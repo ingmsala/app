@@ -74,4 +74,14 @@ class Catedra extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Detallecatedra::className(), ['catedra' => 'id']);
     }
+
+    public function getNameActividad($id)
+    {
+       $actividades = Actividad::find()->where(['id'=> $id])->all();
+       foreach($actividades as $actividad) {
+        return $actividad;
+       }
+    }
+
+
 }

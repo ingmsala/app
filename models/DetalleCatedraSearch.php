@@ -18,8 +18,8 @@ class DetalleCatedraSearch extends DetalleCatedra
     public function rules()
     {
         return [
-            [['id', 'catedra', 'condicion', 'revista', 'resolucion'], 'integer'],
-            [['docente', 'fechaInicio', 'fechaFin'], 'safe'],
+            [['id', 'docente', 'catedra', 'condicion', 'revista', 'resolucion'], 'integer'],
+            [['fechaInicio', 'fechaFin'], 'safe'],
         ];
     }
 
@@ -60,6 +60,7 @@ class DetalleCatedraSearch extends DetalleCatedra
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'docente' => $this->docente,
             'catedra' => $this->catedra,
             'condicion' => $this->condicion,
             'revista' => $this->revista,
@@ -68,8 +69,7 @@ class DetalleCatedraSearch extends DetalleCatedra
             'fechaFin' => $this->fechaFin,
         ]);
 
-        $query->andFilterWhere(['like', 'docente', $this->docente]);
-
+        
         return $dataProvider;
     }
 

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\DetalleCatedra */
@@ -12,16 +13,23 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'catedra')->textInput() ?>
-    <?= Html::tag('span', $catedra) ?>
+    
+    <?php $listDocentes=ArrayHelper::map($docentes,'id', function($doc) {
+            return $doc['apellido'].', '.$doc['nombre'];}
+        );?>
+    <?php $listcondiciones=ArrayHelper::map($condiciones,'id','nombre'); ?>
+    <?php $listrevistas=ArrayHelper::map($revistas,'id','nombre'); ?>
 
+    <?= Html::tag('h3', $catedras->actividad0->nombre.' ('.$catedras->division0->nombre.')') ?>
+
+    <?= $form->field($model, 'catedra')->hiddenInput(['value'=> $catedras->id])->label(false) ?>   
     <?= $form->field($model, 'id')->textInput() ?>
 
-    <?= $form->field($model, 'docente')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'docente')->dropDownList($listDocentes, ['prompt'=>'Seleccionar...']); ?>
 
-    <?= $form->field($model, 'condicion')->textInput() ?>
+    <?= $form->field($model, 'condicion')->dropDownList($listcondiciones, ['prompt'=>'Seleccionar...']); ?>
 
-    <?= $form->field($model, 'revista')->textInput() ?>
+    <?= $form->field($model, 'revista')->dropDownList($listrevistas, ['prompt'=>'Seleccionar...']); ?>
 
     <?= $form->field($model, 'resolucion')->textInput() ?>
 
@@ -30,7 +38,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'fechaFin')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

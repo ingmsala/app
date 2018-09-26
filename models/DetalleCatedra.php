@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "detallecatedra".
  *
  * @property int $id
- * @property string $docente
+ * @property int $docente
  * @property int $catedra
  * @property int $condicion
  * @property int $revista
@@ -39,11 +39,10 @@ class DetalleCatedra extends \yii\db\ActiveRecord
     {
         return [
             [['id', 'docente', 'catedra', 'condicion', 'revista'], 'required'],
-            [['id', 'catedra', 'condicion', 'revista', 'resolucion'], 'integer'],
+            [['id', 'docente', 'catedra', 'condicion', 'revista', 'resolucion'], 'integer'],
             [['fechaInicio', 'fechaFin'], 'safe'],
-            [['docente'], 'string', 'max' => 8],
             [['id'], 'unique'],
-            [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'legajo']],
+            [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
             [['catedra'], 'exist', 'skipOnError' => true, 'targetClass' => Catedra::className(), 'targetAttribute' => ['catedra' => 'id']],
             [['condicion'], 'exist', 'skipOnError' => true, 'targetClass' => Condicion::className(), 'targetAttribute' => ['condicion' => 'id']],
             [['revista'], 'exist', 'skipOnError' => true, 'targetClass' => Revista::className(), 'targetAttribute' => ['revista' => 'id']],
@@ -73,7 +72,7 @@ class DetalleCatedra extends \yii\db\ActiveRecord
      */
     public function getDocente0()
     {
-        return $this->hasOne(Docente::className(), ['legajo' => 'docente']);
+        return $this->hasOne(Docente::className(), ['id' => 'docente']);
     }
 
     /**

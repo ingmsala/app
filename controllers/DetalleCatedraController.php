@@ -8,6 +8,11 @@ use app\models\DetalleCatedraSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Docente;
+use app\models\Revista;
+use app\models\Condicion;
+use app\models\Catedra;
+
 
 /**
  * DetalleCatedraController implements the CRUD actions for DetalleCatedra model.
@@ -65,15 +70,35 @@ class DetalleCatedraController extends Controller
     public function actionCreate()
     {
         $model = new DetalleCatedra();
-        isset ($_REQUEST['catedra']) ? $catedra = $_REQUEST['catedra'] : $catedra='';
+        if (isset ($_REQUEST['catedra'])) {
+            $catedra = $_REQUEST['catedra'] ;
+            
+            $catedrax= Catedra::findOne($catedra);
+            
+
+            }else{
+                $catedra='';
+                $catedrax=Catedra::find()->all();
+            } 
+
+        
+        $docentes=Docente::find()->all();
+        $condiciones=Condicion::find()->all();
+        $revistas=Revista::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['catedra/view', 'id' => $catedra]);
         }
 
         return $this->render('create', [
             'model' => $model,
             'catedra' => $catedra,
+
+            'catedras' => $catedrax,
+            'docentes' => $docentes,
+            'condiciones' => $condiciones,
+            'revistas' => $revistas,
+
         ]);
     }
 
@@ -87,6 +112,21 @@ class DetalleCatedraController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        if (isset ($_REQUEST['catedra'])) {
+            $catedra = $_REQUEST['catedra'] ;
+            
+            $catedrax= Catedra::findOne($catedra);
+            
+
+            }else{
+                $catedra='';
+                $catedrax=Catedra::find()->all();
+            } 
+
+        
+        $docentes=Docente::find()->all();
+        $condiciones=Condicion::find()->all();
+        $revistas=Revista::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -94,6 +134,12 @@ class DetalleCatedraController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'catedra' => $catedra,
+
+            'catedras' => $catedrax,
+            'docentes' => $docentes,
+            'condiciones' => $condiciones,
+            'revistas' => $revistas,
         ]);
     }
 

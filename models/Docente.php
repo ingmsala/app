@@ -62,7 +62,7 @@ class Docente extends \yii\db\ActiveRecord
      */
     public function getDetallecatedras()
     {
-        return $this->hasMany(Detallecatedra::className(), ['docente' => 'legajo']);
+        return $this->hasMany(Detallecatedra::className(), ['docente' => 'id']);
     }
 
     /**
