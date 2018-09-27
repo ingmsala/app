@@ -5,7 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
-    'name' => 'Sistema de Secretaría',
+    'name' => 'Sistema de Gestión Administrativa',
     'basePath' => dirname(__DIR__),
     'language' => 'es',
     'bootstrap' => ['log'],

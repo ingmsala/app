@@ -73,7 +73,7 @@ class CatedraSearch extends Catedra
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            'catedra.id' => $this->id,
             
         ]);
 

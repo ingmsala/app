@@ -90,7 +90,7 @@ class DetalleCatedraController extends Controller
             return $this->redirect(['catedra/view', 'id' => $catedra]);
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('create', [
             'model' => $model,
             'catedra' => $catedra,
 
@@ -129,10 +129,10 @@ class DetalleCatedraController extends Controller
         $revistas=Revista::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['catedra/view', 'id' => $catedra]);
         }
 
-        return $this->render('update', [
+        return $this->renderAjax('update', [
             'model' => $model,
             'catedra' => $catedra,
 

@@ -7,6 +7,8 @@ use yii\widgets\DetailView;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
+use yii\bootstrap\Modal;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Catedra */
@@ -42,12 +44,28 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 
+    <?php 
+        Modal::begin([
+            'header' => "<h2 id='modalHeader'></h2>",
+            'id' => 'modal',
+            'size' => 'modal-lg',
+        ]);
+
+        echo "<div id='modalContent'></div>";
+
+        Modal::end();
+    ?>
+
     
     <h3>Docentes Nombrados</h3>
-    <?= Html::a('Agregar Docente', ['detalle-catedra/create', 'catedra' => $model->id], ['class' => 'btn btn-success']) ?>
+    <?= Html::button('Agregar Docente', ['value' => Url::to('index.php?r=detalle-catedra/create&catedra='.$model->id), 'class' => 'btn btn-success', 'id'=>'modalButton']) ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        
+        'rowOptions' => function($model){
+            if ($model->condicion0->nombre !='SUPL'){
+                return ['class' => 'info'];
+            }
+        },
         'columns' => [
             
             [   
@@ -69,6 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{viewdetcat} {updatedetcat} {deletedetcat}',
+                
                 'buttons' => [
                     'viewdetcat' => function($url, $model, $key){
                         return $model->id != '' ? Html::a(
@@ -76,9 +95,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             '?r=detalle-catedra/view&id='.$model->id) : '';
                     },
                     'updatedetcat' => function($url, $model, $key){
-                        return $model->id != '' ? Html::a(
-                            '<span class="glyphicon glyphicon-pencil"></span>',
-                            '?r=detalle-catedra/update&id='.$model->id) : '';
+                        return $model->id != '' ? Html::button('<span class="glyphicon glyphicon-pencil"></span>',
+                            ['value' => Url::to('index.php?r=detalle-catedra/update&id='.$model->id.'&catedra=' .$model->catedra),
+                                'class' => 'modala btn btn-link', 'id'=>'modala']) : '';
 
 
                     },

@@ -20,9 +20,12 @@ use yii\helpers\ArrayHelper;
     <?php $listcondiciones=ArrayHelper::map($condiciones,'id','nombre'); ?>
     <?php $listrevistas=ArrayHelper::map($revistas,'id','nombre'); ?>
 
-    <?= Html::tag('h3', $catedras->actividad0->nombre.' ('.$catedras->division0->nombre.')') ?>
+    <?= $form->field($model, 'catedra')->hiddenInput(['value'=> $catedras->id])->label(false) ?>
 
-    <?= $form->field($model, 'catedra')->hiddenInput(['value'=> $catedras->id])->label(false) ?>   
+    
+    <?= Html::tag('h3', 'Cátedra: '.$catedras->actividad0->nombre.' ('.$catedras->division0->nombre.')') ?>
+
+       
     <?= $form->field($model, 'id')->textInput() ?>
 
     <?= $form->field($model, 'docente')->dropDownList($listDocentes, ['prompt'=>'Seleccionar...']); ?>
