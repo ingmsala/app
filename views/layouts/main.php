@@ -82,7 +82,7 @@ AppAsset::register($this);
                         '<div class="dropdown-divider"></div>',
                      ['label' => 'Géneros', 'url' => ['/genero']],
                         '<div class="dropdown-divider"></div>',
-                    ['label' => 'Funciones de cargo', 'url' => ['/funcion']],
+                    ['label' => 'Nombramientos de cargo', 'url' => ['/nombramiento']],
                         '<div class="dropdown-divider"></div>',
                     ['label' => 'Cátedra', 'url' => ['/catedra']],
                         '<div class="dropdown-divider"></div>',

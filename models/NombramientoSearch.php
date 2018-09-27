@@ -5,23 +5,24 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Catedra;
+use app\models\Nombramiento;
 
 /**
- * CatedraSearch represents the model behind the search form of `app\models\Catedra`.
+ * NombramientoSearch represents the model behind the search form of `app\models\Nombramiento`.
  */
-class CatedraSearch extends Catedra
+class NombramientoSearch extends Nombramiento
 {
-    public $actividad;
-    public $division;
+    
+    public $revista;
+    public $docente;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', ], 'integer'],
-            [['division', 'actividad'], 'safe'],
+            [['id', 'cargo','horas', 'division', 'suplente'], 'integer'],
+            [['nombre', 'revista', 'docente',], 'safe'],
         ];
     }
 
@@ -43,7 +44,7 @@ class CatedraSearch extends Catedra
      */
     public function search($params)
     {
-        $query = Catedra::find()->joinWith(['actividad0', 'division0']);
+        $query = Nombramiento::find()->joinWith(['docente0', 'revista0']);
 
         // add conditions that should always apply here
 
@@ -59,26 +60,30 @@ class CatedraSearch extends Catedra
             return $dataProvider;
         }
 
-        $dataProvider->sort->attributes['actividad0'] = [
-        // The tables are the ones our relation are configured to
-        // in my case they are prefixed with "tbl_"
-        'asc' => ['actividad.nombre' => SORT_ASC],
-        'desc' => ['actividad.nombre' => SORT_DESC],
+    
+        $dataProvider->sort->attributes['revista0'] = [
+        'asc' => ['revista.nombre' => SORT_ASC],
+        'desc' => ['revista.nombre' => SORT_DESC],
         ];
-        // Lets do the same with country now
-        $dataProvider->sort->attributes['division0'] = [
-        'asc' => ['division.nombre' => SORT_ASC],
-        'desc' => ['division.nombre' => SORT_DESC],
+
+        $dataProvider->sort->attributes['docente0'] = [
+        'asc' => ['docente.apellido' => SORT_ASC],
+        'desc' => ['docente.apellido' => SORT_DESC],
         ];
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'catedra.id' => $this->id,
-            
+            'id' => $this->id,
+            'horas' => $this->horas,
+            'division' => $this->division,
+            'suplente' => $this->suplente,
         ]);
 
-        $query->andFilterWhere(['like', 'actividad.nombre', $this->actividad])
-        ->andFilterWhere(['like', 'division.nombre', $this->division]);
+        $query->andFilterWhere(['like', 'revista.nombre', $this->revista])
+        ->andFilterWhere(['like', 'docente.apellido', $this->docente]);
+        
+
+
         return $dataProvider;
     }
 }

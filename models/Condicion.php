@@ -11,6 +11,7 @@ use Yii;
  * @property string $nombre
  *
  * @property Detallecatedra[] $detallecatedras
+ * @property Nombramiento[] $nombramientos
  */
 class Condicion extends \yii\db\ActiveRecord
 {
@@ -50,5 +51,13 @@ class Condicion extends \yii\db\ActiveRecord
     public function getDetallecatedras()
     {
         return $this->hasMany(Detallecatedra::className(), ['condicion' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNombramientos()
+    {
+        return $this->hasMany(Nombramiento::className(), ['condicion' => 'id']);
     }
 }
