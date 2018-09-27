@@ -32,6 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'legajo',
             'apellido',
             'nombre',
+            [
+                'label'=>"Género",
+                'attribute' => 'genero0.nombre'
+            ],
         ],
     ]) ?>
 

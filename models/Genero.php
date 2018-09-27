@@ -5,21 +5,21 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "sexo".
+ * This is the model class for table "genero".
  *
  * @property int $id
  * @property string $nombre
  *
  * @property Docente[] $docentes
  */
-class Sexo extends \yii\db\ActiveRecord
+class Genero extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'sexo';
+        return 'genero';
     }
 
     /**
@@ -28,10 +28,8 @@ class Sexo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'nombre'], 'required'],
-            [['id'], 'integer'],
+            [['nombre'], 'required'],
             [['nombre'], 'string', 'max' => 15],
-            [['id'], 'unique'],
         ];
     }
 
@@ -51,6 +49,6 @@ class Sexo extends \yii\db\ActiveRecord
      */
     public function getDocentes()
     {
-        return $this->hasMany(Docente::className(), ['sexo' => 'id']);
+        return $this->hasMany(Docente::className(), ['genero' => 'id']);
     }
 }

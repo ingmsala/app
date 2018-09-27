@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Docente;
+use app\models\Genero;
 
 /**
- * DocenteSearch represents the model behind the search form of `app\models\Docente`.
+ * GeneroSearch represents the model behind the search form of `app\models\Genero`.
  */
-class DocenteSearch extends Docente
+class GeneroSearch extends Genero
 {
     /**
      * {@inheritdoc}
@@ -18,8 +18,8 @@ class DocenteSearch extends Docente
     public function rules()
     {
         return [
-            [['id', 'genero'], 'integer'],
-            [['legajo', 'apellido', 'nombre'], 'safe'],
+            [['id'], 'integer'],
+            [['nombre'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class DocenteSearch extends Docente
      */
     public function search($params)
     {
-        $query = Docente::find();
+        $query = Genero::find();
 
         // add conditions that should always apply here
 
@@ -60,12 +60,9 @@ class DocenteSearch extends Docente
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'genero' => $this->genero,
         ]);
 
-        $query->andFilterWhere(['like', 'legajo', $this->legajo])
-            ->andFilterWhere(['like', 'apellido', $this->apellido])
-            ->andFilterWhere(['like', 'nombre', $this->nombre]);
+        $query->andFilterWhere(['like', 'nombre', $this->nombre]);
 
         return $dataProvider;
     }

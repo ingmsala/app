@@ -3,17 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Docente;
-use app\models\DocenteSearch;
+use app\models\Genero;
+use app\models\GeneroSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\models\Genero;
 
 /**
- * DocenteController implements the CRUD actions for Docente model.
+ * GeneroController implements the CRUD actions for Genero model.
  */
-class DocenteController extends Controller
+class GeneroController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -31,12 +30,12 @@ class DocenteController extends Controller
     }
 
     /**
-     * Lists all Docente models.
+     * Lists all Genero models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new DocenteSearch();
+        $searchModel = new GeneroSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -46,7 +45,7 @@ class DocenteController extends Controller
     }
 
     /**
-     * Displays a single Docente model.
+     * Displays a single Genero model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -59,14 +58,13 @@ class DocenteController extends Controller
     }
 
     /**
-     * Creates a new Docente model.
+     * Creates a new Genero model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Docente();
-        $generos = Genero::find()->all();
+        $model = new Genero();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -74,12 +72,11 @@ class DocenteController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'generos' => $generos,
         ]);
     }
 
     /**
-     * Updates an existing Docente model.
+     * Updates an existing Genero model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -88,7 +85,6 @@ class DocenteController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $generos = Genero::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -96,12 +92,11 @@ class DocenteController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'generos' => $generos,
         ]);
     }
 
     /**
-     * Deletes an existing Docente model.
+     * Deletes an existing Genero model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -115,15 +110,15 @@ class DocenteController extends Controller
     }
 
     /**
-     * Finds the Docente model based on its primary key value.
+     * Finds the Genero model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Docente the loaded model
+     * @return Genero the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Docente::findOne($id)) !== null) {
+        if (($model = Genero::findOne($id)) !== null) {
             return $model;
         }
 

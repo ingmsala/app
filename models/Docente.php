@@ -11,10 +11,10 @@ use Yii;
  * @property string $legajo
  * @property string $apellido
  * @property string $nombre
- * @property int $sexo
+ * @property int $genero
  *
  * @property Detallecatedra[] $detallecatedras
- * @property Sexo $sexo0
+ * @property Genero $genero0
  * @property Funcion[] $funcions
  */
 class Docente extends \yii\db\ActiveRecord
@@ -33,13 +33,13 @@ class Docente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'apellido', 'nombre', 'sexo'], 'required'],
-            [['id', 'sexo'], 'integer'],
+            [['id', 'apellido', 'nombre', 'genero'], 'required'],
+            [['id', 'genero'], 'integer'],
             [['legajo'], 'string', 'max' => 8],
             [['apellido', 'nombre'], 'string', 'max' => 70],
             [['legajo'], 'unique'],
             [['id'], 'unique'],
-            [['sexo'], 'exist', 'skipOnError' => true, 'targetClass' => Sexo::className(), 'targetAttribute' => ['sexo' => 'id']],
+            [['genero'], 'exist', 'skipOnError' => true, 'targetClass' => Genero::className(), 'targetAttribute' => ['genero' => 'id']],
         ];
     }
 
@@ -53,7 +53,7 @@ class Docente extends \yii\db\ActiveRecord
             'legajo' => 'Legajo',
             'apellido' => 'Apellido',
             'nombre' => 'Nombre',
-            'sexo' => 'Sexo',
+            'genero' => 'Genero',
         ];
     }
 
@@ -68,9 +68,9 @@ class Docente extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSexo0()
+    public function getGenero0()
     {
-        return $this->hasOne(Sexo::className(), ['id' => 'sexo']);
+        return $this->hasOne(Genero::className(), ['id' => 'genero']);
     }
 
     /**

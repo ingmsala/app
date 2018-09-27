@@ -4,15 +4,15 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Actividad */
+/* @var $model app\models\Genero */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Actividades', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Generos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="actividad-view">
+<div class="genero-view">
 
-    <h1><?= 'Actividad Id: '. Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -30,19 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'nombre',
-            'cantHoras',
-            [   
-                'label'=>"Tipo de Actividad",
-                'attribute' => 'actividadtipo0.nombre'
-            ],
-            [   
-                'label'=>"Plan de Estudios",
-                'attribute' => 'plan0.nombre'
-            ],
-            [   
-                'label'=>"Propuesta Formativa",
-                'attribute' => 'propuesta0.nombre'
-            ],
         ],
     ]) ?>
 

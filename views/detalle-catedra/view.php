@@ -7,32 +7,45 @@ use yii\widgets\DetailView;
 /* @var $model app\models\DetalleCatedra */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Detalle Catedras', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="detalle-catedra-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= 'Catedra Id: '.Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Borrar', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Está seguro de querer eliminar este elemento?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+ 
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
-            'docente',
-            'catedra',
-            'condicion',
-            'revista',
+
+            [   
+                'label'=>"Condición",
+                'attribute' => 'condicion0.nombre'
+            ],
+
+            [
+                'label'=>"Apellido",
+                'attribute' => 'docente0.apellido'
+            ],
+            [
+                'label'=>"Nombre",
+                'attribute' => 'docente0.nombre'
+            ],
+            [   
+                'label'=>"Actividad",
+                'attribute' => 'catedra0.actividad0.nombre'
+            ],
+            [   
+                'label'=>"División",
+                'attribute' => 'catedra0.division0.nombre'
+            ],
+            
+            [   
+                'label'=>"Revista",
+                'attribute' => 'revista0.nombre'
+            ],
             'resolucion',
             'fechaInicio',
             'fechaFin',

@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $model app\models\Actividad */
 
 $this->title = 'Nueva Actividad';
-$this->params['breadcrumbs'][] = ['label' => 'Actividads', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Actividades', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="actividad-create">

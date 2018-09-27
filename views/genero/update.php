@@ -3,20 +3,19 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Docente */
+/* @var $model app\models\Genero */
 
-$this->title = 'Modificar Docente: ' . $model->apellido . ', ' . $model->nombre;
-$this->params['breadcrumbs'][] = ['label' => 'Docentes', 'url' => ['index']];
+$this->title = 'Modificar Género: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Generos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
-<div class="docente-update">
+<div class="genero-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,
-        'generos' => $generos,
     ]) ?>
 
 </div>
