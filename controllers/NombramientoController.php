@@ -172,12 +172,15 @@ class NombramientoController extends Controller
         $revistas = Revista::find()->all();
         $divisiones = Division::find()->all();
         $condiciones = Condicion::find()->all();
-        $suplentes = Nombramiento::find()
+        
+        $subQuery = Nombramiento::find()->select('suplente')->all();
+        $query  = Nombramiento::find()
             ->where(['cargo'=>$cargox,])
             ->andWhere(['<>','id', $idx])
-            ->all();
+            ->andWhere('id NOT IN (SELECT suplente from nombramiento where suplente is not null)')->all();
+        //$suplentes = $query->all();
        
-         $suplente = ArrayHelper::toArray($suplentes, [
+         $suplente = ArrayHelper::toArray($query, [
         'app\models\Nombramiento' => [
             'id',
             'nombre' => function ($supl) {
@@ -185,6 +188,7 @@ class NombramientoController extends Controller
             }],
          ]);
 
+         
          
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -201,4 +205,9 @@ class NombramientoController extends Controller
             'suplentes' => $suplente,
         ]);
     }
+
+
+    
+
+    
 }
