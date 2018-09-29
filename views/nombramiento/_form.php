@@ -49,7 +49,7 @@ use yii\helpers\Url;
 
     <?= $form->field($model, 'horas')->textInput() ?>
 
-    <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'nombre')->textInput(['maxlength' => true, 'style'=>'text-transform:uppercase;']) ?>
 
     <?= $form->field($model, 'docente')->dropDownList($listdocentes, ['prompt'=>'Seleccionar...']); ?>
 

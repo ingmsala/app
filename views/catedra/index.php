@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     //return implode(' // ', $itemsc);
                     return Html::ul($itemsc, ['item' => function($item) {
                         //var_dump($item);
-                        if($item[0]!=5){
+                        if($item[0]!=5){//suplente
                             return 
                                 Html::tag('li', Html::tag('div',Html::tag('span', $item[1], ['class' => "badge pull-left"]).Html::tag('span', $item[3], ['class' => "badge pull-right"])."&nbsp;".$item[2], ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-info']);
                             

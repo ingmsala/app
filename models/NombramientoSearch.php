@@ -87,4 +87,26 @@ class NombramientoSearch extends Nombramiento
 
         return $dataProvider;
     }
+
+    public function providerxsuplente($id)
+    {
+        $query = Nombramiento::find()
+            ->where(['id' => $id,
+                //'condicion' => 5 //suplente
+            ])
+            ->orderBy('condicion ASC', 'id ASC');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        return $dataProvider;
+
+    }
 }

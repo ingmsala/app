@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
 
-
+   
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -29,31 +29,27 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Cod. Cargo',
                 'attribute' => 'cargo',
-                'value' => 'cargo',
+                'value' => function($model){
+
+                   return $model->cargo.' - '.$model->cargo0->nombre;
+                }
             ],
+           
             [
-                'label' => 'Cargo',
-                'attribute' => 'cargo0.nombre',
-                
-            ],
-            [
-                'label' => 'Apellido',
+                'label' => 'Docente',
                 'attribute' => 'docente',
-                'value' => 'docente0.apellido',
+                'format' => 'raw',
+                'value' => function($model){
+
+                    return Html::tag('li', Html::tag('div',Html::tag('span', $model->condicion0->nombre, ['class' => "badge pull-left"]).Html::tag('span', $model->revista0->nombre, ['class' => "badge pull-right"])."&nbsp;".$model->docente0->apellido.', '.$model->docente0->nombre, ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-info']);
+                   //return $model->docente0->apellido.', '.$model->docente0->nombre;
+                }
+
             ],
-            [
-                'label' => 'Nombre',
-                'attribute' => 'docente0.nombre',
-                
-            ],
+
             'nombre',
             'horas',
-            [
-                'label' => 'Revista',
-                'attribute' => 'revista',
-                'value' => 'revista0.nombre',
-            ],
-            
+                        
             
             
             [
@@ -64,7 +60,18 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Suplente',
                 'attribute' => 'suplente',
-                'value' => 'suplente0.docente0.apellido',
+                'format' => 'raw',
+                'value' =>  function($model){
+                     //var_dump($model->suplente0->docente0);
+                        if (isset($model->suplente0)){
+                            return Html::tag('li', Html::tag('div',Html::tag('span', $model->suplente0->condicion0->nombre, ['class' => "badge pull-left"]).Html::tag('span', $model->suplente0->revista0->nombre, ['class' => "badge pull-right"])."&nbsp;".$model->suplente0->docente0->apellido.', '.$model->suplente0->docente0->nombre, ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-info']);
+                        }
+
+                        return '';
+                    }
+                     
+                
+                //'suplente0.docente0.apellido',
             ],
 
             ['class' => 'yii\grid\ActionColumn'],

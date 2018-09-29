@@ -58,8 +58,14 @@ class NombramientoController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $searchModel = new NombramientoSearch();
+        $dataProvider = $searchModel->providerxsuplente($model->suplente);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -118,7 +124,7 @@ class NombramientoController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
+        return $this->renderAjax('update', [
             'model' => $model,
 
             'cargos' => $cargos,
@@ -177,6 +183,7 @@ class NombramientoController extends Controller
         $query  = Nombramiento::find()
             ->where(['cargo'=>$cargox,])
             ->andWhere(['<>','id', $idx])
+            ->andWhere(['=','condicion', 5])//suplente
             ->andWhere('id NOT IN (SELECT suplente from nombramiento where suplente is not null)')->all();
         //$suplentes = $query->all();
        
@@ -194,7 +201,7 @@ class NombramientoController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('createsuplente', [
+        return $this->renderAjax('createsuplente', [
             'model' => $model,
 
             'cargos' => $cargos,
