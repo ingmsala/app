@@ -75,6 +75,11 @@ class Catedra extends \yii\db\ActiveRecord
         return $this->hasMany(Detallecatedra::className(), ['catedra' => 'id']);
     }
 
+    public function getDocentes()
+    {
+        return $this->hasMany(Docente::className(), ['id' => 'docente'])->via('detallecatedras');
+    }
+
     public function getNameActividad($id)
     {
        $actividades = Actividad::find()->where(['id'=> $id])->all();
@@ -82,6 +87,15 @@ class Catedra extends \yii\db\ActiveRecord
         return $actividad;
        }
     }
-
+/*
+    public function getDocentes($id){
+        $detallecatedras = DetalleCatedra::find()
+            ->select('docente')
+            ->where(['catedra' => $id])->all();
+        $docentes = Docente::find()
+            ->select('concat(apellido, ", ", nombre)')
+            ->where('in', 'id', $detallecatedras);
+        return $docentes;
+    }*/
 
 }

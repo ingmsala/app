@@ -28,8 +28,6 @@ use yii\helpers\Url;
 
     <?= $form->field($model, 'id')->textInput() ?>
 
-    <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'cargo')->dropDownList($listcargos, ['prompt'=>'Seleccionar...',
         'onchange'=>'       
                         if ($(this).val()==227) {
@@ -50,6 +48,8 @@ use yii\helpers\Url;
         '])->label('Cargo'); ?>
 
     <?= $form->field($model, 'horas')->textInput() ?>
+
+    <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'docente')->dropDownList($listdocentes, ['prompt'=>'Seleccionar...']); ?>
 

@@ -18,24 +18,67 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Nueva Catedra', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             
 
-            'id',
+            [   
+                'label' => 'Id',
+                'attribute' => 'id',
+                'value' => 'id'
+            ],
             [   
                 'label' => 'Actividad',
                 'attribute' => 'actividad',
                 'value' => 'actividad0.nombre'
             ],
+
+            [   
+                'label' => 'Hora',
+                'attribute' => 'actividad.canthoras',
+                'value' => 'actividad0.cantHoras'
+            ],
+
             [   
                 'label' => 'Division',
                 'attribute' => 'division',
                 'value' => 'division0.nombre'
             ],
+            [
+                'attribute' => 'docentes',
+                'format' => 'raw',
+                'value' => function($model){
+                    $items = [];
+                    $itemsc = [];
+                    //var_dump($model);
+       
+                    foreach($model->detallecatedras as $detallecatedra){
+
+                        
+                        $itemsc[] = [$detallecatedra->condicion0->id, $detallecatedra->condicion0->nombre, $detallecatedra->docente0->apellido.', '.$detallecatedra->docente0->nombre, $detallecatedra->revista0->nombre];
+                        
+                    }
+
+                    sort($itemsc);                   
+                    //var_dump($itemsc);
+                    //return implode(' // ', $itemsc);
+                    return Html::ul($itemsc, ['item' => function($item) {
+                        //var_dump($item);
+                        if($item[0]!=5){
+                            return 
+                                Html::tag('li', Html::tag('div',Html::tag('span', $item[1], ['class' => "badge pull-left"]).Html::tag('span', $item[3], ['class' => "badge pull-right"])."&nbsp;".$item[2], ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-info']);
+                            
+                        }
+
+                        return 
+                                Html::tag('li', Html::tag('div',Html::tag('span', $item[1], ['class' => "badge pull-left"]).Html::tag('span', $item[3], ['class' => "badge pull-right"])."&nbsp;".$item[2], ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-warning']);
+                    }, 'class' => "nav nav-pills nav-stacked"]);
+                }],
+
+
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

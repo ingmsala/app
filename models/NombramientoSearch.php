@@ -74,6 +74,7 @@ class NombramientoSearch extends Nombramiento
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'cargo' => $this->cargo,
             'horas' => $this->horas,
             'division' => $this->division,
             'suplente' => $this->suplente,

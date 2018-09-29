@@ -14,6 +14,7 @@ class CatedraSearch extends Catedra
 {
     public $actividad;
     public $division;
+    public $docentes;
     /**
      * {@inheritdoc}
      */
@@ -21,7 +22,7 @@ class CatedraSearch extends Catedra
     {
         return [
             [['id', ], 'integer'],
-            [['division', 'actividad'], 'safe'],
+            [['division', 'actividad', 'docentes'], 'safe'],
         ];
     }
 
@@ -43,7 +44,7 @@ class CatedraSearch extends Catedra
      */
     public function search($params)
     {
-        $query = Catedra::find()->joinWith(['actividad0', 'division0']);
+        $query = Catedra::find()->joinWith(['actividad0', 'division0', 'detallecatedras', 'detallecatedras.docente0']);
 
         // add conditions that should always apply here
 
@@ -71,6 +72,11 @@ class CatedraSearch extends Catedra
         'desc' => ['division.nombre' => SORT_DESC],
         ];
 
+        $dataProvider->sort->attributes['docentes'] = [
+        'asc' => ['docente.apellido' => SORT_ASC],
+        'desc' => ['docente.apellido' => SORT_DESC],
+        ];
+
         // grid filtering conditions
         $query->andFilterWhere([
             'catedra.id' => $this->id,
@@ -78,7 +84,8 @@ class CatedraSearch extends Catedra
         ]);
 
         $query->andFilterWhere(['like', 'actividad.nombre', $this->actividad])
-        ->andFilterWhere(['like', 'division.nombre', $this->division]);
+        ->andFilterWhere(['like', 'division.nombre', $this->division])
+        ->andFilterWhere(['like', 'docente.apellido', $this->docentes]);
         return $dataProvider;
     }
 }

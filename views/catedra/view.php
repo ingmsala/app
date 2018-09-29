@@ -65,6 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
             if ($model->condicion0->nombre !='SUPL'){
                 return ['class' => 'info'];
             }
+            return ['class' => 'warning'];
         },
         'columns' => [
             
