@@ -145,7 +145,20 @@ class NombramientoController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        $titular = $model->find()
+                    ->where(['suplente' => $model->id])
+                    ->one();
+        
+        if ($titular != null){
+            $modelTitular = $this->findModel($titular->id);
+            $modelTitular->suplente = null;
+            $modelTitular->save();
+            //return $this->redirect(['index']); 
+        }
+        
+        $model->delete();
 
         return $this->redirect(['index']);
     }

@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-    <?= Html::a('Agregar Suplente', ['nombramiento/asignarsuplente', 'cargox' => $model->cargo, 'idx' => $model->id]) ?>
+    
 <?php 
         Modal::begin([
             'header' => "<h2 id='modalHeader'></h2>",
@@ -134,8 +134,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
                     },
-                    'deletedetcat' => function($url, $model, $key){
-                        return $model->id != '' ? Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=nombramiento/delete&id='.$model->id, 
+                    'deletedetcat' => function($url, $suplente, $key){
+                        
+                        echo $suplente->id;
+                        return $suplente->id != '' ? Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=nombramiento/delete&id='.$suplente->id, 
                             ['data' => [
                             'confirm' => 'Está seguro de querer eliminar este elemento?',
                             'method' => 'post',
