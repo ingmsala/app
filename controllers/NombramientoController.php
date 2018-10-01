@@ -124,16 +124,30 @@ class NombramientoController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->renderAjax('update', [
-            'model' => $model,
+        if(Yii::$app->request->isAjax){
 
-            'cargos' => $cargos,
-            'docentes' => $docentes,
-            'revistas' => $revistas,
-            'divisiones' => $divisiones,
-            'condiciones' => $condiciones,
-            'suplentes' => $suplentes,
-        ]);
+            return $this->renderAjax('update', [
+                'model' => $model,
+
+                'cargos' => $cargos,
+                'docentes' => $docentes,
+                'revistas' => $revistas,
+                'divisiones' => $divisiones,
+                'condiciones' => $condiciones,
+                'suplentes' => $suplentes,
+            ]);
+        }
+        return $this->render('update', [
+                'model' => $model,
+
+                'cargos' => $cargos,
+                'docentes' => $docentes,
+                'revistas' => $revistas,
+                'divisiones' => $divisiones,
+                'condiciones' => $condiciones,
+                'suplentes' => $suplentes,
+            ]);
+
     }
 
     /**

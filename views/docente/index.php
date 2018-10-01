@@ -28,7 +28,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'legajo',
             'apellido',
             'nombre',
-            'genero',
+            [
+                'label' => 'Género',
+                'attribute' => 'genero',
+                'value' => function($model){
+
+                   return $model->genero0->nombre;
+                }
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

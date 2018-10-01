@@ -56,7 +56,7 @@ AppAsset::register($this);
                     ['label' => 'Planta Completa', 'url' => ['#']],
                         '<div class="dropdown-divider"></div>',
 
-                    ['label' => 'Listado de Horas por Docente', 'url' => ['#']],
+                    ['label' => 'Listado de Horas por Docente', 'url' => ['/reporte/horasdocentes']],
                         '<div class="dropdown-divider"></div>',
                 ],
             ],

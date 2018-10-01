@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="nombramiento-asignarsuplente">
 
-<h1><?= Html::encode($this->title) ?></h1>
+
 <?php $form = ActiveForm::begin(); ?>
 
 <?php $listsuplentes=ArrayHelper::map($suplentes,'id', 'nombre');?>

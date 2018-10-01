@@ -33,7 +33,9 @@ use yii\helpers\Url;
                         if ($(this).val()==227) {
                             $( ".field-nombramiento-division" ).show();
                         }else{
+                            
                             $( ".field-nombramiento-division" ).hide();
+
                         }
                         $.get( "'.Url::toRoute('/cargo/gethora').'", { id: $(this).val() } )
                             .done(function( data ) {

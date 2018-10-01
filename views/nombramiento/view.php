@@ -18,11 +18,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::button('Modificar', ['value' => Url::to('index.php?r=nombramiento/update&id='.$model->id),
+                                'class' => 'modalaNombramiento btn btn-primary']) ?>
         <?= Html::a('Borrar', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Está seguro de querer eliminar este elemento?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -86,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 
 <h3>Suplente</h3>
-    <?= Html::button('Agregar Suplente', ['value' => Url::to('index.php?r=nombramiento/asignarsuplente&cargox='.$model->cargo.'&idx='.$model->id), 'class' => 'btn btn-success', 'id'=>'modalButton']) ?>
+    <?= Html::button('Agregar Suplente', ['value' => Url::to('index.php?r=nombramiento/asignarsuplente&cargox='.$model->cargo.'&idx='.$model->id), 'class' => 'btn btn-success', 'id'=>'modalButtonNombramiento']) ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'rowOptions' => function($model){
@@ -130,7 +131,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'updatedetcat' => function($url, $model, $key){
                         return $model->id != '' ? Html::button('<span class="glyphicon glyphicon-pencil"></span>',
                             ['value' => Url::to('index.php?r=nombramiento/update&id='.$model->id),
-                                'class' => 'modala btn btn-link', 'id'=>'modala']) : '';
+                                'class' => 'modalaNombramiento btn btn-link']) : '';
 
 
                     },
