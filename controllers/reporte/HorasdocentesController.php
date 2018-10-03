@@ -5,6 +5,8 @@ namespace app\controllers\reporte;
 use Yii;
 use app\models\Docente;
 use app\models\DocenteSearch;
+use app\models\DetalleCatedraSearch;
+use app\models\NombramientoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -42,6 +44,37 @@ class HorasdocentesController extends \yii\web\Controller
 	            'dataProvider' => $dataProvider,
 	        ]);
 	    }
+
+	public function actionView($id)
+    {
+        $searchModel = new DetalleCatedraSearch();
+        $dataProvider = $searchModel->providerxdocente($id);
+        $horasCatedraACobrar = $searchModel->cantidadHorasACobrarXDocente($id);
+        $horasCatedraSinCobrar = $searchModel->cantidadHorasConLicenciaSinGoceXDocente($id);
+
+        $searchModelNombram = new NombramientoSearch();
+        $horasCatedraACobrarNom = $searchModelNombram->cantidadHorasACobrarXDocente($id);
+        $horasCatedraSinCobrarNom = $searchModelNombram->cantidadHorasConLicenciaSinGoceXDocente($id);
+
+        $searchModelNombramientos = new NombramientoSearch();
+        $dataProviderNombramientos = $searchModelNombramientos->searchByDocente($id);
+
+
+
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'searchModelNombramientos' => $searchModelNombramientos,
+            'dataProviderNombramientos' => $dataProviderNombramientos,
+
+            'horasCatedraACobrar' => $horasCatedraACobrar,
+            'horasCatedraSinCobrar' => $horasCatedraSinCobrar,
+
+            'horasCatedraACobrarNom' => $horasCatedraACobrarNom,
+            'horasCatedraSinCobrarNom' => $horasCatedraSinCobrarNom,
+        ]);
+    }
 
 	protected function findModel($id)
     {

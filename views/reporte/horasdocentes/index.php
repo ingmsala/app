@@ -2,12 +2,13 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\DocenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Docentes';
+$this->title = 'Reporte - Horas por Docentes';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="docente-index">
@@ -15,11 +16,21 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Nuevo Docente', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    
 
-    <?= GridView::widget([
+    <?php 
+        Modal::begin([
+            'header' => "<h2 id='modalHeader'></h2>",
+            'id' => 'modal',
+            'size' => 'modal-lg',
+        ]);
+
+        echo "<div id='modalContent'></div>";
+
+        Modal::end();
+    ?>
+
+    <?=  GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -39,14 +50,14 @@ $this->params['breadcrumbs'][] = $this->title;
             		$nombramHoras = [];
             		$hCatedraHoras = [];
             		foreach($model->nombramientos as $nombramiento){
-
-                        $nombramHoras[] = $nombramiento->horas;
+                        if($nombramiento->revista <> 2)
+                            $nombramHoras[] = $nombramiento->horas;
                         
                     }
 
                     foreach($model->detallecatedras as $detalle){
-
-                    	$hCatedraHoras [] = $detalle->catedra0->actividad0->cantHoras;
+                        if($detalle->revista <> 2)
+                    	   $hCatedraHoras [] = $detalle->catedra0->actividad0->cantHoras;
                     	              	    
                     }
 

@@ -106,4 +106,6 @@ class DetalleCatedra extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Resolucion::className(), ['id' => 'resolucion']);
     }
+
+    
 }

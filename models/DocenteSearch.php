@@ -69,4 +69,37 @@ class DocenteSearch extends Docente
 
         return $dataProvider;
     }
+
+
+    public function detallehoras($id)
+    {
+        $query = Docente::find()
+            ->where(['id' => $id]);
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($id);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'genero' => $this->genero,
+        ]);
+
+        $query->andFilterWhere(['like', 'legajo', $this->legajo])
+            ->andFilterWhere(['like', 'apellido', $this->apellido])
+            ->andFilterWhere(['like', 'nombre', $this->nombre]);
+
+        return $dataProvider;
+    }
 }
