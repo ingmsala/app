@@ -35,6 +35,7 @@ AppAsset::register($this);
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
+            'style' => Yii::$app->user->isGuest ? 'visibility: hidden' : '',
         ],
     ]);
     echo Nav::widget([
@@ -49,12 +50,11 @@ AppAsset::register($this);
                         '<div class="dropdown-divider"></div>',
                     ['label' => 'Cargos', 'url' => ['#']],
                         '<div class="dropdown-divider"></div>',
-                    ['label' => 'Preceptores', 'url' => ['#']],
+                    ['label' => 'Preceptores', 'url' => ['/reporte/preceptores']],
                         '<div class="dropdown-divider"></div>',
                     ['label' => 'Jefe de Preceptores', 'url' => ['#']],
                         '<div class="dropdown-divider"></div>',
-                    ['label' => 'Planta Completa', 'url' => ['#']],
-                        '<div class="dropdown-divider"></div>',
+                    
 
                     ['label' => 'Listado de Horas por Docente', 'url' => ['/reporte/horasdocentes']],
                         '<div class="dropdown-divider"></div>',
@@ -127,8 +127,7 @@ AppAsset::register($this);
     <div class="container">
         <p class="pull-left">&copy; Colegio Nacional de Monserrat <?= date('Y') ?></p>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
-    </div>
+        
 </footer>
 
 <?php $this->endBody() ?>

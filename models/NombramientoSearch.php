@@ -170,4 +170,40 @@ class NombramientoSearch extends Nombramiento
 
         return $dataProvider;
     }
+
+    public function getPreceptores()
+    {
+        $query = Nombramiento::find()
+                ->where(['cargo' => 227]);
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+    
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'cargo' => $this->cargo,
+            'horas' => $this->horas,
+            'division' => $this->division,
+            'suplente' => $this->suplente,
+        ]);
+
+        $query->andFilterWhere(['like', 'revista.nombre', $this->revista])
+        ->andFilterWhere(['like', 'docente.apellido', $this->docente]);
+        
+
+
+        return $dataProvider;
+    }
 }

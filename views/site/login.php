@@ -7,36 +7,39 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Ingreso';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Ingresar';
+
 ?>
 <div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
+    
+<div class="container">
+   <div class="row">
+    <div class="form_bg">
+        <h3><?= Html::encode($this->title) ?></h3>
+        <?php $form = ActiveForm::begin([
+            'id' => 'login-form',
+            'layout' => 'horizontal',
+            'fieldConfig' => [
+                'template' => "{label}\n<div class=\"col-lg-12\">{input}</div>\n<div class=\"col-lg-12\">{error}</div>",
+                'labelOptions' => ['class' => 'col-lg-1 control-label'],
+            ],
+        ]); ?>
 
-   
+            <?= $form->field($model, 'username')->textInput(['autofocus' => true])->label("Usuario") ?>
 
-    <?php $form = ActiveForm::begin([
-        'id' => 'login-form',
-        'layout' => 'horizontal',
-        'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-1 control-label'],
-        ],
-    ]); ?>
+            <?= $form->field($model, 'password')->passwordInput()->label("Contraseña") ?>
 
-        <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+            
 
-        <?= $form->field($model, 'password')->passwordInput() ?>
-
-        
-
-        <div class="form-group">
-            <div class="col-lg-offset-1 col-lg-11">
-                <?= Html::submitButton('Aceptar', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+            <div class="form-group">
+                <div class="col-lg-offset-0 col-lg-12">
+                    <?= Html::submitButton('Aceptar', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                </div>
             </div>
-        </div>
 
-    <?php ActiveForm::end(); ?>
-
+        <?php ActiveForm::end(); ?>
+    </div>
+    </div>
+</div>
     
 </div>

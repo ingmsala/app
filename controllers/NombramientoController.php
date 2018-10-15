@@ -14,6 +14,7 @@ use app\models\Revista;
 use app\models\Division;
 use app\models\Condicion;
 use yii\helpers\ArrayHelper;
+use yii\filters\AccessControl;
 
 /**
  * NombramientoController implements the CRUD actions for Nombramiento model.
@@ -26,6 +27,17 @@ class NombramientoController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -80,7 +92,7 @@ class NombramientoController extends Controller
 
 
         $cargos = Cargo::find()->all();
-        $docentes = Docente::find()->all();
+        $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $revistas = Revista::find()->all();
         $divisiones = Division::find()->all();
         $condiciones = Condicion::find()->all();
@@ -114,7 +126,7 @@ class NombramientoController extends Controller
         $model = $this->findModel($id);
 
         $cargos = Cargo::find()->all();
-        $docentes = Docente::find()->all();
+        $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $revistas = Revista::find()->all();
         $divisiones = Division::find()->all();
         $condiciones = Condicion::find()->all();
@@ -201,7 +213,7 @@ class NombramientoController extends Controller
 
         $model = Nombramiento::findOne($idx);
         $cargos = Cargo::find()->all();
-        $docentes = Docente::find()->all();
+        $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $revistas = Revista::find()->all();
         $divisiones = Division::find()->all();
         $condiciones = Condicion::find()->all();

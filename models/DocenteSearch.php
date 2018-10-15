@@ -41,7 +41,8 @@ class DocenteSearch extends Docente
      */
     public function search($params)
     {
-        $query = Docente::find();
+        $query = Docente::find()
+            ->orderBy('apellido', 'nombre', 'legajo');
 
         // add conditions that should always apply here
 

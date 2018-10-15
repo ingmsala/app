@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
+use yii\web\View;
 
 
 /* @var $this yii\web\View */
@@ -13,11 +14,16 @@ $this->title = $model->id;
 ?>
 <div class="detalle-catedra-view">
 
+<?php $this->registerJs("document.getElementById('modalHeader').innerHTML ='".
+    "Docente: ".$model->apellido.', '.$model->nombre.'- Total horas: <span class="label label-info">'.
 
+    ($horasCatedraSinCobrarNom->horas + $horasCatedraSinCobrar->id + $horasCatedraACobrarNom->horas + $horasCatedraACobrar->id)
+
+    .'</span>'
+
+."';", View::POS_END, 'my-options'); ?>
         
-    <h2>Docente: <?= $model->apellido.', '.$model->nombre; ?> - Total horas: <span class="label label-info">
-        <?= $horasCatedraSinCobrarNom->horas + $horasCatedraSinCobrar->id + $horasCatedraACobrarNom->horas + $horasCatedraACobrar->id ?>
-    </span></h2>
+  
 
     <div class="row">
         <div class="col-md-4">
@@ -63,8 +69,12 @@ $this->title = $model->id;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        
+        'rowOptions' => function($model){
+            if ($model->revista !=2){
+                return ['class' => 'success'];
+            }
+            return ['class' => 'danger'];
+        },
         'columns' => [
             
             
@@ -97,8 +107,13 @@ $this->title = $model->id;
     <h3>Detalle de Nombramientos</h3>
     <?= GridView::widget([
         'dataProvider' => $dataProviderNombramientos,
-        'filterModel' => $searchModelNombramientos,
-        
+        'rowOptions' => function($model){
+            if ($model->revista !=2){
+                return ['class' => 'success'];
+            }
+            return ['class' => 'danger'];
+        },
+               
         'columns' => [
             
             

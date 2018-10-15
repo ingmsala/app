@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\bootstrap\Modal;
+use yii\helpers\Url;
+
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\DocenteSearch */
@@ -35,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             
-            'id',
+            
             'legajo',
             'apellido',
             'nombre',
@@ -80,7 +82,24 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{viewdetcat}',
+                
+                'buttons' => [
+                    'viewdetcat' => function($url, $model, $key){
+                        return $model->id != '' ? Html::button('<span class="glyphicon glyphicon-eye-open"></span>',
+                            ['value' => Url::to('index.php?r=reporte/horasdocentes/view&id='.$model->id),
+                                'class' => 'modalaReporteHoras btn btn-link']) : '';
+
+
+                    },
+                    
+                ]
+
+            ],
         ],
     ]); ?>
+
+
 </div>

@@ -2,7 +2,7 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=plantaDoc',
+    'dsn' => 'mysql:host=localhost;dbname=plantaDocTest',
     'username' => 'root',
     'password' => '',
     'charset' => 'utf8',

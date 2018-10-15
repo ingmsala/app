@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use app\models\Plan;
 use app\models\ActividadTipo;
 use app\models\Propuesta;
+use yii\filters\AccessControl;
 
 /**
  * ActividadController implements the CRUD actions for Actividad model.
@@ -23,6 +24,17 @@ class ActividadController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

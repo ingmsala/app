@@ -12,6 +12,7 @@ use app\models\Docente;
 use app\models\Revista;
 use app\models\Condicion;
 use app\models\Catedra;
+use yii\filters\AccessControl;
 
 
 /**
@@ -25,6 +26,17 @@ class DetalleCatedraController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -82,7 +94,7 @@ class DetalleCatedraController extends Controller
             } 
 
         
-        $docentes=Docente::find()->all();
+        $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $condiciones=Condicion::find()->all();
         $revistas=Revista::find()->all();
 
@@ -124,7 +136,7 @@ class DetalleCatedraController extends Controller
             } 
 
         
-        $docentes=Docente::find()->all();
+        $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $condiciones=Condicion::find()->all();
         $revistas=Revista::find()->all();
 
