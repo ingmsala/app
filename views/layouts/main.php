@@ -62,6 +62,7 @@ AppAsset::register($this);
             ],
             ['label' => 'Administración',
                 'items' => [
+                     
                     ['label' => 'Actividades', 'url' => ['/actividad']],
                         '<div class="dropdown-divider"></div>',
                     ['label' => 'Cátedras', 'url' => ['/catedra']],
