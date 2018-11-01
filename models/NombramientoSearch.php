@@ -21,8 +21,8 @@ class NombramientoSearch extends Nombramiento
     public function rules()
     {
         return [
-            [['id', 'cargo','horas', 'division', 'suplente'], 'integer'],
-            [['nombre', 'revista', 'docente',], 'safe'],
+            [['id', 'cargo','horas', ], 'integer'],
+            [['nombre', 'revista', 'docente', 'division', 'suplente'], 'safe'],
         ];
     }
 
@@ -44,7 +44,7 @@ class NombramientoSearch extends Nombramiento
      */
     public function search($params)
     {
-        $query = Nombramiento::find()->joinWith(['docente0', 'revista0']);
+        $query = Nombramiento::find()->joinWith(['docente0', 'revista0', 'division0', 'suplente0 n']);
 
         // add conditions that should always apply here
 
@@ -71,17 +71,28 @@ class NombramientoSearch extends Nombramiento
         'desc' => ['docente.apellido' => SORT_DESC],
         ];
 
+        $dataProvider->sort->attributes['division0'] = [
+        'asc' => ['division.nombre' => SORT_ASC],
+        'desc' => ['division.nombre' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['suplente0'] = [
+        'asc' => ['suplente.apellido' => SORT_ASC],
+        'desc' => ['suplente.apellido' => SORT_DESC],
+        ];
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'cargo' => $this->cargo,
             'horas' => $this->horas,
-            'division' => $this->division,
-            'suplente' => $this->suplente,
+            
         ]);
 
         $query->andFilterWhere(['like', 'revista.nombre', $this->revista])
-        ->andFilterWhere(['like', 'docente.apellido', $this->docente]);
+        ->andFilterWhere(['like', 'docente.apellido', $this->docente])
+        ->andFilterWhere(['like', 'division.nombre', $this->division])
+        ->andFilterWhere(['like', 'n.docente0.apellido', $this->suplente]);
         
 
 

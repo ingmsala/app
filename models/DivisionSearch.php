@@ -18,8 +18,8 @@ class DivisionSearch extends Division
     public function rules()
     {
         return [
-            [['id', 'turno', 'propuesta'], 'integer'],
-            [['nombre'], 'safe'],
+            [['id',], 'integer'],
+            [['nombre', 'turno', 'propuesta'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class DivisionSearch extends Division
      */
     public function search($params)
     {
-        $query = Division::find();
+        $query = Division::find()->joinWith(['turno0', 'propuesta0']);
 
         // add conditions that should always apply here
 
@@ -57,14 +57,28 @@ class DivisionSearch extends Division
             return $dataProvider;
         }
 
+        $dataProvider->sort->attributes['propuesta0'] = [
+        // The tables are the ones our relation are configured to
+        // in my case they are prefixed with "tbl_"
+        'asc' => ['propuesta.nombre' => SORT_ASC],
+        'desc' => ['propuesta.nombre' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['turno0'] = [
+        // The tables are the ones our relation are configured to
+        // in my case they are prefixed with "tbl_"
+        'asc' => ['turno.nombre' => SORT_ASC],
+        'desc' => ['turno.nombre' => SORT_DESC],
+        ];
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'turno' => $this->turno,
-            'propuesta' => $this->propuesta,
+            
         ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre]);
+        $query->andFilterWhere(['like', 'turno.nombre', $this->turno]);
+        $query->andFilterWhere(['like', 'propuesta.nombre', $this->propuesta]);
 
         return $dataProvider;
     }

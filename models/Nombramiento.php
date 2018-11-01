@@ -41,10 +41,9 @@ class Nombramiento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'cargo', 'horas', 'docente', 'revista', 'condicion'], 'required'],
-            [['id', 'cargo', 'horas', 'docente', 'revista', 'condicion', 'division', 'suplente'], 'integer'],
+            [['cargo', 'horas', 'docente', 'revista', 'condicion'], 'required'],
+            [['cargo', 'horas', 'docente', 'revista', 'condicion', 'division', 'suplente'], 'integer'],
             [['nombre'], 'string', 'max' => 150],
-            [['id'], 'unique'],
             [['condicion'], 'exist', 'skipOnError' => true, 'targetClass' => Condicion::className(), 'targetAttribute' => ['condicion' => 'id']],
             [['cargo'], 'exist', 'skipOnError' => true, 'targetClass' => Cargo::className(), 'targetAttribute' => ['cargo' => 'id']],
             [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],

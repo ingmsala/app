@@ -33,12 +33,11 @@ class Docente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'apellido', 'nombre', 'genero'], 'required'],
-            [['id', 'genero'], 'integer'],
+            [['apellido', 'nombre', 'genero'], 'required'],
+            [['genero'], 'integer'],
             [['legajo'], 'string', 'max' => 8],
             [['apellido', 'nombre'], 'string', 'max' => 70],
             [['legajo'], 'unique'],
-            [['id'], 'unique'],
             [['genero'], 'exist', 'skipOnError' => true, 'targetClass' => Genero::className(), 'targetAttribute' => ['genero' => 'id']],
         ];
     }

@@ -18,8 +18,8 @@ class ActividadSearch extends Actividad
     public function rules()
     {
         return [
-            [['id', 'cantHoras', 'actividadtipo', 'plan', 'propuesta'], 'integer'],
-            [['nombre'], 'safe'],
+            [['id', 'cantHoras',], 'integer'],
+            [['nombre', 'actividadtipo', 'plan', 'propuesta'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class ActividadSearch extends Actividad
      */
     public function search($params)
     {
-        $query = Actividad::find();
+        $query = Actividad::find()->joinWith(['actividadtipo0', 'plan0', 'propuesta0']);
 
         // add conditions that should always apply here
 
@@ -57,16 +57,38 @@ class ActividadSearch extends Actividad
             return $dataProvider;
         }
 
+        $dataProvider->sort->attributes['actividadtipo0'] = [
+        // The tables are the ones our relation are configured to
+        // in my case they are prefixed with "tbl_"
+        'asc' => ['actividadtipo.nombre' => SORT_ASC],
+        'desc' => ['actividadtipo.nombre' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['plan0'] = [
+        // The tables are the ones our relation are configured to
+        // in my case they are prefixed with "tbl_"
+        'asc' => ['plan.nombre' => SORT_ASC],
+        'desc' => ['plan.nombre' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['propuesta0'] = [
+        // The tables are the ones our relation are configured to
+        // in my case they are prefixed with "tbl_"
+        'asc' => ['propuesta.nombre' => SORT_ASC],
+        'desc' => ['propuesta.nombre' => SORT_DESC],
+        ];
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'cantHoras' => $this->cantHoras,
-            'actividadtipo' => $this->actividadtipo,
-            'plan' => $this->plan,
-            'propuesta' => $this->propuesta,
+            
         ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre]);
+        $query->andFilterWhere(['like', 'actividadtipo.nombre', $this->actividadtipo]);
+        $query->andFilterWhere(['like', 'plan.nombre', $this->plan]);
+        $query->andFilterWhere(['like', 'propuesta.nombre', $this->propuesta]);
 
         return $dataProvider;
     }

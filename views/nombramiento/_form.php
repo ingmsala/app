@@ -26,7 +26,7 @@ use yii\helpers\Url;
     <?php $listcondiciones=ArrayHelper::map($condiciones,'id','nombre'); ?>
     <?php $listsuplentes=ArrayHelper::map($suplentes,'id', 'nombre');?>
 
-    <?= $form->field($model, 'id')->textInput() ?>
+    
 
     <?= $form->field($model, 'cargo')->dropDownList($listcargos, ['prompt'=>'Seleccionar...',
         'onchange'=>'       

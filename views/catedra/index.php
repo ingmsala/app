@@ -25,11 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             
 
-            [   
-                'label' => 'Id',
-                'attribute' => 'id',
-                'value' => 'id'
-            ],
+            
             [   
                 'label' => 'Actividad',
                 'attribute' => 'actividad',
@@ -37,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [   
-                'label' => 'Hora',
+                'label' => 'Horas',
                 'attribute' => 'actividad.canthoras',
                 'value' => 'actividad0.cantHoras'
             ],

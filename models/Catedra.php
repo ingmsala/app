@@ -31,9 +31,8 @@ class Catedra extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'actividad'], 'required'],
-            [['id', 'actividad', 'division'], 'integer'],
-            [['id'], 'unique'],
+            [['actividad'], 'required'],
+            [['actividad', 'division'], 'integer'],
             [['division'], 'exist', 'skipOnError' => true, 'targetClass' => Division::className(), 'targetAttribute' => ['division' => 'id']],
             [['actividad'], 'exist', 'skipOnError' => true, 'targetClass' => Actividad::className(), 'targetAttribute' => ['actividad' => 'id']],
         ];

@@ -18,8 +18,8 @@ class DocenteSearch extends Docente
     public function rules()
     {
         return [
-            [['id', 'genero'], 'integer'],
-            [['legajo', 'apellido', 'nombre'], 'safe'],
+            [['id', ], 'integer'],
+            [['legajo', 'apellido', 'nombre', 'genero'], 'safe'],
         ];
     }
 
@@ -42,6 +42,7 @@ class DocenteSearch extends Docente
     public function search($params)
     {
         $query = Docente::find()
+            ->joinWith(['genero0'])
             ->orderBy('apellido', 'nombre', 'legajo');
 
         // add conditions that should always apply here
@@ -58,15 +59,23 @@ class DocenteSearch extends Docente
             return $dataProvider;
         }
 
+        $dataProvider->sort->attributes['genero0'] = [
+        // The tables are the ones our relation are configured to
+        // in my case they are prefixed with "tbl_"
+        'asc' => ['genero.nombre' => SORT_ASC],
+        'desc' => ['genero.nombre' => SORT_DESC],
+        ];
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'genero' => $this->genero,
+            
         ]);
 
         $query->andFilterWhere(['like', 'legajo', $this->legajo])
             ->andFilterWhere(['like', 'apellido', $this->apellido])
-            ->andFilterWhere(['like', 'nombre', $this->nombre]);
+            ->andFilterWhere(['like', 'nombre', $this->nombre])
+            ->andFilterWhere(['like', 'genero.nombre', $this->genero]);
 
         return $dataProvider;
     }

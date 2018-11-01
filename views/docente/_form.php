@@ -15,7 +15,6 @@ use yii\helpers\ArrayHelper;
 
     <?php $listgeneros=ArrayHelper::map($generos,'id','nombre'); ?>
 
-    <?= $form->field($model, 'id')->textInput() ?>
 
     <?= $form->field($model, 'legajo')->textInput(['maxlength' => true]) ?>
 
