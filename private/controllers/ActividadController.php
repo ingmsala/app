@@ -9,7 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Plan;
-use app\models\ActividadTipo;
+use app\models\Actividadtipo;
 use app\models\Propuesta;
 use yii\filters\AccessControl;
 
@@ -81,7 +81,7 @@ class ActividadController extends Controller
     {
         $model = new Actividad();
         $planes=Plan::find()->all();
-        $actividadtipos=ActividadTipo::find()->all();
+        $actividadtipos=Actividadtipo::find()->all();
         $propuestas=Propuesta::find()->all();
 
 
@@ -110,7 +110,7 @@ class ActividadController extends Controller
         $model = $this->findModel($id);
 
         $planes=Plan::find()->all();
-        $actividadtipos=ActividadTipo::find()->all();
+        $actividadtipos=Actividadtipo::find()->all();
         $propuestas=Propuesta::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

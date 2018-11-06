@@ -12,7 +12,7 @@ use Yii;
  *
  * @property Actividad[] $actividads
  */
-class ActividadTipo extends \yii\db\ActiveRecord
+class Actividadtipo extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}

@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\ActividadTipo;
+use app\models\Actividadtipo;
 
 /**
  * ActividadTipoSearch represents the model behind the search form of `app\models\ActividadTipo`.
  */
-class ActividadTipoSearch extends ActividadTipo
+class ActividadtipoSearch extends Actividadtipo
 {
     /**
      * {@inheritdoc}
@@ -41,7 +41,7 @@ class ActividadTipoSearch extends ActividadTipo
      */
     public function search($params)
     {
-        $query = ActividadTipo::find();
+        $query = Actividadtipo::find();
 
         // add conditions that should always apply here
 

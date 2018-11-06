@@ -3,8 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\ActividadTipo;
-use app\models\ActividadTipoSearch;
+use app\models\Actividadtipo;
+use app\models\ActividadtipoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -13,7 +13,7 @@ use yii\filters\AccessControl;
 /**
  * ActividadTipoController implements the CRUD actions for ActividadTipo model.
  */
-class ActividadTipoController extends Controller
+class ActividadtipoController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -47,7 +47,7 @@ class ActividadTipoController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ActividadTipoSearch();
+        $searchModel = new ActividadtipoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -76,7 +76,7 @@ class ActividadTipoController extends Controller
      */
     public function actionCreate()
     {
-        $model = new ActividadTipo();
+        $model = new Actividadtipo();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -130,7 +130,7 @@ class ActividadTipoController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = ActividadTipo::findOne($id)) !== null) {
+        if (($model = Actividadtipo::findOne($id)) !== null) {
             return $model;
         }
 

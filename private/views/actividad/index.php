@@ -10,10 +10,12 @@ use yii\grid\GridView;
 $this->title = 'Actividades';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+
 <div class="actividad-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    
 
     <p>
         <?= Html::a('Nueva Actividad', ['create'], ['class' => 'btn btn-success']) ?>
