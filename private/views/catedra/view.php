@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     
     <h3>Docentes Nombrados</h3>
-    <?= Html::button('Agregar Docente', ['value' => Url::to('index.php?r=detalle-catedra/create&catedra='.$model->id), 'class' => 'btn btn-success', 'id'=>'modalButton']) ?>
+    <?= Html::button('Agregar Docente', ['value' => Url::to('index.php?r=detallecatedra/create&catedra='.$model->id), 'class' => 'btn btn-success', 'id'=>'modalButton']) ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'rowOptions' => function($model){
@@ -75,8 +75,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             
             [   
-                'label' => 'Docente',
+                'label' => 'Apellido',
                 'attribute' => 'docente0.apellido'
+            ],
+
+            [   
+                'label' => 'Nombre',
+                'attribute' => 'docente0.nombre'
             ],
             
             [   
@@ -91,24 +96,24 @@ $this->params['breadcrumbs'][] = $this->title;
                 
                 'buttons' => [
                     'viewdetcat' => function($url, $model, $key){
-                        return $model->id != '' ? Html::a(
+                        return Html::a(
                             '<span class="glyphicon glyphicon-eye-open"></span>',
-                            '?r=detalle-catedra/view&id='.$model->id) : '';
+                            '?r=detallecatedra/view&id='.$model->id);
                     },
                     'updatedetcat' => function($url, $model, $key){
-                        return $model->id != '' ? Html::button('<span class="glyphicon glyphicon-pencil"></span>',
-                            ['value' => Url::to('index.php?r=detalle-catedra/update&id='.$model->id.'&catedra=' .$model->catedra),
-                                'class' => 'modala btn btn-link', 'id'=>'modala']) : '';
+                        return Html::button('<span class="glyphicon glyphicon-pencil"></span>',
+                            ['value' => Url::to('index.php?r=detallecatedra/update&id='.$model->id.'&catedra=' .$model->catedra),
+                                'class' => 'modala btn btn-link', 'id'=>'modala']);
 
 
                     },
                     'deletedetcat' => function($url, $model, $key){
-                        return $model->id != '' ? Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=detalle-catedra/delete&id='.$model->id, 
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=detallecatedra/delete&id='.$model->id, 
                             ['data' => [
                             'confirm' => 'Está seguro de querer eliminar este elemento?',
                             'method' => 'post',
                              ]
-                            ]) : '';
+                            ]);
                     },
                 ]
 

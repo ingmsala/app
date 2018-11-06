@@ -11,8 +11,8 @@ use app\models\Propuesta;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\models\DetalleCatedra;
-use app\models\DetalleCatedraSearch;
+use app\models\Detallecatedra;
+use app\models\DetallecatedraSearch;
 use yii\filters\AccessControl;
 
 /**
@@ -69,12 +69,12 @@ class CatedraController extends Controller
      */
     public function actionView($id)
     {
-        $searchModel = new DetalleCatedraSearch();
+        $searchModel = new DetallecatedraSearch();
         $dataProvider = $searchModel->providerxcatedra($id);
 
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'modeldetalle' => DetalleCatedra::find()->where([
+            'modeldetalle' => Detallecatedra::find()->where([
                 'catedra' => $id,
                 
             ])->one(),

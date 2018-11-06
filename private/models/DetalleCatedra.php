@@ -22,7 +22,7 @@ use Yii;
  * @property Revista $revista0
  * @property Resolucion $resolucion0
  */
-class DetalleCatedra extends \yii\db\ActiveRecord
+class Detallecatedra extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}

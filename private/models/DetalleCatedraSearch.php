@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\DetalleCatedra;
+use app\models\Detallecatedra;
 
 /**
  * DetalleCatedraSearch represents the model behind the search form of `app\models\DetalleCatedra`.
  */
-class DetalleCatedraSearch extends DetalleCatedra
+class DetallecatedraSearch extends Detallecatedra
 {
     /**
      * {@inheritdoc}
@@ -41,7 +41,7 @@ class DetalleCatedraSearch extends DetalleCatedra
      */
     public function search($params)
     {
-        $query = DetalleCatedra::find();
+        $query = Detallecatedra::find();
 
         // add conditions that should always apply here
 
@@ -75,7 +75,7 @@ class DetalleCatedraSearch extends DetalleCatedra
 
     public function providerxcatedra($id)
     {
-        $query = DetalleCatedra::find()
+        $query = Detallecatedra::find()
             ->where(['catedra' => $id,
                 //'condicion' => 5 //suplente
             ])
@@ -97,7 +97,7 @@ class DetalleCatedraSearch extends DetalleCatedra
 
      public function providerxdocente($id)
     {
-        $query = DetalleCatedra::find()
+        $query = Detallecatedra::find()
             ->where(['docente' => $id,
                 //'condicion' => 5 //suplente
             ])
@@ -120,7 +120,7 @@ class DetalleCatedraSearch extends DetalleCatedra
 
     public function cantidadHorasACobrarXDocente($id){
 
-        $query = DetalleCatedra::find()->joinWith(['catedra0', 'catedra0.actividad0'])
+        $query = Detallecatedra::find()->joinWith(['catedra0', 'catedra0.actividad0'])
                 ->select('sum(actividad.cantHoras) as id')
                 ->where(['detallecatedra.docente' => $id])
                 ->andWhere(['<>', 'detallecatedra.revista', 2])->one();//no licencia sin goce
@@ -132,7 +132,7 @@ class DetalleCatedraSearch extends DetalleCatedra
 
     public function cantidadHorasConLicenciaSinGoceXDocente($id){
 
-        $query = DetalleCatedra::find()->joinWith(['catedra0', 'catedra0.actividad0'])
+        $query = Detallecatedra::find()->joinWith(['catedra0', 'catedra0.actividad0'])
                 ->select('sum(actividad.cantHoras) as id')
                 ->where(['detallecatedra.docente' => $id])
                 ->andWhere(['detallecatedra.revista' => 2])->one();// lic s/goce

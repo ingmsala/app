@@ -5,7 +5,7 @@ namespace app\controllers\reporte;
 use Yii;
 use app\models\Docente;
 use app\models\DocenteSearch;
-use app\models\DetalleCatedraSearch;
+use app\models\DetallecatedraSearch;
 use app\models\NombramientoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -59,7 +59,7 @@ class HorasdocentesController extends \yii\web\Controller
 
 	public function actionView($id)
     {
-        $searchModel = new DetalleCatedraSearch();
+        $searchModel = new DetallecatedraSearch();
         $dataProvider = $searchModel->providerxdocente($id);
         $horasCatedraACobrar = $searchModel->cantidadHorasACobrarXDocente($id);
         $horasCatedraSinCobrar = $searchModel->cantidadHorasConLicenciaSinGoceXDocente($id);

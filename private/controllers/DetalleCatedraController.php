@@ -3,8 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\DetalleCatedra;
-use app\models\DetalleCatedraSearch;
+use app\models\Detallecatedra;
+use app\models\DetallecatedraSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -18,7 +18,7 @@ use yii\filters\AccessControl;
 /**
  * DetalleCatedraController implements the CRUD actions for DetalleCatedra model.
  */
-class DetalleCatedraController extends Controller
+class DetallecatedraController extends Controller
 {
     /**
      * {@inheritdoc}

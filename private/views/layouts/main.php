@@ -85,10 +85,8 @@ AppAsset::register($this);
                         '<div class="dropdown-divider"></div>',
                     ['label' => 'Situacion de Revista', 'url' => ['/revista']],
                         '<div class="dropdown-divider"></div>',
-                    ['label' => 'Tipo de Actividad', 'url' => ['/actividad-tipo']],
-                        '<div class="dropdown-divider"></div>',
-                    ['label' => 'Detalle de Catedra', 'url' => ['/detalle-catedra']],
-                ],
+                    ['label' => 'Tipo de Actividad', 'url' => ['/actividadtipo']],
+                             ],
 
             ],
             ['label' => 'Procesos', 
