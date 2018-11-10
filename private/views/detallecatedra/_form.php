@@ -16,10 +16,11 @@ use yii\helpers\ArrayHelper;
     
     <?php $listDocentes=ArrayHelper::map($docentes,'id', function($doc) {
             return $doc['apellido'].', '.$doc['nombre'];}
-        );?>
+    );?>
+    
     <?php $listcondiciones=ArrayHelper::map($condiciones,'id','nombre'); ?>
     <?php $listrevistas=ArrayHelper::map($revistas,'id','nombre'); ?>
-
+    
     <?= $form->field($model, 'catedra')->hiddenInput(['value'=> $catedras->id])->label(false) ?>
 
     

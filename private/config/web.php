@@ -23,6 +23,7 @@ $config = [
         'formatter' => [
         'class' => 'yii\i18n\Formatter',
         'nullDisplay' => '',
+        'dateFormat' => 'dd/mm/yyyy',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',

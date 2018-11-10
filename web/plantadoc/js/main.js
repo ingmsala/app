@@ -35,6 +35,15 @@ $(function(){
 });
 
 $(function(){
+	$('#modalaDetalleParte').click(function(){
+		$('#modal').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+		document.getElementById('modalHeader').innerHTML ='Agregar Ausencia';
+	})
+});
+
+$(function(){
 	$('.modalaReporteHoras').click(function(){
 		$('#modal').modal('show')
 			.find('#modalContent')

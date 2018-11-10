@@ -11,11 +11,14 @@ use Yii;
  * @property string $nombre
  * @property int $turno
  * @property int $propuesta
+ * @property int $preceptoria
  *
  * @property Catedra[] $catedras
+ * @property Detalleparte[] $detallepartes
+ * @property Preceptoria $preceptoria0
  * @property Turno $turno0
  * @property Propuesta $propuesta0
- * @property Funcion[] $funcions
+ * @property Nombramiento[] $nombramientos
  */
 class Division extends \yii\db\ActiveRecord
 {
@@ -34,8 +37,9 @@ class Division extends \yii\db\ActiveRecord
     {
         return [
             [['nombre', 'propuesta'], 'required'],
-            [['turno', 'propuesta'], 'integer'],
+            [['turno', 'propuesta', 'preceptoria'], 'integer'],
             [['nombre'], 'string', 'max' => 100],
+            [['preceptoria'], 'exist', 'skipOnError' => true, 'targetClass' => Preceptoria::className(), 'targetAttribute' => ['preceptoria' => 'id']],
             [['turno'], 'exist', 'skipOnError' => true, 'targetClass' => Turno::className(), 'targetAttribute' => ['turno' => 'id']],
             [['propuesta'], 'exist', 'skipOnError' => true, 'targetClass' => Propuesta::className(), 'targetAttribute' => ['propuesta' => 'id']],
         ];
@@ -51,6 +55,7 @@ class Division extends \yii\db\ActiveRecord
             'nombre' => 'Nombre',
             'turno' => 'Turno',
             'propuesta' => 'Propuesta',
+            'preceptoria' => 'Preceptoria',
         ];
     }
 
@@ -60,6 +65,22 @@ class Division extends \yii\db\ActiveRecord
     public function getCatedras()
     {
         return $this->hasMany(Catedra::className(), ['division' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDetallepartes()
+    {
+        return $this->hasMany(Detalleparte::className(), ['division' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPreceptoria0()
+    {
+        return $this->hasOne(Preceptoria::className(), ['id' => 'preceptoria']);
     }
 
     /**
@@ -81,8 +102,8 @@ class Division extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFuncions()
+    public function getNombramientos()
     {
-        return $this->hasMany(Funcion::className(), ['division' => 'id']);
+        return $this->hasMany(Nombramiento::className(), ['division' => 'id']);
     }
 }

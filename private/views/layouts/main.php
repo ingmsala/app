@@ -41,21 +41,20 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
+           
             ['label' => 'Reportes', 
                 'items' => [
-                    ['label' => 'Horas Catedra Secundario', 'url' => ['#']],
+                   /* ['label' => 'Horas Catedra Secundario', 'url' => ['#']],
                         '<div class="dropdown-divider"></div>',
                     ['label' => 'Horas Catedra Pregrado', 'url' => ['#']],
                         '<div class="dropdown-divider"></div>',
                     ['label' => 'Cargos', 'url' => ['#']],
                         '<div class="dropdown-divider"></div>',
-                    ['label' => 'Preceptores', 'url' => ['/reporte/preceptores']],
-                        '<div class="dropdown-divider"></div>',
                     ['label' => 'Jefe de Preceptores', 'url' => ['#']],
                         '<div class="dropdown-divider"></div>',
-                    
-
+                    */
+                    ['label' => 'Preceptores', 'url' => ['/reporte/preceptores']],
+                        '<div class="dropdown-divider"></div>',
                     ['label' => 'Listado de Horas por Docente', 'url' => ['/reporte/horasdocentes']],
                         '<div class="dropdown-divider"></div>',
                 ],
@@ -89,10 +88,19 @@ AppAsset::register($this);
                              ],
 
             ],
+            ['label' => 'Parte Docente', 
+                'items' => [
+                    ['label' => 'Parte docente', 'url' => ['/parte']],
+                        '<div class="dropdown-divider"></div>',
+                    ['label' => 'Horarios de cátedra', 'url' => ['/horarios']],
+                        '<div class="dropdown-divider"></div>',
+                    
+                ],
+            ],
             ['label' => 'Procesos', 
                 'items' => [
-                    ['label' => 'Comparar con Mapuche', 'url' => ['#']],
-                        '<div class="dropdown-divider"></div>',
+                   /* ['label' => 'Comparar con Mapuche', 'url' => ['#']],
+                        '<div class="dropdown-divider"></div>',*/
                     
                 ],
             ],

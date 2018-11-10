@@ -6,8 +6,8 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Division */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Divisions', 'url' => ['index']];
+$this->title = $model->nombre;
+$this->params['breadcrumbs'][] = ['label' => 'Divisiones', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="division-view">
@@ -34,6 +34,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute' =>'propuesta0.nombre'],
             ['label'=>"Turno",
             'attribute' =>'turno0.nombre'],
+            [   
+                'label' => 'Preceptoria',
+                'attribute' => 'preceptoria0.nombre',
+            ],
         ],
     ]) ?>
 
