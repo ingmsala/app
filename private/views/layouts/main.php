@@ -41,7 +41,10 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-           
+            Yii::$app->user->isGuest ? (
+                ['label' => '']
+            ) :(
+            in_array (Yii::$app->user->identity->username, ["msala", "secretaria"]) ? (
             ['label' => 'Reportes', 
                 'items' => [
                    /* ['label' => 'Horas Catedra Secundario', 'url' => ['#']],
@@ -57,8 +60,19 @@ AppAsset::register($this);
                         '<div class="dropdown-divider"></div>',
                     ['label' => 'Listado de Horas por Docente', 'url' => ['/reporte/horasdocentes']],
                         '<div class="dropdown-divider"></div>',
+                    ['label' => 'Parte Docente - Faltas por mes', 'url' => ['/reporte/faltasxmes']],
+                        '<div class="dropdown-divider"></div>',
+                    ['label' => 'Parte Docente - Horas sin dictar por Docentes', 'url' => ['/reporte/faltasdocentes']],
+                        '<div class="dropdown-divider"></div>',
+
                 ],
-            ],
+            ]) :
+                ['label' => '']
+            ),
+            Yii::$app->user->isGuest ? (
+                ['label' => '']
+            ) :(
+            in_array (Yii::$app->user->identity->username, ["msala", "secretaria"]) ? (
             ['label' => 'Administración',
                 'items' => [
                      
@@ -87,7 +101,9 @@ AppAsset::register($this);
                     ['label' => 'Tipo de Actividad', 'url' => ['/actividadtipo']],
                              ],
 
-            ],
+            ]) :
+                ['label' => '']
+            ),
             ['label' => 'Parte Docente', 
                 'items' => [
                     ['label' => 'Parte docente', 'url' => ['/parte']],
@@ -97,13 +113,7 @@ AppAsset::register($this);
                     
                 ],
             ],
-            ['label' => 'Procesos', 
-                'items' => [
-                   /* ['label' => 'Comparar con Mapuche', 'url' => ['#']],
-                        '<div class="dropdown-divider"></div>',*/
-                    
-                ],
-            ],
+            
             Yii::$app->user->isGuest ? (
                 ['label' => 'Ingresar', 'url' => ['/site/login']]
             ) : (

@@ -35,14 +35,16 @@ $precepx = Yii::$app->user->identity->username;
                 'label' => 'Fecha',
                 'attribute' => 'fecha',
                 'value' => function($model){
-                    $formatter = \Yii::$app->formatter;
-                   return $formatter->asDate($model->fecha, 'dd/MM/yyyy');
+                    
+                   return Yii::$app->formatter->asDate($model->fecha, 'dd-MM-yyyy');
                 }
             ],
             [   
                 'label' => 'Preceptoria',
                 'attribute' => 'preceptoria',
-                'value' => 'preceptoria0.nombre'
+                'value' => 'preceptoria0.nombre',
+                'filter' => ['M2P' => 'M2P', 'M1P' => 'M1P', 'MPB' => 'MPB', 'T2P' => 'T2P', 'T1P' => 'T1P', 'TPB' => 'TPB'],
+                'filterInputOptions' => ['prompt' => 'Todas', 'class' => 'form-control', 'id' => null]
             ],
 
             ['class' => 'yii\grid\ActionColumn'],

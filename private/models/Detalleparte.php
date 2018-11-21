@@ -17,6 +17,7 @@ use Yii;
  * @property int $falta
  *
  * @property Parte $parte0
+ * @property Falta $falta0
  * @property Docente $docente0
  * @property Division $division0
  */
@@ -39,6 +40,7 @@ class Detalleparte extends \yii\db\ActiveRecord
             [['parte', 'division', 'docente', 'hora', 'falta'], 'required'],
             [['parte', 'division', 'docente', 'hora', 'llego', 'retiro', 'falta'], 'integer'],
             [['parte'], 'exist', 'skipOnError' => true, 'targetClass' => Parte::className(), 'targetAttribute' => ['parte' => 'id']],
+            [['falta'], 'exist', 'skipOnError' => true, 'targetClass' => Falta::className(), 'targetAttribute' => ['falta' => 'id']],
             [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
             [['division'], 'exist', 'skipOnError' => true, 'targetClass' => Division::className(), 'targetAttribute' => ['division' => 'id']],
         ];
@@ -57,7 +59,7 @@ class Detalleparte extends \yii\db\ActiveRecord
             'hora' => 'Hora',
             'llego' => 'Llego',
             'retiro' => 'Retiro',
-            'falta' => 'Falta',
+            'falta' => 'Tipo de Falta',
         ];
     }
 
@@ -68,6 +70,16 @@ class Detalleparte extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Parte::className(), ['id' => 'parte']);
     }
+
+       /**
+    * @return \yii\db\ActiveQuery
+    */
+   
+   public function getFalta0()
+   {
+       return $this->hasOne(Falta::className(), ['id' => 'falta']);
+   }
+
 
     /**
      * @return \yii\db\ActiveQuery

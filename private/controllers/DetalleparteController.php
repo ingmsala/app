@@ -12,6 +12,7 @@ use yii\filters\VerbFilter;
 use app\models\Docente;
 use app\models\Division;
 use app\models\Hora;
+use app\models\Falta;
 
 /**
  * DetalleparteController implements the CRUD actions for Detalleparte model.
@@ -86,7 +87,7 @@ class DetalleparteController extends Controller
         } 
 
         $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
-        
+        $faltas = Falta::find()->all();
         $horas = Hora::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -100,6 +101,7 @@ class DetalleparteController extends Controller
             'partes' => $partex,
             'parte' => $parte,
             'horas' => $horas,
+            'faltas' => $faltas,
         ]);
     }
 
@@ -129,7 +131,7 @@ class DetalleparteController extends Controller
         } 
 
         $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
-        
+        $faltas = Falta::find()->all();
         $horas = Hora::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -143,6 +145,7 @@ class DetalleparteController extends Controller
             'partes' => $partex,
             'parte' => $parte,
             'horas' => $horas,
+            'faltas' => $faltas,
         ]);
     }
 

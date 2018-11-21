@@ -18,6 +18,7 @@ use yii\helpers\ArrayHelper;
         );?>
 
     <?php $listHoras=ArrayHelper::map($horas,'id','nombre'); ?>
+    <?php $listFaltas=ArrayHelper::map($faltas,'id','nombre'); ?>
      
 
     <?php $listDivisiones=ArrayHelper::map($divisiones,'id','nombre'); ?>
@@ -34,10 +35,10 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'retiro')->textInput() ?>
 
-    <?= $form->field($model, 'falta')->textInput() ?>
+    <?= $form->field($model, 'falta')->dropDownList($listFaltas, ['prompt'=>'Seleccionar...']); ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

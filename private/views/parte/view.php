@@ -68,7 +68,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'llego', 
             'retiro',
-            'falta',
+            [   
+                'label' => 'Tipo de Falta',
+                'attribute' => 'falta0.nombre'
+            ],
             
            
 

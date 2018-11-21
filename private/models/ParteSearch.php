@@ -18,8 +18,8 @@ class ParteSearch extends Parte
     public function rules()
     {
         return [
-            [['id', 'preceptoria'], 'integer'],
-            [['fecha'], 'safe'],
+            [['id'], 'integer'],
+            [['fecha', 'preceptoria'], 'safe'],
         ];
     }
 
@@ -44,9 +44,11 @@ class ParteSearch extends Parte
         $us = Yii::$app->user->identity->username;
         if ( !in_array ($us, ["msala", "secretaria"])) {
         $query = Parte::find()->joinWith('preceptoria0')
-               ->where(['preceptoria.nombre' => $us]);
+               ->where(['preceptoria.nombre' => $us])
+               ->orderBy('fecha');
         }else{
-            $query = Parte::find();
+            $query = Parte::find()->joinWith('preceptoria0')
+                ->orderBy('fecha');
         }
 
         // add conditions that should always apply here
@@ -63,12 +65,19 @@ class ParteSearch extends Parte
             return $dataProvider;
         }
 
+        $dataProvider->sort->attributes['preceptoria0'] = [
+        'asc' => ['preceptoria.nombre' => SORT_ASC],
+        'desc' => ['preceptoria.nombre' => SORT_DESC],
+        ];
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'fecha' => $this->fecha,
-            'preceptoria' => $this->preceptoria,
+            
         ]);
+
+        $query->andFilterWhere(['like', 'preceptoria.nombre', $this->preceptoria]);
 
         return $dataProvider;
     }

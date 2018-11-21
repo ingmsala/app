@@ -42,7 +42,7 @@ class DocenteSearch extends Docente
     public function search($params)
     {
         $query = Docente::find()
-            ->joinWith(['genero0'])
+            ->joinWith(['genero0', 'detallepartes'])
             ->orderBy('apellido', 'nombre', 'legajo');
 
         // add conditions that should always apply here
@@ -74,7 +74,7 @@ class DocenteSearch extends Docente
 
         $query->andFilterWhere(['like', 'legajo', $this->legajo])
             ->andFilterWhere(['like', 'apellido', $this->apellido])
-            ->andFilterWhere(['like', 'nombre', $this->nombre])
+            ->andFilterWhere(['like', 'docente.nombre', $this->nombre])
             ->andFilterWhere(['like', 'genero.nombre', $this->genero]);
 
         return $dataProvider;

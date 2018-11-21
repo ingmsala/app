@@ -90,8 +90,12 @@ class ParteController extends Controller
 
         $model = new Parte();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->fecha = Yii::$app->formatter->asDate($model->fecha, 'yyyy-MM-dd');
+            if ($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('create', [
@@ -110,13 +114,23 @@ class ParteController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        if (isset ($_REQUEST['precepx'])) {
+            $precepx = $_REQUEST['precepx'] ;
+            $precepx=Preceptoria::find()
+                ->where(['nombre' => $precepx])
+                ->orderBy('nombre')->all();
+        
+        }else{
+                
+                $precepx=Preceptoria::find()->all();
+        }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'precepx' => $precepx,
         ]);
     }
 

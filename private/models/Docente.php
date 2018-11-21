@@ -87,6 +87,11 @@ class Docente extends \yii\db\ActiveRecord
         return $this->hasMany(Nombramiento::className(), ['docente' => 'id']);
     }
 
+    public function getDetallepartes()
+    {
+        return $this->hasMany(Detalleparte::className(), ['docente' => 'id']);
+    }
+
 
    
 }

@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\data\SqlDataProvider;
 use app\models\Detalleparte;
 
 /**
@@ -80,6 +81,59 @@ class DetalleparteSearch extends Detalleparte
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        return $dataProvider;
+
+    }
+
+    public function providerxdocente($id)
+    {
+        $query = Detalleparte::find()
+            ->where(['docente' => $id,
+                //'condicion' => 5 //suplente
+            ]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        return $dataProvider;
+
+    }
+
+    public function providerxmes($mes)
+    {
+        /*$query = Detalleparte::find()
+            ->select('COUNT( detalleparte.falta ) AS falta, parte.fecha')
+            ->joinWith(['parte0'])
+            ->where(['month(parte.fecha)' => $mes,
+                'detalleparte.falta' => 1 //suplente
+            ])
+            ->groupBy('parte.fecha');*/
+
+        $sql='SELECT p.fecha, COUNT( dp.falta ) AS faltas
+            FROM parte p
+            INNER JOIN detalleparte dp ON dp.parte = p.id
+            WHERE dp.falta =1
+            AND MONTH( p.fecha ) ='.$mes.'
+            GROUP BY p.fecha';
+
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $sql,
         ]);
 
         if (!$this->validate()) {
