@@ -66,6 +66,8 @@ AppAsset::register($this);
                         '<div class="dropdown-divider"></div>',
                     ['label' => 'Parte Docente - Evolucion Faltas por año', 'url' => ['/reporte/parte/faltasxmeses']],
                         '<div class="dropdown-divider"></div>',
+                    ['label' => 'Parte Docente - Cantidad de Faltas por Turno', 'url' => ['/reporte/parte/faltasxmesesxturno']],
+                        '<div class="dropdown-divider"></div>',
 
                 ],
             ]) :

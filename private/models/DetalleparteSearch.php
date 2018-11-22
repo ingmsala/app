@@ -149,14 +149,6 @@ class DetalleparteSearch extends Detalleparte
 
     public function providerxanio($anio)
     {
-        /*$query = Detalleparte::find()
-            ->select('COUNT( detalleparte.falta ) AS falta, parte.fecha')
-            ->joinWith(['parte0'])
-            ->where(['month(parte.fecha)' => $mes,
-                'detalleparte.falta' => 1 //suplente
-            ])
-                ->groupBy('parte.fecha');*/
-
         
         $sql='
             SELECT MONTH(p.fecha) as meses, COUNT( dp.falta ) AS faltas
@@ -165,6 +157,59 @@ class DetalleparteSearch extends Detalleparte
             WHERE dp.falta =1
             AND YEAR( p.fecha ) ='.$anio.'
             GROUP BY MONTH(p.fecha)';
+
+
+        $dataProvider = new SqlDataProvider([
+            
+            'sql' => $sql,
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        return $dataProvider;
+
+    }
+
+    public function providerxanioxturno($anio)
+    {
+        
+        $sql='
+        SELECT MONTH(p1.fecha) as meses, (
+            SELECT
+            COUNT( dp2.falta )
+            FROM parte p2
+            INNER JOIN detalleparte dp2 ON dp2.parte = p2.id
+                INNER JOIN preceptoria pr2 ON p2.preceptoria = pr2.id
+            WHERE dp2.falta = 1
+            AND pr2.turno = 1
+            AND YEAR( p2.fecha ) = '.$anio.'
+            AND MONTH(p1.fecha) = MONTH(p2.fecha)
+        
+        
+        ) as manana,
+        (
+            SELECT
+            COUNT( dp3.falta )
+            FROM parte p3
+            INNER JOIN detalleparte dp3 ON dp3.parte = p3.id
+                INNER JOIN preceptoria pr3 ON p3.preceptoria = pr3.id
+            WHERE dp3.falta = 1
+            AND pr3.turno = 2
+            AND YEAR( p3.fecha ) = '.$anio.'
+            AND MONTH(p1.fecha) = MONTH(p3.fecha)
+        ) as tarde
+        
+        FROM parte p1
+        LEFT JOIN detalleparte dp1 ON dp1.parte = p1.id
+        LEFT JOIN preceptoria pr1 ON p1.preceptoria = pr1.id
+        WHERE dp1.falta = 1
+        AND YEAR( p1.fecha ) = '.$anio.'
+        GROUP BY MONTH(p1.fecha)
+        ';
 
 
         $dataProvider = new SqlDataProvider([

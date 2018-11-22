@@ -11,6 +11,7 @@ use Yii;
  * @property string $nombre
  *
  * @property Division[] $divisions
+ * @property Preceptoria[] $preceptorias
  */
 class Turno extends \yii\db\ActiveRecord
 {
@@ -50,5 +51,13 @@ class Turno extends \yii\db\ActiveRecord
     public function getDivisions()
     {
         return $this->hasMany(Division::className(), ['turno' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPreceptorias()
+    {
+        return $this->hasMany(Preceptoria::className(), ['turno' => 'id']);
     }
 }

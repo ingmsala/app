@@ -14,7 +14,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\DocenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Reporte - Evolucion Faltas por año';
+$this->title = 'Reporte - Cantidad de Faltas por Turno';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="docente-index">
@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'onchange'=>'
                     var aniojs = document.getElementById("cmbyear").value;
                                                                 
-                                var url = "index.php?r=reporte/parte/faltasxmeses&anio=" + aniojs;
+                                var url = "index.php?r=reporte/parte/faltasxmesesxturno&anio=" + aniojs;
                                 document.getElementById("btnfiltrar").href = url;
 
         ',
@@ -91,8 +91,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 
             ],
              [
-                'label' => 'Cantidad de Faltas',
-                'attribute' => 'faltas',
+                'label' => 'Mañana',
+                'attribute' => 'manana',
+             ],
+
+             [
+                'label' => 'Tarde',
+                'attribute' => 'tarde',
              ],
            
 
@@ -104,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
    'options' => [
       'chart' => [
-            'type' => 'line',
+            'type' => 'column',
         ],
       'title' => ['text' => $anio],
       'credits' => [
@@ -117,8 +122,8 @@ $this->params['breadcrumbs'][] = $this->title;
          'title' => ['text' => 'Faltas']
       ],
       'series' => [
-         ['name' => ' Faltas', 'data' => array_map('intval',ArrayHelper::getColumn($dataProvider->models, 'faltas'))],
-         //['name' => 'Turno Tarde', 'data' => [5, 7, 3]],
+         ['name' => ' Mañana', 'data' => array_map('intval',ArrayHelper::getColumn($dataProvider->models, 'manana'))],
+         ['name' => ' Tarde', 'data' => array_map('intval',ArrayHelper::getColumn($dataProvider->models, 'tarde'))],
 
       ]
    ]
