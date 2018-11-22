@@ -1,6 +1,6 @@
 <?php
 
-namespace app\controllers\reporte;
+namespace app\controllers\reporte\parte;
 
 use Yii;
 use app\models\Detalleparte;
@@ -40,20 +40,26 @@ class FaltasxmesController extends \yii\web\Controller
         ];
     }
 
- 	public function actionIndex($mes=11)
+ 	public function actionIndex($mes=0, $anio=0)
 	    {  
-
+            isset($_GET['anio']) ? $anio = $_GET['anio'] : '';
+            isset($_GET['mes']) ? $mes = $_GET['mes'] : '';
+            ($anio == '') ? $anio = 0 : '';
+            ($mes == '') ? $mes = 0 : '';
 	        $searchModel = new DetalleparteSearch();
-            $dataProvider = $searchModel->providerxmes($mes);
-
+            $dataProvider = $searchModel->providerxmes($mes, $anio);
+            
 	        
 
 	        return $this->render('index', 
 	        [
 	            'searchModel' => $searchModel,
 	            'dataProvider' => $dataProvider,
+                'mes' => $mes,
+                'anio' => $anio,
 	        ]);
 	    }
+
 
 	public function actionView($id)
     {

@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [
                     'viewdetcat' => function($url, $model, $key){
                         return $model->id != '' ? Html::button('<span class="glyphicon glyphicon-eye-open"></span>',
-                            ['value' => Url::to('index.php?r=reporte/faltasdocentes/view&id='.$model->id),
+                            ['value' => Url::to('index.php?r=reporte/parte/faltasdocentes/view&id='.$model->id),
                                 'class' => 'modalaReporteHoras btn btn-link']) : '';
 
 

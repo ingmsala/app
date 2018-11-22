@@ -60,9 +60,11 @@ AppAsset::register($this);
                         '<div class="dropdown-divider"></div>',
                     ['label' => 'Listado de Horas por Docente', 'url' => ['/reporte/horasdocentes']],
                         '<div class="dropdown-divider"></div>',
-                    ['label' => 'Parte Docente - Faltas por mes', 'url' => ['/reporte/faltasxmes']],
+                    ['label' => 'Parte Docente - Faltas por mes y año', 'url' => ['/reporte/parte/faltasxmes']],
                         '<div class="dropdown-divider"></div>',
-                    ['label' => 'Parte Docente - Horas sin dictar por Docentes', 'url' => ['/reporte/faltasdocentes']],
+                    ['label' => 'Parte Docente - Horas sin dictar por Docentes', 'url' => ['/reporte/parte/faltasdocentes']],
+                        '<div class="dropdown-divider"></div>',
+                    ['label' => 'Parte Docente - Evolucion Faltas por año', 'url' => ['/reporte/parte/faltasxmeses']],
                         '<div class="dropdown-divider"></div>',
 
                 ],

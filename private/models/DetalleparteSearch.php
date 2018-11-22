@@ -114,7 +114,7 @@ class DetalleparteSearch extends Detalleparte
 
     }
 
-    public function providerxmes($mes)
+    public function providerxmes($mes, $anio)
     {
         /*$query = Detalleparte::find()
             ->select('COUNT( detalleparte.falta ) AS falta, parte.fecha')
@@ -129,10 +129,46 @@ class DetalleparteSearch extends Detalleparte
             INNER JOIN detalleparte dp ON dp.parte = p.id
             WHERE dp.falta =1
             AND MONTH( p.fecha ) ='.$mes.'
+            AND YEAR( p.fecha ) ='.$anio.'
             GROUP BY p.fecha';
 
 
         $dataProvider = new SqlDataProvider([
+            'sql' => $sql,
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        return $dataProvider;
+
+    }
+
+    public function providerxanio($anio)
+    {
+        /*$query = Detalleparte::find()
+            ->select('COUNT( detalleparte.falta ) AS falta, parte.fecha')
+            ->joinWith(['parte0'])
+            ->where(['month(parte.fecha)' => $mes,
+                'detalleparte.falta' => 1 //suplente
+            ])
+                ->groupBy('parte.fecha');*/
+
+        
+        $sql='
+            SELECT MONTH(p.fecha) as meses, COUNT( dp.falta ) AS faltas
+            FROM parte p
+            INNER JOIN detalleparte dp ON dp.parte = p.id
+            WHERE dp.falta =1
+            AND YEAR( p.fecha ) ='.$anio.'
+            GROUP BY MONTH(p.fecha)';
+
+
+        $dataProvider = new SqlDataProvider([
+            
             'sql' => $sql,
         ]);
 

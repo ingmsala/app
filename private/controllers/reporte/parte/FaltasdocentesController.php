@@ -1,6 +1,6 @@
 <?php
 
-namespace app\controllers\reporte;
+namespace app\controllers\reporte\parte;
 
 use Yii;
 use app\models\Docente;
