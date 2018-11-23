@@ -68,6 +68,12 @@ AppAsset::register($this);
                         '<div class="dropdown-divider"></div>',
                     ['label' => 'Parte Docente - Cantidad de Faltas por Turno', 'url' => ['/reporte/parte/faltasxmesesxturno']],
                         '<div class="dropdown-divider"></div>',
+                    ['label' => 'Parte Docente - Comparación por Turno en un año', 'url' => ['/reporte/parte/faltasxanioxturnototal']],
+                        '<div class="dropdown-divider"></div>',
+                        ['label' => 'Parte Docente - Distribución de faltas por rango de días', 'url' => ['/reporte/parte/distribuciondediasxmes']],
+                        '<div class="dropdown-divider"></div>',
+                        ['label' => 'Parte Docente - Distribución de faltas por dia y hora', 'url' => ['/reporte/parte/distribuciondediasyhoras']],
+                        '<div class="dropdown-divider"></div>',
 
                 ],
             ]) :
@@ -104,6 +110,7 @@ AppAsset::register($this);
                         '<div class="dropdown-divider"></div>',
                     ['label' => 'Tipo de Actividad', 'url' => ['/actividadtipo']],
                              ],
+
 
             ]) :
                 ['label' => '']
