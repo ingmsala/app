@@ -77,31 +77,40 @@ class ParteController extends Controller
      */
     public function actionCreate()
     {
-        if (isset ($_REQUEST['precepx'])) {
-            $precepx = $_REQUEST['precepx'] ;
-            $precepx=Preceptoria::find()
-                ->where(['nombre' => $precepx])
-                ->orderBy('nombre')->all();
+        if (isset ($_POST['precepx'])) {
+            $precepx = $_POST['precepx'];
+            if(in_array (Yii::$app->user->identity->username, ["msala", "secretaria"])){
+                $precepx=Preceptoria::find()
+                    ->orderBy('nombre')->all();
+            }else{
+                $precepx=Preceptoria::find()
+                    ->where(['nombre' => Yii::$app->user->identity->username])
+                    ->orderBy('nombre')->all();
+            }
+            $model = new Parte();
+
+
+            if ($model->load(Yii::$app->request->post())) {
+                $model->fecha = Yii::$app->formatter->asDate($model->fecha, 'yyyy-MM-dd');
+                if ($model->save()){
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            }
+
+            return $this->render('create', [
+                'model' => $model,
+                'precepx' => $precepx,
+            ]);
         
         }else{
                 
-                $precepx=Preceptoria::find()->all();
+                //$precepx=Preceptoria::find()->all();
+           // $precepx='';
+            return $this->redirect(['index']);
+
         }
 
-        $model = new Parte();
-
-
-        if ($model->load(Yii::$app->request->post())) {
-            $model->fecha = Yii::$app->formatter->asDate($model->fecha, 'yyyy-MM-dd');
-            if ($model->save()){
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-            'precepx' => $precepx,
-        ]);
+        
     }
 
     /**

@@ -110,7 +110,10 @@ $fecha = DateTime::createFromFormat('!m', $mes);
 $mestxt = ucfirst(strftime("%B", $fecha->getTimestamp()));
 
 ?>
-<?= Highcharts::widget([
+<?php
+if($anio!=0 and $mes!=0)
+{
+   echo Highcharts::widget([
    'options' => [
       'title' => ['text' => ($anio==0) ? '' : $mestxt.' '.$anio],
       'chart' => [
@@ -132,6 +135,7 @@ $mestxt = ucfirst(strftime("%B", $fecha->getTimestamp()));
       ]
    ]
     ]);
+}
     ?>
 
 </div>

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Detalleparte */
@@ -27,7 +28,19 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'division')->dropDownList($listDivisiones, ['prompt'=>'Seleccionar...']); ?>
 
-    <?= $form->field($model, 'docente')->dropDownList($listDocentes, ['prompt'=>'Seleccionar...']); ?>
+    
+
+    <?= 
+
+        $form->field($model, 'docente')->widget(Select2::classname(), [
+            'data' => $listDocentes,
+            'options' => ['placeholder' => 'Seleccionar...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);
+
+    ?>
 
     <?= $form->field($model, 'hora')->dropDownList($listHoras, ['prompt'=>'Seleccionar...']); ?>
 

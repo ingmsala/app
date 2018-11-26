@@ -14,7 +14,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\DocenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Reporte - Distribución de faltas por dia y hora';
+$this->title = 'Reporte - Distribución de faltas por día y hora';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="docente-index">
@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     </div> 
     <div class="form-group col-xs-3 .col-sm-3"> 
-        <label for="cmbmes">Año</label>
+        <label for="cmbmes">Mes</label>
      <?= 
     
      Html::dropDownList('mes', $selection= $mes, $meses, ['prompt' => '(Todos)', 'id' => 'cmbmes', 'class' => 'form-control',
@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <div class="form-group col-xs-3 .col-sm-3">
-        <label for="cmbturno">Año</label>
+        <label for="cmbturno">Turno</label>
      <?= Html::dropDownList('turn', $selection=$turno, $turnos, ['prompt' => '(Todos)', 'id' => 'cmbturno', 'class' => 'form-control ',
         'onchange'=>'
                                 var aniojs = document.getElementById("cmbyear").value;
@@ -94,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div> 
 
     <div class="form-group">
-        <label for="cmbturno"></label><br />
+        <label for="btnfiltrar" style='color: #ffffff'>.</label><br />
         <?=
         Html::a('<span class="glyphicon glyphicon-filter" aria-hidden="true"></span>', '', ['id' => 'btnfiltrar', 'class' => 'btn btn-primary']); 
            

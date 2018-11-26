@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\DetalleCatedra */
@@ -26,10 +27,18 @@ use yii\helpers\ArrayHelper;
     
     <?= Html::tag('h3', 'Cátedra: '.$catedras->actividad0->nombre.' ('.$catedras->division0->nombre.')') ?>
 
-       
-    
+ 
+    <?= 
 
-    <?= $form->field($model, 'docente')->dropDownList($listDocentes, ['prompt'=>'Seleccionar...']); ?>
+        $form->field($model, 'docente')->widget(Select2::classname(), [
+            'data' => $listDocentes,
+            'options' => ['placeholder' => 'Seleccionar...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);
+
+    ?>
 
     <?= $form->field($model, 'condicion')->dropDownList($listcondiciones, ['prompt'=>'Seleccionar...']); ?>
 

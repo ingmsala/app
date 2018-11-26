@@ -43,48 +43,32 @@ class FaltasdocentesController extends \yii\web\Controller
         ];
     }
 
- 	public function actionIndex()
+ 	public function actionIndex($mes = 0, $anio = 0)
 	    {
-	        $searchModel = new DocenteSearch();
-	        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+	        $searchModel = new DetalleparteSearch();
+	        $dataProvider = $searchModel->providerfaltasdocentes($mes, $anio);
 
 	        
-
 	        return $this->render('index', 
 	        [
 	            'searchModel' => $searchModel,
 	            'dataProvider' => $dataProvider,
+                'anio' => $anio,
+                'mes' => $mes,
 	        ]);
 	    }
 
-	public function actionView($id)
+	public function actionView($mes = 0, $anio = 0, $id)
     {
         $searchModel = new DetalleparteSearch();
-        $dataProvider = $searchModel->providerxdocente($id);
-        //$horasCatedraACobrar = $searchModel->cantidadHorasACobrarXDocente($id);
-        //$horasCatedraSinCobrar = $searchModel->cantidadHorasConLicenciaSinGoceXDocente($id);
-
-        //$searchModelNombram = new NombramientoSearch();
-        //$horasCatedraACobrarNom = $searchModelNombram->cantidadHorasACobrarXDocente($id);
-        //$horasCatedraSinCobrarNom = $searchModelNombram->cantidadHorasConLicenciaSinGoceXDocente($id);
-
-        //$searchModelNombramientos = new NombramientoSearch();
-        //$dataProviderNombramientos = $searchModelNombramientos->searchByDocente($id);
-
-
-
+        $dataProvider = $searchModel->providerfaltasdocentesview($mes, $anio, $id);
+ 
         return $this->renderAjax('view', [
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            /*'searchModelNombramientos' => $searchModelNombramientos,
-            'dataProviderNombramientos' => $dataProviderNombramientos,
-
-            'horasCatedraACobrar' => $horasCatedraACobrar,
-            'horasCatedraSinCobrar' => $horasCatedraSinCobrar,
-
-            'horasCatedraACobrarNom' => $horasCatedraACobrarNom,
-            'horasCatedraSinCobrarNom' => $horasCatedraSinCobrarNom,*/
+            'anio' => $anio,
+            'mes' => $mes,
         ]);
     }
 

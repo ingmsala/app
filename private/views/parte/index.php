@@ -21,7 +21,15 @@ $precepx = Yii::$app->user->identity->username;
 
     <p>
         
-        <?= Html::a('Nuevo parte docente', 'index.php?r=parte/create&precepx='.$precepx, ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Nuevo parte docente', 'index.php?r=parte/create', 
+            [
+             'class' => 'btn btn-success',
+             'data' => [
+                        'method' => 'post',
+                        'params' => ['precepx' => $precepx], // <- extra level
+            ],
+            
+            ]) ?>
     </p>
 
     <?= GridView::widget([

@@ -100,7 +100,10 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-<?= Highcharts::widget([
+<?php
+if($anio!=0)
+{
+ echo Highcharts::widget([
 
    'options' => [
       'chart' => [
@@ -123,6 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
       ]
    ]
     ]);
+}
     ?>
 
 </div>

@@ -60,20 +60,35 @@ AppAsset::register($this);
                         '<div class="dropdown-divider"></div>',
                     ['label' => 'Listado de Horas por Docente', 'url' => ['/reporte/horasdocentes']],
                         '<div class="dropdown-divider"></div>',
-                    ['label' => 'Parte Docente - Faltas por mes y año', 'url' => ['/reporte/parte/faltasxmes']],
+
+                    [
+                        'label' => 'Parte Docente',
+                        'itemsOptions'=>['class'=>'dropdown-submenu'],
+                        'submenuOptions'=>['class'=>'dropdown-menu'],
+                        'items' => [
+
+                                ['label' => 'Faltas por mes y año', 'url' => ['/reporte/parte/faltasxmes']],
                         '<div class="dropdown-divider"></div>',
-                    ['label' => 'Parte Docente - Horas sin dictar por Docentes', 'url' => ['/reporte/parte/faltasdocentes']],
-                        '<div class="dropdown-divider"></div>',
-                    ['label' => 'Parte Docente - Evolucion Faltas por año', 'url' => ['/reporte/parte/faltasxmeses']],
-                        '<div class="dropdown-divider"></div>',
-                    ['label' => 'Parte Docente - Cantidad de Faltas por Turno', 'url' => ['/reporte/parte/faltasxmesesxturno']],
-                        '<div class="dropdown-divider"></div>',
-                    ['label' => 'Parte Docente - Comparación por Turno en un año', 'url' => ['/reporte/parte/faltasxanioxturnototal']],
-                        '<div class="dropdown-divider"></div>',
-                        ['label' => 'Parte Docente - Distribución de faltas por rango de días', 'url' => ['/reporte/parte/distribuciondediasxmes']],
-                        '<div class="dropdown-divider"></div>',
-                        ['label' => 'Parte Docente - Distribución de faltas por dia y hora', 'url' => ['/reporte/parte/distribuciondediasyhoras']],
-                        '<div class="dropdown-divider"></div>',
+                                ['label' => 'Horas sin dictar por Docentes', 'url' => ['/reporte/parte/faltasdocentes']],
+                                    '<div class="dropdown-divider"></div>',
+                                ['label' => 'Evolucion Faltas por año', 'url' => ['/reporte/parte/faltasxmeses']],
+                                    '<div class="dropdown-divider"></div>',
+                                ['label' => 'Cantidad de Faltas por Turno', 'url' => ['/reporte/parte/faltasxmesesxturno']],
+                                    '<div class="dropdown-divider"></div>',
+                                ['label' => 'Comparación por Turno en un año', 'url' => ['/reporte/parte/faltasxanioxturnototal']],
+                                    '<div class="dropdown-divider"></div>',
+                                    ['label' => 'Distribución de faltas por rango de días', 'url' => ['/reporte/parte/distribuciondediasxmes']],
+                                    '<div class="dropdown-divider"></div>',
+                                    ['label' => 'Distribución de faltas por día y hora', 'url' => ['/reporte/parte/distribuciondediasyhoras']],
+                                    '<div class="dropdown-divider"></div>',
+
+                                    ],
+
+                    ],
+                        '<div class="dropdown-divider"></div>',    
+
+
+                    
 
                 ],
             ]) :

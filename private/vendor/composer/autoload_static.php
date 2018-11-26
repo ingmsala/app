@@ -31,6 +31,11 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         array (
             'miloschuman\\highcharts\\' => 23,
         ),
+        'k' => 
+        array (
+            'kartik\\select2\\' => 15,
+            'kartik\\base\\' => 12,
+        ),
         'c' => 
         array (
             'cebe\\markdown\\' => 14,
@@ -110,6 +115,14 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         'miloschuman\\highcharts\\' => 
         array (
             0 => __DIR__ . '/..' . '/miloschuman/yii2-highcharts-widget/src',
+        ),
+        'kartik\\select2\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-select2/src',
+        ),
+        'kartik\\base\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-krajee-base/src',
         ),
         'cebe\\markdown\\' => 
         array (

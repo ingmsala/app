@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Catedra */
@@ -45,13 +46,30 @@ use yii\helpers\Url;
 
     <?php $form = ActiveForm::begin(); ?>
 
+   
+    <?= 
+
+        $form->field($model, 'division')->widget(Select2::classname(), [
+            'data' => $listDivisiones,
+            'options' => ['placeholder' => 'Seleccionar...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);
+
+    ?>
     
+    <?= 
 
+        $form->field($model, 'actividad')->widget(Select2::classname(), [
+            'data' => $listActividades,
+            'options' => ['placeholder' => 'Seleccionar...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);
 
-    <?= $form->field($model, 'division')->dropDownList($listDivisiones, ['prompt'=>'Seleccionar...']); ?>
-
-    <?= $form->field($model, 'actividad')->dropDownList($listActividades, ['prompt'=>'Seleccionar...']); ?>
-
+    ?>
     
 
     <div class="form-group">

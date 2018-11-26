@@ -302,12 +302,12 @@ class DetalleparteSearch extends Detalleparte
             INNER JOIN detalleparte dp ON dp.parte = p.id
             INNER JOIN preceptoria pr ON p.preceptoria = pr.id
             WHERE dp.falta = 1
-            AND YEAR( p.fecha ) = '.$anio.'
-            AND MONTH( p.fecha ) = '.$mes.'
-            GROUP BY rango
-            order by day( p.fecha )
-        ';
+            AND YEAR( p.fecha ) = '.$anio;
 
+        ($mes != 0) ? 
+        $sql.= ' AND MONTH( p.fecha ) = '.$mes : '';
+        $sql.=' GROUP BY rango
+            order by day( p.fecha )';
 
         $dataProvider = new SqlDataProvider([
             
@@ -347,6 +347,76 @@ class DetalleparteSearch extends Detalleparte
                 order by WEEKDAY(p.fecha)';
 
 
+
+        $dataProvider = new SqlDataProvider([
+            
+            'sql' => $sql,
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        return $dataProvider;
+
+    }
+
+
+    public function providerfaltasdocentes($mes, $anio)
+    {
+        
+        $sql='
+            SELECT d.id, d.legajo, d.apellido, d.nombre, 
+            SUM(
+            CASE
+              WHEN dp.falta <= 2 THEN 40 
+              WHEN dp.falta = 3 THEN (coalesce(dp.retiro,0) + coalesce(dp.llego,0))
+              WHEN dp.falta = 4 THEN -40 
+            END) AS faltas
+            FROM detalleparte dp
+            LEFT JOIN docente d  ON dp.docente = d.id
+            LEFT JOIN parte p ON dp.parte = p.id
+            WHERE YEAR(p.fecha) = '.$anio;
+
+        ($mes != 0) ? 
+        $sql.= ' AND MONTH( p.fecha ) = '.$mes : '';
+        $sql.=' GROUP BY d.legajo, d.apellido, d.nombre
+               ORDER BY faltas DESC, d.apellido, d.nombre, d.legajo';
+
+        $dataProvider = new SqlDataProvider([
+            
+            'sql' => $sql,
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        return $dataProvider;
+
+    }
+
+    public function providerfaltasdocentesview($mes, $anio, $id)
+    {
+        
+        $sql='
+            SELECT p.fecha, di.nombre as division, dp.hora, dp.llego, dp.retiro, f.nombre as falta
+            FROM detalleparte dp
+            LEFT JOIN parte p ON dp.parte = p.id
+            LEFT JOIN division di ON dp.division = di.id
+            LEFT JOIN falta f ON dp.falta = f.id
+            WHERE YEAR(p.fecha) = '.$anio.'
+            AND dp.docente = '.$id;
+            
+            
+
+        ($mes != 0) ? 
+        $sql.= ' AND MONTH( p.fecha ) = '.$mes : '';
+        $sql.=' ORDER BY p.fecha, dp.division, dp.hora';
 
         $dataProvider = new SqlDataProvider([
             

@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Nombramiento */
@@ -28,13 +29,22 @@ use yii\helpers\Url;
 
     
 
-    <?= $form->field($model, 'cargo')->dropDownList($listcargos, ['prompt'=>'Seleccionar...',
-        'onchange'=>'       
-                        if ($(this).val()==227) {
-                            $( ".field-nombramiento-division" ).show();
+    
+    <?= 
+
+        $form->field($model, 'cargo')->widget(Select2::classname(), [
+            'data' => $listcargos,
+            'options' => ['placeholder' => 'Seleccionar...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+            'pluginEvents' => [
+                'select2:select' => 'function() {
+                    if ($(this).val()==227) {
+                           $( ".field-nombramiento-division" ).show();
                         }else{
                             
-                            $( ".field-nombramiento-division" ).hide();
+                           $( ".field-nombramiento-division" ).hide();
 
                         }
                         $.get( "'.Url::toRoute('/cargo/gethora').'", { id: $(this).val() } )
@@ -44,24 +54,44 @@ use yii\helpers\Url;
 
                             }
                         );
+                }',
+            ]
+        ]);
 
-                                   
+    ?>
 
-        '])->label('Cargo'); ?>
 
     <?= $form->field($model, 'horas')->textInput() ?>
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true, 'style'=>'text-transform:uppercase;']) ?>
 
-    <?= $form->field($model, 'docente')->dropDownList($listdocentes, ['prompt'=>'Seleccionar...']); ?>
+    <?= 
+
+        $form->field($model, 'docente')->widget(Select2::classname(), [
+            'data' => $listdocentes,
+            'options' => ['placeholder' => 'Seleccionar...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);
+
+    ?>
 
     <?= $form->field($model, 'revista')->dropDownList($listrevistas, ['prompt'=>'Seleccionar...']); ?>
 
     <?= $form->field($model, 'condicion')->dropDownList($listcondiciones, ['prompt'=>'Seleccionar...']); ?>
 
-    <?= $form->field($model, 'division')->dropDownList($listdivisiones, ['prompt'=>'Seleccionar...']); ?>
+    <?= 
 
-    
+        $form->field($model, 'division')->widget(Select2::classname(), [
+            'data' => $listdivisiones,
+            'options' => ['placeholder' => 'Seleccionar...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);
+
+    ?>    
 
     
 

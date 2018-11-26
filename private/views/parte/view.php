@@ -25,6 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'header' => "<h2 id='modalHeader'></h2>",
             'id' => 'modal',
             'size' => 'modal-lg',
+            'options' => [
+                'tabindex' => false,
+            ],
         ]);
 
         echo "<div id='modalContent'></div>";

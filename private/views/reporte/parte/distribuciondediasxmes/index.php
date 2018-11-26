@@ -6,7 +6,7 @@ use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use miloschuman\highcharts\Highcharts;
-use yii\widgets\Pjax;
+
 
 
 
@@ -41,6 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
      <?= Html::beginForm(); ?>
      <div class="form-group col-xs-4 .col-sm-3">
+         <label for="cmbyear">Año</label> 
      <?= Html::dropDownList('year', $selection=$anio, $years, ['prompt' => '(Año)', 'id' => 'cmbyear', 'class' => 'form-control ',
         'onchange'=>'
                     var aniojs = document.getElementById("cmbyear").value;
@@ -55,10 +56,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ]);?>
 
     </div> 
-    <div class="form-group col-xs-4 .col-sm-3"> 
+    <div class="form-group col-xs-4 .col-sm-3">
+         <label for="cmbmes">Mes</label> 
      <?= 
       
-     Html::dropDownList('mes', $selection= $mes, $meses, ['prompt' => '(Mes)', 'id' => 'cmbmes', 'class' => 'form-control',
+     Html::dropDownList('mes', $selection= $mes, $meses, ['prompt' => '(Todos)', 'id' => 'cmbmes', 'class' => 'form-control',
         'onchange'=>'
                     var aniojs = document.getElementById("cmbyear").value;
                                 var mesjs = document.getElementById("cmbmes").value;
@@ -69,8 +71,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ',
         ]);?>
     </div>
-    <div class="form-group col-xs-4 .col-sm-3">
-        
+    <div class="form-group">
+        <label for="btnfiltrar" style='color: #ffffff'>.</label><br />
         <?php
             
          echo Html::a('<span class="glyphicon glyphicon-filter" aria-hidden="true"></span>', '', ['id' => 'btnfiltrar', 'class' => 'btn btn-primary']); 
@@ -104,34 +106,37 @@ $this->params['breadcrumbs'][] = $this->title;
             
         ],
     ]); ?>
-<?php 
-setlocale(LC_TIME, 'spanish');
-$fecha = DateTime::createFromFormat('!m', $mes);
-$mestxt = ucfirst(strftime("%B", $fecha->getTimestamp()));
+    <?php 
+    setlocale(LC_TIME, 'spanish');
+    $fecha = DateTime::createFromFormat('!m', $mes);
+    $mestxt = ucfirst(strftime("%B", $fecha->getTimestamp()));
 
-?>
-<?= Highcharts::widget([
-   'options' => [
-      'title' => ['text' => ($anio==0) ? '' : $mestxt.' '.$anio],
-      'chart' => [
-            'type' => 'column',
-        ],
-      'credits' => [
-            'enabled' => false,
-      ],
-      'xAxis' => [
-         'categories' => ArrayHelper::getColumn($dataProvider->models, 'rango')
-      ],
-      'yAxis' => [
-         'title' => ['text' => 'Faltas']
-      ],
-      'series' => [
-         ['name' => ' Faltas', 'data' => array_map('intval',ArrayHelper::getColumn($dataProvider->models, 'faltas'))],
-         //['name' => 'Turno Tarde', 'data' => [5, 7, 3]],
+    ?>
+    <?php
 
-      ]
-   ]
-    ]);
+    if ($anio != 0) 
+        echo Highcharts::widget([
+           'options' => [
+              'title' => ['text' => ($mes==0) ? $anio : $mestxt.' '.$anio],
+              'chart' => [
+                    'type' => 'column',
+                ],
+              'credits' => [
+                    'enabled' => false,
+              ],
+              'xAxis' => [
+                 'categories' => ArrayHelper::getColumn($dataProvider->models, 'rango')
+              ],
+              'yAxis' => [
+                 'title' => ['text' => 'Faltas']
+              ],
+              'series' => [
+                 ['name' => ' Faltas', 'data' => array_map('intval',ArrayHelper::getColumn($dataProvider->models, 'faltas'))],
+                 //['name' => 'Turno Tarde', 'data' => [5, 7, 3]],
+
+              ]
+           ]
+            ]);
     ?>
 
 </div>
