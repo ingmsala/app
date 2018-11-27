@@ -39,13 +39,12 @@ class Detallecatedra extends \yii\db\ActiveRecord
     {
         return [
             [['docente', 'catedra', 'condicion', 'revista'], 'required'],
-            [['docente', 'catedra', 'condicion', 'revista', 'resolucion'], 'integer'],
-            [['fechaInicio', 'fechaFin'], 'safe'],
+            [['docente', 'catedra', 'condicion', 'revista',], 'integer'],
+            [['fechaInicio', 'fechaFin', 'resolucion'], 'safe'],
             [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
             [['catedra'], 'exist', 'skipOnError' => true, 'targetClass' => Catedra::className(), 'targetAttribute' => ['catedra' => 'id']],
             [['condicion'], 'exist', 'skipOnError' => true, 'targetClass' => Condicion::className(), 'targetAttribute' => ['condicion' => 'id']],
             [['revista'], 'exist', 'skipOnError' => true, 'targetClass' => Revista::className(), 'targetAttribute' => ['revista' => 'id']],
-            [['resolucion'], 'exist', 'skipOnError' => true, 'targetClass' => Resolucion::className(), 'targetAttribute' => ['resolucion' => 'id']],
         ];
     }
 
@@ -101,10 +100,7 @@ class Detallecatedra extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getResolucion0()
-    {
-        return $this->hasOne(Resolucion::className(), ['id' => 'resolucion']);
-    }
+    
 
     
 }

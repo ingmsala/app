@@ -48,8 +48,5 @@ class Resolucion extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDetallecatedras()
-    {
-        return $this->hasMany(Detallecatedra::className(), ['resolucion' => 'id']);
-    }
+    
 }
