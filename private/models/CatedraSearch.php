@@ -44,7 +44,9 @@ class CatedraSearch extends Catedra
      */
     public function search($params)
     {
-        $query = Catedra::find()->joinWith(['actividad0', 'division0', 'detallecatedras', 'detallecatedras.docente0']);
+        $query = Catedra::find()
+            ->joinWith(['actividad0', 'division0', 'detallecatedras', 'detallecatedras.docente0'])
+            ->orderBy('division.nombre, actividad.nombre');
 
         // add conditions that should always apply here
 

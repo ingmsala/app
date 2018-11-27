@@ -31,3 +31,4 @@ tests/_support/_generated
 
 #vagrant folder
 /.vagrant
+private/vendor/kartik-v/yii2-widget-select2/
