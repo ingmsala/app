@@ -95,7 +95,7 @@ $this->title = $model->id;
 
             [
                 'label' => 'Horas',
-                'attribute' => 'catedra0.actividad0.cantHoras',
+                'attribute' => 'hora',
                 
             ],
             

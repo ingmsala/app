@@ -12,7 +12,10 @@ use kartik\select2\Select2;
 
 <div class="detalle-catedra-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'id' => 'create-update-detalle-catedra-form',
+        'enableAjaxValidation' => true
+    ]); ?>
 
     
     <?php $listDocentes=ArrayHelper::map($docentes,'id', function($doc) {
@@ -44,16 +47,21 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'revista')->dropDownList($listrevistas, ['prompt'=>'Seleccionar...']); ?>
 
+    <?= $form->field($model, 'hora')->textInput(['value'=>($model->hora != null) ? $model->hora : $catedras->actividad0->cantHoras]) ?>
+
     <?= $form->field($model, 'resolucion')->textInput() ?>
 
     <?= $form->field($model, 'fechaInicio')->textInput() ?>
 
     <?= $form->field($model, 'fechaFin')->textInput() ?>
 
+    
+
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
+    
 
 </div>

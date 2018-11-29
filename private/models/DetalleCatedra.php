@@ -12,6 +12,7 @@ use Yii;
  * @property int $catedra
  * @property int $condicion
  * @property int $revista
+ * @property int $hora
  * @property int $resolucion
  * @property string $fechaInicio
  * @property string $fechaFin
@@ -37,10 +38,12 @@ class Detallecatedra extends \yii\db\ActiveRecord
      */
     public function rules()
     {
+      
         return [
-            [['docente', 'catedra', 'condicion', 'revista'], 'required'],
-            [['docente', 'catedra', 'condicion', 'revista',], 'integer'],
+            [['docente', 'catedra', 'condicion', 'revista', 'hora'], 'required'],
+            [['docente', 'catedra', 'condicion', 'revista', 'hora'], 'integer'],
             [['fechaInicio', 'fechaFin', 'resolucion'], 'safe'],
+            ['hora', 'compare', 'compareValue' => Catedra::findOne($_REQUEST['catedra'])->actividad0->cantHoras, 'operator' => '<=', 'type' => 'number'],
             [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
             [['catedra'], 'exist', 'skipOnError' => true, 'targetClass' => Catedra::className(), 'targetAttribute' => ['catedra' => 'id']],
             [['condicion'], 'exist', 'skipOnError' => true, 'targetClass' => Condicion::className(), 'targetAttribute' => ['condicion' => 'id']],
@@ -59,6 +62,7 @@ class Detallecatedra extends \yii\db\ActiveRecord
             'catedra' => 'Catedra',
             'condicion' => 'Condicion',
             'revista' => 'Revista',
+            'hora' => 'Horas',
             'resolucion' => 'Resolucion',
             'fechaInicio' => 'Fecha Inicio',
             'fechaFin' => 'Fecha Fin',

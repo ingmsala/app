@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     foreach($model->detallecatedras as $detallecatedra){
 
                         
-                        $itemsc[] = [$detallecatedra->condicion0->id, $detallecatedra->condicion0->nombre, $detallecatedra->docente0->apellido.', '.$detallecatedra->docente0->nombre, $detallecatedra->revista0->nombre];
+                        $itemsc[] = [$detallecatedra->condicion0->id, $detallecatedra->condicion0->nombre, $detallecatedra->docente0->apellido.', '.$detallecatedra->docente0->nombre, $detallecatedra->revista0->nombre, $detallecatedra->hora];
                         
                     }
 
@@ -65,12 +65,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         //var_dump($item);
                         if($item[0]!=5){//suplente
                             return 
-                                Html::tag('li', Html::tag('div',Html::tag('span', $item[1], ['class' => "badge pull-left"]).Html::tag('span', $item[3], ['class' => "badge pull-right"])."&nbsp;".$item[2], ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-info']);
+                                Html::tag('li', 
+                                    Html::tag('div',
+                                        Html::tag('span', $item[1].' ('.$item[4].'hs.)', ['class' => "badge pull-left"]).
+                                        Html::tag('span', $item[3], ['class' => "badge pull-right"])."&nbsp;".$item[2], ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-info']);
                             
                         }
 
                         return 
-                                Html::tag('li', Html::tag('div',Html::tag('span', $item[1], ['class' => "badge pull-left"]).Html::tag('span', $item[3], ['class' => "badge pull-right"])."&nbsp;".$item[2], ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-warning']);
+                                Html::tag('li', 
+                                    Html::tag('div',
+                                        Html::tag('span', $item[1].' ('.$item[4].'hs.)', ['class' => "badge pull-left"]).
+                                        Html::tag('span', $item[3], ['class' => "badge pull-right"])."&nbsp;".$item[2], ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-warning']);
                     }, 'class' => "nav nav-pills nav-stacked"]);
                 }],
 

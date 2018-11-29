@@ -18,8 +18,8 @@ class DetallecatedraSearch extends Detallecatedra
     public function rules()
     {
         return [
-            [['id', 'docente', 'catedra', 'condicion', 'revista', 'resolucion'], 'integer'],
-            [['fechaInicio', 'fechaFin'], 'safe'],
+            [['id', 'docente', 'catedra', 'condicion', 'revista', 'hora'], 'integer'],
+            [['fechaInicio', 'fechaFin', 'resolucion'], 'safe'],
         ];
     }
 
@@ -120,10 +120,10 @@ class DetallecatedraSearch extends Detallecatedra
 
     public function cantidadHorasACobrarXDocente($id){
 
-        $query = Detallecatedra::find()->joinWith(['catedra0', 'catedra0.actividad0'])
-                ->select('sum(actividad.cantHoras) as id')
-                ->where(['detallecatedra.docente' => $id])
-                ->andWhere(['<>', 'detallecatedra.revista', 2])->one();//no licencia sin goce
+        $query = Detallecatedra::find()
+                ->select('sum(hora) as id')
+                ->where(['docente' => $id])
+                ->andWhere(['<>', 'revista', 2])->one();//no licencia sin goce
        
 
         return $query;
@@ -132,14 +132,15 @@ class DetallecatedraSearch extends Detallecatedra
 
     public function cantidadHorasConLicenciaSinGoceXDocente($id){
 
-        $query = Detallecatedra::find()->joinWith(['catedra0', 'catedra0.actividad0'])
-                ->select('sum(actividad.cantHoras) as id')
-                ->where(['detallecatedra.docente' => $id])
-                ->andWhere(['detallecatedra.revista' => 2])->one();// lic s/goce
+        $query = Detallecatedra::find()
+                ->select('sum(hora) as id')
+                ->where(['docente' => $id])
+                ->andWhere(['revista' => 2])->one();// lic s/goce
         
 
         return $query;
         
     }
+
 
 }

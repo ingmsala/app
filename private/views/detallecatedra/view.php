@@ -46,6 +46,10 @@ $this->title = $model->id;
                 'label'=>"Revista",
                 'attribute' => 'revista0.nombre'
             ],
+            [   
+                'label'=>"Horas",
+                'attribute' => 'hora'
+            ],
             'resolucion',
             'fechaInicio',
             'fechaFin',

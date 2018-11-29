@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
 use yii\bootstrap\Modal;
-
+use yii\bootstrap\Progress;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Catedra */
@@ -90,6 +90,19 @@ $this->params['breadcrumbs'][] = $this->title;
             [   
                 'label' => 'Revista',
                 'attribute' => 'revista0.nombre'
+            ],
+
+            
+            [
+                'label' => 'Horas',
+                'format' => 'raw',
+                'value' => function($model){
+                    return '<center>'.$model->hora.Progress::widget([
+                            'options' => ['class' => 'progress-warning progress-striped'],
+                            'percent' => $model->hora*100/$model->catedra0->actividad0->cantHoras,
+                            'label' => round($model->hora*100/$model->catedra0->actividad0->cantHoras).'%'.'</center>',
+                    ]);
+                }
             ],
 
            // ['class' => 'yii\grid\ActionColumn'],

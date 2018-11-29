@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     foreach($model->detallecatedras as $detalle){
                         if($detalle->revista <> 2)
-                    	   $hCatedraHoras [] = $detalle->catedra0->actividad0->cantHoras;
+                    	   $hCatedraHoras [] = $detalle->hora;
                     	              	    
                     }
 

@@ -14,6 +14,11 @@ use app\models\Condicion;
 use app\models\Catedra;
 use yii\filters\AccessControl;
 
+use yii\widgets\ActiveForm; // Ajaxvalidation
+
+use yii\web\Response; // Ajaxvalidation
+
+
 
 /**
  * DetalleCatedraController implements the CRUD actions for DetalleCatedra model.
@@ -98,6 +103,14 @@ class DetallecatedraController extends Controller
         $condiciones=Condicion::find()->all();
         $revistas=Revista::find()->all();
 
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return ActiveForm::validate($model);
+
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['catedra/view', 'id' => $catedra]);
         }
@@ -140,7 +153,16 @@ class DetallecatedraController extends Controller
         $condiciones=Condicion::find()->all();
         $revistas=Revista::find()->all();
 
+       if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return ActiveForm::validate($model);
+
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
             return $this->redirect(['catedra/view', 'id' => $catedra]);
         }
 
