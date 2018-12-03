@@ -22,14 +22,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Borrar', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Está seguro de querer eliminar este elemento?',
-                'method' => 'post',
-            ],
+        
+        <?= Html::a('<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>'.' Volver', 
+        (!empty(Yii::$app->request->referrer) ? Yii::$app->request->referrer : 'index.php?r=catedra/index'), [
+            'class' => 'btn btn-default',
+            
         ]) ?>
+        <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <?= DetailView::widget([
