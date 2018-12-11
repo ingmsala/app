@@ -70,7 +70,8 @@ class CatedraController extends Controller
     public function actionView($id)
     {
         $searchModel = new DetallecatedraSearch();
-        $dataProvider = $searchModel->providerxcatedra($id);
+        $dataProvideractivo = $searchModel->providerxcatedra($id,1);
+        $dataProviderinactivo = $searchModel->providerxcatedra($id,2);
 
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -79,7 +80,8 @@ class CatedraController extends Controller
                 
             ])->one(),
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'dataProvideractivo' => $dataProvideractivo,
+            'dataProviderinactivo' => $dataProviderinactivo,
         ]);
     }
 

@@ -34,7 +34,7 @@ AppAsset::register($this);
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar-default navbar-fixed-top',
             'style' => Yii::$app->user->isGuest ? 'visibility: hidden' : '',
         ],
     ]);
@@ -80,6 +80,8 @@ AppAsset::register($this);
                                     ['label' => 'Distribución de faltas por rango de días', 'url' => ['/reporte/parte/distribuciondediasxmes']],
                                     '<div class="dropdown-divider"></div>',
                                     ['label' => 'Distribución de faltas por día y hora', 'url' => ['/reporte/parte/distribuciondediasyhoras']],
+                                    '<div class="dropdown-divider"></div>',
+                                    ['label' => 'Distribución de faltas por división', 'url' => ['/reporte/parte/faltasxdivision']],
                                     '<div class="dropdown-divider"></div>',
 
                                     ],

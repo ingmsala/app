@@ -84,15 +84,15 @@ class NombramientoSearch extends Nombramiento
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'cargo' => $this->cargo,
-            'horas' => $this->horas,
+            'nombramiento.cargo' => $this->cargo,
+            'nombramiento.horas' => $this->horas,
             
         ]);
 
         $query->andFilterWhere(['like', 'revista.nombre', $this->revista])
         ->andFilterWhere(['like', 'docente.apellido', $this->docente])
         ->andFilterWhere(['like', 'division.nombre', $this->division])
-        ->andFilterWhere(['like', 'n.docente0.apellido', $this->suplente]);
+        ->andFilterWhere(['like', 'docente.apellido', $this->suplente]);
         
 
 

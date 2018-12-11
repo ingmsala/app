@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     foreach($model->detallecatedras as $detallecatedra){
 
                         
-                        $itemsc[] = [$detallecatedra->condicion0->id, $detallecatedra->condicion0->nombre, $detallecatedra->docente0->apellido.', '.$detallecatedra->docente0->nombre, $detallecatedra->revista0->nombre, $detallecatedra->hora];
+                        $itemsc[] = [$detallecatedra->condicion0->id, $detallecatedra->condicion0->nombre, $detallecatedra->docente0->apellido.', '.$detallecatedra->docente0->nombre, $detallecatedra->revista0->nombre, $detallecatedra->hora, $detallecatedra->activo];
                         
                     }
 
@@ -63,20 +63,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     //return implode(' // ', $itemsc);
                     return Html::ul($itemsc, ['item' => function($item) {
                         //var_dump($item);
-                        if($item[0]!=5){//suplente
-                            return 
-                                Html::tag('li', 
-                                    Html::tag('div',
-                                        Html::tag('span', $item[1].' ('.$item[4].'hs.)', ['class' => "badge pull-left"]).
-                                        Html::tag('span', $item[3], ['class' => "badge pull-right"])."&nbsp;".$item[2], ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-info']);
-                            
-                        }
+                        if($item[5]==1){
+                            if($item[0]!=5){//suplente
+                                return 
+                                    Html::tag('li', 
+                                        Html::tag('div',
+                                            Html::tag('span', $item[1].' ('.$item[4].'hs.)', ['class' => "badge pull-left"]).
+                                            Html::tag('span', $item[3], ['class' => "badge pull-right"])."&nbsp;".$item[2], ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-info']);
+                                
+                            }
 
-                        return 
-                                Html::tag('li', 
-                                    Html::tag('div',
-                                        Html::tag('span', $item[1].' ('.$item[4].'hs.)', ['class' => "badge pull-left"]).
-                                        Html::tag('span', $item[3], ['class' => "badge pull-right"])."&nbsp;".$item[2], ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-warning']);
+                            return 
+                                    Html::tag('li', 
+                                        Html::tag('div',
+                                            Html::tag('span', $item[1].' ('.$item[4].'hs.)', ['class' => "badge pull-left"]).
+                                            Html::tag('span', $item[3], ['class' => "badge pull-right"])."&nbsp;".$item[2], ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-warning']);
+                        }
                     }, 'class' => "nav nav-pills nav-stacked"]);
                 }],
 

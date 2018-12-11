@@ -184,13 +184,21 @@ class DetallecatedraController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)//, $view)
+    public function actionDelete($id)
     {   
         $catedra = $this->findModel($id)->catedra;
         $this->findModel($id)->delete();
-        //if ($view== 'catedra'){
+        
+        return $this->redirect(['catedra/view' , 'id' => $catedra]);
 
-        //}
+    }
+
+    public function actionInactive($id)
+    {   
+        $model = $this->findModel($id);
+        $catedra = $model->catedra;
+        $model->activo = 2;
+        $model->save();
         return $this->redirect(['catedra/view' , 'id' => $catedra]);
 
     }

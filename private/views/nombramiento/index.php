@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
+
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\NombramientoSearch */
@@ -21,7 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
    
-    <?= GridView::widget([
+    <?=
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -29,6 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Cod. Cargo',
                 'attribute' => 'cargo',
+                'filter' =>ArrayHelper::map($dataProvider->models, 'cargo', 'cargo0.nombre'),
+                'filterInputOptions' => ['prompt' => 'Todos', 'class' => 'form-control', 'id' => null],
                 'value' => function($model){
 
                    return $model->cargo.' - '.$model->cargo0->nombre;

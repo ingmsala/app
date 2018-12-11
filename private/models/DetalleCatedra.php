@@ -16,6 +16,7 @@ use Yii;
  * @property int $resolucion
  * @property string $fechaInicio
  * @property string $fechaFin
+ * @property int $activo
  *
  * @property Docente $docente0
  * @property Catedra $catedra0

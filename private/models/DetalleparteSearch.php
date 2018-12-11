@@ -433,5 +433,36 @@ class DetalleparteSearch extends Detalleparte
 
     }
 
+    public function providerfaltasxdivision($mes, $anio)
+    {
+        
+        $sql='
+                select d.nombre as division, count(*) as faltas
+                FROM detalleparte dp
+                LEFT JOIN parte p ON dp.parte=p.id
+                LEFT JOIN division d ON dp.division=d.id
+                WHERE dp.falta = 1
+                AND YEAR( p.fecha ) = '.$anio;
+
+        ($mes != 0) ? 
+        $sql.= ' AND MONTH( p.fecha ) = '.$mes : '';
+        $sql.=' GROUP BY division
+        ORDER BY faltas DESC';
+
+        $dataProvider = new SqlDataProvider([
+            
+            'sql' => $sql,
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        return $dataProvider;
+
+    }
+
     
 }

@@ -61,8 +61,21 @@ $this->params['breadcrumbs'][] = $this->title;
     
     <h3>Docentes Nombrados</h3>
     <?= Html::button('Agregar Docente', ['value' => Url::to('index.php?r=detallecatedra/create&catedra='.$model->id), 'class' => 'btn btn-success', 'id'=>'modalButton']) ?>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
+
+
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#home">Activo</a></li>
+  <li><a data-toggle="tab" href="#menu1">Historial</a></li>
+  
+</ul>
+
+<div class="tab-content">
+  <div id="home" class="tab-pane fade in active">
+    
+    <p>
+
+        <?= GridView::widget([
+        'dataProvider' => $dataProvideractivo,
         'rowOptions' => function($model){
             if ($model->condicion0->nombre !='SUPL'){
                 return ['class' => 'info'];
@@ -70,6 +83,92 @@ $this->params['breadcrumbs'][] = $this->title;
             return ['class' => 'warning'];
         },
         'columns' => [
+            
+            [   
+                'label' => 'Condición',
+                'attribute' => 'condicion0.nombre'
+            ],
+            
+            [   
+                'label' => 'Apellido',
+                'attribute' => 'docente0.apellido'
+            ],
+
+            [   
+                'label' => 'Nombre',
+                'attribute' => 'docente0.nombre'
+            ],
+            
+            [   
+                'label' => 'Revista',
+                'attribute' => 'revista0.nombre'
+            ],
+
+            
+            [
+                'label' => 'Horas',
+                'format' => 'raw',
+                'value' => function($model){
+                    return '<center>'.$model->hora.Progress::widget([
+                            'options' => ['class' => 'progress-warning progress-striped'],
+                            'percent' => $model->hora*100/$model->catedra0->actividad0->cantHoras,
+                            'label' => round($model->hora*100/$model->catedra0->actividad0->cantHoras).'%'.'</center>',
+                    ]);
+                }
+            ],
+
+           // ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{viewdetcat} {updatedetcat} {deletedetcat}',
+                
+                'buttons' => [
+                    'viewdetcat' => function($url, $model, $key){
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>',
+                            '?r=detallecatedra/view&id='.$model->id);
+                    },
+                    'updatedetcat' => function($url, $model, $key){
+                        return Html::button('<span class="glyphicon glyphicon-pencil"></span>',
+                            ['value' => Url::to('index.php?r=detallecatedra/update&id='.$model->id.'&catedra=' .$model->catedra),
+                                'class' => 'modala btn btn-link', 'id'=>'modala']);
+
+
+                    },
+                    'deletedetcat' => function($url, $model, $key){
+                        return Html::a('<span class="glyphicon glyphicon-inbox"></span>', '?r=detallecatedra/inactive&id='.$model->id.'&catedra=' .$model->catedra, 
+                            ['data' => [
+                            'confirm' => 'Está seguro de querer pasar este elemento al historial?',
+                            'method' => 'post',
+                             ]
+                            ]);
+                    },
+                ]
+
+            ],
+        ],
+    ]); ?>
+
+    </p>
+  </div>
+  <div id="menu1" class="tab-pane fade">
+    
+    <p>
+        
+        <?= GridView::widget([
+        'dataProvider' => $dataProviderinactivo,
+        'rowOptions' => ['class' => 'active'],
+        'columns' => [
+
+            [   
+                'label' => 'Desde',
+                'attribute' => 'fechaInicio'
+            ],
+
+            [   
+                'label' => 'Hasta',
+                'attribute' => 'fechaFin'
+            ],
             
             [   
                 'label' => 'Condición',
@@ -135,6 +234,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+
+    </p>
+  </div>
+  
+</div>
+
+    
 
    
 

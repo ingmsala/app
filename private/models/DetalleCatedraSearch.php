@@ -73,11 +73,11 @@ class DetallecatedraSearch extends Detallecatedra
         return $dataProvider;
     }
 
-    public function providerxcatedra($id)
+    public function providerxcatedra($id, $activo)
     {
         $query = Detallecatedra::find()
             ->where(['catedra' => $id,
-                //'condicion' => 5 //suplente
+                    'activo' => $activo, 
             ])
             ->orderBy('condicion ASC', 'id ASC');
 
@@ -99,7 +99,7 @@ class DetallecatedraSearch extends Detallecatedra
     {
         $query = Detallecatedra::find()
             ->where(['docente' => $id,
-                //'condicion' => 5 //suplente
+                'activo' => 1 //suplente
             ])
             ->orderBy('revista ASC', 'id ASC');
 
@@ -122,7 +122,10 @@ class DetallecatedraSearch extends Detallecatedra
 
         $query = Detallecatedra::find()
                 ->select('sum(hora) as id')
-                ->where(['docente' => $id])
+                ->where([
+                        'docente' => $id,
+                        'activo' => 1,
+                ])
                 ->andWhere(['<>', 'revista', 2])->one();//no licencia sin goce
        
 
@@ -134,7 +137,10 @@ class DetallecatedraSearch extends Detallecatedra
 
         $query = Detallecatedra::find()
                 ->select('sum(hora) as id')
-                ->where(['docente' => $id])
+                ->where([
+                        'docente' => $id,
+                        'activo' => 1,
+                ])
                 ->andWhere(['revista' => 2])->one();// lic s/goce
         
 
