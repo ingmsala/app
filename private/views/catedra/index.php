@@ -1,9 +1,14 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
+use yii\helpers\Url;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
+use yii\widgets\Pjax;
 
-/* @var $this yii\web\View */
+/* @var $
+this yii\web\View */
 /* @var $searchModel app\models\CatedraSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
@@ -19,33 +24,134 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Nueva Catedra', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     
-    <?= GridView::widget([
+    <?php
+    $listdivisiones=ArrayHelper::map($divisiones,'nombre','nombre');
+    $listpropuestas=ArrayHelper::map($propuestas,'id','nombre');
+    
+    Pjax::begin();
+     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'columns' => [
+        'rowOptions' => function($model){
+            if ($model['revista'] =='VIGENTE'){
+                return ['class' => 'success'];
+            }
+            return ['class' => 'warning'];
+        },
+        'panel' => [
+            'type' => GridView::TYPE_DEFAULT,
+            'heading' => Html::encode($this->title),
+            //'beforeOptions' => ['class'=>'kv-panel-before'],
+        ],
+
+        'exportConfig' => [
+            GridView::EXCEL => [
+                'label' => 'Excel',
+                
+                //'alertMsg' => false,
+            ],
             
 
+        ],
+
+        'toolbar'=>[
+            
+            '{export}',
+            
+        ],
+        'columns' => [
+
+            [   
+                'label' => 'Propuesta',
+                'attribute' => 'propuesta',
+                'vAlign' => 'middle',
+                //'value' => 'actividad0.nombre',
+                'group' => true,
+                'filter' => Select2::widget([
+                    'name' => 'propuesta',
+                    'data' => $listpropuestas,
+                    'theme' => Select2::THEME_BOOTSTRAP,
+                    'hideSearch' => true,
+                    'options' => [
+                        'placeholder' => '-',
+                        'hideSearch' => false,
+                        
+                    ]
+                ]),
+            ],
+            
+            [   
+                'label' => 'Division',
+                'attribute' => 'division',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                //'value' => 'division0.nombre',
+                'group' => true,
+                'filter' => Select2::widget([
+                    'name' => 'division',
+                    'data' => $listdivisiones,
+                    'theme' => Select2::THEME_BOOTSTRAP,
+                    'options' => [
+                        'placeholder' => '-',
+                        
+                    ]
+                ]),
+               /* 'filter' => ['1A' => '1A', 'M1P' => 'M1P', 'MPB' => 'MPB', 'T2P' => 'T2P', 'T1P' => 'T1P', 'TPB' => 'TPB'],
+                'filterInputOptions' => ['prompt' => 'Todas', 'class' => 'form-control', 'id' => null]*/
+
+            ],
             
             [   
                 'label' => 'Actividad',
                 'attribute' => 'actividad',
-                'value' => 'actividad0.nombre'
+                'vAlign' => 'middle',
+                //'value' => 'actividad0.nombre',
+                'group' => true,
             ],
 
             [   
                 'label' => 'Horas',
-                'attribute' => 'actividad.canthoras',
-                'value' => 'actividad0.cantHoras'
+                'attribute' => 'hora',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+
+                //'value' => 'actividad0.cantHoras',
+                
             ],
 
-            [   
-                'label' => 'Division',
-                'attribute' => 'division',
-                'value' => 'division0.nombre'
-            ],
             [
-                'attribute' => 'docentes',
-                'format' => 'raw',
+                    'class' => 'kartik\grid\BooleanColumn',
+                    'attribute' => 'revista', 
+                    'hiddenFromExport' => true,
+                    'label' => '',
+                    'vAlign' => 'middle',
+                    'value' => function ($model){
+                        
+                        if ($model['revista'] == 'VIGENTE')
+                         return true;
+                        elseif ($model['revista'] == '')
+                            return null;
+                        else
+
+                         return false;
+                    }
+            ], 
+
+            [
+                    'label' => 'Revista',
+                    'format' => 'raw',
+                    'attribute' => 'revista',
+                    'vAlign' => 'middle',
+                    'hAlign' => 'center',
+                    'value' => function($model){
+                       return Html::tag('span', $model['revista'], ['class' => "badge"]);
+                    }
+            ],
+            
+            
+            [
+                'attribute' => 'docente',
+                /*'format' => 'raw',
                 'value' => function($model){
                     $items = [];
                     $itemsc = [];
@@ -80,13 +186,68 @@ $this->params['breadcrumbs'][] = $this->title;
                                             Html::tag('span', $item[3], ['class' => "badge pull-right"])."&nbsp;".$item[2], ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-warning']);
                         }
                     }, 'class' => "nav nav-pills nav-stacked"]);
-                }],
+                }*/],
+                
+                [
+                    'label' => 'Condicion',
+                    'format' => 'raw',
+                    'attribute' => 'condicion',
+                    'vAlign' => 'middle',
+                    'hAlign' => 'center',
+                    'value' => function($model){
+                       return Html::tag('span', $model['condicion'], ['class' => "badge"]);
+                    }
+                ],
+                
 
 
 
-            ['class' => 'yii\grid\ActionColumn'],
+            
+            [
+                'class' => 'kartik\grid\ActionColumn',
+
+                'template' => '{viewdetcat} ',
+
+                
+                'buttons' => [
+                    'viewdetcat' => function($url, $model, $key){
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>',
+                            '?r=catedra/view&id='.$model['id']);
+                    },
+                    /*
+                    'deletedetcat' => function($url, $model, $key){
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=catedra/delete&id='.$model['id'], 
+                            ['data' => [
+                            'confirm' => 'Está seguro de querer eliminar este elemento?',
+                            'method' => 'post',
+                             ]
+                            ]);
+                    },*/
+                ]
+
+            ],
+/*
+             [
+                'label' => 'Accion',
+                'format' => 'raw',
+                
+                
+
+                
+                'value' => function($model){
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>',
+                            '?r=catedra/view&id='.$model['id']);
+                    },
+                    
+                
+
+            ],*/
         ],
-    ]); ?>
+    ]);
+    Pjax::end();
+     ?>
 </div>
 
 

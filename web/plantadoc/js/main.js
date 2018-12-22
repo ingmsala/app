@@ -44,6 +44,15 @@ $(function(){
 });
 
 $(function(){
+	$('.modalafinfe').click(function(){
+		$('#modal').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+		document.getElementById('modalHeader').innerHTML ='Pasar a historial';
+	})
+});
+
+$(function(){
 	$('.modalaReporteHoras').click(function(){
 		$('#modal').modal('show')
 			.find('#modalContent')

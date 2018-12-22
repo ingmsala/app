@@ -136,12 +136,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     },
                     'deletedetcat' => function($url, $model, $key){
-                        return Html::a('<span class="glyphicon glyphicon-inbox"></span>', '?r=detallecatedra/inactive&id='.$model->id.'&catedra=' .$model->catedra, 
-                            ['data' => [
-                            'confirm' => 'Está seguro de querer pasar este elemento al historial?',
-                            'method' => 'post',
-                             ]
-                            ]);
+                        return Html::button('<span class="glyphicon glyphicon-inbox"></span>', 
+                            ['value' => Url::to('index.php?r=detallecatedra/fechafin&id='.$model->id.'&catedra=' .$model->catedra), 
+                           'class' => 'modalafinfe btn btn-link', 'id'=>'modalafinfe']);
                     },
                 ]
 

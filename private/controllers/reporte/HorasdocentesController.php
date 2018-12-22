@@ -60,7 +60,8 @@ class HorasdocentesController extends \yii\web\Controller
 	public function actionView($id)
     {
         $searchModel = new DetallecatedraSearch();
-        $dataProvider = $searchModel->providerxdocente($id);
+        $dataProvider = $searchModel->providerxdocente($id, 1);
+        $dataProviderInactivos = $searchModel->providerxdocente($id, 2);
         $horasCatedraACobrar = $searchModel->cantidadHorasACobrarXDocente($id);
         $horasCatedraSinCobrar = $searchModel->cantidadHorasConLicenciaSinGoceXDocente($id);
 
@@ -77,6 +78,7 @@ class HorasdocentesController extends \yii\web\Controller
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'dataProviderInactivos' => $dataProviderInactivos,
             'searchModelNombramientos' => $searchModelNombramientos,
             'dataProviderNombramientos' => $dataProviderNombramientos,
 

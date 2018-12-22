@@ -65,7 +65,7 @@ $this->title = $model->id;
         </div>
     </div>
 
-    <h3>Detalle de Horas</h3>
+    <h3>Detalle de Horas Activas</h3>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -78,7 +78,7 @@ $this->title = $model->id;
         'columns' => [
             
             
-            'id',
+            
             [
                 'label' => 'Revista',
                 'attribute' => 'revista0.nombre'
@@ -98,6 +98,44 @@ $this->title = $model->id;
                 'attribute' => 'hora',
                 
             ],
+            'fechaInicio',
+            'fechaFin',
+            
+
+            
+        ],
+    ]); ?>
+
+    <h3>Detalle de Horas Inactivas</h3>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProviderInactivos,
+        'rowOptions' => ['class' => 'active'],
+        'columns' => [
+            
+            
+           
+            [
+                'label' => 'Revista',
+                'attribute' => 'revista0.nombre'
+            ],
+            [
+                'label' => 'Actividad',
+                'attribute' => 'catedra0.actividad0.nombre'
+            ],
+            [
+                'label' => 'Division',
+                'attribute' => 'catedra0.division0.nombre',
+                
+            ],
+
+            [
+                'label' => 'Horas',
+                'attribute' => 'hora',
+                
+            ],
+            'fechaInicio',
+            'fechaFin',
             
 
             
@@ -117,8 +155,7 @@ $this->title = $model->id;
         'columns' => [
             
             
-            
-             'id',
+          
             [
                 'label' => 'Revista',
                 'attribute' => 'revista0.nombre'

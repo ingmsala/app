@@ -95,11 +95,11 @@ class DetallecatedraSearch extends Detallecatedra
 
     }
 
-     public function providerxdocente($id)
+     public function providerxdocente($id, $activo)
     {
         $query = Detallecatedra::find()
             ->where(['docente' => $id,
-                'activo' => 1 //suplente
+                'activo' => $activo //suplente
             ])
             ->orderBy('revista ASC', 'id ASC');
 

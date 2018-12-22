@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\web\View;
 use miloschuman\highcharts\Highcharts;
 
@@ -10,7 +10,7 @@ use miloschuman\highcharts\Highcharts;
 /* @var $this yii\web\View */
 /* @var $model app\models\DetalleCatedra */
 
-$this->title = $model->id;
+$docente = $model->apellido.', '.$model->nombre;
 
 ?>
 <div class="detalle-catedra-view">
@@ -18,8 +18,6 @@ $this->title = $model->id;
     <?php $this->registerJs("document.getElementById('modalHeader').innerHTML ='".
     'Docente: '.$model->apellido.', '.$model->nombre."';", View::POS_END, 'my-options'); ?>
 
-    
-    <h3>Detalle Ausencias</h3>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -31,6 +29,30 @@ $this->title = $model->id;
             }
             return ['class' => 'warning'];
         },
+        'panel' => [
+            'type' => GridView::TYPE_DEFAULT,
+            'heading' => Html::encode('Detalle Ausencias'),
+            //'beforeOptions' => ['class'=>'kv-panel-before'],
+        ],
+        'exportConfig' => [
+            GridView::EXCEL => [
+                'label' => 'Excel',
+                'showConfirmAlert' => false,
+                'filename' => 'Detalle Ausencias',
+                
+                'alertMsg' => false,
+                'config' => [
+                    'worksheet' => $model->apellido
+                ],
+            ],
+            
+
+        ],
+        'toolbar'=>[
+            
+            '{export}',
+            
+        ],
         'columns' => [
             
             [   

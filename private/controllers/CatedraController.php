@@ -53,11 +53,15 @@ class CatedraController extends Controller
     public function actionIndex()
     {
         $searchModel = new CatedraSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->providercatedras(Yii::$app->request->queryParams);
+        $divisiones = Division::find()->all();
+        $propuestas = Propuesta::find()->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'divisiones' => $divisiones,
+            'propuestas' => $propuestas,
         ]);
     }
 

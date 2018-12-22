@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
 
 
@@ -10,23 +10,20 @@ use yii\helpers\ArrayHelper;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Nombramientos';
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="nombramiento-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('Nuevo Nombramiento', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-
-   
+       
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'panel' => [
+            'type' => GridView::TYPE_DEFAULT,
+            'heading' => Html::encode($this->title)
+            
+            ],
         'columns' => [
         
             [
@@ -79,7 +76,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 //'suplente0.docente0.apellido',
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'kartik\grid\ActionColumn'],
         ],
+         'toolbar'=>[
+            ['content' => 
+                Html::a('Nuevo Nombramiento', ['create'], ['class' => 'btn btn-success'])
+
+            ],
+            '{export}',
+            
+        ],
+        'exportConfig' => [
+            GridView::EXCEL => ['label' => 'Excel'],
+            //GridView::HTML => [// html settings],
+            //GridView::PDF => ['label' => 'PDF'],
+        ]
+        
     ]); ?>
 </div>

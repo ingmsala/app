@@ -193,13 +193,35 @@ class DetallecatedraController extends Controller
 
     }
 
-    public function actionInactive($id)
+    public function actionInactive($id, $fechaFin)
     {   
         $model = $this->findModel($id);
         $catedra = $model->catedra;
         $model->activo = 2;
+        $model->fechaFin = $fechaFin;
         $model->save();
         return $this->redirect(['catedra/view' , 'id' => $catedra]);
+
+    }
+
+       public function actionFechafin($id)
+    {   
+       
+
+        $model = $this->findModel($id);
+        $catedra = $model->catedra;
+        $model->activo = 2;
+        
+        
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            return $this->redirect(['catedra/view', 'id' => $catedra]);
+        }
+
+        return $this->renderAjax('fechafin', [
+            'model' => $this->findModel($id),
+        ]);
 
     }
 

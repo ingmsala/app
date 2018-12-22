@@ -62,6 +62,9 @@ $config = [
         */
         //'catchAll' => ['/site/login'],
     ],
+    'modules' => [
+     'gridview' => ['class' => 'kartik\grid\Module']
+    ], 
     'params' => $params,
 ];
 
