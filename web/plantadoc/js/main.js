@@ -72,4 +72,25 @@ $(function(){
 	})
 });
 
+$(function(){
+	$('#modalButtonIngreso').click(function(){
+		$('#modal').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+			document.getElementById('modalHeader').innerHTML ='Escaneo de DNI';
+	})
+});
+
+$(function(){
+	$('#modalButtonEgreso').click(function(){
+		$('#modal').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+			document.getElementById('modalHeader').innerHTML ='Escaneo de Credencial';
+	})
+});
+
+
+
+
 

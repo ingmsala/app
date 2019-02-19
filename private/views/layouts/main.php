@@ -141,6 +141,30 @@ AppAsset::register($this);
                     
                 ],
             ],
+
+            Yii::$app->user->isGuest ? (
+                ['label' => '']
+            ) :(
+            in_array (Yii::$app->user->identity->username, ["msala", "puerta"]) ? (
+            ['label' => 'Control de Acceso',
+                'items' => [
+                     
+                    ['label' => 'Visitas', 'url' => ['/panelacceso/acceso']],
+                        '<div class="dropdown-divider"></div>',
+                    ['label' => 'Visitantes', 'url' => ['/panelacceso/visitante']],
+                        '<div class="dropdown-divider"></div>',
+                    ['label' => 'Areas', 'url' => ['/panelacceso/area']],
+                        '<div class="dropdown-divider"></div>',
+                    ['label' => 'Tarjetas', 'url' => ['/panelacceso/tarjeta']],
+                        '<div class="dropdown-divider"></div>',
+                    ['label' => 'Restringidos', 'url' => ['/panelacceso/restriccion']],
+                        '<div class="dropdown-divider"></div>',
+                    ],
+
+
+            ]) :
+                ['label' => '']
+            ),
             
             Yii::$app->user->isGuest ? (
                 ['label' => 'Ingresar', 'url' => ['/site/login']]

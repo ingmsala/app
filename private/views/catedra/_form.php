@@ -13,11 +13,16 @@ use kartik\select2\Select2;
 
 <div class="catedra-form">
 
-    
+
 
     <?php $listDivisiones=ArrayHelper::map($divisiones,'id','nombre'); ?>
     <?php $listPropuestas=ArrayHelper::map($propuestas,'id','nombre'); ?>
     <?php $listActividades=ArrayHelper::map($actividades,'id','nombre'); ?>
+
+    <?php 
+
+    echo var_dump($listActividades);
+    ?>
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -50,7 +55,7 @@ use kartik\select2\Select2;
     <?= 
 
         $form->field($model, 'division')->widget(Select2::classname(), [
-            'data' => $listDivisiones,
+            //'data' => $listDivisiones,
             'options' => ['placeholder' => 'Seleccionar...'],
             'pluginOptions' => [
                 'allowClear' => true
@@ -62,7 +67,7 @@ use kartik\select2\Select2;
     <?= 
 
         $form->field($model, 'actividad')->widget(Select2::classname(), [
-            'data' => $listActividades,
+            //'data' => $listActividades,
             'options' => ['placeholder' => 'Seleccionar...'],
             'pluginOptions' => [
                 'allowClear' => true

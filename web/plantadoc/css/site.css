@@ -250,3 +250,17 @@ a.desc:after {
           color: #823c2b;
     }
 }
+
+#infoingreso{
+    position: fixed;
+    bottom: 10%;
+    right: 2%;
+    width: 30%;
+}
+
+#infoegreso{
+    position: fixed;
+    bottom: 10%;
+    right: 2%;
+    width: 30%;
+}
