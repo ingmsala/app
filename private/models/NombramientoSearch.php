@@ -22,7 +22,7 @@ class NombramientoSearch extends Nombramiento
     {
         return [
             [['id', 'cargo','horas', ], 'integer'],
-            [['nombre', 'revista', 'docente', 'division', 'suplente'], 'safe'],
+            [['nombre', 'revista', 'docente', 'division', 'suplente', 'extension'], 'safe'],
         ];
     }
 
@@ -44,7 +44,8 @@ class NombramientoSearch extends Nombramiento
      */
     public function search($params)
     {
-        $query = Nombramiento::find()->joinWith(['docente0', 'revista0', 'division0', 'suplente0 n']);
+        $query = Nombramiento::find()->joinWith(['docente0', 'revista0', 'division0', 'condicion0', 'suplente0 n', 'extension0'])
+                        ->where(['!=','condicion.nombre', 'SUPL'] );
 
         // add conditions that should always apply here
 

@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\NombramientoSearch */
+/* @var $model app\models\ExtensionSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="nombramiento-search">
+<div class="extension-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -18,21 +18,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'id') ?>
 
     <?= $form->field($model, 'nombre') ?>
-
-    <?= $form->field($model, 'cargo') ?>
-
-    <?= $form->field($model, 'horas') ?>
-
-    <?= $form->field($model, 'docente') ?>
-
-    <?php  echo $form->field($model, 'revista') ?>
-
-    <?php  echo $form->field($model, 'division') ?>
-
-    <?php  echo $form->field($model, 'suplente') ?>
-
-    <?php echo $form->field($model, 'extension') ?>
-
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

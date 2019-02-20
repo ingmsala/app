@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'divisiones' => $divisiones,
         'condiciones' => $condiciones,
         'suplentes' => $suplentes,
+        'extensiones' => $extensiones,
         
     ]) ?>
 

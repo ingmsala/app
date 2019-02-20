@@ -16,8 +16,10 @@ use Yii;
  * @property int $condicion
  * @property int $division
  * @property int $suplente
+ * @property int $extension 
  *
  * @property Condicion $condicion0
+ * @property Extension $extension0 
  * @property Cargo $cargo0
  * @property Docente $docente0
  * @property Division $division0
@@ -42,8 +44,9 @@ class Nombramiento extends \yii\db\ActiveRecord
     {
         return [
             [['cargo', 'horas', 'docente', 'revista', 'condicion'], 'required'],
-            [['cargo', 'horas', 'docente', 'revista', 'condicion', 'division', 'suplente'], 'integer'],
+            [['cargo', 'horas', 'docente', 'revista', 'condicion', 'division', 'suplente', 'extension'], 'integer'],
             [['nombre'], 'string', 'max' => 150],
+            [['extension'], 'exist', 'skipOnError' => true, 'targetClass' => Extension::className(), 'targetAttribute' => ['extension' => 'id']], 
             [['condicion'], 'exist', 'skipOnError' => true, 'targetClass' => Condicion::className(), 'targetAttribute' => ['condicion' => 'id']],
             [['cargo'], 'exist', 'skipOnError' => true, 'targetClass' => Cargo::className(), 'targetAttribute' => ['cargo' => 'id']],
             [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
@@ -68,8 +71,17 @@ class Nombramiento extends \yii\db\ActiveRecord
             'condicion' => 'Condicion',
             'division' => 'Division',
             'suplente' => 'Suplente',
+            'extension' => 'Extensión', 
         ];
     }
+
+    /** 
+    * @return \yii\db\ActiveQuery 
+    */ 
+   public function getExtension0() 
+   { 
+       return $this->hasOne(Extension::className(), ['id' => 'extension']); 
+   }
 
     /**
      * @return \yii\db\ActiveQuery

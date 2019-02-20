@@ -26,6 +26,7 @@ use kartik\select2\Select2;
     <?php $listdivisiones=ArrayHelper::map($divisiones,'id','nombre'); ?>
     <?php $listcondiciones=ArrayHelper::map($condiciones,'id','nombre'); ?>
     <?php $listsuplentes=ArrayHelper::map($suplentes,'id', 'nombre');?>
+    <?php $listextensiones=ArrayHelper::map($extensiones,'id', 'nombre');?>
 
     
 
@@ -64,6 +65,8 @@ use kartik\select2\Select2;
     <?= $form->field($model, 'horas')->textInput() ?>
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true, 'style'=>'text-transform:uppercase;']) ?>
+
+    <?= $form->field($model, 'extension')->dropDownList($listextensiones, ['prompt'=>'(Sin extensión horaria)']); ?>
 
     <?= 
 

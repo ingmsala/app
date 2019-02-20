@@ -68,7 +68,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'horas',
             
             
-            'division',
+            [
+                'label' => 'Division',
+                'attribute' => 'division',
+                'value' => function($model){
+
+                    try{
+                        $divi = $model->division0->nombre;
+                     }catch(\Exception $exception){
+                        $divi = '';
+                     }
+
+                     return $divi;
+                }
+            ],
             
         ],
     ]) ?>
@@ -115,6 +128,23 @@ $this->params['breadcrumbs'][] = $this->title;
             [   
                 'label' => 'Revista',
                 'attribute' => 'revista0.nombre'
+            ],
+
+            'horas',
+
+            [
+
+                'label' => 'Extensión',
+                'attribute' => 'extension',
+                'value' => function($model){
+                     try{
+                        $exte = $model->extension0->nombre;
+                     }catch(\Exception $exception){
+                        $exte = '';
+                     }
+
+                   return $exte;
+                }
             ],
 
            // ['class' => 'yii\grid\ActionColumn'],

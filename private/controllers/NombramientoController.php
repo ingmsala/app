@@ -13,6 +13,7 @@ use app\models\Docente;
 use app\models\Revista;
 use app\models\Division;
 use app\models\Condicion;
+use app\models\Extension;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 
@@ -97,6 +98,7 @@ class NombramientoController extends Controller
         $divisiones = Division::find()->all();
         $condiciones = Condicion::find()->all();
         $suplentes = Nombramiento::find()->all();
+        $extensiones = Extension::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -111,6 +113,7 @@ class NombramientoController extends Controller
             'divisiones' => $divisiones,
             'condiciones' => $condiciones,
             'suplentes' => $suplentes,
+            'extensiones' => $extensiones,
         ]);
     }
 
@@ -131,6 +134,7 @@ class NombramientoController extends Controller
         $divisiones = Division::find()->all();
         $condiciones = Condicion::find()->all();
         $suplentes = Nombramiento::find()->all();
+        $extensiones = Extension::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -147,6 +151,7 @@ class NombramientoController extends Controller
                 'divisiones' => $divisiones,
                 'condiciones' => $condiciones,
                 'suplentes' => $suplentes,
+                'extensiones' => $extensiones,
             ]);
         }
         return $this->render('update', [
@@ -158,6 +163,7 @@ class NombramientoController extends Controller
                 'divisiones' => $divisiones,
                 'condiciones' => $condiciones,
                 'suplentes' => $suplentes,
+                'extensiones' => $extensiones,
             ]);
 
     }
@@ -217,6 +223,7 @@ class NombramientoController extends Controller
         $revistas = Revista::find()->all();
         $divisiones = Division::find()->all();
         $condiciones = Condicion::find()->all();
+        $extensiones = Extension::find()->all();
         
         $subQuery = Nombramiento::find()->select('suplente')->all();
         $query  = Nombramiento::find()
@@ -249,6 +256,7 @@ class NombramientoController extends Controller
             'divisiones' => $divisiones,
             'condiciones' => $condiciones,
             'suplentes' => $suplente,
+            'extensiones' => $extensiones,
         ]);
     }
 
