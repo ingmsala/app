@@ -11,6 +11,8 @@ use yii\filters\VerbFilter;
 use app\models\Visitante;
 use app\models\Area;
 use app\models\Tarjeta;
+use yii\filters\AccessControl;
+
 
 
 /**
@@ -24,6 +26,39 @@ class AccesoController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'buscarvisitante', 'egreso', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['create', 'buscarvisitante', 'egreso'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->username, ['msala', 'puerta']);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['index', 'view'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->username, ['msala', 'puerta', 'consulta']);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
+                    ],
+
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

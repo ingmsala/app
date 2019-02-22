@@ -22,13 +22,22 @@ class DistribuciondediasxmesController extends \yii\web\Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view'],
                 'rules' => [
                     [
-                        
+                        'actions' => ['index', 'view'],   
                         'allow' => true,
-                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->username, ['msala', 'secretaria', 'consulta']);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
                     ],
+
+                    
                 ],
             ],
             'verbs' => [

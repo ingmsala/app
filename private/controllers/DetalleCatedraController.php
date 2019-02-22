@@ -36,10 +36,31 @@ class DetallecatedraController extends Controller
                 'only' => ['index', 'view', 'create', 'update', 'delete'],
                 'rules' => [
                     [
-                        
+                        'actions' => ['create', 'update', 'delete', 'inactive', 'fechafin'],   
                         'allow' => true,
-                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->username, ['msala', 'secretaria']);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
                     ],
+
+                    [
+                        'actions' => ['index', 'view'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->username, ['msala','secretaria', 'consulta']);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
                 ],
             ],
             'verbs' => [

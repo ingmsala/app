@@ -30,12 +30,32 @@ class NombramientoController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'asignarsuplente'],
                 'rules' => [
                     [
-                        
+                        'actions' => ['create', 'update', 'delete'],   
                         'allow' => true,
-                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->username, ['msala', 'secretaria']);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['index', 'view'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->username, ['msala', 'secretaria', 'consulta']);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
                     ],
                 ],
             ],

@@ -23,12 +23,32 @@ class CargoController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'gethora'],
                 'rules' => [
                     [
-                        
+                        'actions' => ['index', 'view', 'create', 'update'],   
                         'allow' => true,
-                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->username, ['msala', 'secretaria']);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->username, ['msala']);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
                     ],
                 ],
             ],

@@ -44,7 +44,7 @@ AppAsset::register($this);
             Yii::$app->user->isGuest ? (
                 ['label' => '']
             ) :(
-            in_array (Yii::$app->user->identity->username, ["msala", "secretaria"]) ? (
+            in_array (Yii::$app->user->identity->username, ["msala", "secretaria", "consulta"]) ? (
             ['label' => 'Reportes', 
                 'items' => [
                    /* ['label' => 'Horas Catedra Secundario', 'url' => ['#']],
@@ -99,7 +99,7 @@ AppAsset::register($this);
             Yii::$app->user->isGuest ? (
                 ['label' => '']
             ) :(
-            in_array (Yii::$app->user->identity->username, ["msala", "secretaria"]) ? (
+            in_array (Yii::$app->user->identity->username, ["msala", "secretaria", "consulta"]) ? (
             ['label' => 'Administración',
                 'items' => [
                      
@@ -137,16 +137,16 @@ AppAsset::register($this);
                 ['label' => '']
             ) :(
 
-            in_array (Yii::$app->user->identity->username, ["msala", "secretaria", "regenciatm", "regenciatt","M2P","M1P","MPB","T2P","T1P","TPB"]) ? (
+            in_array (Yii::$app->user->identity->username, ["msala", "secretaria", "regenciatm", "regenciatt","M2P","M1P","MPB","T2P","T1P","TPB", "consulta"]) ? (
             ['label' => 'Parte Docente', 
                 'items' => [
-                    in_array (Yii::$app->user->identity->username, ["msala", "M2P","M1P","MPB","T2P","T1P","TPB"])?  
+                    in_array (Yii::$app->user->identity->username, ["msala", "M2P","M1P","MPB","T2P","T1P","TPB", "consulta"])?  
                     ['label' => 'Parte docente', 'url' => ['/parte']]: ['label' => ''],
                         '<div class="dropdown-divider"></div>',
-                    in_array (Yii::$app->user->identity->username, ["msala", "regenciatt","regenciatm"])?  
+                    in_array (Yii::$app->user->identity->username, ["msala", "regenciatt","regenciatm", "consulta"])?  
                     ['label' => 'Control de Regencia', 'url' => ['parte/controlregencia']] : ['label' => ''],
                         '<div class="dropdown-divider"></div>',
-                    in_array (Yii::$app->user->identity->username, ["msala", "secretaria"])?    
+                    in_array (Yii::$app->user->identity->username, ["msala", "secretaria", "consulta"])?    
                     ['label' => 'Control de Secretaría', 'url' => ['parte/controlsecretaria']]: ['label' => ''],
                         '<div class="dropdown-divider"></div>',
                     ['label' => 'Horarios de cátedra', 'url' => ['parte/horarios']],
