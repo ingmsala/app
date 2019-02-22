@@ -15,11 +15,13 @@ use Yii;
  * @property int $llego
  * @property int $retiro
  * @property int $falta
+ * @property int $estadoinasistencia
  *
  * @property Parte $parte0
  * @property Falta $falta0
  * @property Docente $docente0
  * @property Division $division0
+ * @property Estadoinasistencia $estadoinasistencia0
  */
 class Detalleparte extends \yii\db\ActiveRecord
 {
@@ -38,11 +40,12 @@ class Detalleparte extends \yii\db\ActiveRecord
     {
         return [
             [['parte', 'division', 'docente', 'hora', 'falta'], 'required'],
-            [['parte', 'division', 'docente', 'hora', 'llego', 'retiro', 'falta'], 'integer'],
+            [['parte', 'division', 'docente', 'hora', 'llego', 'retiro', 'falta', 'estadoinasistencia'], 'integer'],
             [['parte'], 'exist', 'skipOnError' => true, 'targetClass' => Parte::className(), 'targetAttribute' => ['parte' => 'id']],
             [['falta'], 'exist', 'skipOnError' => true, 'targetClass' => Falta::className(), 'targetAttribute' => ['falta' => 'id']],
             [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
             [['division'], 'exist', 'skipOnError' => true, 'targetClass' => Division::className(), 'targetAttribute' => ['division' => 'id']],
+            [['estadoinasistencia'], 'exist', 'skipOnError' => true, 'targetClass' => Estadoinasistencia::className(), 'targetAttribute' => ['estadoinasistencia' => 'id']],
         ];
     }
 
@@ -60,6 +63,7 @@ class Detalleparte extends \yii\db\ActiveRecord
             'llego' => 'Llego',
             'retiro' => 'Retiro',
             'falta' => 'Tipo de Falta',
+            'estadoinasistencia' => 'Estado',
         ];
     }
 
@@ -80,6 +84,10 @@ class Detalleparte extends \yii\db\ActiveRecord
        return $this->hasOne(Falta::className(), ['id' => 'falta']);
    }
 
+   public function getEstadoinasistencia0()
+   {
+       return $this->hasOne(Estadoinasistencia::className(), ['id' => 'estadoinasistencia']);
+   }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -103,5 +111,15 @@ class Detalleparte extends \yii\db\ActiveRecord
     public function getHora0()
     {
         return $this->hasOne(Hora::className(), ['id' => 'hora']);
+    }
+
+    public function getEstadoinasistenciaxpartes()
+    {
+        return $this->hasMany(Estadoinasistenciaxparte::className(), ['detalleparte' => 'id']);
+    }
+
+    public function getEstadoinasistencias()
+    {
+        return $this->hasMany(Estadoinasistencia::className(), ['id' => 'detalleparte'])->via('estadoinasistenciaxpartes');
     }
 }

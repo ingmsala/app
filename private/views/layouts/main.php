@@ -132,15 +132,30 @@ AppAsset::register($this);
             ]) :
                 ['label' => '']
             ),
+
+            Yii::$app->user->isGuest ? (
+                ['label' => '']
+            ) :(
+
+            in_array (Yii::$app->user->identity->username, ["msala", "secretaria", "regenciatm", "regenciatt","M2P","M1P","MPB","T2P","T1P","TPB"]) ? (
             ['label' => 'Parte Docente', 
                 'items' => [
-                    ['label' => 'Parte docente', 'url' => ['/parte']],
+                    in_array (Yii::$app->user->identity->username, ["msala", "M2P","M1P","MPB","T2P","T1P","TPB"])?  
+                    ['label' => 'Parte docente', 'url' => ['/parte']]: ['label' => ''],
                         '<div class="dropdown-divider"></div>',
-                    ['label' => 'Horarios de cátedra', 'url' => ['/horarios']],
+                    in_array (Yii::$app->user->identity->username, ["msala", "regenciatt","regenciatm"])?  
+                    ['label' => 'Control de Regencia', 'url' => ['parte/controlregencia']] : ['label' => ''],
+                        '<div class="dropdown-divider"></div>',
+                    in_array (Yii::$app->user->identity->username, ["msala", "secretaria"])?    
+                    ['label' => 'Control de Secretaría', 'url' => ['parte/controlsecretaria']]: ['label' => ''],
+                        '<div class="dropdown-divider"></div>',
+                    ['label' => 'Horarios de cátedra', 'url' => ['parte/horarios']],
                         '<div class="dropdown-divider"></div>',
                     
                 ],
-            ],
+            ])  :
+                ['label' => '']
+            ),          
 
             Yii::$app->user->isGuest ? (
                 ['label' => '']

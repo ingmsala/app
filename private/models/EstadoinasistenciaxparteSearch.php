@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Parte;
+use app\models\Estadoinasistenciaxparte;
 
 /**
- * ParteSearch represents the model behind the search form of `app\models\Parte`.
+ * EstadoinasistenciaxparteSearch represents the model behind the search form of `app\models\Estadoinasistenciaxparte`.
  */
-class ParteSearch extends Parte
+class EstadoinasistenciaxparteSearch extends Estadoinasistenciaxparte
 {
     /**
      * {@inheritdoc}
@@ -18,8 +18,8 @@ class ParteSearch extends Parte
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['fecha', 'preceptoria'], 'safe'],
+            [['id', 'estadoinasistencia', 'detalleparte', 'falta'], 'integer'],
+            [['detalle', 'fecha'], 'safe'],
         ];
     }
 
@@ -41,15 +41,7 @@ class ParteSearch extends Parte
      */
     public function search($params)
     {
-        $us = Yii::$app->user->identity->username;
-        if ( !in_array ($us, ["msala", "secretaria"])) {
-        $query = Parte::find()->joinWith('preceptoria0')
-               ->where(['preceptoria.nombre' => $us])
-               ->orderBy('fecha desc');
-        }else{
-            $query = Parte::find()->joinWith('preceptoria0')
-                ->orderBy('fecha desc');
-        }
+        $query = Estadoinasistenciaxparte::find();
 
         // add conditions that should always apply here
 
@@ -65,20 +57,33 @@ class ParteSearch extends Parte
             return $dataProvider;
         }
 
-        $dataProvider->sort->attributes['preceptoria0'] = [
-        'asc' => ['preceptoria.nombre' => SORT_ASC],
-        'desc' => ['preceptoria.nombre' => SORT_DESC],
-        ];
-
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'estadoinasistencia' => $this->estadoinasistencia,
             'fecha' => $this->fecha,
-            
+            'detalleparte' => $this->detalleparte,
         ]);
 
-        $query->andFilterWhere(['like', 'preceptoria.nombre', $this->preceptoria]);
+        $query->andFilterWhere(['like', 'detalle', $this->detalle]);
 
         return $dataProvider;
+    }
+
+    public function nuevo($detalle=null, $estadoinasistencia, $detalleparte, $falta){
+        $model = new Estadoinasistenciaxparte;
+        $model->detalle = $detalle;
+        $model->estadoinasistencia = $estadoinasistencia;
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $model->fecha = date("Y-m-d H:i:s");
+        $model->detalleparte = $detalleparte;
+        $model->falta = $falta;
+        if ($model->save()){
+            return true;
+        }else{
+            return false;
+        }
+
+
     }
 }

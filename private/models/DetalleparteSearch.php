@@ -19,7 +19,7 @@ class DetalleparteSearch extends Detalleparte
     public function rules()
     {
         return [
-            [['id', 'parte', 'division', 'docente', 'hora', 'llego', 'retiro', 'falta'], 'integer'],
+            [['id', 'parte', 'division', 'docente', 'hora', 'llego', 'retiro', 'falta', 'estadoinasistencia'], 'integer'],
         ];
     }
 
@@ -41,7 +41,23 @@ class DetalleparteSearch extends Detalleparte
      */
     public function search($params)
     {
-        $query = Detalleparte::find();
+        if(Yii::$app->user->identity->username == 'regenciatm'){
+            $query = Detalleparte::find()->joinWith('division0')
+            ->where(['estadoinasistencia' => 1])
+            ->orWhere(['estadoinasistencia' => 3])
+            ->andWhere(['division.turno' =>1]);
+        }elseif(Yii::$app->user->identity->username == 'regenciatt'){
+            $query = Detalleparte::find()->joinWith('division0')
+            ->where(['estadoinasistencia' => 1])
+            ->orWhere(['estadoinasistencia' => 3])
+            ->andWhere(['division.turno' =>2]);
+        }elseif(Yii::$app->user->identity->username == 'msala'){
+            $query = Detalleparte::find()->joinWith('division0')
+            ->where(['estadoinasistencia' => 1])
+            ->orWhere(['estadoinasistencia' => 3]);
+            
+        }
+        
 
         // add conditions that should always apply here
 
@@ -67,6 +83,44 @@ class DetalleparteSearch extends Detalleparte
             'llego' => $this->llego,
             'retiro' => $this->retiro,
             'falta' => $this->falta,
+            'estadoinasistencia' => $this->estadoinasistencia,
+        ]);
+
+        return $dataProvider;
+    }
+
+    public function search2($params)
+    {
+        $query = Detalleparte::find()
+            ->where(['estadoinasistencia' => 2])
+            ->orWhere(['estadoinasistencia' => 4])
+            ->andWhere(['!=', 'falta', 2]);
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'parte' => $this->parte,
+            'division' => $this->division,
+            'docente' => $this->docente,
+            'hora' => $this->hora,
+            'llego' => $this->llego,
+            'retiro' => $this->retiro,
+            'falta' => $this->falta,
+            'estadoinasistencia' => $this->estadoinasistencia,
         ]);
 
         return $dataProvider;
@@ -77,7 +131,7 @@ class DetalleparteSearch extends Detalleparte
         $query = Detalleparte::find()
             ->where(['parte' => $id,
                 //'condicion' => 5 //suplente
-            ]);
+            ])->joinWith(['estadoinasistencias',]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

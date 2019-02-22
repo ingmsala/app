@@ -44,12 +44,36 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'hora')->dropDownList($listHoras, ['prompt'=>'Seleccionar...']); ?>
 
-    <?= $form->field($model, 'llego')->textInput() ?>
+   
+    <?= 
 
-    <?= $form->field($model, 'retiro')->textInput() ?>
+        $form->field($model, 'falta')->widget(Select2::classname(), [
+            'data' => $listFaltas,
+            'options' => ['placeholder' => 'Seleccionar...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+            'pluginEvents' => [
+                'select2:select' => 'function() {
+                    if ($(this).val()==3) {
+                           $( "#retaus" ).show();
+                        }else{
+                            
+                           $( "#retaus" ).hide();
 
-    <?= $form->field($model, 'falta')->dropDownList($listFaltas, ['prompt'=>'Seleccionar...']); ?>
+                        }
+                        
+                }',
+            ],
+        ]);
 
+    ?>
+
+    <div id="retaus" style="display: none;">
+        <?= $form->field($model, 'llego')->textInput() ?>
+
+        <?= $form->field($model, 'retiro')->textInput() ?>
+    </div>
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>

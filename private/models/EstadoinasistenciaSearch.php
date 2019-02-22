@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Parte;
+use app\models\Estadoinasistencia;
 
 /**
- * ParteSearch represents the model behind the search form of `app\models\Parte`.
+ * EstadoinasistenciaSearch represents the model behind the search form of `app\models\Estadoinasistencia`.
  */
-class ParteSearch extends Parte
+class EstadoinasistenciaSearch extends Estadoinasistencia
 {
     /**
      * {@inheritdoc}
@@ -19,7 +19,7 @@ class ParteSearch extends Parte
     {
         return [
             [['id'], 'integer'],
-            [['fecha', 'preceptoria'], 'safe'],
+            [['nombre'], 'safe'],
         ];
     }
 
@@ -41,15 +41,7 @@ class ParteSearch extends Parte
      */
     public function search($params)
     {
-        $us = Yii::$app->user->identity->username;
-        if ( !in_array ($us, ["msala", "secretaria"])) {
-        $query = Parte::find()->joinWith('preceptoria0')
-               ->where(['preceptoria.nombre' => $us])
-               ->orderBy('fecha desc');
-        }else{
-            $query = Parte::find()->joinWith('preceptoria0')
-                ->orderBy('fecha desc');
-        }
+        $query = Estadoinasistencia::find();
 
         // add conditions that should always apply here
 
@@ -65,19 +57,12 @@ class ParteSearch extends Parte
             return $dataProvider;
         }
 
-        $dataProvider->sort->attributes['preceptoria0'] = [
-        'asc' => ['preceptoria.nombre' => SORT_ASC],
-        'desc' => ['preceptoria.nombre' => SORT_DESC],
-        ];
-
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'fecha' => $this->fecha,
-            
         ]);
 
-        $query->andFilterWhere(['like', 'preceptoria.nombre', $this->preceptoria]);
+        $query->andFilterWhere(['like', 'nombre', $this->nombre]);
 
         return $dataProvider;
     }

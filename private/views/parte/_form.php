@@ -15,13 +15,11 @@ use yii\jui\DatePicker;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?php $listPreceptoria=ArrayHelper::map($precepx,'id','nombre'); ?>
-
-  
+    <?php $listPreceptoria=ArrayHelper::map($precepx,'id','nombre'); 
     
-    	
-    		
-    	
+    ?>
+
+  		
 	    <?= 
 	    $form->field($model, 'fecha')->widget(DatePicker::class, [
 	    //'language' => 'ru',

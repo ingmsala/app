@@ -90,6 +90,24 @@ $(function(){
 	})
 });
 
+$(function(){
+	$('.modalRegencia').click(function(){
+		$('#modal').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+			document.getElementById('modalHeader').innerHTML ='Rectificación';
+	})
+});
+
+$(function(){
+	$('.modalSecretaria').click(function(){
+		$('#modal').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+			document.getElementById('modalHeader').innerHTML ='Justificación de inasistencia';
+	})
+});
+
 
 
 

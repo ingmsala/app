@@ -74,6 +74,20 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
             'authKey' => 'test108key',
             'accessToken' => '108-token',
         ],
+        '109' => [
+            'id' => '109',
+            'username' => 'regenciatm',
+            'password' => 'regenciatm',
+            'authKey' => 'test109key',
+            'accessToken' => '109-token',
+        ],
+        '110' => [
+            'id' => '110',
+            'username' => 'regenciatt',
+            'password' => 'regenciatt',
+            'authKey' => 'test110key',
+            'accessToken' => '110-token',
+        ],
     ];
 
 

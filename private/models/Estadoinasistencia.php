@@ -5,21 +5,21 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "falta".
+ * This is the model class for table "estadoinasistencia".
  *
  * @property int $id
  * @property string $nombre
  *
- * @property Detalleparte[] $detallepartes
+ * @property Estadoinasistenciaxparte[] $estadoinasistenciaxpartes
  */
-class Falta extends \yii\db\ActiveRecord
+class Estadoinasistencia extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'falta';
+        return 'estadoinasistencia';
     }
 
     /**
@@ -29,7 +29,7 @@ class Falta extends \yii\db\ActiveRecord
     {
         return [
             [['nombre'], 'required'],
-            [['nombre'], 'string', 'max' => 25],
+            [['nombre'], 'string', 'max' => 50],
         ];
     }
 
@@ -47,13 +47,16 @@ class Falta extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDetallepartes()
+    public function getEstadoinasistenciaxpartes()
     {
-        return $this->hasMany(Detalleparte::className(), ['falta' => 'id']);
+        return $this->hasMany(Estadoinasistenciaxparte::className(), ['estadoinasistencia' => 'id']);
     }
 
-    public function getEstadoinasistenciaxparte()
+   
+    public function getDetallepartes()
     {
-        return $this->hasMany(Estadoinasistenciaxparte::className(), ['falta' => 'id']);
+        return $this->hasMany(Detalleparte::className(), ['id' => 'estadoinasistencia'])->via('estadoinasistenciaxparte');
     }
+
+    
 }

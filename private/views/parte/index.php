@@ -35,6 +35,16 @@ $precepx = Yii::$app->user->identity->username;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'rowOptions' => function($model){
+            
+            date_default_timezone_set('America/Argentina/Buenos_Aires');
+            
+            if ($model->fecha == date('Y-m-d')){
+                return ['class' => 'info', 'style'=>"font-weight:bold"];
+            }
+            return ['class' => 'warning'];
+        },
+
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -42,8 +52,12 @@ $precepx = Yii::$app->user->identity->username;
             [
                 'label' => 'Fecha',
                 'attribute' => 'fecha',
+                'format' => 'raw',
                 'value' => function($model){
-                    
+                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+                   if ($model->fecha == date('Y-m-d')){
+                        return Yii::$app->formatter->asDate($model->fecha, 'dd-MM-yyyy').' (HOY)';
+                   } 
                    return Yii::$app->formatter->asDate($model->fecha, 'dd-MM-yyyy');
                 }
             ],

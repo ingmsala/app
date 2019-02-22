@@ -38,9 +38,13 @@ $this->params['breadcrumbs'][] = $this->title;
      <h3>Ausencia de Docentes</h3>
     <?= Html::button('Agregar Ausencia', ['value' => Url::to('index.php?r=detalleparte/create&parte='.$model->id.'&preceptoria='.$model->preceptoria), 'class' => 'btn btn-success', 'id'=>'modalaDetalleParte']) ?>
     
-    <?= GridView::widget([
+    <?= 
+
+   GridView::widget([
+        
         'dataProvider' => $dataProvider,
         'rowOptions' => function($model){
+
             if ($model->falta !=1){
                 return ['class' => 'info'];
             }
@@ -75,17 +79,24 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Tipo de Falta',
                 'attribute' => 'falta0.nombre'
             ],
+
+            [
+                'label' => 'Estado',
+                'attribute' => 'estadoinasistencia0.nombre'
+            ],
             
            
 
            // ['class' => 'yii\grid\ActionColumn'],
             [
                 'class' => 'yii\grid\ActionColumn',
+
                 'template' => '{updatedetcat} {deletedetcat}',
                 
                 'buttons' => [
                     
                     'updatedetcat' => function($url, $model, $key){
+                        if($model->estadoinasistencia ==1)
                         return Html::button('<span class="glyphicon glyphicon-pencil"></span>',
                             ['value' => Url::to('index.php?r=detalleparte/update&id='.$model->id.'&parte=' .$model->parte),
                                 'class' => 'modala btn btn-link', 'id'=>'modala']);
@@ -93,6 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     },
                     'deletedetcat' => function($url, $model, $key){
+                        if($model->estadoinasistencia ==1)
                         return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=detalleparte/delete&id='.$model->id, 
                             ['data' => [
                             'confirm' => 'Está seguro de querer eliminar este elemento?',

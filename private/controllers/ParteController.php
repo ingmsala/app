@@ -87,28 +87,25 @@ class ParteController extends Controller
                     ->where(['nombre' => Yii::$app->user->identity->username])
                     ->orderBy('nombre')->all();
             }
-            $model = new Parte();
-
-
-            if ($model->load(Yii::$app->request->post())) {
-                $model->fecha = Yii::$app->formatter->asDate($model->fecha, 'yyyy-MM-dd');
-                if ($model->save()){
-                    return $this->redirect(['view', 'id' => $model->id]);
-                }
-            }
-
-            return $this->render('create', [
-                'model' => $model,
-                'precepx' => $precepx,
-            ]);
-        
-        }else{
-                
-                //$precepx=Preceptoria::find()->all();
-           // $precepx='';
-            return $this->redirect(['index']);
+            
 
         }
+        $model = new Parte();
+        
+        if ($model->load(Yii::$app->request->post())) {
+            $model->fecha = Yii::$app->formatter->asDate($model->fecha, 'yyyy-MM-dd');
+
+            if ($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+            'precepx' => $precepx,
+        ]);
+        
+        
 
         
     }
@@ -155,6 +152,26 @@ class ParteController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionControlregencia(){
+        $searchModel = new DetalleparteSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('controlregencia', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionControlsecretaria(){
+        $searchModel = new DetalleparteSearch();
+        $dataProvider = $searchModel->search2(Yii::$app->request->queryParams);
+
+        return $this->render('controlsecretaria', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
