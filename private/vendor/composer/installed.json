@@ -994,6 +994,52 @@
         ]
     },
     {
+        "name": "loveorigami/yii2-modal-ajax",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/loveorigami/yii2-modal-ajax.git",
+            "reference": "949bdf308f2cce39e02248addbe2cd8303096d98"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/loveorigami/yii2-modal-ajax/zipball/949bdf308f2cce39e02248addbe2cd8303096d98",
+            "reference": "949bdf308f2cce39e02248addbe2cd8303096d98",
+            "shasum": ""
+        },
+        "time": "2019-01-24T16:34:44+00:00",
+        "type": "yii2-extension",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "lo\\widgets\\modal\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Karnbrock Gmbh",
+                "homepage": "http://karnbrock.biz"
+            },
+            {
+                "name": "Lukyanov Andrey",
+                "homepage": "http://loveorigami.info"
+            }
+        ],
+        "description": "A wrapper around Yii2 Bootstrap Modal for using an ActiveForm via AJAX inside",
+        "homepage": "https://github.com/loveorigami/yii2-modal-ajax",
+        "keywords": [
+            "ajax-modal",
+            "bootstrap",
+            "modal",
+            "yii2"
+        ]
+    },
+    {
         "name": "miloschuman/yii2-highcharts-widget",
         "version": "v6.0",
         "version_normalized": "6.0.0.0",
@@ -1632,7 +1678,8 @@
         "keywords": [
             "mock",
             "xunit"
-        ]
+        ],
+        "abandoned": true
     },
     {
         "name": "psr/http-message",

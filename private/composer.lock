@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f78638fe515da3db7fb127f13ee7f78d",
+    "content-hash": "02aa4cafd586f9a4434f046f11d1f462",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -462,6 +462,50 @@
                 "yii2"
             ],
             "time": "2018-11-05T12:34:42+00:00"
+        },
+        {
+            "name": "loveorigami/yii2-modal-ajax",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/loveorigami/yii2-modal-ajax.git",
+                "reference": "949bdf308f2cce39e02248addbe2cd8303096d98"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/loveorigami/yii2-modal-ajax/zipball/949bdf308f2cce39e02248addbe2cd8303096d98",
+                "reference": "949bdf308f2cce39e02248addbe2cd8303096d98",
+                "shasum": ""
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "lo\\widgets\\modal\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Karnbrock Gmbh",
+                    "homepage": "http://karnbrock.biz"
+                },
+                {
+                    "name": "Lukyanov Andrey",
+                    "homepage": "http://loveorigami.info"
+                }
+            ],
+            "description": "A wrapper around Yii2 Bootstrap Modal for using an ActiveForm via AJAX inside",
+            "homepage": "https://github.com/loveorigami/yii2-modal-ajax",
+            "keywords": [
+                "ajax-modal",
+                "bootstrap",
+                "modal",
+                "yii2"
+            ],
+            "time": "2019-01-24T16:34:44+00:00"
         },
         {
             "name": "miloschuman/yii2-highcharts-widget",
@@ -3119,7 +3163,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "kartik-v/yii2-widget-select2": 20,
-        "kartik-v/yii2-grid": 20
+        "kartik-v/yii2-grid": 20,
+        "loveorigami/yii2-modal-ajax": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

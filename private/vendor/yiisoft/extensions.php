@@ -102,4 +102,13 @@ return array (
       '@kartik/grid' => $vendorDir . '/kartik-v/yii2-grid/src',
     ),
   ),
+  'loveorigami/yii2-modal-ajax' => 
+  array (
+    'name' => 'loveorigami/yii2-modal-ajax',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@lo/widgets/modal' => $vendorDir . '/loveorigami/yii2-modal-ajax/src',
+    ),
+  ),
 );

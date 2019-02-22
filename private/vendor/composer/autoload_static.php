@@ -31,6 +31,10 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         array (
             'miloschuman\\highcharts\\' => 23,
         ),
+        'l' => 
+        array (
+            'lo\\widgets\\modal\\' => 17,
+        ),
         'k' => 
         array (
             'kartik\\select2\\' => 15,
@@ -117,6 +121,10 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         'miloschuman\\highcharts\\' => 
         array (
             0 => __DIR__ . '/..' . '/miloschuman/yii2-highcharts-widget/src',
+        ),
+        'lo\\widgets\\modal\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/loveorigami/yii2-modal-ajax/src',
         ),
         'kartik\\select2\\' => 
         array (
