@@ -98,7 +98,7 @@ class CatedraSearch extends Catedra
     {
         
         $sql='
-        select c.id as id, a.nombre as actividad, dc.hora as hora, d.nombre as division, concat(doc.apellido,", ",doc.nombre) as docente, con.nombre as condicion, rev.nombre as revista, pro.nombre as propuesta
+        select c.id as id, a.nombre as actividad, dc.hora as hora, d.nombre as division, concat(doc.apellido,", ",doc.nombre) as docente, con.nombre as condicion, rev.nombre as revista, pro.nombre as propuesta, dc.activo
         from catedra c
         left join detallecatedra dc ON c.id = dc.catedra
         left join actividad a ON a.id = c.actividad
@@ -107,7 +107,7 @@ class CatedraSearch extends Catedra
         left join condicion con ON dc.condicion = con.id
         left join revista rev ON dc.revista = rev.id
         left join propuesta pro ON a.propuesta = pro.id
-        where (dc.activo is null or dc.activo=1)';
+        where (dc.activo is null or dc.activo=1 or dc.activo=2)';
         if (isset($params['division'])){
             $sql .= ' AND d.nombre like "%'.$params["division"].'%"';
         }

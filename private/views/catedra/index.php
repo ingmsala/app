@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'rowOptions' => function($model){
-            if ($model['revista'] =='VIGENTE'){
+            if ($model['revista'] =='VIGENTE' && $model['activo'] != 2){
                 return ['class' => 'success'];
             }
             return ['class' => 'warning'];
@@ -114,6 +114,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'hora',
                 'vAlign' => 'middle',
                 'hAlign' => 'center',
+                'value' => function($model){
+                    if($model['activo'] != 2){
+                        return $model['hora'];
+                    }
+                }
 
                 //'value' => 'actividad0.cantHoras',
                 
@@ -126,14 +131,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     'label' => '',
                     'vAlign' => 'middle',
                     'value' => function ($model){
-                        
-                        if ($model['revista'] == 'VIGENTE')
-                         return true;
-                        elseif ($model['revista'] == '')
-                            return null;
-                        else
+                        if($model['activo'] != 2){
+                            if ($model['revista'] == 'VIGENTE')
+                             return true;
+                            elseif ($model['revista'] == '')
+                                return null;
+                            else
 
-                         return false;
+                             return false;
+                        }
+                        return null;
                     }
             ], 
 
@@ -144,13 +151,20 @@ $this->params['breadcrumbs'][] = $this->title;
                     'vAlign' => 'middle',
                     'hAlign' => 'center',
                     'value' => function($model){
-                       return Html::tag('span', $model['revista'], ['class' => "badge"]);
+                        if($model['activo'] != 2){
+                            return Html::tag('span', $model['revista'], ['class' => "badge"]);
+                        }
                     }
             ],
             
             
             [
                 'attribute' => 'docente',
+                'value' => function ($model){
+                    if($model['activo'] != 2){
+                        return $model['docente'];
+                    }
+                }
                 /*'format' => 'raw',
                 'value' => function($model){
                     $items = [];
@@ -195,7 +209,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'vAlign' => 'middle',
                     'hAlign' => 'center',
                     'value' => function($model){
-                       return Html::tag('span', $model['condicion'], ['class' => "badge"]);
+                        if($model['activo'] != 2){
+                            return Html::tag('span', $model['condicion'], ['class' => "badge"]);
+                        }
                     }
                 ],
                 
