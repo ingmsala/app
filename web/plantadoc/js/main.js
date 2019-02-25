@@ -72,14 +72,13 @@ $(function(){
 	})
 });
 
-$(function(){
-	$('#modalButtonIngreso').click(function(){
-		$('#modal').modal('show')
+$('body').on('click', '#modalButtonIngreso', function(e) {
+	$('#modal').modal('show')
 			.find('#modalContent')
 			.load($(this).attr('value'));
 			document.getElementById('modalHeader').innerHTML ='Escaneo de DNI';
-	})
 });
+
 
 $(function(){
 	$('#modalButtonEgreso').click(function(){

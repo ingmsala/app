@@ -9,22 +9,53 @@ use yii\bootstrap\Modal;
 /* @var $searchModel app\models\AccesoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Visitantes actuales';
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="acceso-index">
 
     
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+   
     <div class="row">
-      <div class="col-md-6">           
-          <?= Html::button('Ingreso Visita', ['value' => Url::to('index.php?r=panelacceso/acceso/buscarvisitante'), 'class' => 'btn btn-success btn-lg', 'id'=>'modalButtonIngreso']) ?>
+      <div class="col-md-3"></div>
+      <div class="col-md-3">           
+          <?= 
+            Html::a('<span class="logo glyphicon glyphicon-user"></span><h2>Ingreso</h2><h3>DNI</h3>',
+
+           "javascript:void(0)", 
+
+           [
+
+               'id' => 'modalButtonIngreso',
+               'class' => 'client',
+               'value'=>Url::toRoute(['buscarvisitante'])// modalCall
+
+           ]);
+
+          ?>
+          
       </div>
-      <div class="col-md-6"> 
-          <?= Html::button('Egreso Visita', ['value' => Url::to('index.php?r=panelacceso/acceso/egreso'), 'class' => 'btn btn-danger btn-lg', 'id'=>'modalButtonEgreso']) ?>
+      <div class="col-md-3"> 
+          <?= 
+            Html::a('<span class="logo2 glyphicon glyphicon-barcode"></span><h2>Egreso</h2><h3>Credencial</h3>',
+
+           "javascript:void(0)", 
+
+           [
+
+               'id' => 'modalButtonEgreso',
+               'class' => 'client2',
+               'value'=>Url::toRoute(['egreso'])// modalCall
+
+           ]);
+
+          ?>
+
       </div>
+      <div class="col-md-3"></div>
     </div>
-    
+
+   
+    <div class="clearfix">...</div>
     <h1><?= Html::encode($this->title) ?></h1>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
