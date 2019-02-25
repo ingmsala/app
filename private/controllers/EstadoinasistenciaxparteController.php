@@ -26,14 +26,40 @@ class EstadoinasistenciaxparteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'justificar', 'nuevoestado'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'actions' => ['index', 'view', 'update', 'delete'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
                                     return in_array (Yii::$app->user->identity->username, ['msala']);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['create'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->username, ['msala', 'regenciatm', 'regenciatt']);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['justificar', 'nuevoestado'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->username, ['msala', 'secretaria']);
                                 }catch(\Exception $exception){
                                     return false;
                             }

@@ -42,7 +42,7 @@ class ParteSearch extends Parte
     public function search($params)
     {
         $us = Yii::$app->user->identity->username;
-        if ( !in_array ($us, ["msala", "secretaria"])) {
+        if ( !in_array ($us, ["msala", "secretaria",'consulta','regenciatt','regenciatm'])) {
         $query = Parte::find()->joinWith('preceptoria0')
                ->where(['preceptoria.nombre' => $us])
                ->orderBy('fecha desc');
