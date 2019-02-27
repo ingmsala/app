@@ -31,7 +31,7 @@ class VisitanteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->username, ['msala', 'secretaria', 'puerta']);
+                                    return in_array (Yii::$app->user->identity->role, [1,3,7]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -44,7 +44,7 @@ class VisitanteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->username, ['msala', 'secretaria', 'puerta', 'consulta']);
+                                    return in_array (Yii::$app->user->identity->role, [1,3,6,7]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -57,7 +57,7 @@ class VisitanteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->username, ['msala']);
+                                    return in_array (Yii::$app->user->identity->role, [1]);
                                 }catch(\Exception $exception){
                                     return false;
                             }

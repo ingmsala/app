@@ -13,7 +13,7 @@ use yii\widgets\ActiveForm;
 	
     <?php $form = ActiveForm::begin(); ?>
     	
-    <?= $form->field($modelTarjeta, 'codigo')->textInput(['autofocus' => 'autofocus', 'class' => 'form-control', 'tabindex' => '1'])->label("Credencial") ?>    
+    <?= $form->field($modelTarjeta, 'codigo')->textInput(['autofocus' => 'autofocus', 'class' => 'form-control', 'tabindex' => '-1'])->label("Credencial") ?>    
 
     <div class="form-group">
         <?= Html::submitButton('Registrar Egreso', ['class' => 'btn btn-success']) ?>

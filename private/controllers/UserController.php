@@ -3,17 +3,18 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Actividadtipo;
-use app\models\ActividadtipoSearch;
+use app\models\User;
+use app\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use app\models\Role;
 
 /**
- * ActividadTipoController implements the CRUD actions for ActividadTipo model.
+ * UserController implements the CRUD actions for User model.
  */
-class ActividadtipoController extends Controller
+class UserController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -26,26 +27,13 @@ class ActividadtipoController extends Controller
                 'only' => ['index', 'view', 'create', 'update', 'delete'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update'],   
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1,3]);
+                                    return in_array (Yii::$app->user->identity->role, [1]);
                                 }catch(\Exception $exception){
                                     return false;
-                            }
-                        }
-
-                    ],
-
-                    [
-                        'actions' => ['delete'],   
-                        'allow' => true,
-                        'matchCallback' => function ($rule, $action) {
-                            try{
-                                return in_array (Yii::$app->user->identity->role, [1]);
-                            }catch(\Exception $exception){
-                                return false;
                             }
                         }
 
@@ -62,12 +50,12 @@ class ActividadtipoController extends Controller
     }
 
     /**
-     * Lists all ActividadTipo models.
+     * Lists all User models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ActividadtipoSearch();
+        $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -77,7 +65,7 @@ class ActividadtipoController extends Controller
     }
 
     /**
-     * Displays a single ActividadTipo model.
+     * Displays a single User model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -90,25 +78,34 @@ class ActividadtipoController extends Controller
     }
 
     /**
-     * Creates a new ActividadTipo model.
+     * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Actividadtipo();
+        $model = new User();
+        $roles = Role::find()
+                ->where(['>', 'id', 2])
+                ->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->setPassword($model->password);
+            $model->generateAuthKey();
+
+            if($model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'roles' => $roles,
         ]);
     }
 
     /**
-     * Updates an existing ActividadTipo model.
+     * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -117,40 +114,50 @@ class ActividadtipoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $roles = Role::find()
+                ->where(['>', 'id', 2])
+                ->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->setPassword($model->password);
+            $model->generateAuthKey();
+
+            if($model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'roles' => $roles,
         ]);
     }
 
     /**
-     * Deletes an existing ActividadTipo model.
+     * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
+    {   
+        if($id!=1)
+            $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the ActividadTipo model based on its primary key value.
+     * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return ActividadTipo the loaded model
+     * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Actividadtipo::findOne($id)) !== null) {
+        if (($model = User::findOne($id)) !== null) {
             return $model;
         }
 

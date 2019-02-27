@@ -30,7 +30,7 @@ class CondicionController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->username, ['msala', 'secretaria']);
+                                    return in_array (Yii::$app->user->identity->role, [1,3]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -43,7 +43,7 @@ class CondicionController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->username, ['msala']);
+                                return in_array (Yii::$app->user->identity->role, [1]);
                             }catch(\Exception $exception){
                                 return false;
                             }

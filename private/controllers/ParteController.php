@@ -34,11 +34,13 @@ class ParteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->username, ['msala', 'M2P','M1P','MPB','T2P','T1P','TPB','regenciatm', 'regenciatt', 'consulta']);
+
+                                    return in_array (Yii::$app->user->identity->role, [1,3,4,5,6]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
-                        }
+                        },
+                        
 
                     ],
 
@@ -47,7 +49,7 @@ class ParteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->username, ['msala', 'M2P','M1P','MPB','T2P','T1P','TPB']);
+                                    return in_array (Yii::$app->user->identity->role, [1,5]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -56,11 +58,11 @@ class ParteController extends Controller
                     ],
 
                     [
-                        'actions' => ['delete'],   
+                        'actions' => ['delete', 'update'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->username, ['msala']);
+                                return in_array (Yii::$app->user->identity->role, [1]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -73,7 +75,7 @@ class ParteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->username, ['msala', 'regenciatm', 'regenciatt']);
+                                return in_array (Yii::$app->user->identity->role, [1, 4]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -86,7 +88,7 @@ class ParteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->username, ['msala', 'secretaria']);
+                                return in_array (Yii::$app->user->identity->role, [1, 3]);
                             }catch(\Exception $exception){
                                 return false;
                             }

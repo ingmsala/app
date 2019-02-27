@@ -3,17 +3,17 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Actividadtipo;
-use app\models\ActividadtipoSearch;
+use app\models\Role;
+use app\models\RoleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
 /**
- * ActividadTipoController implements the CRUD actions for ActividadTipo model.
+ * RoleController implements the CRUD actions for Role model.
  */
-class ActividadtipoController extends Controller
+class RoleController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -26,11 +26,11 @@ class ActividadtipoController extends Controller
                 'only' => ['index', 'view', 'create', 'update', 'delete'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update'],   
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1,3]);
+                                    return in_array (Yii::$app->user->identity->role, [1]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -38,18 +38,7 @@ class ActividadtipoController extends Controller
 
                     ],
 
-                    [
-                        'actions' => ['delete'],   
-                        'allow' => true,
-                        'matchCallback' => function ($rule, $action) {
-                            try{
-                                return in_array (Yii::$app->user->identity->role, [1]);
-                            }catch(\Exception $exception){
-                                return false;
-                            }
-                        }
-
-                    ],
+                    
                 ],
             ],
             'verbs' => [
@@ -62,12 +51,12 @@ class ActividadtipoController extends Controller
     }
 
     /**
-     * Lists all ActividadTipo models.
+     * Lists all Role models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ActividadtipoSearch();
+        $searchModel = new RoleSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -77,7 +66,7 @@ class ActividadtipoController extends Controller
     }
 
     /**
-     * Displays a single ActividadTipo model.
+     * Displays a single Role model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -90,13 +79,13 @@ class ActividadtipoController extends Controller
     }
 
     /**
-     * Creates a new ActividadTipo model.
+     * Creates a new Role model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Actividadtipo();
+        $model = new Role();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -108,7 +97,7 @@ class ActividadtipoController extends Controller
     }
 
     /**
-     * Updates an existing ActividadTipo model.
+     * Updates an existing Role model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -128,7 +117,7 @@ class ActividadtipoController extends Controller
     }
 
     /**
-     * Deletes an existing ActividadTipo model.
+     * Deletes an existing Role model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -142,15 +131,15 @@ class ActividadtipoController extends Controller
     }
 
     /**
-     * Finds the ActividadTipo model based on its primary key value.
+     * Finds the Role model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return ActividadTipo the loaded model
+     * @return Role the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Actividadtipo::findOne($id)) !== null) {
+        if (($model = Role::findOne($id)) !== null) {
             return $model;
         }
 

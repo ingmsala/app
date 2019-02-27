@@ -38,7 +38,7 @@ class DetalleparteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->username, ['msala', 'M2P','M1P','MPB','T2P','T1P','TPB']);
+                                    return in_array (Yii::$app->user->identity->readline_on_new_line(), [1,5]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -51,7 +51,7 @@ class DetalleparteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->username, ['msala','secretaria']);
+                                return in_array (Yii::$app->user->identity->role, [1,3]);
                             }catch(\Exception $exception){
                                 return false;
                             }

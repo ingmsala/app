@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use app\models\Visitante;
 use app\models\Area;
 use app\models\Tarjeta;
+use app\models\Cargo;
 use yii\filters\AccessControl;
 
 
@@ -35,7 +36,7 @@ class AccesoController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->username, ['msala', 'puerta']);
+                                    return in_array (Yii::$app->user->identity->role, [1,7]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -48,7 +49,7 @@ class AccesoController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->username, ['msala', 'puerta', 'consulta']);
+                                    return in_array (Yii::$app->user->identity->role, [1,6,7]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -194,6 +195,7 @@ class AccesoController extends Controller
 
         return $this->renderAjax('buscarvisitante', [
             'model' => $model,
+            
         ]);
 
         

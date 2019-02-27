@@ -30,7 +30,7 @@ class FaltasxmesesController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->username, ['msala', 'secretaria', 'consulta']);
+                                    return in_array (Yii::$app->user->identity->role, [1,3,6]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
