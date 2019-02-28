@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
+use yii\jui\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\DetalleCatedra */
@@ -51,9 +52,73 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'resolucion')->textInput() ?>
 
-    <?= $form->field($model, 'fechaInicio')->textInput() ?>
+    
+    <?= 
+        $form->field($model, 'fechaInicio')->widget(DatePicker::class, [
+        //'language' => 'ru',
+        'dateFormat' => 'yyyy-MM-dd',
+        'clientOptions'=>[
+            //'changeYear' => true,
+            //'changeMonth' => true,
+            'showOn' => 'both',
+            //'buttonImage' => '',
+            'buttonImageOnly' => false,
+            'buttonText'=> '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>',
+            
+            
 
-    <?= $form->field($model, 'fechaFin')->textInput() ?>
+        ],
+        'options' => [
+            //'class' => 'form-control',
+            'style' => 'width:20%',
+            'autocomplete' => 'off',
+            'readOnly'=> true,
+
+
+            //'aria-describedby'=>"basic-addon1",
+            
+            
+
+
+        ],
+
+         
+       
+        ]) ?>
+
+    <?= 
+        $form->field($model, 'fechaFin')->widget(DatePicker::class, [
+        //'language' => 'ru',
+        'dateFormat' => 'yyyy-MM-dd',
+        'clientOptions'=>[
+            //'changeYear' => true,
+            //'changeMonth' => true,
+            'showOn' => 'both',
+            //'buttonImage' => '',
+            'buttonImageOnly' => false,
+            'buttonText'=> '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>',
+            
+            
+
+        ],
+        'options' => [
+            //'class' => 'form-control',
+            'style' => 'width:20%',
+            'autocomplete' => 'off',
+            'readOnly'=> true,
+
+
+            //'aria-describedby'=>"basic-addon1",
+            
+            
+
+
+        ],
+
+         
+       
+        ]) ?>
+    
 
     
 

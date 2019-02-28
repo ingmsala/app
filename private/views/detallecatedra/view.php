@@ -50,9 +50,28 @@ $this->title = $model->id;
                 'label'=>"Horas",
                 'attribute' => 'hora'
             ],
-            'resolucion',
-            'fechaInicio',
-            'fechaFin',
+            [   
+                'label'=>"Resolución",
+                'attribute' => 'resolucion'
+            ],
+            [
+                'label' => 'Fecha Inicio',
+                'attribute' => 'fechaInicio',
+                'format' => 'raw',
+                'value' => function($model){
+                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+                    return Yii::$app->formatter->asDate($model->fechaInicio, 'dd-MM-yyyy');
+                }
+            ],
+            [
+                'label' => 'Fecha Fin',
+                'attribute' => 'fechaFin',
+                'format' => 'raw',
+                'value' => function($model){
+                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+                    return Yii::$app->formatter->asDate($model->fechaFin, 'dd-MM-yyyy');
+                }
+            ],
         ],
     ]) ?>
 
