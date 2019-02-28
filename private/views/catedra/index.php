@@ -107,6 +107,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'vAlign' => 'middle',
                 //'value' => 'actividad0.nombre',
                 'group' => true,
+                'filter' => [
+                    'name' => 'actividad',
+                    
+                ],
             ],
 
             [   

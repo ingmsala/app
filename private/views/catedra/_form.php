@@ -19,22 +19,18 @@ use kartik\select2\Select2;
     <?php $listPropuestas=ArrayHelper::map($propuestas,'id','nombre'); ?>
     <?php $listActividades=ArrayHelper::map($actividades,'id','nombre'); ?>
 
-    <?php 
-
-    echo var_dump($listActividades);
-    ?>
-
+    
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($modelpropuesta, 'id')->dropDownList($listPropuestas, ['prompt'=>'Seleccionar...',
     'onchange'=>'       
-                        $( "#'.Html::getInputId($modelpropuesta, 'nombre').'" ).val( $(this).val() );
+                        /*$( "#'.Html::getInputId($modelpropuesta, 'nombre').'" ).val( $(this).val() );
                         $.get( "'.Url::toRoute('/actividad/xpropuesta').'", { id: $(this).val() } )
                             .done(function( data ) {
                                 $( "#'.Html::getInputId($model, 'actividad').'" ).html( data );
                                 
                             }
-                        );
+                        );*/
                         $.get( "'.Url::toRoute('/division/xpropuesta').'", { id: $(this).val() } )
                             .done(function( data ) {
                                 $( "#'.Html::getInputId($model, 'division').'" ).html( data );
@@ -63,11 +59,12 @@ use kartik\select2\Select2;
         ]);
 
     ?>
-    
+
+       
     <?= 
 
         $form->field($model, 'actividad')->widget(Select2::classname(), [
-            //'data' => $listActividades,
+            'data' => $listActividades,
             'options' => ['placeholder' => 'Seleccionar...'],
             'pluginOptions' => [
                 'allowClear' => true
