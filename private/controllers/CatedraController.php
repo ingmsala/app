@@ -8,6 +8,7 @@ use app\models\CatedraSearch;
 use app\models\Actividad;
 use app\models\Division;
 use app\models\Propuesta;
+use app\models\Docente;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -86,16 +87,23 @@ class CatedraController extends Controller
      */
     public function actionIndex()
     {
+        $model = new Catedra();
         $searchModel = new CatedraSearch();
         $dataProvider = $searchModel->providercatedras(Yii::$app->request->queryParams);
         $divisiones = Division::find()->all();
-        $propuestas = Propuesta::find()->all();
+        $propuestasall = Propuesta::find()->all();
+        $docentes = Docente::find()
+                        ->orderBy('apellido')
+                        ->all();
 
         return $this->render('index', [
+            'model' => $model,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'divisiones' => $divisiones,
-            'propuestas' => $propuestas,
+            'propuestasall' => $propuestasall,
+            'docentes' => $docentes,
+            'param' => Yii::$app->request->queryParams,
         ]);
     }
 

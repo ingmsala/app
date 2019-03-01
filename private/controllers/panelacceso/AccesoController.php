@@ -119,10 +119,13 @@ class AccesoController extends Controller
             }catch (\Exception $exception){
                 $model->tarjeta = null;
             }
-                
-            if ($model->save()){
+            if($this->isin($dni)){
+                return $this->redirect(['index']);
+            }else{    
+                if ($model->save()){
 
-                return $this->redirect(['index', 'msg' => "ingr"]);
+                    return $this->redirect(['index', 'msg' => "ingr"]);
+                }
             }
             
         }
@@ -136,6 +139,21 @@ class AccesoController extends Controller
             'areas' => $areas,
             'modelTarjeta' => $modelTarjeta,
         ]);
+    }
+
+    private function isin($dni){
+        $ing = Acceso::find()
+            ->joinWith('visitante0 v')
+            ->where(['v.dni' => $dni])
+            ->andWhere(['fechaegreso' => null])->one();
+        if ($ing == null)
+            return false;
+        else
+            return true;
+    }
+
+    private function istarjetaasignada(){
+        
     }
 
      public function actionBuscarvisitante()
@@ -173,20 +191,19 @@ class AccesoController extends Controller
                     $model->apellidos = $scannerdni[1];
                     $model->nombres = $scannerdni[2];
                 }else{
-                    $model->dni = null;
+                    $model->dni = $model->apellidos;
                     $model->apellidos = null;
                     $model->nombres = null;
                 }
 
-                if (Yii::$app->request->isAjax) {
-                    return $this->renderAjax('../visitante/create', [
-                        'model' => $model,
+                
+
+                    return $this->redirect(['/panelacceso/visitante/create',
+                        'dni' => $model->dni,
+                        'apellidos' => $model->apellidos,
+                        'nombres' => $model->nombres,
                     ]);
-                } else {
-                    return $this->render('../visitante/create', [
-                        'model' => $model,
-                    ]);
-                }
+                
 
                
             }
@@ -216,11 +233,16 @@ class AccesoController extends Controller
 
         if ($modelTarjeta->load(Yii::$app->request->post())) {
             $model = $this->findModelxTarjeta($modelTarjeta->codigo);
-            date_default_timezone_set('America/Argentina/Buenos_Aires');
-            $model->fechaegreso = date("Y-m-d H:i:s");
-            if ($model->save()){
-                
-                return $this->redirect(['index', 'msg' => "egr"]);
+            if($model!=null){
+
+                date_default_timezone_set('America/Argentina/Buenos_Aires');
+                $model->fechaegreso = date("Y-m-d H:i:s");
+                if ($model->save()){
+                    
+                    return $this->redirect(['index', 'msg' => "egr"]);
+                }
+            }else{
+                return $this->redirect(['index']);
             }
         }
 

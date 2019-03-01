@@ -33,7 +33,7 @@ class DetallecatedraController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'inactive', 'fechafin'],
                 'rules' => [
                     [
                         'actions' => ['create', 'update', 'delete', 'inactive', 'fechafin'],   

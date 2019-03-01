@@ -66,6 +66,11 @@ class Catedra extends \yii\db\ActiveRecord
         return $this->hasOne(Actividad::className(), ['id' => 'actividad']);
     }
 
+    public function getPropuesta0()
+    {
+        return $this->hasOne(Propuesta::className(), ['id' => 'propuesta'])->via('actividad0');
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

@@ -47,7 +47,7 @@ class CatedraSearch extends Catedra
    public function search($params)
     {
         $query = Catedra::find()
-            ->joinWith(['actividad0', 'division0', 'detallecatedras', 'detallecatedras.docente0'])
+            ->joinWith(['actividad0', 'division0', 'detallecatedras', 'detallecatedras.docente0', 'actividad0.propuesta0'])
             ->orderBy('division.nombre, actividad.nombre');
 
         // add conditions that should always apply here
@@ -82,6 +82,11 @@ class CatedraSearch extends Catedra
         'desc' => ['docente.apellido' => SORT_DESC],
         ];
 
+        $dataProvider->sort->attributes['actividad0.propuesta0'] = [
+        'asc' => ['propuesta.nombre' => SORT_ASC],
+        'desc' => ['propuesta.nombre' => SORT_DESC],
+        ];
+
         // grid filtering conditions
         $query->andFilterWhere([
             'catedra.id' => $this->id,
@@ -108,17 +113,17 @@ class CatedraSearch extends Catedra
         left join revista rev ON dc.revista = rev.id
         left join propuesta pro ON a.propuesta = pro.id
         where (dc.activo is null or dc.activo=1 or dc.activo=2)';
-        if (isset($params['division'])){
-            $sql .= ' AND d.nombre like "%'.$params["division"].'%"';
+        if (isset($params['Catedra']['division0']) && $params['Catedra']['division0'] != ''){
+            $sql .= ' AND d.nombre like "%'.$params['Catedra']["division0"].'%"';
         }
-        if (isset($params['actividad'])){
-            $sql .= ' AND a.nombre like "%'.$params["actividad"].'%"';
+        if (isset($params['Catedra']['actividad0']) && $params['Catedra']['actividad0'] != ''){
+            $sql .= ' AND a.nombre like "%'.$params["Catedra"]['actividad0'].'%"';
         }
-        if (isset($params['docente'])){
-            $sql .= ' AND doc.apellido like "%'.$params["docente"].'%"';
+        if (isset($params['Catedra']['docentes']) && $params['Catedra']['docentes'] != ''){
+            $sql .= ' AND doc.id = '.$params['Catedra']['docentes'];
         }
-        if (isset($params['propuesta'])){
-            $sql .= ' AND a.propuesta like "%'.$params["propuesta"].'%"';
+        if (isset($params['Catedra']['propuesta0']) && $params['Catedra']['propuesta0'] != ''){
+            $sql .= ' AND a.propuesta ='.$params['Catedra']["propuesta0"];
         }
         $sql.= ' order by a.propuesta, division, a.nombre, rev.nombre';
 

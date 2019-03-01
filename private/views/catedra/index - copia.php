@@ -6,8 +6,6 @@ use yii\helpers\Url;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\widgets\Pjax;
-use yii\widgets\ActiveForm;
-
 
 /* @var $
 this yii\web\View */
@@ -20,139 +18,20 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="catedra-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?php
-        $listdivisiones=ArrayHelper::map($divisiones,'nombre','nombre');
-        $listPropuestas=ArrayHelper::map($propuestasall,'id','nombre');
-        $listDocentes=ArrayHelper::map($docentes,'id', function($doc) {
-            return $doc['apellido'].', '.$doc['nombre'];}
-        );
-        
-
-    ?>
+    <p>
+        <?= Html::a('Nueva Catedra', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
     
-    <div id="accordion" class="panel-group">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-
-                        <span class="badge badge-light"><span class="glyphicon glyphicon-filter"></span> Filtros</span>
-
-                        <?php 
-                            $filter = false;
-                            if(isset($param['Catedra']['propuesta0'])){
-                                if($param['Catedra']['propuesta0']!=''){
-                                    $filter = true;
-                                    echo '<b> - Propuesta: </b>'.$listPropuestas[$param['Catedra']['propuesta0']];
-                                }
-                            }
-
-                            if(isset($param['Catedra']['docentes'])){
-                                if($param['Catedra']['docentes']!=''){
-                                    $filter = true;
-                                    echo '<b> - Docente: </b>'.$listDocentes[$param['Catedra']['docentes']];
-                                    
-                                }
-                            }
-
-                            if(isset($param['Catedra']['actividad0'])){
-                                if($param['Catedra']['actividad0']!=''){
-                                    $filter = true;
-                                    echo '<b> - Actividad: </b>'.$param['Catedra']['actividad0'];
-                                    
-                                }
-                            }
-
-                            if(isset($param['Catedra']['division0'])){
-                                if($param['Catedra']['division0']!=''){
-                                    $filter = true;
-                                    echo '<b> - Division: </b>'.$param['Catedra']['division0'];
-                                    
-                                }
-                            }
-
-
-                        ?>
-
-                    </a>
-                    <?php
-                        if($filter){
-                            echo ' <a href="index.php?r=catedra/index"><span class="badge badge-danger"><span class="glyphicon glyphicon-remove"></span></span></a>';
-                            $filter = false;
-                        }
-                    ?>
-                   
-                </h4>
-            </div>
-            <div id="collapseOne" class="panel-collapse collapse">
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="panel-body">
-                            <?php                 
-
-                                 $form = ActiveForm::begin([
-                                    'action' => ['index'],
-                                    'method' => 'get',
-                                ]); ?>
-
-                            <?= 
-
-                                $form->field($model, 'propuesta0')->widget(Select2::classname(), [
-                                    'data' => $listPropuestas,
-                                    'options' => ['placeholder' => 'Seleccionar...'],
-                                    'value' => 1,
-                                    'pluginOptions' => [
-                                        'allowClear' => true
-                                    ],
-                                ])->label("Propuesta Formativa");
-
-                            ?>
-
-                            <?= 
-                                
-                                $form->field($model, 'docentes')->widget(Select2::classname(), [
-                                    'data' => $listDocentes,
-                                    'options' => ['placeholder' => 'Seleccionar...'],
-                                    'pluginOptions' => [
-                                        'allowClear' => true
-                                    ],
-                                ])->label("Docente");
-
-                            ?>
-                        
-                            <?= $form->field($model, 'actividad0')->textInput(['value' => 
-                                isset($param['Catedra']['actividad0']) ? $param['Catedra']['actividad0'] : ''
-                            ])->label("Actividad") ?>
-
-                            <?= $form->field($model, 'division0')->textInput(['value' => 
-                                isset($param['Catedra']['division0']) ? $param['Catedra']['division0'] : ''
-                            ])->label("División") ?>
-
-                            <div class="form-group">
-                                <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary']) ?>
-                                <?= Html::resetButton('Resetear', ['class' => 'btn btn-default']) ?>
-                            </div>
-
-                            <?php ActiveForm::end(); ?>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-        
-
-       
     <?php
-    
+    $listdivisiones=ArrayHelper::map($divisiones,'nombre','nombre');
+    $listpropuestas=ArrayHelper::map($propuestas,'id','nombre');
     
     Pjax::begin();
      echo GridView::widget([
         'dataProvider' => $dataProvider,
-        
+        'filterModel' => $searchModel,
         'rowOptions' => function($model){
             if ($model['revista'] =='VIGENTE' && $model['activo'] != 2){
                 return ['class' => 'success'];
@@ -176,10 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
 
         'toolbar'=>[
-            ['content' => 
-                Html::a('Nueva Catedra', ['create'], ['class' => 'btn btn-success'])
-
-            ],
+            
             '{export}',
             
         ],
@@ -191,7 +67,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'vAlign' => 'middle',
                 //'value' => 'actividad0.nombre',
                 'group' => true,
-                
+                'filter' => Select2::widget([
+                    'name' => 'propuesta',
+                    'data' => $listpropuestas,
+                    'theme' => Select2::THEME_BOOTSTRAP,
+                    'hideSearch' => true,
+                    'options' => [
+                        'placeholder' => '-',
+                        'hideSearch' => false,
+                        
+                    ]
+                ]),
             ],
             
             [   
@@ -200,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'vAlign' => 'middle',
                 'hAlign' => 'center',
                 //'value' => 'division0.nombre',
-                'group' => true,
+                //'group' => true,
                 'filter' => Select2::widget([
                     'name' => 'division',
                     'data' => $listdivisiones,
@@ -220,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'actividad',
                 'vAlign' => 'middle',
                 //'value' => 'actividad0.nombre',
-                'group' => true,
+                //'group' => true,
                 'filter' => [
                     'name' => 'actividad',
                     

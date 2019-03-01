@@ -33,7 +33,7 @@ class NombramientoController extends Controller
                 'only' => ['index', 'view', 'create', 'update', 'delete', 'asignarsuplente'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update', 'delete'],   
+                        'actions' => ['create', 'update', 'delete','asignarsuplente'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
