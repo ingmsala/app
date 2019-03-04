@@ -19,6 +19,17 @@ class Parte extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    const SCENARIO_ABM = 'create';
+    const SCENARIO_SEARCHINDEX = 'index';
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_ABM] = ['id', 'fecha', 'preceptoria'];
+        $scenarios[self::SCENARIO_SEARCHINDEX] = ['fecha'];
+        return $scenarios;
+    }
+
     public static function tableName()
     {
         return 'parte';

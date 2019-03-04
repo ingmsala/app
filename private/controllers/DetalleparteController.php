@@ -38,7 +38,7 @@ class DetalleparteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->readline_on_new_line(), [1,5]);
+                                    return in_array (Yii::$app->user->identity->role, [1,5]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -78,13 +78,16 @@ class DetalleparteController extends Controller
     {
         $searchModel = new DetalleparteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            
         ]);
     }
 
+    
     /**
      * Displays a single Detalleparte model.
      * @param integer $id
@@ -93,8 +96,10 @@ class DetalleparteController extends Controller
      */
     public function actionView($id)
     {
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
+            
         ]);
     }
 

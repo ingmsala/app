@@ -39,6 +39,7 @@ class DetalleparteSearch extends Detalleparte
      *
      * @return ActiveDataProvider
      */
+    
     public function search($params)
     {
         if(Yii::$app->user->identity->username == 'regenciatm'){
@@ -67,6 +68,46 @@ class DetalleparteSearch extends Detalleparte
 
         $this->load($params);
 
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'parte' => $this->parte,
+            'division' => $this->division,
+            'docente' => $this->docente,
+            'hora' => $this->hora,
+            'llego' => $this->llego,
+            'retiro' => $this->retiro,
+            'falta' => $this->falta,
+            'estadoinasistencia' => $this->estadoinasistencia,
+        ]);
+
+        return $dataProvider;
+    }
+
+    public function otrasausencias($id, $fecha)
+    {
+        
+            $query = Detalleparte::find()
+            ->joinWith(['division0', 'parte0'])
+            ->where(['parte.fecha' => $fecha])
+            ->andWhere(['<>', 'detalleparte.parte', $id])
+            ->andWhere(['detalleparte.falta' => 1]);
+       
+        
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');

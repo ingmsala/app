@@ -85,7 +85,7 @@ class ActividadSearch extends Actividad
             
         ]);
 
-        $query->andFilterWhere(['like', 'nombre', $this->nombre]);
+        $query->andFilterWhere(['like', 'actividad.nombre', $this->nombre]);
         $query->andFilterWhere(['like', 'actividadtipo.nombre', $this->actividadtipo]);
         $query->andFilterWhere(['like', 'plan.nombre', $this->plan]);
         $query->andFilterWhere(['like', 'propuesta.nombre', $this->propuesta]);

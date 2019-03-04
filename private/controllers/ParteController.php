@@ -110,14 +110,21 @@ class ParteController extends Controller
      * Lists all Parte models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($nav = false)
     {
+        
         $searchModel = new ParteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $model = new Parte();
+        $model->scenario = $model::SCENARIO_SEARCHINDEX;
+
         return $this->render('index', [
+            'model' => $model,
+            'param' => Yii::$app->request->queryParams,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'preceptorias' => Preceptoria::find()->all()
         ]);
     }
 
@@ -129,18 +136,20 @@ class ParteController extends Controller
      */
     public function actionView($id)
     {
-
+        $model = $this->findModel($id);
         $searchModel = new DetalleparteSearch();
         $dataProvider = $searchModel->providerxparte($id);
+        $dataProviderOtras = $searchModel->otrasausencias($id, $model->fecha);
 
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
             'modeldetalle' => Detalleparte::find()->where([
                 'parte' => $id,
                 
             ])->one(),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'dataProviderOtras' => $dataProviderOtras,
         ]);
     }
 
