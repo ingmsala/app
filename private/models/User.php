@@ -26,6 +26,19 @@ class User extends \yii\db\ActiveRecord  implements IdentityInterface {
 /**
  * @inheritdoc
  */
+
+    const SCENARIO_CHANGEPASS = 'cambiarpass';
+    public $old_password;
+    public $new_password;
+    public $repeat_password;
+    
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_CHANGEPASS] = ['username', 'old_password', 'new_password', 'repeat_password'];
+        return $scenarios;
+    }
+
 public static function tableName() {
     return 'user';
 }
@@ -40,8 +53,19 @@ public function rules() {
         [['username'], 'string', 'max' => 100],
         [['password'], 'string', 'max' => 60],
         [['authKey'], 'string', 'max' => 32],
+        [['old_password', 'new_password', 'repeat_password'], 'required', 'on'=>self::SCENARIO_CHANGEPASS],
+        ['repeat_password', 'compare', 'compareAttribute'=>'new_password', 'message' => 'Las contraseñas no coinciden', 'on'=>self::SCENARIO_CHANGEPASS],
+        ['old_password', 'findPasswords', 'on' => self::SCENARIO_CHANGEPASS],
     ];
 }
+
+public function findPasswords($attribute, $params, $validator)
+    {
+        $user = User::find()
+        ->where(['username' => Yii::$app->user->identity->username])->one();
+        if (!Yii::$app->security->validatePassword($this->old_password, $user->password))
+            $this->addError($attribute, 'Las contraseña anterior es incorrecta');
+    }
 
 /**
  * @inheritdoc
@@ -55,6 +79,9 @@ public function attributeLabels() {
         'authKey' => 'Auth Key',
         'role' => 'Tipo de usuario',
         'activate' => 'Activo',
+        'old_password' => 'Contraseña anterior', 
+        'new_password' => 'Nueva contraseña', 
+        'repeat_password' => 'Repetir contraseña',
     ];
 }
 

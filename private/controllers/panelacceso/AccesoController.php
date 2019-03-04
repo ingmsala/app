@@ -123,8 +123,8 @@ class AccesoController extends Controller
                 return $this->redirect(['index']);
             }else{    
                 if ($model->save()){
-
-                    return $this->redirect(['index', 'msg' => "ingr"]);
+                    Yii::$app->session->set('success', "Ingreso registrado correctamente");
+                    return $this->redirect(['index']);
                 }
             }
             
@@ -238,8 +238,8 @@ class AccesoController extends Controller
                 date_default_timezone_set('America/Argentina/Buenos_Aires');
                 $model->fechaegreso = date("Y-m-d H:i:s");
                 if ($model->save()){
-                    
-                    return $this->redirect(['index', 'msg' => "egr"]);
+                    Yii::$app->session->set('success', "Egreso registrado correctamente");
+                    return $this->redirect(['index']);
                 }
             }else{
                 return $this->redirect(['index']);

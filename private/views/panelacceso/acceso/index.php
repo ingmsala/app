@@ -4,12 +4,13 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
+use yii\bootstrap\Alert;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\AccesoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-
+$this->title = 'Visitas en curso';
 ?>
 <div class="acceso-index">
 
@@ -55,7 +56,7 @@ use yii\bootstrap\Modal;
     </div>
 
    
-    <div class="clearfix">...</div>
+    <div class="clearfix"></div>
     <h1><?= Html::encode($this->title) ?></h1>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -121,30 +122,30 @@ use yii\bootstrap\Modal;
 
         
         $this->registerJs("
-           var msg = '".$msg."'
-            if (msg == 'egr')   {         
-                $('#infoegreso').fadeIn(1000);
-                   setTimeout(function() { 
-                       $('#infoegreso').fadeOut(1000); 
-                   }, 3000);
-              }
-            if (msg == 'ingr')   {         
+           
+                     
                 $('#infoingreso').fadeIn(1000);
-                   setTimeout(function() { 
+                setTimeout(function() { 
                        $('#infoingreso').fadeOut(1000); 
-                   }, 3000);
-              };");
+                }, 3000);");
     ?>
 
     
+<?php
+
+         if (Yii::$app->session->has('success')){ 
+             echo Alert::widget([
+                    'options' => [
+                        'class' => 'alert-success',
+                        'id'=>"infoingreso",
+                    ],
+                    'body' => Yii::$app->session->get('success'),
+                ]);
+                Yii::$app->session->remove('success');
+} ?>
 
 
-<div class="alert alert-success" id="infoegreso" style="display:none;">
-    <strong>Egreso</strong> registrado correctamente
-  </div>
+
 </div>
 
-<div class="alert alert-success" id="infoingreso" style="display:none;">
-    <strong>Ingreso</strong> registrado correctamente
-  </div>
-</div>
+

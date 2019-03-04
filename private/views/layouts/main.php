@@ -150,8 +150,8 @@ AppAsset::register($this);
                             in_array (Yii::$app->user->identity->role, [1, 3, 6])?    
                             ['label' => 'Control de Secretaría', 'url' => ['parte/controlsecretaria']]: ['label' => ''],
                             '<div class="dropdown-divider"></div>',
-                            ['label' => 'Horarios de cátedra', 'url' => ['parte/horarios']],
-                            '<div class="dropdown-divider"></div>',
+                            /*['label' => 'Horarios de cátedra', 'url' => ['parte/horarios']],
+                            '<div class="dropdown-divider"></div>',*/
 
                         ],
                     ])  :

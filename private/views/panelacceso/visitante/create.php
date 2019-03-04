@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Visitante */
 
-$this->title = 'Create Visitante';
-$this->params['breadcrumbs'][] = ['label' => 'Visitantes', 'url' => ['index']];
+$this->title = 'Nuevo Visitante';
+$this->params['breadcrumbs'][] = ['label' => 'Visitas', 'url' => ['panelacceso/acceso']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="visitante-create">

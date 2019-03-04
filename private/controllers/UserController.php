@@ -24,7 +24,7 @@ class UserController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'cambiarpass'],
                 'rules' => [
                     [
                         'actions' => ['index', 'view', 'create', 'update', 'delete'],   
@@ -38,7 +38,15 @@ class UserController extends Controller
                         }
 
                     ],
+
+                    [
+                        'allow' => true,
+                        'actions' => ['cambiarpass'],
+                        'roles' => ['@'],
+                    ],
                 ],
+
+
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -163,4 +171,40 @@ class UserController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionCambiarpass()
+ {      
+    $model = new User;
+
+    $model = User::find()
+        ->where(['username' => Yii::$app->user->identity->username])->one();
+    $model->scenario = $model::SCENARIO_CHANGEPASS;
+
+
+    
+     if(isset($_POST['User'])){
+            
+        $model->attributes = $_POST['User'];
+        $valid = $model->validate();
+                
+        if($valid){
+                //return $this->redirect(['index']);
+
+                $model->setPassword($model->new_password);
+                
+                       
+            if($model->save()){
+                Yii::$app->session->set('success', "Se modificó la contraseña correctamente");
+                return $this->redirect(['cambiarpass']);
+            }
+        }
+    }
+    
+        
+    return $this->render('cambiarpass',
+        [
+            'model'=>$model,
+
+        ]); 
+ }
 }
