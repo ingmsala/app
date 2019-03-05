@@ -41,33 +41,33 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         <?php 
                             $filter = false;
-                            if(isset($param['Catedra']['propuesta0'])){
-                                if($param['Catedra']['propuesta0']!=''){
+                            if(isset($param['Catedra']['propuesta'])){
+                                if($param['Catedra']['propuesta']!=''){
                                     $filter = true;
-                                    echo '<b> - Propuesta: </b>'.$listPropuestas[$param['Catedra']['propuesta0']];
+                                    echo '<b> - Propuesta: </b>'.$listPropuestas[$param['Catedra']['propuesta']];
                                 }
                             }
 
-                            if(isset($param['Catedra']['docentes'])){
-                                if($param['Catedra']['docentes']!=''){
+                            if(isset($param['Catedra']['docente'])){
+                                if($param['Catedra']['docente']!=''){
                                     $filter = true;
-                                    echo '<b> - Docente: </b>'.$listDocentes[$param['Catedra']['docentes']];
+                                    echo '<b> - Docente: </b>'.$listDocentes[$param['Catedra']['docente']];
                                     
                                 }
                             }
 
-                            if(isset($param['Catedra']['actividad0'])){
-                                if($param['Catedra']['actividad0']!=''){
+                            if(isset($param['Catedra']['actividadnom'])){
+                                if($param['Catedra']['actividadnom']!=''){
                                     $filter = true;
-                                    echo '<b> - Actividad: </b>'.$param['Catedra']['actividad0'];
+                                    echo '<b> - Actividad: </b>'.$param['Catedra']['actividadnom'];
                                     
                                 }
                             }
 
-                            if(isset($param['Catedra']['division0'])){
-                                if($param['Catedra']['division0']!=''){
+                            if(isset($param['Catedra']['divisionnom'])){
+                                if($param['Catedra']['divisionnom']!=''){
                                     $filter = true;
-                                    echo '<b> - Division: </b>'.$param['Catedra']['division0'];
+                                    echo '<b> - Division: </b>'.$param['Catedra']['divisionnom'];
                                     
                                 }
                             }
@@ -99,10 +99,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             <?= 
 
-                                $form->field($model, 'propuesta0')->widget(Select2::classname(), [
+                                $form->field($model, 'propuesta')->widget(Select2::classname(), [
                                     'data' => $listPropuestas,
                                     'options' => ['placeholder' => 'Seleccionar...'],
-                                    'value' => 1,
+                                    //'value' => 1,
                                     'pluginOptions' => [
                                         'allowClear' => true
                                     ],
@@ -112,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             <?= 
                                 
-                                $form->field($model, 'docentes')->widget(Select2::classname(), [
+                                $form->field($model, 'docente')->widget(Select2::classname(), [
                                     'data' => $listDocentes,
                                     'options' => ['placeholder' => 'Seleccionar...'],
                                     'pluginOptions' => [
@@ -122,13 +122,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ?>
                         
-                            <?= $form->field($model, 'actividad0')->textInput(['value' => 
-                                isset($param['Catedra']['actividad0']) ? $param['Catedra']['actividad0'] : ''
-                            ])->label("Actividad") ?>
+                            <?= $form->field($model, 'actividadnom')->textInput()->label("Actividad") ?>
 
-                            <?= $form->field($model, 'division0')->textInput(['value' => 
-                                isset($param['Catedra']['division0']) ? $param['Catedra']['division0'] : ''
-                            ])->label("División") ?>
+                            <?= $form->field($model, 'divisionnom')->textInput()->label("División") ?>
 
                             <div class="form-group">
                                 <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary']) ?>
@@ -228,7 +224,15 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [   
-                'label' => 'Horas',
+                'label' => 'Hora Total',
+                'attribute' => 'horaact',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                
+            ],
+
+            [   
+                'label' => 'Horas Detalle',
                 'attribute' => 'hora',
                 'vAlign' => 'middle',
                 'hAlign' => 'center',

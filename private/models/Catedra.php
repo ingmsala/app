@@ -25,6 +25,22 @@ class Catedra extends \yii\db\ActiveRecord
         return 'catedra';
     }
 
+    const SCENARIO_SEARCHINDEX = 'index';
+
+    public $propuesta;
+    public $docente;
+    public $actividadnom;
+    public $divisionnom;
+   
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_SEARCHINDEX] = ['propuesta', 'docente', 'actividadnom', 'division'];
+        return $scenarios;
+    }
+
+
     /**
      * {@inheritdoc}
      */
@@ -35,6 +51,8 @@ class Catedra extends \yii\db\ActiveRecord
             [['actividad', 'division'], 'integer'],
             [['division'], 'exist', 'skipOnError' => true, 'targetClass' => Division::className(), 'targetAttribute' => ['division' => 'id']],
             [['actividad'], 'exist', 'skipOnError' => true, 'targetClass' => Actividad::className(), 'targetAttribute' => ['actividad' => 'id']],
+            [['actividad', 'division'], 'unique', 'targetClass' => '\app\models\Catedra', 'targetAttribute' => ['actividad', 'division'], 'message' => 'Ya existe la Cátedra que desea crear.'],
+            
         ];
     }
 

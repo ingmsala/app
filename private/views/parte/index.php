@@ -52,10 +52,10 @@ $precepx = Yii::$app->user->identity->username;
                                 }
                             }
 
-                            if(isset($param['Parte']['detallepartes'])){
-                                if($param['Parte']['detallepartes']!=''){
+                            if(isset($param['Parte']['mes'])){
+                                if($param['Parte']['mes']!=''){
                                     $filter = true;
-                                    echo '<b> - Mes: </b>'.$meses[$param['Parte']['detallepartes']];
+                                    echo '<b> - Mes: </b>'.$meses[$param['Parte']['mes']];
                                     
                                 }
                             }
@@ -107,7 +107,7 @@ $precepx = Yii::$app->user->identity->username;
 
                             <?= 
                                 
-                                $form->field($model, 'detallepartes')->widget(Select2::classname(), [
+                                $form->field($model, 'mes')->widget(Select2::classname(), [
                                     'data' => $meses,
                                     'options' => ['placeholder' => 'Seleccionar...'],
                                     'pluginOptions' => [

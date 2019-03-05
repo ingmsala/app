@@ -23,8 +23,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         
-        <?= Html::a('<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>'.' Volver', 
-        (!empty(Yii::$app->request->referrer) ? Yii::$app->request->referrer : 'index.php?r=catedra/index'), [
+        <?php
+
+        (!empty(Yii::$app->request->referrer)) ? $anterior = Yii::$app->request->referrer : $anterior = 'index.php?r=catedra/index';
+
+        echo Html::a('<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>'.' Volver', 
+        $anterior, [
             'class' => 'btn btn-default',
             
         ]) ?>

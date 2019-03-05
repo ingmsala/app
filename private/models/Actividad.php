@@ -41,6 +41,7 @@ class Actividad extends \yii\db\ActiveRecord
             [['plan'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan' => 'id']],
             [['actividadtipo'], 'exist', 'skipOnError' => true, 'targetClass' => Actividadtipo::className(), 'targetAttribute' => ['actividadtipo' => 'id']],
             [['propuesta'], 'exist', 'skipOnError' => true, 'targetClass' => Propuesta::className(), 'targetAttribute' => ['propuesta' => 'id']],
+            [['propuesta', 'nombre', 'plan'], 'unique', 'targetClass' => '\app\models\Actividad', 'targetAttribute' => ['propuesta', 'nombre', 'plan'], 'message' => 'Ya existe la actividad en esa Propuesta y en ese Plan de Estudios.'],
         ];
     }
 

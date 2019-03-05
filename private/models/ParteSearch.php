@@ -84,8 +84,8 @@ class ParteSearch extends Parte
         if (isset($params['Parte']['fecha']) && $params['Parte']['fecha'] != ''){
             $sql .= ' and year(p.fecha) = '.$params["Parte"]["fecha"];
         }
-        if (isset($params['Parte']['detallepartes']) && $params['Parte']['detallepartes'] != ''){
-            $sql .= ' and month(p.fecha) = '.$params["Parte"]["detallepartes"];
+        if (isset($params['Parte']['mes']) && $params['Parte']['mes'] != ''){
+            $sql .= ' and month(p.fecha) = '.$params["Parte"]["mes"];
         }
         if ( in_array (Yii::$app->user->identity->role, [5])) {
             $sql .= ' and pr.nombre="'.Yii::$app->user->identity->username.'"';

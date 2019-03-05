@@ -87,14 +87,24 @@ class CatedraController extends Controller
      */
     public function actionIndex()
     {
+        $param = Yii::$app->request->queryParams;
         $model = new Catedra();
+        $model->scenario = $model::SCENARIO_SEARCHINDEX;
         $searchModel = new CatedraSearch();
-        $dataProvider = $searchModel->providercatedras(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->providercatedras($param);
         $divisiones = Division::find()->all();
         $propuestasall = Propuesta::find()->all();
         $docentes = Docente::find()
                         ->orderBy('apellido')
                         ->all();
+        if(isset($param['Catedra']['propuesta']))
+            $model->propuesta = $param['Catedra']['propuesta'];
+        if(isset($param['Catedra']['docente']))
+            $model->docente = $param['Catedra']['docente'];
+        if(isset($param['Catedra']['actividadnom']))
+            $model->actividadnom = $param['Catedra']['actividadnom'];
+        if(isset($param['Catedra']['divisionnom']))
+            $model->divisionnom = $param['Catedra']['divisionnom'];
 
         return $this->render('index', [
             'model' => $model,
@@ -103,7 +113,7 @@ class CatedraController extends Controller
             'divisiones' => $divisiones,
             'propuestasall' => $propuestasall,
             'docentes' => $docentes,
-            'param' => Yii::$app->request->queryParams,
+            'param' => $param,
         ]);
     }
 

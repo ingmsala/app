@@ -112,12 +112,21 @@ class ParteController extends Controller
      */
     public function actionIndex($nav = false)
     {
-        
+        $param = Yii::$app->request->queryParams;
         $searchModel = new ParteSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search($param);
+
+
 
         $model = new Parte();
         $model->scenario = $model::SCENARIO_SEARCHINDEX;
+
+        if(isset($param['Parte']['fecha']))
+            $model->fecha = $param['Parte']['fecha'];
+        if(isset($param['Parte']['mes']))
+            $model->mes = $param['Parte']['mes'];
+        if(isset($param['Parte']['preceptoria']))
+            $model->preceptoria = $param['Parte']['preceptoria'];
 
         return $this->render('index', [
             'model' => $model,

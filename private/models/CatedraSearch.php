@@ -103,7 +103,7 @@ class CatedraSearch extends Catedra
     {
         
         $sql='
-        select c.id as id, a.nombre as actividad, dc.hora as hora, d.nombre as division, concat(doc.apellido,", ",doc.nombre) as docente, con.nombre as condicion, rev.nombre as revista, pro.nombre as propuesta, dc.activo
+        select c.id as id, a.nombre as actividad, a.cantHoras as horaact, dc.hora as hora, d.nombre as division, concat(doc.apellido,", ",doc.nombre) as docente, con.nombre as condicion, rev.nombre as revista, pro.nombre as propuesta, dc.activo
         from catedra c
         left join detallecatedra dc ON c.id = dc.catedra
         left join actividad a ON a.id = c.actividad
@@ -113,17 +113,17 @@ class CatedraSearch extends Catedra
         left join revista rev ON dc.revista = rev.id
         left join propuesta pro ON a.propuesta = pro.id
         where (dc.activo is null or dc.activo=1 or dc.activo=2)';
-        if (isset($params['Catedra']['division0']) && $params['Catedra']['division0'] != ''){
-            $sql .= ' AND d.nombre like "%'.$params['Catedra']["division0"].'%"';
+        if (isset($params['Catedra']['divisionnom']) && $params['Catedra']['divisionnom'] != ''){
+            $sql .= ' AND d.nombre like "%'.$params['Catedra']["divisionnom"].'%"';
         }
-        if (isset($params['Catedra']['actividad0']) && $params['Catedra']['actividad0'] != ''){
-            $sql .= ' AND a.nombre like "%'.$params["Catedra"]['actividad0'].'%"';
+        if (isset($params['Catedra']['actividadnom']) && $params['Catedra']['actividadnom'] != ''){
+            $sql .= ' AND a.nombre like "%'.$params["Catedra"]['actividadnom'].'%"';
         }
-        if (isset($params['Catedra']['docentes']) && $params['Catedra']['docentes'] != ''){
-            $sql .= ' AND doc.id = '.$params['Catedra']['docentes'];
+        if (isset($params['Catedra']['docente']) && $params['Catedra']['docente'] != ''){
+            $sql .= ' AND doc.id = '.$params['Catedra']['docente'];
         }
-        if (isset($params['Catedra']['propuesta0']) && $params['Catedra']['propuesta0'] != ''){
-            $sql .= ' AND a.propuesta ='.$params['Catedra']["propuesta0"];
+        if (isset($params['Catedra']['propuesta']) && $params['Catedra']['propuesta'] != ''){
+            $sql .= ' AND a.propuesta ='.$params['Catedra']["propuesta"];
         }
         $sql.= ' order by a.propuesta, division, a.nombre, rev.nombre';
 

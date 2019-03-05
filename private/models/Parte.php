@@ -22,11 +22,13 @@ class Parte extends \yii\db\ActiveRecord
     const SCENARIO_ABM = 'create';
     const SCENARIO_SEARCHINDEX = 'index';
 
+    public $mes;
+
     public function scenarios()
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_ABM] = ['id', 'fecha', 'preceptoria'];
-        $scenarios[self::SCENARIO_SEARCHINDEX] = ['fecha'];
+        $scenarios[self::SCENARIO_SEARCHINDEX] = ['fecha', 'mes'];
         return $scenarios;
     }
 
