@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         
         <?php
-
+        
         (!empty(Yii::$app->request->referrer)) ? $anterior = Yii::$app->request->referrer : $anterior = 'index.php?r=catedra/index';
 
         echo Html::a('<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>'.' Volver', 
@@ -87,6 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
             return ['class' => 'warning'];
         },
         'columns' => [
+
             
             [   
                 'label' => 'Condición',
@@ -106,6 +107,26 @@ $this->params['breadcrumbs'][] = $this->title;
             [   
                 'label' => 'Revista',
                 'attribute' => 'revista0.nombre'
+            ],
+
+            [
+                'label' => 'Fecha Inicio',
+                'attribute' => 'fechaInicio',
+                'format' => 'raw',
+                'value' => function($model){
+                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+                    return Yii::$app->formatter->asDate($model->fechaInicio, 'dd-MM-yyyy');
+                }
+            ],
+
+            [
+                'label' => 'Fecha Fin',
+                'attribute' => 'fechaFin',
+                'format' => 'raw',
+                'value' => function($model){
+                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+                    return Yii::$app->formatter->asDate($model->fechaFin, 'dd-MM-yyyy');
+                }
             ],
 
             

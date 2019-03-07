@@ -112,7 +112,7 @@ class CatedraSearch extends Catedra
         left join condicion con ON dc.condicion = con.id
         left join revista rev ON dc.revista = rev.id
         left join propuesta pro ON a.propuesta = pro.id
-        where (dc.activo is null or dc.activo=1 or dc.activo=2)';
+        where (dc.activo is null or dc.activo=1)';
         if (isset($params['Catedra']['divisionnom']) && $params['Catedra']['divisionnom'] != ''){
             $sql .= ' AND d.nombre like "%'.$params['Catedra']["divisionnom"].'%"';
         }

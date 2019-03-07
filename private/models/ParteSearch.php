@@ -49,8 +49,15 @@ class ParteSearch extends Parte
                ->where(['preceptoria.nombre' => $us])
                ->orderBy('fecha desc');
         }else{
-            $query = Parte::find()->joinWith('preceptoria0')
+            if ($us == 'regenciatt') {
+
+            }elseif ($us == 'regenciatt') {
+
+            }else{
+                $query = Parte::find()->joinWith('preceptoria0')
                 ->orderBy('fecha desc');
+            }
+            
         }
 
         // add conditions that should always apply here
@@ -92,6 +99,14 @@ class ParteSearch extends Parte
         }
         if (isset($params['Parte']['preceptoria']) && $params['Parte']['preceptoria'] != ''){
             $sql .= ' and p.preceptoria = '.$params["Parte"]["preceptoria"];
+        }
+        if ( in_array (Yii::$app->user->identity->role, [4])) {
+            if (Yii::$app->user->identity->username == 'regenciatm'){
+                $sql .= ' and pr.turno=1';
+            }else{
+                $sql .= ' and pr.turno=2';
+            }
+            
         }
        
         $sql.= ' order by p.fecha desc';

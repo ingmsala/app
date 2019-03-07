@@ -30,17 +30,43 @@ class ParteController extends Controller
                 'only' => ['index', 'view', 'create', 'update', 'delete', 'controlregencia', 'controlsecretaria'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view'],   
+                        'actions' => ['view'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
-                                    return in_array (Yii::$app->user->identity->role, [1,3,4,5,6]);
+                                    if(in_array (Yii::$app->user->identity->role, [1,3,4,6])){
+                                        return true;
+                                    }
+
+                                    if(in_array (Yii::$app->user->identity->role, [5])){
+                                        $parte = $this->findModel(Yii::$app->request->queryParams['id']);
+                                        
+                                        if ($parte->preceptoria0->nombre == Yii::$app->user->identity->username)
+                                             return true;
+                                    }
+
+                                    return false;
+
+                                    
                                 }catch(\Exception $exception){
                                     return false;
                             }
                         },
                         
+
+                    ],
+
+                    [
+                        'actions' => ['index'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->role, [1,3,4,5,6]);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
 
                     ],
 
@@ -169,9 +195,8 @@ class ParteController extends Controller
      */
     public function actionCreate()
     {
-        if (isset ($_POST['precepx'])) {
-            $precepx = $_POST['precepx'];
-            if(in_array (Yii::$app->user->identity->username, ["msala", "secretaria"])){
+        
+            if(in_array (Yii::$app->user->identity->role, [1,3])){
                 $precepx=Preceptoria::find()
                     ->orderBy('nombre')->all();
             }else{
@@ -181,7 +206,6 @@ class ParteController extends Controller
             }
             
 
-        }
         $model = new Parte();
         
         if ($model->load(Yii::$app->request->post())) {
@@ -192,11 +216,15 @@ class ParteController extends Controller
             }
         }
 
+        if(Yii::$app->request->isAjax)
+            return $this->renderAjax('create', [
+                'model' => $model,
+                'precepx' => $precepx,
+            ]);
         return $this->render('create', [
-            'model' => $model,
-            'precepx' => $precepx,
-        ]);
-        
+                'model' => $model,
+                'precepx' => $precepx,
+            ]);
         
 
         

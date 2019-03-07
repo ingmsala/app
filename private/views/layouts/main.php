@@ -141,7 +141,7 @@ AppAsset::register($this);
                     in_array (Yii::$app->user->identity->role, [1,3,4,5,6]) ? (
                         ['label' => 'Parte Docente', 
                         'items' => [
-                            in_array (Yii::$app->user->identity->role, [1, 3, 5, 6])?  
+                            in_array (Yii::$app->user->identity->role, [1, 3, 4, 5, 6])?  
                             ['label' => 'Parte docente', 'url' => ['/parte']]: ['label' => ''],
                             '<div class="dropdown-divider"></div>',
                             in_array (Yii::$app->user->identity->role, [1, 4, 6])?  

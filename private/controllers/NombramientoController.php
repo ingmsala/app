@@ -116,7 +116,9 @@ class NombramientoController extends Controller
         $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $revistas = Revista::find()->all();
         $divisiones = Division::find()->all();
-        $condiciones = Condicion::find()->all();
+        $condiciones = Condicion::find()
+                        ->where(['<>','id',5])
+                        ->all();
         $suplentes = Nombramiento::find()->all();
         $extensiones = Extension::find()->all();
 
@@ -231,7 +233,7 @@ class NombramientoController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-        public function actionAsignarsuplente()
+        public function actionAsignarsuplente2()
     {
         
         $cargox = $_REQUEST['cargox'];
@@ -278,6 +280,102 @@ class NombramientoController extends Controller
             'suplentes' => $suplente,
             'extensiones' => $extensiones,
         ]);
+    }
+
+
+    public function actionAsignarsuplente()
+    {
+        $cargox = $_REQUEST['cargox'];
+        $idx = $_REQUEST['idx'];
+        
+        $nombramientoParent = Nombramiento::findOne($idx);
+        if($nombramientoParent->suplente == null){
+
+            $model = new Nombramiento();
+            $model->cargo = $cargox;
+            $model->condicion = 5;
+             $model->horas = $nombramientoParent->horas;
+
+            $cargos = Cargo::find()->all();
+            $revistas = Revista::find()->all();
+            $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+            $revistas = Revista::find()->all();
+            $divisiones = Division::find()->all();
+            $extensiones = Extension::find()->all();
+            $condiciones = Condicion::find()->all();
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                $nombramientoParent->suplente = $model->id;
+                $nombramientoParent->save();
+                return $this->redirect(['view', 'id' => $idx]);
+            }
+
+            return $this->renderAjax('createsuplente', [
+                'model' => $model,
+                'nombramientoParent' => $nombramientoParent,
+                'docentes' => $docentes,
+                'revistas' => $revistas,
+                'divisiones' => $divisiones,
+                'extensiones' => $extensiones,
+                'cargos' => $cargos,
+                'revistas' => $revistas,
+                'condiciones' => $condiciones,
+            ]);
+
+        }else{
+            return '<div class="alert alert-danger">
+                        <strong>Error.</strong> Para agregar un suplente debe borrar primero el suplente ya asignado para este cargo.
+                    </div>';
+        }
+        
+        
+        
+    }
+
+    public function actionUpdatesuplente($id)
+    {
+        $model = $this->findModel($id);
+        $idx = $_REQUEST['idx'];
+        $nombramientoParent = Nombramiento::findOne($idx);
+
+        $cargos = Cargo::find()->all();
+        $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+        $revistas = Revista::find()->all();
+        $divisiones = Division::find()->all();
+        $condiciones = Condicion::find()->all();
+        
+        $extensiones = Extension::find()->all();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $idx]);
+        }
+
+        if(Yii::$app->request->isAjax){
+
+            return $this->renderAjax('updatesuplente', [
+                'model' => $model,
+                'nombramientoParent' => $nombramientoParent,
+                'docentes' => $docentes,
+                'revistas' => $revistas,
+                'divisiones' => $divisiones,
+                'extensiones' => $extensiones,
+                'cargos' => $cargos,
+                'revistas' => $revistas,
+                'condiciones' => $condiciones,
+            ]);
+        }
+        return $this->render('updatesuplente', [
+                'model' => $model,
+                'nombramientoParent' => $nombramientoParent,
+                'docentes' => $docentes,
+                'revistas' => $revistas,
+                'divisiones' => $divisiones,
+                'extensiones' => $extensiones,
+                'cargos' => $cargos,
+                'revistas' => $revistas,
+                'condiciones' => $condiciones,
+            ]);
+
     }
 
 

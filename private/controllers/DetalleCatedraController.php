@@ -214,16 +214,6 @@ class DetallecatedraController extends Controller
 
     }
 
-    public function actionInactive($id, $fechaFin)
-    {   
-        $model = $this->findModel($id);
-        $catedra = $model->catedra;
-        $model->activo = 2;
-        $model->fechaFin = $fechaFin;
-        $model->save();
-        return $this->redirect(['catedra/view' , 'id' => $catedra]);
-
-    }
 
        public function actionFechafin($id)
     {   

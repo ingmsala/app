@@ -336,6 +336,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     }
                 ],
+
+                [
+                    'label' => 'act',
+                    
+                    'attribute' => 'activo',
+                    
+                ],
                 
 
 

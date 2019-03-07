@@ -14,7 +14,7 @@ use yii\jui\DatePicker;
 
     <?php $form = ActiveForm::begin([
         'id' => 'create-update-detalle-catedra-form',
-        'enableAjaxValidation' => true
+        
     ]); ?>
 
    <?= 
@@ -28,7 +28,7 @@ use yii\jui\DatePicker;
             //'buttonImage' => '',
             'buttonImageOnly' => false,
             'buttonText'=> '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>',
-            'maxDate'=> "+0d",
+            
             
 
         ],

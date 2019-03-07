@@ -32,14 +32,16 @@ use yii\jui\DatePicker;
         	'buttonImageOnly' => false,
         	'buttonText'=> '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>',
         	'maxDate'=> "+0d",
+        	'z-index' =>100,
         	
 
 	    ],
 	    'options' => [
-	    	//'class' => 'form-control',
+	    	//'class' => 'awe-calendar',
 	    	'style' => 'width:20%',
 	    	'autocomplete' => 'off',
 	    	'readOnly'=> true,
+	    	'z-index' => 1151,
 
 
 	    	//'aria-describedby'=>"basic-addon1",
@@ -54,7 +56,7 @@ use yii\jui\DatePicker;
 		]) ?>
 
     
-    <?= $form->field($model, 'preceptoria')->dropDownList($listPreceptoria, ['prompt'=>'Seleccionar...']); ?>
+    <?= $form->field($model, 'preceptoria')->dropDownList($listPreceptoria, ['prompt'=>'Seleccionar...','style' => 'width:20%']); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

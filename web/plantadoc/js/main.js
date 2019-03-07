@@ -114,6 +114,14 @@ $(function(){
 	})
 });
 
+$('body').on('click', '#nuevoparte', function(e) {
+	$('#modal').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+			document.getElementById('modalHeader').innerHTML ='Nuevo Parte Docente';
+			
+});
+
 
 
 

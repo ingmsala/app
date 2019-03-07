@@ -6,6 +6,8 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
+use yii\bootstrap\Modal;
+
 
 
 /* @var $this yii\web\View */
@@ -15,6 +17,12 @@ use yii\helpers\ArrayHelper;
 $this->title = 'Parte Docente';
 $this->params['breadcrumbs'][] = $this->title;
 $precepx = Yii::$app->user->identity->username;
+
+/*RULES VIEW*/
+if(in_array (Yii::$app->user->identity->role, [1]))
+        $template =  "{viewdetcat} {updatedetcat}";
+    else
+        $template =  "{viewdetcat}";
 
 ?>
 <div class="parte-index">
@@ -142,19 +150,32 @@ $precepx = Yii::$app->user->identity->username;
             </div>
         </div>
     </div>
+
+        <?= Html::button('<span class="glyphicon glyphicon-plus"></span> Nuevo Parte Docente', ['value' => Url::to('index.php?r=parte/create'), 'class' => 'btn btn-success', 'id'=>'nuevoparte']) ?>
         
-        <?= Html::a('Nuevo parte docente', 'index.php?r=parte/create', 
-            [
-             'class' => 'btn btn-success',
-             'data' => [
-                        'method' => 'post',
-                        'params' => ['precepx' => $precepx], // <- extra level
-            ],
-            
-            ]) ?>
+        
     </p>
 
-    <?= GridView::widget([
+    <?php 
+        Modal::begin([
+            'header' => "<h2 id='modalHeader'></h2>",
+            'id' => 'modal',
+            'size' => 'modal-lg',
+            'options' => [
+                'tabindex' => false,
+            ],
+        ]);
+
+        echo "<div id='modalContent'></div>";
+
+        Modal::end();
+    ?>
+
+    <?php
+
+
+                           
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'rowOptions' => function($model){
@@ -190,7 +211,7 @@ $precepx = Yii::$app->user->identity->username;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{viewdetcat}  {updatedetcat}',
+                'template' => $template,
                 
                 'buttons' => [
                     'viewdetcat' => function($url, $model, $key){

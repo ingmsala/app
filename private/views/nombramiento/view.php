@@ -18,8 +18,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::button('Modificar', ['value' => Url::to('index.php?r=nombramiento/update&id='.$model->id),
-                                'class' => 'modalaNombramiento btn btn-primary']) ?>
+        <?php 
+        if($model->condicion<>5){
+            echo Html::button('Modificar', ['value' => Url::to('index.php?r=nombramiento/update&id='.$model->id),
+                                'class' => 'modalaNombramiento btn btn-primary']);
+        }else{
+            echo Html::button('Modificar', ['value' => Url::to('index.php?r=nombramiento/updatesuplente&id='.$model->id.'&idx='.Yii::$app->request->get()['id']),
+                                'class' => 'modalaNombramiento btn btn-primary']);
+
+        }?>
         <?= Html::a('Borrar', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -159,15 +166,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             '?r=nombramiento/view&id='.$model->id) : '';
                     },
                     'updatedetcat' => function($url, $model, $key){
+                        
                         return $model->id != '' ? Html::button('<span class="glyphicon glyphicon-pencil"></span>',
-                            ['value' => Url::to('index.php?r=nombramiento/update&id='.$model->id),
+                            ['value' => Url::to('index.php?r=nombramiento/updatesuplente&id='.$model->id.'&idx='.Yii::$app->request->get()['id']),
                                 'class' => 'modalaNombramiento btn btn-link']) : '';
 
 
                     },
                     'deletedetcat' => function($url, $suplente, $key){
                         
-                        echo $suplente->id;
+                        
                         return $suplente->id != '' ? Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=nombramiento/delete&id='.$suplente->id, 
                             ['data' => [
                             'confirm' => 'Está seguro de querer eliminar este elemento?',
