@@ -151,7 +151,7 @@ if(in_array (Yii::$app->user->identity->role, [1]))
         </div>
     </div>
 
-        <?= Html::button('<span class="glyphicon glyphicon-plus"></span> Nuevo Parte Docente', ['value' => Url::to('index.php?r=parte/create'), 'class' => 'btn btn-success', 'id'=>'nuevoparte']) ?>
+        <?= Html::a('<span class="glyphicon glyphicon-plus"></span> Nuevo Parte Docente', Url::to('index.php?r=parte/create'), ['class' => 'btn btn-success']) //'id'=>'nuevoparte' ?>
         
         
     </p>

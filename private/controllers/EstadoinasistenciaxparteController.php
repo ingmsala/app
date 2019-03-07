@@ -59,7 +59,7 @@ class EstadoinasistenciaxparteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1, 3]);
+                                    return in_array (Yii::$app->user->identity->role, [1, 3, 4]);
                                 }catch(\Exception $exception){
                                     return false;
                             }

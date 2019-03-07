@@ -114,12 +114,14 @@ $(function(){
 	})
 });
 
-$('body').on('click', '#nuevoparte', function(e) {
-	$('#modal').modal('show')
+
+$(function(){
+	$('#nuevoparte').click(function(){
+		$('#modal').modal('show')
 			.find('#modalContent')
 			.load($(this).attr('value'));
-			document.getElementById('modalHeader').innerHTML ='Nuevo Parte Docente';
-			
+		document.getElementById('modalHeader').innerHTML ='Nuevo Parte Docente';
+	})
 });
 
 

@@ -13,7 +13,9 @@ use yii\jui\DatePicker;
 
 <div class="parte-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+    	'id' => 'create-update-detalle-catedra-form',
+    ]); ?>
 
     <?php $listPreceptoria=ArrayHelper::map($precepx,'id','nombre'); 
     
@@ -31,8 +33,8 @@ use yii\jui\DatePicker;
         	//'buttonImage' => '',
         	'buttonImageOnly' => false,
         	'buttonText'=> '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>',
-        	'maxDate'=> "+0d",
-        	'z-index' =>100,
+        	'maxDate'=> "+3d",
+        	
         	
 
 	    ],
@@ -41,7 +43,7 @@ use yii\jui\DatePicker;
 	    	'style' => 'width:20%',
 	    	'autocomplete' => 'off',
 	    	'readOnly'=> true,
-	    	'z-index' => 1151,
+	    	
 
 
 	    	//'aria-describedby'=>"basic-addon1",
