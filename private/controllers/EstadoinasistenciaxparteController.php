@@ -134,6 +134,7 @@ class EstadoinasistenciaxparteController extends Controller
                
                 $detallepartex->falta = $model->falta;
                 $model->estadoinasistencia = $estadoinasistencia;
+                $detallepartex->estadoinasistencia = $model->estadoinasistencia;
                 $detallepartex->save();
                 return $this->redirect(['parte/controlregencia']);
             }

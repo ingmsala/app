@@ -40,7 +40,7 @@ class DetalleparteSearch extends Detalleparte
      * @return ActiveDataProvider
      */
     
-    public function search($params)
+    public function aux($params)
     {
         if(Yii::$app->user->identity->username == 'regenciatm'){
             $query = Detalleparte::find()->joinWith('division0')
@@ -88,6 +88,84 @@ class DetalleparteSearch extends Detalleparte
         ]);
 
         return $dataProvider;
+    }
+
+    public function search($params)
+    {
+        
+        $sql='
+        select distinct detalleparte.id as id, parte.fecha as fecha, division.nombre as division, hora.nombre as hora, docente.apellido as apellido, docente.nombre as nombred, detalleparte.llego, detalleparte.retiro, falta.nombre as falta, detalleparte.estadoinasistencia as estadoinasistenciax, esdp.nombre as estadoinasistenciaxtxt, (select count(*) from estadoinasistenciaxparte eixp where eixp.detalleparte = detalleparte.id) as cont 
+        from detalleparte 
+        left join division on detalleparte.division = division.id
+        left join docente on detalleparte.docente = docente.id
+        left join estadoinasistencia esdp on detalleparte.estadoinasistencia = esdp.id
+        left join hora on detalleparte.hora = hora.id
+        left join falta on detalleparte.falta = falta.id
+        left join parte on detalleparte.parte = parte.id 
+        left join estadoinasistenciaxparte on detalleparte.id = estadoinasistenciaxparte.detalleparte 
+        left join estadoinasistencia on estadoinasistencia.id = estadoinasistenciaxparte.estadoinasistencia
+        left join falta f on estadoinasistenciaxparte.falta = f.id 
+        where true';
+
+        if (isset($params['Detalleparte']['anio']) && $params['Detalleparte']['anio'] != ''){
+            $sql .= ' and year(parte.fecha) = '.$params["Detalleparte"]["anio"];
+        }
+        if (isset($params['Detalleparte']['mes']) && $params['Detalleparte']['mes'] != ''){
+            $sql .= ' and month(parte.fecha) = '.$params["Detalleparte"]["mes"];
+        }
+        if (isset($params['Detalleparte']['docente']) && $params['Detalleparte']['docente'] != ''){
+            $sql .= ' and detalleparte.docente = '.$params["Detalleparte"]["docente"];
+        }
+        if (isset($params['Detalleparte']['estadoinasistencia']) && $params['Detalleparte']['estadoinasistencia'] != ''){
+            $sql .= ' and detalleparte.estadoinasistencia = '.$params["Detalleparte"]["estadoinasistencia"];
+        }else{
+            $sql .= ' and (detalleparte.estadoinasistencia=1 or detalleparte.estadoinasistencia=3)';
+        }
+        if ( in_array (Yii::$app->user->identity->role, [4])) {
+            if (Yii::$app->user->identity->username == 'regenciatm'){
+                $sql .= ' and division.turno=1';
+            }else{
+                $sql .= ' and division.turno=2';
+            }
+            
+        }
+       
+        $sql.= ' order by parte.fecha desc';
+
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $sql,
+            'pagination' => false,
+            'sort' => [
+                'attributes' => [
+                    'actividad',
+                    'division' => [
+                        'asc' => ['division' => SORT_ASC, 'division' => SORT_ASC],
+                        'desc' => ['division' => SORT_DESC, 'division' => SORT_DESC],
+                        
+                    ],
+                    'docente' => [
+                        'asc' => ['docente' => SORT_ASC, 'docente' => SORT_ASC],
+                        'desc' => ['docente' => SORT_DESC, 'docente' => SORT_DESC],
+                        
+                    ],
+                ],
+            ],
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+       
+
+        // grid filtering conditions
+        
+
+        return $dataProvider;
+
     }
 
     public function otrasausencias($id, $fecha)

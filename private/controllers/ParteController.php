@@ -10,6 +10,9 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Detalleparte;
 use app\models\Preceptoria;
+use app\models\Docente;
+use app\models\Estadoinasistencia;
+use app\models\Estadoinasistenciaxparte;
 use app\models\DetalleparteSearch;
 use yii\filters\AccessControl;
 
@@ -27,7 +30,7 @@ class ParteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'controlregencia', 'controlsecretaria'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'controlregencia', 'controlsecretaria', 'procesarmarcadosreg'],
                 'rules' => [
                     [
                         'actions' => ['view'],   
@@ -97,7 +100,7 @@ class ParteController extends Controller
                     ],
 
                     [
-                        'actions' => ['controlregencia'],   
+                        'actions' => ['controlregencia', 'procesarmarcadosreg'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -277,10 +280,30 @@ class ParteController extends Controller
     public function actionControlregencia(){
         $searchModel = new DetalleparteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $param = Yii::$app->request->queryParams;
+
+
+
+        $model = new Detalleparte();
+        $model->scenario = $model::SCENARIO_CONTROLREGENCIA;
+
+        if(isset($param['Detalleparte']['anio']))
+            $model->anio = $param['Detalleparte']['anio'];
+        if(isset($param['Detalleparte']['mes']))
+            $model->mes = $param['Detalleparte']['mes'];
+        if(isset($param['Detalleparte']['docente']))
+            $model->docente = $param['Detalleparte']['docente'];
+        if(isset($param['Detalleparte']['estadoinasistencia']))
+            $model->estadoinasistencia = $param['Detalleparte']['estadoinasistencia'];
+
 
         return $this->render('controlregencia', [
+            'model' => $model,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'param' => Yii::$app->request->queryParams,
+            'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),
+            'estadoinasistencia' => Estadoinasistencia::find()->where(['<=','id',3])->all(),
         ]);
     }
 
@@ -294,6 +317,58 @@ class ParteController extends Controller
         ]);
     }
 
+    public function actionProcesarmarcadosreg(){
+        $param = Yii::$app->request->post();
+        //return $param['id'][1];
+        
+        foreach ($param['id'] as $detalleseleccionado) {
+            
+            $model = new Estadoinasistenciaxparte;
+            $model->detalle = null;
+            $model->estadoinasistencia = 2;
+            date_default_timezone_set('America/Argentina/Buenos_Aires');
+            $model->fecha = date("Y-m-d H:i:s");
+            $model->detalleparte = $detalleseleccionado;
+            $dp = Detalleparte::findOne($detalleseleccionado);
+            
+            $dp->estadoinasistencia = 2;
+            $dp->save();
+            $model->falta = $dp->falta;
+            $model->save();
+        }
+        
+        return 'ok';
+        
+        
+        
+    }    
+
+    public function actionProcesarmarcadosregrec(){
+        $param = Yii::$app->request->post();
+        //return $param['id'][1];
+        
+        foreach ($param['id'] as $detalleseleccionado) {
+            
+            $model = new Estadoinasistenciaxparte;
+            $model->detalle = null;
+            $model->estadoinasistencia = 3;
+            date_default_timezone_set('America/Argentina/Buenos_Aires');
+            $model->fecha = date("Y-m-d H:i:s");
+            $model->detalleparte = $detalleseleccionado;
+            $dp = Detalleparte::findOne($detalleseleccionado);
+            
+            $dp->estadoinasistencia = 3;
+            ($dp->falta == 2) ? $dp->falta = 1 : $dp->falta = 2;
+            $dp->save();
+            $model->falta = $dp->falta;
+            $model->save();
+        }
+        
+        return 'ok';
+        
+        
+        
+    }
     /**
      * Finds the Parte model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

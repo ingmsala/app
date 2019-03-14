@@ -25,6 +25,21 @@ use Yii;
  */
 class Detalleparte extends \yii\db\ActiveRecord
 {
+
+    const SCENARIO_CONTROLREGENCIA = 'index';
+    const SCENARIO_ABM = 'abm';
+
+    public $anio;
+    public $mes;
+    
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_ABM] = ['parte', 'division', 'docente', 'hora', 'falta'];
+        $scenarios[self::SCENARIO_CONTROLREGENCIA] = ['anio', 'mes', 'docente', 'estadoinasistencia'];
+        return $scenarios;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -39,7 +54,9 @@ class Detalleparte extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parte', 'division', 'docente', 'hora', 'falta'], 'required'],
+            
+            [['parte', 'division', 'docente', 'hora', 'falta'], 'required', 'on'=>self::SCENARIO_ABM],
+            [['anio'], 'required', 'message' => 'Debe seleccionar un año lectivo', 'on'=>self::SCENARIO_CONTROLREGENCIA],
             [['parte', 'division', 'docente', 'hora', 'llego', 'retiro', 'falta', 'estadoinasistencia'], 'integer'],
             [['parte'], 'exist', 'skipOnError' => true, 'targetClass' => Parte::className(), 'targetAttribute' => ['parte' => 'id']],
             [['falta'], 'exist', 'skipOnError' => true, 'targetClass' => Falta::className(), 'targetAttribute' => ['falta' => 'id']],

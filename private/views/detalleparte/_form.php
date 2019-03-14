@@ -57,9 +57,13 @@ use kartik\select2\Select2;
                 'select2:select' => 'function() {
                     if ($(this).val()==3) {
                            $( "#retaus" ).show();
+                           $( "#'.Html::getInputId($model, 'llego').'" ).val(null);
+                           $( "#'.Html::getInputId($model, 'retiro').'" ).val(null);
                         }else{
                             
                            $( "#retaus" ).hide();
+                           $( "#'.Html::getInputId($model, 'llego').'" ).val(null);
+                           $( "#'.Html::getInputId($model, 'retiro').'" ).val(null);
 
                         }
                         

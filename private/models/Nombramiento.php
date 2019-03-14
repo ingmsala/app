@@ -144,4 +144,10 @@ class Nombramiento extends \yii\db\ActiveRecord
         return '('.$this->cargo.') '.$this->docente0->apellido.', '.$this->docente0->nombre;
     }
 
+    public function getsuplente($id){
+        $e = new Nombramiento();
+        $e = Nombramiento::findOne($id);
+        return $e;
+    }
+
 }

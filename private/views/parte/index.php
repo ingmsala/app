@@ -56,7 +56,7 @@ if(in_array (Yii::$app->user->identity->role, [1]))
                             if(isset($param['Parte']['fecha'])){
                                 if($param['Parte']['fecha']!=''){
                                     $filter = true;
-                                    echo '<b> - Propuesta: </b>'.$years[$param['Parte']['fecha']];
+                                    echo '<b> - Año: </b>'.$years[$param['Parte']['fecha']];
                                 }
                             }
 

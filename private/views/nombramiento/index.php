@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
+use app\models\Nombramiento;
+use app\models\Docente;
 
 
 /* @var $this yii\web\View */
@@ -11,8 +13,8 @@ use yii\helpers\ArrayHelper;
 
 $this->title = 'Nombramientos';
 
+
 ?>
-<div class="nombramiento-index">
 
        
     <?=
@@ -49,15 +51,14 @@ $this->title = 'Nombramientos';
 
             ],
 
-            'nombre',
-            'horas',
-                        
-            
+                     
             
             [
-                'label' => 'Division',
+                'label' => 'Función (Horas)',
                 'attribute' => 'division',
-                'value' => 'division0.nombre',
+                'value' => function($model){
+                    return $model->nombre.'('.$model->horas.')';
+                }
             ],
             [
                 'label' => 'Suplente',
@@ -66,7 +67,38 @@ $this->title = 'Nombramientos';
                 'value' =>  function($model){
                      //var_dump($model->suplente0->docente0);
                         if (isset($model->suplente0)){
+                            //$suplentes = ArrayHelper::map($model, 'id', 'docente');
+                            //var_dump($model->suplente0->suplente);
+                            
                             return Html::tag('li', Html::tag('div',Html::tag('span', $model->suplente0->condicion0->nombre, ['class' => "badge pull-left"]).Html::tag('span', $model->suplente0->revista0->nombre, ['class' => "badge pull-right"])."&nbsp;".$model->suplente0->docente0->apellido.', '.$model->suplente0->docente0->nombre, ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-info']);
+                        }
+
+                        return '';
+                    }
+                     
+                
+                //'suplente0.docente0.apellido',
+            ],
+
+            [
+                'label' => 'Suplente 2',
+                'attribute' => 'suplente0',
+                'format' => 'raw',
+                'value' =>  function($model){
+                     //var_dump($model->suplente0->docente0);
+                        if ($model->suplente0 != null){
+
+                            if ($model->suplente0->suplente != null){
+                                $supl = new Nombramiento();
+                                $supl = $supl->getsuplente($model->suplente0->suplente);
+                                $supl = Docente::findOne($supl['docente']);
+                                //return $supl['apellido'].', '.$supl['nombre'];
+                            
+                            
+                            //var_dump();
+                                return Html::tag('li', Html::tag('div',Html::tag('span', 'SUPL', ['class' => "badge pull-left"]).Html::tag('span', 'VIGENTE', ['class' => "badge pull-right"])."&nbsp;".$supl['apellido'].', '.$supl['nombre'], ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-info']);
+
+                            }
                         }
 
                         return '';

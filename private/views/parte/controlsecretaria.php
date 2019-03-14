@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'savereg' => function($url, $model, $key){
 
                         //return Html::a('<span class=" modalRegencia glyphicon glyphicon-plus"></span>', '?r=estadoinasistenciaxparte/create&detallecatedra='.$model->id);
-
+                        return Html::a('Justificar',false,['class' => 'btn btn-warning']);
                         return $model->id != '' ? Html::button('Justificar', ['value' => Url::to('index.php?r=estadoinasistenciaxparte/justificar&detalleparte='.$model->id.'&estadoinasistencia=4'), 'class' => 'modalSecretaria btn btn-warning',  ]) : '';
                     },
                     
@@ -157,7 +157,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'savereg' => function($url, $model, $key){
 
                         //return Html::a('<span class="glyphicon glyphicon-floppy-disk"></span>', '?r=estadoinasistenciaxparte/create&detallecatedra='.$model->id);
-
+                        return Html::a('<span class="glyphicon glyphicon-ok"></span>',false,['class' => 'btn btn-success']);
                          return Html::a('<span class="glyphicon glyphicon-ok"></span>', '?r=estadoinasistenciaxparte/nuevoestado&detalleparte='.$model->id.'&estadoinasistencia=5', ['class' => 'btn btn-success',
                             'data' => [
                             'confirm' => 'Está seguro de querer cerrar la inasistencia del docente?',

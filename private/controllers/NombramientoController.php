@@ -76,10 +76,14 @@ class NombramientoController extends Controller
     {
         $searchModel = new NombramientoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $suplentes = Nombramiento::find()
+                        ->where(['condicion' => 5])
+                        ->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'suplentes' => $suplentes,
         ]);
     }
 
@@ -201,18 +205,23 @@ class NombramientoController extends Controller
     {
         $model = $this->findModel($id);
 
-        $titular = $model->find()
-                    ->where(['suplente' => $model->id])
-                    ->one();
-        
-        if ($titular != null){
-            $modelTitular = $this->findModel($titular->id);
-            $modelTitular->suplente = null;
-            $modelTitular->save();
-            //return $this->redirect(['index']); 
+        if ($model->suplente == null){
+
+            $titular = $model->find()
+                        ->where(['suplente' => $model->id])
+                        ->one();
+            
+            if ($titular != null){
+                $modelTitular = $this->findModel($titular->id);
+                $modelTitular->suplente = null;
+                $modelTitular->save();
+                //return $this->redirect(['index']); 
+            }
+            
+            $model->delete();
+        }else{
+            Yii::$app->session->setFlash('error', "No se puede borrar el nombramiento ya que tiene un suplente asignado. Elimine el suplente para proceder.");
         }
-        
-        $model->delete();
 
         return $this->redirect(['index']);
     }
@@ -377,6 +386,8 @@ class NombramientoController extends Controller
             ]);
 
     }
+
+    
 
 
     

@@ -112,6 +112,7 @@ class DetalleparteController extends Controller
     {
         
         $model = new Detalleparte();
+        $model->scenario = $model::SCENARIO_ABM;
         if (isset ($_REQUEST['parte'])) {
             $parte = $_REQUEST['parte'] ;
             
@@ -167,6 +168,7 @@ class DetalleparteController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->scenario = $model::SCENARIO_ABM;
         if (isset ($_REQUEST['parte'])) {
             $parte = $_REQUEST['parte'] ;
             
