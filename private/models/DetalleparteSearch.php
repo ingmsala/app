@@ -212,7 +212,6 @@ class DetalleparteSearch extends Detalleparte
     {
         $query = Detalleparte::find()
             ->where(['estadoinasistencia' => 2])
-            ->orWhere(['estadoinasistencia' => 4])
             ->andWhere(['!=', 'falta', 2]);
 
         // add conditions that should always apply here

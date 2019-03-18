@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Tipo de Falta',
                 'attribute' => 'falta0.nombre'
             ],
-            [
+            /*[
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{savereg}',
                 
@@ -88,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     
                 ]
 
-            ],
+            ],*/
 /*
              [   
                 
@@ -157,10 +157,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'savereg' => function($url, $model, $key){
 
                         //return Html::a('<span class="glyphicon glyphicon-floppy-disk"></span>', '?r=estadoinasistenciaxparte/create&detallecatedra='.$model->id);
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>',false,['class' => 'btn btn-success']);
-                         return Html::a('<span class="glyphicon glyphicon-ok"></span>', '?r=estadoinasistenciaxparte/nuevoestado&detalleparte='.$model->id.'&estadoinasistencia=5', ['class' => 'btn btn-success',
+                        //return Html::a('<span class="glyphicon glyphicon-ok"></span>',false,['class' => 'btn btn-success']);
+                         return Html::a('Justificar', '?r=estadoinasistenciaxparte/nuevoestado&detalleparte='.$model->id.'&estadoinasistencia=4', ['class' => 'btn btn-warning',
                             'data' => [
-                            'confirm' => 'Está seguro de querer cerrar la inasistencia del docente?',
+                            'confirm' => 'Está seguro de querer justificar la inasistencia del docente?',
                             'method' => 'post',
                              ]
                             
