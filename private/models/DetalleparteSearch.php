@@ -250,7 +250,8 @@ class DetalleparteSearch extends Detalleparte
         $query = Detalleparte::find()
             ->where(['parte' => $id,
                 //'condicion' => 5 //suplente
-            ])->joinWith(['estadoinasistencias',]);
+            ])->joinWith(['estadoinasistencias',])
+            ->orderBy('division, hora');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

@@ -214,10 +214,16 @@ class DetalleparteController extends Controller
     {
         $model = $this->findModel($id);
         $parte = $model->parte;
-        
+
         $ei = Estadoinasistenciaxparte::find()
-            ->where(['detalleparte' => $id])->one();
-        $ei->delete();
+            ->where(['detalleparte' => $id])->all();
+
+        foreach ($ei as $eix) {
+            $eix->delete();
+        }
+        
+        
+        
         $this->findModel($id)->delete();
         return $this->redirect(['parte/view', 'id' => $parte]);
     }

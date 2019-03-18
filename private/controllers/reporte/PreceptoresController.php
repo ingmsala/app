@@ -4,6 +4,9 @@ namespace app\controllers\reporte;
 
 use Yii;
 use app\models\Nombramiento;
+use app\models\Propuesta;
+use app\models\Condicion;
+use app\models\Revista;
 use app\models\NombramientoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -54,13 +57,18 @@ class PreceptoresController extends \yii\web\Controller
 	    {
 	        $searchModel = new NombramientoSearch();
 	        $dataProvider = $searchModel->getPreceptores();
+            $model = new Nombramiento();
 
 	        
 
 	        return $this->render('index', 
 	        [
+                'model' => $model,
 	            'searchModel' => $searchModel,
 	            'dataProvider' => $dataProvider,
+                'propuestas' => Propuesta::find()->all(),
+                'condiciones' => Condicion::find()->all(),
+                'revistas' => Revista::find()->all(),
 	        ]);
 	    }
 

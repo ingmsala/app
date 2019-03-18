@@ -17,6 +17,9 @@ use Yii;
  * @property int $division
  * @property int $suplente
  * @property int $extension 
+ * @property int $resolucion 
+ * @property int $fechaInicio 
+ * @property int $fechaFin 
  *
  * @property Condicion $condicion0
  * @property Extension $extension0 
@@ -45,6 +48,7 @@ class Nombramiento extends \yii\db\ActiveRecord
         return [
             [['cargo', 'horas', 'docente', 'revista', 'condicion'], 'required'],
             [['cargo', 'horas', 'docente', 'revista', 'condicion', 'division', 'suplente', 'extension'], 'integer'],
+            [['fechaInicio', 'fechaFin', 'resolucion'], 'safe'],
             [['nombre'], 'string', 'max' => 150],
             [['extension'], 'exist', 'skipOnError' => true, 'targetClass' => Extension::className(), 'targetAttribute' => ['extension' => 'id']], 
             [['condicion'], 'exist', 'skipOnError' => true, 'targetClass' => Condicion::className(), 'targetAttribute' => ['condicion' => 'id']],
