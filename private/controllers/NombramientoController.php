@@ -114,7 +114,7 @@ class NombramientoController extends Controller
     public function actionCreate()
     {
         $model = new Nombramiento();
-
+        $model->scenario = $model::SCENARIO_ABMNOMBRAMIENTO;
 
         $cargos = Cargo::find()->all();
         $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
@@ -153,6 +153,7 @@ class NombramientoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->scenario = $model::SCENARIO_ABMNOMBRAMIENTO;
 
         $cargos = Cargo::find()->all();
         $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
@@ -301,6 +302,7 @@ class NombramientoController extends Controller
         if($nombramientoParent->suplente == null){
 
             $model = new Nombramiento();
+            $model->scenario = $model::SCENARIO_ABMNOMBRAMIENTO;
             $model->cargo = $cargox;
             $model->condicion = 5;
              $model->horas = $nombramientoParent->horas;
@@ -344,6 +346,7 @@ class NombramientoController extends Controller
     public function actionUpdatesuplente($id)
     {
         $model = $this->findModel($id);
+        $model->scenario = $model::SCENARIO_ABMNOMBRAMIENTO;
         $idx = $_REQUEST['idx'];
         $nombramientoParent = Nombramiento::findOne($idx);
 
@@ -383,6 +386,36 @@ class NombramientoController extends Controller
                 'cargos' => $cargos,
                 'revistas' => $revistas,
                 'condiciones' => $condiciones,
+            ]);
+
+    }
+
+
+     public function actionAbmdivision($id)
+    {
+        $model = $this->findModel($id);
+        $model->scenario = $model::SCENARIO_ABMDIVISION;
+
+        
+        $divisiones = Division::find()->all();
+        
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['reporte/preceptores']);
+        }
+
+        if(Yii::$app->request->isAjax){
+
+            return $this->renderAjax('abmdivision', [
+                'model' => $model,
+                'divisiones' => $divisiones,
+                
+            ]);
+        }
+        return $this->render('abmdivision', [
+                'model' => $model,
+                'divisiones' => $divisiones,
+                
             ]);
 
     }

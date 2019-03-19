@@ -124,6 +124,15 @@ $(function(){
 	})
 });
 
+$('body').on('click', '#abmdivision', function(e) {
+	$('#modal').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+			document.getElementById('modalHeader').innerHTML ='Asignar División';
+			
+});
+
+
 
 
 

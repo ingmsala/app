@@ -185,7 +185,9 @@ class DetalleparteController extends Controller
         } 
 
         $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
-        $faltas = Falta::find()->all();
+        $faltas = Falta::find()
+                    ->where(['<>', 'id', 2])
+                    ->all();
         $horas = Hora::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

@@ -309,11 +309,33 @@ class ParteController extends Controller
 
     public function actionControlsecretaria(){
         $searchModel = new DetalleparteSearch();
-        $dataProvider = $searchModel->search2(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $param = Yii::$app->request->queryParams;
+
+
+
+        $model = new Detalleparte();
+        $model->scenario = $model::SCENARIO_CONTROLREGENCIA;
+
+        if(isset($param['Detalleparte']['anio']))
+            $model->anio = $param['Detalleparte']['anio'];
+        if(isset($param['Detalleparte']['mes']))
+            $model->mes = $param['Detalleparte']['mes'];
+        if(isset($param['Detalleparte']['docente']))
+            $model->docente = $param['Detalleparte']['docente'];
+        if(isset($param['Detalleparte']['estadoinasistencia']))
+            $model->estadoinasistencia = $param['Detalleparte']['estadoinasistencia'];
 
         return $this->render('controlsecretaria', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model' => $model,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'param' => Yii::$app->request->queryParams,
+            'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),
+            'estadoinasistencia' => Estadoinasistencia::find()->where(['<=','id',4])->all(),
         ]);
     }
 
@@ -325,13 +347,13 @@ class ParteController extends Controller
             
             $model = new Estadoinasistenciaxparte;
             $model->detalle = null;
-            $model->estadoinasistencia = 2;
+            $model->estadoinasistencia = $param['or'][0];
             date_default_timezone_set('America/Argentina/Buenos_Aires');
             $model->fecha = date("Y-m-d H:i:s");
             $model->detalleparte = $detalleseleccionado;
             $dp = Detalleparte::findOne($detalleseleccionado);
             
-            $dp->estadoinasistencia = 2;
+            $dp->estadoinasistencia = $param['or'][0];
             $dp->save();
             $model->falta = $dp->falta;
             $model->save();

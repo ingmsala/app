@@ -1,10 +1,12 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\RevistaSearch */
@@ -27,6 +29,21 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="revista-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
+
+    <?php 
+        Modal::begin([
+            'header' => "<h2 id='modalHeader'></h2>",
+            'id' => 'modal',
+            'size' => 'modal-lg',
+            'options' => [
+                'tabindex' => false,
+            ],
+        ]);
+
+        echo "<div id='modalContent'></div>";
+
+        Modal::end();
+    ?>
 
 
     <div id="accordion" class="panel-group">
@@ -189,6 +206,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
+                'label' => 'Extensión',
+                'attribute' => 'extension0.nombre', 
+            ],
+
+            [
                 'label' => 'Suplente',
                 'attribute' => 'suplente0.docente0.apellido',
             ],
@@ -200,9 +222,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [
                     
                     'update' => function($url, $model, $key){
-                        return Html::a(
+                        return Html::button('<span class="glyphicon glyphicon-pencil"></span>',
+                            ['value' => Url::to('index.php?r=nombramiento/abmdivision&id='.$model['id']),
+                                'class' => 'btn btn-link', 'id'=>'abmdivision']);
+
+
+                        Html::button(
                             '<span class="glyphicon glyphicon-pencil"></span>',
-                            '?r=nombramiento/update&id='.$model['id']);
+                            '?r=nombramiento/abmdivision&id='.$model['id'], ['id' =>'abmdivision']);
                     },
 
                     

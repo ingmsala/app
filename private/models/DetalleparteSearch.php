@@ -119,7 +119,12 @@ class DetalleparteSearch extends Detalleparte
         if (isset($params['Detalleparte']['estadoinasistencia']) && $params['Detalleparte']['estadoinasistencia'] != ''){
             $sql .= ' and detalleparte.estadoinasistencia = '.$params["Detalleparte"]["estadoinasistencia"];
         }else{
-            $sql .= ' and (detalleparte.estadoinasistencia=1 or detalleparte.estadoinasistencia=3)';
+            if ( in_array (Yii::$app->user->identity->role, [4])) {
+                $sql .= ' and (detalleparte.estadoinasistencia=1 or detalleparte.estadoinasistencia=3)';
+            }else{
+                $sql .= ' and detalleparte.estadoinasistencia=2';
+            }
+
         }
         if ( in_array (Yii::$app->user->identity->role, [4])) {
             if (Yii::$app->user->identity->username == 'regenciatm'){

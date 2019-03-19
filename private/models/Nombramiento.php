@@ -40,13 +40,25 @@ class Nombramiento extends \yii\db\ActiveRecord
         return 'nombramiento';
     }
 
+ const SCENARIO_ABMDIVISION = 'abmdivision';
+ const SCENARIO_ABMNOMBRAMIENTO = 'abm';
+
+    
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_ABMNOMBRAMIENTO] = ['cargo', 'horas', 'docente', 'revista', 'condicion'];
+        $scenarios[self::SCENARIO_ABMDIVISION] = ['division'];
+        return $scenarios;
+    }
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['cargo', 'horas', 'docente', 'revista', 'condicion'], 'required'],
+            [['cargo', 'horas', 'docente', 'revista', 'condicion'], 'required', 'on'=>self::SCENARIO_ABMNOMBRAMIENTO],
             [['cargo', 'horas', 'docente', 'revista', 'condicion', 'division', 'suplente', 'extension'], 'integer'],
             [['fechaInicio', 'fechaFin', 'resolucion'], 'safe'],
             [['nombre'], 'string', 'max' => 150],
@@ -76,6 +88,9 @@ class Nombramiento extends \yii\db\ActiveRecord
             'division' => 'Division',
             'suplente' => 'Suplente',
             'extension' => 'Extensión', 
+            'resolucion' => 'Resolución', 
+            'fechaInicio' => 'Fecha de Inicio', 
+            'fechaFin' => 'Fecha de Fin', 
         ];
     }
 

@@ -5,14 +5,67 @@ use kartik\grid\GridView;
 use kartik\select2\Select2;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\DetalleparteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Parte Docente - Control Secretaría';
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
+
+<?php 
+
+$this->registerJs("
+
+
+  $('#justifall').on('click', function (e) {
+    e.preventDefault();
+   
+    
+    var keys = $('#grid').yiiGridView('getSelectedRows');
+    if(keys.length > 0){
+        var deleteUrl     = 'index.php?r=parte/procesarmarcadosreg';
+        var pjaxContainer = 'test';
+        
+                    $.ajax({
+                      url:   deleteUrl,
+                      type:  'post',
+                      data: {id: keys, or: 4},
+                      beforeSend: function() {
+                         $('#loader').show();
+                      },
+                      error: function (xhr, status, error) {
+                        alert('Error');
+                      }
+                    }).done(function (data) {
+                       $('#loader').hide();
+                      $.pjax.reload({container: '#' + $.trim(pjaxContainer)});
+                      alert('La operación se realizó correctamente');
+                    });
+    }else{
+        alert('Debe seleccionar al menos una instancia');
+    }
+              
+  });
+
+");
+
+?>
+
+<div>
+        
+    <?= $this->render('_filtro', [
+        'model' => $model,
+        'docentes' => $docentes,
+        'estadoinasistencia' => $estadoinasistencia,
+        'param' => $param,
+        'origen' => 'controlsecretaria',
+    ]) ?>
+
+</div>
+
 <div class="detalleparte-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -33,145 +86,169 @@ $this->params['breadcrumbs'][] = $this->title;
         Modal::end();
     ?>
 
-    <?= GridView::widget([
+
+<?php Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
+<div id="loader"></div>
+    <?= 
+
+GridView::widget([
+        'id' => 'grid',
         'dataProvider' => $dataProvider,
+
+        'rowOptions' => function($model){
+            return [
+                'data' => [
+                    'key' => $model['id']
+                ]
+            ];
+        },
+
         //'filterModel' => $searchModel,
         'columns' => [
+            
+            [
+                'class' => 'yii\grid\CheckboxColumn',
+
+                'checkboxOptions' => function ($model, $key, $index, $column) {
+                    if ($model['estadoinasistenciax'] != 2)
+                        return ['disabled' => 'disabled'];
+                }
+                // you may configure additional properties here
+            ],
 
            [   
                 'label' => 'Fecha',
-                'attribute' => 'parte0.fecha',
+                'attribute' => 'fecha',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
                 'value' => function($model){
+                    //var_dump($model);
                     $formatter = \Yii::$app->formatter;
-                    return $formatter->asDate($model->parte0->fecha, 'dd/MM/yyyy');
+                    return $formatter->asDate($model['fecha'], 'dd/MM/yyyy');
+                    
+                }
+            ],
+            [   
+                'label' => 'División',
+                'attribute' => 'division',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                'value' => function($model){
+                    return $model['division'];
+                }
+            ],
+            [   
+                'label' => 'Hora',
+                'attribute' => 'hora',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                'value' => function($model){
+                    return $model['hora'];
+                }
+            ],
+            [   
+                'label' => 'Apellido',
+                'attribute' => 'apellido',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                'value' => function($model){
+                    return $model['apellido'];
+                }
+            ],
+            [   
+                'label' => 'Nombre',
+                'attribute' => 'nombred',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                'value' => function($model){
+                    return $model['nombred'];
+                }
+            ],
+            [   
+                'label' => 'Llegó',
+                'attribute' => 'llego',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                'value' => function($model){
+                    return $model['llego'];
+                }
+            ],
+            [   
+                'label' => 'Retiró',
+                'attribute' => 'retiro',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                'value' => function($model){
+                    return $model['retiro'];
+                }
+            ],
+            [   
+                'label' => 'Tipo de falta',
+                'attribute' => 'falta',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                'value' => function($model){
+                    return $model['falta'];
+                }
+            ],
+            [   
+                'label' => 'Estado',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                'attribute' => 'estadoinasistenciaxtxt',
+                'value' => function($model){
+                        
+                        return $model['estadoinasistenciaxtxt'];
+                        
                 }
             ],
 
-            [   
-                'label' => 'Division',
-                'attribute' => 'division0.nombre'
-            ],
-
-            [   
-                'label' => 'Hora',
-                'attribute' => 'hora0.nombre'
-            ],
-
             
-            [   
-                'label' => 'Apellido',
-                'attribute' => 'docente0.apellido'
-            ],
-
-            [   
-                'label' => 'Nombre',
-                'attribute' => 'docente0.nombre'
-            ],
-
-            'llego', 
-            'retiro',
-            [   
-                'label' => 'Tipo de Falta',
-                'attribute' => 'falta0.nombre'
-            ],
-            /*[
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{savereg}',
-                
-                'buttons' => [
-                    'savereg' => function($url, $model, $key){
-
-                        //return Html::a('<span class=" modalRegencia glyphicon glyphicon-plus"></span>', '?r=estadoinasistenciaxparte/create&detallecatedra='.$model->id);
-                        return Html::a('Justificar',false,['class' => 'btn btn-warning']);
-                        return $model->id != '' ? Html::button('Justificar', ['value' => Url::to('index.php?r=estadoinasistenciaxparte/justificar&detalleparte='.$model->id.'&estadoinasistencia=4'), 'class' => 'modalSecretaria btn btn-warning',  ]) : '';
-                    },
-                    
-                ]
-
-            ],*/
-/*
-             [   
-                
-                'label' => 'Control Regencia',
-                'format' => 'raw',
-                'attribute' => 'falta0.nombre',
-                'value' => function($model)
-                {
-                    var_dump($model->falta);
-                    return Select2::widget([
-                        'model' => $model,
-                        'attribute' => 'falta',
-                        'data' => [ 1 =>'Ratificar', 2 =>'Comisión', 
-                                    
-                                   ],
-                        'hideSearch' => true,
-                        'options' => [
-                                        'id' => 'falta'.$model->id,
-                                        'name' => 'falta'.$model->id,
-                                     ],
-                        'pluginOptions' => [
-                                 'allowClear' => false,
-                        ],
-                    ]);
-                },
-            ],
-*/
-            [   
-                'label' => 'Estados',
-                'attribute' => 'estadoinasistenciaxpartes.nombre',
-                'format' => 'raw',
-                'hAlign' => 'center',
-                'vAlign' => 'middle',
-                'value' => function($model){
-                    $items = [];
-                    $itemsc = [];
-
-                                        
-                    foreach($model->estadoinasistenciaxpartes as $estadoinasistenciaxparte){
-                         $itemsc[] = [$estadoinasistenciaxparte->fecha, $estadoinasistenciaxparte->estadoinasistencia0->nombre, $estadoinasistenciaxparte->falta0->nombre];
-                        
-                    }
-
-                    sort($itemsc);
-
-                    return Html::ul($itemsc, ['item' => function($item) {
-                        //var_dump($item);
-                        //$formatter = \Yii::$app->formatter;
-                            return 
-                                //Html::tag('li', Html::tag('div', Html::tag('span', $formatter->asDate($item[0], "dd/MM/yyyy - HH:i"), ['class' => "badge pull-right"])."&nbsp;".$item[1], ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-info']);
-                            Html::tag('li', Html::tag('div', Html::tag('span', $item[2], ['class' => "badge pull-right"])."&nbsp;".$item[1], ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-info']);
-                            }
-                            
-                    , 'class' => "nav nav-pills nav-stacked"]);
-
-
-                    //return var_dump($model->estadoinasistenciaxpartes);
-               }
-            ],
-
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{savereg}',
+                'template' => '{savesec}',
                 
                 'buttons' => [
-                    'savereg' => function($url, $model, $key){
+                    'savesec' => function($url, $model, $key){
 
                         //return Html::a('<span class="glyphicon glyphicon-floppy-disk"></span>', '?r=estadoinasistenciaxparte/create&detallecatedra='.$model->id);
                         //return Html::a('<span class="glyphicon glyphicon-ok"></span>',false,['class' => 'btn btn-success']);
-                         return Html::a('Justificar', '?r=estadoinasistenciaxparte/nuevoestado&detalleparte='.$model->id.'&estadoinasistencia=4', ['class' => 'btn btn-warning',
+                        if ($model['estadoinasistenciax'] == 2){
+                            return Html::a('Justificar', '?r=estadoinasistenciaxparte/nuevoestado&detalleparte='.$model['id'].'&estadoinasistencia=4', ['class' => 'btn btn-warning btn-sm',
                             'data' => [
                             'confirm' => 'Está seguro de querer justificar la inasistencia del docente?',
                             'method' => 'post',
                              ]
                             
-                     ]);
-
+                            ]);
+                        }
                          
                     },
                     
                 ]
 
             ],
+
+            
         ],
-    ]); ?>
+        'pjax' => true,
+]);
+
+
+
+Pjax::end();
+
+echo Html::a(
+                            '<span class="glyphicon glyphicon-ok"></span> Justificar Seleccionados',
+                            false,
+                            [
+                                'class'          => 'btn btn-warning',
+                                'id' => 'justifall',
+                                'delete-url'     => '/parte/procesarmarcadosreg',
+                                'pjax-container' => 'test',
+                                
+                            ]
+                        );
+
+ ?>
 </div>
