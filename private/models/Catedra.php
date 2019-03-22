@@ -31,12 +31,13 @@ class Catedra extends \yii\db\ActiveRecord
     public $docente;
     public $actividadnom;
     public $divisionnom;
+    public $resolucion;
    
 
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_SEARCHINDEX] = ['propuesta', 'docente', 'actividadnom', 'division'];
+        $scenarios[self::SCENARIO_SEARCHINDEX] = ['propuesta', 'docente', 'actividadnom', 'division', 'resolucion'];
         return $scenarios;
     }
 

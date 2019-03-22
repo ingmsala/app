@@ -64,12 +64,26 @@ $this->params['breadcrumbs'][] = $this->title;
                    return $model->cargo.' - '.$model->cargo0->nombre;
                 }
             ],
+
+            [
+                'label' => 'Extensión',
+                'attribute' => 'extension',
+                'value' => function($model){
+                   try{
+                        $extension = $model->extension0->nombre;
+                        ($model->resolucionext!=null) ? $extension.= ' (Res: '.$model->resolucionext.')' : $extension=$extension;
+                     }catch(\Exception $exception){
+                        $extension = '';
+                     }
+
+                     return $extension;
+                }
+            ],
             [
                 'label' => 'Revista',
                 'attribute' => 'revista',
                 'value' => function($model){
-
-                   return $model->revista0->nombre;
+                    return $model->revista0->nombre;
                 }
             ],
             'horas',

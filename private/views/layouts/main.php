@@ -61,6 +61,8 @@ AppAsset::register($this);
                         '<div class="dropdown-divider"></div>',
                         ['label' => 'Listado de Horas por Docente', 'url' => ['/reporte/horasdocentes']],
                         '<div class="dropdown-divider"></div>',
+                        ['label' => 'Horas de actividades por Cátedra', 'url' => ['/reporte/horasmateriaxcatedra']],
+                        '<div class="dropdown-divider"></div>',
 
                         [
                             'label' => 'Parte Docente',

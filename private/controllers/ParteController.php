@@ -100,7 +100,7 @@ class ParteController extends Controller
                     ],
 
                     [
-                        'actions' => ['controlregencia', 'procesarmarcadosreg'],   
+                        'actions' => ['controlregencia'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -113,11 +113,24 @@ class ParteController extends Controller
                     ],
 
                     [
+                        'actions' => ['procesarmarcadosreg'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [1,3,4]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    [
                         'actions' => ['controlsecretaria'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1, 3]);
+                                return in_array (Yii::$app->user->identity->role, [1, 3, 6]);
                             }catch(\Exception $exception){
                                 return false;
                             }

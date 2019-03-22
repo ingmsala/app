@@ -1,12 +1,12 @@
 <?php
 
-namespace app\controllers\reporte\parte;
+namespace app\controllers\reporte;
 
 use Yii;
 use app\models\Docente;
+use app\models\Actividad;
 use app\models\DocenteSearch;
-use app\models\DetalleparteSearch;
-use app\models\Detalleparte;
+use app\models\DetallecatedraSearch;
 use app\models\NombramientoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -14,7 +14,7 @@ use yii\filters\VerbFilter;
 use app\models\Genero;
 use yii\filters\AccessControl;
 
-class FaltasdocentesController extends \yii\web\Controller
+class HorasmateriaxcatedraController extends \yii\web\Controller
 {
 
 
@@ -53,43 +53,42 @@ class FaltasdocentesController extends \yii\web\Controller
         ];
     }
 
- 	public function actionIndex($mes = 0, $anio = 0, $docente = 0)
+ 	public function actionIndex()
 	    {
-	        $searchModel = new DetalleparteSearch();
-	        $dataProvider = $searchModel->providerfaltasdocentes($mes, $anio, $docente);
-            $model = new Detalleparte();
+	        $searchModel = new DetallecatedraSearch();
+	        $dataProvider = $searchModel->horasXMateriaXCatedra(Yii::$app->request->queryParams);
+            $model = new Actividad();
             $param = Yii::$app->request->queryParams;
-            	        
+            if(isset($param['Actividad']['id']))
+            $model->id = $param['Actividad']['id'];
+	        
+
 	        return $this->render('index', 
 	        [
 	            'searchModel' => $searchModel,
 	            'dataProvider' => $dataProvider,
-                'anio' => $anio,
-                'mes' => $mes,
-                'docente' => $docente,
+                'actividades' => Actividad::find()->orderBy('nombre')->all(),
                 'model' => $model,
                 'param' => $param,
-                'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),
 	        ]);
 	    }
 
-	public function actionView($mes = 0, $anio = 0, $id)
+	public function actionView($id)
     {
-        $searchModel = new DetalleparteSearch();
-        $dataProvider = $searchModel->providerfaltasdocentesview($mes, $anio, $id);
- 
+        $searchModel = new DetallecatedraSearch();
+        $dataProvider = $searchModel->providerDocentesxActividad($id);
+        
         return $this->renderAjax('view', [
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'anio' => $anio,
-            'mes' => $mes,
+            
         ]);
     }
 
 	protected function findModel($id)
     {
-        if (($model = Docente::findOne($id)) !== null) {
+        if (($model = Actividad::findOne($id)) !== null) {
             return $model;
         }
 

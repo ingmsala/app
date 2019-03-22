@@ -20,7 +20,7 @@ $precepx = Yii::$app->user->identity->username;
 
 /*RULES VIEW*/
 if(in_array (Yii::$app->user->identity->role, [1]))
-        $template =  "{viewdetcat} {updatedetcat}";
+        $template =  "{viewdetcat} {updatedetcat} {deletedetcat}";
     else
         $template =  "{viewdetcat}";
 
@@ -227,9 +227,12 @@ if(in_array (Yii::$app->user->identity->role, [1]))
 
                         
                     'deletedetcat' => function($url, $model, $key){
-                        return Html::button('<span class="glyphicon glyphicon-trash"></span>', 
-                            ['value' => Url::to('index.php?r=parte/delete&id='.$model['id']), 
-                           'class' => 'btn btn-link']);
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=parte/delete&id='.$model['id'], 
+                            ['data' => [
+                            'confirm' => 'Está seguro de querer eliminar este elemento?',
+                            'method' => 'post',
+                             ]
+                            ]);
                     },
                 ]
 

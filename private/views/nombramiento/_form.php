@@ -67,7 +67,74 @@ use yii\jui\DatePicker;
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true, 'style'=>'text-transform:uppercase;']) ?>
 
-    <?= $form->field($model, 'extension')->dropDownList($listextensiones, ['prompt'=>'(Sin extensión horaria)']); ?>
+    <?= $form->field($model, 'extension')->dropDownList($listextensiones, 
+        [
+            'prompt' => '(Sin extensión horaria)',
+            'id' => 'dropdownextension',
+        ]); ?>
+
+
+    <div class="well" id="divdetres" <?php if($model->extension==null) echo 'style="display: none; margin:28px;"'; else echo 'style="display: block; margin:28px;"'; ?>>
+    <?= $form->field($model, 'resolucionext')->textInput() ?>
+
+    
+    <?= 
+        $form->field($model, 'fechaInicioext')->widget(DatePicker::class, [
+        //'language' => 'ru',
+        'dateFormat' => 'yyyy-MM-dd',
+
+        'clientOptions'=>[
+            //'changeYear' => true,
+            //'changeMonth' => true,
+
+            'showOn' => 'both',
+            //'buttonImage' => '',
+            'buttonImageOnly' => false,
+            'buttonText'=> '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>',
+            
+            
+
+        ],
+        'options' => [
+            //'class' => 'form-control',
+            'style' => 'width:20%',
+            'autocomplete' => 'off',
+            'readOnly'=> true,
+        ],
+
+         
+       
+        ]) ?>
+
+    <?= 
+        $form->field($model, 'fechaFinext')->widget(DatePicker::class, [
+        //'language' => 'ru',
+        'dateFormat' => 'yyyy-MM-dd',
+        'clientOptions'=>[
+            //'changeYear' => true,
+            //'changeMonth' => true,
+            'showOn' => 'both',
+            //'buttonImage' => '',
+            'buttonImageOnly' => false,
+            'buttonText'=> '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>',
+            
+        ],
+        'options' => [
+            //'class' => 'form-control',
+            'style' => 'width:20%',
+            'autocomplete' => 'off',
+            'readOnly'=> true,
+
+
+            //'aria-describedby'=>"basic-addon1",
+            
+        ],
+
+         
+       
+        ]) ?>
+
+    </div>
 
     <?= 
 
@@ -104,6 +171,7 @@ use yii\jui\DatePicker;
         $form->field($model, 'fechaInicio')->widget(DatePicker::class, [
         //'language' => 'ru',
         'dateFormat' => 'yyyy-MM-dd',
+        
         'clientOptions'=>[
             //'changeYear' => true,
             //'changeMonth' => true,
@@ -175,3 +243,24 @@ use yii\jui\DatePicker;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php 
+
+    $this->registerJs('
+         $("#dropdownextension").change(function(){
+            var value = this.value;
+            
+            if (value>0) {
+                           $( "#divdetres" ).show();
+                        }else{
+                            
+                           $( "#divdetres" ).hide();
+                           $( "#'.Html::getInputId($model, 'resolucionext').'" ).val( null );
+                           $( "#'.Html::getInputId($model, 'fechaInicioext').'" ).val( null );
+                           $( "#'.Html::getInputId($model, 'fechaFinext').'" ).val( null );
+
+                        }
+        })'
+    );
+
+?>

@@ -68,6 +68,8 @@ $docente = $model->apellido.', '.$model->nombre;
                 'label' => 'Division',
                 'attribute' => 'division'
             ],
+
+
             'hora',
             'llego',
             'retiro',

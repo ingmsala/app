@@ -542,7 +542,7 @@ class DetalleparteSearch extends Detalleparte
     }
 
 
-    public function providerfaltasdocentes($mes, $anio)
+    public function providerfaltasdocentes($mes, $anio, $docente)
     {
         
         $sql='
@@ -556,10 +556,13 @@ class DetalleparteSearch extends Detalleparte
             FROM detalleparte dp
             LEFT JOIN docente d  ON dp.docente = d.id
             LEFT JOIN parte p ON dp.parte = p.id
-            WHERE YEAR(p.fecha) = '.$anio;
-
+            WHERE true ';
+        ($anio != 0) ? 
+            $sql.= ' AND YEAR( p.fecha ) = '.$anio : '';
         ($mes != 0) ? 
-        $sql.= ' AND MONTH( p.fecha ) = '.$mes : '';
+            $sql.= ' AND MONTH( p.fecha ) = '.$mes : '';
+        ($docente != 0) ? 
+            $sql.= ' AND d.id = '.$docente : '';
         $sql.=' GROUP BY d.legajo, d.apellido, d.nombre
                ORDER BY faltas DESC, d.apellido, d.nombre, d.legajo';
 
@@ -582,9 +585,10 @@ class DetalleparteSearch extends Detalleparte
     {
         
         $sql='
-            SELECT p.fecha, di.nombre as division, dp.hora, dp.llego, dp.retiro, f.nombre as falta
+            SELECT p.fecha, di.nombre as division, h.nombre as hora, dp.llego, dp.retiro, f.nombre as falta
             FROM detalleparte dp
             LEFT JOIN parte p ON dp.parte = p.id
+            LEFT JOIN hora h ON dp.hora = h.id
             LEFT JOIN division di ON dp.division = di.id
             LEFT JOIN falta f ON dp.falta = f.id
             WHERE YEAR(p.fecha) = '.$anio.'

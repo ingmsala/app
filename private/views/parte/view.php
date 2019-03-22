@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 },
                                 'deletedetcat' => function($url, $model, $key){
-                                    if($model->estadoinasistencia ==1)
+                                    if($model->estadoinasistencia == 1 or in_array (Yii::$app->user->identity->role, [1]))
                                     return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=detalleparte/delete&id='.$model->id, 
                                         ['data' => [
                                         'confirm' => 'Está seguro de querer eliminar este elemento?',

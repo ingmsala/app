@@ -19,16 +19,15 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="catedra-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    
 
     <?php
         $listdivisiones=ArrayHelper::map($divisiones,'nombre','nombre');
         $listPropuestas=ArrayHelper::map($propuestasall,'id','nombre');
+        $listResoluciones=ArrayHelper::map($resoluciones,'resolucion','resolucion');
         $listDocentes=ArrayHelper::map($docentes,'id', function($doc) {
             return $doc['apellido'].', '.$doc['nombre'];}
         );
-        
-
     ?>
     
     <div id="accordion" class="panel-group">
@@ -68,6 +67,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 if($param['Catedra']['divisionnom']!=''){
                                     $filter = true;
                                     echo '<b> - Division: </b>'.$param['Catedra']['divisionnom'];
+                                    
+                                }
+                            }
+
+                            if(isset($param['Catedra']['resolucion'])){
+                                if($param['Catedra']['resolucion']!=''){
+                                    $filter = true;
+                                    echo '<b> - Resolución: </b>'.$param['Catedra']['resolucion'];
                                     
                                 }
                             }
@@ -126,6 +133,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             <?= $form->field($model, 'divisionnom')->textInput()->label("División") ?>
 
+                            <?= 
+                                
+                                $form->field($model, 'resolucion')->widget(Select2::classname(), [
+                                    'data' => $listResoluciones,
+                                    'options' => ['placeholder' => 'Seleccionar...'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ])->label("Resolución");
+
+                            ?>
+
                             <div class="form-group">
                                 <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary']) ?>
                                 <?= Html::resetButton('Resetear', ['class' => 'btn btn-default']) ?>
@@ -160,6 +179,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading' => Html::encode($this->title),
             //'beforeOptions' => ['class'=>'kv-panel-before'],
         ],
+        'summary' => false,
 
         'exportConfig' => [
             GridView::EXCEL => [
@@ -337,12 +357,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 ],
 
-                [
-                    'label' => 'act',
-                    
-                    'attribute' => 'activo',
-                    
-                ],
                 
 
 

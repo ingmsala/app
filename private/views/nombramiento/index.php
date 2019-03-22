@@ -23,6 +23,7 @@ $this->title = 'Nombramientos';
         'filterModel' => $searchModel,
         'panel' => [
             'type' => GridView::TYPE_DEFAULT,
+
             'heading' => Html::encode($this->title)
             
             ],
@@ -110,14 +111,18 @@ $this->title = 'Nombramientos';
 
             ['class' => 'kartik\grid\ActionColumn'],
         ],
+
          'toolbar'=>[
             ['content' => 
-                Html::a('Nuevo Nombramiento', ['create'], ['class' => 'btn btn-success'])
+                Html::a('Nuevo Nombramiento', ['create'], ['class' => 'btn btn-success']),
 
+               
             ],
             '{export}',
             
         ],
+        'floatHeader'=>true,
+        'summary'=>false,
         'exportConfig' => [
             GridView::EXCEL => ['label' => 'Excel'],
             //GridView::HTML => [// html settings],

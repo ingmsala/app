@@ -207,6 +207,14 @@ GridView::widget([
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{savesec}',
+                'visibleButtons'=> [
+                        'savesec' => function(){
+
+                    return !in_array (Yii::$app->user->identity->role, [6]);
+
+                }
+
+                ],
                 
                 'buttons' => [
                     'savesec' => function($url, $model, $key){
@@ -237,7 +245,7 @@ GridView::widget([
 
 
 Pjax::end();
-
+if (!in_array (Yii::$app->user->identity->role, [6])){
 echo Html::a(
                             '<span class="glyphicon glyphicon-ok"></span> Justificar Seleccionados',
                             false,
@@ -249,6 +257,6 @@ echo Html::a(
                                 
                             ]
                         );
-
+}
  ?>
 </div>

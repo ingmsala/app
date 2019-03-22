@@ -94,6 +94,9 @@ class CatedraController extends Controller
         $dataProvider = $searchModel->providercatedras($param);
         $divisiones = Division::find()->all();
         $propuestasall = Propuesta::find()->all();
+        $resoluciones = Detallecatedra::find()
+                    ->select('resolucion')->distinct()->all();
+
         $docentes = Docente::find()
                         ->orderBy('apellido')
                         ->all();
@@ -105,6 +108,8 @@ class CatedraController extends Controller
             $model->actividadnom = $param['Catedra']['actividadnom'];
         if(isset($param['Catedra']['divisionnom']))
             $model->divisionnom = $param['Catedra']['divisionnom'];
+        if(isset($param['Catedra']['resolucion']))
+            $model->resolucion = $param['Catedra']['resolucion'];
 
         return $this->render('index', [
             'model' => $model,
@@ -113,6 +118,7 @@ class CatedraController extends Controller
             'divisiones' => $divisiones,
             'propuestasall' => $propuestasall,
             'docentes' => $docentes,
+            'resoluciones' => $resoluciones,
             'param' => $param,
         ]);
     }

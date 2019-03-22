@@ -6,6 +6,8 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Detallecatedra;
+use yii\data\SqlDataProvider;
+use yii\db\Query;
 
 /**
  * DetalleCatedraSearch represents the model behind the search form of `app\models\DetalleCatedra`.
@@ -147,6 +149,98 @@ class DetallecatedraSearch extends Detallecatedra
         return $query;
         
     }
+
+    public function horasXMateriaXCatedra($params)
+        {
+        
+        $sql='
+            select a.id as id, a.nombre as actividad, count(c.actividad) as cantidad_catedras, count(c.actividad)*a.cantHoras as horas_semanales, (
+                SELECT sum(dc2.hora)
+                from detallecatedra dc2
+                inner join catedra c2 on dc2.catedra = c2.id
+                inner join actividad a2 on c2.actividad = a2.id
+                where a2.id = a.id and dc2.revista = 1  and dc2.activo = 1
+            ) as cantidad_vigente,(
+                SELECT sum(dc3.hora)
+                from detallecatedra dc3
+                inner join catedra c3 on dc3.catedra = c3.id
+                inner join actividad a3 on c3.actividad = a3.id
+                where a3.id = a.id and dc3.revista <> 2 and dc3.activo = 1
+            ) as horas_cobradas
+            from catedra c
+            inner join actividad a on c.actividad = a.id';
+            if (isset($params['Actividad']['id']) && $params['Actividad']['id'] != ''){
+                $sql .= ' where a.id = '.$params['Actividad']["id"];
+            }
+            $sql .= ' group by a.nombre
+
+            order by c.id
+
+        '; //1 es vigente y 2 es diferente a lic s/goce
+
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $sql,
+            'pagination' => false,
+            
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+
+
+        
+        // grid filtering conditions
+        
+
+        return $dataProvider;
+
+    }
+
+
+    public function providerDocentesxActividad($actividad){
+        
+        $sql='
+            select c.id as id, di.nombre as division, d.apellido as apellido, d.nombre as nombre, sum(dc.hora) as horas
+            from catedra c
+            inner join actividad a on c.actividad = a.id
+            inner join detallecatedra dc on dc.catedra = c.id
+            inner join division di on c.division = di.id
+            inner join docente d on dc.docente = d.id
+            where a.id = '.$actividad.' 
+            and dc.revista = 1
+            and dc.activo = 1
+            group by di.nombre, d.apellido, d.nombre
+            order by di.id'; //1 es vigente y 2 es diferente a lic s/goce
+
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $sql,
+            'pagination' => false,
+            
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+
+
+        
+        // grid filtering conditions
+        
+
+        return $dataProvider;
+
+    }
+        
+    
 
 
 }

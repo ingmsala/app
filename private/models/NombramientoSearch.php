@@ -22,7 +22,7 @@ class NombramientoSearch extends Nombramiento
     {
         return [
             [['id', 'cargo','horas', ], 'integer'],
-            [['nombre', 'revista', 'docente', 'division', 'suplente', 'extension', 'resolucion', 'fechaInicio', 'fechaFin'], 'safe'],
+            [['nombre', 'revista', 'docente', 'division', 'suplente', 'extension', 'resolucion', 'fechaInicio', 'fechaFin', 'resolucionext', 'fechaInicioext', 'fechaFinext'], 'safe'],
         ];
     }
 

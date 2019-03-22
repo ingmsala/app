@@ -20,7 +20,9 @@ use Yii;
  * @property int $resolucion 
  * @property int $fechaInicio 
  * @property int $fechaFin 
- *
+ * @property int $resolucionext 
+ * @property int $fechaInicioext
+ * @property int $fechaFinext
  * @property Condicion $condicion0
  * @property Extension $extension0 
  * @property Cargo $cargo0
@@ -48,7 +50,7 @@ class Nombramiento extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_ABMNOMBRAMIENTO] = ['cargo', 'horas', 'docente', 'revista', 'condicion'];
+        $scenarios[self::SCENARIO_ABMNOMBRAMIENTO] = ['cargo', 'horas', 'docente', 'revista', 'condicion', 'extension', 'suplente', 'fechaInicio', 'docente', 'division',  'fechaFin', 'resolucion', 'fechaInicioext', 'fechaFinext', 'resolucionext'];
         $scenarios[self::SCENARIO_ABMDIVISION] = ['division'];
         return $scenarios;
     }
@@ -60,7 +62,8 @@ class Nombramiento extends \yii\db\ActiveRecord
         return [
             [['cargo', 'horas', 'docente', 'revista', 'condicion'], 'required', 'on'=>self::SCENARIO_ABMNOMBRAMIENTO],
             [['cargo', 'horas', 'docente', 'revista', 'condicion', 'division', 'suplente', 'extension'], 'integer'],
-            [['fechaInicio', 'fechaFin', 'resolucion'], 'safe'],
+            [['fechaInicio', 'fechaFin', 'resolucion', 'fechaInicioext', 'fechaFinext', 'resolucionext'], 'safe'],
+            [['fechaInicio', 'fechaFin', 'fechaInicioext', 'fechaFinext'], 'default', 'value' => null],
             [['nombre'], 'string', 'max' => 150],
             [['extension'], 'exist', 'skipOnError' => true, 'targetClass' => Extension::className(), 'targetAttribute' => ['extension' => 'id']], 
             [['condicion'], 'exist', 'skipOnError' => true, 'targetClass' => Condicion::className(), 'targetAttribute' => ['condicion' => 'id']],
@@ -91,6 +94,9 @@ class Nombramiento extends \yii\db\ActiveRecord
             'resolucion' => 'Resolución', 
             'fechaInicio' => 'Fecha de Inicio', 
             'fechaFin' => 'Fecha de Fin', 
+            'resolucionext' => 'Resolución de extensión', 
+            'fechaInicioext' => 'Fecha de Inicio de extensión', 
+            'fechaFinext' => 'Fecha de Fin de extensión', 
         ];
     }
 

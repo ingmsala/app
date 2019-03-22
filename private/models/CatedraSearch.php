@@ -116,6 +116,9 @@ class CatedraSearch extends Catedra
         if (isset($params['Catedra']['divisionnom']) && $params['Catedra']['divisionnom'] != ''){
             $sql .= ' AND d.nombre like "%'.$params['Catedra']["divisionnom"].'%"';
         }
+        if (isset($params['Catedra']['resolucion']) && $params['Catedra']['resolucion'] != ''){
+            $sql .= ' AND dc.resolucion like "%'.$params["Catedra"]['resolucion'].'%"';
+        }
         if (isset($params['Catedra']['actividadnom']) && $params['Catedra']['actividadnom'] != ''){
             $sql .= ' AND a.nombre like "%'.$params["Catedra"]['actividadnom'].'%"';
         }
