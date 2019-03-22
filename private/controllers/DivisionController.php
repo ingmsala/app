@@ -7,6 +7,7 @@ use app\models\Division;
 use app\models\DivisionSearch;
 use app\models\Turno;
 use app\models\Propuesta;
+use app\models\Preceptoria;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -102,6 +103,7 @@ class DivisionController extends Controller
         $model = new Division();
         $turnos=Turno::find()->all();
         $propuestas=Propuesta::find()->all();
+        $preceptorias=Preceptoria::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -111,6 +113,7 @@ class DivisionController extends Controller
             'model' => $model,
             'turnos' => $turnos,
             'propuestas' => $propuestas,
+            'preceptorias' => $preceptorias,
         ]);
     }
 
@@ -126,6 +129,7 @@ class DivisionController extends Controller
         $model = $this->findModel($id);
         $turnos=Turno::find()->all();
         $propuestas=Propuesta::find()->all();
+        $preceptorias=Preceptoria::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -135,6 +139,7 @@ class DivisionController extends Controller
             'model' => $model,
             'turnos' => $turnos,
             'propuestas' => $propuestas,
+            'preceptorias' => $preceptorias,
         ]);
     }
 

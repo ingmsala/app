@@ -15,12 +15,15 @@ use yii\helpers\ArrayHelper;
 
    	<?php $listTurnos=ArrayHelper::map($turnos,'id','nombre'); ?>
    	<?php $listPropuestas=ArrayHelper::map($propuestas,'id','nombre'); ?>
+    <?php $listPreceptorias=ArrayHelper::map($preceptorias,'id','nombre'); ?>
 
    	<?= $form->field($model, 'propuesta')->dropDownList($listPropuestas, ['prompt'=>'Seleccionar...']); ?>
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true,'style'=>'text-transform:uppercase;']) ?>
 
     <?= $form->field($model, 'turno')->dropDownList($listTurnos, ['prompt'=>'Seleccionar...']); ?>
+
+    <?= $form->field($model, 'preceptoria')->dropDownList($listPreceptorias, ['prompt'=>'Seleccionar...']); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
