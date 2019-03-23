@@ -70,7 +70,10 @@ $config = [
         //'catchAll' => ['/site/login'],
     ],
     'modules' => [
-     'gridview' => ['class' => 'kartik\grid\Module']
+     'gridview' => ['class' => 'kartik\grid\Module'],
+     'optativas' => [
+            'class' => 'app\modules\optativas\Optativas',
+     ],
     ], 
     'params' => $params,
 ];
