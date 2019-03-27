@@ -200,7 +200,10 @@ class UserController extends Controller
         }
     }
     
-        
+    if(Yii::$app->user->identity->role == 8){
+        $this->layout = '@app/modules/optativas/views/layouts/main';
+    }
+    
     return $this->render('cambiarpass',
         [
             'model'=>$model,

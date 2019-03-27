@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models;
+use app\modules\optativas\models\Optativa;
 
 use Yii;
 
@@ -18,6 +19,7 @@ use Yii;
  * @property Actividadtipo $actividadtipo0
  * @property Propuesta $propuesta0
  * @property Catedra[] $catedras
+ * @property Optativa[] $optativas
  */
 class Actividad extends \yii\db\ActiveRecord
 {
@@ -90,5 +92,10 @@ class Actividad extends \yii\db\ActiveRecord
     public function getCatedras()
     {
         return $this->hasMany(Catedra::className(), ['actividad' => 'id']);
+    }
+
+    public function getOptativas()
+    {
+        return $this->hasMany(Optativa::className(), ['actividad' => 'id']);
     }
 }

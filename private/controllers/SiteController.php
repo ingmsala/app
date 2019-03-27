@@ -24,10 +24,13 @@ class SiteController extends Controller
                 'only' => ['index', 'logout'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['index', 'logout'],   
                         'allow' => true,
                         'roles' => ['@'],
+
                     ],
+
+                    
                 ],
             ],
             'verbs' => [
@@ -62,6 +65,10 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        if (in_array (Yii::$app->user->identity->role, [8])){
+                return $this->redirect(['/optativas']);
+                
+        }
         return $this->render('index');
     }
 
@@ -73,11 +80,17 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
+            if (in_array (Yii::$app->user->identity->role, [8])){
+                return $this->redirect(['/optativas']);
+            }
             return $this->goHome();
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            if (in_array (Yii::$app->user->identity->role, [8])){
+                return $this->redirect(['/optativas']);
+            }
             return $this->goBack();
         }
 

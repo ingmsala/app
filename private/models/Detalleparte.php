@@ -35,7 +35,7 @@ class Detalleparte extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_ABM] = ['parte', 'division', 'docente', 'hora', 'falta'];
+        $scenarios[self::SCENARIO_ABM] = ['parte', 'division', 'docente', 'hora', 'falta', 'llego','retiro'];
         $scenarios[self::SCENARIO_CONTROLREGENCIA] = ['anio', 'mes', 'docente', 'estadoinasistencia'];
         return $scenarios;
     }
@@ -58,6 +58,7 @@ class Detalleparte extends \yii\db\ActiveRecord
             [['parte', 'division', 'docente', 'hora', 'falta'], 'required', 'on'=>self::SCENARIO_ABM],
             [['anio'], 'required', 'message' => 'Debe seleccionar un año lectivo', 'on'=>self::SCENARIO_CONTROLREGENCIA],
             [['parte', 'division', 'docente', 'hora', 'llego', 'retiro', 'falta', 'estadoinasistencia'], 'integer'],
+            
             [['parte'], 'exist', 'skipOnError' => true, 'targetClass' => Parte::className(), 'targetAttribute' => ['parte' => 'id']],
             [['falta'], 'exist', 'skipOnError' => true, 'targetClass' => Falta::className(), 'targetAttribute' => ['falta' => 'id']],
             [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],

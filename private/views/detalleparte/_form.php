@@ -49,7 +49,7 @@ use kartik\select2\Select2;
 
         $form->field($model, 'falta')->widget(Select2::classname(), [
             'data' => $listFaltas,
-            'options' => ['placeholder' => 'Seleccionar...'],
+            'options' => ['placeholder' => 'Seleccionar...', 'id'=>'falta'],
             'pluginOptions' => [
                 'allowClear' => true
             ],
@@ -74,9 +74,9 @@ use kartik\select2\Select2;
     ?>
 
     <div id="retaus" style="display: none;">
-        <?= $form->field($model, 'llego')->textInput() ?>
+        <?= $form->field($model, 'llego')->textInput(['id'=>'llego']) ?>
 
-        <?= $form->field($model, 'retiro')->textInput() ?>
+        <?= $form->field($model, 'retiro')->textInput(['id'=>'retiro']) ?>
     </div>
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

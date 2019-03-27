@@ -35,7 +35,7 @@ AppAsset::register($this);
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
                 'class' => 'navbar-default navbar-fixed-top',
-                'style' => Yii::$app->user->isGuest ? 'visibility: hidden' : '',
+                'style' => (Yii::$app->user->isGuest or in_array (Yii::$app->user->identity->role, [8])) ? 'visibility: hidden' : '',
             ],
         ]);
         echo Nav::widget([
@@ -177,6 +177,33 @@ AppAsset::register($this);
                             '<div class="dropdown-divider"></div>',
                             ['label' => 'Restringidos', 'url' => ['/panelacceso/restriccion']],
                             '<div class="dropdown-divider"></div>',
+                        ],
+
+
+                    ]) :
+                    ['label' => '']
+                ),
+
+                Yii::$app->user->isGuest ? (
+                    ['label' => '']
+                ) :(
+                    in_array (Yii::$app->user->identity->role, [1]) ? (
+                        ['label' => 'Optativas',
+                        'items' => [
+
+                            ['label' => 'Home', 'url' => ['/optativas']],
+                            '<div class="dropdown-divider"></div>',
+                            ['label' => 'Matrícula', 'url' => ['/optativas/matricula']],
+                            '<div class="dropdown-divider"></div>',
+                            ['label' => 'Actividades Optativas', 'url' => ['/optativas/optativa']],
+                            '<div class="dropdown-divider"></div>',
+                            ['label' => 'Tipos de clase', 'url' => ['/optativas/tipoclase']],
+                            '<div class="dropdown-divider"></div>',
+                            ['label' => 'Año Lectivo', 'url' => ['/optativas/aniolectivo']],
+                            '<div class="dropdown-divider"></div>',
+                            ['label' => 'Estado de Matrícula', 'url' => ['/optativas/estadomatricula']],
+                            '<div class="dropdown-divider"></div>',
+                            
                         ],
 
 
