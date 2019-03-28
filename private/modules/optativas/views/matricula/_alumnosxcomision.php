@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use yii\helpers\ArrayHelper;
+use kartik\grid\CheckboxColumn;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\optativas\models\MatriculaSearch */
@@ -10,6 +12,14 @@ use yii\widgets\Pjax;
 
 $this->title = 'Planilla de Asistencia';
 $this->params['breadcrumbs'][] = $this->title;
+?>
+
+<?php $listInasistenciasdeldia=ArrayHelper::map($inasistenciasdeldia,'matricula','matricula'); ?>
+<?php $listAlumnosdecomsion=ArrayHelper::map($alumnosdecomsion,'id','id'); ?>
+<?php 
+     $presentes =array_diff($listAlumnosdecomsion, $listInasistenciasdeldia);
+     $presentestxt = implode(",",$listAlumnosdecomsion);
+
 ?>
 
 <?php $this->registerJs("
@@ -22,15 +32,18 @@ $this->params['breadcrumbs'][] = $this->title;
     
     var keys = $('#grid').yiiGridView('getSelectedRows');
 
-    if(keys.length > 0){
-        alert(keys);
+
+    if(keys.length < 1){
+        keys = [0];
+    }
+        
         var deleteUrl     = 'index.php?r=optativas/inasistencia/procesarausentes';
         var pjaxContainer = 'test';
         
                     $.ajax({
                       url:   deleteUrl,
                       type:  'post',
-                      data: {id: key, clase: 4},
+                      data: {id: keys, clase: ".$clase.", presentes: '".$presentestxt."'},
                       
                       error: function (xhr, status, error) {
                         alert('Error');
@@ -40,21 +53,42 @@ $this->params['breadcrumbs'][] = $this->title;
                       $.pjax.reload({container: '#' + $.trim(pjaxContainer)});
                       alert('La operación se realizó correctamente');
                     });
-    }else{
-        alert('Debe seleccionar al menos un alumno');
-    }
+    
               
   });
 
 "); ?>
+
+
+
+
 <div class="matricula-index">
 
     
-<?php Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
+<?php 
+
+
+Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
     
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'id' => 'grid',
+        'rowOptions' => function($model) use ($listInasistenciasdeldia){
+             if (in_array ($model['id'], $listInasistenciasdeldia)){
+                return [
+                    'class' => 'danger',
+                    'data' => [
+                        'key' => $model['id']
+                    ],
+
+            ];
+            }
+            return [
+                'data' => [
+                    'key' => $model['id']
+                ]
+            ];
+        },
         //'filterModel' => $searchModel,
         'panel' => [
             'type' => GridView::TYPE_DEFAULT,
@@ -80,16 +114,24 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'columns' => [
             [
-                'class' => 'yii\grid\CheckboxColumn',
-                'checkboxOptions'=>['style'=>'display: block;margin-right: auto;margin-left: auto;'],//center checkboxes
+                'class' => 'kartik\grid\CheckboxColumn',
+                'hiddenFromExport' => true,
+                
+                'checkboxOptions' => 
+                    function($model, $key, $index, $column) use ($listInasistenciasdeldia) {
+
+                     $bool = in_array($model->id, $listInasistenciasdeldia);
+                     return ['checked' => $bool];
+                 },
                 'header' => Html::checkBox('selection_all', false, [
                 'label' => '<span>Ausentes</span>',//pull left the label
                 'class' => 'select-on-check-all',//pull right the checkbox
+                
           
         ]),
             ],
             ['class' => 'yii\grid\SerialColumn'],
-
+            
             /*[
                 'label' => 'Optativa',
                 'attribute' => 'fecha',
@@ -107,9 +149,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'alumno0.apellido',
             'alumno0.nombre',
             [
-                'label' => 'Estado',
+                'label' => 'Matrícula',
                 'attribute' => 'estadomatricula0.nombre',
                 
+            ],
+            [
+                'label' => 'En clase',
+                'value' => function($model) use ($listInasistenciasdeldia) {
+                     if (in_array ($model['id'], $listInasistenciasdeldia)){
+                        return "AUSENTE";
+                    }
+                    return "PRESENTE";
+                }
             ],
                         
            
@@ -124,7 +175,7 @@ Pjax::end();
                 '<span class="glyphicon glyphicon-ok"></span> Confirmar Ausentes',
                 false,
                 [
-                    'class'          => 'btn btn-danger',
+                    'class' => 'btn btn-danger',
                     'id' => 'btnausentes',
                     'delete-url'     => '/parte/procesarmarcadosreg',
                     'pjax-container' => 'test',

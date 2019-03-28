@@ -82,6 +82,7 @@ class MatriculaSearch extends Matricula
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         $this->load($comsion);

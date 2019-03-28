@@ -4,8 +4,10 @@ namespace app\modules\optativas\controllers;
 
 use Yii;
 use app\modules\optativas\models\Clase;
+use app\modules\optativas\models\Matricula;
 use app\modules\optativas\models\Tipoclase;
 use app\modules\optativas\models\ClaseSearch;
+use app\modules\optativas\models\Inasistencia;
 use app\modules\optativas\models\MatriculaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -59,11 +61,22 @@ class ClaseController extends Controller
         $searchModel = new MatriculaSearch();
         $comsion = $this->findModel($id)->comision;
         $dataProvider = $searchModel->alumnosxcomision($comsion);
+        $inasistenciasdeldia = Inasistencia::find()
+                    ->where(['clase' => $id])
+                    ->all();
+        $alumnosdecomsion = Matricula::find()
+                    ->select('id')
+                    ->where(['comision' => $comsion])
+                    ->all();
 
+       
         return $this->render('view', [
             'model' => $this->findModel($id),
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'inasistenciasdeldia' => $inasistenciasdeldia,
+            'alumnosdecomsion' => $alumnosdecomsion,
+           
 
         ]);
     }

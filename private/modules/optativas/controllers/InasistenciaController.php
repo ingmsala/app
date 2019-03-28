@@ -117,13 +117,48 @@ class InasistenciaController extends Controller
     public function actionProcesarausentes()
     {
         $param = Yii::$app->request->post();
+        $presentes = explode(",", $param['presentes']);
+        
+        foreach ($presentes as $presente) {
+            
+            $existe2 = Inasistencia::find()
+                ->select('id')
+                ->where(['clase' => $param['clase'][0]])
+                ->andWhere(['matricula' => $presente])
+                ->count();
+                
+            if($existe2>0){
+                $inasistenciax = Inasistencia::find()
+                    ->select('id')
+                    ->where(['clase' => $param['clase'][0]])
+                    ->andWhere(['matricula' => $presente])
+                    ->one();
+                $this->findModel($inasistenciax->id)->delete();
+            }
+
+           
+        }
 
         foreach ($param['id'] as $matricula) {
-        $model = new Inasistencia();
-        $model->clase = $param['clase'][0]
-        $model->matricula = $matricula;
-        $model->save();
-        return 'ok';
+
+            $existe = Inasistencia::find()
+                ->select('id')
+                ->where(['clase' => $param['clase'][0]])
+                ->andWhere(['matricula' => $matricula])
+                ->count();
+
+            if($existe==0){
+                $model = new Inasistencia();
+                $model->clase = $param['clase'][0];
+                $model->matricula = $matricula;
+                $model->save();
+            }
+
+            
+        }
+
+        
+        return $param['id'][0];
     }
 
     /**

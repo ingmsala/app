@@ -17,6 +17,10 @@ $this->params['breadcrumbs'][] = $this->title;
    <?= $this->render('/matricula/_alumnosxcomision', [
         'dataProvider' => $dataProvider,
         'searchModel' => $searchModel,
+        'clase' => $model->id,
+        'inasistenciasdeldia' => $inasistenciasdeldia,
+        'alumnosdecomsion' => $alumnosdecomsion,
+        
     ]) ?>
 
 </div>
