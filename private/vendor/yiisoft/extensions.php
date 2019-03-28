@@ -93,15 +93,6 @@ return array (
       '@kartik/dialog' => $vendorDir . '/kartik-v/yii2-dialog/src',
     ),
   ),
-  'kartik-v/yii2-grid' => 
-  array (
-    'name' => 'kartik-v/yii2-grid',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@kartik/grid' => $vendorDir . '/kartik-v/yii2-grid/src',
-    ),
-  ),
   'loveorigami/yii2-modal-ajax' => 
   array (
     'name' => 'loveorigami/yii2-modal-ajax',
@@ -109,6 +100,15 @@ return array (
     'alias' => 
     array (
       '@lo/widgets/modal' => $vendorDir . '/loveorigami/yii2-modal-ajax/src',
+    ),
+  ),
+  'kartik-v/yii2-grid' => 
+  array (
+    'name' => 'kartik-v/yii2-grid',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@kartik/grid' => $vendorDir . '/kartik-v/yii2-grid/src',
     ),
   ),
 );

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "02aa4cafd586f9a4434f046f11d1f462",
+    "content-hash": "5892b692ca79c069325ee94be672b62c",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -93,7 +93,7 @@
             "version": "1.12.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/components/jqueryui.git",
+                "url": "git@github.com:components/jqueryui.git",
                 "reference": "44ecf3794cc56b65954cc19737234a3119d036cc"
             },
             "dist": {
@@ -312,12 +312,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-grid.git",
-                "reference": "3735c999eda391961220845063f8b373f409f488"
+                "reference": "93fbed5d0ad6e3e0879d82d404441532a68b13a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/3735c999eda391961220845063f8b373f409f488",
-                "reference": "3735c999eda391961220845063f8b373f409f488",
+                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/93fbed5d0ad6e3e0879d82d404441532a68b13a7",
+                "reference": "93fbed5d0ad6e3e0879d82d404441532a68b13a7",
                 "shasum": ""
             },
             "require": {
@@ -329,7 +329,7 @@
             "type": "yii2-extension",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2.x-dev"
+                    "dev-master": "3.3.x-dev"
                 }
             },
             "autoload": {
@@ -356,7 +356,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-12-07T12:28:30+00:00"
+            "time": "2019-03-13T07:03:37+00:00"
         },
         {
             "name": "kartik-v/yii2-krajee-base",
@@ -1979,6 +1979,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2015-10-02T06:51:40+00:00"
         },
         {

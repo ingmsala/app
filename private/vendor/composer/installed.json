@@ -156,7 +156,7 @@
         "version_normalized": "1.12.1.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/components/jqueryui.git",
+            "url": "git@github.com:components/jqueryui.git",
             "reference": "44ecf3794cc56b65954cc19737234a3119d036cc"
         },
         "dist": {
@@ -837,12 +837,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/kartik-v/yii2-grid.git",
-            "reference": "3735c999eda391961220845063f8b373f409f488"
+            "reference": "93fbed5d0ad6e3e0879d82d404441532a68b13a7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/3735c999eda391961220845063f8b373f409f488",
-            "reference": "3735c999eda391961220845063f8b373f409f488",
+            "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/93fbed5d0ad6e3e0879d82d404441532a68b13a7",
+            "reference": "93fbed5d0ad6e3e0879d82d404441532a68b13a7",
             "shasum": ""
         },
         "require": {
@@ -851,11 +851,11 @@
         "suggest": {
             "kartik-v/yii2-mpdf": "For exporting grids to PDF"
         },
-        "time": "2018-12-07T12:28:30+00:00",
+        "time": "2019-03-13T07:03:37+00:00",
         "type": "yii2-extension",
         "extra": {
             "branch-alias": {
-                "dev-master": "3.2.x-dev"
+                "dev-master": "3.3.x-dev"
             }
         },
         "installation-source": "source",
