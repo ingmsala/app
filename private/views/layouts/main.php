@@ -163,7 +163,7 @@ AppAsset::register($this);
                 Yii::$app->user->isGuest ? (
                     ['label' => '']
                 ) :(
-                    in_array (Yii::$app->user->identity->role, [1, 7]) ? (
+                    in_array (Yii::$app->user->identity->role, [7]) ? (
                         ['label' => 'Control de Acceso',
                         'items' => [
 
@@ -192,6 +192,8 @@ AppAsset::register($this);
                         'items' => [
 
                             ['label' => 'Home', 'url' => ['/optativas']],
+                            '<div class="dropdown-divider"></div>',
+                            ['label' => 'Preinscripción', 'url' => ['/optativas/preinscripcion']],
                             '<div class="dropdown-divider"></div>',
                             ['label' => 'Matrícula', 'url' => ['/optativas/matricula']],
                             '<div class="dropdown-divider"></div>',

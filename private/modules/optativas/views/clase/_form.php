@@ -10,6 +10,23 @@ use yii\helpers\ArrayHelper;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+<?php 
+
+$this->registerJs("
+
+
+  $(document).ready(function() { 
+            $('#hr').change(function() {
+            	var hc;
+            	hc = $('#hr').val() * 60 / 40;
+            	$('#hc').val(hc);
+            }); 
+        });
+
+");
+
+?>
+
 
 <?php $tipos=ArrayHelper::map($tiposclase,'id','nombre'); ?>
 
@@ -46,9 +63,19 @@ use yii\helpers\ArrayHelper;
 		]) 
 	?>
 
-    <?= $form->field($model, 'tema')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'tipoclase')->dropDownList($tipos, ['prompt'=>'Seleccionar...']); ?>
+    <div class="panel panel-default" style="width:50%;">
+		<div class="panel-heading">Convertir a hora cátedra <span data-toggle="tooltip" title="Sólo se guarda el valor de la hora cátedra" class="glyphicon glyphicon-info-sign"></span></div>
+		<div class="panel-body">
+	    	<label>Hora reloj</label>
+	    	<?= Html::input('text', 'username','', ['id'=>'hr', 'class' => 'form-control']) ?><br>
+	    	<?= $form->field($model, 'horascatedra')->textInput(['maxlength' => true, 'id'=>'hc']) ?>
+
+
+		</div>
+	</div>
+    
+    <?= $form->field($model, 'tema')->textInput(['maxlength' => true]) ?>
 
     
     <div class="form-group">

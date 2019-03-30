@@ -22,12 +22,20 @@ use Yii;
  */
 class Matricula extends \yii\db\ActiveRecord
 {
+    const SCENARIO_CREATE = 'create';
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
         return 'matricula';
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_CREATE] = ['fecha', 'alumno', 'comision', 'estadomatricula'];
+        return $scenarios;
     }
 
     /**
@@ -42,7 +50,35 @@ class Matricula extends \yii\db\ActiveRecord
             [['comision'], 'exist', 'skipOnError' => true, 'targetClass' => Comision::className(), 'targetAttribute' => ['comision' => 'id']],
             [['alumno'], 'exist', 'skipOnError' => true, 'targetClass' => Alumno::className(), 'targetAttribute' => ['alumno' => 'id']],
             [['estadomatricula'], 'exist', 'skipOnError' => true, 'targetClass' => Estadomatricula::className(), 'targetAttribute' => ['estadomatricula' => 'id']],
+            [['alumno', 'comision'], 'inscriptocicloycomision', 'on' => self::SCENARIO_CREATE],
+            [['alumno', 'comision'], 'inscriptocicloyoptativa', 'on' => self::SCENARIO_CREATE]
         ];
+    }
+
+    public function inscriptocicloycomision($attribute, $params, $validator)
+    {
+        $matricula = Matricula::find()
+        ->joinWith('comision0')
+        ->where(['comision.id' => $this->comision])
+        ->andWhere(['matricula.alumno' => $this->alumno])
+        ->count();
+        if ($matricula>0)
+            $this->addError($attribute, 'El alumno seleccionado ya está inscripto en la comisión');
+    }
+
+    public function inscriptocicloyoptativa($attribute, $params, $validator)
+    {
+        $optativa = Comision::find()
+        ->where(['id' => $this->comision])
+        ->one()->optativa;
+
+        $comisionotra = Optativa::find()
+                            ->joinWith(['comisions','comisions.matriculas'])
+                            ->where(['<>', 'comision.id', $this->comision])
+                            ->andWhere(['matricula.alumno' => $this->alumno])
+                            ->andWhere(['optativa.id' => $optativa])->count();
+        if ($comisionotra>0)
+            $this->addError($attribute, 'El alumno seleccionado ya está inscripto en otra comisión de esta Optativa');
     }
 
     /**

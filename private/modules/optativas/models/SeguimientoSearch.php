@@ -18,8 +18,8 @@ class SeguimientoSearch extends Seguimiento
     public function rules()
     {
         return [
-            [['id', 'matricula', 'descripción'], 'integer'],
-            [['fecha'], 'safe'],
+            [['id', 'matricula'], 'integer'],
+            [['fecha', 'descripcion'], 'safe'],
         ];
     }
 
@@ -62,7 +62,38 @@ class SeguimientoSearch extends Seguimiento
             'id' => $this->id,
             'matricula' => $this->matricula,
             'fecha' => $this->fecha,
-            'descripción' => $this->descripción,
+            'descripcion' => $this->descripcion,
+        ]);
+
+        return $dataProvider;
+    }
+
+    public function seguimientosdelalumno($id)
+    {
+        $query = Seguimiento::find()
+                ->where(['matricula' => $id])
+                ->orderBy('fecha DESC');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($id);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'matricula' => $this->matricula,
+            'fecha' => $this->fecha,
+            'descripcion' => $this->descripcion,
         ]);
 
         return $dataProvider;

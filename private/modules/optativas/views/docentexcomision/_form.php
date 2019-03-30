@@ -16,6 +16,7 @@ use kartik\select2\Select2;
 
 <?php $listComisiones=ArrayHelper::map($comisiones,'id','nombre'); ?>
 <?php $listOptativas=ArrayHelper::map($optativa,'id','nombre'); ?>
+<?php $listRoles=ArrayHelper::map($roles,'id','nombre'); ?>
 
 <div class="docentexcomision-form">
 
@@ -29,6 +30,18 @@ use kartik\select2\Select2;
 
         $form->field($model, 'docente')->widget(Select2::classname(), [
             'data' => $listDocentes,
+            'options' => ['placeholder' => 'Seleccionar...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);
+
+    ?>
+
+    <?= 
+
+        $form->field($model, 'role')->widget(Select2::classname(), [
+            'data' => $listRoles,
             'options' => ['placeholder' => 'Seleccionar...'],
             'pluginOptions' => [
                 'allowClear' => true

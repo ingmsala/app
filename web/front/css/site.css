@@ -463,6 +463,30 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     100% { transform: rotate(360deg); }
 }
 
+#firma{ 
+    display: none;
+    margin-top: 150px;
+    text-align: center;
+}
+
+#encabezado{ 
+    display: none;
+    width: 200px;
+
+}
+
+@media print {
+  #print-button, #menucomxdoc, .footer {
+    display: none;
+  }
+  .matricula-view{
+    margin-top: -70px;
+  }
+  #firma, #encabezado {
+    display: block;
+  }
+}
+
 
 
 

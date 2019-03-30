@@ -6,11 +6,13 @@ use Yii;
 use app\modules\optativas\models\Docentexcomision;
 use app\modules\optativas\models\Comision;
 use app\models\Actividad;
+use app\models\Role;
 use app\models\Docente;
 use app\modules\optativas\models\DocentexcomisionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * DocentexcomisionController implements the CRUD actions for Docentexcomision model.
@@ -23,6 +25,26 @@ class DocentexcomisionController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [1]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -85,6 +107,11 @@ class DocentexcomisionController extends Controller
                     ->joinWith(['optativas', 'optativas.comisions'])
                     ->where(['comision.id' => $comisionx])
                     ->all();
+
+        $roles = Role::find()
+                    ->where(['id' => 8])
+                    ->orWhere(['id' => 9])
+                    ->all();
         
 
         $model->comision = $comisionx;
@@ -98,6 +125,7 @@ class DocentexcomisionController extends Controller
             'docentes' => $docentes,
             'comisiones' => $comisiones,
             'optativa' => $optativa,
+            'roles' => $roles,
             
         ]);
     }

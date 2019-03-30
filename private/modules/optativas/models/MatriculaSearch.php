@@ -104,4 +104,6 @@ class MatriculaSearch extends Matricula
 
         return $dataProvider;
     }
+
+    
 }

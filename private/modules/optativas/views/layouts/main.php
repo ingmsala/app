@@ -50,7 +50,28 @@ AppAsset::register($this);
                         ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
                         ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><div>Calificaciones</div>', 'url' => ['/optativas/calificacion']],
                         ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/optativas/seguimiento']],
-                        ['label' => '<span class="glyphicon glyphicon-modal-window"></span><div>Reportes</div>', 'url' => ['/optativas/reportes']],
+                        ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
+
+                            'items' => [
+                                [
+                                    'label' => 'Ficha del Alumno',
+                                    'url' => ['/optativas/reportes/fichadelalumno'],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+
+                                [
+                                    'label' => 'Lista de Alumnos',
+                                    'url' => ['/optativas/fichadelalumno'],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+                            
+                            ],
+
+
+
+                        ],
                         
                             
                         
@@ -94,14 +115,29 @@ NavBar::end();
             
 
             <div id="content" class="col-sm-3">
+                <div class="row">
                     <?php $search= new DocentexcomisionSearch() ?>
-                    <?= $this->render('/comision/_comisionxdocente',
-                        [
-                            'dataProvider' => $search->providerxdocente(Yii::$app->user->identity->username),
-                            'comisiones' => $search->comisionesxdocente(Yii::$app->user->identity->username),
-                            'model' => new Docentexcomision(),
-                        ])
+                    <?php 
+
+                    if(Yii::$app->request->get('r')!='user/cambiarpass'){
+
+                        echo $this->render('/comision/_comisionxdocente',
+                            [
+                                'dataProvider' => $search->providerxdocente(Yii::$app->user->identity->username),
+                                'comisiones' => $search->comisionesxdocente(Yii::$app->user->identity->username),
+                                'model' => new Docentexcomision(),
+                            ]);
+                    }
                     ?>
+                </div>
+                <div class="row" style="margin-top: 50px;" id="submenu">
+                    <?php
+
+                       echo isset($this->params['submenu']) ? $this->params['submenu'] : '';
+
+                     ?>
+                </div>
+                    
 
             </div>
             <div class="col-sm-9">

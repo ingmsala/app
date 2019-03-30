@@ -17,6 +17,9 @@ use kartik\select2\Select2;
 
 <?php $listComisiones=ArrayHelper::map($comisiones,'id','nombre'); ?>
 <?php $listEstadosMatricula=ArrayHelper::map($estadosmatricula,'id','nombre'); ?>
+<?php $listComisiones=ArrayHelper::map($comisiones,'id', function($comision) {
+           return $comision->optativa0->actividad0->nombre.' - Comisión: '.$comision->nombre;}
+        );?>
 
 
 <div class="matricula-form">

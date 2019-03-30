@@ -18,6 +18,7 @@ $this->title = 'Agregar Docente a Comisión';
         'docentes' => $docentes,
         'comisiones' => $comisiones,
         'optativa' => $optativa,
+        'roles' => $roles,
         
     ]) ?>
 

@@ -4,10 +4,13 @@ namespace app\modules\optativas\controllers;
 
 use Yii;
 use app\modules\optativas\models\Seguimiento;
+use app\modules\optativas\models\Matricula;
 use app\modules\optativas\models\SeguimientoSearch;
+use app\modules\optativas\models\MatriculaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * SeguimientoController implements the CRUD actions for Seguimiento model.
@@ -20,6 +23,26 @@ class SeguimientoController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [1,8,9]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -36,13 +59,29 @@ class SeguimientoController extends Controller
     public function actionIndex()
     {
         $this->layout = 'main';
-        $searchModel = new SeguimientoSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new MatriculaSearch();
+        $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
+        if($com != 0){
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+            $dataProvider = $searchModel->alumnosxcomision($com);
+            
+            $seguimientos = Seguimiento::find()
+                
+                ->joinWith('matricula0')
+                ->where(['matricula.comision' =>$com])
+                ->all();
+
+            return $this->render('index', [
+                
+                'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'seguimientos' => $seguimientos,
+
+            ]);
+        }else{
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar una <b>Actividad Optativa</b>');
+            return $this->redirect(['/optativas']);
+        }
     }
 
     /**
@@ -54,9 +93,22 @@ class SeguimientoController extends Controller
     public function actionView($id)
     {
         $this->layout = 'main';
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $matricula = $id;
+        $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
+        if($com != 0){
+            $searchModel = new SeguimientoSearch();
+            $dataProvider = $searchModel->seguimientosdelalumno($matricula);
+            $matr = Matricula::findOne($matricula);
+            
+            return $this->render('view', [
+                'matricula' => $matricula,
+                'dataProvider' => $dataProvider,
+                'matr' => $matr,
+            ]);
+        }else{
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar una <b>Actividad Optativa</b>');
+            return $this->redirect(['/optativas']);
+        }
     }
 
     /**
@@ -64,18 +116,28 @@ class SeguimientoController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
         $this->layout = 'main';
-        $model = new Seguimiento();
+        $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
+        if($com != 0){
+            $model = new Seguimiento();
+            date_default_timezone_set('America/Argentina/Buenos_Aires');
+            $model->fecha = date("Y-m-d");
+            $model->matricula = $id;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->matricula]);
+            }
+
+            return $this->render('create', [
+                'model' => $model,
+                'matr' => Matricula::findOne($id),
+            ]);
+        }else{
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar una <b>Actividad Optativa</b>');
+            return $this->redirect(['/optativas']);
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -88,15 +150,21 @@ class SeguimientoController extends Controller
     public function actionUpdate($id)
     {
         $this->layout = 'main';
-        $model = $this->findModel($id);
+        $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
+        if($com != 0){
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->matricula]);
+            }
+
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }else{
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar una <b>Actividad Optativa</b>');
+            return $this->redirect(['/optativas']);
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -109,9 +177,11 @@ class SeguimientoController extends Controller
     public function actionDelete($id)
     {
         $this->layout = 'main';
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $matricula = $model->matricula;
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['view', 'id' => $matricula]);
     }
 
     /**

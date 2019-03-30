@@ -7,8 +7,7 @@ use yii\helpers\Html;
 
 $this->title = 'Update Seguimiento: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Seguimientos', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Modificar';
 ?>
 <div class="seguimiento-update">
 

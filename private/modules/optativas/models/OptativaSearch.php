@@ -18,7 +18,7 @@ class OptativaSearch extends Optativa
     public function rules()
     {
         return [
-            [['id', 'actividad', 'aniolectivo'], 'integer'],
+            [['id', 'actividad', 'aniolectivo', 'duracion'], 'integer'],
         ];
     }
 
@@ -61,6 +61,7 @@ class OptativaSearch extends Optativa
             'id' => $this->id,
             'actividad' => $this->actividad,
             'aniolectivo' => $this->aniolectivo,
+            'duracion' => $this->duracion,
         ]);
 
         return $dataProvider;

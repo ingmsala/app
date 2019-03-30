@@ -10,6 +10,7 @@ use app\modules\optativas\models\DocentexcomisionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * ComisionController implements the CRUD actions for Comision model.
@@ -22,6 +23,26 @@ class ComisionController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [1]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -59,11 +80,14 @@ class ComisionController extends Controller
         
         $searchModel = new DocentexcomisionSearch();
         $dataProviderdocentes = $searchModel->providerdocentes($id);
+        $searchModelpreceptores = new DocentexcomisionSearch();
+        $dataProviderpreceptores = $searchModelpreceptores->providerpreceptores($id);
 
         
         return $this->render('view', [
             'model' => $this->findModel($id),
             'dataProviderdocentes' => $dataProviderdocentes,
+            'dataProviderpreceptores' => $dataProviderpreceptores,
         ]);
     }
 

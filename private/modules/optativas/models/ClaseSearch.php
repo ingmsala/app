@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\optativas\models\Clase;
+use yii\db\Query;
 
 /**
  * ClaseSearch represents the model behind the search form of `app\modules\optativas\models\Clase`.
@@ -18,7 +19,7 @@ class ClaseSearch extends Clase
     public function rules()
     {
         return [
-            [['id', 'tipoclase', 'comision'], 'integer'],
+            [['id', 'tipoclase', 'comision', 'horascatedra'], 'integer'],
             [['fecha', 'tema'], 'safe'],
         ];
     }
@@ -66,10 +67,26 @@ class ClaseSearch extends Clase
             'fecha' => $this->fecha,
             'tipoclase' => $this->tipoclase,
             'comision' => $this->comision,
+            'horascatedra' => $this->horascatedra,
         ]);
 
         $query->andFilterWhere(['like', 'tema', $this->tema]);
 
         return $dataProvider;
+    }
+
+    public function getHorasTotalactual($com){
+        $query = new Query();
+        $query->from('clase')
+            ->where(['comision' => $com]);
+        return $query->sum('horascatedra');
+    }
+
+    public function getHorasParcialactual($com, $tipo){
+        $query = new Query();
+        $query->from('clase')
+            ->where(['comision' => $com])
+            ->andWhere(['tipoclase' => $tipo]);
+        return $query->sum('horascatedra');
     }
 }

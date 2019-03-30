@@ -2,6 +2,7 @@
 
 namespace app\modules\optativas\models;
 use app\models\Docente;
+use app\models\Role;
 
 use Yii;
 
@@ -31,10 +32,11 @@ class Docentexcomision extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['docente', 'comision'], 'required'],
-            [['docente', 'comision'], 'integer'],
+            [['docente', 'comision', 'role'], 'required'],
+            [['docente', 'comision', 'role'], 'integer'],
             [['comision'], 'exist', 'skipOnError' => true, 'targetClass' => Comision::className(), 'targetAttribute' => ['comision' => 'id']],
             [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
+            [['role'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['role' => 'id']],
         ];
     }
 
@@ -47,6 +49,7 @@ class Docentexcomision extends \yii\db\ActiveRecord
             'id' => 'ID',
             'docente' => 'Docente',
             'comision' => 'Comision',
+            'role' => 'Rol',
         ];
     }
 
@@ -64,5 +67,10 @@ class Docentexcomision extends \yii\db\ActiveRecord
     public function getDocente0()
     {
         return $this->hasOne(Docente::className(), ['id' => 'docente']);
+    }
+
+    public function getRole0()
+    {
+        return $this->hasOne(Role::className(), ['id' => 'role']);
     }
 }

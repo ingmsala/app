@@ -18,7 +18,7 @@ class DocentexcomisionSearch extends Docentexcomision
     public function rules()
     {
         return [
-            [['id', 'docente', 'comision'], 'integer'],
+            [['id', 'docente', 'comision', 'role'], 'integer'],
         ];
     }
 
@@ -70,8 +70,30 @@ class DocentexcomisionSearch extends Docentexcomision
     {
         $query = Docentexcomision::find()
             ->joinWith(['docente0'])
-            ->where(['comision' => $id,
-            ])
+            ->where(['comision' => $id])
+            ->andWhere(['role' => 8])
+            ->orderBy('docente.apellido', 'docente.nombre');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        return $dataProvider;
+
+    }
+
+    public function providerpreceptores($id)
+    {
+        $query = Docentexcomision::find()
+            ->joinWith(['docente0'])
+            ->where(['comision' => $id])
+            ->andWhere(['role' => 9])
             ->orderBy('docente.apellido', 'docente.nombre');
 
         $dataProvider = new ActiveDataProvider([

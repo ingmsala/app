@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\modules\optativas\models\Clase */
 
 
-$this->params['breadcrumbs'][] = ['label' => 'Seguimiento', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Ficha del Alumno', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="clase-view">
@@ -17,7 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
    <?= $this->render('_alumnosxcomision', [
         'dataProvider' => $dataProvider,
         'searchModel' => $searchModel,
-        'seguimientos' => $seguimientos,
         
         
     ]) ?>

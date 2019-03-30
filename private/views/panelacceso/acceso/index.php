@@ -136,7 +136,7 @@ $this->title = 'Visitas en curso';
          if (Yii::$app->session->has('success')){ 
              echo Alert::widget([
                     'options' => [
-                        'class' => 'alert-success',
+                        'class' => 'alert-danger',
                         'id'=>"infoingreso",
                     ],
                     'body' => Yii::$app->session->get('success'),

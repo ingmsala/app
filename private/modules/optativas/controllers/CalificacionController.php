@@ -8,6 +8,7 @@ use app\modules\optativas\models\CalificacionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * CalificacionController implements the CRUD actions for Calificacion model.
@@ -20,6 +21,26 @@ class CalificacionController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [1,8,9]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -36,13 +57,19 @@ class CalificacionController extends Controller
     public function actionIndex()
     {
         $this->layout = 'main';
-        $searchModel = new CalificacionSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
+        if(false){
+            $searchModel = new CalificacionSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }else{
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección de <b>Calificaciones</b> no está habilitada');
+            return $this->redirect(['/optativas']);
+        }
     }
 
     /**
@@ -53,9 +80,15 @@ class CalificacionController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
+        if(false){
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }else{
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección de <b>Calificaciones</b> no está habilitada');
+            return $this->redirect(['/optativas']);
+        }
     }
 
     /**
@@ -66,15 +99,22 @@ class CalificacionController extends Controller
     public function actionCreate()
     {
         $this->layout = 'main';
-        $model = new Calificacion();
+        $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
+        if(false){
+        
+            $model = new Calificacion();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }else{
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección de <b>Calificaciones</b> no está habilitada');
+            return $this->redirect(['/optativas']);
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -87,15 +127,21 @@ class CalificacionController extends Controller
     public function actionUpdate($id)
     {
         $this->layout = 'main';
-        $model = $this->findModel($id);
+        $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
+        if(false){
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }else{
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección de <b>Calificaciones</b> no está habilitada');
+            return $this->redirect(['/optativas']);
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**

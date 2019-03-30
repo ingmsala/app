@@ -6,6 +6,7 @@ use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
+use yii\bootstrap\Alert;
 
 
 
@@ -23,16 +24,18 @@ use yii\helpers\Url;
             return $comision['comision0']['optativa0']['actividad0']['nombre'].' ('.$comision['comision0']['nombre'].')';}
         );
     ?>
-<div><b>Actividades Optativas</b></div>
+
+<div id="menucomxdoc">
+    <div><b>Actividades Optativas</b></div>
 <?php
       
-    
-   echo Html::dropDownList('comision', $selection=isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0, $listComisiones, ['prompt' => '(Seleccionar)', 'id' => 'cmbyear', 'class' => 'form-control ',
+
+   echo Html::dropDownList('comision', $selection=isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0, $listComisiones, ['prompt' => '(Seleccionar)', 'id' => 'cbmcomision', 'class' => 'form-control ',
         'onchange'=>'
                     $.get( "'.Url::toRoute('/optativas/default/setsession').'", { id: $(this).val() } )
                             .done(function( data ) {
                                 $( "#'.Html::getInputId($model, 'comision').'" ).val( data );
-                                location.reload(true);
+                                window.location.replace("index.php?r=optativas");
 
                             }
                         );
@@ -43,4 +46,20 @@ use yii\helpers\Url;
         ]);
 
 ?>
+</div>
+<div style="margin-top: 5px;">
+   <?php
+
+         if (Yii::$app->session->has('success')){ 
+             echo Alert::widget([
+                    'options' => [
+                        'class' => 'alert-danger',
+                        
+                    ],
+                    'body' => Yii::$app->session->get('success'),
+                ]);
+                Yii::$app->session->remove('success');
+    } ?> 
+</div>
+
 

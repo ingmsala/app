@@ -12,6 +12,7 @@ use Yii;
  * @property string $tema
  * @property int $tipoclase
  * @property int $comision
+ * @property double  $horascatedra
  *
  * @property Inasistencia[] $inasistencias
  */
@@ -31,10 +32,14 @@ class Clase extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fecha', 'tema', 'tipoclase', 'comision'], 'required'],
+            [['fecha', 'tipoclase', 'comision'], 'required'],
             [['fecha'], 'safe'],
+            [['horascatedra'], 'number'],
             [['tipoclase', 'comision'], 'integer'],
             [['tema'], 'string', 'max' => 200],
+            [['comision'], 'exist', 'skipOnError' => true, 'targetClass' => Comision::className(), 'targetAttribute' => ['comision' => 'id']], 
+            [['tipoclase'], 'exist', 'skipOnError' => true, 'targetClass' => Tipoclase::className(), 'targetAttribute' => ['tipoclase' => 'id']], 
+
         ];
     }
 
@@ -49,6 +54,7 @@ class Clase extends \yii\db\ActiveRecord
             'tema' => 'Tema',
             'tipoclase' => 'Tipo de clase',
             'comision' => 'Comision',
+            'horascatedra' => 'Horas Cátedra',
         ];
     }
 

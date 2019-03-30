@@ -12,6 +12,7 @@ use app\modules\optativas\models\MatriculaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * MatriculaController implements the CRUD actions for Matricula model.
@@ -24,6 +25,26 @@ class MatriculaController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [1]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -72,11 +93,15 @@ class MatriculaController extends Controller
     {
         
         $model = new Matricula();
+        $model->scenario = $model::SCENARIO_CREATE;
         $alumnos = Alumno::find()
                     ->orderBy('apellido, nombre')
                     ->all();
         $optativas = Optativa::find()->all();
-        $comisiones = Comision::find()->all();
+        $comisiones = Comision::find()
+                        ->joinWith(['optativa0', 'optativa0.actividad0'])
+                        ->orderBy('actividad.nombre', 'comision.nombre')
+                        ->all();
         $estadosmatricula = Estadomatricula::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -105,6 +130,15 @@ class MatriculaController extends Controller
     {
         
         $model = $this->findModel($id);
+        $alumnos = Alumno::find()
+                    ->orderBy('apellido, nombre')
+                    ->all();
+        $optativas = Optativa::find()->all();
+        $comisiones = Comision::find()
+                        ->joinWith(['optativa0', 'optativa0.actividad0'])
+                        ->orderBy('actividad.nombre', 'comision.nombre')
+                        ->all();
+        $estadosmatricula = Estadomatricula::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

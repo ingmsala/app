@@ -10,7 +10,7 @@ use Yii;
  * @property int $id
  * @property int $matricula
  * @property string $fecha
- * @property int $descripci贸n
+ * @property string $descripcion
  *
  * @property Matricula $matricula0
  */
@@ -30,8 +30,9 @@ class Seguimiento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['matricula', 'fecha', 'descripci贸n'], 'required'],
-            [['matricula', 'descripci贸n'], 'integer'],
+            [['matricula', 'fecha', 'descripcion'], 'required'],
+            [['matricula'], 'integer'],
+            [['descripcion'], 'safe'],
             [['fecha'], 'safe'],
             [['matricula'], 'exist', 'skipOnError' => true, 'targetClass' => Matricula::className(), 'targetAttribute' => ['matricula' => 'id']],
         ];
@@ -46,7 +47,7 @@ class Seguimiento extends \yii\db\ActiveRecord
             'id' => 'ID',
             'matricula' => 'Matricula',
             'fecha' => 'Fecha',
-            'descripci贸n' => 'Descripci愠n',
+            'descripcion' => 'Descripcion',
         ];
     }
 

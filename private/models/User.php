@@ -203,7 +203,7 @@ public function removePasswordResetToken() {
 
  public function getRole0()
     {
-        return $this->hasOne(Turno::className(), ['id' => 'role']);
+        return $this->hasOne(Role::className(), ['id' => 'role']);
     }
 
 }

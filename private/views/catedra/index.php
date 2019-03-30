@@ -243,13 +243,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
 
-            [   
+            /*[   
                 'label' => 'Hora Total',
                 'attribute' => 'horaact',
                 'vAlign' => 'middle',
                 'hAlign' => 'center',
                 
-            ],
+            ],*/
 
             [   
                 'label' => 'Horas Detalle',

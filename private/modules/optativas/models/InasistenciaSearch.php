@@ -65,4 +65,31 @@ class InasistenciaSearch extends Inasistencia
 
         return $dataProvider;
     }
+
+    public function providerinasistenciasxalumno($id)
+    {
+        $query = Inasistencia::find()
+                    ->joinWith(['clase0'])
+                    ->where(['inasistencia.matricula' => $id])
+                    ->orderBy('clase.fecha ASC');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($id);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        
+
+        return $dataProvider;
+    }
 }

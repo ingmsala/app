@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\bootstrap\Progress;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\optativas\models\ClaseSearch */
@@ -47,9 +48,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Tipo de Clase',
                 'attribute' => 'tipoclase0.nombre',
             ],
+            'horascatedra',
             
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
+    ]); 
+
+
+   
+
+    ?>
+
+
+    
+
+
 </div>

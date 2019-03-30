@@ -73,6 +73,7 @@ Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'id' => 'grid',
+        'floatHeader'=>true,
         'rowOptions' => function($model) use ($listInasistenciasdeldia){
              if (in_array ($model['id'], $listInasistenciasdeldia)){
                 return [
