@@ -70,5 +70,33 @@ class ComisionSearch extends Comision
         return $dataProvider;
     }
 
+    public function comisionesxalumno($dni)
+    {
+        $query = Comision::find()
+            ->joinWith(['matriculas', 'matriculas.estadomatricula0', 'optativa0', 'optativa0.aniolectivo0', 'matriculas.alumno0'])
+            ->where(['alumno.dni' => $dni])
+            ->orderBy('aniolectivo.nombre');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($dni);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        
+
+
+        return $dataProvider;
+    }
+
     
 }

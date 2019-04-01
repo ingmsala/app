@@ -340,6 +340,88 @@ a.desc:after {
     }
 }
 
+
+/*Nav bar autogestion*/
+.navbar-default-autogestion {
+    background-color: #f7f7f7;
+    border-color: #E7E7E7;
+}
+/* Title */
+.navbar-default-autogestion .navbar-brand {
+    color: #818181;
+}
+.navbar-default-autogestion .navbar-brand:hover,
+.navbar-default-autogestion .navbar-brand:focus {
+    color: #818181;
+}
+/* Link */
+.navbar-default-autogestion .navbar-nav > li > a {
+    color: #818181;
+}
+
+.navbar-default-autogestion .navbar-nav > li {
+    text-align: center;
+}
+
+
+
+.navbar-default-autogestion .navbar-nav > li > a:hover,
+.navbar-default-autogestion .navbar-nav > li > a:focus {
+    color: #443B9F;
+}
+.navbar-default-autogestion .navbar-nav > li > form > button {
+    color: #818181;
+}
+.navbar-default-autogestion .navbar-nav > .active > a,
+.navbar-default-autogestion .navbar-nav > .active > a:hover,
+.navbar-default-autogestion .navbar-nav > .active > a:focus {
+    color: #ccc;
+    background-color: #443B9F;
+}
+.navbar-default-autogestion .navbar-nav > .open > a,
+.navbar-default-autogestion .navbar-nav > .open > a:hover,
+.navbar-default-autogestion .navbar-nav > .open > a:focus {
+    color: #818181;
+    background-color: #443B9F;
+}
+/* Caret */
+.navbar-default-autogestion .navbar-nav > .dropdown > a .caret {
+    border-top-color: #818181;
+    border-bottom-color: #818181;
+}
+.navbar-default-autogestion .navbar-nav > .dropdown > a:hover .caret,
+.navbar-default-autogestion .navbar-nav > .dropdown > a:focus .caret {
+    border-top-color: #818181;
+    border-bottom-color: #818181;
+}
+.navbar-default-autogestion .navbar-nav > .open > a .caret,
+.navbar-default-autogestion .navbar-nav > .open > a:hover .caret,
+.navbar-default-autogestion .navbar-nav > .open > a:focus .caret {
+    border-top-color: #443B9F;
+    border-bottom-color: #443B9F;
+}
+/* Mobile version */
+.navbar-default-autogestion .navbar-toggle {
+    border-color: #443B9F;
+}
+.navbar-default-autogestion .navbar-toggle:hover,
+.navbar-default-autogestion .navbar-toggle:focus {
+    background-color: #443B9F;
+}
+.navbar-default-autogestion .navbar-toggle .icon-bar {
+    background-color: #CCC;
+}
+@media (max-width: 767px) {
+    .navbar-default-autogestion .navbar-nav .open .dropdown-menu > li > a {
+        color: #fff;
+    }
+
+    .navbar-default-autogestion .navbar-nav .open .dropdown-menu > li > a:hover,
+    .navbar-default-autogestion .navbar-nav .open .dropdown-menu > li > a:focus {
+          color: #000;
+    }
+}
+
 #infoingreso{
     position: fixed;
     bottom: 10%;

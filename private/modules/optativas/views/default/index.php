@@ -1,7 +1,36 @@
 <div class="optativas-default-index">
-    <h2>Información general</h2>
+	<h3>DE LAS UNIDADES CURRICULARES ELECTIVAS U OPTATIVAS</h3>
+    <h4>De las unidades curriculares optativas</h4>
 
-    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit nisi, mauris vel iaculis ante hac ultrices eros sem montes, porttitor suscipit quisque neque leo sed velit. Dui elementum phasellus lacinia nascetur justo rhoncus diam dictum odio, pulvinar tempor sagittis ultricies potenti sodales interdum scelerisque, viverra sociosqu parturient in curae magna urna aliquet. Faucibus ultricies ullamcorper himenaeos scelerisque nullam sociis senectus ornare penatibus, justo hendrerit enim dictumst sed vitae dapibus nam mollis, accumsan nostra quisque ac lacus at leo habitasse. Rutrum torquent vivamus auctor condimentum tristique ultricies vel taciti sed, magnis dictum egestas semper nisi eu leo aptent, pharetra quis varius per fringilla in ad ultrices.</p> <p>Potenti lectus augue luctus varius vehicula cum fusce eget, iaculis cubilia vivamus pellentesque enim per. Enim at class quis magna facilisi dis auctor dui id volutpat, sociosqu lacinia eleifend orci tristique ullamcorper pharetra phasellus vitae, placerat quam ligula eu ut nec eget habitasse neque. Purus vulputate libero aliquet dis nostra volutpat nascetur sem mauris quis laoreet tortor, mi placerat class et est viverra facilisi neque id vehicula.</p> <p>Sagittis quisque torquent tempor laoreet nibh consequat volutpat facilisis taciti est placerat lacinia natoque varius pellentesque, rhoncus eleifend mus integer nam venenatis quis neque inceptos etiam montes molestie maecenas. Dis fermentum morbi facilisis proin habitasse molestie tempus sagittis et turpis velit, a mollis augue rhoncus phasellus vivamus habitant cum feugiat. Mauris venenatis sed rhoncus leo cursus laoreet habitasse est suscipit inceptos dignissim natoque primis gravida augue, ad malesuada placerat vitae fringilla orci turpis tempus curae nec duis tortor convallis facilisi. Montes suspendisse aliquet tellus metus blandit habitasse eleifend cum nunc accumsan, massa mi nisi magnis parturient felis vivamus auctor.</p>
+    <p>
+El estudiante dispone para el cursado del currículo la posibilidad de elegir entre diferentes espacios curriculares que conforman las unidades curriculares optativas.
+La práctica de las unidades curriculares optativas son de gran utilidad para que los estudiantes desarrollen su capacidad de decisión, desenvuelvan sus intereses específicos y relacionen las actividades curriculares con la realidad socio cultural.
+Este escrito consiste en una serie de recomendaciones explícitas con la intención de indicar el procedimiento de la puesta en marcha de las unidades curriculares optativas.
+Las unidades optativas consisten en un acuerdo entre docentes de las diferentes áreas y departamentos, conforme a su
+especificidad, sobre un determinado tema teniendo en cuenta los intereses de los alumnos y la realidad socio cultural.
 
-    <ul><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li> <li>Nisi bibendum a mus in, netus lectus habitasse.</li> <li>Ante magna sem gravida mi senectus, egestas cursus tincidunt suspendisse.</li> <li>Montes mauris dignissim convallis ridiculus, molestie ante penatibus ac vel, vulputate urna primis.</li> <li>Nec curae justo scelerisque aenean, nam aliquet.</li> <li>Porttitor primis conubia pretium nunc morbi, pharetra ridiculus ornare.</li></ul>
+	</p>
+<h4>Los objetivos</h4>
+
+<ul>
+	<li>Organizar la práctica de la enseñanza de las unidades curriculares optativas de manera tal que genere espacios de apropiación del saber desde diferentes formatos.</li>
+	<li>Brindar una propuesta diferenciada a los estudiantes que genere autonomía y desarrolle capacidades diferentes.</li>
+	<li>Facilitar la puesta en marcha para los miembros de la comunidad educativa</li>
+</ul>
+
+<h4>Organización de las unidades optativas.</h4>
+<ul>
+	<li>La organización del dictado de las unidades curriculares optativas estará a cargo del Vicedirector Académico, de un
+Regente, Coordinador de área de la especialidad que se pone en juego y un miembro de la coordinación pedagógica.</li>
+	<li>Las unidades curriculares optativas se definirán en setiembre del año anterior al que se cursarány los estudiantes deberán optar en octubre del ciclo lectivo anterior en un orden decreciente hasta completar tres espacios curriculares.</li>
+	<li>La selección de los grupos se hará según la opción que el estudiante realice y en caso de exceder el cupo, se realizará un sorteo no recibiendo más de 30 alumnos ni menos de 20 por optativa. Y así, sucesivamente con el orden elegido, hasta completar los espacios optativos propuestos.</li>
+	<li>De la misma manera, los programas o actividades según sea el formato (talleres, seminarios, ateneos, materias, módulos et simila), deberán estar presentados en setiembre del ciclo lectivo anterior a su dictado y ser conocido por los estudiantes.</li>
+	<li>Los estudiantes deberán cursar por lo menos dos unidades optativas curriculares por ciclo con un total de 7 al finalizar el séptimo año, no pudiendo superponerse dos de igual departamento por ciclo.</li>
+	<li>El cursado de la unidad curricular optativa será de iguales características que las obligatorias conforme al formato.</li>
+	<li>Su duración podrá ser anual, cuatrimestral o de otro periodo que complete un total 96 horas cátedras, no pudiendo ser menor ni superior a esta carga horaria.</li>
+	<li>La evaluación será acorde al formato curricular e igual para su eximición que las obligatorias.</li>
+	<li>El cursado con su respectivo cronograma podrá hacerse entre turnos o los días sábados con un intervalo no mayor de 15 días por clase.</li>
+</ul>
+
+   
 </div>

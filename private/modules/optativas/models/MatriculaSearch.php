@@ -105,5 +105,33 @@ class MatriculaSearch extends Matricula
         return $dataProvider;
     }
 
+    public function matriculasxalumno($dni)
+    {
+        $query = Matricula::find()
+            ->joinWith(['comision0', 'estadomatricula0', 'comision0.optativa0', 'comision0.optativa0.aniolectivo0', 'alumno0'])
+            ->where(['alumno.dni' => $dni])
+            ->orderBy('aniolectivo.nombre');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($dni);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        
+
+
+        return $dataProvider;
+    }
+
     
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\optativas\controllers\reportes;
+namespace app\modules\optativas\controllers\autogestion;
 
 use Yii;
 use app\modules\optativas\models\Matricula;
@@ -41,7 +41,7 @@ class FichadelalumnoController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1,8,9]);
+                                return in_array (1, [1,8,9]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -65,33 +65,15 @@ class FichadelalumnoController extends \yii\web\Controller
      * Lists all Matricula models.
      * @return mixed
      */
-    public function actionIndex()
+
+    public function actionIndex($id)
     {
+        $comision = Matricula::find()
+                ->joinWith(['alumno0'])
+                ->where(['matricula.id' => $id])
+                ->andWhere(['alumno.dni' => $_SESSION['dni']])->one()->comision;
+        $this->layout = 'mainautogestion';
         
-        $this->layout = 'main';
-        $searchModel = new MatriculaSearch();
-        $comision = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
-        $dataProvider = $searchModel->alumnosxcomision($comision);
-           
-        return $this->render('index', [
-            
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
-
-        ]);
-
-    }
-
-    /**
-     * Displays a single Matricula model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        $this->layout = 'main';
-        $comision = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         $searchModelInasistencias  = new InasistenciaSearch();
         $dataProviderInasistencias = $searchModelInasistencias->providerinasistenciasxalumno($id);
 
@@ -146,7 +128,7 @@ class FichadelalumnoController extends \yii\web\Controller
         $dataProviderSeguimientos = $searchModelSeguimientos->seguimientosdelalumno($id);
 
 
-        return $this->render('view', [
+        return $this->render('index', [
             'dataProviderInasistencias' => $dataProviderInasistencias,
             'listClasescomision' => $listClasescomision,
             'dataProviderSeguimientos' => $dataProviderSeguimientos,

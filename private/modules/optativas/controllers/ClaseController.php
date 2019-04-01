@@ -101,7 +101,7 @@ class ClaseController extends Controller
 
         ]); 
         }else{
-            Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar una <b>Actividad Optativa</b>');
+            Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
                 return $this->redirect(['/optativas']);
         }
         
@@ -140,7 +140,7 @@ class ClaseController extends Controller
 
             ]);
         }else{
-            Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar una <b>Actividad Optativa</b>');
+            Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
                 return $this->redirect(['/optativas']);
         }
     }
@@ -165,7 +165,7 @@ class ClaseController extends Controller
                     return $this->redirect(['view', 'id' => $model->id]);
                 }else{
                     
-                    Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar una <b>Actividad Optativa</b>');
+                    Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
                     return $this->redirect(['create']);
                 }
                 
@@ -177,7 +177,7 @@ class ClaseController extends Controller
 
             ]);
         }else{
-            Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar una <b>Actividad Optativa</b>');
+            Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
                 return $this->redirect(['/optativas']);
         }
     }
@@ -206,7 +206,7 @@ class ClaseController extends Controller
                 'tiposclase' => $tiposclase,
             ]);
         }else{
-        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar una <b>Actividad Optativa</b>');
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
             return $this->redirect(['/optativas']);
         }
     }

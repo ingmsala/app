@@ -79,7 +79,7 @@ class SeguimientoController extends Controller
 
             ]);
         }else{
-        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar una <b>Actividad Optativa</b>');
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
             return $this->redirect(['/optativas']);
         }
     }
@@ -106,7 +106,7 @@ class SeguimientoController extends Controller
                 'matr' => $matr,
             ]);
         }else{
-        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar una <b>Actividad Optativa</b>');
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
             return $this->redirect(['/optativas']);
         }
     }
@@ -135,7 +135,7 @@ class SeguimientoController extends Controller
                 'matr' => Matricula::findOne($id),
             ]);
         }else{
-        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar una <b>Actividad Optativa</b>');
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
             return $this->redirect(['/optativas']);
         }
     }
@@ -162,7 +162,7 @@ class SeguimientoController extends Controller
                 'model' => $model,
             ]);
         }else{
-        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar una <b>Actividad Optativa</b>');
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
             return $this->redirect(['/optativas']);
         }
     }

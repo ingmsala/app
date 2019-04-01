@@ -23,7 +23,7 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="assets/images/favicon1.ico" type="image/x-icon" />
     <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode('Gestión de Actividades Optativas') ?></title>
+    <title><?= Html::encode('Gestión de Espacios Optativos') ?></title>
     <?php $this->head() ?>
 </head>
 <body>
@@ -33,7 +33,7 @@ AppAsset::register($this);
         <?php
 
         NavBar::begin([
-            'brandLabel' => '<img src="assets/images/escudo.png" style="display:inline; vertical-align: middle; height:35px;"> Gestión de Actividades Optativas',
+            'brandLabel' => '<img src="assets/images/escudo.png" style="display:inline; vertical-align: middle; height:35px;"> Gestión de Espacios Optativos',
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
                 'class' => 'navbar-default-optativas navbar-fixed-top',

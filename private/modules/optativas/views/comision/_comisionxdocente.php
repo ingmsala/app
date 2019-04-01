@@ -26,7 +26,7 @@ use yii\bootstrap\Alert;
     ?>
 
 <div id="menucomxdoc">
-    <div><b>Actividades Optativas</b></div>
+    <div><b>Espacios Optativos</b></div>
 <?php
       
 
