@@ -23,10 +23,10 @@ class InasistenciaController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'procesarausentes'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'procesarausentes'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -137,21 +137,29 @@ class InasistenciaController extends Controller
 
     public function actionProcesarausentes()
     {
+        
         $param = Yii::$app->request->post();
+        //return $param['presentes'];
         $presentes = explode(",", $param['presentes']);
+        
+        $clase = $param['clase'];
+        //return $param['clase'][0];
+
+        $clase = intval($clase);
         
         foreach ($presentes as $presente) {
             
             $existe2 = Inasistencia::find()
                 ->select('id')
-                ->where(['clase' => $param['clase'][0]])
+                ->where(['clase' => $clase])
                 ->andWhere(['matricula' => $presente])
                 ->count();
-                
+            
+
             if($existe2>0){
                 $inasistenciax = Inasistencia::find()
                     ->select('id')
-                    ->where(['clase' => $param['clase'][0]])
+                    ->where(['clase' => $clase])
                     ->andWhere(['matricula' => $presente])
                     ->one();
                 $this->findModel($inasistenciax->id)->delete();
@@ -162,24 +170,17 @@ class InasistenciaController extends Controller
 
         foreach ($param['id'] as $matricula) {
 
-            $existe = Inasistencia::find()
-                ->select('id')
-                ->where(['clase' => $param['clase'][0]])
-                ->andWhere(['matricula' => $matricula])
-                ->count();
-
-            if($existe==0){
                 $model = new Inasistencia();
-                $model->clase = $param['clase'][0];
+                $model->clase = $clase;
                 $model->matricula = $matricula;
                 $model->save();
-            }
+            
 
             
         }
 
         
-        return $param['id'][0];
+        return $clase;
     }
 
     /**

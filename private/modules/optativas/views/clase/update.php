@@ -6,9 +6,7 @@ use yii\helpers\Html;
 /* @var $model app\modules\optativas\models\Clase */
 
 $this->title = 'Modificar Clase: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Clases', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+
 ?>
 <div class="clase-update">
 

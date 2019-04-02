@@ -7,8 +7,7 @@ use yii\helpers\Html;
 /* @var $model app\modules\optativas\models\Clase */
 
 $this->title = 'Nueva Clase';
-$this->params['breadcrumbs'][] = ['label' => 'Clases', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="clase-create">
 

@@ -7,8 +7,7 @@ use yii\helpers\Html;
 /* @var $model app\modules\optativas\models\Inasistencia */
 
 $this->title = 'Create Inasistencia';
-$this->params['breadcrumbs'][] = ['label' => 'Inasistencias', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="inasistencia-create">
 

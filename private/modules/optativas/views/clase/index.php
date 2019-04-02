@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\bootstrap\Progress;
 
 /* @var $this yii\web\View */
@@ -9,21 +9,41 @@ use yii\bootstrap\Progress;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Clases';
-$this->params['breadcrumbs'][] = $this->title;
-?>
-<div class="clase-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+?>
+<div class="clase-index" style="margin-top: 20px;">
+
+    
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Nueva Clase', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+        'panel' => [
+            'type' => GridView::TYPE_DEFAULT,
+            'heading' => Html::encode($this->title),
+            //'beforeOptions' => ['class'=>'kv-panel-before'],
+        ],
         'summary' => false,
+
+        'exportConfig' => [
+            GridView::EXCEL => [
+                'label' => 'Excel',
+                'filename' =>Html::encode($this->title),
+                
+                //'alertMsg' => false,
+            ],
+            
+
+        ],
+        'toolbar'=>[
+            ['content' => 
+                Html::a('Nueva Clase', ['create'], ['class' => 'btn btn-success'])
+            ],
+            '{export}',
+            
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 

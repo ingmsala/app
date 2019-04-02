@@ -50,6 +50,7 @@ Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
         'exportConfig' => [
             GridView::EXCEL => [
                 'label' => 'Excel',
+                'filename' =>Html::encode($this->title),
                 
                 //'alertMsg' => false,
             ],
@@ -83,8 +84,31 @@ Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
             'alumno0.apellido',
             'alumno0.nombre',
             [
-                'label' => 'Matrícula',
+                'label' => '',
                 'attribute' => 'estadomatricula0.nombre',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                'format' => 'raw',
+                'hiddenFromExport' => true,
+                'value' => function($model) use($cantidades){
+                    
+                    
+                    try{
+                        $i = $cantidades[$model->id];
+                        return '<span style="color:green;" class="glyphicon glyphicon-record"></span>';
+                    }catch(\Exception $exception){
+                        return '<span style="color:red;" class="glyphicon glyphicon-record"></span>';
+                    }
+                    
+                    
+                }
+                
+            ],
+            [
+                'label' => 'Cantidad',
+                'attribute' => 'estadomatricula0.nombre',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
                 'value' => function($model) use($cantidades){
                     
                     
@@ -94,7 +118,7 @@ Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
                         return 0;
                     }
                     
-                    var_dump($seguimientos);
+                    
                 }
                 
             ],

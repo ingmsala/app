@@ -15,10 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php $listInasistenciasdeldia=ArrayHelper::map($inasistenciasdeldia,'matricula','matricula'); ?>
-<?php $listAlumnosdecomsion=ArrayHelper::map($alumnosdecomsion,'id','id'); ?>
+<?php $listAlumnosdecomision=ArrayHelper::map($alumnosdecomision,'id','id'); ?>
 <?php 
-     $presentes =array_diff($listAlumnosdecomsion, $listInasistenciasdeldia);
-     $presentestxt = implode(",",$listAlumnosdecomsion);
+     $presentes =array_diff($listAlumnosdecomision, $listInasistenciasdeldia);
+     $presentestxt = implode(",",$listAlumnosdecomision);
 
 ?>
 
@@ -38,15 +38,17 @@ $this->params['breadcrumbs'][] = $this->title;
     }
         
         var deleteUrl     = 'index.php?r=optativas/inasistencia/procesarausentes';
+        var clase     = ".$clase.";
+        var presentes     = '".$presentestxt."';
         var pjaxContainer = 'test';
-        
+                    
                     $.ajax({
                       url:   deleteUrl,
                       type:  'post',
-                      data: {id: keys, clase: ".$clase.", presentes: '".$presentestxt."'},
+                      data: {id: keys, clase: clase, presentes: presentes},
                       
                       error: function (xhr, status, error) {
-                        alert('Error');
+                        alert(error);
                       }
                     }).done(function (data) {
                       

@@ -8,8 +8,7 @@ use kartik\grid\GridView;
 /* @var $model app\modules\optativas\models\Seguimiento */
 
 $this->title = $matr->alumno0->apellido.', '.$matr->alumno0->nombre;
-$this->params['breadcrumbs'][] = ['label' => 'Seguimientos', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="seguimiento-view">
 

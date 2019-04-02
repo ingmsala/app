@@ -205,6 +205,8 @@ AppAsset::register($this);
                             '<div class="dropdown-divider"></div>',
                             ['label' => 'Estado de Matrícula', 'url' => ['/optativas/estadomatricula']],
                             '<div class="dropdown-divider"></div>',
+                            ['label' => 'Interfaz yacaré', 'url' => ['/optativas/interfazyacare']],
+                            '<div class="dropdown-divider"></div>',
                             
                         ],
 

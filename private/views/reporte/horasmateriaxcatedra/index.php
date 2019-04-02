@@ -122,6 +122,7 @@ $listActividades=ArrayHelper::map($actividades,'id', 'nombre');
         'exportConfig' => [
             GridView::EXCEL => [
                 'label' => 'Excel',
+                'filename' =>Html::encode($this->title),
             ],
             
 

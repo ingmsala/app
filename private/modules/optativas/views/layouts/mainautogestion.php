@@ -32,7 +32,7 @@ AppAsset::register($this);
         <?php
 
         NavBar::begin([
-            'brandLabel' => '<img src="assets/images/logo-encabezado.png" style="display:inline; vertical-align: middle; height:35px;"> Autogestión de Espacios Optativos',
+            'brandLabel' => '<img src="assets/images/logo-encabezado.png" style="display:inline; vertical-align: middle; height:35px;"><span id="brandspan-autogestion">Autogestión de Espacios Optativos</span>',
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
                 'class' => 'navbar-default-autogestion navbar-fixed-top',

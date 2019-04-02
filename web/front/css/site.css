@@ -183,6 +183,13 @@ a.desc:after {
 
 /*Fin submenu*/
 
+#brandspan-autogestion {
+    margin-left: 30px;
+}
+#brandspan-optativas {
+    margin-left: 20px;
+}
+
 /* navbar */
 .navbar-default {
     background-color: #891f02;

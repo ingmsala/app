@@ -184,6 +184,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'exportConfig' => [
             GridView::EXCEL => [
                 'label' => 'Excel',
+                'filename' =>Html::encode($this->title),
                 
                 //'alertMsg' => false,
             ],

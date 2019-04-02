@@ -119,14 +119,14 @@ class ClaseController extends Controller
         $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         if($com != 0){
             $searchModel = new MatriculaSearch();
-            $comsion = $this->findModel($id)->comision;
-            $dataProvider = $searchModel->alumnosxcomision($comsion);
+            $comision = $this->findModel($id)->comision;
+            $dataProvider = $searchModel->alumnosxcomision($comision);
             $inasistenciasdeldia = Inasistencia::find()
                         ->where(['clase' => $id])
                         ->all();
-            $alumnosdecomsion = Matricula::find()
+            $alumnosdecomision = Matricula::find()
                         ->select('id')
-                        ->where(['comision' => $comsion])
+                        ->where(['comision' => $comision])
                         ->all();
 
            
@@ -135,7 +135,7 @@ class ClaseController extends Controller
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
                 'inasistenciasdeldia' => $inasistenciasdeldia,
-                'alumnosdecomsion' => $alumnosdecomsion,
+                'alumnosdecomision' => $alumnosdecomision,
                
 
             ]);
@@ -221,7 +221,15 @@ class ClaseController extends Controller
     public function actionDelete($id)
     {
         $this->layout = 'main';
-        $this->findModel($id)->delete();
+
+        try{
+
+            $this->findModel($id)->delete();
+
+        }catch(\Exception $exception){
+            Yii::$app->session->setFlash('error', "No se puede borrar una clase que tiene cargadas inasistencias. Si desea proceder deberá poner a los alumnos de la misma como presentes.");
+        }
+        
 
         return $this->redirect(['index']);
     }

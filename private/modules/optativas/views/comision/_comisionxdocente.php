@@ -21,7 +21,7 @@ use yii\bootstrap\Alert;
         
         $listComisiones=ArrayHelper::map($comisiones,'comision', function($comision) {
           //var_dump($comision['comision0']['optativa0']['actividad0']);
-            return $comision['comision0']['optativa0']['actividad0']['nombre'].' ('.$comision['comision0']['nombre'].')';}
+            return $comision['comision0']['optativa0']['aniolectivo0']['nombre'].' - '.$comision['comision0']['optativa0']['actividad0']['nombre'].' ('.$comision['comision0']['nombre'].')';}
         );
     ?>
 

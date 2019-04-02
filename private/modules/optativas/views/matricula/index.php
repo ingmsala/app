@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'exportConfig' => [
             GridView::EXCEL => [
                 'label' => 'Excel',
+                'filename' =>Html::encode($this->title),
                 
                 //'alertMsg' => false,
             ],
@@ -50,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'fecha',
                 'value' => function($model){
                     //return var_dump($model);
-                    return $model['comision0']['optativa0']['actividad0']['nombre'].' - Comisión: '.$model['comision0']['nombre'];
+                    return $model['comision0']['optativa0']['aniolectivo0']['nombre'].' - '.$model['comision0']['optativa0']['actividad0']['nombre'].' - Comisión: '.$model['comision0']['nombre'];
                 },
                 'group' => true,  // enable grouping,
                 'groupedRow' => true,                    // move grouped column to a single grouped row

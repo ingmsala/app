@@ -33,7 +33,7 @@ AppAsset::register($this);
         <?php
 
         NavBar::begin([
-            'brandLabel' => '<img src="assets/images/escudo.png" style="display:inline; vertical-align: middle; height:35px;"> Gestión de Espacios Optativos',
+            'brandLabel' => '<img src="assets/images/escudo.png" style="display:inline; vertical-align: middle; height:35px;"><span id="brandspan-optativas">Gestión de Espacios Optativos</span>',
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
                 'class' => 'navbar-default-optativas navbar-fixed-top',

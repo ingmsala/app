@@ -19,6 +19,7 @@ use yii\filters\VerbFilter;
 use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
+use \Datetime;
 
 
 /**
@@ -41,7 +42,12 @@ class FichadelalumnoController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (1, [1,8,9]);
+                                $key1 = isset($_SESSION['dni']);
+                                if (Alumno::find()->where(['dni' => $_SESSION['dni']])->one() != null)
+                                    $key2 = true;
+                                else
+                                    $key2 = false;
+                                return ($key1 and $key2);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -79,6 +85,7 @@ class FichadelalumnoController extends \yii\web\Controller
 
         $clasescomision = Clase::find()
                             ->where(['comision' => $comision])
+                            ->orderBy('fecha ASC')
                             ->all();
 
         $listClasescomision=ArrayHelper::map($clasescomision,
@@ -88,7 +95,18 @@ class FichadelalumnoController extends \yii\web\Controller
                     
                 },
                 function($model){
-                    return "P";
+                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+                    $fecha = date_create($model->fecha);
+                    $hoy = new DateTime("now");
+                    $interval = $fecha->diff($hoy);
+                    $signo = $interval->format('%R');
+                    //$interval = $interval->format('%a');
+                    //$interval = intval($interval);
+                    //return $signo;
+                    if ($signo == '+')
+                        return "P";
+                    else
+                        return '';
                 }
         );
 
@@ -105,7 +123,16 @@ class FichadelalumnoController extends \yii\web\Controller
                     
                 },
                 function($model){
-                    return "A";
+                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+                    $fecha = date_create($model->clase0->fecha);
+                    $hoy = new DateTime("now");
+                    $interval = $fecha->diff($hoy);
+                    $signo = $interval->format('%R');
+
+                    if ($signo == '+')
+                        return "A";
+                    else
+                        return '';
                 });
 
         $listClasescomision = array_merge($listClasescomision, $listFaltasdelalumno);
