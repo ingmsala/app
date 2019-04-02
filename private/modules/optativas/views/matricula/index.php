@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\optativas\models\MatriculaSearch */
@@ -12,7 +15,109 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="matricula-index">
 
-    
+    <?php
+        $listaniolectivos=ArrayHelper::map($aniolectivos,'id','nombre');
+        $listComisiones=ArrayHelper::map($comisiones,'comision', function($comision) {
+          return $comision['comision0']['optativa0']['aniolectivo0']['nombre'].' - '.$comision['comision0']['optativa0']['actividad0']['nombre'].' ('.$comision['comision0']['nombre'].')';}
+        );
+        
+    ?>
+
+    <div id="accordion" class="panel-group">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+
+                        <span class="badge badge-light"><span class="glyphicon glyphicon-filter"></span> Filtros</span>
+
+                        <?php 
+                            $filter1 = false;
+                            if(isset($param['Matricula']['aniolectivo'])){
+                                if($param['Matricula']['aniolectivo']!=''){
+                                    $filter1 = true;
+                                    echo '<b> - Año Lectivo: </b>'.$listaniolectivos[$param['Matricula']['aniolectivo']];
+                                }
+                            }
+
+                            
+
+                        ?>
+
+                        <?php 
+                            $filter2 = false;
+                            if(isset($param['Matricula']['comision'])){
+                                if($param['Matricula']['comision']!=''){
+                                    $filter2 = true;
+                                    echo '<b> - Optativa: </b>'.$listComisiones[$param['Matricula']['comision']];
+                                }
+                            }
+
+                            
+
+                        ?>
+
+                    </a>
+                    <?php
+                        if($filter1 || $filter2){
+                            echo ' <a href="index.php?r=optativas/matricula/index"><span class="badge badge-danger"><span class="glyphicon glyphicon-remove"></span></span></a>';
+                            $filter = false;
+                        }
+                    ?>
+                   
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel-body">
+                            <?php                 
+
+                                 $form = ActiveForm::begin([
+                                    'action' => ['index'],
+                                    'method' => 'get',
+                                ]); ?>
+
+                            <?= 
+
+                                $form->field($model, 'aniolectivo')->widget(Select2::classname(), [
+                                    'data' => $listaniolectivos,
+                                    'options' => ['placeholder' => 'Seleccionar...'],
+                                    //'value' => 1,
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ])->label("Año Lectivo");
+
+                            ?>
+
+                            <?= 
+
+                                $form->field($model, 'comision')->widget(Select2::classname(), [
+                                    'data' => $listComisiones,
+                                    'options' => ['placeholder' => 'Seleccionar...'],
+                                    //'value' => 1,
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ])->label("Espacio Optativo");
+
+                            ?>
+
+                            <div class="form-group">
+                                <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary']) ?>
+                                <?= Html::resetButton('Resetear', ['class' => 'btn btn-default']) ?>
+                            </div>
+
+                            <?php ActiveForm::end(); ?>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

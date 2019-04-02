@@ -43,6 +43,14 @@ class MatriculaSearch extends Matricula
     {
         $query = Matricula::find()
                 ->joinWith(['alumno0', 'comision0', 'comision0.optativa0', 'comision0.optativa0.actividad0'])
+                ->where(true)
+                ->andWhere(
+
+                    (isset($params['Matricula']['aniolectivo']) && $params['Matricula']['aniolectivo'] != '') ? ['optativa.aniolectivo' => $params['Matricula']['aniolectivo']] : true)
+                ->andWhere(
+
+                    (isset($params['Matricula']['comision']) && $params['Matricula']['comision'] != '') ? ['comision' => $params['Matricula']['comision']] : true)
+                
                 ->orderBy('actividad.nombre, comision.nombre, alumno.apellido, alumno.nombre');
 
         // add conditions that should always apply here

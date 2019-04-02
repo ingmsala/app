@@ -7,6 +7,7 @@ use app\modules\optativas\models\Matricula;
 use app\modules\optativas\models\Alumno;
 use app\modules\optativas\models\Comision;
 use app\modules\optativas\models\Optativa;
+use app\modules\optativas\models\Aniolectivo;
 use app\modules\optativas\models\Estadomatricula;
 use app\modules\optativas\models\MatriculaSearch;
 use yii\web\Controller;
@@ -60,13 +61,27 @@ class MatriculaController extends Controller
      */
     public function actionIndex()
     {
-        
+        $param = Yii::$app->request->queryParams;
+        $model = new Matricula();
+        $model->scenario = $model::SCENARIO_SEARCHINDEX;
         $searchModel = new MatriculaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $aniolectivos = Aniolectivo::find()->all();
+
+        $comisiones = Matricula::find()->all();
+
+        if(isset($param['Matricula']['aniolectivo']))
+            $model->aniolectivo = $param['Matricula']['aniolectivo'];
+        if(isset($param['Matricula']['comision']))
+            $model->comision = $param['Matricula']['comision'];
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'aniolectivos' => $aniolectivos,
+            'param' => $param,
+            'model' => $model,
+            'comisiones' => $comisiones,
         ]);
     }
 

@@ -26,15 +26,22 @@ class Matricula extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+
+    public $aniolectivo;
+
     public static function tableName()
     {
         return 'matricula';
     }
 
+    const SCENARIO_SEARCHINDEX = 'aniolectivo';
+
     public function scenarios()
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_CREATE] = ['fecha', 'alumno', 'comision', 'estadomatricula'];
+        $scenarios[self::SCENARIO_SEARCHINDEX] = ['aniolectivo'];
+
         return $scenarios;
     }
 
@@ -45,6 +52,7 @@ class Matricula extends \yii\db\ActiveRecord
     {
         return [
             [['fecha', 'alumno', 'comision', 'estadomatricula'], 'required'],
+            [['aniolectivo'], 'required', 'message' => 'El Año lectivo es obligatorio',  'on' => self::SCENARIO_SEARCHINDEX],
             [['fecha'], 'safe'],
             [['alumno', 'comision', 'estadomatricula'], 'integer'],
             [['comision'], 'exist', 'skipOnError' => true, 'targetClass' => Comision::className(), 'targetAttribute' => ['comision' => 'id']],
