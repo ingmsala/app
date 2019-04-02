@@ -3,7 +3,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
-use yii\jui\DatePicker;
+use kartik\date\DatePicker;
+
 
 
 /* @var $this yii\web\View */
@@ -22,40 +23,23 @@ use yii\jui\DatePicker;
     ?>
 
   		
-	    <?= 
-	    $form->field($model, 'fecha')->widget(DatePicker::class, [
-	    //'language' => 'ru',
-	    'dateFormat' => 'yyyy-MM-dd',
-	    'clientOptions'=>[
-	    	//'changeYear' => true,
-	    	//'changeMonth' => true,
-	    	'showOn' => 'both',
-        	//'buttonImage' => '',
-        	'buttonImageOnly' => false,
-        	'buttonText'=> '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>',
-        	'maxDate'=> "+3d",
-        	
-        	
+	   <div style="width: 25%;">
+    <?= 
+$form->field($model, 'fecha')->widget(DatePicker::classname(), [
+    //'name' => 'dp_3',
+    'type' => DatePicker::TYPE_COMPONENT_APPEND,
+    //'value' => '23-Feb-1982',
+    'readonly' => true,
+    'pluginOptions' => [
+        'autoclose'=>true,
+        'format' => 'yyyy-mm-dd',
+        'endDate' => "1d",
+        
+    ],
+    
+]); ?>
 
-	    ],
-	    'options' => [
-	    	//'class' => 'awe-calendar',
-	    	'style' => 'width:20%',
-	    	'autocomplete' => 'off',
-	    	'readOnly'=> true,
-	    	
-
-
-	    	//'aria-describedby'=>"basic-addon1",
-	    	
-	    	
-
-
-	    ],
-
-	     
-	   
-		]) ?>
+</div>
 
     
     <?= $form->field($model, 'preceptoria')->dropDownList($listPreceptoria, ['prompt'=>'Seleccionar...','style' => 'width:20%']); ?>

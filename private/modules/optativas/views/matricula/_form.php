@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\jui\DatePicker;
+use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 
@@ -26,34 +26,23 @@ use kartik\select2\Select2;
 
     <?php $form = ActiveForm::begin(); ?>
 
+
+<div style="width: 20%;">
     <?= 
-	    $form->field($model, 'fecha')->widget(DatePicker::class, [
-	    //'language' => 'ru',
-		    'dateFormat' => 'yyyy-MM-dd',
-		    'clientOptions'=>[
-		    	//'changeYear' => true,
-		    	//'changeMonth' => true,
-		    	'showOn' => 'both',
-	        	//'buttonImage' => '',
-	        	'buttonImageOnly' => false,
-	        	'buttonText'=> '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>',
-	        	//'maxDate'=> "+3d",
-	        	
-	        	
+$form->field($model, 'fecha')->widget(DatePicker::classname(), [
+    //'name' => 'dp_3',
+    'type' => DatePicker::TYPE_COMPONENT_APPEND,
+    //'value' => '23-Feb-1982',
+    'readonly' => true,
+    'pluginOptions' => [
+        'autoclose'=>true,
+        'format' => 'yyyy-mm-dd',
+        
+    ],
+    
+]); ?>
 
-		    ],
-		    'options' => [
-		    	//'class' => 'awe-calendar',
-		    	'style' => 'width:20%',
-		    	'autocomplete' => 'off',
-		    	'readOnly'=> true,
-		    	
-			],
-
-	     
-	   
-		]) 
-	?>
+</div>
 
     <?= 
 

@@ -22,7 +22,8 @@
         "miloschuman/yii2-highcharts-widget": "*",
         "kartik-v/yii2-widget-select2": "dev-master",
         "kartik-v/yii2-grid": "dev-master",
-        "loveorigami/yii2-modal-ajax": "@dev"
+        "loveorigami/yii2-modal-ajax": "@dev",
+        "kartik-v/yii2-widget-datepicker": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

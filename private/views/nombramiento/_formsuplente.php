@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use kartik\select2\Select2;
-use yii\jui\DatePicker;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Nombramiento */
@@ -62,59 +62,39 @@ use yii\jui\DatePicker;
     <?= $form->field($model, 'resolucionext')->textInput() ?>
 
     
+    <div style="width: 25%;">
     <?= 
-        $form->field($model, 'fechaInicioext')->widget(DatePicker::class, [
-        //'language' => 'ru',
-        'dateFormat' => 'yyyy-MM-dd',
-        'clientOptions'=>[
-            //'changeYear' => true,
-            //'changeMonth' => true,
-            'showOn' => 'both',
-            //'buttonImage' => '',
-            'buttonImageOnly' => false,
-            'buttonText'=> '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>',
-            
-            
+$form->field($model, 'fechaInicioext')->widget(DatePicker::classname(), [
+    //'name' => 'dp_3',
+    'type' => DatePicker::TYPE_COMPONENT_APPEND,
+    //'value' => '23-Feb-1982',
+    'readonly' => true,
+    'pluginOptions' => [
+        'autoclose'=>true,
+        'format' => 'yyyy-mm-dd',
+        
+    ],
+    
+]); ?>
 
-        ],
-        'options' => [
-            //'class' => 'form-control',
-            'style' => 'width:20%',
-            'autocomplete' => 'off',
-            'readOnly'=> true,
-        ],
+</div>
 
-         
-       
-        ]) ?>
-
+    <div style="width: 25%;">
     <?= 
-        $form->field($model, 'fechaFinext')->widget(DatePicker::class, [
-        //'language' => 'ru',
-        'dateFormat' => 'yyyy-MM-dd',
-        'clientOptions'=>[
-            //'changeYear' => true,
-            //'changeMonth' => true,
-            'showOn' => 'both',
-            //'buttonImage' => '',
-            'buttonImageOnly' => false,
-            'buttonText'=> '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>',
-            
-        ],
-        'options' => [
-            //'class' => 'form-control',
-            'style' => 'width:20%',
-            'autocomplete' => 'off',
-            'readOnly'=> true,
+$form->field($model, 'fechaFinext')->widget(DatePicker::classname(), [
+    //'name' => 'dp_3',
+    'type' => DatePicker::TYPE_COMPONENT_APPEND,
+    //'value' => '23-Feb-1982',
+    'readonly' => true,
+    'pluginOptions' => [
+        'autoclose'=>true,
+        'format' => 'yyyy-mm-dd',
+        
+    ],
+    
+]); ?>
 
-
-            //'aria-describedby'=>"basic-addon1",
-            
-        ],
-
-         
-       
-        ]) ?>
+</div>
 
     </div>
 
@@ -150,71 +130,39 @@ use yii\jui\DatePicker;
     <?= $form->field($model, 'resolucion')->textInput() ?>
 
     
+    <div style="width: 25%;">
     <?= 
-        $form->field($model, 'fechaInicio')->widget(DatePicker::class, [
-        //'language' => 'ru',
-        'dateFormat' => 'yyyy-MM-dd',
-        'clientOptions'=>[
-            //'changeYear' => true,
-            //'changeMonth' => true,
-            'showOn' => 'both',
-            //'buttonImage' => '',
-            'buttonImageOnly' => false,
-            'buttonText'=> '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>',
-            
-            
+$form->field($model, 'fechaInicio')->widget(DatePicker::classname(), [
+    //'name' => 'dp_3',
+    'type' => DatePicker::TYPE_COMPONENT_APPEND,
+    //'value' => '23-Feb-1982',
+    'readonly' => true,
+    'pluginOptions' => [
+        'autoclose'=>true,
+        'format' => 'yyyy-mm-dd',
+        
+    ],
+    
+]); ?>
 
-        ],
-        'options' => [
-            //'class' => 'form-control',
-            'style' => 'width:20%',
-            'autocomplete' => 'off',
-            'readOnly'=> true,
+</div>
 
-
-            //'aria-describedby'=>"basic-addon1",
-            
-            
-
-
-        ],
-
-         
-       
-        ]) ?>
-
+    <div style="width: 25%;">
     <?= 
-        $form->field($model, 'fechaFin')->widget(DatePicker::class, [
-        //'language' => 'ru',
-        'dateFormat' => 'yyyy-MM-dd',
-        'clientOptions'=>[
-            //'changeYear' => true,
-            //'changeMonth' => true,
-            'showOn' => 'both',
-            //'buttonImage' => '',
-            'buttonImageOnly' => false,
-            'buttonText'=> '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>',
-            
-            
+$form->field($model, 'fechaFin')->widget(DatePicker::classname(), [
+    //'name' => 'dp_3',
+    'type' => DatePicker::TYPE_COMPONENT_APPEND,
+    //'value' => '23-Feb-1982',
+    'readonly' => true,
+    'pluginOptions' => [
+        'autoclose'=>true,
+        'format' => 'yyyy-mm-dd',
+        
+    ],
+    
+]); ?>
 
-        ],
-        'options' => [
-            //'class' => 'form-control',
-            'style' => 'width:20%',
-            'autocomplete' => 'off',
-            'readOnly'=> true,
-
-
-            //'aria-describedby'=>"basic-addon1",
-            
-            
-
-
-        ],
-
-         
-       
-        ]) ?> 
+</div>
 
     
 

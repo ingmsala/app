@@ -145,6 +145,8 @@ class MatriculaController extends Controller
     {
         
         $model = $this->findModel($id);
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        //$model->fecha = Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy');
         $alumnos = Alumno::find()
                     ->orderBy('apellido, nombre')
                     ->all();
@@ -155,8 +157,12 @@ class MatriculaController extends Controller
                         ->all();
         $estadosmatricula = Estadomatricula::find()->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())){
+            //date_default_timezone_set('America/Argentina/Buenos_Aires');
+            //$model->fecha = Yii::$app->formatter->asDate($model->fecha, 'yyyy-MM-dd');
+            if($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('update', [
