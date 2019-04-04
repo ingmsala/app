@@ -16,6 +16,7 @@ use app\models\Condicion;
 use app\models\Extension;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
+use app\config\Globales;
 
 /**
  * NombramientoController implements the CRUD actions for Nombramiento model.
@@ -37,7 +38,7 @@ class NombramientoController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1,3]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -50,7 +51,7 @@ class NombramientoController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1,3, 6]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -74,16 +75,59 @@ class NombramientoController extends Controller
      */
     public function actionIndex()
     {
+        Yii::$app->session->remove('urlorigen');
         $searchModel = new NombramientoSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $model = new Nombramiento();
+        $param = Yii::$app->request->queryParams;
+        $dataProvider = $searchModel->search($param);
         $suplentes = Nombramiento::find()
-                        ->where(['condicion' => 5])
+                        ->where(['condicion' => Globales::COND_SUPL])
                         ->all();
+
+        $cargos = Cargo::find()->all();
+        $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+        $revistas = Revista::find()->all();
+        $divisiones = Division::find()->all();
+        $condiciones = Condicion::find()->all();
+        
+        $resoluciones = Nombramiento::find()
+                    ->select('resolucion')->distinct()
+                    ->orderBy('resolucion')->all();
+
+        $resolucionesext =Nombramiento::find()
+                    ->select('resolucionext')->distinct()
+                    ->orderBy('resolucionext')->all();
+
+        if(isset($param['Nombramiento']['cargo']) && $param['Nombramiento']['cargo']!='')
+            $model->cargo = $param['Nombramiento']['cargo'];
+        if(isset($param['Nombramiento']['docente']) && $param['Nombramiento']['docente']!='')
+            $model->docente = $param['Nombramiento']['docente'];
+        if(isset($param['Nombramiento']['revista']) && $param['Nombramiento']['revista']!='')
+            $model->revista = $param['Nombramiento']['revista'];
+        if(isset($param['Nombramiento']['condicion']) && $param['Nombramiento']['condicion']!='')
+            $model->condicion = $param['Nombramiento']['condicion'];
+        if(isset($param['Nombramiento']['resolucion']) && $param['Nombramiento']['resolucion']!='')
+            $model->resolucion = $param['Nombramiento']['resolucion'];
+        if(isset($param['Nombramiento']['resolucionext']) && $param['Nombramiento']['resolucionext']!='')
+            $model->resolucionext = $param['Nombramiento']['resolucionext'];
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'suplentes' => $suplentes,
+        
+            'model' => $model,
+
+            'cargos' => $cargos,
+            'docentes' => $docentes,
+            'revistas' => $revistas,
+            'divisiones' => $divisiones,
+            'condiciones' => $condiciones,
+            
+            'resoluciones' => $resoluciones,
+            'resolucionesext' => $resolucionesext,
+            'param' => $param,
+        
         ]);
     }
 
@@ -95,6 +139,11 @@ class NombramientoController extends Controller
      */
     public function actionView($id)
     {
+        $origen = urldecode(Yii::$app->request->referrer);
+        $existe = strpos($origen, 'nombramiento/index' );
+        if ($existe > 0)
+            Yii::$app->session->set('urlorigen', $origen.'#'.$id);
+
         $model = $this->findModel($id);
         $searchModel = new NombramientoSearch();
         $dataProvider = $searchModel->providerxsuplente($model->suplente);
@@ -121,7 +170,7 @@ class NombramientoController extends Controller
         $revistas = Revista::find()->all();
         $divisiones = Division::find()->all();
         $condiciones = Condicion::find()
-                        ->where(['<>','id',5])
+                        ->where(['<>','id',Globales::COND_SUPL])
                         ->all();
         $suplentes = Nombramiento::find()->all();
         $extensiones = Extension::find()->all();
@@ -261,7 +310,7 @@ class NombramientoController extends Controller
         $query  = Nombramiento::find()
             ->where(['cargo'=>$cargox,])
             ->andWhere(['<>','id', $idx])
-            ->andWhere(['=','condicion', 5])//suplente
+            ->andWhere(['=','condicion', Globales::COND_SUPL])//suplente
             ->andWhere('id NOT IN (SELECT suplente from nombramiento where suplente is not null)')->all();
         //$suplentes = $query->all();
        
@@ -304,7 +353,7 @@ class NombramientoController extends Controller
             $model = new Nombramiento();
             $model->scenario = $model::SCENARIO_ABMNOMBRAMIENTO;
             $model->cargo = $cargox;
-            $model->condicion = 5;
+            $model->condicion = Globales::COND_SUPL;
              $model->horas = $nombramientoParent->horas;
 
             $cargos = Cargo::find()->all();

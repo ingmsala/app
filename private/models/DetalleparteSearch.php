@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\data\SqlDataProvider;
 use app\models\Detalleparte;
+use app\config\Globales;
 
 /**
  * DetalleparteSearch represents the model behind the search form of `app\models\Detalleparte`.
@@ -44,18 +45,18 @@ class DetalleparteSearch extends Detalleparte
     {
         if(Yii::$app->user->identity->username == 'regenciatm'){
             $query = Detalleparte::find()->joinWith('division0')
-            ->where(['estadoinasistencia' => 1])
-            ->orWhere(['estadoinasistencia' => 3])
-            ->andWhere(['division.turno' =>1]);
+            ->where(['estadoinasistencia' => Globales::ESTADOINASIST_PREC])
+            ->orWhere(['estadoinasistencia' => Globales::ESTADOINASIST_REGREC])
+            ->andWhere(['division.turno' =>Globales::TURNO_MAN]);
         }elseif(Yii::$app->user->identity->username == 'regenciatt'){
             $query = Detalleparte::find()->joinWith('division0')
-            ->where(['estadoinasistencia' => 1])
-            ->orWhere(['estadoinasistencia' => 3])
-            ->andWhere(['division.turno' =>2]);
+            ->where(['estadoinasistencia' => Globales::ESTADOINASIST_PREC])
+            ->orWhere(['estadoinasistencia' => Globales::ESTADOINASIST_REGREC])
+            ->andWhere(['division.turno' =>Globales::TURNO_TAR]);
         }elseif(Yii::$app->user->identity->username == 'msala'){
             $query = Detalleparte::find()->joinWith('division0')
-            ->where(['estadoinasistencia' => 1])
-            ->orWhere(['estadoinasistencia' => 3]);
+            ->where(['estadoinasistencia' => Globales::ESTADOINASIST_PREC])
+            ->orWhere(['estadoinasistencia' => Globales::ESTADOINASIST_REGREC]);
             
         }
         
@@ -119,14 +120,14 @@ class DetalleparteSearch extends Detalleparte
         if (isset($params['Detalleparte']['estadoinasistencia']) && $params['Detalleparte']['estadoinasistencia'] != ''){
             $sql .= ' and detalleparte.estadoinasistencia = '.$params["Detalleparte"]["estadoinasistencia"];
         }else{
-            if ( in_array (Yii::$app->user->identity->role, [4])) {
+            if ( in_array (Yii::$app->user->identity->role, [Globales::US_REGENCIA])) {
                 $sql .= ' and (detalleparte.estadoinasistencia=1 or detalleparte.estadoinasistencia=3)';
             }else{
                 $sql .= ' and detalleparte.estadoinasistencia=2';
             }
 
         }
-        if ( in_array (Yii::$app->user->identity->role, [4])) {
+        if ( in_array (Yii::$app->user->identity->role, [Globales::US_REGENCIA])) {
             if (Yii::$app->user->identity->username == 'regenciatm'){
                 $sql .= ' and division.turno=1';
             }else{

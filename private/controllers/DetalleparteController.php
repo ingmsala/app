@@ -16,6 +16,7 @@ use app\models\Hora;
 use app\models\Falta;
 use app\models\EstadoinasistenciaxparteSearch;
 use app\models\Estadoinasistenciaxparte;
+use app\config\Globales;
 
 
 /**
@@ -38,7 +39,7 @@ class DetalleparteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1,5]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_PRECEPTORIA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -51,7 +52,7 @@ class DetalleparteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1,3]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -130,16 +131,16 @@ class DetalleparteController extends Controller
 
         $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $faltas = Falta::find()
-                    ->where(['<>', 'id', 2])
+                    ->where(['<>', 'id', Globales::FALTA_COMISION])
                     ->all();
         $horas = Hora::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
 
             $ei = new EstadoinasistenciaxparteSearch();
-            $model->estadoinasistencia = 1;
+            $model->estadoinasistencia = Globales::ESTADOINASIST_PREC;
             if($model->save()){
-                $guardaok = $ei->nuevo(null, 1, $model->id, $model->falta);
+                $guardaok = $ei->nuevo(null, Globales::ESTADOINASIST_PREC, $model->id, $model->falta);
                 if ($guardaok){
                    
                     return $this->redirect(['parte/view', 'id' => $parte]);
@@ -186,7 +187,7 @@ class DetalleparteController extends Controller
 
         $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $faltas = Falta::find()
-                    ->where(['<>', 'id', 2])
+                    ->where(['<>', 'id', Globales::FALTA_COMISION])
                     ->all();
         $horas = Hora::find()->all();
 

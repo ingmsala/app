@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use app\models\Detallecatedra;
 use yii\data\SqlDataProvider;
 use yii\db\Query;
+use app\config\Globales;
 
 /**
  * DetalleCatedraSearch represents the model behind the search form of `app\models\DetalleCatedra`.
@@ -126,9 +127,9 @@ class DetallecatedraSearch extends Detallecatedra
                 ->select('sum(hora) as id')
                 ->where([
                         'docente' => $id,
-                        'activo' => 1,
+                        'activo' => Globales::DETCAT_ACTIVO,
                 ])
-                ->andWhere(['<>', 'revista', 2])->one();//no licencia sin goce
+                ->andWhere(['<>', 'revista', Globales::LIC_SINGOCE])->one();//no licencia sin goce
        
 
         return $query;
@@ -141,9 +142,9 @@ class DetallecatedraSearch extends Detallecatedra
                 ->select('sum(hora) as id')
                 ->where([
                         'docente' => $id,
-                        'activo' => 1,
+                        'activo' => Globales::DETCAT_ACTIVO,
                 ])
-                ->andWhere(['revista' => 2])->one();// lic s/goce
+                ->andWhere(['revista' => Globales::LIC_SINGOCE])->one();// lic s/goce
         
 
         return $query;
@@ -159,13 +160,13 @@ class DetallecatedraSearch extends Detallecatedra
                 from detallecatedra dc2
                 inner join catedra c2 on dc2.catedra = c2.id
                 inner join actividad a2 on c2.actividad = a2.id
-                where a2.id = a.id and dc2.revista = 1  and dc2.activo = 1
+                where a2.id = a.id and dc2.revista = '.Globales::LIC_VIGENTE.'  and dc2.activo = '.Globales::DETCAT_ACTIVO.'
             ) as cantidad_vigente,(
                 SELECT sum(dc3.hora)
                 from detallecatedra dc3
                 inner join catedra c3 on dc3.catedra = c3.id
                 inner join actividad a3 on c3.actividad = a3.id
-                where a3.id = a.id and dc3.revista <> 2 and dc3.activo = 1
+                where a3.id = a.id and dc3.revista <> '.Globales::LIC_SINGOCE.' and dc3.activo = '.Globales::DETCAT_ACTIVO.'
             ) as horas_cobradas
             from catedra c
             inner join actividad a on c.actividad = a.id';
@@ -212,8 +213,8 @@ class DetallecatedraSearch extends Detallecatedra
             inner join division di on c.division = di.id
             inner join docente d on dc.docente = d.id
             where a.id = '.$actividad.' 
-            and dc.revista = 1
-            and dc.activo = 1
+            and dc.revista = '.Globales::LIC_VIGENTE.'
+            and dc.activo = '.Globales::DETCAT_ACTIVO.'
             group by di.nombre, d.apellido, d.nombre
             order by di.id'; //1 es vigente y 2 es diferente a lic s/goce
 

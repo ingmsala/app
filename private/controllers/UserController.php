@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\models\Role;
+use app\config\Globales;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -31,7 +32,7 @@ class UserController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -94,7 +95,7 @@ class UserController extends Controller
     {
         $model = new User();
         $roles = Role::find()
-                ->where(['>', 'id', 2])
+                ->where(['>', 'id', Globales::US_ADMIN])
                 ->all();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -123,7 +124,7 @@ class UserController extends Controller
     {
         $model = $this->findModel($id);
         $roles = Role::find()
-                ->where(['>', 'id', 2])
+                ->where(['>', 'id', Globales::US_ADMIN])
                 ->all();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -200,7 +201,7 @@ class UserController extends Controller
         }
     }
     
-    if(Yii::$app->user->identity->role == 8){
+    if(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
         $this->layout = '@app/modules/optativas/views/layouts/main';
     }
     

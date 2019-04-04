@@ -13,6 +13,7 @@ use app\models\Area;
 use app\models\Tarjeta;
 use app\models\Cargo;
 use yii\filters\AccessControl;
+use app\config\Globales;
 
 
 
@@ -36,7 +37,7 @@ class AccesoController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1,7]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_INGRESO]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -49,7 +50,7 @@ class AccesoController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1,6,7]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_CONSULTA, Globales::US_INGRESO]);
                                 }catch(\Exception $exception){
                                     return false;
                             }

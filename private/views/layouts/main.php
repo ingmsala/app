@@ -9,6 +9,8 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use kartik\spinner\Spinner;
+use app\models\NovedadesparteSearch;
 
 AppAsset::register($this);
 ?>
@@ -26,6 +28,18 @@ AppAsset::register($this);
 </head>
 <body>
     <?php $this->beginBody() ?>
+
+        <?php 
+
+$ns = new NovedadesparteSearch(); 
+$cantnov = $ns->novedadesactivascant();
+if ($cantnov>0) {
+    $cantnov = '<span class="glyphicon glyphicon-bell" aria-hidden="true"></span>';
+}else{
+    $cantnov ='';
+}
+
+?>
 
     <div class="wrap">
         <?php
@@ -141,7 +155,7 @@ AppAsset::register($this);
                 ) :(
 
                     in_array (Yii::$app->user->identity->role, [1,3,4,5,6]) ? (
-                        ['label' => 'Parte Docente', 
+                        ['label' => in_array (Yii::$app->user->identity->role, [1, 3, 6])?$cantnov.' Parte Docente':'Parte Docente', 
                         'items' => [
                             in_array (Yii::$app->user->identity->role, [1, 3, 4, 5, 6])?  
                             ['label' => 'Parte docente', 'url' => ['/parte']]: ['label' => ''],
@@ -151,6 +165,9 @@ AppAsset::register($this);
                             '<div class="dropdown-divider"></div>',
                             in_array (Yii::$app->user->identity->role, [1, 3, 6])?    
                             ['label' => 'Control de Secretaría', 'url' => ['parte/controlsecretaria']]: ['label' => ''],
+                            '<div class="dropdown-divider"></div>',
+                            in_array (Yii::$app->user->identity->role, [1, 3, 6])?    
+                            ['label' => 'Panel de Novedades '.$cantnov, 'url' => ['novedadesparte/panelnovedades']]: ['label' => ''],
                             '<div class="dropdown-divider"></div>',
                             /*['label' => 'Horarios de cátedra', 'url' => ['parte/horarios']],
                             '<div class="dropdown-divider"></div>',*/
@@ -254,7 +271,10 @@ AppAsset::register($this);
 NavBar::end();
 ?>
 
+
+
 <div class="container">
+
     <?= Breadcrumbs::widget([
         'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
     ]) ?>

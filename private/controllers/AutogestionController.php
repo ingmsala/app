@@ -7,6 +7,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use app\config\Globales;
 
 /**
  * ActividadTipoController implements the CRUD actions for ActividadTipo model.

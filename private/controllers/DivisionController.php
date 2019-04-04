@@ -12,6 +12,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use app\config\Globales;
 
 /**
  * DivisionController implements the CRUD actions for Division model.
@@ -33,7 +34,7 @@ class DivisionController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1,3]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -46,7 +47,7 @@ class DivisionController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
                             }catch(\Exception $exception){
                                 return false;
                             }

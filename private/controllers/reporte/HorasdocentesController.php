@@ -12,6 +12,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Genero;
 use yii\filters\AccessControl;
+use app\config\Globales;
 
 class HorasdocentesController extends \yii\web\Controller
 {
@@ -32,7 +33,7 @@ class HorasdocentesController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1,3,6]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -69,8 +70,8 @@ class HorasdocentesController extends \yii\web\Controller
 	public function actionView($id)
     {
         $searchModel = new DetallecatedraSearch();
-        $dataProvider = $searchModel->providerxdocente($id, 1);
-        $dataProviderInactivos = $searchModel->providerxdocente($id, 2);
+        $dataProvider = $searchModel->providerxdocente($id, Globales::DOC_ACTIVOS);
+        $dataProviderInactivos = $searchModel->providerxdocente($id, Globales::DOC_INACTIVOS);
         $horasCatedraACobrar = $searchModel->cantidadHorasACobrarXDocente($id);
         $horasCatedraSinCobrar = $searchModel->cantidadHorasConLicenciaSinGoceXDocente($id);
 

@@ -15,6 +15,7 @@ use yii\filters\VerbFilter;
 use app\models\Detallecatedra;
 use app\models\DetallecatedraSearch;
 use yii\filters\AccessControl;
+use app\config\Globales;
 
 /**
  * CatedraController implements the CRUD actions for Catedra model.
@@ -36,7 +37,7 @@ class CatedraController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1,3]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -49,7 +50,7 @@ class CatedraController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -62,7 +63,7 @@ class CatedraController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1,3,6]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -87,6 +88,7 @@ class CatedraController extends Controller
      */
     public function actionIndex()
     {
+        Yii::$app->session->remove('urlorigen');
         $param = Yii::$app->request->queryParams;
         $model = new Catedra();
         $model->scenario = $model::SCENARIO_SEARCHINDEX;
@@ -131,9 +133,14 @@ class CatedraController extends Controller
      */
     public function actionView($id)
     {
+        $origen = urldecode(Yii::$app->request->referrer);
+        $existe = strpos($origen, 'catedra/index' );
+        if ($existe > 0)
+            Yii::$app->session->set('urlorigen', $origen.'#'.$id);
+        
         $searchModel = new DetallecatedraSearch();
-        $dataProvideractivo = $searchModel->providerxcatedra($id,1);
-        $dataProviderinactivo = $searchModel->providerxcatedra($id,2);
+        $dataProvideractivo = $searchModel->providerxcatedra($id,Globales::DETCAT_ACTIVO);
+        $dataProviderinactivo = $searchModel->providerxcatedra($id,Globales::DETCAT_ACTIVO);
 
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -144,6 +151,7 @@ class CatedraController extends Controller
             'searchModel' => $searchModel,
             'dataProvideractivo' => $dataProvideractivo,
             'dataProviderinactivo' => $dataProviderinactivo,
+            
         ]);
     }
 

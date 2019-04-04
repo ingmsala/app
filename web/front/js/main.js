@@ -43,6 +43,25 @@ $(function(){
 	})
 });
 
+
+$(function(){
+	$('#modalaNovedadesParte').click(function(){
+		$('#modal').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+		document.getElementById('modalHeader').innerHTML ='Agregar Novedad';
+	})
+});
+
+$(function(){
+	$('#modalaModificarNovedad').click(function(){
+		$('#modal').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+		document.getElementById('modalHeader').innerHTML ='Modificar Novedad';
+	})
+});
+
 $(function(){
 	$('.modalafinfe').click(function(){
 		$('#modal').modal('show')
@@ -167,7 +186,7 @@ $(document).on('click', '#btnCopiar', function () {
     var divAlerta = document.getElementById('alerta');
     
     function exito() {
-        divAlerta.innerText = '¡¡Código copiado al portapapeles!!';
+        divAlerta.innerText = '¡¡Código copiado!!';
         divAlerta.classList.add('alert-success');
     }
 

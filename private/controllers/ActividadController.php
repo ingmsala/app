@@ -12,7 +12,7 @@ use app\models\Plan;
 use app\models\Actividadtipo;
 use app\models\Propuesta;
 use yii\filters\AccessControl;
-
+use app\config\Globales;
 /**
  * ActividadController implements the CRUD actions for Actividad model.
  */
@@ -33,7 +33,7 @@ class ActividadController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1, 3]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -46,7 +46,7 @@ class ActividadController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                            try{
-                                return in_array (Yii::$app->user->identity->role, [1]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
                             }catch(\Exception $exception){
                                 return false;
                             }

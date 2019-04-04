@@ -17,9 +17,30 @@ this yii\web\View */
 $this->title = 'Catedras';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<div id="loadercontenedor">
+        <div id="loaderman"></div>
+    </div>
 <div class="catedra-index">
 
+<?php
+
+$this->registerJs("
+
+
+    document.addEventListener('readystatechange', (event) => {
+        
+        if(document.readyState == 'complete'){
+            document.getElementById('loadercontenedor').style.display = 'none';
+            document.getElementById('loaderman').style.display = 'none';
+        }
+    });
+
+"); 
+
     
+
+?>
 
     <?php
         $listdivisiones=ArrayHelper::map($divisiones,'nombre','nombre');
@@ -170,9 +191,9 @@ $this->params['breadcrumbs'][] = $this->title;
         
         'rowOptions' => function($model){
             if ($model['revista'] =='VIGENTE' && $model['activo'] != 2){
-                return ['class' => 'success'];
+                return ['class' => 'success', 'id' => $model['id']];
             }
-            return ['class' => 'warning'];
+            return ['class' => 'warning', 'id' => $model['id']];
         },
         'panel' => [
             'type' => GridView::TYPE_DEFAULT,

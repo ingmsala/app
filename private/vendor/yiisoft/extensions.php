@@ -120,4 +120,13 @@ return array (
       '@kartik/date' => $vendorDir . '/kartik-v/yii2-widget-datepicker/src',
     ),
   ),
+  'kartik-v/yii2-widget-spinner' => 
+  array (
+    'name' => 'kartik-v/yii2-widget-spinner',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@kartik/spinner' => $vendorDir . '/kartik-v/yii2-widget-spinner/src',
+    ),
+  ),
 );

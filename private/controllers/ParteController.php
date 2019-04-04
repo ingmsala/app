@@ -14,7 +14,9 @@ use app\models\Docente;
 use app\models\Estadoinasistencia;
 use app\models\Estadoinasistenciaxparte;
 use app\models\DetalleparteSearch;
+use app\models\NovedadesparteSearch;
 use yii\filters\AccessControl;
+use app\config\Globales;
 
 
 /**
@@ -38,11 +40,11 @@ class ParteController extends Controller
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
-                                    if(in_array (Yii::$app->user->identity->role, [1,3,4,6])){
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_CONSULTA])){
                                         return true;
                                     }
 
-                                    if(in_array (Yii::$app->user->identity->role, [5])){
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTORIA])){
                                         $parte = $this->findModel(Yii::$app->request->queryParams['id']);
                                         
                                         if ($parte->preceptoria0->nombre == Yii::$app->user->identity->username)
@@ -65,7 +67,7 @@ class ParteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1,3,4,5,6]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_PRECEPTORIA, Globales::US_CONSULTA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -78,7 +80,7 @@ class ParteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1,5]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_PRECEPTORIA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -91,7 +93,7 @@ class ParteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -104,7 +106,7 @@ class ParteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1, 4]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -117,7 +119,7 @@ class ParteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1,3,4]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -130,7 +132,7 @@ class ParteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1, 3, 6]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -192,6 +194,10 @@ class ParteController extends Controller
         $dataProvider = $searchModel->providerxparte($id);
         $dataProviderOtras = $searchModel->otrasausencias($id, $model->fecha);
 
+        $searchModelnovedades = new NovedadesparteSearch();
+        $dataProvidernovedades = $searchModelnovedades->novedadesxparte($id);
+        
+
         return $this->render('view', [
             'model' => $model,
             'modeldetalle' => Detalleparte::find()->where([
@@ -201,6 +207,9 @@ class ParteController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'dataProviderOtras' => $dataProviderOtras,
+
+            'searchModelnovedades' => $searchModelnovedades,
+            'dataProvidernovedades' => $dataProvidernovedades,
         ]);
     }
 
@@ -212,7 +221,7 @@ class ParteController extends Controller
     public function actionCreate()
     {
         
-            if(in_array (Yii::$app->user->identity->role, [1,3])){
+            if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA])){
                 $precepx=Preceptoria::find()
                     ->orderBy('nombre')->all();
             }else{
@@ -316,7 +325,7 @@ class ParteController extends Controller
             'dataProvider' => $dataProvider,
             'param' => Yii::$app->request->queryParams,
             'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),
-            'estadoinasistencia' => Estadoinasistencia::find()->where(['<=','id',3])->all(),
+            'estadoinasistencia' => Estadoinasistencia::find()->where(['<=','id',Globales::ESTADOINASIST_REGREC])->all(),
         ]);
     }
 
@@ -348,7 +357,7 @@ class ParteController extends Controller
             'dataProvider' => $dataProvider,
             'param' => Yii::$app->request->queryParams,
             'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),
-            'estadoinasistencia' => Estadoinasistencia::find()->where(['<=','id',4])->all(),
+            'estadoinasistencia' => Estadoinasistencia::find()->where(['<=','id',Globales::ESTADOINASIST_SECJUS])->all(),
         ]);
     }
 
@@ -386,14 +395,14 @@ class ParteController extends Controller
             
             $model = new Estadoinasistenciaxparte;
             $model->detalle = null;
-            $model->estadoinasistencia = 3;
+            $model->estadoinasistencia = Globales::ESTADOINASIST_REGREC;
             date_default_timezone_set('America/Argentina/Buenos_Aires');
             $model->fecha = date("Y-m-d H:i:s");
             $model->detalleparte = $detalleseleccionado;
             $dp = Detalleparte::findOne($detalleseleccionado);
             
-            $dp->estadoinasistencia = 3;
-            ($dp->falta == 2) ? $dp->falta = 1 : $dp->falta = 2;
+            $dp->estadoinasistencia = Globales::ESTADOINASIST_REGREC;
+            ($dp->falta == Globales::FALTA_COMISION) ? $dp->falta = Globales::FALTA_FALTA : $dp->falta = Globales::FALTA_COMISION;
             $dp->save();
             $model->falta = $dp->falta;
             $model->save();

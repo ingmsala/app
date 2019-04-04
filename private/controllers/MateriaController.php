@@ -11,6 +11,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use app\config\Globales;
 
 /**
  * MateriaController implements the CRUD actions for Materia model.

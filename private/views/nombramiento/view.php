@@ -19,6 +19,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php 
+      
+        
+        (Yii::$app->session->has('urlorigen')) ? $anterior = Yii::$app->session->get('urlorigen') : $anterior = 'index.php?r=nombramiento/index';
+
+        echo Html::a('<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>'.' Volver', 
+        $anterior, [
+            'class' => 'btn btn-default',
+            
+        ]);
+
+        echo '&nbsp;';
+
         if($model->condicion<>5){
             echo Html::button('Modificar', ['value' => Url::to('index.php?r=nombramiento/update&id='.$model->id),
                                 'class' => 'modalaNombramiento btn btn-primary']);

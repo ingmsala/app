@@ -15,12 +15,29 @@ $this->title = 'Nombramientos';
 
 
 ?>
+    
+    <?= $this->render('_filter', [
+        'model' => $model,
 
+        'cargos' => $cargos,
+        'docentes' => $docentes,
+        'revistas' => $revistas,
+        'condiciones' => $condiciones,
+        'resoluciones' => $resoluciones,
+        'resolucionesext' => $resolucionesext,
+        'param' => $param,
+        
+    ]) ?>
+
+    <?php  echo Constantes::US_SUPER; ?>
        
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
+        'rowOptions' => function($model){
+            return ['id' => $model['id']];
+        },
         'panel' => [
             'type' => GridView::TYPE_DEFAULT,
 
@@ -32,8 +49,6 @@ $this->title = 'Nombramientos';
             [
                 'label' => 'Cod. Cargo',
                 'attribute' => 'cargo',
-                'filter' =>ArrayHelper::map($dataProvider->models, 'cargo', 'cargo0.nombre'),
-                'filterInputOptions' => ['prompt' => 'Todos', 'class' => 'form-control', 'id' => null],
                 'value' => function($model){
 
                    return $model->cargo.' - '.$model->cargo0->nombre;
@@ -121,7 +136,7 @@ $this->title = 'Nombramientos';
             '{export}',
             
         ],
-        'floatHeader'=>true,
+        //'floatHeader'=>true,
         'summary'=>false,
         'exportConfig' => [
             GridView::EXCEL => ['label' => 'Excel'],

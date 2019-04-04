@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
+use app\config\Globales;
 
 class FaltasxmesesxturnoController extends \yii\web\Controller
 {
@@ -30,7 +31,7 @@ class FaltasxmesesxturnoController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1,3,6]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }

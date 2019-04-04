@@ -12,6 +12,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use app\config\Globales;
 
 /**
  * EstadoinasistenciaxparteController implements the CRUD actions for Estadoinasistenciaxparte model.
@@ -33,7 +34,7 @@ class EstadoinasistenciaxparteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -46,7 +47,7 @@ class EstadoinasistenciaxparteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1, 4]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -59,7 +60,7 @@ class EstadoinasistenciaxparteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1, 3, 4]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -118,7 +119,7 @@ class EstadoinasistenciaxparteController extends Controller
 
         $model = new Estadoinasistenciaxparte();
         $faltas = Falta::find()
-                    ->where(['<=','id',2])
+                    ->where(['<=','id',Globales::FALTA_COMISION])
                     ->andWhere(['<>','id',$detallepartex->falta])
                     ->all();
 
@@ -209,7 +210,7 @@ class EstadoinasistenciaxparteController extends Controller
         $dp->save();
         $model->falta = $dp->falta;
         if ($model->save()){
-            if($estadoinasistencia==2)
+            if($estadoinasistencia==Globales::ESTADOINASIST_REGRAT)
                 return $this->redirect(['parte/controlregencia']);
             else
                 return $this->redirect(['parte/controlsecretaria']);
@@ -224,7 +225,7 @@ class EstadoinasistenciaxparteController extends Controller
 
         $model = new Estadoinasistenciaxparte();
         $faltas = Falta::find()
-                    ->where(['<=','id',2])
+                    ->where(['<=','id',Globales::FALTA_COMISION])
                     ->andWhere(['<>','id',$detallepartex->falta])
                     ->all();
 

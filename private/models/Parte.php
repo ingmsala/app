@@ -78,4 +78,12 @@ class Parte extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Preceptoria::className(), ['id' => 'preceptoria']);
     }
+
+       /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNovedadespartes()
+    {
+        return $this->hasMany(Novedadesparte::className(), ['parte' => 'id']);
+    }
 }

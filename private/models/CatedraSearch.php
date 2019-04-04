@@ -8,6 +8,8 @@ use yii\data\ActiveDataProvider;
 use app\models\Catedra;
 use yii\data\SqlDataProvider;
 use yii\db\Query;
+use app\config\Globales;
+
 
 /**
  * CatedraSearch represents the model behind the search form of `app\models\Catedra`.
@@ -112,7 +114,7 @@ class CatedraSearch extends Catedra
         left join condicion con ON dc.condicion = con.id
         left join revista rev ON dc.revista = rev.id
         left join propuesta pro ON a.propuesta = pro.id
-        where (dc.activo is null or dc.activo=1)';
+        where (dc.activo is null or dc.activo='.Globales::DETCAT_ACTIVO.')';
         if (isset($params['Catedra']['divisionnom']) && $params['Catedra']['divisionnom'] != ''){
             $sql .= ' AND d.nombre like "%'.$params['Catedra']["divisionnom"].'%"';
         }

@@ -13,6 +13,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Genero;
 use yii\filters\AccessControl;
+use app\config\Globales;
 
 class FaltasdocentesController extends \yii\web\Controller
 {
@@ -33,7 +34,7 @@ class FaltasdocentesController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1,3,6]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }

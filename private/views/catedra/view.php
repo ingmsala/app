@@ -20,12 +20,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="catedra-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
+    
     <p>
         
         <?php
         
-        (!empty(Yii::$app->request->referrer)) ? $anterior = Yii::$app->request->referrer : $anterior = 'index.php?r=catedra/index';
+        (Yii::$app->session->has('urlorigen')) ? $anterior = Yii::$app->session->get('urlorigen') : $anterior = 'index.php?r=catedra/index';
 
         echo Html::a('<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>'.' Volver', 
         $anterior, [

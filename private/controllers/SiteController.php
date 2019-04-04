@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Division;
+use app\config\Globales;
 
 class SiteController extends Controller
 {
@@ -65,7 +66,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        if (in_array (Yii::$app->user->identity->role, [8, 9])){
+        if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
                 return $this->redirect(['/optativas']);
                 
         }
@@ -80,7 +81,7 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
-            if (in_array (Yii::$app->user->identity->role, [8, 9])){
+            if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
                 return $this->redirect(['/optativas']);
             }
             return $this->goHome();
@@ -88,7 +89,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            if (in_array (Yii::$app->user->identity->role, [8, 9])){
+            if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
                 return $this->redirect(['/optativas']);
             }
             return $this->goBack();

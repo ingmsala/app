@@ -13,6 +13,7 @@ use app\models\Revista;
 use app\models\Condicion;
 use app\models\Catedra;
 use yii\filters\AccessControl;
+use app\config\Globales;
 
 use yii\widgets\ActiveForm; // Ajaxvalidation
 
@@ -40,7 +41,7 @@ class DetallecatedraController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1,3]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -53,7 +54,7 @@ class DetallecatedraController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1,3,6]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -221,7 +222,7 @@ class DetallecatedraController extends Controller
 
         $model = $this->findModel($id);
         $catedra = $model->catedra;
-        $model->activo = 2;
+        $model->activo = Globales::CAT_INACTIVO;
         
         
 

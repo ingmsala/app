@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Genero;
 use yii\filters\AccessControl;
+use app\config\Globales;
 
 /**
  * DocenteController implements the CRUD actions for Docente model.
@@ -31,7 +32,7 @@ class DocenteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [1,3]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -44,7 +45,7 @@ class DocenteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -57,7 +58,7 @@ class DocenteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1,3,6]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
                             }catch(\Exception $exception){
                                 return false;
                             }

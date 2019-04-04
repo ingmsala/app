@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Nombramiento;
+use app\config\Globales;
 
 /**
  * NombramientoSearch represents the model behind the search form of `app\models\Nombramiento`.
@@ -45,8 +46,32 @@ class NombramientoSearch extends Nombramiento
     public function search($params)
     {
         $query = Nombramiento::find()->joinWith(['docente0', 'revista0', 'division0', 'condicion0', 'suplente0 n', 'extension0'])
-                        ->where(['!=','condicion.nombre', 'SUPL'] )
-                        ->orderBy('cargo');
+                        //->where(['!=','condicion.nombre', 'SUPL'] )
+                        ->where(true)
+                        ->andWhere(
+
+                            (isset($params['Nombramiento']['cargo']) && $params['Nombramiento']['cargo'] != '') ? ['nombramiento.cargo' => $params['Nombramiento']['cargo']] : true)
+                        ->andWhere(
+
+                            (isset($params['Nombramiento']['docente']) && $params['Nombramiento']['docente'] != '') ? 
+                            [   
+                                'or', 
+                                ['nombramiento.docente' => $params['Nombramiento']['docente']],
+                                ['n.docente' => $params['Nombramiento']['docente']]
+                            ] : true)
+                        ->andWhere(
+
+                            (isset($params['Nombramiento']['revista']) && $params['Nombramiento']['revista'] != '') ? ['nombramiento.revista' => $params['Nombramiento']['revista']] : true)
+                        ->andWhere(
+
+                            (isset($params['Nombramiento']['condicion']) && $params['Nombramiento']['condicion'] != '') ? ['nombramiento.condicion' => $params['Nombramiento']['condicion']] : ['!=','condicion.nombre', 'SUPL'])
+                        ->andWhere(
+
+                            (isset($params['Nombramiento']['resolucion']) && $params['Nombramiento']['resolucion'] != '') ? ['nombramiento.resolucion' => $params['Nombramiento']['resolucion']] : true)
+                        ->andWhere(
+
+                            (isset($params['Nombramiento']['resolucionext']) && $params['Nombramiento']['resolucionext'] != '') ? ['nombramiento.resolucionext' => $params['Nombramiento']['resolucionext']] : true)
+                        ->orderBy('nombramiento.cargo, docente.apellido, docente.nombre');
 
         // add conditions that should always apply here
 
@@ -129,7 +154,7 @@ class NombramientoSearch extends Nombramiento
         $query = Nombramiento::find()
                 ->select('sum(horas) as horas')
                 ->where(['docente' => $id])
-                ->andWhere(['<>', 'revista', 2])->one();//no licencia sin goce
+                ->andWhere(['<>', 'revista', Globales::LIC_SINGOCE])->one();//no licencia sin goce
 
 
         return $query;
@@ -141,7 +166,7 @@ class NombramientoSearch extends Nombramiento
         $query = Nombramiento::find()
                 ->select('sum(horas) as horas')
                 ->where(['docente' => $id])
-                ->andWhere(['revista' => 2])->one();// lic s/goce
+                ->andWhere(['revista' => Globales::LIC_SINGOCE])->one();// lic s/goce
 
 
         return $query;
@@ -188,7 +213,7 @@ class NombramientoSearch extends Nombramiento
     public function getPreceptores()
     {
         $query = Nombramiento::find()
-                ->where(['cargo' => 227])
+                ->where(['cargo' => Globales::CARGO_PREC])
                 ->orderBy('revista, division');
 
         // add conditions that should always apply here
