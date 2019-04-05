@@ -18,25 +18,10 @@ $this->title = 'Catedras';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div id="loadercontenedor">
-        <div id="loaderman"></div>
-    </div>
+
 <div class="catedra-index">
 
 <?php
-
-$this->registerJs("
-
-
-    document.addEventListener('readystatechange', (event) => {
-        
-        if(document.readyState == 'complete'){
-            document.getElementById('loadercontenedor').style.display = 'none';
-            document.getElementById('loaderman').style.display = 'none';
-        }
-    });
-
-"); 
 
     
 

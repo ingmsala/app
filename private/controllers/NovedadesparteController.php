@@ -30,7 +30,7 @@ class NovedadesparteController extends Controller
                 'only' => ['index', 'view', 'create', 'update', 'delete', 'panelnovedades', 'nuevoestado'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'actions' => ['index', 'view'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
@@ -43,11 +43,37 @@ class NovedadesparteController extends Controller
                     ],
 
                     [
-                        'actions' => ['panelnovedades', 'nuevoestado'],   
+                        'actions' => ['create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_PRECEPTORIA]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['nuevoestado'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
                                 return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['panelnovedades'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
                             }catch(\Exception $exception){
                                 return false;
                             }

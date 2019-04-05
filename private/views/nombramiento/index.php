@@ -29,8 +29,7 @@ $this->title = 'Nombramientos';
         
     ]) ?>
 
-    <?php  echo Constantes::US_SUPER; ?>
-       
+           
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,

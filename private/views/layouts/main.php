@@ -155,7 +155,7 @@ if ($cantnov>0) {
                 ) :(
 
                     in_array (Yii::$app->user->identity->role, [1,3,4,5,6]) ? (
-                        ['label' => in_array (Yii::$app->user->identity->role, [1, 3, 6])?$cantnov.' Parte Docente':'Parte Docente', 
+                        ['label' => in_array (Yii::$app->user->identity->role, [1, 3])?' Parte Docente '.'<sup><span class="label label-primary">'.$cantnov.'</span></sup>':'Parte Docente', 
                         'items' => [
                             in_array (Yii::$app->user->identity->role, [1, 3, 4, 5, 6])?  
                             ['label' => 'Parte docente', 'url' => ['/parte']]: ['label' => ''],
