@@ -54,7 +54,7 @@ class FaltasdocentesController extends \yii\web\Controller
         ];
     }
 
- 	public function actionIndex($mes = 0, $anio = 0, $docente = 0)
+ 	public function actionIndex($mes = 0, $anio = 1, $docente = 0)
 	    {
 	        $searchModel = new DetalleparteSearch();
 	        $dataProvider = $searchModel->providerfaltasdocentes($mes, $anio, $docente);

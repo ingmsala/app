@@ -114,7 +114,13 @@ class CatedraSearch extends Catedra
         left join condicion con ON dc.condicion = con.id
         left join revista rev ON dc.revista = rev.id
         left join propuesta pro ON a.propuesta = pro.id
-        where (dc.activo is null or dc.activo='.Globales::DETCAT_ACTIVO.')';
+        where true';
+        if (!isset($params['Catedra']['activo']) or $params['Catedra']['activo'] == 0){
+            $sql .= ' AND (dc.activo is null or dc.activo='.Globales::DETCAT_ACTIVO.')';
+        }else{
+            $sql .= ' AND (dc.activo='.Globales::DETCAT_INACTIVO.')';
+            $sql .= ' AND c.id not in (select c2.id from catedra c2 left join detallecatedra dc2 ON c2.id = dc2.catedra where dc2.activo=null or dc2.activo=1)';
+        }
         if (isset($params['Catedra']['divisionnom']) && $params['Catedra']['divisionnom'] != ''){
             $sql .= ' AND d.nombre like "%'.$params['Catedra']["divisionnom"].'%"';
         }

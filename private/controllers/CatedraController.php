@@ -112,6 +112,8 @@ class CatedraController extends Controller
             $model->divisionnom = $param['Catedra']['divisionnom'];
         if(isset($param['Catedra']['resolucion']))
             $model->resolucion = $param['Catedra']['resolucion'];
+        if(isset($param['Catedra']['activo']) && $param['Catedra']['activo'] == 1)
+            $model->activo = $param['Catedra']['activo'];
 
         return $this->render('index', [
             'model' => $model,
@@ -122,6 +124,7 @@ class CatedraController extends Controller
             'docentes' => $docentes,
             'resoluciones' => $resoluciones,
             'param' => $param,
+
         ]);
     }
 
@@ -242,6 +245,6 @@ class CatedraController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    
+
     
 }

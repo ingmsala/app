@@ -85,6 +85,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             }
 
+                            if(isset($param['Catedra']['activo'])){
+                                if($param['Catedra']['activo']==1){
+                                    $filter = true;
+                                    echo '<b> - Inactivas </b>';
+                                    
+                                }
+                            }
+
 
                         ?>
 
@@ -150,6 +158,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ])->label("Resolución");
 
                             ?>
+
+                            <?= $form->field($model, 'activo')->checkbox(['label'=>''])->label('Inactivas'); ?>
 
                             <div class="form-group">
                                 <?= Html::submitButton('Buscar', ['class' => 'btn btn-primary']) ?>

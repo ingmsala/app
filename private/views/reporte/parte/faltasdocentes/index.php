@@ -49,7 +49,7 @@ $listDocentes=ArrayHelper::map($docentes,'id', function($doc) {
      <?= Html::beginForm(); ?>
      <div class="form-group col-xs-2 .col-sm-3">
          <label for="cmbyear">Año</label> 
-     <?= Html::dropDownList('year', $selection=$anio, $years, ['prompt' => '(Año)', 'id' => 'cmbyear', 'class' => 'form-control ',
+     <?= Html::dropDownList('year', $selection=$anio, $years, ['prompt' => '(Año)', 'id' => 'cmbyear', 'class' => 'form-control ',   'required' => true,
         'onchange'=>'
                     var aniojs = document.getElementById("cmbyear").value;
                     var mesjs = document.getElementById("cmbmes").value;
