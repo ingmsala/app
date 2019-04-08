@@ -155,7 +155,7 @@ if ($cantnov>0) {
                 ) :(
 
                     in_array (Yii::$app->user->identity->role, [1,3,4,5,6]) ? (
-                        ['label' => in_array (Yii::$app->user->identity->role, [1, 3])?' Parte Docente '.'<sup><span class="label label-primary">'.$cantnov.'</span></sup>':'Parte Docente', 
+                        ['label' => in_array (Yii::$app->user->identity->role, [1, 3, 4])?' Parte Docente '.'<sup><span class="label label-primary">'.$cantnov.'</span></sup>':'Parte Docente', 
                         'items' => [
                             in_array (Yii::$app->user->identity->role, [1, 3, 4, 5, 6])?  
                             ['label' => 'Parte docente', 'url' => ['/parte']]: ['label' => ''],
@@ -166,7 +166,7 @@ if ($cantnov>0) {
                             in_array (Yii::$app->user->identity->role, [1, 3, 6])?    
                             ['label' => 'Control de Secretaría', 'url' => ['parte/controlsecretaria']]: ['label' => ''],
                             '<div class="dropdown-divider"></div>',
-                            in_array (Yii::$app->user->identity->role, [1, 3, 6])?    
+                            in_array (Yii::$app->user->identity->role, [1, 3, 4, 6])?    
                             ['label' => 'Panel de Novedades '.$cantnov, 'url' => ['novedadesparte/panelnovedades']]: ['label' => ''],
                             '<div class="dropdown-divider"></div>',
                             /*['label' => 'Horarios de cátedra', 'url' => ['parte/horarios']],
