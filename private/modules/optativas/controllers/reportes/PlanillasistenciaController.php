@@ -26,7 +26,7 @@ use \Datetime;
 /**
  * MatriculaController implements the CRUD actions for Matricula model.
  */
-class FichadelalumnoController extends \yii\web\Controller
+class PlanillasistenciaController extends \yii\web\Controller
 {
     /**
      * {@inheritdoc}
@@ -72,63 +72,34 @@ class FichadelalumnoController extends \yii\web\Controller
         
         $this->layout = 'main';
         $searchModel = new MatriculaSearch();
-            $comision = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
-        if($comision != 0){
-            $dataProvider = $searchModel->alumnosxcomision($comision);
-               
-            return $this->render('index', [
-                
-                'dataProvider' => $dataProvider,
-                'searchModel' => $searchModel,
-
-            ]);
-        }else{
-        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
-            return $this->redirect(['/optativas']);
-        }
-
-    }
-
-    /**
-     * Displays a single Matricula model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        $this->layout = 'main';
         $comision = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         if($comision != 0){
-            $searchModelInasistencias  = new InasistenciaSearch();
-            $dataProviderInasistencias = $searchModelInasistencias->providerinasistenciasxalumno($id);
 
-            $clasescomision = Clase::find()
-                                ->where(['comision' => $comision])
-                                ->orderBy('fecha ASC')
-                                ->all();
+            $dataProvider = $searchModel->alumnosxcomision($comision);
 
-            $listClasescomision=ArrayHelper::map($clasescomision,
+
+            $alumnosxcomision = Matricula::find()
+                                    ->joinWith(['alumno0'])
+                                    ->where(['comision' => $comision])
+                                    ->orderBy('alumno.apellido, alumno.nombre')
+                                    ->all();
+
+             $alumnosxcomision=ArrayHelper::map($alumnosxcomision,
+                    
                     function($model){
-                        date_default_timezone_set('America/Argentina/Buenos_Aires');
-                        return Yii::$app->formatter->asDate($model->fecha, 'dd/MM');
+                        
+                        return $model->alumno0->id;
                         
                     },
                     function($model){
-                        date_default_timezone_set('America/Argentina/Buenos_Aires');
-                        $fecha = date_create($model->fecha);
-                        $hoy = new DateTime("now");
-                        $interval = $fecha->diff($hoy);
-                        $signo = $interval->format('%R');
-                        //$interval = $interval->format('%a');
-                        //$interval = intval($interval);
-                        //return $signo;
-                        if ($signo == '+')
-                            return "P";
-                        else
-                            return '';
+                        
+                        return [$model->alumno0->apellido.', '.$model->alumno0->nombre, array_fill(0, 10, 's')];
                     }
             );
+
+
+
+    /*
 
             $faltasdelalumno = Inasistencia::find()
                                 ->joinWith(['clase0'])
@@ -153,50 +124,46 @@ class FichadelalumnoController extends \yii\web\Controller
                             return "A";
                         else
                             return '';
-                    });
+                    }
+            );
 
-            $listClasescomision = array_merge($listClasescomision, $listFaltasdelalumno);
+            */
 
             $data = [
-                $listClasescomision,
+                $alumnosxcomision,
+                //$listFaltasdelalumno,
                 
             ];
 
             $dataProviderInasistencias = new ArrayDataProvider([
-                'allModels' => $data,
-                'pagination' => [
-                    'pageSize' => 10,
+                'allModels' => [
+
+                    'alumno' => $alumnosxcomision,
+                    //'clases' => array_fill(0, 10, 's'),
+
                 ],
-                
             ]);
 
-            
-            $searchModelSeguimientos  = new SeguimientoSearch();
-            $dataProviderSeguimientos = $searchModelSeguimientos->seguimientosdelalumno($id);
+            $com = $this->findModel($comision);
+            $optnom = $com->optativa0->aniolectivo0->nombre.' - '.$com->optativa0->actividad0->nombre.' <br/> Comisión: '.$com->nombre;
 
 
-            return $this->render('view', [
-                'dataProviderInasistencias' => $dataProviderInasistencias,
-                'listClasescomision' => $listClasescomision,
-                'dataProviderSeguimientos' => $dataProviderSeguimientos,
-                'model' => $this->findModel($id),
+            return $this->render('index', [
+                
+                'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'optnom' => $optnom,
+
             ]);
         }else{
-        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
+            Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
             return $this->redirect(['/optativas']);
         }
+
     }
- 
-    /**
-     * Finds the Matricula model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Matricula the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Matricula::findOne($id)) !== null) {
+
+ protected function findModel($id){
+        if (($model = Comision::findOne($id)) !== null) {
             return $model;
         }
 

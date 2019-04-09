@@ -574,6 +574,18 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
   #firma, #encabezado {
     display: block;
   }
+
+  #contimpr{
+    margin-top: -100px;
+    margin-right: 20px;
+  }
+
+.table > tbody > tr > td{
+    padding: 2px;
+    font-size: 8pt;
+    font-weight: 100 ;
+  }
+
 }
 
 #loadercontenedor

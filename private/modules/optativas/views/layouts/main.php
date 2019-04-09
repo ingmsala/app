@@ -61,8 +61,8 @@ AppAsset::register($this);
                                 '<div class="dropdown-divider"></div>',
 
                                 [
-                                    'label' => 'Lista de Alumnos',
-                                    'url' => ['/optativas/fichadelalumno'],
+                                    'label' => 'Planilla de Asistencia',
+                                    'url' => ['/optativas/reportes/planillasistencia'],
                                 ],
                             
                                 '<div class="dropdown-divider"></div>',
