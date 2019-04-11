@@ -37,6 +37,7 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         ),
         'k' => 
         array (
+            'kartik\\switchinput\\' => 19,
             'kartik\\spinner\\' => 15,
             'kartik\\select2\\' => 15,
             'kartik\\grid\\' => 12,
@@ -127,6 +128,10 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         'lo\\widgets\\modal\\' => 
         array (
             0 => __DIR__ . '/..' . '/loveorigami/yii2-modal-ajax/src',
+        ),
+        'kartik\\switchinput\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-switchinput',
         ),
         'kartik\\spinner\\' => 
         array (
