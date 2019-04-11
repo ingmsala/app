@@ -5,12 +5,12 @@ namespace app\modules\optativas\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\optativas\models\Optativa;
+use app\modules\optativas\models\Areaoptativa;
 
 /**
- * OptativaSearch represents the model behind the search form of `app\modules\optativas\models\Optativa`.
+ * AreaoptativaSearch represents the model behind the search form of `app\modules\optativas\models\Areaoptativa`.
  */
-class OptativaSearch extends Optativa
+class AreaoptativaSearch extends Areaoptativa
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,8 @@ class OptativaSearch extends Optativa
     public function rules()
     {
         return [
-            [['id', 'actividad', 'aniolectivo', 'duracion', 'areaoptativa'], 'integer'],
+            [['id'], 'integer'],
+            [['nombre'], 'safe'],
         ];
     }
 
@@ -40,7 +41,7 @@ class OptativaSearch extends Optativa
      */
     public function search($params)
     {
-        $query = Optativa::find();
+        $query = Areaoptativa::find();
 
         // add conditions that should always apply here
 
@@ -59,11 +60,9 @@ class OptativaSearch extends Optativa
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'actividad' => $this->actividad,
-            'aniolectivo' => $this->aniolectivo,
-            'duracion' => $this->duracion,
-            'areaoptativa' => $this->areaoptativa,
         ]);
+
+        $query->andFilterWhere(['like', 'nombre', $this->nombre]);
 
         return $dataProvider;
     }

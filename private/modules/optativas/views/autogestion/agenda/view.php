@@ -8,7 +8,7 @@ use yii\bootstrap\Progress;
 /* @var $searchModel app\modules\optativas\models\ClaseSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Clases';
+$this->title = 'Agenda de Clases';
 
 ?>
 <div class="clase-index" style="margin-top: 20px;">
@@ -38,9 +38,7 @@ $this->title = 'Clases';
 
         ],
         'toolbar'=>[
-            ['content' => 
-                Html::a('Nueva Clase', ['create'], ['class' => 'btn btn-success'])
-            ],
+            
             '{export}',
             
         ],
@@ -71,8 +69,6 @@ $this->title = 'Clases';
             ],
             'horascatedra',
             
-
-            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); 
 

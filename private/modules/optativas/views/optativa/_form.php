@@ -13,6 +13,7 @@ use kartik\select2\Select2;
 
 <?php $listActividades=ArrayHelper::map($actividades,'id','nombre'); ?>
 <?php $listAniolectivo=ArrayHelper::map($aniolectivo,'id','nombre'); ?>
+<?php $listAreasoptativas=ArrayHelper::map($areasoptativas,'id','nombre'); ?>
 
 <div class="optativa-form">
 
@@ -22,6 +23,18 @@ use kartik\select2\Select2;
 
         $form->field($model, 'actividad')->widget(Select2::classname(), [
             'data' => $listActividades,
+            'options' => ['placeholder' => 'Seleccionar...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);
+
+    ?>
+
+    <?= 
+
+        $form->field($model, 'areaoptativa')->widget(Select2::classname(), [
+            'data' => $listAreasoptativas,
             'options' => ['placeholder' => 'Seleccionar...'],
             'pluginOptions' => [
                 'allowClear' => true

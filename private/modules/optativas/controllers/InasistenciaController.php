@@ -179,7 +179,8 @@ class InasistenciaController extends Controller
             
         }
 
-        
+        Yii::$app->session->set('info', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La asistencia se cargó <b>correctamente</b>');
+
         return $clase;
     }
 

@@ -59,7 +59,30 @@ use yii\bootstrap\Alert;
                     'body' => Yii::$app->session->get('success'),
                 ]);
                 Yii::$app->session->remove('success');
-    } ?> 
+    } ?>
+    <?php
+
+         if (Yii::$app->session->has('info')){ 
+             echo Alert::widget([
+                    'options' => [
+                        'class' => 'alert-success',
+                        'id' => 'alertinfo',
+                        
+                    ],
+                    'body' => Yii::$app->session->get('info'),
+                ]);
+                Yii::$app->session->remove('info');
+    } ?>  
 </div>
+
+<?php 
+
+    $js=<<< JS
+     $("#alertinfo").animate({opacity: 1.0}, 3000).fadeOut("slow");
+JS;
+
+$this->registerJs($js, yii\web\View::POS_READY);
+
+?>
 
 

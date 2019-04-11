@@ -23,14 +23,26 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php $this->registerJs("
+    
+
+ 
 
 
   $('#btnausentes').on('click', function (e) {
     e.preventDefault();
 
-   
+    var array = []
+var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
+
+for (var i = 0; i < checkboxes.length; i++) {
+  array.push(checkboxes[i].name)
+}
+
+//alert(array);
+
     
-    var keys = $('#grid').yiiGridView('getSelectedRows');
+    
+    var keys = array;
 
 
     if(keys.length < 1){
@@ -41,6 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
         var clase     = ".$clase.";
         var presentes     = '".$presentestxt."';
         var pjaxContainer = 'test';
+        var pjaxContainer2 = 'test2';
                     
                     $.ajax({
                       url:   deleteUrl,
@@ -53,7 +66,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     }).done(function (data) {
                       
                       $.pjax.reload({container: '#' + $.trim(pjaxContainer)});
-                      alert('La operación se realizó correctamente');
+                      $.pjax.reload({container: '#' + $.trim(pjaxContainer2)});
+                      window.location.href = 'index.php?r=optativas%2Fclase%2Fview&id='+ clase;
+
+                      //alert('La operación se realizó correctamente');
                     });
     
               
@@ -70,115 +86,37 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
 
 
-Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
+Pjax::begin(['id' => 'test', 'timeout' => 5000]); 
     
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'id' => 'grid',
-        'floatHeader'=>true,
-        'rowOptions' => function($model) use ($listInasistenciasdeldia){
-             if (in_array ($model['id'], $listInasistenciasdeldia)){
-                return [
-                    'class' => 'danger',
-                    'data' => [
-                        'key' => $model['id']
-                    ],
-
-            ];
-            }
-            return [
-                'data' => [
-                    'key' => $model['id']
-                ]
-            ];
-        },
-        //'filterModel' => $searchModel,
-        'panel' => [
-            'type' => GridView::TYPE_DEFAULT,
-            'heading' => Html::encode($this->title),
-            //'beforeOptions' => ['class'=>'kv-panel-before'],
-        ],
-        'summary' => false,
-
-        'exportConfig' => [
-            GridView::EXCEL => [
-                'label' => 'Excel',
-                
-                //'alertMsg' => false,
-            ],
-            
-
-        ],
-
-        'toolbar'=>[
-            
-            '{export}',
-            
-        ],
-        'columns' => [
-            [
-                'class' => 'kartik\grid\CheckboxColumn',
-                'hiddenFromExport' => true,
-                
-                'checkboxOptions' => 
-                    function($model, $key, $index, $column) use ($listInasistenciasdeldia) {
-
-                     $bool = in_array($model->id, $listInasistenciasdeldia);
-                     return ['checked' => $bool];
-                 },
-                'header' => Html::checkBox('selection_all', false, [
-                'label' => '<span>Ausentes</span>',//pull left the label
-                'class' => 'select-on-check-all',//pull right the checkbox
-                
-          
-        ]),
-            ],
-            ['class' => 'yii\grid\SerialColumn'],
-            
-            /*[
-                'label' => 'Optativa',
-                'attribute' => 'fecha',
-                'value' => function($model){
-                    //return var_dump($model);
-                    return $model['comision0']['optativa0']['actividad0']['nombre'].' - Comisión: '.$model['comision0']['nombre'];
-                },
-                'group' => true,  // enable grouping,
-                'groupedRow' => true,                    // move grouped column to a single grouped row
-                'groupOddCssClass' => 'kv-grouped-row',  // configure odd group cell css class
-                'groupEvenCssClass' => 'kv-grouped-row', // configure even group cell css class
-                
-            ],*/
-
-            'alumno0.apellido',
-            'alumno0.nombre',
-            [
-                'label' => 'Matrícula',
-                'attribute' => 'estadomatricula0.nombre',
-                
-            ],
-            [
-                'label' => 'En clase',
-                'value' => function($model) use ($listInasistenciasdeldia) {
-                     if (in_array ($model['id'], $listInasistenciasdeldia)){
-                        return "AUSENTE";
-                    }
-                    return "PRESENTE";
-                }
-            ],
-                        
-           
-        ],
-        'pjax' => true,
-    ]);
+    
 
 Pjax::end();
  ?>
 
+    
+</div>
+
+<a
+    href="index.php?r=optativas%2Fclase%2Fviewgrid&id=<?=$clase; ?>"
+    target="v"
+    onclick="window.open('', 'v', 'width=950,height=600');" >
+    Cambiar Vista
+</a>
+
+<div class="row">
+ <?php 
+ Pjax::begin(['id' => 'test2', 'timeout' => 5000]);
+ echo $echodiv; 
+    Pjax::end();
+ ?>
+
+</div>
+<div class="pull-right">
     <?=Html::a(
                 '<span class="glyphicon glyphicon-ok"></span> Confirmar Ausentes',
                 false,
                 [
-                    'class' => 'btn btn-danger',
+                    'class' => 'btn btn-primary',
                     'id' => 'btnausentes',
                     'delete-url'     => '/parte/procesarmarcadosreg',
                     'pjax-container' => 'test',

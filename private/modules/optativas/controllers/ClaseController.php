@@ -15,6 +15,10 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+
+use kartik\switchinput\SwitchInput;
 
 /**
  * ClaseController implements the CRUD actions for Clase model.
@@ -129,6 +133,44 @@ class ClaseController extends Controller
                         ->where(['comision' => $comision])
                         ->all();
 
+            $alumnosdecomisionprueba = Matricula::find()
+                        ->joinWith(['alumno0'])
+                        ->where(['comision' => $comision])
+                        ->orderBy('alumno.apellido, alumno.nombre')
+                        ->all();
+
+            $listInasistenciasdeldia=ArrayHelper::map($inasistenciasdeldia,'matricula','matricula');
+            $echodiv='';
+            foreach ($alumnosdecomisionprueba as $matricula) {
+
+                $sel = in_array ($matricula["id"], $listInasistenciasdeldia);
+                if($sel)
+                    $paneltype = 'danger';
+                else
+                    $paneltype = 'success';
+
+                $echodiv .= '<div class="col-6 col-md-6 col-lg-4">';
+                $echodiv .= '<div class="panel panel-'.$paneltype.'" style="height: 25vh;">';
+                $echodiv .= '<div class="panel-heading">'.$matricula["alumno0"]["apellido"].', '.$matricula["alumno0"]["nombre"].'</div>';
+                $echodiv .= '<div class="panel-body"><span class ="pull-right">';
+                //$echodiv .= Html::checkbox("scripts", $sel, ['label' => 'Se Ausentó', 'value' => $matricula["id"]]);
+                $echodiv .= SwitchInput::widget([
+                            'name' => $matricula["id"],
+                            'value'=>$sel,
+                            'pluginOptions' => [
+                                'onText' => 'Ausente',
+                                'offText' => 'Presente',
+                                'offColor' => 'success',
+                                'onColor' => 'danger',
+                            ]
+                        ]);
+                $echodiv .= '</span></div>
+                                </div>
+                              </div>';
+            }
+            
+
+
            
             return $this->render('view', [
                 'model' => $this->findModel($id),
@@ -136,7 +178,47 @@ class ClaseController extends Controller
                 'searchModel' => $searchModel,
                 'inasistenciasdeldia' => $inasistenciasdeldia,
                 'alumnosdecomision' => $alumnosdecomision,
+                'alumnosdecomisionprueba' => $alumnosdecomisionprueba,
+                'echodiv' => $echodiv,
                
+
+            ]);
+        }else{
+            Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
+                return $this->redirect(['/optativas']);
+        }
+    }
+
+    public function actionViewgrid($id)
+    {
+        $this->layout = null;
+        $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
+        if($com != 0){
+            $searchModel = new MatriculaSearch();
+            $comision = $this->findModel($id)->comision;
+            $dataProvider = $searchModel->alumnosxcomision($comision);
+            $inasistenciasdeldia = Inasistencia::find()
+                        ->where(['clase' => $id])
+                        ->all();
+            $alumnosdecomision = Matricula::find()
+                        ->select('id')
+                        ->where(['comision' => $comision])
+                        ->all();
+
+            
+
+                     
+
+
+           
+            return $this->render('viewgrid', [
+                'model' => $this->findModel($id),
+                'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'inasistenciasdeldia' => $inasistenciasdeldia,
+                'alumnosdecomision' => $alumnosdecomision,
+                'clase' => $id,
+                               
 
             ]);
         }else{

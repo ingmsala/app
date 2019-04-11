@@ -47,6 +47,10 @@ AppAsset::register($this);
                         
  
                 
+                    [
+                        'label' => '<span class="glyphicon glyphicon-calendar"></span><div>Agenda de Clases</div>', 
+                        'url' => ['autogestion/agenda/index'],
+                    ],
 
                     [
                         'label' => '<span class="glyphicon glyphicon-education"></span><div>Cursadas</div>', 

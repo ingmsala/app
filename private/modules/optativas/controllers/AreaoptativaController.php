@@ -3,22 +3,17 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;
-use app\modules\optativas\models\Optativa;
-use app\modules\optativas\models\ComisionSearch;
-use app\modules\optativas\models\Aniolectivo;
 use app\modules\optativas\models\Areaoptativa;
-use app\modules\optativas\models\OptativaSearch;
-use app\models\Actividad;
-
+use app\modules\optativas\models\AreaoptativaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
 /**
- * OptativaController implements the CRUD actions for Optativa model.
+ * AreaoptativaController implements the CRUD actions for Areaoptativa model.
  */
-class OptativaController extends Controller
+class AreaoptativaController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -56,13 +51,12 @@ class OptativaController extends Controller
     }
 
     /**
-     * Lists all Optativa models.
+     * Lists all Areaoptativa models.
      * @return mixed
      */
     public function actionIndex()
     {
-        
-        $searchModel = new OptativaSearch();
+        $searchModel = new AreaoptativaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -72,35 +66,26 @@ class OptativaController extends Controller
     }
 
     /**
-     * Displays a single Optativa model.
+     * Displays a single Areaoptativa model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        $searchModel = new ComisionSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Creates a new Optativa model.
+     * Creates a new Areaoptativa model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        
-        $model = new Optativa();
-        $actividades = Actividad::find()->all();
-        $aniolectivo = Aniolectivo::find()->all();
-        $areasoptativas = Areaoptativa::find()->all();
+        $model = new Areaoptativa();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -108,14 +93,11 @@ class OptativaController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'actividades' => $actividades,
-            'aniolectivo' => $aniolectivo,
-            'areasoptativas' => $areasoptativas,
         ]);
     }
 
     /**
-     * Updates an existing Optativa model.
+     * Updates an existing Areaoptativa model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -123,11 +105,7 @@ class OptativaController extends Controller
      */
     public function actionUpdate($id)
     {
-        
         $model = $this->findModel($id);
-        $actividades = Actividad::find()->all();
-        $aniolectivo = Aniolectivo::find()->all();
-        $areasoptativas = Areaoptativa::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -135,14 +113,11 @@ class OptativaController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'actividades' => $actividades,
-            'aniolectivo' => $aniolectivo,
-            'areasoptativas' => $areasoptativas,
         ]);
     }
 
     /**
-     * Deletes an existing Optativa model.
+     * Deletes an existing Areaoptativa model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -150,22 +125,21 @@ class OptativaController extends Controller
      */
     public function actionDelete($id)
     {
-        
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Optativa model based on its primary key value.
+     * Finds the Areaoptativa model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Optativa the loaded model
+     * @return Areaoptativa the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Optativa::findOne($id)) !== null) {
+        if (($model = Areaoptativa::findOne($id)) !== null) {
             return $model;
         }
 

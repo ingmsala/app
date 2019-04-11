@@ -49,6 +49,8 @@ $form->field($model, 'fecha')->widget(DatePicker::classname(), [
     
 ]); ?>
 
+<?= $form->field($model, 'hora')->textInput(['maxlength' => true]) ?>
+
 </div>
 
     <?= $form->field($model, 'tipoclase')->dropDownList($tipos, ['prompt'=>'Seleccionar...']); ?>

@@ -17,6 +17,7 @@ use app\models\Actividad;
  * @property Matricula[] $matriculas
  * @property Actividad $actividad0
  * @property Aniolectivo $aniolectivo0
+ * @property Areaoptativa $areaoptativa0
  */
 class Optativa extends \yii\db\ActiveRecord
 {
@@ -34,10 +35,11 @@ class Optativa extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['actividad', 'aniolectivo'], 'required'],
-            [['actividad', 'aniolectivo', 'duracion'], 'integer'],
+            [['actividad', 'aniolectivo', 'areaoptativa'], 'required'],
+            [['actividad', 'aniolectivo', 'duracion', 'areaoptativa'], 'integer'],
             [['actividad'], 'exist', 'skipOnError' => true, 'targetClass' => Actividad::className(), 'targetAttribute' => ['actividad' => 'id']],
             [['aniolectivo'], 'exist', 'skipOnError' => true, 'targetClass' => Aniolectivo::className(), 'targetAttribute' => ['aniolectivo' => 'id']],
+            [['areaoptativa'], 'exist', 'skipOnError' => true, 'targetClass' => Areaoptativa::className(), 'targetAttribute' => ['areaoptativa' => 'id']],
         ];
     }
 
@@ -51,6 +53,7 @@ class Optativa extends \yii\db\ActiveRecord
             'actividad' => 'Actividad',
             'aniolectivo' => 'Año Lectivo',
             'duracion' => 'Duración (horas)',
+            'areaoptativa' => 'Area de optativa',
         ];
     }
 
@@ -84,5 +87,10 @@ class Optativa extends \yii\db\ActiveRecord
     public function getAniolectivo0()
     {
         return $this->hasOne(Aniolectivo::className(), ['id' => 'aniolectivo']);
+    }
+
+    public function getAreaoptativa0()
+    {
+        return $this->hasOne(Areaoptativa::className(), ['id' => 'areaoptativa']);
     }
 }

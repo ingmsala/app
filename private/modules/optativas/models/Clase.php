@@ -33,7 +33,7 @@ class Clase extends \yii\db\ActiveRecord
     {
         return [
             [['fecha', 'tipoclase', 'comision'], 'required'],
-            [['fecha'], 'safe'],
+            [['fecha', 'hora'], 'safe'],
             [['horascatedra'], 'number'],
             [['tipoclase', 'comision'], 'integer'],
             [['tema'], 'string', 'max' => 200],
@@ -55,6 +55,7 @@ class Clase extends \yii\db\ActiveRecord
             'tipoclase' => 'Tipo de clase',
             'comision' => 'Comision',
             'horascatedra' => 'Horas Cátedra',
+            'hora' => 'Horario',
         ];
     }
 
