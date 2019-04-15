@@ -30,9 +30,12 @@ class InicioController extends \yii\web\Controller
                                     $key2 = true;
                                 else
                                     $key2 = false;
-                                return ($key1 and $key2);
+                                if ($key1 and $key2)
+                                    return true;
+                                else
+                                    return $this->redirect(['autogestion']);
                             }catch(\Exception $exception){
-                                return false;
+                                return $this->redirect(['autogestion']);
                             }
                         }
 
@@ -50,7 +53,8 @@ class InicioController extends \yii\web\Controller
      */
     public function actionIndex()
     {
-    	//$this->layout = 'mainautogestion';
+        
+    	$this->layout = null;
         $model = new Alumno();
         Yii::$app->session->destroy();
         if ($model->load(Yii::$app->request->post())) {
@@ -58,7 +62,7 @@ class InicioController extends \yii\web\Controller
             
             if (Alumno::find()->where(['dni' => $model->dni])->one() != null){
                 $this->actionSetsession($model->dni);
-                return $this->redirect(['view']);
+                return $this->redirect(['/optativas/autogestion/agenda/index']);
             }else{
                 $model->dni = null;
                 Yii::$app->session->setFlash('error', "El documento no corresponde a un alumno con optativas cursadas o que esté en condiciones de preinscribirse a un espacio.");
@@ -72,6 +76,10 @@ class InicioController extends \yii\web\Controller
 
     public function actionView()
     {
+        Yii::$app->session->setFlash('error', "No está habilitada la sección a la que intenta ingresar. <b>Próximamente</b> estará disponible");
+     
+            
+        return $this->redirect(['/optativas/autogestion/agenda/index']);
          $dni = isset($_SESSION['dni']) ? $_SESSION['dni'] : 0;
         if($dni == 0){
             return $this->redirect(['index']);
@@ -90,7 +98,7 @@ class InicioController extends \yii\web\Controller
         ]);
     }
 
-    public function actionSetsession($dni)
+    private function actionSetsession($dni)
     {   
 
         $session = Yii::$app->session;

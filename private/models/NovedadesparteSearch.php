@@ -110,6 +110,7 @@ class NovedadesparteSearch extends Novedadesparte
                     ->joinWith(['tiponovedad0', 'parte0'])
                     ->where(['estadonovedad' => 1])
                     ->andWhere(['<>', 'tiponovedad', 1])
+                    ->andWhere(['<>', 'tiponovedad', 5])
                     ->orderBy('parte.fecha');
 
         // add conditions that should always apply here
@@ -143,6 +144,7 @@ class NovedadesparteSearch extends Novedadesparte
         $query = Novedadesparte::find()
                     ->where(['estadonovedad' => 1])
                     ->andWhere(['<>', 'tiponovedad', 1])
+                    ->andWhere(['<>', 'tiponovedad', 5])
                     ->count();
         return $query;
     }

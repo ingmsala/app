@@ -139,7 +139,7 @@ class NovedadesparteController extends Controller
 
 
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->tiponovedad != 1){
+            if ($model->tiponovedad != 1 && $model->tiponovedad != 5){
                 $model->docente = null;
             }
 
@@ -172,7 +172,7 @@ class NovedadesparteController extends Controller
                         ->all();
 
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->tiponovedad != 1){
+            if ($model->tiponovedad != 1 && $model->tiponovedad != 5){
                 $model->docente = null;
             }
 

@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\optativas\models\Docentexcomision;
+use app\config\Globales;
 
 /**
  * DocentexcomisionSearch represents the model behind the search form of `app\modules\optativas\models\Docentexcomision`.
@@ -134,6 +135,12 @@ class DocentexcomisionSearch extends Docentexcomision
 
     public function comisionesxdocente($id)
     {
+        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER])){
+            return Docentexcomision::find()
+            ->joinWith(['docente0', 'comision0', 'comision0.optativa0', 'comision0.optativa0.actividad0'])
+            ->orderBy('actividad.nombre', 'optativa.nombre')
+            ->all();
+        }
        return Docentexcomision::find()
             ->joinWith(['docente0', 'comision0', 'comision0.optativa0', 'comision0.optativa0.actividad0'])
             ->where(['docente.legajo' => $id,

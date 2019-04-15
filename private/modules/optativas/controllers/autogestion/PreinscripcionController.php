@@ -66,8 +66,8 @@ class PreinscripcionController extends Controller
         
      Yii::$app->session->setFlash('error', "No existe un periodo de <b>Preinscripción</b> activo.");
      
-            
-        return $this->redirect(['/optativas/autogestion/inicio/view']);
+             
+        return $this->redirect(['/optativas/autogestion/agenda/index']);
     }
 
    

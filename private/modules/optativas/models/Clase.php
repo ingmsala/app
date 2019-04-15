@@ -32,7 +32,7 @@ class Clase extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fecha', 'tipoclase', 'comision'], 'required'],
+            [['tipoclase', 'comision'], 'required'],
             [['fecha', 'hora'], 'safe'],
             [['horascatedra'], 'number'],
             [['tipoclase', 'comision'], 'integer'],
@@ -56,6 +56,7 @@ class Clase extends \yii\db\ActiveRecord
             'comision' => 'Comision',
             'horascatedra' => 'Horas Cátedra',
             'hora' => 'Horario',
+            'fechaconf' => 'Confirmación de Fecha',
         ];
     }
 

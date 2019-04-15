@@ -69,7 +69,8 @@ class FichadelalumnoController extends \yii\web\Controller
      */
     public function actionIndex()
     {
-        
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección no está habilitada');
+            return $this->redirect(['/optativas']);
         $this->layout = 'main';
         $searchModel = new MatriculaSearch();
             $comision = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
@@ -97,6 +98,8 @@ class FichadelalumnoController extends \yii\web\Controller
      */
     public function actionView($id)
     {
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección no está habilitada');
+            return $this->redirect(['/optativas']);
         $this->layout = 'main';
         $comision = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         if($comision != 0){

@@ -5,8 +5,10 @@ namespace app\modules\optativas\controllers\autogestion;
 use yii\web\Controller;
 use Yii;use yii\filters\AccessControl;
 use app\modules\optativas\models\Alumno;
+use app\modules\optativas\models\Comision;
 use app\modules\optativas\models\ClaseSearch;
 use app\modules\optativas\models\MatriculaSearch;
+use yii\helpers\ArrayHelper;
 
 
 /**
@@ -19,10 +21,10 @@ class AgendaController extends \yii\web\Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['view'],
+                'only' => ['index', 'view'],
                 'rules' => [
                     [
-                        'actions' => ['view'],   
+                        'actions' => ['index', 'view'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -31,9 +33,12 @@ class AgendaController extends \yii\web\Controller
                                     $key2 = true;
                                 else
                                     $key2 = false;
-                                return ($key1 and $key2);
+                                if ($key1 and $key2)
+                                    return true;
+                                else
+                                    return $this->redirect(['/optativas/autogestion/inicio']);
                             }catch(\Exception $exception){
-                                return false;
+                                return $this->redirect(['/optativas/autogestion/inicio']);
                             }
                         }
 
@@ -71,14 +76,40 @@ class AgendaController extends \yii\web\Controller
     {
 
         $this->layout = 'mainautogestion';
-        $searchModel = new ClaseSearch();
-        $dataProvider = $searchModel->clasexalumno(Yii::$app->request->queryParams);
-        return $this->render('view', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            
+        $dni = isset($_SESSION['dni']) ? $_SESSION['dni'] : 0;
 
-        ]);
+        $comisionesalumno= Comision::find()
+                        ->joinWith(['matriculas', 'matriculas.alumno0'])
+                        ->select('comision.id')
+                        ->where(['alumno.dni' =>$dni])
+                        ->all();
+
+        $comisionesalumno=ArrayHelper::map($comisionesalumno,'id','id');
+
+        $comision = Comision::find()
+                        ->where(['id' => $id])
+                        ->one();
+
+        if($comision != null){
+
+            if(in_array($comision->id, $comisionesalumno)){
+            $searchModel = new ClaseSearch();
+                    $dataProvider = $searchModel->clasexalumno(Yii::$app->request->queryParams);
+                    return $this->render('view', [
+                        'searchModel' => $searchModel,
+                        'dataProvider' => $dataProvider,
+                        'comision' => $comision,
+                        
+
+                ]);
+            }
+            
+        
+        }
+        Yii::$app->session->setFlash('error', "No está matriculado en la comisión que intenta acceder");
+            return $this->redirect(['/optativas/autogestion/agenda/index']);
+
+        
     }
 
 }

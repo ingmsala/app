@@ -11,6 +11,7 @@ use kartik\grid\CheckboxColumn;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Planilla de Asistencia';
+$this->params['breadcrumbs'][] = ['label' => 'Clases', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -95,13 +96,13 @@ Pjax::end();
 
     
 </div>
-
+<!--
 <a
     href="index.php?r=optativas%2Fclase%2Fviewgrid&id=<?=$clase; ?>"
     target="v"
     onclick="window.open('', 'v', 'width=950,height=600');" >
     Cambiar Vista
-</a>
+</a>-->
 
 <div class="row">
  <?php 

@@ -45,7 +45,7 @@ class ClaseSearch extends Clase
         $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         $query = Clase::find()
             ->where(['comision' => $com])
-            ->orderBy('fecha DESC');
+            ->orderBy('fecha ASC');
 
         // add conditions that should always apply here
 

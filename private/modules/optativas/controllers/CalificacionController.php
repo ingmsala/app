@@ -67,7 +67,7 @@ class CalificacionController extends Controller
                 'dataProvider' => $dataProvider,
             ]);
         }else{
-        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección de <b>Calificaciones</b> no está habilitada');
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección no está habilitada');
             return $this->redirect(['/optativas']);
         }
     }
@@ -86,7 +86,7 @@ class CalificacionController extends Controller
                 'model' => $this->findModel($id),
             ]);
         }else{
-        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección de <b>Calificaciones</b> no está habilitada');
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección no está habilitada');
             return $this->redirect(['/optativas']);
         }
     }

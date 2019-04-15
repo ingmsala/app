@@ -58,6 +58,8 @@ class SeguimientoController extends Controller
      */
     public function actionIndex()
     {
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección no está habilitada');
+            return $this->redirect(['/optativas']);
         $this->layout = 'main';
         $searchModel = new MatriculaSearch();
         $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
@@ -92,6 +94,8 @@ class SeguimientoController extends Controller
      */
     public function actionView($id)
     {
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección no está habilitada');
+            return $this->redirect(['/optativas']);
         $this->layout = 'main';
         $matricula = $id;
         $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
@@ -118,6 +122,8 @@ class SeguimientoController extends Controller
      */
     public function actionCreate($id)
     {
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección no está habilitada');
+            return $this->redirect(['/optativas']);
         $this->layout = 'main';
         $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         if($com != 0){
@@ -149,6 +155,8 @@ class SeguimientoController extends Controller
      */
     public function actionUpdate($id)
     {
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección no está habilitada');
+            return $this->redirect(['/optativas']);
         $this->layout = 'main';
         $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         if($com != 0){
@@ -176,6 +184,8 @@ class SeguimientoController extends Controller
      */
     public function actionDelete($id)
     {
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección no está habilitada');
+            return $this->redirect(['/optativas']);
         $this->layout = 'main';
         $model = $this->findModel($id);
         $matricula = $model->matricula;

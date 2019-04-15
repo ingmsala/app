@@ -47,9 +47,12 @@ class FichadelalumnoController extends \yii\web\Controller
                                     $key2 = true;
                                 else
                                     $key2 = false;
-                                return ($key1 and $key2);
+                                if ($key1 and $key2)
+                                    return true;
+                                else
+                                    return $this->redirect(['autogestion']);
                             }catch(\Exception $exception){
-                                return false;
+                                return $this->redirect(['autogestion']);
                             }
                         }
 
@@ -74,6 +77,10 @@ class FichadelalumnoController extends \yii\web\Controller
 
     public function actionIndex($id)
     {
+        Yii::$app->session->setFlash('error', "No está habilitada la sección a la que intenta ingresar. <b>Próximamente</b> estará disponible");
+     
+            
+        return $this->redirect(['/optativas/autogestion/agenda/index']);
         $comision = Matricula::find()
                 ->joinWith(['alumno0'])
                 ->where(['matricula.id' => $id])

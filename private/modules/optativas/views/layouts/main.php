@@ -46,7 +46,7 @@ AppAsset::register($this);
             'options' => ['class' => 'navbar-nav navbar-right'],
             'items' => [
                         
-                        ['label' => '<span class="glyphicon glyphicon-align-center"></span><div>Home</div>', 'url' => ['/optativas']],
+                        ['label' => '<span class="glyphicon glyphicon-align-center"></span><div>Inicio</div>', 'url' => ['/optativas']],
                         ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
                         ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><div>Calificaciones</div>', 'url' => ['/optativas/calificacion']],
                         ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/optativas/seguimiento']],
@@ -133,7 +133,7 @@ NavBar::end();
                 <div class="row" style="margin-top: 50px;" id="submenu">
                     <?php
 
-                       echo isset($this->params['submenu']) ? $this->params['submenu'] : '';
+                       //echo isset($this->params['submenu']) ? $this->params['submenu'] : '';
 
                      ?>
                 </div>

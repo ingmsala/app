@@ -5,6 +5,7 @@
 
 use app\widgets\Alert;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
@@ -30,16 +31,18 @@ AppAsset::register($this);
 
     <div class="wrap">
         <?php
-
+ (isset($_SESSION["dni"])) ? $uss = $_SESSION["dni"] : $uss="";
         NavBar::begin([
             'brandLabel' => '<img src="assets/images/logo-encabezado.png" style="display:inline; vertical-align: middle; height:35px;"><span id="brandspan-autogestion">Autogestión de Espacios Optativos</span>',
-            'brandUrl' => Yii::$app->homeUrl,
+            'brandUrl' => Url::to('index.php?r=optativas%2Fautogestion%2Fagenda%2Findex'),
             'options' => [
                 'class' => 'navbar-default-autogestion navbar-fixed-top',
                 'style' => !isset($_SESSION['dni']) ? 'visibility: hidden' : '',
             ],
             'brandOptions' => []
         ]);
+
+       
         echo Nav::widget([
             'encodeLabels' => false,
             'options' => ['class' => 'navbar-nav navbar-right'],
@@ -62,7 +65,7 @@ AppAsset::register($this);
                         'url' => ['autogestion/preinscripcion'],
                     ],
 
-                    ['label' => '<span class="glyphicon glyphicon-user"></span><br>'.$_SESSION["dni"].'',
+                    ['label' => '<span class="glyphicon glyphicon-user"></span><br>'.$uss.'',
                         
                         'items' => [
                                                                                    

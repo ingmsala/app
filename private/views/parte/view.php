@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         Modal::end();
     ?>
-
+    <!--
     <div class="alert alert-info fade in">
         <a href="#" class="close" data-dismiss="alert">&times;</a>
         <strong>Nuevo!</strong> Existen dos pestañas en el parte. En la primera <strong>Asistencia Docente</strong> para la carga de Asistencia de los profesores como se venía haciendo (La ausencia de preceptores no se debe marcar como hora cero). En la segunda de <strong>Novedades</strong>, para cargar la inasistencia de los Preceptores y otras opciones como: <ul>
@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </ul>
 
         En la descripción de la novedad, si corresponde, especificar número de aula y bancos en caso de que haya que efectuar reparaciones.
-    </div>
+    </div>-->
 
 
     <ul class="nav nav-tabs">

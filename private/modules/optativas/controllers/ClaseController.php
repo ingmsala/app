@@ -36,11 +36,34 @@ class ClaseController extends Controller
                 'only' => ['index', 'view', 'create', 'update', 'delete'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'actions' => ['index', 'create', 'update', 'delete'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
                                 return in_array (Yii::$app->user->identity->role, [1,8,9]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['view'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                
+                                if (in_array (Yii::$app->user->identity->role, [1,8,9])){
+                                    $model = $this->findModel($_GET['id']);
+                                    if($model->fechaconf == 1 && $model->hora != null)
+                                        return true;
+                                    else{
+                                        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Para cargar la asistencia debe tener definido <b>fecha y hora</b>');
+                                        return $this->redirect(['index']);
+                                    }
+                                }
+                                else
+                                    return false;
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -238,30 +261,45 @@ class ClaseController extends Controller
         $model = new Clase();
         $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         if($com != 0){
-            $model->comision = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
-
+            $model->comision = $com;
+            
             $tiposclase = Tipoclase::find()->all();
-            if ($model->load(Yii::$app->request->post())) {
-                if($model->validate()){
-                    $model->save();
-                    return $this->redirect(['view', 'id' => $model->id]);
-                }else{
-                    
-                    Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
-                    return $this->redirect(['create']);
-                }
-                
-            }
 
+            if ($model->load(Yii::$app->request->post())) {
+                $model->fechaconf = Yii::$app->request->post()['Clase']['fechaconf'];
+                $mes = Yii::$app->request->post()['meses'];
+                if ($mes<10) {
+                    $mes = '0'.$mes;
+                }
+                if($model->fechaconf == 0){
+                    
+                    $date = '2019-'.$mes.'-01';
+                    $model->fecha =  $date;
+                    $model->hora = null;
+                    $model->save();
+                    return $this->redirect(['index']);
+                }
+                if($model->save()){
+                    if($model->fechaconf == 1 && $model->hora!=null)
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    else
+                        return $this->redirect(['index']);
+                }
+            }
+            $mesx = 0;
+            if($model->fechaconf ==0){
+                $mesx = Yii::$app->formatter->asDate($model->fecha, 'n');
+            }
             return $this->render('create', [
                 'model' => $model,
                 'tiposclase' => $tiposclase,
-
+                'mesx' => $mesx,
             ]);
         }else{
-            Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
-                return $this->redirect(['/optativas']);
+        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
+            return $this->redirect(['/optativas']);
         }
+
     }
 
     /**
@@ -273,19 +311,41 @@ class ClaseController extends Controller
      */
     public function actionUpdate($id)
     {
+
         $this->layout = 'main';
         $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         if($com != 0){
             $model = $this->findModel($id);
             $tiposclase = Tipoclase::find()->all();
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post())) {
+                $model->fechaconf = Yii::$app->request->post()['Clase']['fechaconf'];
+                $mes = Yii::$app->request->post()['meses'];
+                if ($mes<10) {
+                    $mes = '0'.$mes;
+                }
+                if($model->fechaconf == 0){
+                    
+                    $date = '2019-'.$mes.'-01';
+                    $model->fecha =  $date;
+                    $model->hora = null;
+                    $model->save();
+                    return $this->redirect(['index']);
+                }
+                if($model->save())
+                    if($model->fechaconf == 1 && $model->hora!=null)
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    else
+                        return $this->redirect(['index']);
             }
-
+            $mesx = 0;
+            if($model->fechaconf ==0){
+                $mesx = Yii::$app->formatter->asDate($model->fecha, 'n');
+            }
             return $this->render('update', [
                 'model' => $model,
                 'tiposclase' => $tiposclase,
+                'mesx' => $mesx,
             ]);
         }else{
         Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');

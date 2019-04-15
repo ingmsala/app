@@ -34,6 +34,25 @@ $this->title = 'Optativas del Alumno';
             ],
 
             [
+                'label' => 'Profesores/as',
+                'format' => 'raw',
+                'value' => function($matricula){
+                    $items = [];
+                    $docentes = $matricula->comision0->docentexcomisions;
+
+                    foreach ($docentes as $docente) {
+                        if($docente->role == 8)
+                            $item[] = [$docente->docente0->apellido, $docente->docente0->nombre];
+                    }
+                    return Html::ul($item, ['item' => function($item) {
+                             return 
+                                        Html::tag('li', $item[0].', '.$item[1]);
+                        
+                    }]);
+                }
+            ],
+
+            [
                 'label' => 'Estado',
                 'attribute' => 'estadomatricula0.nombre',
                 
@@ -49,7 +68,7 @@ $this->title = 'Optativas del Alumno';
                     'fichadelalumno' => function($url, $model, $key){
                         return Html::a(
                             '<span class="glyphicon glyphicon-eye-open"></span>',
-                            '?r=optativas/autogestion/agenda/view&id='.$model->id);
+                            '?r=optativas/autogestion/agenda/view&id='.$model->comision);
                     },
                     /*'update' => function($url, $model, $key){
                         return Html::a(

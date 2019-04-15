@@ -29,7 +29,7 @@ use kartik\select2\Select2;
             ],
             'pluginEvents' => [
                 'select2:select' => 'function() {
-                    if ($(this).val()==1) {
+                    if ($(this).val()==1 || $(this).val()==5) {
                            $( "#divpreceptor" ).show();
                         }else{
                             
@@ -53,7 +53,7 @@ use kartik\select2\Select2;
                                     'pluginOptions' => [
                                         'allowClear' => true
                                     ],
-                                ]);
+                                ])->label('Docente');
 
                             ?>
     </div>
