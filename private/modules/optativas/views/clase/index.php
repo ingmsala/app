@@ -22,6 +22,7 @@ $this->title = 'Clases';
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+        'responsiveWrap' => false,
         'rowOptions' => function($model){
 
                                     if($model->fechaconf == 1 && $model->hora != null)

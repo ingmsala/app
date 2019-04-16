@@ -206,4 +206,9 @@ public function removePasswordResetToken() {
         return $this->hasOne(Role::className(), ['id' => 'role']);
     }
 
+     public function getDocente0()
+    {
+        return $this->hasOne(Docente::className(), ['legajo' => 'username']);
+    }
+
 }

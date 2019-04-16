@@ -6,6 +6,7 @@ use Yii;
 use app\modules\optativas\models\Matricula;
 use app\modules\optativas\models\Alumno;
 use app\modules\optativas\models\Comision;
+use app\models\Division;
 use app\modules\optativas\models\Optativa;
 use app\modules\optativas\models\Aniolectivo;
 use app\modules\optativas\models\Estadomatricula;
@@ -113,6 +114,9 @@ class MatriculaController extends Controller
                     ->orderBy('apellido, nombre')
                     ->all();
         $optativas = Optativa::find()->all();
+        $divisiones = Division::find()
+                        ->where(['propuesta' => 1])
+                        ->all();
         $comisiones = Comision::find()
                         ->joinWith(['optativa0', 'optativa0.actividad0'])
                         ->orderBy('actividad.nombre', 'comision.nombre')
@@ -129,6 +133,7 @@ class MatriculaController extends Controller
             'optativas' => $optativas,
             'comisiones' => $comisiones,
             'estadosmatricula' => $estadosmatricula,
+            'divisiones' => $divisiones,
 
 
         ]);
@@ -171,6 +176,7 @@ class MatriculaController extends Controller
             'optativas' => $optativas,
             'comisiones' => $comisiones,
             'estadosmatricula' => $estadosmatricula,
+            'divisiones' => $divisiones,
         ]);
     }
 

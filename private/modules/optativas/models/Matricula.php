@@ -54,7 +54,7 @@ class Matricula extends \yii\db\ActiveRecord
             [['fecha', 'alumno', 'comision', 'estadomatricula'], 'required'],
             [['aniolectivo'], 'required', 'message' => 'El Año lectivo es obligatorio',  'on' => self::SCENARIO_SEARCHINDEX],
             [['fecha'], 'safe'],
-            [['alumno', 'comision', 'estadomatricula'], 'integer'],
+            [['alumno', 'comision', 'estadomatricula', 'division'], 'integer'],
             [['comision'], 'exist', 'skipOnError' => true, 'targetClass' => Comision::className(), 'targetAttribute' => ['comision' => 'id']],
             [['alumno'], 'exist', 'skipOnError' => true, 'targetClass' => Alumno::className(), 'targetAttribute' => ['alumno' => 'id']],
             [['estadomatricula'], 'exist', 'skipOnError' => true, 'targetClass' => Estadomatricula::className(), 'targetAttribute' => ['estadomatricula' => 'id']],
@@ -149,5 +149,10 @@ class Matricula extends \yii\db\ActiveRecord
     public function getSeguimientos()
     {
         return $this->hasMany(Seguimiento::className(), ['matricula' => 'id']);
+    }
+
+    public function getDivision0()
+    {
+        return $this->hasOne(Division::className(), ['id' => 'division']);
     }
 }

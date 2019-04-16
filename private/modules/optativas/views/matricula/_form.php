@@ -16,6 +16,8 @@ use kartik\select2\Select2;
         ); ?>
 
 <?php $listComisiones=ArrayHelper::map($comisiones,'id','nombre'); ?>
+<?php $listDivisiones=ArrayHelper::map($divisiones,'id','nombre'); ?>
+
 <?php $listEstadosMatricula=ArrayHelper::map($estadosmatricula,'id','nombre'); ?>
 <?php $listComisiones=ArrayHelper::map($comisiones,'id', function($comision) {
            return $comision->optativa0->aniolectivo0->nombre.' - '.$comision->optativa0->actividad0->nombre.' - Comisión: '.$comision->nombre;}
@@ -48,6 +50,18 @@ $form->field($model, 'fecha')->widget(DatePicker::classname(), [
 
         $form->field($model, 'alumno')->widget(Select2::classname(), [
             'data' => $listAlumnos,
+            'options' => ['placeholder' => 'Seleccionar...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);
+
+    ?>
+
+    <?= 
+
+        $form->field($model, 'division')->widget(Select2::classname(), [
+            'data' => $listDivisiones,
             'options' => ['placeholder' => 'Seleccionar...'],
             'pluginOptions' => [
                 'allowClear' => true

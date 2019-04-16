@@ -26,7 +26,16 @@ $this->params['breadcrumbs'][] = $this->title;
             
             'id',
             'username',
-            'email:email',
+            [
+                'label' => 'Usuario',
+                'value' => function($model){
+                    if ($model->docente0 != null)
+                        return $model->docente0['apellido'].', '.$model->docente0['nombre'];
+                    return '';
+                },
+            ],
+            'role0.nombre',
+            
             
 
             ['class' => 'yii\grid\ActionColumn'],

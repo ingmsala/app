@@ -98,7 +98,9 @@ class OptativaController extends Controller
     {
         
         $model = new Optativa();
-        $actividades = Actividad::find()->all();
+        $actividades = Actividad::find()
+                        ->where(['actividadtipo' => 4])
+                        ->all();
         $aniolectivo = Aniolectivo::find()->all();
         $areasoptativas = Areaoptativa::find()->all();
 
