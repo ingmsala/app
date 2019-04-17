@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Nombramiento;
+use yii\db\Query;
 use app\config\Globales;
 
 /**
@@ -246,4 +247,243 @@ class NombramientoSearch extends Nombramiento
 
         return $dataProvider;
     }
+
+    public function getPadronPreceptores($prop)
+    {
+        if($prop ==1){
+            $query = Docente::find()
+                ->distinct()
+                ->joinWith(['nombramientos', 'nombramientos.division0'])
+                ->where(['nombramiento.cargo' => Globales::CARGO_PREC])
+                ->andWhere(['or', 
+                    ['division.propuesta' => $prop],
+                    ['nombramiento.division' => null]
+                ])
+                
+                ->orderBy('docente.apellido, docente.nombre');
+            }else{
+                 $query = Docente::find()
+                ->distinct()
+                ->joinWith(['nombramientos', 'nombramientos.division0'])
+                ->where(['nombramiento.cargo' => Globales::CARGO_PREC])
+                ->andWhere(['or', 
+                    ['division.propuesta' => $prop],
+                    
+                ])
+                
+                ->orderBy('docente.apellido, docente.nombre');
+            }
+        
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        return $dataProvider;
+    }
+
+    public function getPadronJefes($prop)
+    {
+        if($prop ==1){
+            $query = Docente::find()
+                ->distinct()
+                ->joinWith(['nombramientos', 'nombramientos.division0'])
+                ->where(['nombramiento.cargo' => Globales::CARGO_JEFE])
+                ->andWhere(['or', 
+                    ['division.propuesta' => $prop],
+                    ['nombramiento.division' => null]
+                ])
+                
+                ->orderBy('docente.apellido, docente.nombre');
+            }else{
+                 $query = Docente::find()
+                ->distinct()
+                ->joinWith(['nombramientos', 'nombramientos.division0'])
+                ->where(['nombramiento.cargo' => Globales::CARGO_JEFE])
+                ->andWhere(['or', 
+                    ['division.propuesta' => $prop],
+                    
+                ])
+                
+                ->orderBy('docente.apellido, docente.nombre');
+            }
+        
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        return $dataProvider;
+    }
+
+    public function getPadronOtrosDocente($prop, $param){
+        
+            
+            try{
+                 $largo = count($param);
+             }catch(\Exception $exception){
+                $largo = 0;
+            }
+
+            if($largo < 1){
+
+                $query = Docente::find()
+                ->distinct()
+                ->joinWith(['nombramientos', 'nombramientos.division0'])
+                ->where(['nombramiento.cargo' => Globales::CARGO_JEFE])
+                ->andWhere(['or', 
+                    ['division.propuesta' => $prop],
+                    ['nombramiento.division' => null]
+                ])
+                
+                ->orderBy('docente.apellido, docente.nombre');
+            }else{
+
+                
+                
+                
+                /*foreach ($param['Nombramiento']['cargo'] as $cargos) {
+                    
+                }*/
+
+                $query = Docente::find()
+                ->distinct()
+                ->joinWith(['nombramientos', 'nombramientos.division0'])
+                ->where(true)
+                ->andWhere(['in', 
+                    'cargo', $param
+                ])
+                ->orderBy('docente.apellido, docente.nombre');
+
+
+            }
+            
+                    
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        return $dataProvider;
+    }
+
+    public function getCantidadPreceptores($prop){
+        $query = new Query();
+        if($prop ==1){
+            $query->from('docente')
+                        ->distinct()
+                    ->select('docente.id')
+                        //->join(['nombramientos', 'nombramientos.division0'])
+                    ->leftJoin('nombramiento', 'docente.id = nombramiento.docente')
+                    ->leftJoin('division', 'division.id = nombramiento.division')
+                    ->where(['nombramiento.cargo' => Globales::CARGO_PREC])
+                    ->andWhere(['or', 
+                        ['division.propuesta' => $prop],
+                        ['nombramiento.division' => null]
+                    ]);
+            return $query->count('id');
+
+        }else{
+            $query->from('docente')
+                        ->distinct()
+                    ->select('docente.id')
+                        //->join(['nombramientos', 'nombramientos.division0'])
+                    ->leftJoin('nombramiento', 'docente.id = nombramiento.docente')
+                    ->leftJoin('division', 'division.id = nombramiento.division')
+                    ->where(['nombramiento.cargo' => Globales::CARGO_PREC])
+                    ->andWhere(['or', 
+                        ['division.propuesta' => $prop],
+                        
+                    ]);
+            return $query->count('id');
+        }
+        
+    }
+
+    public function getCantidadJefes($prop){
+        $query = new Query();
+        if($prop ==1){
+            $query->from('docente')
+                        ->distinct()
+                    ->select('docente.id')
+                        //->join(['nombramientos', 'nombramientos.division0'])
+                    ->leftJoin('nombramiento', 'docente.id = nombramiento.docente')
+                    ->leftJoin('division', 'division.id = nombramiento.division')
+                    ->where(['nombramiento.cargo' => Globales::CARGO_JEFE])
+                    ->andWhere(['or', 
+                        ['division.propuesta' => $prop],
+                        ['nombramiento.division' => null]
+                    ]);
+            return $query->count('id');
+
+        }else{
+            $query->from('docente')
+                        ->distinct()
+                    ->select('docente.id')
+                        //->join(['nombramientos', 'nombramientos.division0'])
+                    ->leftJoin('nombramiento', 'docente.id = nombramiento.docente')
+                    ->leftJoin('division', 'division.id = nombramiento.division')
+                    ->where(['nombramiento.cargo' => Globales::CARGO_JEFE])
+                    ->andWhere(['or', 
+                        ['division.propuesta' => $prop],
+                        
+                    ]);
+            return $query->count('id');
+        }
+        
+    }
+
+    public function getCantidadOtrosDocentes($prop, $param){
+            $query = new Query();
+            try{
+                 $largo = count($param);
+             }catch(\Exception $exception){
+                $largo = 0;
+            }
+
+                            $query->from('docente')
+                        ->distinct()
+                    ->select('docente.id')
+                    ->leftJoin('nombramiento', 'docente.id = nombramiento.docente')
+                    ->leftJoin('division', 'division.id = nombramiento.division')
+                    
+                    ->where(['in', 
+                    'cargo', $param
+                    ]);
+                return $query->count('id');
+
+            
+
+    }
+
 }

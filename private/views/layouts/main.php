@@ -77,6 +77,8 @@ if ($cantnov>0) {
                         '<div class="dropdown-divider"></div>',
                         ['label' => 'Horas de actividades por Cátedra', 'url' => ['/reporte/horasmateriaxcatedra']],
                         '<div class="dropdown-divider"></div>',
+                        ['label' => 'Padrones', 'url' => ['/reporte/padrones/padrones']],
+                        '<div class="dropdown-divider"></div>',
 
                         [
                             'label' => 'Parte Docente',

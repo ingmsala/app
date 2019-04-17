@@ -26,6 +26,7 @@ class Globales
 	const DOC_INACTIVOS = 2;
 	
 	const CARGO_PREC = 227;
+	const CARGO_JEFE = 223;
 	
 	const LIC_SINGOCE = 2;
 	const LIC_VIGENTE = 1;
@@ -43,6 +44,8 @@ class Globales
 	const ESTADOINASIST_REGREC = 3;
 	const ESTADOINASIST_SECJUS = 4;
 	const ESTADOINASIST_SECCON = 5;
+
+	const PADRON_OTROSDOC = [203, 205, 207, 209, 219, 226, 234, 241, 242];
 
 
 }

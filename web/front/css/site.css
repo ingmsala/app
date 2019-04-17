@@ -623,3 +623,5 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.panel-body .btn:not(.btn-block) { width:160px;margin-bottom:10px; }

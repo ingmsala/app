@@ -43,10 +43,11 @@ use kartik\date\DatePicker;
             'pluginEvents' => [
                 'select2:select' => 'function() {
                     if ($(this).val()==227) {
-                           $( ".field-nombramiento-division" ).show();
+                            document.getElementById("labeldivision").childNodes[0].nodeValue="División";
+                           
                         }else{
                             
-                           $( ".field-nombramiento-division" ).hide();
+                           document.getElementById("labeldivision").childNodes[0].nodeValue="Padrón";
 
                         }
                         $.get( "'.Url::toRoute('/cargo/gethora').'", { id: $(this).val() } )
@@ -134,11 +135,11 @@ $form->field($model, 'fechaFinext')->widget(DatePicker::classname(), [
 
         $form->field($model, 'division')->widget(Select2::classname(), [
             'data' => $listdivisiones,
-            'options' => ['placeholder' => 'Seleccionar...'],
+            'options' => ['placeholder' => '(Toda la institución)'],
             'pluginOptions' => [
                 'allowClear' => true
             ],
-        ]);
+        ])->label('División o Padrón', ['id' => 'labeldivision']);
 
     ?>
 

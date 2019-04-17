@@ -240,6 +240,53 @@ class DetallecatedraSearch extends Detallecatedra
         return $dataProvider;
 
     }
+
+    public function getPadronDocente($prop){
+        
+            $query = Docente::find()
+                ->distinct()
+                ->joinWith(['detallecatedras', 'detallecatedras.catedra0', 'detallecatedras.catedra0.division0'])
+                ->where(['detallecatedra.activo' => 1])
+                ->andWhere(['division.propuesta' => $prop])
+                
+                ->orderBy('docente.apellido, docente.nombre');
+                    
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        return $dataProvider;
+    }
+
+    public function getCantidadDocentes($prop){
+            $query = new Query();
+            $query->from('docente')
+            ->distinct()
+            ->select('docente.id')
+            ->leftJoin('detallecatedra', 'docente.id = detallecatedra.docente')
+            ->leftJoin('catedra', 'catedra.id = detallecatedra.catedra')
+            ->leftJoin('division', 'division.id = catedra.division')
+            ->where(['detallecatedra.activo' => 1])
+            ->andWhere(['division.propuesta' => $prop]);
+            
+            return $query->count('id');
+
+            
+
+    }
+
+    
         
     
 

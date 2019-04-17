@@ -122,7 +122,7 @@ $form->field($model, 'fechaFinext')->widget(DatePicker::classname(), [
             'pluginOptions' => [
                 'allowClear' => true
             ],
-        ]);
+        ])->label('División o Padrón', ['id' => 'labeldivision']);
 
     ?>    
 
