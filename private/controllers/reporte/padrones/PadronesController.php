@@ -27,14 +27,14 @@ class PadronesController extends \yii\web\Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view'],
+                'only' => ['index', 'preceptores', 'jefespreceptor', 'docentes', 'otrosdocentes'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'preceptores'],   
+                        'actions' => ['index', 'preceptores', 'jefespreceptor', 'docentes', 'otrosdocentes'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_JUNTA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }

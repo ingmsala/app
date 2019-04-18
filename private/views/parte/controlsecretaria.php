@@ -68,7 +68,7 @@ $this->registerJs("
 
 <div class="detalleparte-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
   <?php 
@@ -102,12 +102,35 @@ GridView::widget([
                 ]
             ];
         },
+        'panel' => [
+            'type' => GridView::TYPE_DEFAULT,
+            'heading' => Html::encode($this->title),
+            //'beforeOptions' => ['class'=>'kv-panel-before'],
+        ],
+
+        'exportConfig' => [
+            GridView::EXCEL => [
+                'label' => 'Excel',
+                'filename' =>Html::encode($this->title),
+                
+                //'alertMsg' => false,
+            ],
+            
+
+        ],
+
+        'toolbar'=>[
+            
+            '{export}',
+            
+        ],
 
         //'filterModel' => $searchModel,
         'columns' => [
             
             [
                 'class' => 'yii\grid\CheckboxColumn',
+                
 
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if ($model['estadoinasistenciax'] != 2)
@@ -205,7 +228,8 @@ GridView::widget([
 
             
             [
-                'class' => 'yii\grid\ActionColumn',
+                'class' => 'kartik\grid\ActionColumn',
+                'hiddenFromExport' => true,
                 'template' => '{savesec}',
                 'visibleButtons'=> [
                         'savesec' => function(){

@@ -66,6 +66,9 @@ AppAsset::register($this);
                                 ],
                             
                                 '<div class="dropdown-divider"></div>',
+
+                                ['label' => 'Listado c/DNI y Fecha de Nacimiento', 'url' => ['/optativas/reportes/listadoparasalida']],
+                                '<div class="dropdown-divider"></div>',
                             
                             ],
 

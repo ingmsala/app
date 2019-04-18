@@ -15,6 +15,7 @@ class Globales
 	const US_INGRESO = 7;
 	const US_DOCENTE = 8;
 	const US_PRECEPTOR = 9;
+	const US_JUNTA = 10;
 	
 	const COND_SUPL = 5;
 	

@@ -235,6 +235,22 @@ if ($cantnov>0) {
                 ),
 
                 Yii::$app->user->isGuest ? (
+                    ['label' => '']
+                ) :(
+                    in_array (Yii::$app->user->identity->role, [10]) ? (
+                        
+                   
+                            [
+                            'label' => 'Padrones', 
+                            'url' => ['/reporte/padrones/padrones'],
+                            ]
+                            
+                        
+                ) :
+                    ['label' => '']
+                ),
+
+                Yii::$app->user->isGuest ? (
                     ['label' => 'Ingresar', 'url' => ['/site/login']]
                 ) : (
 
