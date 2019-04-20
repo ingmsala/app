@@ -19,7 +19,7 @@ class AlumnoSearch extends Alumno
     {
         return [
             [['id', 'dni', 'curso'], 'integer'],
-            [['apellido', 'nombre'], 'safe'],
+            [['apellido', 'nombre', 'fechanac'], 'safe'],
         ];
     }
 

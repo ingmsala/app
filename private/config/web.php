@@ -70,10 +70,37 @@ $config = [
         //'catchAll' => ['/site/login'],
     ],
     'modules' => [
-     'gridview' => ['class' => 'kartik\grid\Module'],
-     'optativas' => [
-            'class' => 'app\modules\optativas\Optativas',
-     ],
+         'gridview' => ['class' => 'kartik\grid\Module'],
+         'optativas' => [
+                'class' => 'app\modules\optativas\Optativas',
+         ],
+         'db-manager' => [
+                'class' => 'bs\dbManager\Module',
+                // path to directory for the dumps
+                'path' => '@app/backup',
+                
+                // list of registerd db-components
+                'dbList' => ['db'],
+                'as access' => [
+                    'class' => 'yii\filters\AccessControl',
+                    'rules' => [
+                        [
+                               
+                            'allow' => true,
+                            'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->role, [1]);
+                                }catch(\Exception $exception){
+                                    return false;
+                                }
+                            }
+
+                        ],
+
+                        
+                    ],
+                ],
+        ],
     ], 
     'params' => $params,
 ];

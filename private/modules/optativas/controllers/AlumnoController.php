@@ -57,7 +57,7 @@ class AlumnoController extends Controller
      */
     public function actionIndex()
     {
-        $this->layout = 'main';
+        
         $searchModel = new AlumnoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -75,7 +75,7 @@ class AlumnoController extends Controller
      */
     public function actionView($id)
     {
-        $this->layout = 'main';
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -88,7 +88,7 @@ class AlumnoController extends Controller
      */
     public function actionCreate()
     {
-        $this->layout = 'main';
+        
         $model = new Alumno();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -109,7 +109,7 @@ class AlumnoController extends Controller
      */
     public function actionUpdate($id)
     {
-        $this->layout = 'main';
+        
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -130,7 +130,7 @@ class AlumnoController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->layout = 'main';
+        
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

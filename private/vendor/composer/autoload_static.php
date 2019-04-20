@@ -48,13 +48,19 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         ),
         'c' => 
         array (
+            'creocoder\\flysystem\\' => 20,
             'cebe\\markdown\\' => 14,
+        ),
+        'b' => 
+        array (
+            'bs\\dbManager\\' => 13,
         ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Symfony\\Component\\Yaml\\' => 23,
+            'Symfony\\Component\\Process\\' => 26,
             'Symfony\\Component\\Finder\\' => 25,
             'Symfony\\Component\\EventDispatcher\\' => 34,
             'Symfony\\Component\\DomCrawler\\' => 29,
@@ -67,6 +73,10 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         array (
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
+        ),
+        'L' => 
+        array (
+            'League\\Flysystem\\' => 17,
         ),
         'G' => 
         array (
@@ -162,9 +172,17 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-krajee-base/src',
         ),
+        'creocoder\\flysystem\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/creocoder/yii2-flysystem/src',
+        ),
         'cebe\\markdown\\' => 
         array (
             0 => __DIR__ . '/..' . '/cebe/markdown',
+        ),
+        'bs\\dbManager\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/beaten-sect0r/yii2-db-manager/src',
         ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
@@ -177,6 +195,10 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         'Symfony\\Component\\Yaml\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
+        ),
+        'Symfony\\Component\\Process\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/process',
         ),
         'Symfony\\Component\\Finder\\' => 
         array (
@@ -213,6 +235,10 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'League\\Flysystem\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/flysystem/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (

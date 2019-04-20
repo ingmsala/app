@@ -33,6 +33,7 @@ class Alumno extends \yii\db\ActiveRecord
         return [
             [['apellido', 'nombre', 'dni', 'curso'], 'required'],
             [['dni', 'curso'], 'integer'],
+            [['fechanac'], 'safe'],
             [['apellido', 'nombre'], 'string', 'max' => 100],
         ];
     }
@@ -48,6 +49,7 @@ class Alumno extends \yii\db\ActiveRecord
             'nombre' => 'Nombre',
             'dni' => 'Dni',
             'curso' => 'Curso',
+            'fechanac' => 'Fecha de Nacimiento',
         ];
     }
 

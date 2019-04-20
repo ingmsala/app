@@ -72,7 +72,7 @@ class ListadoparasalidaController extends \yii\web\Controller
         Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección no está habilitada');
         return $this->redirect(['/optativas']);
         $this->layout = 'main';
-        try{
+        
             $searchModel = new MatriculaSearch();
             $comision = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
             if($comision != 0){
@@ -91,10 +91,7 @@ class ListadoparasalidaController extends \yii\web\Controller
             Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
                 return $this->redirect(['/optativas']);
             }
-        }catch(\Exception $exception){
-            Yii::$app->session->set('success', var_dump($exception));
-            return $this->redirect(['/optativas', ['id' => $exception]]);
-        }
+        
         
 
     }

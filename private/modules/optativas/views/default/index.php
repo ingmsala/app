@@ -1,3 +1,7 @@
+<div>
+	<h2>Guía del Usuario</h2>
+	<a href="https://drive.google.com/drive/folders/1911ZL3__5pHZshwatUSWyaqVC7Zu7qKw?usp=sharing">Guía de Usuario del Sistema</a>
+</div>	
 <div class="optativas-default-index">
 	<h3>DE LAS UNIDADES CURRICULARES ELECTIVAS U OPTATIVAS</h3>
     <h4>De las unidades curriculares optativas</h4>
