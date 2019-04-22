@@ -88,7 +88,11 @@ class DefaultController extends Controller
     public function actionIndex()
     {
 
-        $dataArray = $this->prepareFileData();
+        
+
+        
+        try{
+             $dataArray = $this->prepareFileData();
         $dbList = $this->getModule()->dbList;
         $model = new Dump($dbList, $this->getModule()->customDumpOptions);
         $dataProvider = new ArrayDataProvider([
@@ -98,13 +102,21 @@ class DefaultController extends Controller
             ],
         ]);
         $activePids = $this->checkActivePids();
-
-        return $this->render('index', [
+            return $this->render('index', [
             'dataProvider' => $dataProvider,
             'model' => $model,
             'dbList' => $dbList,
             'activePids' => $activePids,
         ]);
+        }catch(\Exception $exception){
+           Yii::$app->session->setFlash('error', var_dump($exception));
+        return $this->redirect(['/optativas']);
+        }
+        
+       
+                            
+
+        
     }
 
     /**
@@ -127,7 +139,7 @@ class DefaultController extends Controller
                 $this->runProcess($dumpCommand);
             }
         } else {
-            Yii::$app->session->setFlash('error', Yii::t('dbManager', 'Dump request invalid.') . '<br>' . Html::errorSummary($model));
+            Yii::$app->session->setFlash('error', 'Dump request invalid.' . '<br>' . Html::errorSummary($model));
         }
 
         return $this->redirect(['index']);
@@ -135,7 +147,7 @@ class DefaultController extends Controller
 
     public function actionNuevoajax()
     {
-        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        //date_default_timezone_set('America/Argentina/Buenos_Aires');
         $param = Yii::$app->request->post();
         $id = $param['id'];
         $dataArray = $this->prepareFileData();
@@ -228,11 +240,11 @@ class DefaultController extends Controller
             $exists = Yii::$app->backupStorage->has($dumpname);
             if ($exists) {
                 Yii::$app->backupStorage->delete($dumpname);
-                Yii::$app->session->setFlash('success', Yii::t('dbManager', 'Dump deleted from storage.'));
+                Yii::$app->session->setFlash('success', 'Dump deleted from storage.');
             } else {
                 $stream = fopen($dumpPath, 'r+');
                 Yii::$app->backupStorage->writeStream($dumpname, $stream);
-                Yii::$app->session->setFlash('success', Yii::t('dbManager', 'Dump uploaded to storage.'));
+                Yii::$app->session->setFlash('success', 'Dump uploaded to storage.');
             }
         }
 
@@ -246,9 +258,9 @@ class DefaultController extends Controller
     {
         $dumpFile = $this->getModule()->path . StringHelper::basename(ArrayHelper::getValue($this->getModule()->getFileList(), $id));
         if (unlink($dumpFile)) {
-            Yii::$app->session->setFlash('success', Yii::t('dbManager', 'Dump deleted successfully.'));
+            Yii::$app->session->setFlash('success', 'Dump deleted successfully.');
         } else {
-            Yii::$app->session->setFlash('error', Yii::t('dbManager', 'Error deleting dump.'));
+            Yii::$app->session->setFlash('error', 'Error deleting dump.');
         }
 
         return $this->redirect(['index']);
@@ -267,9 +279,9 @@ class DefaultController extends Controller
                 }
             }
             if (empty($fail)) {
-                Yii::$app->session->setFlash('success', Yii::t('dbManager', 'All dumps successfully removed.'));
+                Yii::$app->session->setFlash('success', 'All dumps successfully removed.');
             } else {
-                Yii::$app->session->setFlash('error', Yii::t('dbManager', 'Error deleting dumps.'));
+                Yii::$app->session->setFlash('error', 'Error deleting dumps.');
             }
         }
 
@@ -288,7 +300,7 @@ class DefaultController extends Controller
             //$msg = (!$isRestore) ? Yii::t('dbManager', 'Backup creado exitosamente.') : Yii::t('dbManager', 'Backup restaurado existosamente.');
             //Yii::$app->session->addFlash('success', $msg);
         } else {
-            $msg = (!$isRestore) ? Yii::t('dbManager', 'Dump failed.') : Yii::t('dbManager', 'Restore failed.');
+            $msg = (!$isRestore) ? 'Dump failed.' : 'Restore failed.';
             Yii::$app->session->addFlash('error', $msg . '<br>' . 'Command - ' . $command . '<br>' . $process->getOutput() . $process->getErrorOutput());
             Yii::error($msg . PHP_EOL . 'Command - ' . $command . PHP_EOL . $process->getOutput() . PHP_EOL . $process->getErrorOutput());
         }
@@ -306,17 +318,17 @@ class DefaultController extends Controller
         $activePids = Yii::$app->session->get('backupPids', []);
         if (!$process->isRunning()) {
             if ($process->isSuccessful()) {
-                $msg = (!$isRestore) ? Yii::t('dbManager', 'Dump successfully created.') : Yii::t('dbManager', 'Dump successfully restored.');
+                $msg = (!$isRestore) ? 'Dump successfully created.' : 'Dump successfully restored.';
                 Yii::$app->session->addFlash('success', $msg);
             } else {
-                $msg = (!$isRestore) ? Yii::t('dbManager', 'Dump failed.') : Yii::t('dbManager', 'Restore failed.');
+                $msg = (!$isRestore) ? 'Dump failed.' : 'Restore failed.';
                 Yii::$app->session->addFlash('error', $msg . '<br>' . 'Command - ' . $command . '<br>' . $process->getOutput() . $process->getErrorOutput());
                 Yii::error($msg . PHP_EOL . 'Command - ' . $command . PHP_EOL . $process->getOutput() . PHP_EOL . $process->getErrorOutput());
             }
         } else {
             $activePids[$pid] = $command;
             Yii::$app->session->set('backupPids', $activePids);
-            Yii::$app->session->addFlash('info', Yii::t('dbManager', 'Process running with pid={pid}', ['pid' => $pid]) . '<br>' . $command);
+            Yii::$app->session->addFlash('info', 'Process running with pid={pid}', ['pid' => $pid] . '<br>' . $command);
         }
     }
 
@@ -333,7 +345,7 @@ class DefaultController extends Controller
                 $process->run();
                 if (!$process->isSuccessful()) {
                     Yii::$app->session->addFlash('success',
-                        Yii::t('dbManager', 'Process complete!') . '<br> PID=' . $pid . ' ' . $cmd);
+                        'Process complete!' . '<br> PID=' . $pid . ' ' . $cmd);
                 } else {
                     $newActivePids[$pid] = $cmd;
                 }
@@ -349,7 +361,7 @@ class DefaultController extends Controller
      */
     protected function prepareFileData()
     {
-        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        //date_default_timezone_set('America/Argentina/Buenos_Aires');
         $dataArray = [];
         foreach ($this->getModule()->getFileList() as $id => $file) {
             $dataArray[] = [

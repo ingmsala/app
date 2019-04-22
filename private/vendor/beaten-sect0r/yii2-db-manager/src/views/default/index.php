@@ -80,13 +80,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => Yii::t('dbManager', 'Tamaño'),
             ],
             [
-                //'attribute' => 'create_at',
+                'attribute' => 'create_at',
                 'label' => Yii::t('dbManager', 'Fecha de Creación'),
-                'value' => function($model){
-                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+                /*'value' => function($model){
+                    //date_default_timezone_set('America/Argentina/Buenos_Aires');
                     return Yii::$app->formatter->asDate($model['create_at'], 'dd/MM/yyyy hh:mm:ss');
 
-                }
+                }*/
             ],
 
             [

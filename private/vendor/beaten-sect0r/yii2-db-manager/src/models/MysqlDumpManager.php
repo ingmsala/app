@@ -23,13 +23,24 @@ class MysqlDumpManager extends BaseDumpManager
         if (empty($dbInfo['port'])) {
             $dbInfo['port'] = '3306';
         }
-        $arguments = [
-            'C:/wamp/bin/mysql/mysql5.5.24/bin/mysqldump',
-            '--host=' . $dbInfo['host'],
-            '--port=' . $dbInfo['port'],
-            '--user=' . $dbInfo['username'],
-            '--password=' . $dbInfo['password'],
-        ];
+        if (YII_ENV_DEV) {
+            $arguments = [
+                        'C:/wamp/bin/mysql/mysql5.5.24/bin/mysqldump',
+                        '--host=' . $dbInfo['host'],
+                        '--port=' . $dbInfo['port'],
+                        '--user=' . $dbInfo['username'],
+                        '--password=' . $dbInfo['password'],
+                    ];
+        }else{
+            $arguments = [
+                        '/usr/bin/mysqldump',
+                        '--host=' . $dbInfo['host'],
+                        '--port=' . $dbInfo['port'],
+                        '--user=' . $dbInfo['username'],
+                        '--password=' . $dbInfo['password'],
+                    ];
+        }
+        
         if ($dumpOptions['schemaOnly']) {
             $arguments[] = '--no-data';
         }
@@ -65,8 +76,25 @@ class MysqlDumpManager extends BaseDumpManager
         if (empty($dbInfo['port'])) {
             $dbInfo['port'] = '3306';
         }
-        $arguments = ArrayHelper::merge($arguments, [
+        if (YII_ENV_DEV) {
+            $arguments = ArrayHelper::merge($arguments, [
             'C:/wamp/bin/mysql/mysql5.5.24/bin/mysql',
+            '--host=' . $dbInfo['host'],
+            '--port=' . $dbInfo['port'],
+            '--user=' . $dbInfo['username'],
+            '--password=' . $dbInfo['password'],
+        ]);
+        }else{
+            $arguments = ArrayHelper::merge($arguments, [
+            '/usr/bin/mysql',
+            '--host=' . $dbInfo['host'],
+            '--port=' . $dbInfo['port'],
+            '--user=' . $dbInfo['username'],
+            '--password=' . $dbInfo['password'],
+        ]);
+        }
+        $arguments = ArrayHelper::merge($arguments, [
+            '/usr/bin/mysql',
             '--host=' . $dbInfo['host'],
             '--port=' . $dbInfo['port'],
             '--user=' . $dbInfo['username'],

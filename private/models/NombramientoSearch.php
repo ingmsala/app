@@ -360,20 +360,31 @@ class NombramientoSearch extends Nombramiento
             }else{
 
                 
+                if($prop ==1){
+                    $query = Docente::find()
+                                    ->distinct()
+                                    ->joinWith(['nombramientos', 'nombramientos.division0'])
+                                    ->where(true)
+                                    ->andWhere(['in', 
+                                        'cargo', $param
+                                    ])
+                                    ->andWhere(['or', 
+                                        ['division.propuesta' => $prop],
+                                        ['nombramiento.division' => null]
+                                    ])
+                                    ->orderBy('docente.apellido, docente.nombre');
+                }else{
+                    $query = Docente::find()
+                                    ->distinct()
+                                    ->joinWith(['nombramientos', 'nombramientos.division0'])
+                                    ->where(true)
+                                    ->andWhere(['in', 
+                                        'cargo', $param
+                                    ])
+                                    ->andWhere(['division.propuesta' => $prop])
+                                    ->orderBy('docente.apellido, docente.nombre');
+                }
                 
-                
-                /*foreach ($param['Nombramiento']['cargo'] as $cargos) {
-                    
-                }*/
-
-                $query = Docente::find()
-                ->distinct()
-                ->joinWith(['nombramientos', 'nombramientos.division0'])
-                ->where(true)
-                ->andWhere(['in', 
-                    'cargo', $param
-                ])
-                ->orderBy('docente.apellido, docente.nombre');
 
 
             }
@@ -470,16 +481,32 @@ class NombramientoSearch extends Nombramiento
              }catch(\Exception $exception){
                 $largo = 0;
             }
-
-                            $query->from('docente')
-                        ->distinct()
+                if($prop ==1){
+                    $query->from('docente')
+                    ->distinct()
                     ->select('docente.id')
                     ->leftJoin('nombramiento', 'docente.id = nombramiento.docente')
                     ->leftJoin('division', 'division.id = nombramiento.division')
                     
                     ->where(['in', 
                     'cargo', $param
+                    ])
+                    ->andWhere(['or', 
+                        ['division.propuesta' => $prop],
+                        ['nombramiento.division' => null]
                     ]);
+                }else{
+                     $query->from('docente')
+                    ->distinct()
+                    ->select('docente.id')
+                    ->leftJoin('nombramiento', 'docente.id = nombramiento.docente')
+                    ->leftJoin('division', 'division.id = nombramiento.division')
+                    
+                    ->where(['in', 
+                    'cargo', $param
+                    ])
+                    ->andWhere(['division.propuesta' => $prop]);
+                }
                 return $query->count('id');
 
             

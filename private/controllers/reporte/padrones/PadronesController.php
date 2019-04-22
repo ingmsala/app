@@ -62,7 +62,8 @@ class PadronesController extends \yii\web\Controller
             $cantidadjefespregrado = $searchModel->getCantidadJefes(2);
             $cantidadpreceptoressecundario = $searchModel->getCantidadPreceptores(1);
             $cantidadpreceptorespregrado = $searchModel->getCantidadPreceptores(2);
-            $cantidadotrosdocentes = $searchModel->getCantidadOtrosDocentes(1, Globales::PADRON_OTROSDOC);
+            $cantidadotrosdocentessec = $searchModel->getCantidadOtrosDocentes(1, Globales::PADRON_OTROSDOC);
+            $cantidadotrosdocentespre = $searchModel->getCantidadOtrosDocentes(2, Globales::PADRON_OTROSDOC);
             $cantidaddocentessecundario = $searchModel2->getCantidadDocentes(1);
             $cantidaddocentespregrado = $searchModel2->getCantidadDocentes(2);
 
@@ -72,7 +73,8 @@ class PadronesController extends \yii\web\Controller
                 'cantidadjefespregrado' => $cantidadjefespregrado,
                 'cantidadpreceptoressecundario' => $cantidadpreceptoressecundario,
                 'cantidadpreceptorespregrado' => $cantidadpreceptorespregrado,
-                'cantidadotrosdocentes' => $cantidadotrosdocentes,
+                'cantidadotrosdocentessec' => $cantidadotrosdocentessec,
+                'cantidadotrosdocentespre' => $cantidadotrosdocentespre,
                 'cantidaddocentessecundario' => $cantidaddocentessecundario,
                 'cantidaddocentespregrado' => $cantidaddocentespregrado,
             ]);
@@ -146,15 +148,33 @@ class PadronesController extends \yii\web\Controller
                 ->orderBy('docente.apellido, docente.nombre')->all();
     }
 
-    private function getOtrosDocentes(){
-        return Docente::find()
+    private function getOtrosDocentes($prop){
+        if($prop ==1){
+             return Docente::find()
                 ->distinct()
                 ->joinWith(['nombramientos', 'nombramientos.division0'])
                 ->where(true)
                 ->andWhere(['in', 
                     'cargo', Globales::PADRON_OTROSDOC
                 ])
+                ->andWhere(['or', 
+                    ['division.propuesta' => $prop],
+                    ['nombramiento.division' => null]
+                ])
                 ->orderBy('docente.apellido, docente.nombre')->all();
+        }else{
+             return Docente::find()
+                ->distinct()
+                ->joinWith(['nombramientos', 'nombramientos.division0'])
+                ->where(true)
+                ->andWhere(['in', 
+                    'cargo', Globales::PADRON_OTROSDOC
+                ])
+                ->andWhere( 
+                    ['division.propuesta' => $prop])
+                ->orderBy('docente.apellido, docente.nombre')->all();
+        }
+       
     }
 
     public function actionPreceptores($prop){  
@@ -172,7 +192,8 @@ class PadronesController extends \yii\web\Controller
             $docpre = $this->getDocentes(2);
             $precsec = $this->getPreceptores(1);
             $precpre = $this->getPreceptores(2);
-            $otrosdoc = $this->getOtrosDocentes(2);
+            $otrosdoc = $this->getOtrosDocentes(1);
+            $otrosdocpre = $this->getOtrosDocentes(2);
 
 
 
@@ -188,6 +209,7 @@ class PadronesController extends \yii\web\Controller
                 'precsec' => $precsec,
                 'precpre' => $precpre,
                 'otrosdoc' => $otrosdoc,
+                'otrosdocpre' => $otrosdocpre,
             ]);
     }
 
@@ -206,7 +228,8 @@ class PadronesController extends \yii\web\Controller
             $docpre = $this->getDocentes(2);
             $precsec = $this->getPreceptores(1);
             $precpre = $this->getPreceptores(2);
-            $otrosdoc = $this->getOtrosDocentes(2);
+            $otrosdoc = $this->getOtrosDocentes(1);
+            $otrosdocpre = $this->getOtrosDocentes(2);
 
             return $this->render('jefespreceptor',[
                 
@@ -220,6 +243,7 @@ class PadronesController extends \yii\web\Controller
                 'precsec' => $precsec,
                 'precpre' => $precpre,
                 'otrosdoc' => $otrosdoc,
+                'otrosdocpre' => $otrosdocpre,
             ]);
     }
 
@@ -238,7 +262,8 @@ class PadronesController extends \yii\web\Controller
             $docpre = $this->getDocentes(2);
             $precsec = $this->getPreceptores(1);
             $precpre = $this->getPreceptores(2);
-            $otrosdoc = $this->getOtrosDocentes(2);
+            $otrosdoc = $this->getOtrosDocentes(1);
+            $otrosdocpre = $this->getOtrosDocentes(2);
 
             return $this->render('docentes',[
                                 
@@ -251,6 +276,7 @@ class PadronesController extends \yii\web\Controller
                 'precsec' => $precsec,
                 'precpre' => $precpre,
                 'otrosdoc' => $otrosdoc,
+                'otrosdocpre' => $otrosdocpre,
             ]);
     }
 
@@ -270,9 +296,9 @@ class PadronesController extends \yii\web\Controller
             $model = new Nombramiento();          
             
             if($prop == 1)
-                $propuesta = 'TODOS';
+                $propuesta = 'SECUNDARIO';
             if($prop == 2)
-                $propuesta = 'TODOS';
+                $propuesta = 'PREGRADO';
 
             $cargosseleccionados = [];
             if($largo<1){
@@ -293,7 +319,8 @@ class PadronesController extends \yii\web\Controller
             $docpre = $this->getDocentes(2);
             $precsec = $this->getPreceptores(1);
             $precpre = $this->getPreceptores(2);
-            $otrosdoc = $this->getOtrosDocentes(2);
+            $otrosdoc = $this->getOtrosDocentes(1);
+            $otrosdocpre = $this->getOtrosDocentes(2);
 
             return $this->render('otrosdocentes',[
                 'model' => $model,
@@ -308,6 +335,7 @@ class PadronesController extends \yii\web\Controller
                 'precsec' => $precsec,
                 'precpre' => $precpre,
                 'otrosdoc' => $otrosdoc,
+                'otrosdocpre' => $otrosdocpre,
                 
             ]);
     }

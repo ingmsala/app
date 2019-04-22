@@ -40,10 +40,10 @@ use yii\widgets\Pjax;
                       data: {id: keys},
                       
                       error: function (xhr, status, error) {
-                        alert(error);
+                        //alert(error);
                       }
                     }).done(function (data) {
-                      alert(data);
+                      //alert(data);
                       $('#devok').innerHTML = data;
                       //$.pjax.reload({container: '#' + $.trim(pjaxContainer2)});
                       //window.location.href = 'index.php?r=optativas%2Fclase%2Fview&id='+ clase;
@@ -89,7 +89,7 @@ $form->field($model, 'fecha')->widget(DatePicker::classname(), [
     <?= $form->field($model, 'preceptoria')->dropDownList($listPreceptoria, ['prompt'=>'Seleccionar...','style' => 'width:20%']); ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success', 'id' => 'btnausentes2']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success', 'id' => 'btnausentes']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -115,7 +115,7 @@ Pjax::begin(['id' => 'test2', 'timeout' => 5000]); ?>
                 false,
                 [
                     'class' => 'btn btn-primary',
-                    'id' => 'btnausentes',
+                    'id' => 'btnausentes2',
                     
                 ]
             );

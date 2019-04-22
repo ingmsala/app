@@ -29,6 +29,7 @@ $listcargos=ArrayHelper::map($cargos,'id','nombre');
 <?php $listdocsec=ArrayHelper::map($docsec,'id','id'); ?>
 <?php $listdocpre=ArrayHelper::map($docpre,'id','id'); ?>
 <?php $listotrosdoc=ArrayHelper::map($otrosdoc,'id','id'); ?>
+<?php $listotrosdocpre=ArrayHelper::map($otrosdocpre,'id','id'); ?>
 
 <div class="revista-index">
 
@@ -103,7 +104,7 @@ $listcargos=ArrayHelper::map($cargos,'id','nombre');
                 'label' => 'Aparece en otros padrones',
                 'headerOptions' => ['style' => 'width:20%'],
                 'format' => 'raw',
-                'value' => function($model) use($propuesta, $listdocsec, $listdocpre, $listjefessec, $listjefespre, $listotrosdoc, $listprecsec, $listprecpre) {
+                'value' => function($model) use($propuesta, $listdocsec, $listdocpre, $listjefessec, $listjefespre, $listotrosdoc, $listprecsec, $listprecpre, $listotrosdocpre) {
                     $ret = '<ul>';
                     if (in_array ($model->id, $listdocsec)){
                         $ret .= '<li>Docente Secundario</li>';
@@ -116,6 +117,16 @@ $listcargos=ArrayHelper::map($cargos,'id','nombre');
                     }
                     if (in_array ($model->id, $listjefespre)){
                         $ret .= '<li>Jefe Pregrado</li>';
+                    }
+                    if($propuesta == 'PREGRADO'){
+                        if (in_array ($model->id, $listotrosdoc)){
+                            $ret .= '<li>Otros docentes Secundario</li>';
+                        }
+                    }else{
+                        if (in_array ($model->id, $listotrosdocpre)){
+                            $ret .= '<li>Otros docentes Pregrado</li>';
+                        }
+
                     }
                     if (in_array ($model->id, $listprecpre)){
                             $ret .= '<li>Preceptor Pregrado</li>';
