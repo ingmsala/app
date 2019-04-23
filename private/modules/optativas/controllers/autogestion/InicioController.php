@@ -25,17 +25,17 @@ class InicioController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                $key1 = isset($_SESSION['dni']);
-                                if (Alumno::find()->where(['dni' => $_SESSION['dni']])->one() != null)
+                                $key1 = Yii::$app->session->has('dni');
+                                if (Alumno::find()->where(['dni' => Yii::$app->session->get('dni')])->one() != null)
                                     $key2 = true;
                                 else
                                     $key2 = false;
                                 if ($key1 and $key2)
                                     return true;
                                 else
-                                    return $this->redirect(['autogestion']);
+                                    return $this->redirect(['/optativas/autogestion/inicio']);
                             }catch(\Exception $exception){
-                                return $this->redirect(['autogestion']);
+                                return $this->redirect(['/optativas/autogestion/inicio']);
                             }
                         }
 
@@ -56,12 +56,12 @@ class InicioController extends \yii\web\Controller
         
     	$this->layout = null;
         $model = new Alumno();
-        Yii::$app->session->destroy();
+        Yii::$app->session->remove('dni');
         if ($model->load(Yii::$app->request->post())) {
 
             
             if (Alumno::find()->where(['dni' => $model->dni])->one() != null){
-                $this->actionSetsession($model->dni);
+                Yii::$app->session->set('dni', $model->dni);
                 return $this->redirect(['/optativas/autogestion/agenda/index']);
             }else{
                 $model->dni = null;
@@ -98,11 +98,5 @@ class InicioController extends \yii\web\Controller
         ]);
     }
 
-    private function actionSetsession($dni)
-    {   
-
-        $session = Yii::$app->session;
-		$session->set('dni', $dni);
-        return $dni;
-    }
+    
 }

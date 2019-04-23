@@ -3,7 +3,8 @@
 namespace app\modules\optativas\controllers\autogestion;
 
 use yii\web\Controller;
-use Yii;use yii\filters\AccessControl;
+use Yii;
+use yii\filters\AccessControl;
 use app\modules\optativas\models\Alumno;
 use app\modules\optativas\models\Comision;
 use app\modules\optativas\models\ClaseSearch;
@@ -28,8 +29,8 @@ class AgendaController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                $key1 = isset($_SESSION['dni']);
-                                if (Alumno::find()->where(['dni' => $_SESSION['dni']])->one() != null)
+                                $key1 = Yii::$app->session->has('dni');
+                                if (Alumno::find()->where(['dni' => Yii::$app->session->get('dni')])->one() != null)
                                     $key2 = true;
                                 else
                                     $key2 = false;

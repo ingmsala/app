@@ -42,17 +42,17 @@ class FichadelalumnoController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                $key1 = isset($_SESSION['dni']);
-                                if (Alumno::find()->where(['dni' => $_SESSION['dni']])->one() != null)
+                                $key1 = Yii::$app->session->has('dni');
+                                if (Alumno::find()->where(['dni' => Yii::$app->session->get('dni')])->one() != null)
                                     $key2 = true;
                                 else
                                     $key2 = false;
                                 if ($key1 and $key2)
                                     return true;
                                 else
-                                    return $this->redirect(['autogestion']);
+                                    return $this->redirect(['/optativas/autogestion/inicio']);
                             }catch(\Exception $exception){
-                                return $this->redirect(['autogestion']);
+                                return $this->redirect(['/optativas/autogestion/inicio']);
                             }
                         }
 
