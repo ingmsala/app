@@ -76,10 +76,7 @@ class InicioController extends \yii\web\Controller
 
     public function actionView()
     {
-        Yii::$app->session->setFlash('error', "No está habilitada la sección a la que intenta ingresar. <b>Próximamente</b> estará disponible");
-     
-            
-        return $this->redirect(['/optativas/autogestion/agenda/index']);
+        
          $dni = isset($_SESSION['dni']) ? $_SESSION['dni'] : 0;
         if($dni == 0){
             return $this->redirect(['index']);

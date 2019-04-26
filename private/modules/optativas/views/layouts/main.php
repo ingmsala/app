@@ -11,6 +11,7 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\modules\optativas\models\DocentexcomisionSearch;
 use app\modules\optativas\models\Docentexcomision;
+use app\config\Globales;
 
 AppAsset::register($this);
 ?>
@@ -21,7 +22,7 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="assets/images/favicon1.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="assets/images/favicon2.ico" type="image/x-icon" />
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode('Gestión de Espacios Optativos') ?></title>
     <?php $this->head() ?>
@@ -31,22 +32,13 @@ AppAsset::register($this);
 
     <div class="wrap">
         <?php
+        
+        if(!Yii::$app->user->isGuest){
 
-        NavBar::begin([
-            'brandLabel' => '<img src="assets/images/escudo.png" style="display:inline; vertical-align: middle; height:35px;"><span id="brandspan-optativas">Gestión de Espacios Optativos</span>',
-            'brandUrl' => Yii::$app->homeUrl,
-            'options' => [
-                'class' => 'navbar-default-optativas navbar-fixed-top',
-                'style' => Yii::$app->user->isGuest ? 'visibility: hidden' : '',
-            ],
-            'brandOptions' => []
-        ]);
-        echo Nav::widget([
-            'encodeLabels' => false,
-            'options' => ['class' => 'navbar-nav navbar-right'],
-            'items' => [
-                        
-                        ['label' => '<span class="glyphicon glyphicon-align-center"></span><div>Inicio</div>', 'url' => ['/optativas']],
+            if(Yii::$app->user->identity->role == Globales::US_SUPER){
+                $items = [
+                                            
+                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
                         ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
                         ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><div>Calificaciones</div>', 'url' => ['/optativas/calificacion']],
                         ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/optativas/seguimiento']],
@@ -75,42 +67,256 @@ AppAsset::register($this);
 
 
                         ],
+
+                        ['label' => '<span class="glyphicon glyphicon-user"></span><br>'.Yii::$app->user->identity->username.'',
                         
-                            
+                            'items' => [
+                                                           [
+                                    'label' => 'Cambiar contraseña',
+                                    'url' => ['/user/cambiarpass'],
+                                ],
+                                
+                                [
+                                    'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                                    'url' => ['/site/logout'],
+                                    'linkOptions' => ['data-method' => 'post'],
+                                
                         
-
-
-                  
-
-                Yii::$app->user->isGuest ? (
-                    ['label' => 'Ingresar', 'url' => ['/site/login']]
-                ) : (
-
-
-                    ['label' => '<span class="glyphicon glyphicon-user"></span><br>'.Yii::$app->user->identity->username.'',
-                        
-                        'items' => [
-                                                       [
-                                'label' => 'Cambiar contraseña',
-                                'url' => ['/user/cambiarpass'],
-                            ],
-                            
-                            [
-                                'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                'url' => ['/site/logout'],
-                                'linkOptions' => ['data-method' => 'post'],
-                            
+                                ],
+                                '<div class="dropdown-divider"></div>',
+                                
+                             ],
+                        ]
                     
-                            ],
-                            '<div class="dropdown-divider"></div>',
-                            
-                         ],
-                    ]
-
-
+                ];
+            }else if(in_array(Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+                $items = [
                     
-                )
+                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
+                        ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
+                        ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><div>Calificaciones</div>', 'url' => ['/optativas/calificacion']],
+                        ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/optativas/seguimiento']],
+                        ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
+
+                            'items' => [
+                                [
+                                    'label' => 'Ficha del Alumno',
+                                    'url' => ['/optativas/reportes/fichadelalumno'],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+
+                                [
+                                    'label' => 'Planilla de Asistencia',
+                                    'url' => ['/optativas/reportes/planillasistencia'],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+
+                            
+                            ],
+
+
+
+                        ],
+
+                        ['label' => '<span class="glyphicon glyphicon-user"></span><br>'.Yii::$app->user->identity->username.'',
+                        
+                            'items' => [
+                                                           [
+                                    'label' => 'Cambiar contraseña',
+                                    'url' => ['/user/cambiarpass'],
+                                ],
+                                
+                                [
+                                    'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                                    'url' => ['/site/logout'],
+                                    'linkOptions' => ['data-method' => 'post'],
+                                
+                        
+                                ],
+                                '<div class="dropdown-divider"></div>',
+                                
+                             ],
+                        ]
+                    
+                ];
+            }else if( in_array (Yii::$app->user->identity->role, [Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA])){
+                $items = [
+                    
+                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
+                        ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
+                        ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><div>Calificaciones</div>', 'url' => ['/optativas/calificacion']],
+                        ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/optativas/seguimiento']],
+                        ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
+
+                            'items' => [
+                                [
+                                    'label' => 'Ficha del Alumno',
+                                    'url' => ['/optativas/reportes/fichadelalumno'],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+
+                                [
+                                    'label' => 'Planilla de Asistencia',
+                                    'url' => ['/optativas/reportes/planillasistencia'],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+
+                                ['label' => 'Listado c/DNI y Fecha de Nacimiento', 'url' => ['/optativas/reportes/listadoparasalida']],
+                                '<div class="dropdown-divider"></div>',
+
+                            
+                            ],
+
+
+
+                        ],
+
+                        ['label' => '<span class="glyphicon glyphicon-user"></span><br>'.Yii::$app->user->identity->username.'',
+                        
+                            'items' => [
+                                                           [
+                                    'label' => 'Cambiar contraseña',
+                                    'url' => ['/user/cambiarpass'],
+                                ],
+                                
+                                [
+                                    'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                                    'url' => ['/site/logout'],
+                                    'linkOptions' => ['data-method' => 'post'],
+                                
+                        
+                                ],
+                                '<div class="dropdown-divider"></div>',
+                                
+                             ],
+                        ]
+                    
+                ];
+            }else if(Yii::$app->user->identity->role == Globales::US_COORDINACION){
+                $items = [
+                    
+                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
+                        ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
+                        ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><div>Calificaciones</div>', 'url' => ['/optativas/calificacion']],
+                        ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/optativas/seguimiento']],
+                        ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
+
+                            'items' => [
+                                [
+                                    'label' => 'Ficha del Alumno',
+                                    'url' => ['/optativas/reportes/fichadelalumno'],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+
+                                [
+                                    'label' => 'Planilla de Asistencia',
+                                    'url' => ['/optativas/reportes/planillasistencia'],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+
+                                                            
+                            ],
+
+
+
+                        ],
+
+                        ['label' => '<span class="glyphicon glyphicon-user"></span><br>'.Yii::$app->user->identity->username.'',
+                        
+                            'items' => [
+                                                           [
+                                    'label' => 'Cambiar contraseña',
+                                    'url' => ['/user/cambiarpass'],
+                                ],
+                                
+                                [
+                                    'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                                    'url' => ['/site/logout'],
+                                    'linkOptions' => ['data-method' => 'post'],
+                                
+                        
+                                ],
+                                '<div class="dropdown-divider"></div>',
+                                
+                             ],
+                        ]
+                    
+                ];
+            }else if(Yii::$app->user->identity->role == Globales::US_SREI){
+                $items = [
+                    
+                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
+                        
+                        ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
+
+                            'items' => [
+                                
+                                        ['label' => 'Listado c/DNI y Fecha de Nacimiento', 'url' => ['/optativas/reportes/listadoparasalida']],
+                                '<div class="dropdown-divider"></div>',
+                                                            
+                            ],
+
+
+
+                        ],
+
+                        ['label' => '<span class="glyphicon glyphicon-user"></span><br>'.Yii::$app->user->identity->username.'',
+                        
+                            'items' => [
+                                                           [
+                                    'label' => 'Cambiar contraseña',
+                                    'url' => ['/user/cambiarpass'],
+                                ],
+                                
+                                [
+                                    'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                                    'url' => ['/site/logout'],
+                                    'linkOptions' => ['data-method' => 'post'],
+                                
+                        
+                                ],
+                                '<div class="dropdown-divider"></div>',
+                                
+                             ],
+                        ]
+                    
+                ];
+            }
+
+
+
+
+            else{
+                $items = ['items' => [
+                        
+                        ['label' => '']
+                ]];
+            }
+        }else{
+            $items = [
+                        ['label' => '']
+                ];
+        }
+
+        NavBar::begin([
+            'brandLabel' => '<img src="assets/images/escudo.png" style="display:inline; vertical-align: middle; height:35px;"><span id="brandspan-optativas">Gestión de Espacios Optativos</span>',
+            'brandUrl' => Yii::$app->homeUrl,
+            'options' => [
+                'class' => 'navbar-default-optativas navbar-fixed-top',
+                'style' => Yii::$app->user->isGuest ? 'visibility: hidden' : '',
             ],
+            'brandOptions' => []
+        ]);
+        echo Nav::widget([
+            'encodeLabels' => false,
+            'options' => ['class' => 'navbar-nav navbar-right'],
+            'items' => $items
         ]);
 NavBar::end();
 ?>

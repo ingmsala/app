@@ -276,6 +276,8 @@ if ($cantnov>0) {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Nombramientos de cargo', 'url' => ['/nombramiento']],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'Espacios Optativos', 'url' => ['/optativas']],
+                                '<div class="dropdown-divider"></div>',
                                                                 
                             ],
 
@@ -468,6 +470,8 @@ if ($cantnov>0) {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Nombramientos de cargo', 'url' => ['/nombramiento']],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'Espacios Optativos', 'url' => ['/optativas']],
+                                '<div class="dropdown-divider"></div>',
                                 
                             ],
 
@@ -514,7 +518,7 @@ if ($cantnov>0) {
                 ];
 
 
-            }if(Yii::$app->user->identity->role == Globales::US_INGRESO){
+            }else if(Yii::$app->user->identity->role == Globales::US_INGRESO){
                 $items = [
                         
                     ['label' => 'Control de Acceso',
@@ -566,6 +570,42 @@ if ($cantnov>0) {
                             'label' => 'Padrones', 
                             'url' => ['/reporte/padrones/padrones'],
                     ],
+                    
+                    
+                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
+                            
+                            'items' => [
+                                            
+                                            [
+                                                'label' => 'Cambiar contraseña',
+                                                'url' => ['/user/cambiarpass'],
+                                            ],
+                                
+                                            [
+                                                'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                                                'url' => ['/site/logout'],
+                                                'linkOptions' => ['data-method' => 'post'],
+                                            
+                                    
+                                            ],
+                                            '<div class="dropdown-divider"></div>',
+                                
+                             ],
+                    ],
+
+
+
+
+                ];
+
+
+            }else if(Yii::$app->user->identity->role == Globales::US_NOVEDADES){
+
+                
+                $items = [
+                        
+                   ['label' => 'Panel de Novedades '.$cantnov, 'url' => ['novedadesparte/panelnovedades']],
+                                
                     
                     
                     ['label' => 'Usuario: '.Yii::$app->user->identity->username,

@@ -113,7 +113,7 @@ Pjax::end();
 
 </div>
 <div class="pull-right">
-    <?=Html::a(
+    <?= in_array (Yii::$app->user->identity->role, [1,8,9]) ? Html::a(
                 '<span class="glyphicon glyphicon-ok"></span> Confirmar Ausentes',
                 false,
                 [
@@ -123,6 +123,6 @@ Pjax::end();
                     'pjax-container' => 'test',
                     
                 ]
-            );
+            ) : '';
     ?>
 </div>

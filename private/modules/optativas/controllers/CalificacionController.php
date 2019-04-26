@@ -30,7 +30,7 @@ class CalificacionController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1,8,9]);
+                                return in_array (Yii::$app->user->identity->role, [1,3,6,8,9,12,13,14]);
                             }catch(\Exception $exception){
                                 return false;
                             }

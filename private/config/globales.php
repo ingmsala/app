@@ -16,6 +16,11 @@ class Globales
 	const US_DOCENTE = 8;
 	const US_PRECEPTOR = 9;
 	const US_JUNTA = 10;
+	const US_NOVEDADES = 11;
+	const US_SACADEMICA = 12;
+	const US_COORDINACION = 13;
+	const US_SREI = 14;
+	
 	
 	const COND_SUPL = 5;
 	

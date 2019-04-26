@@ -7,7 +7,7 @@ use kartik\grid\GridView;
 /* @var $searchModel app\modules\optativas\models\ComisionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Optativas del Alumno';
+$this->title = 'Agenda de Clases';
 
 ?>
 <div class="comision-index">

@@ -30,6 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
         $listdivisiones=ArrayHelper::map($divisiones,'nombre','nombre');
         $listPropuestas=ArrayHelper::map($propuestasall,'id','nombre');
+        $listCondiciones=ArrayHelper::map($condiciones,'id','nombre');
         $listResoluciones=ArrayHelper::map($resoluciones,'resolucion','resolucion');
         $listDocentes=ArrayHelper::map($docentes,'id', function($doc) {
             return $doc['apellido'].', '.$doc['nombre'];}
@@ -85,6 +86,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             }
 
+                            if(isset($param['Catedra']['condicion'])){
+                                if($param['Catedra']['condicion']!=''){
+                                    $filter = true;
+                                    echo '<b> - Condición: </b>'.$listCondiciones[$param['Catedra']['condicion']];
+                                    
+                                }
+                            }
+
                             if(isset($param['Catedra']['activo'])){
                                 if($param['Catedra']['activo']==1){
                                     $filter = true;
@@ -109,8 +118,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <div id="collapseOne" class="panel-collapse collapse">
 
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="panel-body">
+                    
+                    <div class="panel-body">
+                        <div class="col-md-6">
                             <?php                 
 
                                  $form = ActiveForm::begin([
@@ -145,6 +155,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         
                             <?= $form->field($model, 'actividadnom')->textInput()->label("Actividad") ?>
 
+                        </div>
+                        <div class="col-md-6">    
                             <?= $form->field($model, 'divisionnom')->textInput()->label("División") ?>
 
                             <?= 
@@ -159,6 +171,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ?>
 
+                            <?= 
+                                
+                                $form->field($model, 'condicion')->widget(Select2::classname(), [
+                                    'data' => $listCondiciones,
+                                    'options' => ['placeholder' => 'Seleccionar...'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ])->label("Condición");
+
+                            ?>
+                        </div>
+                        <div class="col-md-6">
                             <?= $form->field($model, 'activo')->checkbox(['label'=>''])->label('Inactivas'); ?>
 
                             <div class="form-group">

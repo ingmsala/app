@@ -36,7 +36,19 @@ class ClaseController extends Controller
                 'only' => ['index', 'view', 'create', 'update', 'delete'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'create', 'update', 'delete'],   
+                        'actions' => ['index'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [1,3,6,8,9,12,13]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['create', 'update', 'delete'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -53,7 +65,7 @@ class ClaseController extends Controller
                         'matchCallback' => function ($rule, $action) {
                             try{
                                 
-                                if (in_array (Yii::$app->user->identity->role, [1,8,9])){
+                                if (in_array (Yii::$app->user->identity->role, [1,3,6,8,9,12,13])){
                                     $model = $this->findModel($_GET['id']);
                                     if($model->fechaconf == 1 && $model->hora != null)
                                         return true;

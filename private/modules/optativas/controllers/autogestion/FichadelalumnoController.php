@@ -77,10 +77,7 @@ class FichadelalumnoController extends \yii\web\Controller
 
     public function actionIndex($id)
     {
-        Yii::$app->session->setFlash('error', "No está habilitada la sección a la que intenta ingresar. <b>Próximamente</b> estará disponible");
-     
-            
-        return $this->redirect(['/optativas/autogestion/agenda/index']);
+        
         $comision = Matricula::find()
                 ->joinWith(['alumno0'])
                 ->where(['matricula.id' => $id])

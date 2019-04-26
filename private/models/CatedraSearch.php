@@ -133,6 +133,9 @@ class CatedraSearch extends Catedra
         if (isset($params['Catedra']['docente']) && $params['Catedra']['docente'] != ''){
             $sql .= ' AND doc.id = '.$params['Catedra']['docente'];
         }
+        if (isset($params['Catedra']['condicion']) && $params['Catedra']['condicion'] != ''){
+            $sql .= ' AND dc.condicion = '.$params['Catedra']['condicion'];
+        }
         if (isset($params['Catedra']['propuesta']) && $params['Catedra']['propuesta'] != ''){
             $sql .= ' AND a.propuesta ='.$params['Catedra']["propuesta"];
         }

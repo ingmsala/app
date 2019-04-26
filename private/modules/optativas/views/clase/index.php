@@ -10,6 +10,8 @@ use yii\bootstrap\Progress;
 
 $this->title = 'Clases';
 
+in_array (Yii::$app->user->identity->role, [1,8,9]) ? $template = '{view} {update} {delete}' : $template = '{view}'
+
 ?>
 <?php $meses = [ 1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12=> 'Diciembre']; ?>
 
@@ -49,7 +51,7 @@ $this->title = 'Clases';
         ],
         'toolbar'=>[
             ['content' => 
-                Html::a('Nueva Clase', ['create'], ['class' => 'btn btn-success'])
+                in_array (Yii::$app->user->identity->role, [1,8,9]) ? Html::a('Nueva Clase', ['create'], ['class' => 'btn btn-success']) : ''
             ],
             '{export}',
             
@@ -97,7 +99,7 @@ $this->title = 'Clases';
             [
                 'class' => 'kartik\grid\ActionColumn',
 
-                'template' => '{view} {update} {delete}',
+                'template' => $template,
 
                 
                 'buttons' => [

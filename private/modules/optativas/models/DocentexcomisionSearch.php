@@ -135,7 +135,7 @@ class DocentexcomisionSearch extends Docentexcomision
 
     public function comisionesxdocente($id)
     {
-        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER])){
+        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI, Globales::US_CONSULTA, Globales::US_SECRETARIA])){
             return Docentexcomision::find()
             ->joinWith(['docente0', 'comision0', 'comision0.optativa0', 'comision0.optativa0.actividad0'])
             ->orderBy('actividad.nombre', 'optativa.nombre')

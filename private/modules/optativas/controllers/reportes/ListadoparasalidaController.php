@@ -43,7 +43,7 @@ class ListadoparasalidaController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1]);
+                                return in_array (Yii::$app->user->identity->role, [1,3,6,12,14]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -69,8 +69,7 @@ class ListadoparasalidaController extends \yii\web\Controller
      */
     public function actionIndex()
     {
-        Yii::$app->session->set('success', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La sección no está habilitada');
-        return $this->redirect(['/optativas']);
+        
         $this->layout = 'main';
         
             $searchModel = new MatriculaSearch();

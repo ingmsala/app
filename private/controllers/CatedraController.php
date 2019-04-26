@@ -7,6 +7,7 @@ use app\models\Catedra;
 use app\models\CatedraSearch;
 use app\models\Actividad;
 use app\models\Division;
+use app\models\Condicion;
 use app\models\Propuesta;
 use app\models\Docente;
 use yii\web\Controller;
@@ -95,6 +96,7 @@ class CatedraController extends Controller
         $searchModel = new CatedraSearch();
         $dataProvider = $searchModel->providercatedras($param);
         $divisiones = Division::find()->all();
+        $condiciones = Condicion::find()->all();
         $propuestasall = Propuesta::find()->all();
         $resoluciones = Detallecatedra::find()
                     ->select('resolucion')->distinct()->all();
@@ -112,6 +114,8 @@ class CatedraController extends Controller
             $model->divisionnom = $param['Catedra']['divisionnom'];
         if(isset($param['Catedra']['resolucion']))
             $model->resolucion = $param['Catedra']['resolucion'];
+        if(isset($param['Catedra']['condicion']))
+            $model->condicion = $param['Catedra']['condicion'];
         if(isset($param['Catedra']['activo']) && $param['Catedra']['activo'] == 1)
             $model->activo = $param['Catedra']['activo'];
 
@@ -123,6 +127,7 @@ class CatedraController extends Controller
             'propuestasall' => $propuestasall,
             'docentes' => $docentes,
             'resoluciones' => $resoluciones,
+            'condiciones' => $condiciones,
             'param' => $param,
 
         ]);
