@@ -24,9 +24,19 @@ class Estadoinasistenciaxparte extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    const SCENARIO_COMISONREG = 'detalle';
+
     public static function tableName()
     {
         return 'estadoinasistenciaxparte';
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+       
+        $scenarios[self::SCENARIO_COMISONREG] = ['estadoinasistencia', 'detalle', 'falta'];
+        return $scenarios;
     }
 
     /**
@@ -36,6 +46,7 @@ class Estadoinasistenciaxparte extends \yii\db\ActiveRecord
     {
         return [
             [['estadoinasistencia', 'fecha', 'detalleparte', 'falta'], 'required'],
+            [['falta', 'detalle'], 'required', 'on'=>self::SCENARIO_COMISONREG],
             [['estadoinasistencia', 'detalleparte', 'falta'], 'integer'],
             [['fecha'], 'safe'],
             [['detalle'], 'string', 'max' => 100],

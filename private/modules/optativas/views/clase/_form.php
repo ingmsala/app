@@ -21,7 +21,8 @@ $this->registerJs("
   $(document).ready(function() { 
             $('#hr').change(function() {
             	var hc;
-            	hc = $('#hr').val() * 60 / 40;
+            	hc = $('#hr').val() * 1.66666666;
+                hc = Math.round(hc * 100) / 100
             	$('#hc').val(hc);
             }); 
         });

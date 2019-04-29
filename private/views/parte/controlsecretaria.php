@@ -215,6 +215,16 @@ GridView::widget([
                 }
             ],
             [   
+                'label' => 'Motivo',
+                'attribute' => 'falta',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                'value' => function($model){
+                    return $model['detalle'];
+                }
+            ],
+            
+            [   
                 'label' => 'Estado',
                 'vAlign' => 'middle',
                 'hAlign' => 'center',

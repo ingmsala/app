@@ -342,7 +342,7 @@ NavBar::end();
                 <div class="row" style="margin-top: 50px;" id="submenu">
                     <?php
 
-                       //echo isset($this->params['submenu']) ? $this->params['submenu'] : '';
+                       echo isset($this->params['submenu']) ? $this->params['submenu'] : '';
 
                      ?>
                 </div>

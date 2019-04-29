@@ -14,6 +14,10 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\config\Globales;
 
+use yii\widgets\ActiveForm; // Ajaxvalidation
+
+use yii\web\Response; // Ajaxvalidation
+
 /**
  * EstadoinasistenciaxparteController implements the CRUD actions for Estadoinasistenciaxparte model.
  */
@@ -118,10 +122,19 @@ class EstadoinasistenciaxparteController extends Controller
         $detallepartex = Detalleparte::findOne($detalleparte);
 
         $model = new Estadoinasistenciaxparte();
+        $model->scenario = $model::SCENARIO_COMISONREG;
         $faltas = Falta::find()
                     ->where(['<=','id',Globales::FALTA_COMISION])
                     ->andWhere(['<>','id',$detallepartex->falta])
                     ->all();
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return ActiveForm::validate($model);
+
+        }
 
         if ($model->load(Yii::$app->request->post())) {
 

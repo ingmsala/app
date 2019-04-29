@@ -13,7 +13,7 @@ $this->title = 'Clases';
 in_array (Yii::$app->user->identity->role, [1,8,9]) ? $template = '{view} {update} {delete}' : $template = '{view}'
 
 ?>
-<?php $meses = [ 1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12=> 'Diciembre']; ?>
+<?php $meses = [ 1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12=> 'Diciembre', '01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo', '04' => 'Abril', '05' => 'Mayo', '06' => 'Junio', '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre']; ?>
 
 <div class="clase-index" style="margin-top: 20px;">
 
@@ -65,8 +65,17 @@ in_array (Yii::$app->user->identity->role, [1,8,9]) ? $template = '{view} {updat
                 'format' => 'raw',
                 'value' => function($model) use($meses){
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
+                    //return Yii::$app->formatter->asDate($model['fecha'], 'n');
                     if(!$model['fechaconf']){
-                        return $meses[Yii::$app->formatter->asDate($model['fecha'], 'n')].'<span style="color: red;"><i> (A definir)</i><span>';
+                        //if (Yii::$app->formatter->asDate($model['fecha'], 'MM')<10)
+
+                        //return Yii::$app->formatter->asDate($model['fecha'], 'n');
+                        try{
+                            return $meses[Yii::$app->formatter->asDate($model['fecha'], 'MM')].'<span style="color: red;"><i> (A definir)</i><span>';
+                        }catch(\Exception $exception){
+                            return Yii::$app->formatter->asDate($model['fecha'], 'MM');
+                        }
+                        
                     }
                    if ($model['fecha'] == date('Y-m-d')){
                         return Yii::$app->formatter->asDate($model['fecha'], 'dd/MM/yyyy').' (HOY)';

@@ -192,6 +192,8 @@ if ($cantnov>0) {
                                             '<div class="dropdown-divider"></div>',
                                             ['label' => 'Roles', 'url' => ['/role']],
                                             '<div class="dropdown-divider"></div>',
+                                            ['label' => 'Backup', 'url' => ['/db-manager']],
+                                            '<div class="dropdown-divider"></div>',
 
                                             [
                                                 'label' => 'Cambiar contraseña',

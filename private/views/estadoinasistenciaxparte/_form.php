@@ -13,12 +13,15 @@ use yii\helpers\ArrayHelper;
 
 	<?php $listFaltas=ArrayHelper::map($faltas,'id','nombre'); ?>
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+		'id' => 'create-update-detalle-catedra-form',
+        'enableAjaxValidation' => true
+    ]); ?>
 
     
     <?= $form->field($model, 'falta')->dropDownList($listFaltas, ['prompt'=>'Seleccionar...']); ?>
 
-    <?= $form->field($model, 'detalle')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'detalle')->textInput(['maxlength' => true])->label('Motivo') ?>
 
     
     <div class="form-group">

@@ -119,11 +119,11 @@ class ClaseController extends Controller
         
         $submenu = $this->renderPartial('_submenu', [
 
-            'duracion' => $duracion,
-            'horastotalactual' => $horastotalactual,
-            'horaspresencialactual' => $horaspresencialactual,
-            'horasnopresencialactual' => $horasnopresencialactual,
-            'horasvisitaactual' => $horasvisitaactual,
+            'duracion' => round($duracion,2),
+            'horastotalactual' => round($horastotalactual,2),
+            'horaspresencialactual' => round($horaspresencialactual,2),
+            'horasnopresencialactual' => round($horasnopresencialactual,2),
+            'horasvisitaactual' => round($horasvisitaactual,2),
 
         ]);
 
@@ -293,7 +293,8 @@ class ClaseController extends Controller
                 }
                 if($model->save()){
                     if($model->fechaconf == 1 && $model->hora!=null)
-                        return $this->redirect(['view', 'id' => $model->id]);
+                        return $this->redirect(['index']);
+                        //return $this->redirect(['view', 'id' => $model->id]);
                     else
                         return $this->redirect(['index']);
                 }
@@ -352,7 +353,7 @@ class ClaseController extends Controller
             }
             $mesx = 0;
             if($model->fechaconf ==0){
-                $mesx = Yii::$app->formatter->asDate($model->fecha, 'n');
+                $mesx = Yii::$app->formatter->asDate($model->fecha, 'M');
             }
             return $this->render('update', [
                 'model' => $model,

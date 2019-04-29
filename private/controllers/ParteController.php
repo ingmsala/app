@@ -350,11 +350,11 @@ class ParteController extends Controller
             $model->estadoinasistencia = $param['Detalleparte']['estadoinasistencia'];
 
         return $this->render('controlsecretaria', [
-            'searchModel' => $searchModel,
+            
             'dataProvider' => $dataProvider,
             'model' => $model,
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            
             'param' => Yii::$app->request->queryParams,
             'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),
             'estadoinasistencia' => Estadoinasistencia::find()->where(['<=','id',Globales::ESTADOINASIST_SECJUS])->all(),
