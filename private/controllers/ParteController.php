@@ -364,9 +364,9 @@ class ParteController extends Controller
     public function actionProcesarmarcadosreg(){
         $param = Yii::$app->request->post();
         //return $param['id'][1];
-        
+        $c=0;
         foreach ($param['id'] as $detalleseleccionado) {
-            
+            $c=$c+1;
             $model = new Estadoinasistenciaxparte;
             $model->detalle = null;
             $model->estadoinasistencia = $param['or'][0];
@@ -381,7 +381,7 @@ class ParteController extends Controller
             $model->save();
         }
         
-        return 'ok';
+        return $c;
         
         
         

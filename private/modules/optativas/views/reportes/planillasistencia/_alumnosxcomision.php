@@ -27,6 +27,7 @@ Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'id' => 'grid',
+        'responsiveWrap' => false,
         
         
         //'filterModel' => $searchModel,

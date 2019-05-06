@@ -30,24 +30,22 @@ $this->registerJs("
    
     
     var keys = $('#grid').yiiGridView('getSelectedRows');
+    
     if(keys.length > 0){
         var deleteUrl     = 'index.php?r=parte/procesarmarcadosreg';
         var pjaxContainer = 'test';
         
                     $.ajax({
-                      url:   deleteUrl,
-                      type:  'post',
-                      data: {id: key, or: 2},
-                      beforeSend: function() {
-                         $('#loader').show();
-                      },
+                      url: deleteUrl,
+                      type: 'post',
+                      data: {id: keys, or: 2},
                       error: function (xhr, status, error) {
                         alert('Error');
                       }
                     }).done(function (data) {
-                       $('#loader').hide();
+                      
                       $.pjax.reload({container: '#' + $.trim(pjaxContainer)});
-                      alert('La operación se realizó correctamente');
+                      alert('La operación se realizó correctamente. Se modificaron '+data+' registros');
                     });
     }else{
         alert('Debe seleccionar al menos una instancia');
@@ -132,7 +130,7 @@ $this->registerJs("
 
 
 <?php Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
-<div id="loader"></div>
+
     <?= 
 
 GridView::widget([
@@ -307,8 +305,7 @@ echo Html::a(
                             [
                                 'class'          => 'btn btn-success',
                                 'id' => 'ratifall',
-                                'delete-url'     => '/parte/procesarmarcadosreg',
-                                'pjax-container' => 'test',
+                                
                                 
                             ]
                         );

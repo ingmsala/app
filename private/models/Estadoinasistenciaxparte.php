@@ -24,7 +24,7 @@ class Estadoinasistenciaxparte extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    const SCENARIO_COMISONREG = 'detalle';
+    const SCENARIO_COMISONREG = 'detalleparteesc';
 
     public static function tableName()
     {

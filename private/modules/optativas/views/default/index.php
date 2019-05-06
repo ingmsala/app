@@ -38,3 +38,7 @@ Regente, Coordinador de área de la especialidad que se pone en juego y un miemb
 
    
 </div>
+<div>
+	<h2>Consultas</h2>
+	msala@unc.edu.ar
+</div>

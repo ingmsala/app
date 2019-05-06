@@ -119,22 +119,29 @@ class EstadoinasistenciaxparteController extends Controller
      */
     public function actionCreate($detalle=null, $detalleparte=null, $estadoinasistencia=null)
     {
+        
+       
         $detallepartex = Detalleparte::findOne($detalleparte);
 
         $model = new Estadoinasistenciaxparte();
+
         $model->scenario = $model::SCENARIO_COMISONREG;
+        
         $faltas = Falta::find()
                     ->where(['<=','id',Globales::FALTA_COMISION])
                     ->andWhere(['<>','id',$detallepartex->falta])
                     ->all();
 
+                    
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
 
+            
             Yii::$app->response->format = Response::FORMAT_JSON;
 
             return ActiveForm::validate($model);
 
         }
+
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -153,11 +160,14 @@ class EstadoinasistenciaxparteController extends Controller
                 return $this->redirect(['parte/controlregencia']);
             }
         }
-
+        
         return $this->renderAjax('create', [
-            'model' => $model,
-            'faltas' => $faltas,
-        ]);
+                    'model' => $model,
+                    'faltas' => $faltas,
+                ]);
+         
+
+        
     }
 
     /**

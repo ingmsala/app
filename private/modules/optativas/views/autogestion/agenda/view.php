@@ -136,7 +136,7 @@ $this->title = 'Agenda de Clases';
             [
                 'label' => 'Duración',
                 'value' => function($model){
-                    $hora_reloj = $model->horascatedra / 1.666666;
+                    $hora_reloj = $model->horascatedra / 1.5;
                     
                     $h = intval($hora_reloj);
                     $m = round((((($hora_reloj - $h) / 100.0) * 60.0) * 100), 0);
