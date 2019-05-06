@@ -29,7 +29,7 @@ use kartik\select2\Select2;
             ],
             'pluginEvents' => [
                 'select2:select' => 'function() {
-                    if ($(this).val()==1 || $(this).val()==5) {
+                    if ($(this).val()==1 || $(this).val()==5 || $(this).val()==6) {
                            $( "#divpreceptor" ).show();
                         }else{
                             
