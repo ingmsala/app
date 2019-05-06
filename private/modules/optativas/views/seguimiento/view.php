@@ -8,14 +8,14 @@ use kartik\grid\GridView;
 /* @var $model app\modules\optativas\models\Seguimiento */
 
 $this->title = $matr->alumno0->apellido.', '.$matr->alumno0->nombre;
-in_array (Yii::$app->user->identity->role, [1,8,9]) ? $template = '{update} {delete}' : $template = '';
+in_array (Yii::$app->user->identity->role, [1,8]) ? $template = '{update} {delete}' : $template = '';
 ?>
 <div class="seguimiento-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= in_array (Yii::$app->user->identity->role, [1,8,9]) ? Html::a('Nuevo Seguimiento', ['create', 'id' => $matricula], ['class' => 'btn btn-success']) : '' ?>
+        <?= in_array (Yii::$app->user->identity->role, [1,8]) ? Html::a('Nuevo Seguimiento', ['create', 'id' => $matricula], ['class' => 'btn btn-success']) : '' ?>
         
     </p>
 

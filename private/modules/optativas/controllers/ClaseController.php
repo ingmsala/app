@@ -111,6 +111,11 @@ class ClaseController extends Controller
         $optativa = Optativa::findOne($comision->optativa);
         $duracion = $optativa->duracion;
 
+        $inasistencias = Inasistencia::find()
+                            ->joinWith(['clase0'])
+                            ->where(['clase.comision' => $com])
+                            ->all();
+
         
         $horastotalactual = $searchModel->getHorasTotalactual($com);
         $horaspresencialactual = $searchModel->getHorasParcialactual($com, 1);//presencial 1
@@ -137,6 +142,7 @@ class ClaseController extends Controller
             'horaspresencialactual' => $horaspresencialactual,
             'horasnopresencialactual' => $horasnopresencialactual,
             'horasvisitaactual' => $horasvisitaactual,
+            'inasistencias' => $inasistencias,
 
         ]); 
         }else{

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\bootstrap\Progress;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\optativas\models\ClaseSearch */
@@ -14,12 +15,16 @@ in_array (Yii::$app->user->identity->role, [1,8,9]) ? $template = '{view} {updat
 
 ?>
 <?php $meses = [ 1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12=> 'Diciembre', '01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo', '04' => 'Abril', '05' => 'Mayo', '06' => 'Junio', '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre']; ?>
+<?php 
+    $listinasistencias=ArrayHelper::map($inasistencias,'id','clase'); 
+    $cantidades = array_count_values($listinasistencias);
+?>
+
 
 <div class="clase-index" style="margin-top: 20px;">
 
     
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
+   
     
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -58,7 +63,7 @@ in_array (Yii::$app->user->identity->role, [1,8,9]) ? $template = '{view} {updat
         ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
+            
             [
                 'label' => 'Fecha',
                 'attribute' => 'fecha',
@@ -103,6 +108,24 @@ in_array (Yii::$app->user->identity->role, [1,8,9]) ? $template = '{view} {updat
                 'attribute' => 'tipoclase0.nombre',
             ],
             'horascatedra',
+            [
+                'label' => 'Ausentes',
+                //'attribute' => 'estadomatricula0.nombre',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                'value' => function($model) use($cantidades){
+                    
+                    
+                    try{
+                        return $cantidades[$model->id];
+                    }catch(\Exception $exception){
+                        return 0;
+                    }
+                    
+                    
+                }
+                
+            ],
             
 
             [

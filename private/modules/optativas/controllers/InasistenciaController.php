@@ -167,19 +167,20 @@ class InasistenciaController extends Controller
 
            
         }
-
+        $c = 0;
         foreach ($param['id'] as $matricula) {
-
+                
                 $model = new Inasistencia();
                 $model->clase = $clase;
                 $model->matricula = $matricula;
-                $model->save();
+                if ($model->save())
+                    $c=$c+1;
             
 
             
         }
 
-        Yii::$app->session->set('info', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La asistencia se cargó <b>correctamente</b>');
+        Yii::$app->session->set('info', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La asistencia se cargó correctamente.<br/><b>Total: '.$c.' ausentes</b>');
 
         return $clase;
     }

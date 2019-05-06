@@ -32,7 +32,7 @@ class SeguimientoController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1,8,9]);
+                                return in_array (Yii::$app->user->identity->role, [1,8]);
                             }catch(\Exception $exception){
                                 return false;
                             }
