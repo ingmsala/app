@@ -83,7 +83,7 @@ class MatriculaSearch extends Matricula
     public function alumnosxcomision($comsion)
     {
         $query = Matricula::find()
-                ->joinWith(['alumno0', 'comision0', 'comision0.optativa0', 'comision0.optativa0.actividad0'])
+                ->joinWith(['alumno0', 'comision0', 'comision0.optativa0', 'comision0.optativa0.actividad0', 'alumno0.contactoalumnos'])
                 ->where(['comision.id' => $comsion])
                 ->orderBy('actividad.nombre, comision.nombre, alumno.apellido, alumno.nombre');
 

@@ -61,6 +61,9 @@ AppAsset::register($this);
 
                                 ['label' => 'Listado c/DNI y Fecha de Nacimiento', 'url' => ['/optativas/reportes/listadoparasalida']],
                                 '<div class="dropdown-divider"></div>',
+
+                                ['label' => 'Datos de Emergencia', 'url' => ['/optativas/reportes/listadocontacto']],
+                                '<div class="dropdown-divider"></div>',
                             
                             ],
 
@@ -89,7 +92,7 @@ AppAsset::register($this);
                         ]
                     
                 ];
-            }else if(in_array(Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+            }else if(in_array(Yii::$app->user->identity->role, [Globales::US_DOCENTE])){
                 $items = [
                     
                         ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
@@ -111,6 +114,63 @@ AppAsset::register($this);
                                     'url' => ['/optativas/reportes/planillasistencia'],
                                 ],
                             
+                                '<div class="dropdown-divider"></div>',
+
+                                
+
+                            
+                            ],
+
+
+
+                        ],
+
+                        ['label' => '<span class="glyphicon glyphicon-user"></span><br>'.Yii::$app->user->identity->username.'',
+                        
+                            'items' => [
+                                                           [
+                                    'label' => 'Cambiar contraseña',
+                                    'url' => ['/user/cambiarpass'],
+                                ],
+                                
+                                [
+                                    'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                                    'url' => ['/site/logout'],
+                                    'linkOptions' => ['data-method' => 'post'],
+                                
+                        
+                                ],
+                                '<div class="dropdown-divider"></div>',
+                                
+                             ],
+                        ]
+                    
+                ];
+            }else if(in_array(Yii::$app->user->identity->role, [Globales::US_PRECEPTOR])){
+                $items = [
+                    
+                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
+                        ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
+                        ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><div>Calificaciones</div>', 'url' => ['/optativas/calificacion']],
+                        ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/optativas/seguimiento']],
+                        ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
+
+                            'items' => [
+                                [
+                                    'label' => 'Ficha del Alumno',
+                                    'url' => ['/optativas/reportes/fichadelalumno'],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+
+                                [
+                                    'label' => 'Planilla de Asistencia',
+                                    'url' => ['/optativas/reportes/planillasistencia'],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+
+                                ['label' => 'Datos de Emergencia', 'url' => ['/optativas/reportes/listadocontacto']],
                                 '<div class="dropdown-divider"></div>',
 
                             
@@ -166,6 +226,9 @@ AppAsset::register($this);
                                 '<div class="dropdown-divider"></div>',
 
                                 ['label' => 'Listado c/DNI y Fecha de Nacimiento', 'url' => ['/optativas/reportes/listadoparasalida']],
+                                '<div class="dropdown-divider"></div>',
+
+                                ['label' => 'Datos de Emergencia', 'url' => ['/optativas/reportes/listadocontacto']],
                                 '<div class="dropdown-divider"></div>',
 
                             
@@ -258,6 +321,9 @@ AppAsset::register($this);
                             'items' => [
                                 
                                         ['label' => 'Listado c/DNI y Fecha de Nacimiento', 'url' => ['/optativas/reportes/listadoparasalida']],
+                                '<div class="dropdown-divider"></div>',
+
+                                ['label' => 'Datos de Emergencia', 'url' => ['/optativas/reportes/listadocontacto']],
                                 '<div class="dropdown-divider"></div>',
                                                             
                             ],

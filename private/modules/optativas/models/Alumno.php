@@ -60,4 +60,9 @@ class Alumno extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Matricula::className(), ['alumno' => 'id']);
     }
+
+    public function getContactoalumnos()
+    {
+        return $this->hasMany(Contactoalumno::className(), ['alumno' => 'id']);
+    }
 }
