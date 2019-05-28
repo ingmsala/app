@@ -315,6 +315,8 @@ AppAsset::register($this);
                 $items = [
                     
                         ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
+
+                        ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
                         
                         ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
 
