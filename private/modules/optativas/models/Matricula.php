@@ -3,6 +3,7 @@
 namespace app\modules\optativas\models;
 
 use Yii;
+use app\models\Division;
 
 /**
  * This is the model class for table "matricula".

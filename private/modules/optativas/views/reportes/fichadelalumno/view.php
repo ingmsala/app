@@ -29,7 +29,12 @@ $this->title = 'Ficha del alumno';
             [
             	'label' => 'Alumno',
             	'value' => function($matricula){
-            		return $matricula->alumno0->apellido.', '.$matricula->alumno0->nombre;
+                    try{
+                        return $matricula->alumno0->apellido.', '.$matricula->alumno0->nombre.' ('.$matricula->division0->nombre.')';
+                    }catch(\Exception $e){
+                        return $matricula->alumno0->apellido.', '.$matricula->alumno0->nombre;
+                    }
+            		
             	}
             ],
             [

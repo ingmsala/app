@@ -70,6 +70,18 @@ Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
                 
             ],*/
 
+            [
+                'label' => 'División secundario',
+                'value' => function($matricula){
+                    try{
+                         return $matricula->division0->nombre;
+                     }catch (\Exception $e){
+                        return "";
+                     }
+                   
+                }
+            ],
+
             'alumno0.apellido',
             'alumno0.nombre',
             [
