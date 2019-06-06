@@ -64,6 +64,11 @@ AppAsset::register($this);
 
                                 ['label' => 'Datos de Emergencia', 'url' => ['/optativas/reportes/listadocontacto']],
                                 '<div class="dropdown-divider"></div>',
+
+                                ['label' => 'Mails de tutores', 'url' => ['/optativas/reportes/listadomails']],
+                                '<div class="dropdown-divider"></div>',
+
+                                
                             
                             ],
 
@@ -173,6 +178,9 @@ AppAsset::register($this);
                                 ['label' => 'Datos de Emergencia', 'url' => ['/optativas/reportes/listadocontacto']],
                                 '<div class="dropdown-divider"></div>',
 
+                                ['label' => 'Mails de tutores', 'url' => ['/optativas/reportes/listadomails']],
+                                '<div class="dropdown-divider"></div>',
+
                             
                             ],
 
@@ -229,6 +237,9 @@ AppAsset::register($this);
                                 '<div class="dropdown-divider"></div>',
 
                                 ['label' => 'Datos de Emergencia', 'url' => ['/optativas/reportes/listadocontacto']],
+                                '<div class="dropdown-divider"></div>',
+
+                                 ['label' => 'Mails de tutores', 'url' => ['/optativas/reportes/listadomails']],
                                 '<div class="dropdown-divider"></div>',
 
                             
@@ -326,6 +337,9 @@ AppAsset::register($this);
                                 '<div class="dropdown-divider"></div>',
 
                                 ['label' => 'Datos de Emergencia', 'url' => ['/optativas/reportes/listadocontacto']],
+                                '<div class="dropdown-divider"></div>',
+
+                                 ['label' => 'Mails de tutores', 'url' => ['/optativas/reportes/listadomails']],
                                 '<div class="dropdown-divider"></div>',
                                                             
                             ],
