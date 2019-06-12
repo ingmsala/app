@@ -75,7 +75,7 @@ class ListadomailsController extends \yii\web\Controller
             $searchModel = new MatriculaSearch();
             $comision = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
             if($comision != 0){
-                $dataProvider = $searchModel->alumnosxcomision($comision);
+                $dataProvider = $searchModel->alumnosxcomisionmails($comision);
                 $com = $this->findModel($comision);
                 $optnom = $com->optativa0->aniolectivo0->nombre.' - '.$com->optativa0->actividad0->nombre.' <br/> Comisión: '.$com->nombre;
                    

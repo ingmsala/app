@@ -56,8 +56,7 @@ Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
         ],
         'columns' => [
             
-            ['class' => 'yii\grid\SerialColumn'],
-            
+                        
             /*[
                 'label' => 'Optativa',
                 'attribute' => 'fecha',
@@ -80,7 +79,7 @@ Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
                         ],
                 'group' => true,
                 'value' => function($model){
-                    return $model->alumno0->apellido.', '.$model->alumno0->nombre;
+                    return $model['apellido'].', '.$model['nombre'];
                 }
                 
             ],
@@ -91,10 +90,11 @@ Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
                 'format' => 'raw',
                 'value' => function($model){
 
+                     return $model['mail'];
                     
                     $itemsc = [];
-                    
-       
+                    return var_dump($model);
+        
                     foreach($model->alumno0->contactoalumnos as $contacto){
                         
                         $itemsc[] = [$contacto->apellido, $contacto->nombre, $contacto->parentezco, $contacto->mail];

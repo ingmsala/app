@@ -5,10 +5,11 @@ namespace app\modules\optativas\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\data\SqlDataProvider;
 use app\modules\optativas\models\Matricula;
 
 /**
- * MatriculaSearch represents the model behind the search form of `app\modules\optativas\models\Matricula`.
+ * MatriculaSearch represents the model behind the search form of app\modules\optativas\models\Matricula.
  */
 class MatriculaSearch extends Matricula
 {
@@ -110,6 +111,36 @@ class MatriculaSearch extends Matricula
             'comision' => $this->comision,
             'estadomatricula' => $this->estadomatricula,
         ]);
+
+        return $dataProvider;
+    }
+
+    public function alumnosxcomisionmails($comsion)
+    {
+         $sql="SELECT DISTINCT alumno.apellido, alumno.nombre, contactoalumno.mail FROM matricula LEFT JOIN alumno ON matricula.alumno = alumno.id LEFT JOIN comision ON matricula.comision = comision.id LEFT JOIN optativa ON comision.optativa = optativa.id LEFT JOIN actividad ON optativa.actividad = actividad.id LEFT JOIN contactoalumno ON alumno.id = contactoalumno.alumno WHERE comision.id=".$comsion." ORDER BY actividad.nombre, comision.nombre, alumno.apellido, alumno.nombre";
+        /*$query = Matricula::find()
+                ->select(['alumno.apellido', 'alumno.nombre', 'contactoalumno.mail'])->distinct()
+                ->joinWith(['alumno0', 'comision0', 'comision0.optativa0', 'comision0.optativa0.actividad0', 'alumno0.contactoalumnos'])
+                ->where(['comision.id' => $comsion])
+                ->orderBy('actividad.nombre, comision.nombre, alumno.apellido, alumno.nombre');*/
+
+        // add conditions that should always apply here
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $sql,
+            'pagination' => false,
+        ]);
+
+        $this->load($comsion);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        
 
         return $dataProvider;
     }
