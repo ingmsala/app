@@ -73,7 +73,7 @@ $this->title = 'Ficha del alumno';
             'comision0.optativa0.aniolectivo0.nombre',
 
             [
-            	'label' => 'Estado',
+            	'label' => 'Condición',
             	'attribute' => 'estadomatricula0.nombre',
             ]
         ],
@@ -84,9 +84,11 @@ $this->title = 'Ficha del alumno';
         <?= $this->render('_inasistenciasxalumno', [
             'dataProviderInasistencias' => $dataProviderInasistencias,
             'listClasescomision' => $listClasescomision,
-             
+             'echodiv' => $echodiv,
             
         ]) ?>
+
+    <div class="clearfix"></div>
 
     <h3><?= Html::encode('Evaluación de Seguimiento') ?></h3>
 
@@ -96,10 +98,7 @@ $this->title = 'Ficha del alumno';
             
         ]) ?>
 
-    <h3><?= Html::encode('Producción Final') ?></h3>
-
-    <h3><?= Html::encode('Calificación Final') ?></h3>
-
+   
     <div id="firma">
         ....................................
         <br>
