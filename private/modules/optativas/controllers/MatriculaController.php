@@ -150,12 +150,15 @@ class MatriculaController extends Controller
     {
         
         $model = $this->findModel($id);
-        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        //date_default_timezone_set('America/Argentina/Buenos_Aires');
         //$model->fecha = Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy');
         $alumnos = Alumno::find()
                     ->orderBy('apellido, nombre')
                     ->all();
         $optativas = Optativa::find()->all();
+        $divisiones = Division::find()
+                        ->where(['propuesta' => 1])
+                        ->all();
         $comisiones = Comision::find()
                         ->joinWith(['optativa0', 'optativa0.actividad0'])
                         ->orderBy('actividad.nombre', 'comision.nombre')
