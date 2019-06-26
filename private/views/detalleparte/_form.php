@@ -42,7 +42,22 @@ use kartik\select2\Select2;
 
     ?>
 
-    <?= $form->field($model, 'hora')->dropDownList($listHoras, ['prompt'=>'Seleccionar...']); ?>
+   
+
+     <?= 
+
+        $form->field($model, 'hora')->widget(Select2::classname(), [
+            'data' => $listHoras,
+            'options' => [
+                'placeholder' => 'Seleccionar...',
+                'multiple' => true,
+            ],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ])->label("HOras");
+
+    ?>
 
    
     <?= 

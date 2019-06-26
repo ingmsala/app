@@ -57,7 +57,7 @@ class Detalleparte extends \yii\db\ActiveRecord
             
             [['parte', 'division', 'docente', 'hora', 'falta'], 'required', 'on'=>self::SCENARIO_ABM],
             [['anio'], 'required', 'message' => 'Debe seleccionar un año lectivo', 'on'=>self::SCENARIO_CONTROLREGENCIA],
-            [['parte', 'division', 'docente', 'hora', 'llego', 'retiro', 'falta', 'estadoinasistencia'], 'integer'],
+            [['parte', 'division', 'docente', 'llego', 'retiro', 'falta', 'estadoinasistencia'], 'integer'],
             
             [['parte'], 'exist', 'skipOnError' => true, 'targetClass' => Parte::className(), 'targetAttribute' => ['parte' => 'id']],
             [['falta'], 'exist', 'skipOnError' => true, 'targetClass' => Falta::className(), 'targetAttribute' => ['falta' => 'id']],

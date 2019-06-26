@@ -111,7 +111,7 @@ class DetalleparteController extends Controller
      */
     public function actionCreate()
     {
-        
+        $param = Yii::$app->request->queryParams;
         $model = new Detalleparte();
         $model->scenario = $model::SCENARIO_ABM;
         if (isset ($_REQUEST['parte'])) {
@@ -136,16 +136,49 @@ class DetalleparteController extends Controller
         $horas = Hora::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
+            $parte =$model->parte;
+            $division = $model->division;
+            $docente = $model->docente;
+            $llego = $model->llego;
+            $retiro = $model->retiro;
+            $falta = $model->falta;
+            $estadoinasistencia = $model->estadoinasistencia;
 
-            $ei = new EstadoinasistenciaxparteSearch();
-            $model->estadoinasistencia = Globales::ESTADOINASIST_PREC;
-            if($model->save()){
-                $guardaok = $ei->nuevo(null, Globales::ESTADOINASIST_PREC, $model->id, $model->falta);
-                if ($guardaok){
-                   
-                    return $this->redirect(['parte/view', 'id' => $parte]);
-                }
+            try{
+                 $largo = count($model->hora);
+             }catch(\Exception $exception){
+                $largo = 0;
             }
+            $horas = $model->hora;
+            
+                //return $largo;
+            
+            
+
+            for ($i=0; $i < $largo; $i++) { 
+                    $model2 = new Detalleparte();
+                    $model2->scenario = $model::SCENARIO_ABM;
+                    $model2->parte = $parte;
+                    $model2->division = $division;
+                    $model2->docente = $docente;
+                    $model2->llego = $llego;
+                    $model2->retiro = $retiro;
+                    $model2->falta = $falta;
+                    //$model2->estadoinasistencia = $estadoinasistencia;
+                    $model2->hora = $horas[$i];
+                    $ei = new EstadoinasistenciaxparteSearch();
+                    $model2->estadoinasistencia = Globales::ESTADOINASIST_PREC;
+                   if($model2->save()){
+                        $guardaok = $ei->nuevo(null, Globales::ESTADOINASIST_PREC, $model2->id, $model2->falta);
+                   
+                    } 
+            }
+
+             if ($guardaok){
+                       
+                        return $this->redirect(['parte/view', 'id' => $parte]);
+            }
+            
         }
 
         return $this->renderAjax('create', [
