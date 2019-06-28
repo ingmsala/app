@@ -106,7 +106,7 @@ class DetalleparteSearch extends Detalleparte
         left join estadoinasistenciaxparte on detalleparte.id = estadoinasistenciaxparte.detalleparte 
         left join estadoinasistencia on estadoinasistencia.id = estadoinasistenciaxparte.estadoinasistencia
         left join falta f on estadoinasistenciaxparte.falta = f.id 
-        where true';
+        where estadoinasistenciaxparte.id = (select max(eixp2.id) from estadoinasistenciaxparte eixp2 where eixp2.detalleparte = detalleparte.id)';
 
         if (isset($params['Detalleparte']['anio']) && $params['Detalleparte']['anio'] != ''){
             $sql .= ' and year(parte.fecha) = '.$params["Detalleparte"]["anio"];
@@ -122,8 +122,11 @@ class DetalleparteSearch extends Detalleparte
         }else{
             if ( in_array (Yii::$app->user->identity->role, [Globales::US_REGENCIA])) {
                 $sql .= ' and (detalleparte.estadoinasistencia=1 or detalleparte.estadoinasistencia=3)';
+            }elseif( in_array (Yii::$app->user->identity->role, [Globales::US_SACADEMICA])){
+                $sql .= ' and (detalleparte.estadoinasistencia=1 or detalleparte.estadoinasistencia=7)';
+                $sql .= ' and parte.preceptoria=7';
             }else{
-                $sql .= ' and detalleparte.estadoinasistencia=2';
+             $sql .= ' and detalleparte.estadoinasistencia=2';   
             }
 
         }
@@ -135,8 +138,15 @@ class DetalleparteSearch extends Detalleparte
             }
             
         }
+
+        if ( in_array (Yii::$app->user->identity->role, [Globales::US_SACADEMICA])) {
+           
+                $sql .= ' and division.turno=4';
+            
+            
+        }
        
-        $sql.= ' order by parte.fecha desc';
+        $sql.= ' order by parte.fecha desc, division.nombre, hora.nombre';
 
 
         $dataProvider = new SqlDataProvider([

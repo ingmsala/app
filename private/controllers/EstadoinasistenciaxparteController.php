@@ -51,7 +51,7 @@ class EstadoinasistenciaxparteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA,  Globales::US_SACADEMICA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -64,7 +64,7 @@ class EstadoinasistenciaxparteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_SACADEMICA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -157,7 +157,15 @@ class EstadoinasistenciaxparteController extends Controller
                 $model->estadoinasistencia = $estadoinasistencia;
                 $detallepartex->estadoinasistencia = $model->estadoinasistencia;
                 $detallepartex->save();
-                return $this->redirect(['parte/controlregencia']);
+
+                if($estadoinasistencia==3)
+                    return $this->redirect(['parte/controlregencia']);
+                elseif($estadoinasistencia==7){
+                    return $this->redirect(['parte/controlacademica']);
+                }else{
+                    return $this->redirect(['parte/controlsecretaria']);
+                }
+                //return $this->redirect(['parte/controlregencia']);
             }
         }
         
@@ -221,8 +229,10 @@ class EstadoinasistenciaxparteController extends Controller
     }
 
     public function actionNuevoestado($estadoinasistencia, $detalleparte){
+
+        $eixp = Estadoinasistenciaxparte::findOne(Estadoinasistenciaxparte::find()->where(['detalleparte' => $detalleparte])->max('id'));
         $model = new Estadoinasistenciaxparte;
-        $model->detalle = null;
+        $model->detalle = $eixp->detalle;
         $model->estadoinasistencia = $estadoinasistencia;
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $model->fecha = date("Y-m-d H:i:s");
@@ -235,8 +245,13 @@ class EstadoinasistenciaxparteController extends Controller
         if ($model->save()){
             if($estadoinasistencia==Globales::ESTADOINASIST_REGRAT)
                 return $this->redirect(['parte/controlregencia']);
-            else
+            elseif($estadoinasistencia==6){
+                return $this->redirect(['parte/controlacademica']);
+            }else{
                 return $this->redirect(['parte/controlsecretaria']);
+            }
+        
+            
         }else{
             return false;
         }
