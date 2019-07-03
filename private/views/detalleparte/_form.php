@@ -49,13 +49,13 @@ use kartik\select2\Select2;
         $form->field($model, 'hora')->widget(Select2::classname(), [
             'data' => $listHoras,
             'options' => [
-                'placeholder' => 'Seleccionar...',
+                'prompt' => '...',
                 'multiple' => true,
             ],
             'pluginOptions' => [
                 'allowClear' => true
             ],
-        ])->label("HOras");
+        ])->label('Horas <small><span class="text-muted">(Puede seleccionar más de una hora)</mark></small>');
 
     ?>
 

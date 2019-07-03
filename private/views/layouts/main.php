@@ -141,6 +141,8 @@ if ($cantnov>0) {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Panel de Novedades '.$cantnov, 'url' => ['novedadesparte/panelnovedades']],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q/edit?usp=sharing'],
+                                '<div class="dropdown-divider"></div>',
                                 
                             ],
                     ],
@@ -294,6 +296,7 @@ if ($cantnov>0) {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Panel de Novedades '.$cantnov, 'url' => ['novedadesparte/panelnovedades']],
                                 '<div class="dropdown-divider"></div>',
+
                                 
                             ],
                     ],
@@ -330,6 +333,8 @@ if ($cantnov>0) {
 
                 
                 $items = [
+
+                    ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
                         
                     ['label' => ' Parte Docente '.'<sup><span class="label label-primary">'.$cantnov.'</span></sup>', 
                             'items' => [
@@ -372,10 +377,60 @@ if ($cantnov>0) {
                 ];
 
 
+            }else if(Yii::$app->user->identity->role == Globales::US_SACADEMICA){
+
+                
+                $items = [
+
+                    ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
+                        
+                    ['label' => ' Parte Docente '.'<sup><span class="label label-primary">'.$cantnov.'</span></sup>', 
+                            'items' => [
+                                
+                                ['label' => 'Parte docente', 'url' => ['/parte']],
+                                '<div class="dropdown-divider"></div>',
+                                ['label' => 'Control de Sec. Académica', 'url' => ['parte/controlacademica']],
+                                '<div class="dropdown-divider"></div>',
+                                ['label' => 'Panel de Novedades '.$cantnov, 'url' => ['novedadesparte/panelnovedades']],
+                                '<div class="dropdown-divider"></div>',
+                                
+                            ],
+                    ],
+                    
+                    
+                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
+                            
+                            'items' => [
+                                            
+                                            [
+                                                'label' => 'Cambiar contraseña',
+                                                'url' => ['/user/cambiarpass'],
+                                            ],
+                                
+                                            [
+                                                'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                                                'url' => ['/site/logout'],
+                                                'linkOptions' => ['data-method' => 'post'],
+                                            
+                                    
+                                            ],
+                                            '<div class="dropdown-divider"></div>',
+                                
+                             ],
+                    ],
+
+
+
+
+                ];
+
+
             }else if(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
 
                 
                 $items = [
+
+                    ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
                         
                     ['label' => ' Parte Docente '.'<sup><span class="label label-primary">'.$cantnov.'</span></sup>', 
                             'items' => [
@@ -479,6 +534,9 @@ if ($cantnov>0) {
 
 
                     ],
+
+                    ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
+                    
                     ['label' => ' Parte Docente '.'<sup><span class="label label-primary">'.$cantnov.'</span></sup>', 
                             'items' => [
                                 

@@ -23,7 +23,7 @@ class NombramientoSearch extends Nombramiento
     public function rules()
     {
         return [
-            [['id', 'cargo','horas', ], 'integer'],
+            [['id', 'cargo','horas', 'activo'], 'integer'],
             [['nombre', 'revista', 'docente', 'division', 'suplente', 'extension', 'resolucion', 'fechaInicio', 'fechaFin', 'resolucionext', 'fechaInicioext', 'fechaFinext'], 'safe'],
         ];
     }

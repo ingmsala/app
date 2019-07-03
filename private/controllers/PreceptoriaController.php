@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Preceptoria;
+use app\models\Turno;
 use app\models\PreceptoriaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -98,6 +99,7 @@ class PreceptoriaController extends Controller
     public function actionCreate()
     {
         $model = new Preceptoria();
+        $turnos = Turno::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -105,6 +107,7 @@ class PreceptoriaController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'turnos' => $turnos,
         ]);
     }
 
@@ -118,6 +121,7 @@ class PreceptoriaController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $turnos = Turno::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -125,6 +129,7 @@ class PreceptoriaController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'turnos' => $turnos,
         ]);
     }
 

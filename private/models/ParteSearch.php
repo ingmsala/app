@@ -108,6 +108,9 @@ class ParteSearch extends Parte
             }
             
         }
+        if ( in_array (Yii::$app->user->identity->role, [12])) {
+            $sql .= ' and pr.turno=4';
+        }
        
         $sql.= ' order by p.fecha desc';
 

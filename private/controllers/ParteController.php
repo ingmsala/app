@@ -32,7 +32,7 @@ class ParteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'controlregencia', 'controlsecretaria', 'procesarmarcadosreg'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'controlregencia', 'controlsecretaria', 'procesarmarcadosreg', 'controlacademica'],
                 'rules' => [
                     [
                         'actions' => ['view'],   
@@ -40,7 +40,7 @@ class ParteController extends Controller
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
-                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_CONSULTA])){
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_SACADEMICA])){
                                         return true;
                                     }
 
@@ -67,7 +67,7 @@ class ParteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_PRECEPTORIA, Globales::US_CONSULTA]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_PRECEPTORIA, Globales::US_CONSULTA, Globales::US_SACADEMICA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -107,6 +107,18 @@ class ParteController extends Controller
                         'matchCallback' => function ($rule, $action) {
                             try{
                                 return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['controlacademica'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SACADEMICA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -320,6 +332,36 @@ class ParteController extends Controller
 
 
         return $this->render('controlregencia', [
+            'model' => $model,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'param' => Yii::$app->request->queryParams,
+            'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),
+            'estadoinasistencia' => Estadoinasistencia::find()->where(['<=','id',Globales::ESTADOINASIST_REGREC])->all(),
+        ]);
+    }
+
+    public function actionControlacademica(){
+        $searchModel = new DetalleparteSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $param = Yii::$app->request->queryParams;
+
+
+
+        $model = new Detalleparte();
+        $model->scenario = $model::SCENARIO_CONTROLREGENCIA;
+
+        if(isset($param['Detalleparte']['anio']))
+            $model->anio = $param['Detalleparte']['anio'];
+        if(isset($param['Detalleparte']['mes']))
+            $model->mes = $param['Detalleparte']['mes'];
+        if(isset($param['Detalleparte']['docente']))
+            $model->docente = $param['Detalleparte']['docente'];
+        if(isset($param['Detalleparte']['estadoinasistencia']))
+            $model->estadoinasistencia = $param['Detalleparte']['estadoinasistencia'];
+
+
+        return $this->render('controlacademica', [
             'model' => $model,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

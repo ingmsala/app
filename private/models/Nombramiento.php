@@ -31,6 +31,7 @@ use Yii;
  * @property Revista $revista0
  * @property Nombramiento $suplente0
  * @property Nombramiento[] $nombramientos
+ * @property int $activo
  */
 class Nombramiento extends \yii\db\ActiveRecord
 {
@@ -50,7 +51,7 @@ class Nombramiento extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_ABMNOMBRAMIENTO] = ['cargo', 'horas', 'docente', 'revista', 'condicion', 'extension', 'suplente', 'fechaInicio', 'docente', 'division',  'fechaFin', 'resolucion', 'fechaInicioext', 'fechaFinext', 'resolucionext'];
+        $scenarios[self::SCENARIO_ABMNOMBRAMIENTO] = ['cargo', 'horas', 'docente', 'revista', 'condicion', 'extension', 'suplente', 'fechaInicio', 'docente', 'division',  'fechaFin', 'resolucion', 'fechaInicioext', 'fechaFinext', 'resolucionext', 'activo'];
         $scenarios[self::SCENARIO_ABMDIVISION] = ['division'];
         return $scenarios;
     }
@@ -61,7 +62,7 @@ class Nombramiento extends \yii\db\ActiveRecord
     {
         return [
             [['cargo', 'horas', 'docente', 'revista', 'condicion'], 'required', 'on'=>self::SCENARIO_ABMNOMBRAMIENTO],
-            [['cargo', 'horas', 'docente', 'revista', 'condicion', 'division', 'suplente', 'extension'], 'integer'],
+            [['cargo', 'horas', 'docente', 'revista', 'condicion', 'division', 'suplente', 'extension', 'activo'], 'integer'],
             [['fechaInicio', 'fechaFin', 'resolucion', 'fechaInicioext', 'fechaFinext', 'resolucionext'], 'safe'],
             [['fechaInicio', 'fechaFin', 'fechaInicioext', 'fechaFinext'], 'default', 'value' => null],
             [['nombre'], 'string', 'max' => 150],
@@ -97,6 +98,7 @@ class Nombramiento extends \yii\db\ActiveRecord
             'resolucionext' => 'Resolución de extensión', 
             'fechaInicioext' => 'Fecha de Inicio de extensión', 
             'fechaFinext' => 'Fecha de Fin de extensión', 
+            'activo' => 'Activo', 
         ];
     }
 
