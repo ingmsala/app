@@ -270,6 +270,7 @@ class DetalleparteSearch extends Detalleparte
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         if (!$this->validate()) {
