@@ -66,6 +66,14 @@ use yii\widgets\ActiveForm;
                                 }
                             }
 
+                            if(isset($param['Detalleparte']['solodia'])){
+                                if($param['Detalleparte']['solodia']==1){
+                                    $filter = true;
+                                    echo '<b> - Por día </b>';
+                                    
+                                }
+                            }
+
                         ?>
 
                     </a>
@@ -136,6 +144,8 @@ use yii\widgets\ActiveForm;
                                 ])->label("Estado");
 
                             ?>
+
+                            <?= $form->field($model, 'solodia')->checkbox(['label'=>''])->label('Por día'); ?>
                         
                             
                             <div class="form-group">

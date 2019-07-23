@@ -96,6 +96,11 @@ GridView::widget([
         'dataProvider' => $dataProvider,
 
         'rowOptions' => function($model){
+            try {
+                $r = $model['id'];
+            } catch (Exception $e) {
+                return false;
+            }
             return [
                 'data' => [
                     'key' => $model['id']
@@ -146,8 +151,13 @@ GridView::widget([
                 'hAlign' => 'center',
                 'value' => function($model){
                     //var_dump($model);
-                    $formatter = \Yii::$app->formatter;
-                    return $formatter->asDate($model['fecha'], 'dd/MM/yyyy');
+                    try {
+                        $formatter = \Yii::$app->formatter;
+                        return $formatter->asDate($model['fecha'], 'dd/MM/yyyy');
+                    } catch (Exception $e) {
+                        return false;
+                    }
+                    
                     
                 }
             ],
@@ -157,16 +167,28 @@ GridView::widget([
                 'vAlign' => 'middle',
                 'hAlign' => 'center',
                 'value' => function($model){
-                    return $model['division'];
-                }
+                    try {
+                        return $model['division'];
+                    } catch (Exception $e) {
+                        return false;
+                    }
+                    
+                },
+                'hidden' => (!isset($param['Detalleparte']['solodia']) || $param['Detalleparte']['solodia'] == 0) ? false : true
             ],
             [   
                 'label' => 'Hora',
                 'attribute' => 'hora',
                 'vAlign' => 'middle',
                 'hAlign' => 'center',
+                'hidden' => (!isset($param['Detalleparte']['solodia']) || $param['Detalleparte']['solodia'] == 0) ? false : true,
                 'value' => function($model){
-                    return $model['hora'];
+                    try {
+                        return $model['hora'];
+                    } catch (Exception $e) {
+                        return false;
+                    }
+                    
                 }
             ],
             [   
@@ -256,13 +278,18 @@ GridView::widget([
                         //return Html::a('<span class="glyphicon glyphicon-floppy-disk"></span>', '?r=estadoinasistenciaxparte/create&detallecatedra='.$model->id);
                         //return Html::a('<span class="glyphicon glyphicon-ok"></span>',false,['class' => 'btn btn-success']);
                         if ($model['estadoinasistenciax'] == 2){
-                            return Html::a('Justificar', '?r=estadoinasistenciaxparte/nuevoestado&detalleparte='.$model['id'].'&estadoinasistencia=4', ['class' => 'btn btn-warning btn-sm',
+                            try {
+                               return Html::a('Justificar', '?r=estadoinasistenciaxparte/nuevoestado&detalleparte='.$model['id'].'&estadoinasistencia=4', ['class' => 'btn btn-warning btn-sm',
                             'data' => [
                             'confirm' => 'Está seguro de querer justificar la inasistencia del docente?',
                             'method' => 'post',
                              ]
                             
-                            ]);
+                            ]); 
+                            } catch (Exception $e) {
+                                
+                            }
+                            
                         }
                          
                     },

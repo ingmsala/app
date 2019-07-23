@@ -93,9 +93,13 @@ class DetalleparteSearch extends Detalleparte
 
     public function search($params)
     {
-        
-        $sql='
-        select distinct detalleparte.id as id, parte.fecha as fecha, division.nombre as division, hora.nombre as hora, docente.apellido as apellido, docente.nombre as nombred, detalleparte.llego, detalleparte.retiro, falta.nombre as falta, estadoinasistenciaxparte.detalle as detalle, detalleparte.estadoinasistencia as estadoinasistenciax, esdp.nombre as estadoinasistenciaxtxt, (select count(*) from estadoinasistenciaxparte eixp where eixp.detalleparte = detalleparte.id) as cont 
+        if (isset($params['Detalleparte']['solodia']) && $params['Detalleparte']['solodia'] == 1){
+            $sql= 'select distinct ' ;
+        }else{
+            $sql= 'select distinct detalleparte.id as id, division.nombre as division, hora.nombre as hora, ' ;
+        }
+        $sql.='
+        parte.fecha as fecha, docente.apellido as apellido, docente.nombre as nombred, detalleparte.llego, detalleparte.retiro, falta.nombre as falta, estadoinasistenciaxparte.detalle as detalle, detalleparte.estadoinasistencia as estadoinasistenciax, esdp.nombre as estadoinasistenciaxtxt, (select count(*) from estadoinasistenciaxparte eixp where eixp.detalleparte = detalleparte.id) as cont 
         from detalleparte 
         left join division on detalleparte.division = division.id
         left join docente on detalleparte.docente = docente.id
@@ -145,8 +149,14 @@ class DetalleparteSearch extends Detalleparte
             
             
         }
+
+        if (isset($params['Detalleparte']['solodia']) && $params['Detalleparte']['solodia'] == 1){
+            $sql.= ' order by parte.fecha desc, docente.apellido, docente.nombre';
+        }else{
+            $sql.= ' order by parte.fecha desc, division.nombre, hora.nombre';
+        }
        
-        $sql.= ' order by parte.fecha desc, division.nombre, hora.nombre';
+        
 
 
         $dataProvider = new SqlDataProvider([

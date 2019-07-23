@@ -31,12 +31,13 @@ class Detalleparte extends \yii\db\ActiveRecord
 
     public $anio;
     public $mes;
+    public $solodia;
     
     public function scenarios()
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_ABM] = ['parte', 'division', 'docente', 'hora', 'falta', 'llego','retiro'];
-        $scenarios[self::SCENARIO_CONTROLREGENCIA] = ['anio', 'mes', 'docente', 'estadoinasistencia'];
+        $scenarios[self::SCENARIO_CONTROLREGENCIA] = ['anio', 'mes', 'docente', 'estadoinasistencia', 'solodia'];
         return $scenarios;
     }
 
