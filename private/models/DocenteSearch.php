@@ -6,6 +6,9 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Docente;
+use yii\data\SqlDataProvider;
+use yii\db\Query;
+use app\config\Globales;
 
 /**
  * DocenteSearch represents the model behind the search form of `app\models\Docente`.
@@ -111,5 +114,128 @@ class DocenteSearch extends Docente
             ->andFilterWhere(['like', 'nombre', $this->nombre]);
 
         return $dataProvider;
+    }
+
+    public function getPadronsumarizado()
+        {
+        
+            $sql='select d.apellido, d.nombre, (
+    select count(distinct d2.id) from docente d2
+    inner join detallecatedra dc2 ON dc2.docente = d2.id
+    inner join catedra c2 ON dc2.catedra = c2.id
+    inner join division di2 ON c2.division = di2.id
+    where d2.id = d.id and dc2.activo=1 and di2.propuesta=1
+    ) as docente_secundario,
+    (
+    select count(distinct d3.id) from docente d3
+    inner join detallecatedra dc3 ON dc3.docente = d3.id
+    inner join catedra c3 ON dc3.catedra = c3.id
+    inner join division di3 ON c3.division = di3.id
+    where d3.id = d.id and dc3.activo=1 and di3.propuesta=2
+    ) as docente_pregrado,
+    (
+    select count(distinct d4.id) from docente d4
+    left join nombramiento n4 ON d4.id = n4.docente
+    left join division di4 ON n4.division = di4.id
+    where d4.id = d.id and n4.cargo=227 and (di4.propuesta=1 or n4.division is null)
+    ) as preceptor_secundario, 
+    (
+    select count(distinct d5.id) from docente d5
+    inner join nombramiento n5 ON n5.docente = d5.id
+    inner join division di5 ON n5.division = di5.id
+    where d5.id = d.id and n5.cargo=227 and di5.propuesta=2
+    ) as preceptor_pregrado,
+    (
+    select count(distinct d6.id) from docente d6
+    left join nombramiento n6 ON d6.id = n6.docente
+    left join division di6 ON n6.division = di6.id
+    where d6.id = d.id and n6.cargo=223 and (di6.propuesta=1 or n6.division is null)
+    ) as jefe_secundario, 
+    (
+    select count(distinct d7.id) from docente d7
+    inner join nombramiento n7 ON n7.docente = d7.id
+    inner join division di7 ON n7.division = di7.id
+    where d7.id = d.id and n7.cargo=223 and di7.propuesta=2
+    ) as jefe_pregrado,
+    (
+    select count(distinct d8.id) from docente d8
+    left join nombramiento n8 ON d8.id = n8.docente
+    left join division di8 ON n8.division = di8.id
+    where d8.id = d.id and n8.cargo IN (203, 205, 207, 209, 219, 226, 234, 241, 242) and (di8.propuesta=1 or n8.division is null)
+    ) as otros_secundario, 
+    (
+    select count(distinct d9.id) from docente d9
+    inner join nombramiento n9 ON n9.docente = d9.id
+    inner join division di9 ON n9.division = di9.id
+    where d9.id = d.id and n9.cargo IN (203, 205, 207, 209, 219, 226, 234, 241, 242) and di9.propuesta=2
+    ) as otros_pregrado, 
+    ((select count(distinct d2.id) from docente d2
+    inner join detallecatedra dc2 ON dc2.docente = d2.id
+    inner join catedra c2 ON dc2.catedra = c2.id
+    inner join division di2 ON c2.division = di2.id
+    where d2.id = d.id and dc2.activo=1 and di2.propuesta=1) + (
+    select count(distinct d3.id) from docente d3
+    inner join detallecatedra dc3 ON dc3.docente = d3.id
+    inner join catedra c3 ON dc3.catedra = c3.id
+    inner join division di3 ON c3.division = di3.id
+    where d3.id = d.id and dc3.activo=1 and di3.propuesta=2
+    ) + (
+    select count(distinct d4.id) from docente d4
+    left join nombramiento n4 ON d4.id = n4.docente
+    left join division di4 ON n4.division = di4.id
+    where d4.id = d.id and n4.cargo=227 and (di4.propuesta=1 or n4.division is null)
+    ) + (
+    select count(distinct d5.id) from docente d5
+    inner join nombramiento n5 ON n5.docente = d5.id
+    inner join division di5 ON n5.division = di5.id
+    where d5.id = d.id and n5.cargo=227 and di5.propuesta=2
+    ) + (
+    select count(distinct d6.id) from docente d6
+    left join nombramiento n6 ON d6.id = n6.docente
+    left join division di6 ON n6.division = di6.id
+    where d6.id = d.id and n6.cargo=223 and (di6.propuesta=1 or n6.division is null)
+    ) + (
+    select count(distinct d7.id) from docente d7
+    inner join nombramiento n7 ON n7.docente = d7.id
+    inner join division di7 ON n7.division = di7.id
+    where d7.id = d.id and n7.cargo=223 and di7.propuesta=2
+    ) + (
+    select count(distinct d8.id) from docente d8
+    left join nombramiento n8 ON d8.id = n8.docente
+    left join division di8 ON n8.division = di8.id
+    where d8.id = d.id and n8.cargo IN (203, 205, 207, 209, 219, 226, 234, 241, 242) and (di8.propuesta=1 or n8.division is null)
+    ) + (
+    select count(distinct d9.id) from docente d9
+    inner join nombramiento n9 ON n9.docente = d9.id
+    inner join division di9 ON n9.division = di9.id
+    where d9.id = d.id and n9.cargo IN (203, 205, 207, 209, 219, 226, 234, 241, 242) and di9.propuesta=2
+    )) as total
+    
+    
+from docente d
+having total>0
+order by d.apellido, d.nombre'; 
+
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $sql,
+            'pagination' => false,
+            
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+
+
+        
+        // grid filtering conditions
+        
+
+        return $dataProvider;
+
     }
 }

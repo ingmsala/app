@@ -33,6 +33,18 @@
                           <a href="index.php?r=reporte/padrones/padrones/otrosdocentes&prop=2" class="btn btn-success btn-lg" role="button"><?= $cantidadotrosdocentespre ?> <br/>Otros Docentes</a>
                         </div>
                     </div>
+                    <div class="row">
+                      <center>
+                        <div class="col-xs-12 col-md-12">
+                            <a href="index.php?r=reporte/padrones/padrones/getall" class="btn btn-danger btn-lg" role="button"> 
+                              <?= $cantidadtotal ?>
+                              <br/>Planta completa</a>
+                            
+                        </div>
+                      </center>
+                          
+                          
+                      </div>
                     
                 </div>
             </div>

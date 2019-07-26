@@ -12,6 +12,7 @@ use app\models\Docente;
 use app\models\Cargo;
 use app\models\Nombramiento;
 use app\models\NombramientoSearch;
+use app\models\DocenteSearch;
 use app\models\DetallecatedraSearch;
 use app\config\Globales;
 
@@ -67,6 +68,10 @@ class PadronesController extends \yii\web\Controller
             $cantidaddocentessecundario = $searchModel2->getCantidadDocentes(1);
             $cantidaddocentespregrado = $searchModel2->getCantidadDocentes(2);
 
+            $searchModelDoc = new DocenteSearch();
+            $dataProviderDoc = $searchModelDoc->getPadronsumarizado();
+            $cantidadtotal = $dataProviderDoc->getTotalCount();
+
                       
             return $this->render('index',[
                 'cantidadjefessecundario' => $cantidadjefessecundario,
@@ -77,6 +82,7 @@ class PadronesController extends \yii\web\Controller
                 'cantidadotrosdocentespre' => $cantidadotrosdocentespre,
                 'cantidaddocentessecundario' => $cantidaddocentessecundario,
                 'cantidaddocentespregrado' => $cantidaddocentespregrado,
+                'cantidadtotal' => $cantidadtotal,
             ]);
         }catch(\Exception $exception){
             Yii::$app->session->setFlash('error', $exception);
@@ -336,6 +342,19 @@ class PadronesController extends \yii\web\Controller
                 'precpre' => $precpre,
                 'otrosdoc' => $otrosdoc,
                 'otrosdocpre' => $otrosdocpre,
+                
+            ]);
+    }
+
+    public function actionGetall(){  
+                      
+            $searchModel = new DocenteSearch();
+            $dataProvider = $searchModel->getPadronsumarizado();
+            
+            return $this->render('getall',[
+                
+                
+                'dataProvider' => $dataProvider,
                 
             ]);
     }
