@@ -10,6 +10,10 @@ use kartik\select2\Select2;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+<div class="alert alert-info" role="alert">
+     <b>Nuevo</b> Se pueden marcar horas vacantes dejando el campo de "Docente" vacío y en "Tipo de Falta" marcar la opción "Hora vacante"
+    </div>
+
 <div class="detalleparte-form">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -29,7 +33,6 @@ use kartik\select2\Select2;
     <?= $form->field($model, 'division')->dropDownList($listDivisiones, ['prompt'=>'Seleccionar...']); ?>
 
     
-
     <?= 
 
         $form->field($model, 'docente')->widget(Select2::classname(), [

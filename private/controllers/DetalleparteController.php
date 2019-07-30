@@ -154,7 +154,7 @@ class DetalleparteController extends Controller
                 //return $largo;
             
             
-
+            $guardaok=false;
             for ($i=0; $i < $largo; $i++) { 
                     $model2 = new Detalleparte();
                     $model2->scenario = $model::SCENARIO_ABM;

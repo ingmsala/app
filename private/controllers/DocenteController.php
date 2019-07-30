@@ -83,7 +83,7 @@ class DocenteController extends Controller
     public function actionIndex()
     {
         $searchModel = new DocenteSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search2(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

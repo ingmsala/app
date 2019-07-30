@@ -35,6 +35,50 @@ class DocenteSearch extends Docente
         return Model::scenarios();
     }
 
+    public function search2($params)
+    {
+        $query = Docente::find()
+            ->joinWith(['genero0'])
+            ->orderBy('apellido', 'nombre', 'legajo');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 50,
+            ],
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        $dataProvider->sort->attributes['genero0'] = [
+        // The tables are the ones our relation are configured to
+        // in my case they are prefixed with "tbl_"
+        'asc' => ['genero.nombre' => SORT_ASC],
+        'desc' => ['genero.nombre' => SORT_DESC],
+        ];
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            
+        ]);
+
+        $query->andFilterWhere(['like', 'legajo', $this->legajo])
+            ->andFilterWhere(['like', 'apellido', $this->apellido])
+            ->andFilterWhere(['like', 'docente.nombre', $this->nombre])
+            ->andFilterWhere(['like', 'genero.nombre', $this->genero]);
+
+        return $dataProvider;
+    }
+
     /**
      * Creates data provider instance with search query applied
      *
@@ -52,6 +96,7 @@ class DocenteSearch extends Docente
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            
         ]);
 
         $this->load($params);
@@ -134,37 +179,37 @@ class DocenteSearch extends Docente
     where d3.id = d.id and dc3.activo=1 and di3.propuesta=2
     ) as docente_pregrado,
     (
-    select count(distinct d4.id) from docente d4
+    select count(d4.id) from docente d4
     left join nombramiento n4 ON d4.id = n4.docente
     left join division di4 ON n4.division = di4.id
     where d4.id = d.id and n4.cargo=227 and (di4.propuesta=1 or n4.division is null)
     ) as preceptor_secundario, 
     (
-    select count(distinct d5.id) from docente d5
+    select count(d5.id) from docente d5
     inner join nombramiento n5 ON n5.docente = d5.id
     inner join division di5 ON n5.division = di5.id
     where d5.id = d.id and n5.cargo=227 and di5.propuesta=2
     ) as preceptor_pregrado,
     (
-    select count(distinct d6.id) from docente d6
+    select count(d6.id) from docente d6
     left join nombramiento n6 ON d6.id = n6.docente
     left join division di6 ON n6.division = di6.id
     where d6.id = d.id and n6.cargo=223 and (di6.propuesta=1 or n6.division is null)
     ) as jefe_secundario, 
     (
-    select count(distinct d7.id) from docente d7
+    select count(d7.id) from docente d7
     inner join nombramiento n7 ON n7.docente = d7.id
     inner join division di7 ON n7.division = di7.id
     where d7.id = d.id and n7.cargo=223 and di7.propuesta=2
     ) as jefe_pregrado,
     (
-    select count(distinct d8.id) from docente d8
+    select count(d8.id) from docente d8
     left join nombramiento n8 ON d8.id = n8.docente
     left join division di8 ON n8.division = di8.id
     where d8.id = d.id and n8.cargo IN (203, 205, 207, 209, 219, 226, 234, 241, 242) and (di8.propuesta=1 or n8.division is null)
     ) as otros_secundario, 
     (
-    select count(distinct d9.id) from docente d9
+    select count(d9.id) from docente d9
     inner join nombramiento n9 ON n9.docente = d9.id
     inner join division di9 ON n9.division = di9.id
     where d9.id = d.id and n9.cargo IN (203, 205, 207, 209, 219, 226, 234, 241, 242) and di9.propuesta=2
@@ -180,32 +225,32 @@ class DocenteSearch extends Docente
     inner join division di3 ON c3.division = di3.id
     where d3.id = d.id and dc3.activo=1 and di3.propuesta=2
     ) + (
-    select count(distinct d4.id) from docente d4
+    select count(d4.id) from docente d4
     left join nombramiento n4 ON d4.id = n4.docente
     left join division di4 ON n4.division = di4.id
     where d4.id = d.id and n4.cargo=227 and (di4.propuesta=1 or n4.division is null)
     ) + (
-    select count(distinct d5.id) from docente d5
+    select count(d5.id) from docente d5
     inner join nombramiento n5 ON n5.docente = d5.id
     inner join division di5 ON n5.division = di5.id
     where d5.id = d.id and n5.cargo=227 and di5.propuesta=2
     ) + (
-    select count(distinct d6.id) from docente d6
+    select count(d6.id) from docente d6
     left join nombramiento n6 ON d6.id = n6.docente
     left join division di6 ON n6.division = di6.id
     where d6.id = d.id and n6.cargo=223 and (di6.propuesta=1 or n6.division is null)
     ) + (
-    select count(distinct d7.id) from docente d7
+    select count(d7.id) from docente d7
     inner join nombramiento n7 ON n7.docente = d7.id
     inner join division di7 ON n7.division = di7.id
     where d7.id = d.id and n7.cargo=223 and di7.propuesta=2
     ) + (
-    select count(distinct d8.id) from docente d8
+    select count(d8.id) from docente d8
     left join nombramiento n8 ON d8.id = n8.docente
     left join division di8 ON n8.division = di8.id
     where d8.id = d.id and n8.cargo IN (203, 205, 207, 209, 219, 226, 234, 241, 242) and (di8.propuesta=1 or n8.division is null)
     ) + (
-    select count(distinct d9.id) from docente d9
+    select count(d9.id) from docente d9
     inner join nombramiento n9 ON n9.docente = d9.id
     inner join division di9 ON n9.division = di9.id
     where d9.id = d.id and n9.cargo IN (203, 205, 207, 209, 219, 226, 234, 241, 242) and di9.propuesta=2

@@ -56,7 +56,7 @@ class Detalleparte extends \yii\db\ActiveRecord
     {
         return [
             
-            [['parte', 'division', 'docente', 'hora', 'falta'], 'required', 'on'=>self::SCENARIO_ABM],
+            [['parte', 'division', 'hora', 'falta'], 'required', 'on'=>self::SCENARIO_ABM],
             [['anio'], 'required', 'message' => 'Debe seleccionar un año lectivo', 'on'=>self::SCENARIO_CONTROLREGENCIA],
             [['parte', 'division', 'docente', 'llego', 'retiro', 'falta', 'estadoinasistencia'], 'integer'],
             
@@ -65,7 +65,15 @@ class Detalleparte extends \yii\db\ActiveRecord
             [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
             [['division'], 'exist', 'skipOnError' => true, 'targetClass' => Division::className(), 'targetAttribute' => ['division' => 'id']],
             [['estadoinasistencia'], 'exist', 'skipOnError' => true, 'targetClass' => Estadoinasistencia::className(), 'targetAttribute' => ['estadoinasistencia' => 'id']],
+            ['docente', 'isVacante', 'on' => self::SCENARIO_ABM],
         ];
+    }
+
+    public function isVacante($attribute, $params, $validator)
+    {
+        
+            if($this->docente == null && $this->falta != 5)
+                $this->addError($attribute, 'Debe seleccionar un docente o marcar la opción hora vacante');
     }
 
     /**
