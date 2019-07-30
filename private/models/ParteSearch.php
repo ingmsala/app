@@ -101,11 +101,12 @@ class ParteSearch extends Parte
             $sql .= ' and p.preceptoria = '.$params["Parte"]["preceptoria"];
         }
         if ( in_array (Yii::$app->user->identity->role, [4])) {
-            if (Yii::$app->user->identity->username == 'regenciatm'){
+            $sql .= ' and (pr.turno=1 or pr.turno=2)';
+            /*if (Yii::$app->user->identity->username == 'regenciatm'){
                 $sql .= ' and pr.turno=1';
             }else{
                 $sql .= ' and pr.turno=2';
-            }
+            } nuevos regentes 2019*/ 
             
         }
         if ( in_array (Yii::$app->user->identity->role, [12])) {
