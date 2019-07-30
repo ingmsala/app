@@ -154,6 +154,33 @@ class FichadelalumnoController extends \yii\web\Controller
             
         ]);
 
+        $ids = ArrayHelper::getColumn($listClasescomision, 0);
+            $echodiv='';
+            $i=0;
+            foreach ($listClasescomision as $key => $value) {
+
+                if($value == "P"){
+                    $paneltype = 'success';
+                    $prt = $value;
+                }
+                elseif ($value == "A"){
+                    $paneltype = 'danger';
+                    $prt = '<b>'.$value.'</b>';
+                }
+                else
+                    break;
+                $echodiv .= '<div class="col-md-2 col-lg-2 col-sm-2 col-lx-2">';
+                $echodiv .= '<div class="panel panel-'.$paneltype.'" style="height: 12vh; margin:2px">';
+                $echodiv .= '<div class="panel-heading" style="height: 5vh;">'.'<center>'.$key.'</center>'.'</div>';
+                $echodiv .= '<div class="panel-body"><span class="align-top">';
+                //$echodiv .= Html::checkbox("scripts", $sel, ['label' => 'Se Ausentó', 'value' => $matricula["id"]]);
+                $echodiv .= '<center>'.$prt.'</center>';
+                $echodiv .= '</span></div>
+                                </div>
+                              </div>';
+                $i=$i+1;
+            }
+
         
         $searchModelSeguimientos  = new SeguimientoSearch();
         $dataProviderSeguimientos = $searchModelSeguimientos->seguimientosdelalumno($id);
@@ -164,6 +191,7 @@ class FichadelalumnoController extends \yii\web\Controller
             'listClasescomision' => $listClasescomision,
             'dataProviderSeguimientos' => $dataProviderSeguimientos,
             'model' => $this->findModel($id),
+            'echodiv' => $echodiv,
         ]);
         
     }

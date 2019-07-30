@@ -79,9 +79,11 @@ $this->title = 'Ficha del alumno';
         <?= $this->render('/reportes/fichadelalumno/_inasistenciasxalumno', [
             'dataProviderInasistencias' => $dataProviderInasistencias,
             'listClasescomision' => $listClasescomision,
-             
+             'echodiv' => $echodiv,
             
         ]) ?>
+
+    <div class="clearfix"></div>
 
     <h3><?= Html::encode('Evaluación de Seguimiento') ?></h3>
 
