@@ -18,6 +18,9 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '9I-_xkrT1Sx2CLZz4E1z6UvOjcDgM_39',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         
         'formatter' => [
@@ -74,6 +77,12 @@ $config = [
          'optativas' => [
                 'class' => 'app\modules\optativas\Optativas',
          ],
+
+         'api' => [
+                'class' => 'app\modules\api\v1\V1',
+                                
+         ],
+
          'db-manager' => [
                 'class' => 'bs\dbManager\Module',
                 // path to directory for the dumps

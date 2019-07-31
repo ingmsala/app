@@ -65,4 +65,23 @@ class Alumno extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Contactoalumno::className(), ['alumno' => 'id']);
     }
+
+    public function fields()
+    {
+        $fields = [
+            // el nombre de campo es el mismo nombre del atributo
+            'id',
+            // el nombre del campo es "email", su atributo se denomina "email_address"
+            'lastName' => 'apellido',
+            // el nombre del campo es "name", su valor es definido está definido por una función anónima de retrollamada (callback)
+            'name' => 'nombre',
+            'course' => 'curso',
+            'birdDate' => 'fechanac',
+        ];
+
+        // quita los campos con información sensible
+        unset($fields['dni']);
+
+        return $fields;
+    }
 }
