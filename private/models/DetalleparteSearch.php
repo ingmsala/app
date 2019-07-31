@@ -135,12 +135,14 @@ class DetalleparteSearch extends Detalleparte
 
         }
         if ( in_array (Yii::$app->user->identity->role, [Globales::US_REGENCIA])) {
-            $sql .= ' and (division.turno=1 or division.turno=2)';
-            /*if (Yii::$app->user->identity->username == 'regenciatm'){
+            
+            if (Yii::$app->user->identity->username == 'regenciatm'){
                 $sql .= ' and division.turno=1';
-            }else{
+            }elseif(Yii::$app->user->identity->username == 'regenciatt'){
                 $sql .= ' and division.turno=2';
-            }* nuevos regentes 2019*/
+            }else{
+                $sql .= ' and (division.turno=1 or division.turno=2)';//regencia unificada
+            }
             
         }
 
