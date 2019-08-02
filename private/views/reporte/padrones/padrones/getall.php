@@ -73,7 +73,7 @@ $this->title = 'Padrón Docente - Por Agente';
                 'hAlign' => 'center',
                 'vAlign' => 'middle',
                 'value' => function($model) {
-                    return ($model['docente_secundario'] == 0) ? '' : 'Sí';                
+                    return ($model['docente_secundario'] == 0) ? '' : $model['docente_secundario'];                
                 }
             ],
 
@@ -82,7 +82,7 @@ $this->title = 'Padrón Docente - Por Agente';
                 'hAlign' => 'center',
                 'vAlign' => 'middle',
                 'value' => function($model) {
-                    return ($model['preceptor_secundario'] == 0) ? '' : 'Sí';                
+                    return ($model['preceptor_secundario'] == 0) ? '' : $model['preceptor_secundario'];                
                 }
             ],
 
@@ -91,7 +91,7 @@ $this->title = 'Padrón Docente - Por Agente';
                 'hAlign' => 'center',
                 'vAlign' => 'middle',
                 'value' => function($model) {
-                    return ($model['jefe_secundario'] == 0) ? '' : 'Sí';                
+                    return ($model['jefe_secundario'] == 0) ? '' : $model['jefe_secundario'];                
                 }
             ],
 
@@ -100,7 +100,7 @@ $this->title = 'Padrón Docente - Por Agente';
                 'hAlign' => 'center',
                 'vAlign' => 'middle',
                 'value' => function($model) {
-                    return ($model['otros_secundario'] == 0) ? '' : 'Sí';                
+                    return ($model['otros_secundario'] == 0) ? '' : $model['otros_secundario'];                
                 }
             ],
 
@@ -109,7 +109,7 @@ $this->title = 'Padrón Docente - Por Agente';
                 'hAlign' => 'center',
                 'vAlign' => 'middle',
                 'value' => function($model) {
-                    return ($model['docente_pregrado'] == 0) ? '' : 'Sí';                
+                    return ($model['docente_pregrado'] == 0) ? '' : $model['docente_pregrado'];                
                 }
             ],
 
@@ -118,7 +118,7 @@ $this->title = 'Padrón Docente - Por Agente';
                 'hAlign' => 'center',
                 'vAlign' => 'middle',
                 'value' => function($model) {
-                    return ($model['preceptor_pregrado'] == 0) ? '' : 'Sí';                
+                    return ($model['preceptor_pregrado'] == 0) ? '' : $model['preceptor_pregrado'];                
                 }
             ],
 
@@ -127,7 +127,7 @@ $this->title = 'Padrón Docente - Por Agente';
                 'hAlign' => 'center',
                 'vAlign' => 'middle',
                 'value' => function($model) {
-                    return ($model['jefe_pregrado'] == 0) ? '' : 'Sí';                
+                    return ($model['jefe_pregrado'] == 0) ? '' : $model['jefe_pregrado'];                
                 }
             ],
 
@@ -136,7 +136,7 @@ $this->title = 'Padrón Docente - Por Agente';
                 'hAlign' => 'center',
                 'vAlign' => 'middle',
                 'value' => function($model) {
-                    return ($model['otros_pregrado'] == 0) ? '' : 'Sí';                
+                    return ($model['otros_pregrado'] == 0) ? '' : $model['otros_pregrado'];                
                 }
             ],
 

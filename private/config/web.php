@@ -79,7 +79,7 @@ $config = [
          ],
 
          'api' => [
-                'class' => 'app\modules\api\v1\V1',
+                'class' => 'app\modules\api\test\Test',
                                 
          ],
 
