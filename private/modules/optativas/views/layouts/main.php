@@ -68,6 +68,9 @@ AppAsset::register($this);
                                 ['label' => 'Mails de tutores', 'url' => ['/optativas/reportes/listadomails']],
                                 '<div class="dropdown-divider"></div>',
 
+                                ['label' => 'Inasistencias por División', 'url' => ['/optativas/reportes/inasistencias']],
+                                '<div class="dropdown-divider"></div>',
+
                                 
                             
                             ],
@@ -181,6 +184,9 @@ AppAsset::register($this);
                                 ['label' => 'Mails de tutores', 'url' => ['/optativas/reportes/listadomails']],
                                 '<div class="dropdown-divider"></div>',
 
+                                ['label' => 'Inasistencias por División', 'url' => ['/optativas/reportes/inasistencias']],
+                                '<div class="dropdown-divider"></div>',
+
                             
                             ],
 
@@ -242,6 +248,9 @@ AppAsset::register($this);
                                  ['label' => 'Mails de tutores', 'url' => ['/optativas/reportes/listadomails']],
                                 '<div class="dropdown-divider"></div>',
 
+                                ['label' => 'Inasistencias por División', 'url' => ['/optativas/reportes/inasistencias']],
+                                '<div class="dropdown-divider"></div>',
+
                             
                             ],
 
@@ -291,6 +300,9 @@ AppAsset::register($this);
                                     'label' => 'Planilla de Asistencia',
                                     'url' => ['/optativas/reportes/planillasistencia'],
                                 ],
+
+                                ['label' => 'Inasistencias por División', 'url' => ['/optativas/reportes/inasistencias']],
+                                '<div class="dropdown-divider"></div>',
                             
                                 '<div class="dropdown-divider"></div>',
 

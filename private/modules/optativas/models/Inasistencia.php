@@ -19,6 +19,19 @@ class Inasistencia extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+
+    public $division;
+    public $aniolectivo;
+    
+    const SCENARIO_SEARCHINDEX = 'index';
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_SEARCHINDEX] = ['division', 'aniolectivo'];
+        return $scenarios;
+    }
+
     public static function tableName()
     {
         return 'inasistencia';
@@ -31,6 +44,7 @@ class Inasistencia extends \yii\db\ActiveRecord
     {
         return [
             [['matricula', 'clase'], 'required'],
+            [['aniolectivo'], 'required', 'on' => self::SCENARIO_SEARCHINDEX, 'message' => 'Campo obligatorio'],
             [['matricula', 'clase'], 'integer'],
             [['clase'], 'exist', 'skipOnError' => true, 'targetClass' => Clase::className(), 'targetAttribute' => ['clase' => 'id']],
             [['matricula'], 'exist', 'skipOnError' => true, 'targetClass' => Matricula::className(), 'targetAttribute' => ['matricula' => 'id']],
