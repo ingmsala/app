@@ -50,6 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <ul class="nav nav-tabs">
           <li class="active"><a data-toggle="tab" href="#parte">Asistencia Docente</a></li>
           <li><a data-toggle="tab" href="#novedades">Novedades</a></li>
+          <li><a data-toggle="tab" href="#aviso">Aviso de Inasistencias <span class="badge"> <?=$dataProvideravisosinasistencias->getTotalCount()?></span></a></li>
           
         </ul>
 
@@ -159,6 +160,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     'searchModel' => $searchModelnovedades,
                     'dataProvider' => $dataProvidernovedades,
+                    'model' => $model,
+
+                ]) 
+
+            ?>
+            
+
+          </div>
+
+          <div id="aviso" class="tab-pane fade">
+            <?php 
+
+                echo $this->render('/avisoinasistencia/index',[
+
+                    'searchModel' => $searchModelavisosinasistencias,
+                    'dataProvider' => $dataProvideravisosinasistencias,
                     'model' => $model,
 
                 ]) 

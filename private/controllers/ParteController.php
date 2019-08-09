@@ -15,6 +15,8 @@ use app\models\Estadoinasistencia;
 use app\models\Estadoinasistenciaxparte;
 use app\models\DetalleparteSearch;
 use app\models\NovedadesparteSearch;
+use app\models\Avisoinasistencia;
+use app\models\AvisoinasistenciaSearch;
 use yii\filters\AccessControl;
 use app\config\Globales;
 
@@ -208,6 +210,9 @@ class ParteController extends Controller
 
         $searchModelnovedades = new NovedadesparteSearch();
         $dataProvidernovedades = $searchModelnovedades->novedadesxparte($id);
+
+        $searchModelavisosinasistencias = new AvisoinasistenciaSearch();
+        $dataProvideravisosinasistencias = $searchModelavisosinasistencias->providerFromParte($model->fecha);
         
 
         return $this->render('view', [
@@ -222,6 +227,8 @@ class ParteController extends Controller
 
             'searchModelnovedades' => $searchModelnovedades,
             'dataProvidernovedades' => $dataProvidernovedades,
+            'searchModelavisosinasistencias' => $searchModelavisosinasistencias,
+            'dataProvideravisosinasistencias' => $dataProvideravisosinasistencias,
         ]);
     }
 
