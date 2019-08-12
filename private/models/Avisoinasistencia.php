@@ -32,6 +32,7 @@ class Avisoinasistencia extends \yii\db\ActiveRecord
     {
         return [
             [['descripcion'], 'string'],
+            [['hasta'], 'required', 'message' => 'Fecha de fin de la inasistencia o finalización de la visualización del aviso en el parte'],
             [['docente'], 'integer'],
             [['desde', 'hasta'], 'safe'],
             [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],

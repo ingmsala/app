@@ -27,6 +27,15 @@ public function behaviors()
 
         ];
 
+        $behaviors['corsFilter'] = [
+        'class' => \yii\filters\Cors::className(),
+        'cors' => [
+            'Origin'                           => "*",
+            'Access-Control-Request-Method'    => ['GET, POST, OPTIONS, PUT, PATCH, DELETE'],
+            'Access-Control-Request-Headers' => ['X-Requested-With,content-type'],
+        ],
+    ];
+
         return $behaviors;
 
     }
@@ -69,6 +78,7 @@ public function behaviors()
 	            			LEFT JOIN alumno ON matricula.alumno = alumno.id 
 	            			LEFT JOIN actividad ON optativa.actividad = actividad.id
 	            			WHERE alumno.dni='".$dni."'",
+	            'pagination' => false,
 	        ]);
 	    }
 
@@ -80,6 +90,7 @@ public function behaviors()
 	            			LEFT JOIN matricula ON inasistencia.matricula = matricula.id 
 	            			LEFT JOIN clase ON inasistencia.clase = clase.id 
 	            			WHERE matricula.id=".$enrollment_id,
+	            'pagination' => false,
 	        ]);
 	    }
 
@@ -90,7 +101,8 @@ public function behaviors()
 	            			FROM clase 
 	            			LEFT JOIN tipoclase ON clase.tipoclase = tipoclase.id 
 	            			LEFT JOIN comision ON clase.comision = comision.id 
-	            			WHERE clase.comision=".$commission_id
+	            			WHERE clase.comision=".$commission_id,
+	            'pagination' => false,
 	        ]);
 	    }
 
@@ -99,7 +111,8 @@ public function behaviors()
 	        return new SqlDataProvider([
 	            'sql' => "SELECT id as tracking_id, fecha as tracking_date, descripcion as tracking_detail
 	            			FROM seguimiento 
-	            			WHERE matricula=".$enrollment_id
+	            			WHERE matricula=".$enrollment_id,
+	            'pagination' => false,
 	        ]);
 	    }
 
