@@ -142,8 +142,14 @@ class NovedadesparteController extends Controller
 
 
         if ($model->load(Yii::$app->request->post())) {
+
             if ($model->tiponovedad != 1 && $model->tiponovedad != 5 && $model->tiponovedad != 6){
                 $model->docente = null;
+                if ($model->tiponovedad == 2 || $model->tiponovedad == 3){
+                    $text = ' - N° de Aula o espacio: '.Yii::$app->request->post()["aulaoespacio"];
+                    $text .= ' - Banco: '.Yii::$app->request->post()["banco"];
+                    $model->descripcion = $text.' - '.$model->descripcion;
+                }
             }
 
             if($model->save()){

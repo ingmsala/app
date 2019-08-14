@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Novedadesparte */
 /* @var $form yii\widgets\ActiveForm */
@@ -31,10 +32,14 @@ use kartik\select2\Select2;
                 'select2:select' => 'function() {
                     if ($(this).val()==1 || $(this).val()==5 || $(this).val()==6) {
                            $( "#divpreceptor" ).show();
+                           $( "#divedilicias" ).hide();
                         }else{
                             
                            $( "#divpreceptor" ).hide();
-
+                            $( "#divedilicias" ).hide();
+                           if ($(this).val()==2 || $(this).val()==3){
+                                $( "#divedilicias" ).show();
+                           }
                         }
                         
                 }',
@@ -56,6 +61,19 @@ use kartik\select2\Select2;
                                 ])->label('Docente');
 
                             ?>
+    </div>
+    <div id="divedilicias" <?php if(in_array($model->tiponovedad, [2,3])) echo 'style="display: block; "'; else echo 'style="display: none; "'; ?>>
+    <div class="row">
+        <div class="col-lg-6">
+                    <?= Html::label('N° Aula o Nombre del espacio', 'aulaoespacio') ?>
+                    <?= Html::textInput('aulaoespacio', null, ['class' => 'form-control']) ?>   
+        </div> 
+        <div class="col-lg-6">
+                   <?= Html::label('Banco', 'banco') ?>
+                    <?= Html::textInput('banco', null, ['class' => 'form-control']) ?>   
+        </div>         
+    </div>   
+    
     </div>
     <?= $form->field($model, 'descripcion')->textarea(['rows' => 6]) ?>
 
