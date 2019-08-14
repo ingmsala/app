@@ -135,6 +135,51 @@ GridView::widget([
                             return '<center><span style="color:green;">En proceso</span></center>';
                 },
             ],
+
+            [
+                'format' => 'raw',
+                'label' => 'Tiempo respuesta',
+                //'attribute' => 'estadonovedad0.nombre',
+                'value' => function($model){
+                        $itemsc = [];
+                        $max=-1;
+                        $c=0;
+       
+                        foreach($model->estadoxnovedads as $estadoxnovedad){
+                            if($c==0){
+                                $max = $estadoxnovedad->estadonovedad;
+                                $date1 = new DateTime($estadoxnovedad->fecha);
+                            }
+                            if ($max>=$estadoxnovedad->estadonovedad){
+                                $max=$max;
+                                $date2 = new DateTime(date("Y-m-d"));
+                            }else{
+                                $max=$estadoxnovedad->estadonovedad;
+                                $date2 = new DateTime($estadoxnovedad->fecha);
+                            }
+                            $c=$c+1;
+                        }
+                        //return $max;
+                        
+                        $diff = $date1->diff($date2);
+                        $dias = 'días';
+                        if($diff->days>15)
+                            $color='red';
+                        elseif($diff->days>5)
+                            $color='orange';
+                        elseif($diff->days==1){
+                            $color='green';
+                             $dias = 'día';
+                        }
+                        else
+                            $color='green';
+                        // will output 2 days
+                        //return $diff->days . ' días';
+                        //if ($max ==  1)
+                        return '<center><span style="color:'.$color.';">'.$diff->days.' '.$dias.'</span></center>';
+                  
+                },
+            ],
             
 
             
@@ -147,11 +192,11 @@ GridView::widget([
 
                         //return Html::a('<span class="glyphicon glyphicon-floppy-disk"></span>', '?r=estadoinasistenciaxparte/create&detallecatedra='.$model->id);
                         //return Html::a('<span class="glyphicon glyphicon-ok"></span>',false,['class' => 'btn btn-success']);
-
+                        //return var_dump(Yii::$app->request->get()['page']);
                         $itemsc = [];
                         $max=-1;
                         $c=0;
-       
+                        (isset(Yii::$app->request->get()['page'])) ? $page = Yii::$app->request->get()['page'] : $page = 1;
                         foreach($model->estadoxnovedads as $estadoxnovedad){
                             if($c==0)
                                 $max = $estadoxnovedad->estadonovedad;
@@ -164,7 +209,7 @@ GridView::widget([
                         else
                             $lab = ["Finalizar", "success", "Pasar la novedad a estado 'Finalizada' y guardarla en el historial?",3];
 
-                        return Html::a($lab[0], '?r=novedadesparte/nuevoestado&id='.$model['id'].'&estado='.$lab[3], ['class' => 'btn btn-'.$lab[1].' btn-sm',
+                        return Html::a($lab[0], '?r=novedadesparte/nuevoestado&id='.$model['id'].'&estado='.$lab[3].'&page='.$page, ['class' => 'btn btn-'.$lab[1].' btn-sm',
                             'data' => [
                             'confirm' => $lab[2],
                             'method' => 'post',

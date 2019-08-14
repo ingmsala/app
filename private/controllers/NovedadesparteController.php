@@ -262,7 +262,7 @@ class NovedadesparteController extends Controller
         ]);
     }
 
-    public function actionNuevoestado($id, $estado)
+    public function actionNuevoestado($id, $estado, $page)
     {
         $model = $this->findModel($id);
         if ($estado == 3)
@@ -273,12 +273,12 @@ class NovedadesparteController extends Controller
 
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $fecha = date("Y-m-d");
-        $nuevafecha = strtotime ( '-80 day' , strtotime ( $fecha ) ) ;
-        $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+        /*$nuevafecha = strtotime ( '-50 day' , strtotime ( $fecha ) ) ;
+        $nuevafecha = date ( 'Y-m-j' , $nuevafecha );*/
                 
         $modelexn->estadonovedad = $estado;
         $modelexn->novedadesparte = $model->id;
-        $modelexn->fecha = $nuevafecha;
+        $modelexn->fecha = $fecha;
 
         $modelexn->save();
         
@@ -286,6 +286,6 @@ class NovedadesparteController extends Controller
         $searchModel = new NovedadesparteSearch();
         $dataProvider = $searchModel->novedadesactivas(Globales::TIPO_NOV_X_USS[3]);
         
-        return $this->redirect('index.php?r=novedadesparte/panelnovedades');
+        return $this->redirect('index.php?r=novedadesparte/panelnovedades&page='.$page);
     }
 }

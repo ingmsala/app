@@ -77,6 +77,7 @@ class NovedadesparteSearch extends Novedadesparte
         $query = Novedadesparte::find()
                     ->joinWith(['tiponovedad0'])
                     ->where(['activo' => 1])
+                    ->andWhere(['not in', 'tiponovedad', Globales::TIPO_NOV_X_USS[3]])
                     ->andWhere(['parte' => $id])
                     ->orderBy('tiponovedad.id');
 
@@ -115,7 +116,7 @@ class NovedadesparteSearch extends Novedadesparte
         $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
 
         $query = Novedadesparte::find()
-                    ->joinWith(['tiponovedad0', 'estadoxnovedads'])
+                    ->joinWith(['tiponovedad0', 'estadoxnovedads', 'parte0'])
                     //->where(['activ' => 1])
                     //->andWhere(['parte' => $id])
                     ->andWhere(['in', 'tiponovedad', Globales::TIPO_NOV_X_USS[3]])
@@ -130,8 +131,8 @@ class NovedadesparteSearch extends Novedadesparte
                                         ['>', 'estadoxnovedad.fecha', $nuevafecha]
                                 ],
                                 
-                        ]);
-                    //->orderBy('tiponovedad.id');
+                        ])
+                    ->orderBy('estadoxnovedad.fecha DESC, parte.fecha DESC');
 
         // add conditions that should always apply here
 

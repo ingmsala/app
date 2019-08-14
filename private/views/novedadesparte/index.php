@@ -130,24 +130,14 @@ $this->title = 'Novedades del parte';
             ]); ?>
         </div>
         <div class="col-lg-6">
-            <h3>Otras</h3>
+            <h3>Otras Novedades del Día</h3>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 //'filterModel' => $searchModel,
                 'columns' => [
                     
                       
-                    [   
-                        'label' => 'Fecha',
-                        'attribute' => 'parte0.fecha',
-                       
-                        'value' => function($model){
-                            //var_dump($model);
-                            $formatter = \Yii::$app->formatter;
-                            return $formatter->asDate($model->parte0->fecha, 'dd/MM/yyyy');
-                            
-                        }
-                    ],
+                    
                     
                     [
 
