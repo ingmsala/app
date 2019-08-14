@@ -47,18 +47,22 @@ use kartik\select2\Select2;
 
    
 
-     <?= 
+     <?php 
+        if ($origen=='create')
+            $labelhora = 'Horas <small><span class="text-muted">(Puede seleccionar más de una hora)</mark></small>';
+        else
+            $labelhora = 'Hora';
 
-        $form->field($model, 'hora')->widget(Select2::classname(), [
+        echo $form->field($model, 'hora')->widget(Select2::classname(), [
             'data' => $listHoras,
             'options' => [
                 'prompt' => '...',
-                'multiple' => true,
+                'multiple' => ($origen=='create') ? true : false,
             ],
             'pluginOptions' => [
                 'allowClear' => true
             ],
-        ])->label('Horas <small><span class="text-muted">(Puede seleccionar más de una hora)</mark></small>');
+        ])->label($labelhora);
 
     ?>
 

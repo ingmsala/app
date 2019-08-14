@@ -160,6 +160,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     'searchModel' => $searchModelnovedades,
                     'dataProvider' => $dataProvidernovedades,
+
+                    'searchModelnovedadesEdilicias' => $searchModelnovedadesEdilicias,
+                    'dataProvidernovedadesEdilicias' => $dataProvidernovedadesEdilicias,
+                    
                     'model' => $model,
 
                 ]) 

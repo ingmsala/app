@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\Novedadesparte;
 use app\models\Tiponovedad;
+use app\models\Estadonovedad;
+use app\models\Estadoxnovedad;
 use app\models\Parte;
 use app\models\Docente;
 use app\models\NovedadesparteSearch;
@@ -129,7 +131,8 @@ class NovedadesparteController extends Controller
     public function actionCreate($parte)
     {
         $model = new Novedadesparte();
-        $model->estadonovedad = 1;
+        $modelexn = new Estadoxnovedad();
+        
         $model->parte = $parte;
 
         $tiponovedades = Tiponovedad::find()->all();
@@ -144,8 +147,16 @@ class NovedadesparteController extends Controller
             }
 
             if($model->save()){
-                Yii::$app->session->setFlash('success', "Se guardó correctamente la novedad.");
-                return $this->redirect(['/parte/view', 'id' => $model->parte]);
+
+                date_default_timezone_set('America/Argentina/Buenos_Aires');
+                
+                $modelexn->estadonovedad = 1;
+                $modelexn->novedadesparte = $model->id;
+                $modelexn->fecha = date("Y-m-d");
+                if($modelexn->save()){
+                    Yii::$app->session->setFlash('success', "Se guardó correctamente la novedad.");
+                    return $this->redirect(['/parte/view', 'id' => $model->parte]);
+                }
             }
         }
 
@@ -221,32 +232,60 @@ class NovedadesparteController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-
+    protected function tiponovedad(){
+        if (Yii::$app->user->identity->role == Globales::US_SUPER)
+            return 0;
+        elseif(Yii::$app->user->identity->role == Globales::US_SECRETARIA)
+            return 1;
+        elseif(Yii::$app->user->identity->role == Globales::US_SACADEMICA)
+            return 2;
+        elseif(Yii::$app->user->identity->role == Globales::US_NOVEDADES)
+            return 3;
+        else
+            return 0;
+    }
     public function actionPanelnovedades()
     {
+
         $searchModel = new NovedadesparteSearch();
-        $dataProvider = $searchModel->novedadesactivas();
+        $tiponovedad = $this->tiponovedad();
+        $dataProvider = $searchModel->novedadesactivas(Globales::TIPO_NOV_X_USS[$tiponovedad]);
+        /*$estados = Estadonovedad::find()
+                    ->where(['<>', 'id', 1])
+                    ->all();*/
         
         return $this->render('panelnovedades', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'tiponovedad' => $tiponovedad,
             
         ]);
     }
 
-    public function actionNuevoestado($id)
+    public function actionNuevoestado($id, $estado)
     {
         $model = $this->findModel($id);
-        $model->estadonovedad = 2;
+        if ($estado == 3)
+            $model->activo = 2;
+        $modelexn = new Estadoxnovedad();
+        
         $model->save();
 
-        $searchModel = new NovedadesparteSearch();
-        $dataProvider = $searchModel->novedadesactivas();
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $fecha = date("Y-m-d");
+        $nuevafecha = strtotime ( '-80 day' , strtotime ( $fecha ) ) ;
+        $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+                
+        $modelexn->estadonovedad = $estado;
+        $modelexn->novedadesparte = $model->id;
+        $modelexn->fecha = $nuevafecha;
+
+        $modelexn->save();
         
-        return $this->render('panelnovedades', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            
-        ]);
+
+        $searchModel = new NovedadesparteSearch();
+        $dataProvider = $searchModel->novedadesactivas(Globales::TIPO_NOV_X_USS[3]);
+        
+        return $this->redirect('index.php?r=novedadesparte/panelnovedades');
     }
 }

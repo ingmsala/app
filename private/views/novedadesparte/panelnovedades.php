@@ -11,7 +11,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\DetalleparteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Parte Docente - Panel de Novedades';
+$this->title = 'Panel de Novedades';
 
 ?>
 
@@ -45,12 +45,37 @@ GridView::widget([
         'id' => 'grid',
         'dataProvider' => $dataProvider,
 
-        
-
         //'filterModel' => $searchModel,
         'columns' => [
             
-            ['class' => 'yii\grid\SerialColumn'],
+           [
+                'format' => 'raw',
+                'label' => '',
+                //'attribute' => 'estadonovedad0.nombre',
+                'value' => function($model){
+                    $itemsc = [];
+                    
+                    $formatter = \Yii::$app->formatter;
+       
+                    foreach($model->estadoxnovedads as $estadoxnovedad){
+                        
+                        $itemsc[] = [$formatter->asDate($estadoxnovedad->fecha, 'dd/MM/yyyy'), $estadoxnovedad->estadonovedad0->nombre];
+                        
+                    }
+                    
+                    return Html::ul($itemsc, ['item' => function($item) {
+                        //var_dump($item);
+                                ($item[1]=='Activo') ? $boots='warning' : $boots='success';
+                                return 
+                                        Html::tag('li', 
+                                        $item[0].' - '.$item[1], ['class' => 'list-group-item list-group-item-'.$boots]);
+                        }
+                    , 'class' => "nav nav-pills nav-stacked"]);                  
+                    //var_dump($itemsc);
+                    //return implode(' // ', $itemsc);
+                    //return $model->alumno0->dni;
+                }
+            ],
            [   
                 'label' => 'Fecha',
                 'attribute' => 'parte0.fecha',
@@ -66,6 +91,7 @@ GridView::widget([
 
                 'label' => 'Preceptoria',
                 'attribute' => 'parte0.preceptoria0.nombre',
+
             ],
 
             [
@@ -73,10 +99,10 @@ GridView::widget([
                 'label' => 'Tipo de Novedad',
                 'attribute' => 'tiponovedad0.nombre',
             ],
-            
-            
+
             [
-                'label' => 'Preceptor',
+                'label' => 'Docente',
+                'visible' => ($tiponovedad<>3) ? true : false,
                 'value' => function($model){
                     if($model->docente0 != null)
                         return $model->docente0['apellido'].', '.$model->docente0['nombre'];
@@ -85,14 +111,30 @@ GridView::widget([
                 }
             ],
             
-            
             'descripcion:ntext',
+            
             [
-
+                'format' => 'raw',
                 'label' => 'Estado',
-                'attribute' => 'estadonovedad0.nombre',
+                //'attribute' => 'estadonovedad0.nombre',
+                'value' => function($model){
+                        $itemsc = [];
+                        $max=-1;
+                        $c=0;
+       
+                        foreach($model->estadoxnovedads as $estadoxnovedad){
+                            if($c==0)
+                                $max = $estadoxnovedad->estadonovedad;
+                            ($max>=$estadoxnovedad->estadonovedad) ? $max=$max : $max=$estadoxnovedad->estadonovedad;
+                            $c=$c+1;
+                        }
+                        //return $max;
+                        if ($max ==  1)
+                            return '<center><span style="color:orange;">Activo</span></center>';
+                                    
+                            return '<center><span style="color:green;">En proceso</span></center>';
+                },
             ],
-
             
 
             
@@ -105,15 +147,34 @@ GridView::widget([
 
                         //return Html::a('<span class="glyphicon glyphicon-floppy-disk"></span>', '?r=estadoinasistenciaxparte/create&detallecatedra='.$model->id);
                         //return Html::a('<span class="glyphicon glyphicon-ok"></span>',false,['class' => 'btn btn-success']);
-                        return Html::a('Listo', '?r=novedadesparte/nuevoestado&id='.$model['id'], ['class' => 'btn btn-success btn-sm',
+
+                        $itemsc = [];
+                        $max=-1;
+                        $c=0;
+       
+                        foreach($model->estadoxnovedads as $estadoxnovedad){
+                            if($c==0)
+                                $max = $estadoxnovedad->estadonovedad;
+                            ($max>=$estadoxnovedad->estadonovedad) ? $max=$max : $max=$estadoxnovedad->estadonovedad;
+                            $c=$c+1;
+                        }
+                        //return $max;
+                        if ($max ==  1)
+                            $lab = ["Recibir", "warning","Recibir la notificación y pasar la novedad a estado 'En Proceso'?",2];
+                        else
+                            $lab = ["Finalizar", "success", "Pasar la novedad a estado 'Finalizada' y guardarla en el historial?",3];
+
+                        return Html::a($lab[0], '?r=novedadesparte/nuevoestado&id='.$model['id'].'&estado='.$lab[3], ['class' => 'btn btn-'.$lab[1].' btn-sm',
                             'data' => [
-                            'confirm' => 'Desea marcar la novedad como Procesada y que se quite de esta lista?',
+                            'confirm' => $lab[2],
                             'method' => 'post',
                              ]
                             
                             ]);
                         
-                         
+                        
+                        
+
                     },
                     
                 ]

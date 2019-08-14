@@ -211,6 +211,9 @@ class ParteController extends Controller
         $searchModelnovedades = new NovedadesparteSearch();
         $dataProvidernovedades = $searchModelnovedades->novedadesxparte($id);
 
+        $searchModelnovedadesEdilicias = new NovedadesparteSearch();
+        $dataProvidernovedadesEdilicias = $searchModelnovedadesEdilicias->novedadesEdiliciasActivas($id);
+
         $searchModelavisosinasistencias = new AvisoinasistenciaSearch();
         $dataProvideravisosinasistencias = $searchModelavisosinasistencias->providerFromParte($model->fecha);
         
@@ -227,6 +230,10 @@ class ParteController extends Controller
 
             'searchModelnovedades' => $searchModelnovedades,
             'dataProvidernovedades' => $dataProvidernovedades,
+
+            'searchModelnovedadesEdilicias' => $searchModelnovedadesEdilicias,
+            'dataProvidernovedadesEdilicias' => $dataProvidernovedadesEdilicias,
+
             'searchModelavisosinasistencias' => $searchModelavisosinasistencias,
             'dataProvideravisosinasistencias' => $dataProvideravisosinasistencias,
         ]);

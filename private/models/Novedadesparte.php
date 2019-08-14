@@ -33,10 +33,9 @@ class Novedadesparte extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tiponovedad', 'parte', 'estadonovedad'], 'required'],
-            [['tiponovedad', 'parte', 'estadonovedad', 'docente'], 'integer'],
+            [['tiponovedad', 'parte'], 'required'],
+            [['tiponovedad', 'parte', 'docente', 'activo'], 'integer'],
             [['descripcion'], 'string'],
-            [['estadonovedad'], 'exist', 'skipOnError' => true, 'targetClass' => Estadonovedad::className(), 'targetAttribute' => ['estadonovedad' => 'id']],
             [['tiponovedad'], 'exist', 'skipOnError' => true, 'targetClass' => Tiponovedad::className(), 'targetAttribute' => ['tiponovedad' => 'id']],
             [['parte'], 'exist', 'skipOnError' => true, 'targetClass' => Parte::className(), 'targetAttribute' => ['parte' => 'id']],
         ];
@@ -52,17 +51,17 @@ class Novedadesparte extends \yii\db\ActiveRecord
             'tiponovedad' => 'Tipo de novedad',
             'parte' => 'Parte',
             'descripcion' => 'Descripción',
-            'estadonovedad' => 'Estado de novedad',
-            'docente' => 'Preceptor',
+            'docente' => 'Docente',
+            'activo' => 'activo',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEstadonovedad0()
+    public function getEstadoxnovedads()
     {
-        return $this->hasOne(Estadonovedad::className(), ['id' => 'estadonovedad']);
+        return $this->hasMany(Estadoxnovedad::className(), ['novedadesparte' => 'id']);
     }
 
     /**

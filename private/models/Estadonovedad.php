@@ -47,8 +47,8 @@ class Estadonovedad extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getNovedadespartes()
+    public function getEstadoxnovedads()
     {
-        return $this->hasMany(Novedadesparte::className(), ['estadonovedad' => 'id']);
+        return $this->hasMany(Estadoxnovedad::className(), ['estadonovedad' => 'id']);
     }
 }

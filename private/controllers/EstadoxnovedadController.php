@@ -3,18 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Estadonovedad;
-use app\models\EstadonovedadSearch;
+use app\models\Estadoxnovedad;
+use app\models\EstadoxnovedadSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use app\config\Globales;
 
 /**
- * EstadonovedadController implements the CRUD actions for Estadonovedad model.
+ * EstadoxnovedadController implements the CRUD actions for Estadoxnovedad model.
  */
-class EstadonovedadController extends Controller
+class EstadoxnovedadController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -22,26 +20,6 @@ class EstadonovedadController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
-                'rules' => [
-                    [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
-                        'allow' => true,
-                        'matchCallback' => function ($rule, $action) {
-                                try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
-                                }catch(\Exception $exception){
-                                    return false;
-                            }
-                        }
-
-                    ],
-
-                    
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -52,12 +30,12 @@ class EstadonovedadController extends Controller
     }
 
     /**
-     * Lists all Estadonovedad models.
+     * Lists all Estadoxnovedad models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new EstadonovedadSearch();
+        $searchModel = new EstadoxnovedadSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -67,7 +45,7 @@ class EstadonovedadController extends Controller
     }
 
     /**
-     * Displays a single Estadonovedad model.
+     * Displays a single Estadoxnovedad model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -80,13 +58,13 @@ class EstadonovedadController extends Controller
     }
 
     /**
-     * Creates a new Estadonovedad model.
+     * Creates a new Estadoxnovedad model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Estadonovedad();
+        $model = new Estadoxnovedad();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -98,7 +76,7 @@ class EstadonovedadController extends Controller
     }
 
     /**
-     * Updates an existing Estadonovedad model.
+     * Updates an existing Estadoxnovedad model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -118,7 +96,7 @@ class EstadonovedadController extends Controller
     }
 
     /**
-     * Deletes an existing Estadonovedad model.
+     * Deletes an existing Estadoxnovedad model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -132,15 +110,15 @@ class EstadonovedadController extends Controller
     }
 
     /**
-     * Finds the Estadonovedad model based on its primary key value.
+     * Finds the Estadoxnovedad model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Estadonovedad the loaded model
+     * @return Estadoxnovedad the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Estadonovedad::findOne($id)) !== null) {
+        if (($model = Estadoxnovedad::findOne($id)) !== null) {
             return $model;
         }
 

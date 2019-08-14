@@ -6,6 +6,8 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Novedadesparte;
+use app\config\Globales;
+
 
 /**
  * NovedadesparteSearch represents the model behind the search form of `app\models\Novedadesparte`.
@@ -18,7 +20,7 @@ class NovedadesparteSearch extends Novedadesparte
     public function rules()
     {
         return [
-            [['id', 'tiponovedad', 'parte', 'estadonovedad', 'docente'], 'integer'],
+            [['id', 'tiponovedad', 'parte', 'docente', 'activo'], 'integer'],
             [['descripcion'], 'safe'],
         ];
     }
@@ -62,7 +64,7 @@ class NovedadesparteSearch extends Novedadesparte
             'id' => $this->id,
             'tiponovedad' => $this->tiponovedad,
             'parte' => $this->parte,
-            'estadonovedad' => $this->estadonovedad,
+            
         ]);
 
         $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);
@@ -74,7 +76,8 @@ class NovedadesparteSearch extends Novedadesparte
     {
         $query = Novedadesparte::find()
                     ->joinWith(['tiponovedad0'])
-                    ->where(['parte' => $id])
+                    ->where(['activo' => 1])
+                    ->andWhere(['parte' => $id])
                     ->orderBy('tiponovedad.id');
 
         // add conditions that should always apply here
@@ -96,7 +99,7 @@ class NovedadesparteSearch extends Novedadesparte
             'id' => $this->id,
             'tiponovedad' => $this->tiponovedad,
             'parte' => $this->parte,
-            'estadonovedad' => $this->estadonovedad,
+            
         ]);
 
         $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);
@@ -104,13 +107,65 @@ class NovedadesparteSearch extends Novedadesparte
         return $dataProvider;
     }
 
-    public function novedadesactivas()
+    public function novedadesEdiliciasActivas($id)
+    {
+        $model = Parte::find()->where(['id' => $id])->one();
+        $fecha = $model->fecha;
+        $nuevafecha = strtotime ( '-10 day' , strtotime ( $fecha ) ) ;
+        $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+
+        $query = Novedadesparte::find()
+                    ->joinWith(['tiponovedad0', 'estadoxnovedads'])
+                    //->where(['activ' => 1])
+                    //->andWhere(['parte' => $id])
+                    ->andWhere(['in', 'tiponovedad', Globales::TIPO_NOV_X_USS[3]])
+                    ->andWhere(['or', 
+                                ['and',
+                                        ['activo' => 1],
+                                        
+                                ],
+                                ['and',
+                                        ['activo' => 2],
+                                        ['=', 'estadoxnovedad.estadonovedad', 3],
+                                        ['>', 'estadoxnovedad.fecha', $nuevafecha]
+                                ],
+                                
+                        ]);
+                    //->orderBy('tiponovedad.id');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($id);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'tiponovedad' => $this->tiponovedad,
+            'parte' => $this->parte,
+            
+        ]);
+
+        $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);
+
+        return $dataProvider;
+    }
+
+    public function novedadesactivas($tipodenovedadXusuario)
     {
         $query = Novedadesparte::find()
-                    ->joinWith(['tiponovedad0', 'parte0'])
-                    ->where(['estadonovedad' => 1])
-                    ->andWhere(['<>', 'tiponovedad', 1])
-                    ->andWhere(['<>', 'tiponovedad', 5])
+                    ->joinWith(['tiponovedad0', 'parte0', 'estadoxnovedads'])
+                    ->where(['activo' => 1])
+                    ->andWhere(['in', 'tiponovedad', $tipodenovedadXusuario])
                     ->orderBy('parte.fecha');
 
         // add conditions that should always apply here
@@ -131,7 +186,7 @@ class NovedadesparteSearch extends Novedadesparte
             'id' => $this->id,
             'tiponovedad' => $this->tiponovedad,
             'parte' => $this->parte,
-            'estadonovedad' => $this->estadonovedad,
+            
         ]);
 
         $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);
@@ -142,7 +197,8 @@ class NovedadesparteSearch extends Novedadesparte
      public function novedadesactivascant()
     {
         $query = Novedadesparte::find()
-                    ->where(['estadonovedad' => 1])
+                    ->joinWith(['estadoxnovedads'])
+                    ->where(['activo' => 1])
                     ->andWhere(['<>', 'tiponovedad', 1])
                     ->andWhere(['<>', 'tiponovedad', 5])
                     ->count();

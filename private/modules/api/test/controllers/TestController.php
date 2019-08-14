@@ -12,12 +12,23 @@ use yii\filters\auth\HttpBasicAuth;
 	class TestController extends Controller
 	{
 	    //public $modelClass = 'app\modules\optativas\models\Alumno';
+	    public $enableCsrfValidation = false;
 
 public function behaviors()
 
     {
 
         $behaviors = parent::behaviors();
+
+        $behaviors['corsFilter'] = [
+        'class' => \yii\filters\Cors::className(),
+        'cors' => [
+            'Origin' => ['*'],
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Request-Method'    => ['GET, POST, OPTIONS, PUT, PATCH, DELETE'],
+            'Access-Control-Request-Headers' => ['X-Requested-With,content-type'],
+        ]
+    ];
 
         $behaviors['authenticator'] = [
 
@@ -27,14 +38,7 @@ public function behaviors()
 
         ];
 
-        $behaviors['corsFilter'] = [
-        'class' => \yii\filters\Cors::className(),
-        'cors' => [
-            'Origin'                           => "*",
-            'Access-Control-Request-Method'    => ['GET, POST, OPTIONS, PUT, PATCH, DELETE'],
-            'Access-Control-Request-Headers' => ['X-Requested-With,content-type'],
-        ],
-    ];
+        
 
         return $behaviors;
 
