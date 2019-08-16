@@ -88,20 +88,36 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                     
                                     [   
-                                        'label' => 'Apellido',
-                                        'attribute' => 'docente0.apellido'
+                                        'label' => 'Docente',
+                                        //'attribute' => 'docente0.apellido',
+                                        'value' => function($model){
+                                            return $model->docente0->apellido.', '.$model->docente0->nombre;
+                                        }
                                     ],
 
-                                    [   
-                                        'label' => 'Nombre',
-                                        'attribute' => 'docente0.nombre'
-                                    ],
 
-                                    'llego', 
-                                    'retiro',
+                                    
                                     [   
                                         'label' => 'Tipo de Falta',
                                         'attribute' => 'falta0.nombre'
+                                    ],
+
+                                    
+
+                                    [
+                                        'label' => 'Detalle',
+                                        'attribute' => 'detalleadelrecup',
+                                        'format' => 'raw',
+                                        'value' => function($model){
+                                            $txt = '';
+                                            if($model->llego != null)
+                                                $txt .='<span class="label label-primary">Llegó</span> '.$model->llego.' min. tarde<br />';
+                                            if($model->retiro != null)
+                                                $txt .='Se <span class="label label-primary">retiró</span> '.$model->retiro.' min. antes<br />';
+                                            if($model->detalleadelrecup != null)
+                                                $txt .='<span class="label label-primary">Detalle</span> adelanto/recupero: '.$model->detalleadelrecup;
+                                            return $txt;
+                                        }
                                     ],
 
                                     [

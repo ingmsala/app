@@ -20,7 +20,7 @@ class DetalleparteSearch extends Detalleparte
     public function rules()
     {
         return [
-            [['id', 'parte', 'division', 'docente', 'hora', 'llego', 'retiro', 'falta', 'estadoinasistencia'], 'integer'],
+            [['id', 'parte', 'division', 'docente', 'hora', 'llego', 'retiro', 'falta', 'estadoinasistencia','detalleadelrecup'], 'integer'],
         ];
     }
 
@@ -85,6 +85,7 @@ class DetalleparteSearch extends Detalleparte
             'llego' => $this->llego,
             'retiro' => $this->retiro,
             'falta' => $this->falta,
+            'detalleadelrecup' => $this->detalleadelrecup,
             'estadoinasistencia' => $this->estadoinasistencia,
         ]);
 
@@ -580,6 +581,7 @@ class DetalleparteSearch extends Detalleparte
               WHEN dp.falta <= 2 THEN 40 
               WHEN dp.falta = 3 THEN (coalesce(dp.retiro,0) + coalesce(dp.llego,0))
               WHEN dp.falta = 4 THEN -40 
+              WHEN dp.falta = 6 THEN -40
             END) AS faltas
             FROM detalleparte dp
             LEFT JOIN docente d  ON dp.docente = d.id
@@ -609,7 +611,7 @@ class DetalleparteSearch extends Detalleparte
 
     }
 
-    public function providerfaltasdocentesview($mes, $anio, $id)
+    public function     providerfaltasdocentesview($mes, $anio, $id)
     {
         
         $sql='

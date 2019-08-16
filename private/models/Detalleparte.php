@@ -15,6 +15,7 @@ use Yii;
  * @property int $llego
  * @property int $retiro
  * @property int $falta
+ * @property int $detalleadelrecup
  * @property int $estadoinasistencia
  *
  * @property Parte $parte0
@@ -36,7 +37,7 @@ class Detalleparte extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_ABM] = ['parte', 'division', 'docente', 'hora', 'falta', 'llego','retiro'];
+        $scenarios[self::SCENARIO_ABM] = ['parte', 'division', 'docente', 'hora', 'falta', 'llego','retiro', 'detalleadelrecup'];
         $scenarios[self::SCENARIO_CONTROLREGENCIA] = ['anio', 'mes', 'docente', 'estadoinasistencia', 'solodia'];
         return $scenarios;
     }
@@ -90,6 +91,7 @@ class Detalleparte extends \yii\db\ActiveRecord
             'llego' => 'Llego',
             'retiro' => 'Retiro',
             'falta' => 'Tipo de Falta',
+            'detalleadelrecup' => 'Detalle recupera/adelanto',
             'estadoinasistencia' => 'Estado',
         ];
     }

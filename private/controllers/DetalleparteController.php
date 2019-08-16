@@ -131,7 +131,7 @@ class DetalleparteController extends Controller
 
         $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $faltas = Falta::find()
-                    ->where(['<>', 'id', Globales::FALTA_COMISION])
+                    ->where(['not in', 'id', [Globales::FALTA_COMISION, 4]])
                     ->all();
         $horas = Hora::find()->all();
 
@@ -140,6 +140,7 @@ class DetalleparteController extends Controller
             $division = $model->division;
             $docente = $model->docente;
             $llego = $model->llego;
+            $detalleadelrecup = $model->detalleadelrecup;
             $retiro = $model->retiro;
             $falta = $model->falta;
             $estadoinasistencia = $model->estadoinasistencia;
@@ -162,6 +163,7 @@ class DetalleparteController extends Controller
                     $model2->division = $division;
                     $model2->docente = $docente;
                     $model2->llego = $llego;
+                    $model2->detalleadelrecup = $detalleadelrecup;
                     $model2->retiro = $retiro;
                     $model2->falta = $falta;
                     //$model2->estadoinasistencia = $estadoinasistencia;
@@ -220,7 +222,7 @@ class DetalleparteController extends Controller
 
         $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $faltas = Falta::find()
-                    ->where(['<>', 'id', Globales::FALTA_COMISION])
+                    ->where(['not in', 'id', [Globales::FALTA_COMISION, 4]])
                     ->all();
         $horas = Hora::find()->all();
 

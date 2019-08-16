@@ -79,15 +79,31 @@ use kartik\select2\Select2;
                 'select2:select' => 'function() {
                     if ($(this).val()==3) {
                            $( "#retaus" ).show();
+                           $( "#adelrecup" ).hide();
                            $( "#'.Html::getInputId($model, 'llego').'" ).val(null);
                            $( "#'.Html::getInputId($model, 'retiro').'" ).val(null);
+                           $( "#'.Html::getInputId($model, 'detalleadelrecup').'" ).val(null);
                         }else{
                             
                            $( "#retaus" ).hide();
                            $( "#'.Html::getInputId($model, 'llego').'" ).val(null);
                            $( "#'.Html::getInputId($model, 'retiro').'" ).val(null);
+                           $( "#'.Html::getInputId($model, 'detalleadelrecup').'" ).val(null);
+
+                           if ($(this).val()==6 || $(this).val()==7) {
+                               $( "#adelrecup" ).show();
+                               $( "#'.Html::getInputId($model, 'detalleadelrecup').'" ).val(null);
+                           
+                            }else{
+                                
+                               $( "#adelrecup" ).hide();
+                               $( "#'.Html::getInputId($model, 'detalleadelrecup').'" ).val(null);
+                               
 
                         }
+
+                        }
+                    
                         
                 }',
             ],
@@ -99,6 +115,9 @@ use kartik\select2\Select2;
         <?= $form->field($model, 'llego')->textInput(['id'=>'llego']) ?>
 
         <?= $form->field($model, 'retiro')->textInput(['id'=>'retiro']) ?>
+    </div>
+    <div id="adelrecup" style="display: none;">
+        <?= $form->field($model, 'detalleadelrecup')->textInput(['id'=>'detalleadelrecup']) ?>
     </div>
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
