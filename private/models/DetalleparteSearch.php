@@ -201,10 +201,13 @@ class DetalleparteSearch extends Detalleparte
     {
         
             $query = Detalleparte::find()
-            ->joinWith(['division0', 'parte0'])
+            ->distinct()
+            ->select(['docente'])
+            ->joinWith(['docente0', 'division0', 'parte0', 'division0.turno0'])
             ->where(['parte.fecha' => $fecha])
             ->andWhere(['<>', 'detalleparte.parte', $id])
-            ->andWhere(['detalleparte.falta' => 1]);
+            ->andWhere(['detalleparte.falta' => 1])
+            ->orderBy('docente.apellido, docente.nombre');
        
         
 

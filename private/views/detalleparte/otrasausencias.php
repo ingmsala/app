@@ -12,25 +12,16 @@ use yii\grid\GridView;
                     'summary'=> "",
                     'columns' => [
                         
+                       ['class' => 'yii\grid\SerialColumn'],
                         [   
-                            'label' => 'División',
-                            'attribute' => 'division',
-                            'value' => 'division0.nombre'
-                        ],
-                        [   
-                            'label' => 'Hora',
-                            'attribute' => 'hora',
-                            'value' => 'hora0.nombre'
-                        ],
-                        [   
-                            'label' => 'Apellido',
-                            'attribute' => 'docente0.apellido'
+                            'label' => 'Docente',
+                            'value' => function($model){
+                                return $model->docente0->apellido.', '.$model->docente0->nombre;
+                            }
+                            
                         ],
 
-                        [   
-                            'label' => 'Nombre',
-                            'attribute' => 'docente0.nombre'
-                        ],
+                      
                         
                         
                     ],

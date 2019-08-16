@@ -45,24 +45,47 @@ if(in_array (Yii::$app->user->identity->role, [1,4]))
                 'label' => 'Desde',
                 'attribute' => 'desde',
                 'format' => 'raw',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
                 'value' => function($model){
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
-                   if ($model['desde'] == date('Y-m-d')){
-                        return Yii::$app->formatter->asDate($model['desde'], 'dd/MM/yyyy').' (HOY)';
-                   } 
-                   return Yii::$app->formatter->asDate($model['desde'], 'dd/MM/yyyy');
+                    $hoy = date("Y-m-d");
+                    $tomorrow = strtotime ( '+1 day' , strtotime ( $hoy ) ) ;
+                    $fourdays = strtotime ( '+4 day' , strtotime ( $hoy ) ) ;
+                    $tomorrow = date ( 'Y-m-j' , $tomorrow );
+                    $fourdays = date ( 'Y-m-j' , $fourdays );
+                    if ($model['desde'] == $hoy){
+                        return '<span class="label label-primary">HOY</span>';
+                    }elseif($model['desde'] == $tomorrow ){
+                        
+                         return '<span class="label label-info">MAÑANA</span>';
+                    }elseif($model['desde'] <= $fourdays &&  $model['desde'] > $hoy){
+                            return Yii::$app->formatter->asDate($model['desde'], 'dd/MM/yyyy').'<br /><span class="label label-warning">PRÓXIMAMENTE</span>';
+                    }elseif($model['desde'] <= $fourdays){
+                            return Yii::$app->formatter->asDate($model['desde'], 'dd/MM/yyyy').'<br /><span class="label label-danger">En curso</span>';
+                        }   
+                    return Yii::$app->formatter->asDate($model['desde'], 'dd/MM/yyyy');
                 }
             ],
             [
                 'label' => 'Hasta',
                 'attribute' => 'hasta',
                 'format' => 'raw',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
                 'value' => function($model){
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
-                   if ($model['hasta'] == date('Y-m-d')){
-                        return Yii::$app->formatter->asDate($model['hasta'], 'dd/MM/yyyy').' (HOY)';
-                   } 
-                   return Yii::$app->formatter->asDate($model['hasta'], 'dd/MM/yyyy');
+                    $hoy = date("Y-m-d");
+                    $tomorrow = strtotime ( '+1 day' , strtotime ( $hoy ) ) ;
+                    $tomorrow = date ( 'Y-m-j' , $tomorrow );
+                    
+                    if ($model['hasta'] == $hoy){
+                        return '<span class="label label-primary">HOY</span>';
+                    }elseif($model['hasta'] == $tomorrow ){
+                        
+                         return '<span class="label label-info">MAÑANA</span>';
+                    }
+                    return Yii::$app->formatter->asDate($model['hasta'], 'dd/MM/yyyy');
                 }
             ],
 

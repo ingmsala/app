@@ -48,22 +48,50 @@ $this->title = 'Nombramientos';
             [
                 'label' => 'Cod. Cargo',
                 'attribute' => 'cargo',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
                 'value' => function($model){
 
                    return $model->cargo.' - '.$model->cargo0->nombre;
+                }
+            ],
+
+            [
+                'label' => 'Revista',
+                'attribute' => 'revista',
+                'format' => 'raw',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                'value' => function($model){
+
+                   return Html::tag('span',  $model->revista0->nombre, ['class' => "badge"]);
                 }
             ],
            
             [
                 'label' => 'Docente',
                 'attribute' => 'docente',
-                'format' => 'raw',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                
                 'value' => function($model){
 
-                    return Html::tag('li', Html::tag('div',Html::tag('span', $model->condicion0->nombre, ['class' => "badge pull-left"]).Html::tag('span', $model->revista0->nombre, ['class' => "badge pull-right"])."&nbsp;".$model->docente0->apellido.', '.$model->docente0->nombre, ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-info']);
+                    return $model->docente0->apellido.', '.$model->docente0->nombre;
                    //return $model->docente0->apellido.', '.$model->docente0->nombre;
                 }
 
+            ],
+
+            [
+                'label' => 'Condición',
+                'attribute' => 'condicion',
+                'format' => 'raw',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                'value' => function($model){
+
+                   return Html::tag('span',  $model->condicion0->nombre, ['class' => "badge"]);
+                }
             ],
 
                      
@@ -71,6 +99,8 @@ $this->title = 'Nombramientos';
             [
                 'label' => 'Función (Horas)',
                 'attribute' => 'division',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
                 'value' => function($model){
                     return $model->nombre.'('.$model->horas.')';
                 }
@@ -78,6 +108,8 @@ $this->title = 'Nombramientos';
             [
                 'label' => 'Suplente',
                 'attribute' => 'suplente',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
                 'format' => 'raw',
                 'value' =>  function($model){
                      //var_dump($model->suplente0->docente0);
@@ -98,6 +130,8 @@ $this->title = 'Nombramientos';
             [
                 'label' => 'Suplente 2',
                 'attribute' => 'suplente0',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
                 'format' => 'raw',
                 'value' =>  function($model){
                      //var_dump($model->suplente0->docente0);

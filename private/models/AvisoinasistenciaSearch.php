@@ -78,7 +78,7 @@ class AvisoinasistenciaSearch extends Avisoinasistencia
                     //->where(['BETWEEN','desde', 'hasta', $fechaparte, 'hasta'])
                     //->where(['<=','desde',$fechaparte])
                     ->andWhere(['>=','hasta',$fechaparte])
-                    ->orderBy('desde DESC');
+                    ->orderBy('desde ASC');
 
         // add conditions that should always apply here
 
