@@ -582,6 +582,7 @@ class DetalleparteSearch extends Detalleparte
               WHEN dp.falta = 3 THEN (coalesce(dp.retiro,0) + coalesce(dp.llego,0))
               WHEN dp.falta = 4 THEN -40 
               WHEN dp.falta = 6 THEN -40
+              WHEN dp.falta = 7 THEN -40
             END) AS faltas
             FROM detalleparte dp
             LEFT JOIN docente d  ON dp.docente = d.id

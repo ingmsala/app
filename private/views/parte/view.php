@@ -114,8 +114,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 $txt .='<span class="label label-primary">Llegó</span> '.$model->llego.' min. tarde<br />';
                                             if($model->retiro != null)
                                                 $txt .='Se <span class="label label-primary">retiró</span> '.$model->retiro.' min. antes<br />';
-                                            if($model->detalleadelrecup != null)
-                                                $txt .='<span class="label label-primary">Detalle</span> adelanto/recupero: '.$model->detalleadelrecup;
+                                            if($model->detalleadelrecup != null && $model->falta==6)
+                                                $txt .='<span class="label label-primary">Detalle</span> recupero: '.$model->detalleadelrecup.'<br />';
+                                            if($model->detalleadelrecup != null && $model->falta==7)
+                                                $txt .='<span class="label label-primary">Detalle</span> adelanto: '.$model->detalleadelrecup.'<br />';
                                             return $txt;
                                         }
                                     ],
