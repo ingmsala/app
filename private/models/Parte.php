@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property string $fecha
  * @property int $preceptoria
+ * @property int $tipoparte
  *
  * @property Detalleparte[] $detallepartes
  * @property Preceptoria $preceptoria0
@@ -27,7 +28,7 @@ class Parte extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_ABM] = ['id', 'fecha', 'preceptoria'];
+        $scenarios[self::SCENARIO_ABM] = ['id', 'fecha', 'preceptoria', 'tipoparte'];
         $scenarios[self::SCENARIO_SEARCHINDEX] = ['fecha', 'mes'];
         return $scenarios;
     }
@@ -43,11 +44,12 @@ class Parte extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fecha', 'preceptoria'], 'required'],
+            [['fecha', 'preceptoria', 'tipoparte'], 'required'],
             [['fecha'], 'safe'],
-            [['preceptoria'], 'integer'],
+            [['preceptoria', 'tipoparte'], 'integer'],
             [['fecha', 'preceptoria'], 'unique', 'targetAttribute' => ['fecha', 'preceptoria']],
             [['preceptoria'], 'exist', 'skipOnError' => true, 'targetClass' => Preceptoria::className(), 'targetAttribute' => ['preceptoria' => 'id']],
+            [['tipoparte'], 'exist', 'skipOnError' => true, 'targetClass' => Tipoparte::className(), 'targetAttribute' => ['tipoparte' => 'id']],
         ];
     }
 
@@ -60,6 +62,7 @@ class Parte extends \yii\db\ActiveRecord
             'id' => 'ID',
             'fecha' => 'Fecha',
             'preceptoria' => 'Preceptoria',
+            'tipoparte' => 'Tipo de Parte',
         ];
     }
 
@@ -77,6 +80,11 @@ class Parte extends \yii\db\ActiveRecord
     public function getPreceptoria0()
     {
         return $this->hasOne(Preceptoria::className(), ['id' => 'preceptoria']);
+    }
+
+    public function getTipoparte0()
+    {
+        return $this->hasOne(Tipoparte::className(), ['id' => 'tipoparte']);
     }
 
        /**

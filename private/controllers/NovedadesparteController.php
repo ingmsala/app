@@ -75,7 +75,7 @@ class NovedadesparteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_NOVEDADES]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_NOVEDADES]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -248,7 +248,7 @@ class NovedadesparteController extends Controller
         elseif(Yii::$app->user->identity->role == Globales::US_NOVEDADES)
             return 3;
         else
-            return 0;
+            return 4;
     }
     public function actionPanelnovedades()
     {

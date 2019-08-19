@@ -44,12 +44,12 @@ $listDocentes=ArrayHelper::map($docentes,'id', function($doc) {
 
      <?php $meses = [ 1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12=> 'Diciembre',]; 
 
-     $years = [ 2019 => '2019', 2020 => '2020', 2021 => '2021', 2022 => '2022', 2023 => '2023']; ?>
+      $years2=ArrayHelper::map($years,'nombre','nombre'); ?>
 
      <?= Html::beginForm(); ?>
      <div class="form-group col-xs-2 .col-sm-3">
          <label for="cmbyear">Año</label> 
-     <?= Html::dropDownList('year', $selection=$anio, $years, ['prompt' => '(Año)', 'id' => 'cmbyear', 'class' => 'form-control ',   'required' => true,
+     <?= Html::dropDownList('year', $selection=$anio, $years2, ['prompt' => '(Año)', 'id' => 'cmbyear', 'class' => 'form-control ',   'required' => true,
         'onchange'=>'
                     var aniojs = document.getElementById("cmbyear").value;
                     var mesjs = document.getElementById("cmbmes").value;

@@ -654,3 +654,29 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     display:inline-block;
     vertical-align:middle;
 }
+
+.button__badge {
+  background-color: #fa3e3e;
+      
+    border-radius: 0.2em;
+    color: white;
+    padding: 0.01em 0.4em;
+    font-size: 0.7em;
+    position: absolute;
+    top: 0.5em;
+    left: 2.9em;  
+}
+
+#button__cont {
+  color: red;
+  display: inline-block; /* Inline elements with width and height. TL;DR they make the icon buttons stack from left-to-right instead of top-to-bottom */
+  position: relative; /* All 'absolute'ly positioned elements are relative to this one */
+  padding: 2px; /* Add some padding so it looks nice */
+}
+#glibell {
+  color: white;
+  font-size: 20px;
+  /*display: inline-block; /* Inline elements with width and height. TL;DR they make the icon buttons stack from left-to-right instead of top-to-bottom */
+  /*position: relative; /* All 'absolute'ly positioned elements are relative to this one */
+  padding: 0px; /* Add some padding so it looks nice */
+}

@@ -32,13 +32,29 @@ AppAsset::register($this);
 
         <?php 
 
-$ns = new NovedadesparteSearch(); 
-$cantnov = $ns->novedadesactivascant();
-if ($cantnov>0) {
-    $cantnov = '<span class="glyphicon glyphicon-bell" aria-hidden="true"></span>';
-}else{
-    $cantnov ='';
+try {
+        $visi = 'inline';
+    if (Yii::$app->user->identity->role == Globales::US_SUPER)
+            $tiponovedad = 0;
+        elseif(Yii::$app->user->identity->role == Globales::US_SECRETARIA)
+            $tiponovedad = 1;
+        elseif(Yii::$app->user->identity->role == Globales::US_SACADEMICA)
+            $tiponovedad = 2;
+        elseif(Yii::$app->user->identity->role == Globales::US_NOVEDADES)
+            $tiponovedad = 3;
+        else{
+            $tiponovedad = 4;
+            $visi = 'none';
+        }
+        $ns = new NovedadesparteSearch(); 
+        $cantnov = $ns->novedadesactivas(Globales::TIPO_NOV_X_USS[$tiponovedad])->getTotalCount();
+} catch (Exception $e) {
+        $cantnov = 0;
+        $visi = 'none';
 }
+        
+
+
 
 ?>
 
@@ -130,7 +146,7 @@ if ($cantnov>0) {
 
 
                     ],
-                    ['label' => ' Parte Docente '.'<sup><span class="label label-primary">'.$cantnov.'</span></sup>', 
+                    ['label' => 'Parte Docente', 
                             'items' => [
                                 
                                 ['label' => 'Parte docente', 'url' => ['/parte']],
@@ -141,7 +157,7 @@ if ($cantnov>0) {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Avisos de Inasistencias', 'url' => ['/avisoinasistencia']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Panel de Novedades '.$cantnov, 'url' => ['novedadesparte/panelnovedades']],
+                                ['label' => 'Panel de Novedades', 'url' => ['novedadesparte/panelnovedades']],
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q/edit?usp=sharing'],
                                 '<div class="dropdown-divider"></div>',
@@ -189,6 +205,7 @@ if ($cantnov>0) {
                                 
                             ],
                     ],
+                    ['label' => '<span id="button_cont"><i id="glibell" class="glyphicon glyphicon-bell" aria-hidden="true"></i><div display="'.$visi.'" class="button__badge">'.$cantnov.'</div></span>', 'url' => ['novedadesparte/panelnovedades']],
                     ['label' => 'Usuario: '.Yii::$app->user->identity->username,
                             
                             'items' => [
@@ -296,14 +313,14 @@ if ($cantnov>0) {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Control de Secretaría', 'url' => ['parte/controlsecretaria']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Panel de Novedades '.$cantnov, 'url' => ['novedadesparte/panelnovedades']],
+                                ['label' => 'Panel de Novedades', 'url' => ['novedadesparte/panelnovedades']],
                                 '<div class="dropdown-divider"></div>',
 
                                 
                             ],
                     ],
                     
-                    
+                    ['label' => '<span id="button_cont"><i id="glibell" class="glyphicon glyphicon-bell" aria-hidden="true"></i><div style="display:'.$visi.'" class="button__badge">'.$cantnov.'</div></span>', 'url' => ['novedadesparte/panelnovedades']],
                     ['label' => 'Usuario: '.Yii::$app->user->identity->username,
                             
                             'items' => [
@@ -347,13 +364,13 @@ if ($cantnov>0) {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Avisos de Inasistencias', 'url' => ['/avisoinasistencia']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Panel de Novedades '.$cantnov, 'url' => ['novedadesparte/panelnovedades']],
+                                ['label' => 'Panel de Novedades', 'url' => ['novedadesparte/panelnovedades']],
                                 '<div class="dropdown-divider"></div>',
                                 
                             ],
                     ],
                     
-                    
+                    ['label' => '<span id="button_cont"><i id="glibell" class="glyphicon glyphicon-bell" aria-hidden="true"></i><div style="display:'.$visi.'" class="button__badge">'.$cantnov.'</div></span>', 'url' => ['novedadesparte/panelnovedades']],
                     ['label' => 'Usuario: '.Yii::$app->user->identity->username,
                             
                             'items' => [
@@ -388,19 +405,22 @@ if ($cantnov>0) {
 
                     ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
                         
-                    ['label' => ' Parte Docente '.'<sup><span class="label label-primary">'.$cantnov.'</span></sup>', 
+                    ['label' => 'Administración', 
                             'items' => [
                                 
                                 ['label' => 'Parte docente', 'url' => ['/parte']],
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Control de Sec. Académica', 'url' => ['parte/controlacademica']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Panel de Novedades '.$cantnov, 'url' => ['novedadesparte/panelnovedades']],
+                                ['label' => 'Panel de Novedades', 'url' => ['novedadesparte/panelnovedades']],
+                                '<div class="dropdown-divider"></div>',
+                                ['label' => 'Imprimir certificados', 'url' => ['/']],
                                 '<div class="dropdown-divider"></div>',
                                 
                             ],
                     ],
                     
+                    ['label' => '<span id="button_cont"><i id="glibell" class="glyphicon glyphicon-bell" aria-hidden="true"></i><div style="display:'.$visi.'" class="button__badge">'.$cantnov.'</div></span>', 'url' => ['novedadesparte/panelnovedades']],
                     
                     ['label' => 'Usuario: '.Yii::$app->user->identity->username,
                             
@@ -436,14 +456,15 @@ if ($cantnov>0) {
 
                     ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
                         
-                    ['label' => ' Parte Docente '.'<sup><span class="label label-primary">'.$cantnov.'</span></sup>', 
+                    ['label' => ' Parte Docente', 
                             'items' => [
                                 
                                 ['label' => 'Parte docente', 'url' => ['/parte']],
                                 '<div class="dropdown-divider"></div>',
                             ],
                     ],
-                    
+
+                                       
                     
                     ['label' => 'Usuario: '.Yii::$app->user->identity->username,
                             
@@ -554,7 +575,8 @@ if ($cantnov>0) {
                             ],
                     ],
                     
-                    
+                    ['label' => '<span id="button_cont"><i id="glibell" class="glyphicon glyphicon-bell" aria-hidden="true"></i><div style="display:'.$visi.'" class="button__badge">'.$cantnov.'</div></span>', 'url' => ['novedadesparte/panelnovedades']],
+
                     ['label' => 'Usuario: '.Yii::$app->user->identity->username,
                             
                             'items' => [
@@ -668,8 +690,9 @@ if ($cantnov>0) {
                 
                 $items = [
                         
-                   ['label' => 'Panel de Novedades '.$cantnov, 'url' => ['novedadesparte/panelnovedades']],
-                                
+                   ['label' => 'Panel de Novedades', 'url' => ['novedadesparte/panelnovedades']],
+                          
+                          ['label' => '<span id="button_cont"><i id="glibell" class="glyphicon glyphicon-bell" aria-hidden="true"></i><div style="display:'.$visi.'" class="button__badge">'.$cantnov.'</div></span>', 'url' => ['novedadesparte/panelnovedades']],      
                     
                     
                     ['label' => 'Usuario: '.Yii::$app->user->identity->username,

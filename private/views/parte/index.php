@@ -47,9 +47,11 @@ if(in_array (Yii::$app->user->identity->role, [1]))
                             
                             $meses = [ 1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12=> 'Diciembre',]; 
 
-                            $years = [ 2018 => '2018', 2019 => '2019', 2020 => '2020', 2021 => '2021', 2022 => '2022', 2023 => '2023'];
+                            //$years = [ 2018 => '2018', 2019 => '2019', 2020 => '2020', 2021 => '2021', 2022 => '2022', 2023 => '2023'];
 
                             $listPreceptorias=ArrayHelper::map($preceptorias,'id','nombre');
+
+                            $years=ArrayHelper::map($years,'nombre','nombre');
 
                             $filter = false;
                             
@@ -207,6 +209,11 @@ if(in_array (Yii::$app->user->identity->role, [1]))
             [   
                 'label' => 'Preceptoria',
                 'attribute' => 'preceptoria',
+            ],
+
+            [   
+                'label' => 'Tipo de Parte',
+                'attribute' => 'tipoparte',
             ],
 
             [

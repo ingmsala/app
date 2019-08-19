@@ -133,7 +133,12 @@ class DetalleparteController extends Controller
         $faltas = Falta::find()
                     ->where(['not in', 'id', [Globales::FALTA_COMISION, 4]])
                     ->all();
-        $horas = Hora::find()->all();
+        if($partex->tipoparte == 1)
+            $horas = Hora::find()->all();
+        elseif($partex->tipoparte == 2)
+            $horas = Hora::find()->where(['in', 'id', [2,3]])->all();
+        else
+            $horas = Hora::find()->where(['in', 'id', [2]])->all();
 
         if ($model->load(Yii::$app->request->post())) {
             $parte =$model->parte;

@@ -25,8 +25,8 @@ use yii\widgets\ActiveForm;
                             
                             $meses = [ 1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12=> 'Diciembre',]; 
 
-                            $years = [ 2019 => '2019', 2020 => '2020', 2021 => '2021', 2022 => '2022', 2023 => '2023'];
-
+                            //$years = [ 2019 => '2019', 2020 => '2020', 2021 => '2021', 2022 => '2022', 2023 => '2023'];
+                            $years=ArrayHelper::map($years,'nombre','nombre');
                             $listDocentes=ArrayHelper::map($docentes,'id', function($doc) {
                                     return $doc['apellido'].', '.$doc['nombre'];}
                             );

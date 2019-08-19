@@ -91,7 +91,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'label' => 'Docente',
                                         //'attribute' => 'docente0.apellido',
                                         'value' => function($model){
-                                            return $model->docente0->apellido.', '.$model->docente0->nombre;
+                                            
+                                            try {
+                                                return $model->docente0->apellido.', '.$model->docente0->nombre;
+                                            } catch (Exception $e) {
+                                                return '';
+                                            }
+                                            
                                         }
                                     ],
 

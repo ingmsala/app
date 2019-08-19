@@ -20,7 +20,7 @@ class ParteSearch extends Parte
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'tipoparte'], 'integer'],
             [['fecha', 'preceptoria'], 'safe'],
         ];
     }
@@ -83,9 +83,10 @@ class ParteSearch extends Parte
     {
         
         $sql='
-        select p.id, p.fecha as fecha, pr.nombre as preceptoria
+        select p.id, p.fecha as fecha, pr.nombre as preceptoria, tp.nombre as tipoparte
         from parte p 
         left join preceptoria pr on p.preceptoria = pr.id 
+        left join tipoparte tp on p.tipoparte = tp.id
         where true';
 
         if (isset($params['Parte']['fecha']) && $params['Parte']['fecha'] != ''){

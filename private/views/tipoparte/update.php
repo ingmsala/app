@@ -3,21 +3,19 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Parte */
+/* @var $model app\models\Tipoparte */
 
-$this->title = 'Modificar Parte: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Partes', 'url' => ['index']];
+$this->title = 'Update Tipoparte: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Tipopartes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
-<div class="parte-update">
+<div class="tipoparte-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,
-        'precepx' => $precepx,
-        'tiposparte' => $tiposparte,
     ]) ?>
 
 </div>

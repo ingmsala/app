@@ -62,12 +62,13 @@ use yii\widgets\Pjax;
     	'id' => 'create-update-detalle-catedra-form',
     ]); ?>
 
-    <?php $listPreceptoria=ArrayHelper::map($precepx,'id','nombre'); 
+    <?php $listPreceptoria=ArrayHelper::map($precepx,'id','nombre');?> 
+    <?php $listTipoParte=ArrayHelper::map($tiposparte,'id','nombre');?>
     
-    ?>
+    
 
   		
-	   <div style="width: 25%;">
+	   <div style="width: 50%;">
     <?= 
 $form->field($model, 'fecha')->widget(DatePicker::classname(), [
     //'name' => 'dp_3',
@@ -86,7 +87,10 @@ $form->field($model, 'fecha')->widget(DatePicker::classname(), [
 </div>
 
     
-    <?= $form->field($model, 'preceptoria')->dropDownList($listPreceptoria, ['prompt'=>'Seleccionar...','style' => 'width:20%']); ?>
+    <?= $form->field($model, 'preceptoria')->dropDownList($listPreceptoria, ['prompt'=>'Seleccionar...','style' => 'width:50%']); ?>
+
+
+    <?= $form->field($model, 'tipoparte')->dropDownList($listTipoParte, ['prompt'=>'Seleccionar...','style' => 'width:50%']); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success', 'id' => 'btnausentes']) ?>

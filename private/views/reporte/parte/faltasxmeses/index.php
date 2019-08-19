@@ -37,11 +37,15 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
     <?php $meses = [ 1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12=> 'Diciembre',]; 
 
-     $years = [ 2018 => '2018', 2019 => '2019', 2020 => '2020', 2021 => '2021', 2022 => '2022', 2023 => '2023']; ?>
+     //$years = [ 2018 => '2018', 2019 => '2019', 2020 => '2020', 2021 => '2021', 2022 => '2022', 2023 => '2023']; 
+    ?>
+
+     <?php $years2=ArrayHelper::map($years,'nombre','nombre');  ?>
+
 
      <?= Html::beginForm(); ?>
      <div class="form-group col-xs-4 .col-sm-3">
-     <?= Html::dropDownList('year', $selection=$anio, $years, ['prompt' => '(Año)', 'id' => 'cmbyear', 'class' => 'form-control ',
+     <?= Html::dropDownList('year', $selection=$anio, $years2, ['prompt' => '(Año)', 'id' => 'cmbyear', 'class' => 'form-control ',
         'onchange'=>'
                     var aniojs = document.getElementById("cmbyear").value;
                                                                 
@@ -94,6 +98,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Cantidad de Faltas',
                 'attribute' => 'faltas',
              ],
+
+             [
+                'label' => 'Dias de Clase',
+                'attribute' => 'diasclase',
+             ],
+
+             [
+                'header' => '% Ausentismo '.'<span data-toggle="tooltip" title="Se toma un aproximado de 395.5 horas cátedra diarias (Tomada de la suma ponderada por curso, horas semanales)" class="glyphicon glyphicon-info-sign"></span>',
+                'value' => function($model){
+                  return '~'.round(($model['faltas'] / ($model['diasclase'] * 395.5)) * 100,2).'%';
+                }
+             ],
            
 
             
@@ -103,6 +119,19 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 if($anio!=0)
 {
+
+
+ $faltasarray =  ArrayHelper::getColumn($dataProvider->models, 'faltas');
+ $diasclasearray =  ArrayHelper::getColumn($dataProvider->models, 'diasclase');
+
+ $it = [];
+
+
+for ($i = 0; $i < count($faltasarray); $i++) {
+    $it[]=round(($faltasarray[$i] / ($diasclasearray[$i] * 395.5)) * 100,2);
+    //$it[]= $faltasarray[$i] / $diasclasearray[$i];
+}
+
  echo Highcharts::widget([
 
    'options' => [
@@ -117,10 +146,10 @@ if($anio!=0)
          'categories' => $mesespok
       ],
       'yAxis' => [
-         'title' => ['text' => 'Faltas']
+         'title' => ['text' => '%']
       ],
       'series' => [
-         ['name' => ' Faltas', 'data' => array_map('intval',ArrayHelper::getColumn($dataProvider->models, 'faltas'))],
+         ['name' => ' % Ausentismo', 'data' => array_map('intval',$it)],
          //['name' => 'Turno Tarde', 'data' => [5, 7, 3]],
 
       ]

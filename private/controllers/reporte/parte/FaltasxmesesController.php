@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use app\config\Globales;
+use app\modules\optativas\models\Aniolectivo;
 
 class FaltasxmesesController extends \yii\web\Controller
 {
@@ -59,6 +60,8 @@ class FaltasxmesesController extends \yii\web\Controller
             
             $searchModel = new DetalleparteSearch();
             $dataProvider = $searchModel->providerxanio($anio);
+
+            $years = Aniolectivo::find()->all();
             
             $meses = ArrayHelper::getColumn($dataProvider->models, 'meses');
             $mesesesp = [ 1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12=> 'Diciembre',];
@@ -76,6 +79,7 @@ class FaltasxmesesController extends \yii\web\Controller
                 'anio' => $anio,
                 'mes' => 0,
                 'mesespok' => $mesespok,
+                'years' => $years,
             ]);
         }
 

@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Parte;
 use app\models\ParteSearch;
+use app\models\Tipoparte;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -19,6 +20,7 @@ use app\models\Avisoinasistencia;
 use app\models\AvisoinasistenciaSearch;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use app\modules\optativas\models\Aniolectivo;
 
 
 /**
@@ -178,6 +180,7 @@ class ParteController extends Controller
 
         $model = new Parte();
         $model->scenario = $model::SCENARIO_SEARCHINDEX;
+        $years = Aniolectivo::find()->all();
 
         if(isset($param['Parte']['fecha']))
             $model->fecha = $param['Parte']['fecha'];
@@ -191,7 +194,8 @@ class ParteController extends Controller
             'param' => Yii::$app->request->queryParams,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'preceptorias' => Preceptoria::find()->all()
+            'preceptorias' => Preceptoria::find()->all(),
+            'years' => $years,
         ]);
     }
 
@@ -258,6 +262,7 @@ class ParteController extends Controller
             
 
         $model = new Parte();
+        $tiposparte = Tipoparte::find()->all();
         
         if ($model->load(Yii::$app->request->post())) {
             $model->fecha = Yii::$app->formatter->asDate($model->fecha, 'yyyy-MM-dd');
@@ -271,10 +276,12 @@ class ParteController extends Controller
             return $this->renderAjax('create', [
                 'model' => $model,
                 'precepx' => $precepx,
+                'tiposparte' => $tiposparte,
             ]);
         return $this->render('create', [
                 'model' => $model,
                 'precepx' => $precepx,
+                'tiposparte' => $tiposparte,
             ]);
         
 
@@ -291,6 +298,7 @@ class ParteController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $tiposparte = Tipoparte::find()->all();
         if (isset ($_REQUEST['precepx'])) {
             $precepx = $_REQUEST['precepx'] ;
             $precepx=Preceptoria::find()
@@ -308,6 +316,7 @@ class ParteController extends Controller
         return $this->render('update', [
             'model' => $model,
             'precepx' => $precepx,
+            'tiposparte' => $tiposparte,
         ]);
     }
 
@@ -334,6 +343,7 @@ class ParteController extends Controller
 
         $model = new Detalleparte();
         $model->scenario = $model::SCENARIO_CONTROLREGENCIA;
+        $years = Aniolectivo::find()->all();
 
         if(isset($param['Detalleparte']['anio']))
             $model->anio = $param['Detalleparte']['anio'];
@@ -348,6 +358,7 @@ class ParteController extends Controller
         return $this->render('controlregencia', [
             'model' => $model,
             'searchModel' => $searchModel,
+            'years' => $years,
             'dataProvider' => $dataProvider,
             'param' => Yii::$app->request->queryParams,
             'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),
@@ -364,6 +375,7 @@ class ParteController extends Controller
 
         $model = new Detalleparte();
         $model->scenario = $model::SCENARIO_CONTROLREGENCIA;
+        $years = Aniolectivo::find()->all();
 
         if(isset($param['Detalleparte']['anio']))
             $model->anio = $param['Detalleparte']['anio'];
@@ -379,6 +391,7 @@ class ParteController extends Controller
             'model' => $model,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'years' => $years,
             'param' => Yii::$app->request->queryParams,
             'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),
             'estadoinasistencia' => Estadoinasistencia::find()->where(['<=','id',Globales::ESTADOINASIST_REGREC])->all(),
@@ -395,6 +408,7 @@ class ParteController extends Controller
 
         $model = new Detalleparte();
         $model->scenario = $model::SCENARIO_CONTROLREGENCIA;
+        $years = Aniolectivo::find()->all();
 
         if(isset($param['Detalleparte']['anio']))
             $model->anio = $param['Detalleparte']['anio'];
@@ -410,6 +424,7 @@ class ParteController extends Controller
             'dataProvider' => $dataProvider,
             'model' => $model,
             'searchModel' => $searchModel,
+            'years' => $years,
             
             'param' => Yii::$app->request->queryParams,
             'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),

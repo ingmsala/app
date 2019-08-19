@@ -100,6 +100,7 @@ $this->registerJs("
         'docentes' => $docentes,
         'estadoinasistencia' => $estadoinasistencia,
         'param' => $param,
+        'years' => $years,
         'origen' => 'controlacademica',
     ]) ?>
 

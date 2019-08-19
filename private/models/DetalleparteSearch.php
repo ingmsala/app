@@ -358,10 +358,10 @@ class DetalleparteSearch extends Detalleparte
     {
         
         $sql='
-            SELECT MONTH(p.fecha) as meses, COUNT( dp.falta ) AS faltas
+            SELECT MONTH(p.fecha) as meses, COUNT( dp.falta ) AS faltas, COUNT( DISTINCT  p.fecha ) AS diasclase
             FROM parte p
             INNER JOIN detalleparte dp ON dp.parte = p.id
-            WHERE dp.falta =1
+            WHERE (dp.falta =1 OR dp.falta =2)
             AND YEAR( p.fecha ) ='.$anio.'
             GROUP BY MONTH(p.fecha)';
 
@@ -654,7 +654,7 @@ class DetalleparteSearch extends Detalleparte
                 FROM detalleparte dp
                 LEFT JOIN parte p ON dp.parte=p.id
                 LEFT JOIN division d ON dp.division=d.id
-                WHERE dp.falta = 1
+                WHERE (dp.falta = 1 or dp.falta = 2)
                 AND YEAR( p.fecha ) = '.$anio;
 
         ($mes != 0) ? 

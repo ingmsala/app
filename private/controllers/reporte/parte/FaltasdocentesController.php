@@ -14,6 +14,7 @@ use yii\filters\VerbFilter;
 use app\models\Genero;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use app\modules\optativas\models\Aniolectivo;
 
 class FaltasdocentesController extends \yii\web\Controller
 {
@@ -60,6 +61,7 @@ class FaltasdocentesController extends \yii\web\Controller
 	        $dataProvider = $searchModel->providerfaltasdocentes($mes, $anio, $docente);
             $model = new Detalleparte();
             $param = Yii::$app->request->queryParams;
+            $years = Aniolectivo::find()->all();
             	        
 	        return $this->render('index', 
 	        [
@@ -71,6 +73,7 @@ class FaltasdocentesController extends \yii\web\Controller
                 'model' => $model,
                 'param' => $param,
                 'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),
+                'years' => $years,
 	        ]);
 	    }
 

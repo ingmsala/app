@@ -61,11 +61,11 @@ if(in_array (Yii::$app->user->identity->role, [1,4]))
                          return '<span class="label label-info">MAÑANA</span>';
                     }elseif($model['desde'] <= $fourdays &&  $model['desde'] > $hoy){
                             return Yii::$app->formatter->asDate($model['desde'], 'dd/MM/yyyy').'<br /><span class="label label-warning">PRÓXIMAMENTE</span>';
-                    }elseif($model['desde'] <= $fourdays){
+                    }elseif($model['desde'] <= $fourdays && $model['hasta'] >= $hoy){
                             return Yii::$app->formatter->asDate($model['desde'], 'dd/MM/yyyy').'<br /><span class="label label-danger">En curso</span>';
                         }   
                     return Yii::$app->formatter->asDate($model['desde'], 'dd/MM/yyyy');
-                }
+                } 
             ],
             [
                 'label' => 'Hasta',
