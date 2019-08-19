@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Novedadesparte;
 use app\models\Tiponovedad;
+use app\models\NotificacionSearch;
 use app\models\Estadonovedad;
 use app\models\Estadoxnovedad;
 use app\models\Parte;
@@ -149,7 +150,20 @@ class NovedadesparteController extends Controller
                     $text = ' - N° de Aula o espacio: '.Yii::$app->request->post()["aulaoespacio"];
                     $text .= ' - Banco: '.Yii::$app->request->post()["banco"];
                     $model->descripcion = $text.' - '.$model->descripcion;
+
+                    $novs = new NotificacionSearch(); 
+                    $nov = $novs::providerXuserEspecifico(43);
+                    $nov->cantidad = $nov->cantidad + 1;
+                    $nov->save();
                 }
+            }
+
+            if (in_array($model->tiponovedad, [1,4,5])){
+
+                $novs = new NotificacionSearch(); 
+                $nov = $novs::providerXuserEspecifico(3);
+                $nov->cantidad = $nov->cantidad + 1;
+                $nov->save();
             }
 
             if($model->save()){
@@ -160,6 +174,9 @@ class NovedadesparteController extends Controller
                 $modelexn->novedadesparte = $model->id;
                 $modelexn->fecha = date("Y-m-d");
                 if($modelexn->save()){
+
+                    
+
                     Yii::$app->session->setFlash('success', "Se guardó correctamente la novedad.");
                     return $this->redirect(['/parte/view', 'id' => $model->parte]);
                 }
@@ -260,6 +277,10 @@ class NovedadesparteController extends Controller
                     ->where(['<>', 'id', 1])
                     ->all();*/
         
+        $novs = new NotificacionSearch(); 
+        $nov = $novs::providerXuser();
+        $nov->cantidad = 0;
+        $nov->save();
         return $this->render('panelnovedades', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -288,10 +309,47 @@ class NovedadesparteController extends Controller
 
         $modelexn->save();
         
+        if($model->tiponovedad == 2 || $model->tiponovedad == 3){
+            $forzarpreceptoria = [9,10,11,6,7,8];
+            $preceptoria = $model->parte0->preceptoria;
+            
+            $novs = new NotificacionSearch(); 
+            $nov = $novs::providerXuserEspecifico($forzarpreceptoria[$preceptoria-1]);
+            $nov->cantidad = $nov->cantidad + 1;
+            $nov->save();
+        }
 
         $searchModel = new NovedadesparteSearch();
         $dataProvider = $searchModel->novedadesactivas(Globales::TIPO_NOV_X_USS[3]);
         
         return $this->redirect('index.php?r=novedadesparte/panelnovedades&page='.$page);
+    }
+
+    public function actionNotificacionesnuevas()
+    {
+        try{
+
+            $ns = new NotificacionSearch(); 
+            $nov = $ns::providerXuser();
+            $cantnot = $nov->cantidad;
+            $nov->cantidad = 0;
+            $nov->save();
+            
+        }catch (Exception $e){
+            $cantnot = 0;
+            
+        }
+
+       
+        $searchModel = new NovedadesparteSearch();
+        $dataProvider = $searchModel->novedadesSinNotificar($cantnot);
+        $tiponovedad = $this->tiponovedad();
+        
+        
+        return $this->render('notificationnews', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'tiponovedad' => $tiponovedad,
+        ]);
     }
 }

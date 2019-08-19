@@ -205,4 +205,53 @@ class NovedadesparteSearch extends Novedadesparte
                     ->count();
         return $query;
     }
+
+
+    public function novedadesSinNotificar($cant)
+    {
+        
+        $forzarpreceptoria = [
+            9 => 1,
+            10 => 2,
+            11 => 3,
+            6 => 4,
+            7 => 5,
+            8 => 6,
+            
+        ];
+        $query = Novedadesparte::find()
+                    ->joinWith(['tiponovedad0', 'estadoxnovedads', 'parte0'])
+                    ->where(['<>', 'estadonovedad', 1])
+                    ->andWhere(['parte.preceptoria' => $forzarpreceptoria[Yii::$app->user->identity->id]])
+                    ->andWhere(['in', 'tiponovedad', Globales::TIPO_NOV_X_USS[3]])
+                    ->orderBy('estadoxnovedad.id DESC')
+                    ->limit($cant);
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        //$this->load($id);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'tiponovedad' => $this->tiponovedad,
+            'parte' => $this->parte,
+            
+        ]);
+
+        $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);
+
+        return $dataProvider;
+    }
 }
