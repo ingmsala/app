@@ -8,6 +8,8 @@ use app\models\NotificacionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use app\config\Globales;
 
 /**
  * NotificacionController implements the CRUD actions for Notificacion model.
@@ -17,9 +19,29 @@ class NotificacionController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+       public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
+                    ],
+
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

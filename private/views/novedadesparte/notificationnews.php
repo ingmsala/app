@@ -6,6 +6,7 @@ use kartik\select2\Select2;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
+use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\DetalleparteSearch */
@@ -16,8 +17,19 @@ $this->title = 'Notificaciones';
 ?>
 
 
+
+
+
 <div class="detalleparte-index">
-<?= Html::a('<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>'.' Volver', ['/parte'], ['class' => 'btn btn-default']) ?>
+	<div style="float: right;">
+		<?php 
+
+			(Yii::$app->session->has('urlorigen')) ? $anterior = Yii::$app->session->get('urlorigen') : $anterior = 'index';
+			Yii::$app->session->remove('urlorigen');
+		?>
+		<?= Html::a('<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>', $anterior, ['class' => 'btn btn-default']) ?>
+	</div>
+<div class="clearfix"></div>
 <h3><?= Html::encode($this->title) ?></h3>
 <?php Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
 

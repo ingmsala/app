@@ -31,21 +31,40 @@ AppAsset::register($this);
 </head>
 <body>
     <?php $this->beginBody() ?>
-    
-    <?php 
+
+     <?php 
         Modal::begin([
-            'header' => "<h2 id='modalHeader'></h2>",
-            'id' => 'modal',
+            'header' => "<h2 id='modalHeader'>Notificaciones</h2>",
+            'id' => 'modalLarge',
             'size' => 'modal-lg',
             'options' => [
                 'tabindex' => false,
             ],
+            'clientOptions' => ['backdrop' => 'static', 'keyboard' => false] 
         ]);
 
         echo "<div id='modalContent'></div>";
 
         Modal::end();
     ?>
+    
+    <?php 
+
+$this->registerJs(
+            "$(function() {
+               $('#modalButton22 a').click(function(e) {
+               e.preventDefault();
+               $('.button__badge').hide();
+               $('#modalLarge').modal('show')
+                 .find('.modal-content')
+                 .load($(this).attr('href'));
+                 document.getElementById('modalHeader').innerHTML ='Notificaciones';
+              });
+             });", 
+        yii\web\View::POS_HEAD, 'login-modal');
+
+ ?>
+    
         <?php 
         
 try {
@@ -489,7 +508,7 @@ try {
 
                     ['label' => '<div id="notinews"><span id="button_cont"><i id="glibell" class="glyphicon glyphicon-bell" aria-hidden="true"></i><div style="display:'.$visi.'" class="button__badge">'.$cantnot.'</div></span></div>', 
                     'url' => ['novedadesparte/notificacionesnuevas'], 
-                    //'linkOptions' => ['target'=>'_blank'],
+                    'options' => ['id' => 'modalButton22'],
                     ],                   
                     
                     ['label' => 'Usuario: '.Yii::$app->user->identity->username,

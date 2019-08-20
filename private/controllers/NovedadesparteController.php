@@ -327,6 +327,10 @@ class NovedadesparteController extends Controller
 
     public function actionNotificacionesnuevas()
     {
+        $origen = urldecode(Yii::$app->request->referrer);
+        $existe = strpos($origen, 'index' );
+        if ($existe > 0)
+            Yii::$app->session->set('urlorigen', $origen);
         try{
 
             $ns = new NotificacionSearch(); 
@@ -345,8 +349,8 @@ class NovedadesparteController extends Controller
         $dataProvider = $searchModel->novedadesSinNotificar($cantnot);
         $tiponovedad = $this->tiponovedad();
         
-        
-        return $this->render('notificationnews', [
+
+        return $this->renderAjax('notificationnews', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'tiponovedad' => $tiponovedad,
