@@ -118,7 +118,7 @@ class NovedadesparteSearch extends Novedadesparte
         $query = Novedadesparte::find()
                     ->joinWith(['tiponovedad0', 'estadoxnovedads', 'parte0'])
                     //->where(['activ' => 1])
-                    //->andWhere(['parte' => $id])
+                    ->andWhere(['parte.preceptoria' => $model->preceptoria])
                     ->andWhere(['in', 'tiponovedad', Globales::TIPO_NOV_X_USS[3]])
                     ->andWhere(['or', 
                                 ['and',

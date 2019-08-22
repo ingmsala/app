@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
@@ -48,7 +49,10 @@ Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
         ],
 
         'toolbar'=>[
-            
+            ['content' => 
+                Html::a('<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Imprimir todos', Url::to(['all', 'comision' => $comision]), ['class' => 'btn btn-default'])
+
+            ],
             '{export}',
             
         ],

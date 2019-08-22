@@ -80,6 +80,7 @@ class FichadelalumnoController extends \yii\web\Controller
                 
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
+                'comision' => $comision,
 
             ]);
         }else{
@@ -213,6 +214,142 @@ class FichadelalumnoController extends \yii\web\Controller
         Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');
             return $this->redirect(['/optativas']);
         }
+    }
+
+    public function actionAll($comision){
+        $this->layout = 'print';
+        $salidaimpar = '';
+        $salidapar = '';
+        $impar = true;
+        $searchModel = new MatriculaSearch();
+        //$comision = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
+        $dataProvider = $searchModel->alumnosxcomision($comision);
+        //$salidaimpar =$comision;
+        foreach ($dataProvider->getKeys() as $id) {
+            if($impar)
+                $salidaimpar .= $this->generarFicha($id);
+            else{
+                $salidapar .= $this->generarFicha($id);
+            }
+              $impar = !$impar;
+        }
+        return $this->render('all', [
+                'salidaimpar' => $salidaimpar,
+                'salidapar' => $salidapar,
+               
+            ]);
+    }
+
+    protected function generarFicha($id)
+    {
+         $searchModelInasistencias  = new InasistenciaSearch();
+            $dataProviderInasistencias = $searchModelInasistencias->providerinasistenciasxalumno($id);
+            $comision = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
+
+            $clasescomision = Clase::find()
+                                ->where(['comision' => $comision])
+                                ->orderBy('fecha ASC')
+                                ->all();
+
+            $listClasescomision=ArrayHelper::map($clasescomision,
+                    function($model){
+                        date_default_timezone_set('America/Argentina/Buenos_Aires');
+                        return Yii::$app->formatter->asDate($model->fecha, 'dd/MM');
+                        
+                    },
+                    function($model){
+                        date_default_timezone_set('America/Argentina/Buenos_Aires');
+                        $fecha = date_create($model->fecha);
+                        $hoy = new DateTime("now");
+                        $interval = $fecha->diff($hoy);
+                        $signo = $interval->format('%R');
+                        //$interval = $interval->format('%a');
+                        //$interval = intval($interval);
+                        //return $signo;
+                        if ($signo == '+')
+                            return "P";
+                        else
+                            return '';
+                    }
+            );
+
+            $faltasdelalumno = Inasistencia::find()
+                                ->joinWith(['clase0'])
+                                ->where(['matricula' => $id])
+                                ->andWhere(['clase.comision' => $comision])
+                                ->all();
+
+
+            $listFaltasdelalumno=ArrayHelper::map($faltasdelalumno,
+                    function($model){
+                        date_default_timezone_set('America/Argentina/Buenos_Aires');
+                        return Yii::$app->formatter->asDate($model->clase0->fecha, 'dd/MM');
+                        
+                    },
+                    function($model){
+                        date_default_timezone_set('America/Argentina/Buenos_Aires');
+                        $fecha = date_create($model->clase0->fecha);
+                        $hoy = new DateTime("now");
+                        $interval = $fecha->diff($hoy);
+                        $signo = $interval->format('%R');
+
+                        if ($signo == '+')
+                            return "A";
+                        else
+                            return '';
+                    });
+
+            $listClasescomision = array_merge($listClasescomision, $listFaltasdelalumno);
+            
+           /* $data = [
+                $listClasescomision,
+                
+            ];
+    
+            $dataProviderInasistencias = new ArrayDataProvider([
+                'allModels' => $data,
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+                
+            ]);*/
+            $ids = ArrayHelper::getColumn($listClasescomision, 0);
+            $echodiv='';
+            $i=0;
+            foreach ($listClasescomision as $key => $value) {
+
+                if($value == "P"){
+                    $paneltype = 'success';
+                    $prt = $value;
+                }
+                elseif ($value == "A"){
+                    $paneltype = 'danger';
+                    $prt = '<b>'.$value.'</b>';
+                }
+                else
+                    break;
+                $echodiv .= '<div class="col-md-2 col-lg-2 col-sm-2 col-lx-2">';
+                $echodiv .= '<div class="panel panel-'.$paneltype.'" style="height: 12vh; margin:2px">';
+                $echodiv .= '<div class="panel-heading" style="height: 5vh;">'.'<center>'.$key.'</center>'.'</div>';
+                $echodiv .= '<div class="panel-body"><span class="align-top">';
+                //$echodiv .= Html::checkbox("scripts", $sel, ['label' => 'Se Ausentó', 'value' => $matricula["id"]]);
+                $echodiv .= '<center>'.$prt.'</center>';
+                $echodiv .= '</span></div>
+                                </div>
+                              </div>';
+                $i=$i+1;
+            }
+
+            $searchModelSeguimientos  = new SeguimientoSearch();
+            $dataProviderSeguimientos = $searchModelSeguimientos->seguimientosdelalumno($id);
+
+            return $this->renderAjax('view', [
+                'dataProviderInasistencias' => $dataProviderInasistencias,
+                'listClasescomision' => $listClasescomision,
+                'dataProviderSeguimientos' => $dataProviderSeguimientos,
+                'echodiv' => $echodiv,
+                'model' => $this->findModel($id),
+            ]);
     }
  
     /**

@@ -9,12 +9,19 @@ use yii\widgets\DetailView;
 ?>
 <div class="clase-view" style="margin-top: 20px;">
 
+   <div class="row">
+   	
+   		<div class="col-lg-6">
+   			<?= $salidaimpar ?>
+   		</div>
+
+   		<div class="col-lg-6">
+   			<?= $salidapar ?>
+   		</div>
+
+   </div>
    
-   <?= $this->render('_alumnosxcomision', [
-        'dataProvider' => $dataProvider,
-        'searchModel' => $searchModel,
-        'comision' => $comision,
-        
-    ]) ?>
+
+  
 
 </div>

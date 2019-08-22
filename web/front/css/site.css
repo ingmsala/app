@@ -568,8 +568,11 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
   #print-button, #menucomxdoc, .footer {
     display: none;
   }
-  .matricula-view{
+  .fichadelalumnotable{
     margin-top: -70px;
+    max-height: 100%;
+        overflow: hidden;
+        page-break-after: always;
   }
   #firma, #encabezado {
     display: block;

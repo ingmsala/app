@@ -9,7 +9,7 @@ use yii\widgets\DetailView;
 $this->title = 'Ficha del alumno';
 
 ?>
-<div class="matricula-view">
+<div class="fichadelalumnotable">
     <center>
         <div id="encabezado">
             <img src="assets/images/logo-encabezado.png" />

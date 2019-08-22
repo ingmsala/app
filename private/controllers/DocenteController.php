@@ -114,8 +114,12 @@ class DocenteController extends Controller
         $model = new Docente();
         $generos = Genero::find()->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->apellido = strtoupper($model->apellido);
+            $model->nombre = strtoupper($model->nombre);
+            if($model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -136,8 +140,12 @@ class DocenteController extends Controller
         $model = $this->findModel($id);
         $generos = Genero::find()->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->apellido = strtoupper($model->apellido);
+            $model->nombre = strtoupper($model->nombre);
+            if($model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
