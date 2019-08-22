@@ -227,9 +227,9 @@ class FichadelalumnoController extends \yii\web\Controller
         //$salidaimpar =$comision;
         foreach ($dataProvider->getKeys() as $id) {
             if($impar)
-                $salidaimpar .= $this->generarFicha($id);
+                $salidaimpar .= $this->generarFicha($id, $comision);
             else{
-                $salidapar .= $this->generarFicha($id);
+                $salidapar .= $this->generarFicha($id, $comision);
             }
               $impar = !$impar;
         }
@@ -240,11 +240,11 @@ class FichadelalumnoController extends \yii\web\Controller
             ]);
     }
 
-    protected function generarFicha($id)
+    protected function generarFicha($id, $comision)
     {
          $searchModelInasistencias  = new InasistenciaSearch();
             $dataProviderInasistencias = $searchModelInasistencias->providerinasistenciasxalumno($id);
-            $comision = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
+            //$comision = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
 
             $clasescomision = Clase::find()
                                 ->where(['comision' => $comision])
