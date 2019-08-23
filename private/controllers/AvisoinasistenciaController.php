@@ -106,13 +106,22 @@ class AvisoinasistenciaController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             
             $desdeexplode = explode("/",$model->desde);
-            $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
+
+            if(count($desdeexplode) > 1){
+                $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
+                $model->desde = $newdatedesde;
+            }else{
+                $model->desde = null;
+            }
             
             $hastaexplode = explode("/",$model->hasta);
-            $newdatehasta = date("Y-m-d", mktime(0, 0, 0, $hastaexplode[1], $hastaexplode[0], $hastaexplode[2]));
-            $model->desde = $newdatedesde;
-            $model->hasta = $newdatehasta;
-            //return $nuevafecha2;
+            if(count($hastaexplode) > 1){
+                $newdatehasta = date("Y-m-d", mktime(0, 0, 0, $hastaexplode[1], $hastaexplode[0], $hastaexplode[2]));
+                $model->hasta = $newdatehasta;
+            }else{
+                $model->hasta = null;
+            }
+            
             if ($model->save())
                 return $this->redirect(['index']);
         }
@@ -135,15 +144,41 @@ class AvisoinasistenciaController extends Controller
         $model = $this->findModel($id);
         $docentes = Docente::find()->all();
 
+            $desdeexplode1 = explode("-",$model->desde);
+            
+            if(count($desdeexplode1) > 1){
+                $newdatedesde1 = date("d/m/Y", mktime(0, 0, 0, $desdeexplode1[1], $desdeexplode1[2], $desdeexplode1[0]));
+                $model->desde = $newdatedesde1;
+            }else{
+                $model->desde = null;
+            }
+
+            $hastaexplode1 = explode("-",$model->hasta);
+
+            if(count($hastaexplode1) > 1){
+                $newdatehasta1 = date("d/m/Y", mktime(0, 0, 0, $hastaexplode1[1], $hastaexplode1[2], $hastaexplode1[0]));
+                $model->hasta = $newdatehasta1;
+            }else{
+                $model->hasta = null;
+            }
+
         if ($model->load(Yii::$app->request->post())) {
             
             $desdeexplode = explode("/",$model->desde);
-            $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
-            
+            if(count($desdeexplode) > 1){
+                $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
+                $model->desde = $newdatedesde;
+            }else{
+                $model->desde = null;
+            }
+
             $hastaexplode = explode("/",$model->hasta);
-            $newdatehasta = date("Y-m-d", mktime(0, 0, 0, $hastaexplode[1], $hastaexplode[0], $hastaexplode[2]));
-            $model->desde = $newdatedesde;
-            $model->hasta = $newdatehasta;
+            if(count($hastaexplode) > 1){
+                $newdatehasta = date("Y-m-d", mktime(0, 0, 0, $hastaexplode[1], $hastaexplode[0], $hastaexplode[2]));
+                $model->hasta = $newdatehasta;
+            }else{
+                $model->hasta = null;
+            }
             //return $nuevafecha2;
             if ($model->save())
                 return $this->redirect(['index']);

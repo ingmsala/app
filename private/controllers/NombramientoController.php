@@ -176,11 +176,51 @@ class NombramientoController extends Controller
         $extensiones = Extension::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
+            
+            
+            $fechaInicio_explode = explode("/",$model->fechaInicio);
+            //return count($fechaInicio_explode);
+            if(count($fechaInicio_explode) > 1){
+                $fechaInicio_nuevo = date("Y-m-d", mktime(0, 0, 0, $fechaInicio_explode[1], $fechaInicio_explode[0], $fechaInicio_explode[2]));
+                $model->fechaInicio = $fechaInicio_nuevo;
+            }else{
+                $model->fechaInicio = null;
+            }
+            
+            $fechaFin_explode = explode("/",$model->fechaFin);
+
+            if(count($fechaFin_explode) > 1){
+                $fechaFin_nuevo = date("Y-m-d", mktime(0, 0, 0, $fechaFin_explode[1], $fechaFin_explode[0], $fechaFin_explode[2]));
+                $model->fechaFin = $fechaFin_nuevo;
+            }else{
+                $model->fechaFin = null;
+            }
+
+            $fechaInicioext_explode = explode("/",$model->fechaInicioext);
+            //return count($fechaInicioext_explode);
+            if(count($fechaInicioext_explode) > 1){
+                $fechaInicioext_nuevo = date("Y-m-d", mktime(0, 0, 0, $fechaInicioext_explode[1], $fechaInicioext_explode[0], $fechaInicioext_explode[2]));
+                $model->fechaInicioext = $fechaInicioext_nuevo;
+            }else{
+                $model->fechaInicioext = null;
+            }
+            
+            $fechaFinext_explode = explode("/",$model->fechaFinext);
+
+            if(count($fechaFinext_explode) > 1){
+                $fechaFinext_nuevo = date("Y-m-d", mktime(0, 0, 0, $fechaFinext_explode[1], $fechaFinext_explode[0], $fechaFinext_explode[2]));
+                $model->fechaFinext = $fechaFinext_nuevo;
+            }else{
+                $model->fechaFinext = null;
+            }
+                        
+            //return $nuevafecha2;
             $model->activo = 1;
             if($model->save())
                 return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        
         return $this->render('create', [
             'model' => $model,
 
@@ -214,8 +254,83 @@ class NombramientoController extends Controller
         $suplentes = Nombramiento::find()->all();
         $extensiones = Extension::find()->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $fechaInicio_explode = explode("-",$model->fechaInicio);
+            
+        if(count($fechaInicio_explode) > 1){
+            $fechaInicio_nuevo = date("d/m/Y", mktime(0, 0, 0, $fechaInicio_explode[1], $fechaInicio_explode[2], $fechaInicio_explode[0]));
+            $model->fechaInicio = $fechaInicio_nuevo;
+        }else{
+            $model->fechaInicio = null;
+        }
+
+        $fechaFin_explode = explode("-",$model->fechaFin);
+        if(count($fechaFin_explode) > 1){
+            $fechaFin_nuevo = date("d/m/Y", mktime(0, 0, 0, $fechaFin_explode[1], $fechaFin_explode[2], $fechaFin_explode[0]));
+            $model->fechaFin = $fechaFin_nuevo;
+        }else{
+            $model->fechaFin = null;
+        }
+
+        $fechaInicioext_explode = explode("-",$model->fechaInicioext);
+            
+        if(count($fechaInicioext_explode) > 1){
+            $fechaInicioext_nuevo = date("d/m/Y", mktime(0, 0, 0, $fechaInicioext_explode[1], $fechaInicioext_explode[2], $fechaInicioext_explode[0]));
+            $model->fechaInicioext = $fechaInicioext_nuevo;
+        }else{
+            $model->fechaInicioext = null;
+        }
+
+        $fechaFinext_explode = explode("-",$model->fechaFinext);
+        if(count($fechaFinext_explode) > 1){
+            $fechaFinext_nuevo = date("d/m/Y", mktime(0, 0, 0, $fechaFinext_explode[1], $fechaFinext_explode[2], $fechaFinext_explode[0]));
+            $model->fechaFinext = $fechaFinext_nuevo;
+        }else{
+            $model->fechaFinext = null;
+        }
+
+
+
+        if ($model->load(Yii::$app->request->post())) {
+
+
+            $fechaInicio_explode = explode("/",$model->fechaInicio);
+            //return count($fechaInicio_explode);
+            if(count($fechaInicio_explode) > 1){
+                $fechaInicio_nuevo = date("Y-m-d", mktime(0, 0, 0, $fechaInicio_explode[1], $fechaInicio_explode[0], $fechaInicio_explode[2]));
+                $model->fechaInicio = $fechaInicio_nuevo;
+            }else{
+                $model->fechaInicio = null;
+            }
+            
+            $fechaFin_explode = explode("/",$model->fechaFin);
+
+            if(count($fechaFin_explode) > 1){
+                $fechaFin_nuevo = date("Y-m-d", mktime(0, 0, 0, $fechaFin_explode[1], $fechaFin_explode[0], $fechaFin_explode[2]));
+                $model->fechaFin = $fechaFin_nuevo;
+            }else{
+                $model->fechaFin = null;
+            }
+
+            $fechaInicioext_explode = explode("/",$model->fechaInicioext);
+            //return count($fechaInicioext_explode);
+            if(count($fechaInicioext_explode) > 1){
+                $fechaInicioext_nuevo = date("Y-m-d", mktime(0, 0, 0, $fechaInicioext_explode[1], $fechaInicioext_explode[0], $fechaInicioext_explode[2]));
+                $model->fechaInicioext = $fechaInicioext_nuevo;
+            }else{
+                $model->fechaInicioext = null;
+            }
+            
+            $fechaFinext_explode = explode("/",$model->fechaFinext);
+
+            if(count($fechaFinext_explode) > 1){
+                $fechaFinext_nuevo = date("Y-m-d", mktime(0, 0, 0, $fechaFinext_explode[1], $fechaFinext_explode[0], $fechaFinext_explode[2]));
+                $model->fechaFinext = $fechaFinext_nuevo;
+            }else{
+                $model->fechaFinext = null;
+            }
+            
+            if($model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
         }
 
         if(Yii::$app->request->isAjax){

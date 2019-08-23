@@ -88,7 +88,7 @@ $form->field($model, 'fechaInicioext')->widget(DatePicker::classname(), [
     'readonly' => true,
     'pluginOptions' => [
         'autoclose'=>true,
-        'format' => 'yyyy-mm-dd',
+        'format' => 'dd/mm/yyyy',
         
     ],
     
@@ -105,7 +105,7 @@ $form->field($model, 'fechaFinext')->widget(DatePicker::classname(), [
     'readonly' => true,
     'pluginOptions' => [
         'autoclose'=>true,
-        'format' => 'yyyy-mm-dd',
+        'format' => 'dd/mm/yyyy',
         
     ],
     
@@ -155,7 +155,7 @@ $form->field($model, 'fechaInicio')->widget(DatePicker::classname(), [
     'readonly' => true,
     'pluginOptions' => [
         'autoclose'=>true,
-        'format' => 'yyyy-mm-dd',
+        'format' => 'dd/mm/yyyy',
         
     ],
     
@@ -172,7 +172,7 @@ $form->field($model, 'fechaFin')->widget(DatePicker::classname(), [
     'readonly' => true,
     'pluginOptions' => [
         'autoclose'=>true,
-        'format' => 'yyyy-mm-dd',
+        'format' => 'dd/mm/yyyy',
         
     ],
     
