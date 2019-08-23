@@ -19,11 +19,10 @@ $this->title = 'Ficha del Alumno';
 
 <div class="matricula-index">
 
-    
-<?php 
 
 
-Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
+
+
     
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -111,10 +110,10 @@ Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
                         
            
         ],
-        'pjax' => true,
+        
     ]);
 
-Pjax::end();
+
  ?>
 
     

@@ -172,9 +172,25 @@ $this->title = 'Nombramientos';
         //'floatHeader'=>true,
         'summary'=>false,
         'exportConfig' => [
-            GridView::EXCEL => ['label' => 'Excel'],
+            GridView::EXCEL => [
+                'label' => 'Excel', 
+                'filename' =>Html::encode($this->title),
+                'config' => [
+                    'worksheet' => Html::encode($this->title),
+            
+                ]
+            ],
             //GridView::HTML => [// html settings],
-            //GridView::PDF => ['label' => 'PDF'],
+            GridView::PDF => ['label' => 'PDF',
+                'filename' =>Html::encode($this->title),
+                'options' => ['title' => 'Portable Document Format'],
+                'config' => [
+                    'methods' => [ 
+                        'SetHeader'=>[Html::encode($this->title).' - Colegio Nacional de Monserrat'], 
+                        'SetFooter'=>[date('d/m/Y').' - Página '.'{PAGENO}'],
+                    ]
+                ],
+            ],
         ]
         
     ]); ?>

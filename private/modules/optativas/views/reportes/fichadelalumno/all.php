@@ -11,14 +11,11 @@ use yii\widgets\DetailView;
 
    <div class="row">
    	
-   		<div class="col-lg-6">
+   		<div class="col-lg-12">
    			<?= $salidaimpar ?>
    		</div>
 
-   		<div class="col-lg-6">
-   			<?= $salidapar ?>
-   		</div>
-
+   		
    </div>
    
 

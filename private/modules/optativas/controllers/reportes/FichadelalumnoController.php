@@ -20,6 +20,7 @@ use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 use \Datetime;
+use kartik\mpdf\Pdf;
 
 
 
@@ -216,28 +217,98 @@ class FichadelalumnoController extends \yii\web\Controller
         }
     }
 
+
+
     public function actionAll($comision){
-        $this->layout = 'print';
+        //$this->layout = 'print';
+        Yii::$app->getModule('debug')->instance->allowedIPs = [];
         $salidaimpar = '';
         $salidapar = '';
         $impar = true;
         $searchModel = new MatriculaSearch();
         //$comision = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         $dataProvider = $searchModel->alumnosxcomision($comision);
+
+
+        $com = Comision::find()
+                                ->where(['id' => $comision])
+                                ->one();
+        $optativa = $com->optativa0->aniolectivo0->nombre.' - '.$com->optativa0->actividad0->nombre;
         //$salidaimpar =$comision;
         foreach ($dataProvider->getKeys() as $id) {
-            if($impar)
+            if($impar){
+                            $salidaimpar .= $this->generarFicha($id, $comision);
+                            //$salidaimpar .= '<pagebreak/>';
+            }else{
                 $salidaimpar .= $this->generarFicha($id, $comision);
-            else{
-                $salidapar .= $this->generarFicha($id, $comision);
+                //$salidapar .= '<pagebreak/>';
             }
-              $impar = !$impar;
+              $impar = $impar;
         }
-        return $this->render('all', [
+        $content = $this->renderAjax('all', [
                 'salidaimpar' => $salidaimpar,
                 'salidapar' => $salidapar,
                
             ]);
+
+        $pdf = new Pdf([
+        // set to use core fonts only
+        'mode' => Pdf::MODE_CORE, 
+        // A4 paper format
+        'format' => Pdf::FORMAT_A4, 
+        // portrait orientation
+        'orientation' => Pdf::ORIENT_PORTRAIT, 
+        // stream to browser inline
+        'destination' => Pdf::DEST_DOWNLOAD, 
+        'filename' => $optativa.'.pdf', 
+        // your html content input
+        'content' => $content,  
+        // format content from your own css file if needed or use the
+        // enhanced bootstrap css built by Krajee for mPDF formatting 
+        //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+        // any css to be embedded if required
+        'cssInline' => '
+                .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
+                        float: left;
+                    }
+
+                .col-sm-2 {
+                        width: 7%;
+                        
+                   } 
+                .fichadelalumnotable{
+                    margin-top: -70px;
+                    max-height: 100%;
+                    overflow: hidden;
+                    page-break-after: always;
+                }
+
+                .pull-right {
+                    display: none;
+                }
+                #firma{ 
+                    
+                    margin-top: 50px;
+                    text-align: center;
+                }
+
+                #encabezado{ 
+                    margin: auto;
+                    
+                    width: 200px;
+
+                }', 
+         // set mPDF properties on the fly
+        'options' => ['title' => 'Colegio Nacional de Monserrat'],
+         // call mPDF methods on the fly
+        'methods' => [ 
+            'SetHeader'=>['Colegio Nacional de Monserrat'], 
+            'SetFooter'=>['Espacios Optativos'],
+        ]
+    ]);
+    
+    // return the pdf output as per the destination setting
+    return $pdf->render(); 
     }
 
     protected function generarFicha($id, $comision)
@@ -367,4 +438,69 @@ class FichadelalumnoController extends \yii\web\Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
+
+    public function actionFinal (){
+        $mpdf = new Pdf([
+            'format' => 'A4-L',
+            'marginLeft' => 0,
+            'marginRight' => 0,
+            'marginTop' => 0,
+            'marginBottom' => 0,
+            'marginHeader' => 0,
+            'marginFooter' => 0,
+        ]);
+
+    //$mpdf->SetImportUse();
+
+  
+
+    //$mpdf->SetDisplayMode('fullpage');
+
+    $pagecount = $mpdf->SetSourceFile('D:\Mariano\Mis Descargas\Chrome\index (29).pdf');
+    $pp = GetBookletPages($pagecount);
+
+    foreach ($pp as $v) {
+        $mpdf->AddPage();
+
+        if ($v[0] > 0 && $v[0] <= $pagecount) {
+            $tplIdx = $mpdf->ImportPage($v[0], 0, 0, $ow, $oh);
+            $mpdf->UseTemplate($tplIdx, 0, 0, $pw, $ph);
+        }
+
+        if ($v[1] > 0 && $v[1] <= $pagecount) {
+            $tplIdx = $mpdf->ImportPage($v[1], 0, 0, $ow, $oh);
+            $mpdf->UseTemplate($tplIdx, $pw, 0, $pw, $ph);
+        }
+    }
+
+    $mpdf->Output();
+    exit;
+    }
+    function GetBookletPages($np, $backcover = true) {
+        $lastpage = $np;
+        $np = 4 * ceil($np / 4);
+        $pp = array();
+
+        for ($i = 1; $i <= $np / 2; $i++) {
+
+            $p1 = $np - $i + 1;
+
+            if ($backcover) {
+                if ($i == 1) {
+                    $p1 = $lastpage;
+                } elseif ($p1 >= $lastpage) {
+                    $p1 = 0;
+                }
+            }
+
+            $pp[] = ($i % 2 == 1)
+                ? array( $p1,  $i )
+                : array( $i, $p1 );
+        }
+
+        return $pp;
+    }
+    
 }
