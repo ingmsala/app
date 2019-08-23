@@ -77,7 +77,7 @@ $form->field($model, 'fecha')->widget(DatePicker::classname(), [
     'readonly' => true,
     'pluginOptions' => [
         'autoclose'=>true,
-        'format' => 'yyyy-mm-dd',
+        'format' => 'dd/mm/yyyy',
         'endDate' => "1d",
         
     ],

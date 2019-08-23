@@ -265,7 +265,11 @@ class ParteController extends Controller
         $tiposparte = Tipoparte::find()->all();
         
         if ($model->load(Yii::$app->request->post())) {
-            $model->fecha = Yii::$app->formatter->asDate($model->fecha, 'yyyy-MM-dd');
+            //$model->fecha = Yii::$app->formatter->asDate($model->fecha, 'yyyy-MM-dd');
+
+            $desdeexplode = explode("/",$model->fecha);
+            $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
+            $model->fecha = $newdatedesde;
 
             if ($model->save()){
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -309,8 +313,13 @@ class ParteController extends Controller
                 
                 $precepx=Preceptoria::find()->all();
         }
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $desdeexplode = explode("/",$model->fecha);
+            $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
+            $model->fecha = $newdatedesde;
+            if($model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [

@@ -103,8 +103,18 @@ class AvisoinasistenciaController extends Controller
         $model = new Avisoinasistencia();
         $docentes = Docente::find()->orderBy('apellido, nombre')->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $desdeexplode = explode("/",$model->desde);
+            $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
+            
+            $hastaexplode = explode("/",$model->hasta);
+            $newdatehasta = date("Y-m-d", mktime(0, 0, 0, $hastaexplode[1], $hastaexplode[0], $hastaexplode[2]));
+            $model->desde = $newdatedesde;
+            $model->hasta = $newdatehasta;
+            //return $nuevafecha2;
+            if ($model->save())
+                return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -125,8 +135,18 @@ class AvisoinasistenciaController extends Controller
         $model = $this->findModel($id);
         $docentes = Docente::find()->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $desdeexplode = explode("/",$model->desde);
+            $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
+            
+            $hastaexplode = explode("/",$model->hasta);
+            $newdatehasta = date("Y-m-d", mktime(0, 0, 0, $hastaexplode[1], $hastaexplode[0], $hastaexplode[2]));
+            $model->desde = $newdatedesde;
+            $model->hasta = $newdatehasta;
+            //return $nuevafecha2;
+            if ($model->save())
+                return $this->redirect(['index']);
         }
 
         return $this->render('update', [

@@ -44,7 +44,7 @@ use kartik\date\DatePicker;
 		    'readonly' => true,
 		    'pluginOptions' => [
 		        'autoclose'=>true,
-		        'format' => 'yyyy-mm-dd',
+		        'format' => 'dd/mm/yyyy',
 		        		        
 		    ],
 		    
@@ -58,7 +58,7 @@ use kartik\date\DatePicker;
 		    'readonly' => true,
 		    'pluginOptions' => [
 		        'autoclose'=>true,
-		        'format' => 'yyyy-mm-dd',
+		        'format' => 'dd/mm/yyyy',
 		        		        
 		    ],
 		    

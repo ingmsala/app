@@ -221,7 +221,9 @@ class FichadelalumnoController extends \yii\web\Controller
 
     public function actionAll($comision){
         //$this->layout = 'print';
-        Yii::$app->getModule('debug')->instance->allowedIPs = [];
+        if (YII_ENV_DEV) {
+            Yii::$app->getModule('debug')->instance->allowedIPs = [];
+        }
         $salidaimpar = '';
         $salidapar = '';
         $impar = true;
