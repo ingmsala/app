@@ -47,7 +47,7 @@ class MatriculaSearch extends Matricula
                 ->where(true)
                 ->andWhere(
 
-                    (isset($params['Matricula']['aniolectivo']) && $params['Matricula']['aniolectivo'] != '') ? ['optativa.aniolectivo' => $params['Matricula']['aniolectivo']] : true)
+                    (isset($params['Matricula']['aniolectivo']) && $params['Matricula']['aniolectivo'] != '') ? ['optativa.aniolectivo' => $params['Matricula']['aniolectivo']] : ['optativa.aniolectivo' => 0])
                 ->andWhere(
 
                     (isset($params['Matricula']['comision']) && $params['Matricula']['comision'] != '') ? ['comision' => $params['Matricula']['comision']] : true)

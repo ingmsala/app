@@ -1,16 +1,18 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use kartik\grid\GridView;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
+use kartik\depdrop\DepDrop;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\optativas\models\MatriculaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Matrículas';
+$this->title = 'Matrículas - Espacios Optativos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="matricula-index">
@@ -67,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                    
                 </h4>
             </div>
-            <div id="collapseOne" class="panel-collapse collapse">
+            <div id="collapseOne" class="panel-collapse collapse in">
 
                 <div class="row">
                     <div class="col-md-6">
@@ -83,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 $form->field($model, 'aniolectivo')->widget(Select2::classname(), [
                                     'data' => $listaniolectivos,
-                                    'options' => ['placeholder' => 'Seleccionar...'],
+                                    'options' => ['placeholder' => 'Seleccionar...', 'id' => 'anio-id'],
                                     //'value' => 1,
                                     'pluginOptions' => [
                                         'allowClear' => true
@@ -94,13 +96,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             <?= 
 
-                                $form->field($model, 'comision')->widget(Select2::classname(), [
-                                    'data' => $listComisiones,
-                                    'options' => ['placeholder' => 'Seleccionar...'],
+                                $form->field($model, 'comision')->widget(DepDrop::classname(), [
+                                    //'data' => $listComisiones,
+                                    'options'=>['id'=>'comision-id'],
                                     //'value' => 1,
-                                    'pluginOptions' => [
-                                        'allowClear' => true
-                                    ],
+                                    'pluginOptions'=>[
+                                        'depends'=>['anio-id'],
+                                        'placeholder'=>'(Todos)',
+                                        'url'=>Url::to(['/optativas/comision/comxanio'])
+                                    ]
                                 ])->label("Espacio Optativo");
 
                             ?>
@@ -131,13 +135,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
         'exportConfig' => [
             GridView::EXCEL => [
-                'label' => 'Excel',
+                'label' => 'Excel', 
                 'filename' =>Html::encode($this->title),
-                
-                //'alertMsg' => false,
-            ],
+                'config' => [
+                    'worksheet' => Html::encode($this->title),
             
-
+                ]
+            ],
+            //GridView::HTML => [// html settings],
+            GridView::PDF => ['label' => 'PDF',
+                'filename' =>Html::encode($this->title),
+                'options' => ['title' => 'Portable Document Format'],
+                'config' => [
+                    'methods' => [ 
+                        'SetHeader'=>[Html::encode($this->title).' - Colegio Nacional de Monserrat'], 
+                        'SetFooter'=>[date('d/m/Y').' - Página '.'{PAGENO}'],
+                    ]
+                ],
+            ],
         ],
 
         'toolbar'=>[

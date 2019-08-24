@@ -11,6 +11,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 
 /**
  * ComisionController implements the CRUD actions for Comision model.
@@ -25,10 +26,10 @@ class ComisionController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'comxanio'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'comxanio'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -167,5 +168,43 @@ class ComisionController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionComxanio()
+    {
+        $searchModel = new ComisionSearch();
+        
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+
+        if (isset($_POST['depdrop_parents'])) {
+            
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+
+                $anio_id = $parents[0];
+                $comisiones = Comision::find()
+                    ->joinWith(['optativa0', 'optativa0.aniolectivo0', 'optativa0.actividad0'])
+                    ->where(['optativa.aniolectivo' => $anio_id])
+                    ->orderBy('actividad.nombre')->all();
+
+                $listComisiones=ArrayHelper::toArray($comisiones, [
+                    'app\modules\optativas\models\Comision' => [
+                        'id',
+                        'name' => function($comision) {
+                            return $comision['optativa0']['actividad0']['nombre'].' ('.$comision['nombre'].')';},
+                    ],
+                ]);
+                $out = $listComisiones;
+                return ['output'=>$out, 'selected'=>''];
+            }
+
+        }
+
+        return ['output'=>'', 'selected'=>''];
+
+        
+        
+        
     }
 }

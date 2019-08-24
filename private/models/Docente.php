@@ -74,7 +74,7 @@ class Docente extends \yii\db\ActiveRecord
 
     public function getCatedras()
     {
-        return $this->hasMany(Catedra::className(), ['id' => 'docente'])->via('detallecatedras');
+        return $this->hasMany(Catedra::className(), ['id' => 'catedra'])->via('detallecatedras');
     }
 
     public function getCondicions()

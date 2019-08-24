@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use kartik\select2\Select2;
+use kartik\depdrop\DepDrop;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Catedra */
@@ -22,7 +23,7 @@ use kartik\select2\Select2;
     
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($modelpropuesta, 'id')->dropDownList($listPropuestas, ['prompt'=>'Seleccionar...',
+    <?= $form->field($modelpropuesta, 'id')->dropDownList($listPropuestas, ['prompt'=>'Seleccionar...', 'id' => 'propuesta-id',/*
     'onchange'=>'       
                         /*$( "#'.Html::getInputId($modelpropuesta, 'nombre').'" ).val( $(this).val() );
                         $.get( "'.Url::toRoute('/actividad/xpropuesta').'", { id: $(this).val() } )
@@ -30,7 +31,7 @@ use kartik\select2\Select2;
                                 $( "#'.Html::getInputId($model, 'actividad').'" ).html( data );
                                 
                             }
-                        );*/
+                        );
                         $.get( "'.Url::toRoute('/division/xpropuesta').'", { id: $(this).val() } )
                             .done(function( data ) {
                                 $( "#'.Html::getInputId($model, 'division').'" ).html( data );
@@ -38,7 +39,7 @@ use kartik\select2\Select2;
                             }
                         );
 
-        '])->label('Propuesta Formativa'); ?>
+        '*/])->label('Propuesta Formativa'); ?>
 
     
 
@@ -50,12 +51,15 @@ use kartik\select2\Select2;
    
     <?= 
 
-        $form->field($model, 'division')->widget(Select2::classname(), [
+        $form->field($model, 'division')->widget(DepDrop::classname(), [
             //'data' => $listDivisiones,
-            'options' => ['placeholder' => 'Seleccionar...'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
+            'options'=>['id'=>'division-id'],
+                                    
+                'pluginOptions'=>[
+                    'depends'=>['propuesta-id'],
+                    'placeholder'=>'Seleccionar',
+                    'url'=>Url::to(['/division/xpropuesta'])
+            ]
         ]);
 
     ?>
@@ -63,12 +67,14 @@ use kartik\select2\Select2;
        
     <?= 
 
-        $form->field($model, 'actividad')->widget(Select2::classname(), [
-            'data' => $listActividades,
-            'options' => ['placeholder' => 'Seleccionar...'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
+        $form->field($model, 'actividad')->widget(DepDrop::classname(), [
+            'options'=>['id'=>'actividad-id'],
+                                    
+            'pluginOptions'=>[
+                    'depends'=>['propuesta-id'],
+                    'placeholder'=>'Seleccionar',
+                    'url'=>Url::to(['/actividad/xpropuesta'])
+            ]
         ]);
 
     ?>

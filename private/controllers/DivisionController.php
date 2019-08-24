@@ -13,6 +13,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use yii\helpers\ArrayHelper;
 
 /**
  * DivisionController implements the CRUD actions for Division model.
@@ -174,23 +175,40 @@ class DivisionController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionXpropuesta($id)
+    public function actionXpropuesta()
     {   
+        $searchModel = new DivisionSearch();
+        
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
 
-        $divisiones = Division::find()
-                ->where(['propuesta' => $id])
+        if (isset($_POST['depdrop_parents'])) {
+            
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+
+                $propuesta_id = $parents[0];
+                $divisiones = Division::find()
+                ->where(['propuesta' => $propuesta_id])
                 ->orderBy('nombre ASC')
                 ->all();
                 
-        if (!empty($divisiones)) {
-            
-            foreach($divisiones as $division) {
-                echo "<option value='".$division->id."'>".$division->nombre."</option>";
+
+                $listDivisiones=ArrayHelper::toArray($divisiones, [
+                    'app\models\Division' => [
+                        'id',
+                        'name' => 'nombre',
+                    ],
+                ]);
+                $out = $listDivisiones;
+                return ['output'=>$out, 'selected'=>''];
             }
-            
-        } else {
-            echo "<option>-</option>";
+
         }
+
+        return ['output'=>'', 'selected'=>''];
+        
+                
         
     }
 }

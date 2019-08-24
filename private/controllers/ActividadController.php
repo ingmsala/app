@@ -13,6 +13,7 @@ use app\models\Actividadtipo;
 use app\models\Propuesta;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use yii\helpers\ArrayHelper;
 /**
  * ActividadController implements the CRUD actions for Actividad model.
  */
@@ -175,23 +176,41 @@ class ActividadController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionXpropuesta($id)
+    
+    public function actionXpropuesta()
     {   
+        $searchModel = new ActividadSearch();
+        
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
 
-        $actividades = Actividad::find()
-                ->where(['propuesta' => $id])
+        if (isset($_POST['depdrop_parents'])) {
+            
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+
+                $propuesta_id = $parents[0];
+                $actividad = Actividad::find()
+                ->where(['propuesta' => $propuesta_id])
                 ->orderBy('nombre ASC')
                 ->all();
                 
-        if (!empty($actividades)) {
-            
-            foreach($actividades as $actividad) {
-                echo "<option value='".$actividad->id."'>".$actividad->nombre."</option>";
+
+                $listActividad=ArrayHelper::toArray($actividad, [
+                    'app\models\Actividad' => [
+                        'id',
+                        'name' => 'nombre',
+                    ],
+                ]);
+                $out = $listActividad;
+                return ['output'=>$out, 'selected'=>''];
             }
-            
-        } else {
-            echo "<option>-</option>";
+
         }
+
+        return ['output'=>'', 'selected'=>''];
+        
+                
         
     }
 }

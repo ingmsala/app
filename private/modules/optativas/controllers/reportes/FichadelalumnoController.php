@@ -37,10 +37,10 @@ class FichadelalumnoController extends \yii\web\Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view'],
+                'only' => ['index', 'view', 'all'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view'],   
+                        'actions' => ['index', 'view', 'all'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{

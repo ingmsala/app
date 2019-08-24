@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 use kartik\date\DatePicker;
+use kartik\daterange\DateRangePicker;
 
 
 /* @var $this yii\web\View */
@@ -35,35 +36,39 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'descripcion')->textarea(['rows' => 6]) ?>
 
+    <div style="width: 50%;">
+	<?php 
+	echo '<div class="input-group drp-container">';
+echo DateRangePicker::widget([
+    'model'=>$model,
+    'attribute' => 'kvdate1',
+    'useWithAddon'=>true,
+    'convertFormat'=>true,
+    'startAttribute' => 'datetime_start',
+    'endAttribute' => 'datetime_end',
+    'pluginOptions'=>[
+        'locale'=>['format' => 'Y-m-d'],
+    ]
+]) . $addon;
+		echo '<label class="control-label">Fecha</label>';
+		echo DatePicker::widget([
+			    'model' => $model,
+			    'attribute' => 'desde',
+			    'attribute2' => 'hasta',
+			    'options' => ['placeholder' => 'Fecha de Inicio', 'readonly' => true,],
+			    'options2' => ['placeholder' => 'Fecha de Fin', 'readonly' => true,],
+			    'separator' => 'hasta',
+			    'type' => DatePicker::TYPE_RANGE,
+			    'form' => $form,
+			    'pluginOptions' => [
+			        'format' => 'dd/mm/yyyy',
+			        'autoclose' => true,
+		    	]
+			]);
+	 ?>
+   	</div>
 
-    <?= 
-		$form->field($model, 'desde')->widget(DatePicker::classname(), [
-		    //'name' => 'dp_3',
-		    'type' => DatePicker::TYPE_COMPONENT_APPEND,
-		    //'value' => '23-Feb-1982',
-		    'readonly' => true,
-		    'pluginOptions' => [
-		        'autoclose'=>true,
-		        'format' => 'dd/mm/yyyy',
-		        		        
-		    ],
-		    
-		]); ?>
-
-    <?= 
-		$form->field($model, 'hasta')->widget(DatePicker::classname(), [
-		    //'name' => 'dp_3',
-		    'type' => DatePicker::TYPE_COMPONENT_APPEND,
-		    //'value' => '23-Feb-1982',
-		    'readonly' => true,
-		    'pluginOptions' => [
-		        'autoclose'=>true,
-		        'format' => 'dd/mm/yyyy',
-		        		        
-		    ],
-		    
-		]); ?>
-
+    <br />
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
