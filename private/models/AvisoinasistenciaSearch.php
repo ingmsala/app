@@ -75,10 +75,11 @@ class AvisoinasistenciaSearch extends Avisoinasistencia
     {
 
         $query = Avisoinasistencia::find()
+                    ->joinWith(['docente0'])
                     //->where(['BETWEEN','desde', 'hasta', $fechaparte, 'hasta'])
                     //->where(['<=','desde',$fechaparte])
                     ->andWhere(['>=','hasta',$fechaparte])
-                    ->orderBy('desde ASC');
+                    ->orderBy('docente.apellido ASC');
 
         // add conditions that should always apply here
 

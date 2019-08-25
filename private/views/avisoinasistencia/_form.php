@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use kartik\form\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 use kartik\date\DatePicker;
@@ -21,7 +21,34 @@ use kartik\daterange\DateRangePicker;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    
+        
+	<?php 
+
+		
+		//echo '<div class="input-group drp-container">';
+		echo $form->field($model, 'hasta', [
+		    'addon'=>['prepend'=>['content'=>'<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>']],
+		    'options'=>['class'=>'drp-container form-group']
+		])->widget(DateRangePicker::classname(), [
+		    'useWithAddon'=>true,
+		    'convertFormat'=>true,
+		    'startAttribute' => 'desde',
+    		'endAttribute' => 'hasta',
+    		'readonly' => true,
+		    'pluginOptions'=>[
+		        'locale'=>[
+		            'format'=>'d/m/yy',
+		            'separator'=>' hasta el ',
+		        ],
+		        'opens'=>'left'
+		    ],
+		    
+		])->label('Fecha');
+		//echo '</div>';
+
+		
+	 ?>
+   	
     <?= 
 
         $form->field($model, 'docente')->widget(Select2::classname(), [
@@ -36,37 +63,7 @@ use kartik\daterange\DateRangePicker;
 
     <?= $form->field($model, 'descripcion')->textarea(['rows' => 6]) ?>
 
-    <div style="width: 50%;">
-	<?php 
-	echo '<div class="input-group drp-container">';
-echo DateRangePicker::widget([
-    'model'=>$model,
-    'attribute' => 'kvdate1',
-    'useWithAddon'=>true,
-    'convertFormat'=>true,
-    'startAttribute' => 'datetime_start',
-    'endAttribute' => 'datetime_end',
-    'pluginOptions'=>[
-        'locale'=>['format' => 'Y-m-d'],
-    ]
-]) . $addon;
-		echo '<label class="control-label">Fecha</label>';
-		echo DatePicker::widget([
-			    'model' => $model,
-			    'attribute' => 'desde',
-			    'attribute2' => 'hasta',
-			    'options' => ['placeholder' => 'Fecha de Inicio', 'readonly' => true,],
-			    'options2' => ['placeholder' => 'Fecha de Fin', 'readonly' => true,],
-			    'separator' => 'hasta',
-			    'type' => DatePicker::TYPE_RANGE,
-			    'form' => $form,
-			    'pluginOptions' => [
-			        'format' => 'dd/mm/yyyy',
-			        'autoclose' => true,
-		    	]
-			]);
-	 ?>
-   	</div>
+
 
     <br />
     <div class="form-group">

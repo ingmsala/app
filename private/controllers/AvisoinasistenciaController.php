@@ -115,8 +115,13 @@ class AvisoinasistenciaController extends Controller
             }
             
             $hastaexplode = explode("/",$model->hasta);
+
+            if(strpos($hastaexplode[2], "hasta") === false)
+                $anio = $hastaexplode[2];
+            else
+                $anio = $hastaexplode[4];
             if(count($hastaexplode) > 1){
-                $newdatehasta = date("Y-m-d", mktime(0, 0, 0, $hastaexplode[1], $hastaexplode[0], $hastaexplode[2]));
+                $newdatehasta = date("Y-m-d", mktime(0, 0, 0, $hastaexplode[1], $hastaexplode[0], $anio));
                 $model->hasta = $newdatehasta;
             }else{
                 $model->hasta = null;
@@ -125,7 +130,8 @@ class AvisoinasistenciaController extends Controller
             if ($model->save())
                 return $this->redirect(['index']);
         }
-
+        $model->desde = date("d/m/Y");
+        $model->hasta = date("d/m/Y");
         return $this->render('create', [
             'model' => $model,
             'docentes' => $docentes,
@@ -173,8 +179,12 @@ class AvisoinasistenciaController extends Controller
             }
 
             $hastaexplode = explode("/",$model->hasta);
+            if(strpos($hastaexplode[2], "hasta") === false)
+                $anio = $hastaexplode[2];
+            else
+                $anio = $hastaexplode[4];
             if(count($hastaexplode) > 1){
-                $newdatehasta = date("Y-m-d", mktime(0, 0, 0, $hastaexplode[1], $hastaexplode[0], $hastaexplode[2]));
+                $newdatehasta = date("Y-m-d", mktime(0, 0, 0, $hastaexplode[1], $hastaexplode[0], $anio));
                 $model->hasta = $newdatehasta;
             }else{
                 $model->hasta = null;

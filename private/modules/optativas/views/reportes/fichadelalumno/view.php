@@ -1,12 +1,17 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\optativas\models\Matricula */
-
-$this->title = 'Ficha del alumno';
+try{
+                        $al = $model->alumno0->apellido.', '.$model->alumno0->nombre.' ('.$model->division0->nombre.')';
+                    }catch(\Exception $e){
+                        $al = $model->alumno0->apellido.', '.$model->alumno0->nombre;
+                    }
+$this->title = 'Ficha del alumno: '.$al;
 
 ?>
 <div class="fichadelalumnotable">
@@ -18,7 +23,7 @@ $this->title = 'Ficha del alumno';
 
     <h3><?= Html::encode($this->title) ?></h3>
     <div class="pull-right" style="margin-bottom: 10px;">
-        <button class="btn btn-default hidden-print" onclick="javascript:window.print()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Imprimir</button>
+        <?php echo Html::a('<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Imprimir', Url::to(['print', 'matricula' => $model->id]), ['class' => 'btn btn-default']) ?>
     </div>
     
 
@@ -26,17 +31,7 @@ $this->title = 'Ficha del alumno';
         'model' => $model,
         'attributes' => [
             
-            [
-            	'label' => 'Alumno',
-            	'value' => function($matricula){
-                    try{
-                        return $matricula->alumno0->apellido.', '.$matricula->alumno0->nombre.' ('.$matricula->division0->nombre.')';
-                    }catch(\Exception $e){
-                        return $matricula->alumno0->apellido.', '.$matricula->alumno0->nombre;
-                    }
-            		
-            	}
-            ],
+            
             [
             	'label' => 'Espacio Optativo',
             	'value' => function($matricula){
@@ -63,15 +58,7 @@ $this->title = 'Ficha del alumno';
             	}
             ],
 
-            [
-            	'label' => 'Duración',
-            	'value' => function($matricula){
-            		return $matricula->comision0->optativa0->duracion.' horas';
-            	}
-            ],
             
-            'comision0.optativa0.aniolectivo0.nombre',
-
             [
             	'label' => 'Condición',
             	'attribute' => 'estadomatricula0.nombre',
