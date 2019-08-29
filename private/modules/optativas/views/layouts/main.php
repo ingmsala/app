@@ -11,6 +11,8 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\modules\optativas\models\DocentexcomisionSearch;
 use app\modules\optativas\models\Docentexcomision;
+use app\modules\optativas\models\Matricula;
+use app\modules\optativas\models\Aniolectivo;
 use app\config\Globales;
 
 AppAsset::register($this);
@@ -429,6 +431,8 @@ NavBar::end();
                                 'dataProvider' => $search->providerxdocente(Yii::$app->user->identity->username),
                                 'comisiones' => $search->comisionesxdocente(Yii::$app->user->identity->username),
                                 'model' => new Docentexcomision(),
+                                'model2' => new Matricula(),
+                                'aniolectivos' => Aniolectivo::find()->where(['activo' => 1])->all(),
                             ]);
                     }
                     ?>

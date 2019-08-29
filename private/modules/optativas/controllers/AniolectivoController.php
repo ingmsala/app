@@ -89,6 +89,7 @@ class AniolectivoController extends Controller
     {
         
         $model = new Aniolectivo();
+        $model->activo = 1;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

@@ -28,8 +28,8 @@ class Aniolectivo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre'], 'required'],
-            [['nombre'], 'integer'],
+            [['nombre', 'activo'], 'required'],
+            [['nombre', 'activo'], 'integer'],
         ];
     }
 
@@ -41,6 +41,7 @@ class Aniolectivo extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nombre' => 'Año Lectivo',
+            'activo' => 'Activo',
         ];
     }
 

@@ -9,6 +9,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'language' => 'es',
     'bootstrap' => ['log'],
+    //'catchAll' => ['site/mantenimiento'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -70,7 +71,7 @@ $config = [
             ],
         ],
         */
-        //'catchAll' => ['/site/login'],
+        
     ],
     'modules' => [
          'gridview' => ['class' => 'kartik\grid\Module'],

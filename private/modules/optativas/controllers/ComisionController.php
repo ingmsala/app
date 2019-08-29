@@ -7,11 +7,13 @@ use app\modules\optativas\models\Comision;
 use app\modules\optativas\models\Optativa;
 use app\modules\optativas\models\ComisionSearch;
 use app\modules\optativas\models\DocentexcomisionSearch;
+use app\modules\optativas\models\Docentexcomision;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
+use app\config\Globales;
 
 /**
  * ComisionController implements the CRUD actions for Comision model.
@@ -29,11 +31,24 @@ class ComisionController extends Controller
                 'only' => ['index', 'view', 'create', 'update', 'delete', 'comxanio'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'comxanio'],   
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
                                 return in_array (Yii::$app->user->identity->role, [1]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['comxanio'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [1,3,6,8,9,12,13,14]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -183,20 +198,42 @@ class ComisionController extends Controller
             if ($parents != null) {
 
                 $anio_id = $parents[0];
-                $comisiones = Comision::find()
-                    ->joinWith(['optativa0', 'optativa0.aniolectivo0', 'optativa0.actividad0'])
+                /*$comisiones = Comision::find()
+                    ->joinWith(['comision0', 'optativa0', 'optativa0.aniolectivo0', 'optativa0.actividad0', ])
                     ->where(['optativa.aniolectivo' => $anio_id])
-                    ->orderBy('actividad.nombre')->all();
+                    ->orderBy('actividad.nombre')->all();*/
+
+
+
+                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI, Globales::US_CONSULTA, Globales::US_SECRETARIA])){
+                    $comisiones = Docentexcomision::find()
+                    ->distinct()
+                    ->select(['comision', 'optativa.aniolectivo'])
+                    ->joinWith(['comision0', 'comision0.optativa0', 'comision0.optativa0.actividad0'])
+                    ->where(['optativa.aniolectivo' => $anio_id])
+                    ->orderBy('actividad.nombre', 'optativa.nombre')
+                    ->all();
+                }else{
+                    $comisiones = Docentexcomision::find()
+                    ->joinWith(['docente0', 'comision0', 'comision0.optativa0', 'comision0.optativa0.actividad0'])
+                    ->where(['docente.legajo' => Yii::$app->user->identity->username])
+                    ->andWhere(['optativa.aniolectivo' => $anio_id])
+                    ->orderBy('actividad.nombre', 'optativa.nombre')
+                    ->all(); 
+                }
+       
 
                 $listComisiones=ArrayHelper::toArray($comisiones, [
-                    'app\modules\optativas\models\Comision' => [
-                        'id',
+                    'app\modules\optativas\models\Docentexcomision' => [
+                        'id' => function($comision) {
+                            return $comision['comision0']['id'];},
                         'name' => function($comision) {
-                            return $comision['optativa0']['actividad0']['nombre'].' ('.$comision['nombre'].')';},
+                            return $comision['comision0']['optativa0']['actividad0']['nombre'].' ('.$comision['comision0']['nombre'].')';},
                     ],
                 ]);
                 $out = $listComisiones;
-                return ['output'=>$out, 'selected'=>''];
+                $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
+                return ['output'=>$out, 'selected'=>$com];
             }
 
         }

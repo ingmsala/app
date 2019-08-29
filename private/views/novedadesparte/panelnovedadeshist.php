@@ -6,12 +6,13 @@ use kartik\select2\Select2;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
+use app\config\Globales;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\DetalleparteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Panel de Novedades';
+$this->title = 'Historial Panel de Novedades';
 
 ?>
 
@@ -60,8 +61,7 @@ GridView::widget([
 
         ],
         'toolbar'=>[
-            ['content' => 
-                Html::a('Historial', ['panelnovedadeshist'], ['class' => 'btn btn-default'])
+            ['content' => (Yii::$app->user->identity->role != Globales::US_PRECEPTORIA) ? Html::a('Activos', ['panelnovedades'], ['class' => 'btn btn-default']) : ''
 
             ],
             '{export}',
@@ -123,17 +123,6 @@ GridView::widget([
                 'attribute' => 'tiponovedad0.nombre',
             ],
 
-            [
-                'label' => 'Docente',
-                'visible' => ($tiponovedad<>3) ? true : false,
-                'value' => function($model){
-                    if($model->docente0 != null)
-                        return $model->docente0['apellido'].', '.$model->docente0['nombre'];
-                    else
-                        return '';
-                }
-            ],
-            
             'descripcion:ntext',
             
             [
@@ -173,7 +162,8 @@ GridView::widget([
                         $itemsc = [];
                         $max=-1;
                         $c=0;
-       
+                        $date1 = new DateTime(date("Y-m-d"));
+                        $date2 = new DateTime(date("Y-m-d"));
                         foreach($model->estadoxnovedads as $estadoxnovedad){
                             if($c==0){
                                 $max = $estadoxnovedad->estadonovedad;
@@ -211,7 +201,7 @@ GridView::widget([
             ],
             
 
-            
+            /*
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{savesec}',
@@ -285,7 +275,7 @@ GridView::widget([
                     
                 ]
 
-            ],
+            ],*/
 
             
         ],

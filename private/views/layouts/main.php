@@ -201,6 +201,8 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Panel de Novedades', 'url' => ['novedadesparte/panelnovedades']],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'Reporte - Ausencia a trimestrales', 'url' => ['novedadesparte/panelnovedadeshist']],
+                                '<div class="dropdown-divider"></div>',
                                 ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q/edit?usp=sharing'],
                                 '<div class="dropdown-divider"></div>',
                                 
@@ -503,6 +505,7 @@ try {
                                 
                                 ['label' => 'Parte docente', 'url' => ['/parte']],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'Reporte - Ausencia a trimestrales', 'url' => ['novedadesparte/panelnovedadeshist']],
                             ],
                     ],
 

@@ -30,7 +30,7 @@ class NovedadesparteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'panelnovedades', 'nuevoestado'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'panelnovedades', 'nuevoestado', 'panelnovedadeshist'],
                 'rules' => [
                     [
                         'actions' => ['index', 'view'],   
@@ -46,7 +46,7 @@ class NovedadesparteController extends Controller
                     ],
 
                     [
-                        'actions' => ['create', 'update', 'delete'],   
+                        'actions' => ['create', 'update', 'delete', 'panelnovedadeshist'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -72,7 +72,7 @@ class NovedadesparteController extends Controller
                     ],
 
                     [
-                        'actions' => ['panelnovedades'],   
+                        'actions' => ['panelnovedades', 'panelnovedadeshist'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -264,6 +264,10 @@ class NovedadesparteController extends Controller
             return 2;
         elseif(Yii::$app->user->identity->role == Globales::US_NOVEDADES)
             return 3;
+        elseif(Yii::$app->user->identity->role == Globales::US_REGENCIA)
+            return 5;
+        elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA)
+            return 6;
         else
             return 4;
     }
@@ -289,10 +293,32 @@ class NovedadesparteController extends Controller
         ]);
     }
 
+    public function actionPanelnovedadeshist()
+    {
+
+        $searchModel = new NovedadesparteSearch();
+        $tiponovedad = $this->tiponovedad();
+        $dataProvider = $searchModel->novedadesall(Globales::TIPO_NOV_X_USS[$tiponovedad]);
+        /*$estados = Estadonovedad::find()
+                    ->where(['<>', 'id', 1])
+                    ->all();*/
+        
+        /*$novs = new NotificacionSearch(); 
+        $nov = $novs::providerXuser();
+        $nov->cantidad = 0;
+        $nov->save();*/
+        return $this->render('panelnovedadeshist', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'tiponovedad' => $tiponovedad,
+            
+        ]);
+    }
+
     public function actionNuevoestado($id, $estado, $page)
     {
         $model = $this->findModel($id);
-        if ($estado == 3)
+        if ($estado == 3 || $estado == 4 || $estado == 5)
             $model->activo = 2;
         $modelexn = new Estadoxnovedad();
         

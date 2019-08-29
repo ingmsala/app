@@ -53,7 +53,7 @@ class Globales
 
 	const PADRON_OTROSDOC = [203, 205, 207, 209, 219, 226, 234, 241, 242];
 
-	const TIPO_NOV_X_USS = [[1,2,3,4,5,6],[1,4,5],[6],[2,3],[]];//super, secret admin, secdoc(certificados), vicegestion, vacio
+	const TIPO_NOV_X_USS = [[1,2,3,4,5,6,7],[1,4,5],[6],[2,3],[],[7],[7] ];//super, secret admin, secdoc(certificados), vicegestion, vacio, regentes
 
 
 }

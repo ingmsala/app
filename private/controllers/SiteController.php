@@ -73,6 +73,15 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
+    public function actionMantenimiento()
+    {
+        if (YII_ENV_DEV) {
+            Yii::$app->getModule('debug')->instance->allowedIPs = [];
+        }
+        
+        return $this->render('mantenimiento');
+    }
+
     /**
      * Login action.
      *

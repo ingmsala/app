@@ -18,7 +18,7 @@ class AniolectivoSearch extends Aniolectivo
     public function rules()
     {
         return [
-            [['id', 'nombre'], 'integer'],
+            [['id', 'nombre', 'activo'], 'integer'],
         ];
     }
 

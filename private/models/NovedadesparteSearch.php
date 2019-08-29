@@ -195,6 +195,53 @@ class NovedadesparteSearch extends Novedadesparte
         return $dataProvider;
     }
 
+    public function novedadesall($tipodenovedadXusuario)
+    {
+        if(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA)
+            $query = Novedadesparte::find()
+                    ->joinWith(['tiponovedad0', 'parte0', 'estadoxnovedads', 'parte0.preceptoria0'])
+                    ->where(['in', 'tiponovedad', $tipodenovedadXusuario])
+                    ->andWhere(['preceptoria.nombre' => Yii::$app->user->identity->username])
+                    ->orderBy('parte.fecha');
+        elseif(Yii::$app->user->identity->role == Globales::US_NOVEDADES)
+            $query = Novedadesparte::find()
+                    ->joinWith(['tiponovedad0', 'parte0', 'estadoxnovedads'])
+                    ->where(['activo' => 2])
+                    ->andWhere(['in', 'tiponovedad', $tipodenovedadXusuario])
+                    ->orderBy('parte.fecha');
+        else
+            $query = Novedadesparte::find()
+                    ->joinWith(['tiponovedad0', 'parte0', 'estadoxnovedads'])
+                    ->where(['activo' => 2])
+                    ->andWhere(['in', 'tiponovedad', $tipodenovedadXusuario])
+                    ->orderBy('parte.fecha');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'tiponovedad' => $this->tiponovedad,
+            'parte' => $this->parte,
+            
+        ]);
+
+        $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);
+
+        return $dataProvider;
+    }
+
      public function novedadesactivascant()
     {
         $query = Novedadesparte::find()

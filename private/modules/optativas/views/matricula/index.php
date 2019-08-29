@@ -24,7 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
         );
         
     ?>
-
     <div id="accordion" class="panel-group">
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -51,7 +50,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             if(isset($param['Matricula']['comision'])){
                                 if($param['Matricula']['comision']!=''){
                                     $filter2 = true;
-                                    echo '<b> - Optativa: </b>'.$listComisiones[$param['Matricula']['comision']];
+                                    try {
+                                        echo '<b> - Optativa: </b>'.$listComisiones[$param['Matricula']['comision']];
+                                    } catch (Exception $e) {
+                                        echo '<b> - Optativa: Sin Matriculados</b>';
+                                    }
+                                    
                                 }
                             }
 
