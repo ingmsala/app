@@ -264,6 +264,18 @@ class CatedraController extends Controller
             if ($parents != null) {
 
                 $division_id = $parents[0];
+                if ($division_id == 77)//no tiene cargadas cátedras
+                    $catedras = Catedra::find()
+                    ->joinWith(['actividad0'])
+                    ->where(['division' => 53])
+                    ->orderBy('actividad.nombre')
+                    ->all();
+                else
+                    $catedras = Catedra::find()
+                    ->joinWith(['actividad0'])
+                    ->where(['division' => $division_id])
+                    ->orderBy('actividad.nombre')
+                    ->all();
                 /*$comisiones = Comision::find()
                     ->joinWith(['comision0', 'optativa0', 'optativa0.aniolectivo0', 'optativa0.actividad0', ])
                     ->where(['optativa.aniolectivo' => $division_id])
@@ -271,11 +283,7 @@ class CatedraController extends Controller
 
 
 
-                $catedras = Catedra::find()
-                    ->joinWith(['actividad0'])
-                    ->where(['division' => $division_id])
-                    ->orderBy('actividad.nombre')
-                    ->all(); 
+                
                 
        
 

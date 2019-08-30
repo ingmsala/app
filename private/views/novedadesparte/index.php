@@ -81,7 +81,7 @@ $this->title = 'Novedades del parte';
                     [
                         'class' => 'yii\grid\ActionColumn',
 
-                        'template' => '{update} {delete}',
+                        'template' => '{delete}',
                         
                         'buttons' => [
                             
@@ -189,7 +189,7 @@ $this->title = 'Novedades del parte';
                     [
                         'class' => 'yii\grid\ActionColumn',
 
-                        'template' => '{update} {delete}',
+                        'template' => '{delete}',
                         
                         'buttons' => [
                             

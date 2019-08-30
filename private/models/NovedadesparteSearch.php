@@ -220,6 +220,7 @@ class NovedadesparteSearch extends Novedadesparte
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         
