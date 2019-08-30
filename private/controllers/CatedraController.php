@@ -17,6 +17,7 @@ use app\models\Detallecatedra;
 use app\models\DetallecatedraSearch;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use yii\helpers\ArrayHelper;
 
 /**
  * CatedraController implements the CRUD actions for Catedra model.
@@ -248,6 +249,56 @@ class CatedraController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionCatxdivi()
+    {
+        
+        
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+        
+        if (isset($_POST['depdrop_parents'])) {
+            
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+
+                $division_id = $parents[0];
+                /*$comisiones = Comision::find()
+                    ->joinWith(['comision0', 'optativa0', 'optativa0.aniolectivo0', 'optativa0.actividad0', ])
+                    ->where(['optativa.aniolectivo' => $division_id])
+                    ->orderBy('actividad.nombre')->all();*/
+
+
+
+                $catedras = Catedra::find()
+                    ->joinWith(['actividad0'])
+                    ->where(['division' => $division_id])
+                    ->orderBy('actividad.nombre')
+                    ->all(); 
+                
+       
+
+                $listCatedras=ArrayHelper::toArray($catedras, [
+                    'app\models\Catedra' => [
+                        'id' => function($catedra) {
+                            return $catedra['actividad0']['id'];},
+                        'name' => function($catedra) {
+                            return $catedra['actividad0']['nombre'];},
+                    ],
+                ]);
+                $out = $listCatedras;
+                
+                return ['output'=>$out, 'selected'=>''];
+            }
+
+        }
+
+        return ['output'=>'', 'selected'=>''];
+
+        
+        
+        
     }
 
 

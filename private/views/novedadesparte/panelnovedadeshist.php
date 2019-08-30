@@ -88,7 +88,16 @@ GridView::widget([
                     
                     return Html::ul($itemsc, ['item' => function($item) {
                         //var_dump($item);
-                                ($item[1]=='Activo') ? $boots='warning' : $boots='success';
+                                if($item[1]=='Activo')
+                                    $boots='info';
+                                elseif($item[1]=='En proceso')
+                                    $boots='warning';
+                                elseif($item[1]=='Rechazado')
+                                    $boots='danger';
+                                elseif($item[1]=='Presentó nota - Pendiente de revisión')
+                                    $boots='warning';
+                                else
+                                    $boots='success';
                                 return 
                                         Html::tag('li', 
                                         $item[0].' - '.$item[1], ['class' => 'list-group-item list-group-item-'.$boots]);
@@ -132,12 +141,17 @@ GridView::widget([
                 'value' => function($model){
                         $itemsc = [];
                         $max=-1;
+                        $aux = 0;
                         $c=0;
        
                         foreach($model->estadoxnovedads as $estadoxnovedad){
+                            if($estadoxnovedad->estadonovedad == 6)
+                                $aux = 2.5;
+                            else
+                                $aux = $estadoxnovedad->estadonovedad;
                             if($c==0)
-                                $max = $estadoxnovedad->estadonovedad;
-                            ($max>=$estadoxnovedad->estadonovedad) ? $max=$max : $max=$estadoxnovedad->estadonovedad;
+                                $max = $aux;
+                            ($max>=$aux) ? $max=$max : $max=$aux;
                             $c=$c+1;
                         }
                         //return $max;
@@ -151,6 +165,8 @@ GridView::widget([
                             return '<center><span style="color:green;">Aprobado</span></center>';
                         elseif($max ==  5)          
                             return '<center><span style="color:red;">Rechazado</span></center>';
+                        elseif($max ==  2.5)          
+                            return '<center><span style="color:red;">Presentó nota - Pendiente de revisión</span></center>';
                 },
             ],
 

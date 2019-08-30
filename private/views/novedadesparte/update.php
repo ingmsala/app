@@ -15,6 +15,8 @@ $this->title = 'Modificar Novedad: ' . $model->id;
         'model' => $model,
         'tiponovedades' => $tiponovedades,
         'preceptores' => $preceptores,
+        'cursos' => $cursos,
+        'alumnos' => $alumnos,
     ]) ?>
 
 </div>

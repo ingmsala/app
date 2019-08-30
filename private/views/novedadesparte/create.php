@@ -17,6 +17,8 @@ $this->title = 'Nueva Novedad';
         'model' => $model,
         'tiponovedades' => $tiponovedades,
         'preceptores' => $preceptores,
+        'cursos' => $cursos,
+        'alumnos' => $alumnos,
     ]) ?>
 
 </div>

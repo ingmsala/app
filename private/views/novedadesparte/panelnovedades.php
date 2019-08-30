@@ -88,7 +88,16 @@ GridView::widget([
                     
                     return Html::ul($itemsc, ['item' => function($item) {
                         //var_dump($item);
-                                ($item[1]=='Activo') ? $boots='warning' : $boots='success';
+                                if($item[1]=='Activo')
+                                    $boots='info';
+                                elseif($item[1]=='En proceso')
+                                    $boots='warning';
+                                elseif($item[1]=='Rechazado')
+                                    $boots='danger';
+                                elseif($item[1]=='Presentó nota - Pendiente de revisión')
+                                    $boots='warning';
+                                else
+                                    $boots='success';
                                 return 
                                         Html::tag('li', 
                                         $item[0].' - '.$item[1], ['class' => 'list-group-item list-group-item-'.$boots]);
@@ -125,7 +134,7 @@ GridView::widget([
 
             [
                 'label' => 'Docente',
-                'visible' => ($tiponovedad<>3) ? true : false,
+                'visible' => ($tiponovedad==3 || $tiponovedad==5) ? false : true,
                 'value' => function($model){
                     if($model->docente0 != null)
                         return $model->docente0['apellido'].', '.$model->docente0['nombre'];
@@ -143,15 +152,20 @@ GridView::widget([
                 'value' => function($model){
                         $itemsc = [];
                         $max=-1;
+                        $aux = 0;
                         $c=0;
        
                         foreach($model->estadoxnovedads as $estadoxnovedad){
+                            if($estadoxnovedad->estadonovedad == 6)
+                                $aux = 2.5;
+                            else
+                                $aux = $estadoxnovedad->estadonovedad;
                             if($c==0)
-                                $max = $estadoxnovedad->estadonovedad;
-                            ($max>=$estadoxnovedad->estadonovedad) ? $max=$max : $max=$estadoxnovedad->estadonovedad;
+                                $max = $aux;
+                            ($max>=$aux) ? $max=$max : $max=$aux;
                             $c=$c+1;
                         }
-                        //return $max;
+                        //return var_dump($model->estadoxnovedads);
                         if ($max ==  1)
                             return '<center><span style="color:orange;">Activo</span></center>';
                         elseif($max ==  2)          
@@ -162,6 +176,8 @@ GridView::widget([
                             return '<center><span style="color:green;">Aprobado</span></center>';
                         elseif($max ==  5)          
                             return '<center><span style="color:red;">Rechazado</span></center>';
+                        elseif($max ==  2.5)          
+                            return '<center><span style="color:blue;">Presentó nota - Pendiente de revisión</span></center>';
                 },
             ],
 
@@ -226,18 +242,23 @@ GridView::widget([
                         $max=-1;
                         $c=0;
                         (isset(Yii::$app->request->get()['page'])) ? $page = Yii::$app->request->get()['page'] : $page = 1;
+
                         foreach($model->estadoxnovedads as $estadoxnovedad){
+                            if($estadoxnovedad->estadonovedad == 6)
+                                $aux = 2.5;
+                            else
+                                $aux = $estadoxnovedad->estadonovedad;
                             if($c==0)
-                                $max = $estadoxnovedad->estadonovedad;
-                            ($max>=$estadoxnovedad->estadonovedad) ? $max=$max : $max=$estadoxnovedad->estadonovedad;
+                                $max = $aux;
+                            ($max>=$aux) ? $max=$max : $max=$aux;
                             $c=$c+1;
                         }
                         //return $max;
                         if ($max ==  1){
-                            $lab = ["Recibir", "warning","Recibir la notificación y pasar la novedad a estado 'En Proceso'?",2];
-                            $divbtn = Html::a($lab[0], '?r=novedadesparte/nuevoestado&id='.$model['id'].'&estado='.$lab[3].'&page='.$page, ['class' => 'btn btn-'.$lab[1].' btn-sm',
+                            $lab0 = ["Recibir", "warning","Recibir la notificación y pasar la novedad a estado 'En Proceso'?",2];
+                            $divbtn = Html::a($lab0[0], '?r=novedadesparte/nuevoestado&id='.$model['id'].'&estado='.$lab0[3].'&page='.$page, ['class' => 'btn btn-'.$lab0[1].' btn-sm',
                             'data' => [
-                            'confirm' => $lab[2],
+                            'confirm' => $lab0[2],
                             'method' => 'post',
                              ]
                             
@@ -248,7 +269,18 @@ GridView::widget([
                                 if($model->tiponovedad == 7){
                                     $lab = ["Rechazar", "danger", "Pasar la ausencia a trimestral a estado 'Rechazada' y guardarla en el historial?",5];
                                     $lab2 = ["Aprobar", "success", "Pasar la ausencia a trimestral a estado 'Aceptada' y guardarla en el historial?",4];
-                                        $divbtn = Html::a($lab[0], '?r=novedadesparte/nuevoestado&id='.$model['id'].'&estado='.$lab[3].'&page='.$page, ['class' => 'btn btn-'.$lab[1].' btn-sm',
+                                    $lab3 = ["Presentó nota", "info", "Pasar la ausencia a trimestral a estado 'Presentó Nota - Pendiente de revisión'?",6];
+                                    $divbtn = '';
+                                    if($max != 2.5){
+                                        $divbtn .= Html::a($lab3[0], '?r=novedadesparte/nuevoestado&id='.$model['id'].'&estado='.$lab3[3].'&page='.$page, ['class' => 'btn btn-'.$lab3[1].' btn-sm',
+                                            'data' => [
+                                            'confirm' => $lab3[2],
+                                            'method' => 'post',
+                                             ]
+                                        
+                                        ]);
+                                    }
+                                        $divbtn .= Html::a($lab[0], '?r=novedadesparte/nuevoestado&id='.$model['id'].'&estado='.$lab[3].'&page='.$page, ['class' => 'btn btn-'.$lab[1].' btn-sm',
                                         'data' => [
                                         'confirm' => $lab[2],
                                         'method' => 'post',

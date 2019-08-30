@@ -5,9 +5,12 @@ namespace app\controllers;
 use Yii;
 use app\models\Novedadesparte;
 use app\models\Tiponovedad;
+use app\models\Actividad;
 use app\models\NotificacionSearch;
 use app\models\Estadonovedad;
 use app\models\Estadoxnovedad;
+use app\modules\optativas\models\Alumno;
+use app\models\Division;
 use app\models\Parte;
 use app\models\Docente;
 use app\models\NovedadesparteSearch;
@@ -141,6 +144,10 @@ class NovedadesparteController extends Controller
                         ->orderBy('apellido, nombre')
                         ->all();
 
+        $cursos = Division::find()->where(['preceptoria' => $model->parte0->preceptoria])->all();
+        $alumnos = Alumno::find()->orderBy('apellido, nombre')->all();
+
+
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -153,6 +160,33 @@ class NovedadesparteController extends Controller
 
                     $novs = new NotificacionSearch(); 
                     $nov = $novs::providerXuserEspecifico(43);
+                    $nov->cantidad = $nov->cantidad + 1;
+                    $nov->save();
+                }elseif($model->tiponovedad == 7){
+                    $divi = Division::findOne(Yii::$app->request->post()["curso"]);
+                    $alu = Alumno::findOne(Yii::$app->request->post()["alumno"]);
+                    $text = $divi->nombre;
+                    $alu2 = $alu->apellido.', '.$alu->nombre;
+                    $text .= ' - Alumno: '.$alu2;
+                    //$mate = Actividad::findOne(Yii::$app->request->post()["catedra"]);
+                    $mate = Yii::$app->request->post()["catedra"];
+
+                    try{
+                         $largo = count(Yii::$app->request->post()["catedra"]);
+                     }catch(\Exception $exception){
+                        $largo = 0;
+                    }
+                    $text .= ' - Materia/s: ';
+                    for ($i=0; $i < $largo; $i++) { 
+                        $act = Actividad::findOne(Yii::$app->request->post()["catedra"][$i]);
+                        $text .= ' - '.$act->nombre;
+                        
+                    }
+
+                    $model->descripcion = $text.' - '.$model->descripcion;
+
+                    $novs = new NotificacionSearch(); 
+                    $nov = $novs::providerXuserEspecifico(41);
                     $nov->cantidad = $nov->cantidad + 1;
                     $nov->save();
                 }
@@ -187,6 +221,8 @@ class NovedadesparteController extends Controller
             'model' => $model,
             'tiponovedades' => $tiponovedades,
             'preceptores' => $preceptores,
+            'cursos' => $cursos,
+            'alumnos' => $alumnos,
         ]);
     }
 
@@ -204,6 +240,8 @@ class NovedadesparteController extends Controller
         $preceptores = Docente::find()
                         ->orderBy('apellido, nombre')
                         ->all();
+        $cursos = Division::find()->where(['preceptoria' => $model->parte0->preceptoria])->all();
+        $alumnos = Alumno::find()->orderBy('apellido, nombre')->all();
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->tiponovedad != 1 && $model->tiponovedad != 5 && $model->tiponovedad != 6){
@@ -220,6 +258,8 @@ class NovedadesparteController extends Controller
             'model' => $model,
             'tiponovedades' => $tiponovedades,
             'preceptores' => $preceptores,
+            'cursos' => $cursos,
+            'alumnos' => $alumnos,
         ]);
     }
 
@@ -320,10 +360,11 @@ class NovedadesparteController extends Controller
         $model = $this->findModel($id);
         if ($estado == 3 || $estado == 4 || $estado == 5)
             $model->activo = 2;
-        $modelexn = new Estadoxnovedad();
+        
         
         $model->save();
 
+        $modelexn = new Estadoxnovedad();
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $fecha = date("Y-m-d");
         /*$nuevafecha = strtotime ( '-50 day' , strtotime ( $fecha ) ) ;
@@ -345,8 +386,8 @@ class NovedadesparteController extends Controller
             $nov->save();
         }
 
-        $searchModel = new NovedadesparteSearch();
-        $dataProvider = $searchModel->novedadesactivas(Globales::TIPO_NOV_X_USS[3]);
+        //$searchModel = new NovedadesparteSearch();
+        //$dataProvider = $searchModel->novedadesactivas(Globales::TIPO_NOV_X_USS[3]);
         
         return $this->redirect('index.php?r=novedadesparte/panelnovedades&page='.$page);
     }
