@@ -79,6 +79,10 @@ $config = [
                 'class' => 'app\modules\optativas\Optativas',
          ],
 
+         'edh' => [
+                'class' => 'app\modules\edh\Edh',
+         ],
+
          'api' => [
                 'class' => 'app\modules\api\test\Test',
                                 

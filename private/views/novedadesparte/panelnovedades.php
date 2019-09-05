@@ -37,13 +37,14 @@ $this->title = 'Panel de Novedades';
     ?>
 
 
-<?php Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
+
 
     <?= 
 
 GridView::widget([
         'id' => 'grid',
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'panel' => [
             'type' => GridView::TYPE_DEFAULT,
             'heading' => Html::encode($this->title),
@@ -60,11 +61,13 @@ GridView::widget([
 
         ],
         'toolbar'=>[
+            '{toggleData}',
             ['content' => 
                 Html::a('Historial', ['panelnovedadeshist'], ['class' => 'btn btn-default'])
 
             ],
             '{export}',
+
             
         ],
 
@@ -74,6 +77,7 @@ GridView::widget([
            [
                 'format' => 'raw',
                 'label' => '',
+                'hiddenFromExport' => true,
                 //'attribute' => 'estadonovedad0.nombre',
                 'value' => function($model){
                     $itemsc = [];
@@ -229,9 +233,9 @@ GridView::widget([
 
             
             [
-                'class' => 'yii\grid\ActionColumn',
+                'class' => 'kartik\grid\ActionColumn',
                 'template' => '{savesec}',
-                                
+                'hiddenFromExport' => true,
                 'buttons' => [
                     'savesec' => function($url, $model, $key){
                         //return var_dump($model);
@@ -321,12 +325,12 @@ GridView::widget([
 
             
         ],
-        'pjax' => true,
+        
 ]);
 
 
 
-Pjax::end();
+
     
  ?>
 </div>

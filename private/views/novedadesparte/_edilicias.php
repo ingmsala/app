@@ -6,13 +6,10 @@ use yii\helpers\Url;
 use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\NovedadesparteSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
+/* @var $model app\models\NovedadesparteSearch */
+/* @var $form yii\widgets\ActiveForm */
 $this->title = 'Novedades del parte';
-
 ?>
-
 <?php 
         Modal::begin([
             'header' => "<h2 id='modalHeader'></h2>",
@@ -28,36 +25,32 @@ $this->title = 'Novedades del parte';
         Modal::end();
     ?>
 
-<div class="novedadesparte-index">
+<h3><?= Html::encode($this->title) ?></h3>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    
-    <div class="row">
-        <div class="col-lg-6">
-             <?php 
+    <p>
+        <?= Html::button('Nueva Novedad', ['value' => Url::to('index.php?r=novedadesparte/create&parte='.$model->id.'&preceptoria='.$model->preceptoria), 'class' => 'btn btn-success', 'id'=>'modalaNovedadesParte']) ?>
+        
+    </p>
 
-                echo $this->render('_edilicias',[
-
-                    'searchModel' => $searchModelnovedadesEdilicias,
-                    'dataProvider' => $dataProvidernovedadesEdilicias,
-
-                    'searchModelnovedadesEdilicias' => $searchModelnovedadesEdilicias,
-                    'dataProvidernovedadesEdilicias' => $dataProvidernovedadesEdilicias,
-                    
-                    'model' => $model,
-
-                ]) 
-
-            ?>
-        </div>
-        <div class="col-lg-6">
-            <h3>Otras Novedades del Día</h3>
+<h3>Edilicias</h3>
             <?= GridView::widget([
-                'dataProvider' => $dataProvider,
+                'dataProvider' => $dataProvidernovedadesEdilicias,
                 //'filterModel' => $searchModel,
                 'columns' => [
                     
                       
-                    
+                    [   
+                        'label' => 'Fecha',
+                        'attribute' => 'parte0.fecha',
+                       
+                        'value' => function($model){
+                            //var_dump($model);
+                            $formatter = \Yii::$app->formatter;
+                            return $formatter->asDate($model->parte0->fecha, 'dd/MM/yyyy');
+                            
+                        }
+                    ],
                     
                     [
 
@@ -65,18 +58,8 @@ $this->title = 'Novedades del parte';
                         'attribute' => 'tiponovedad0.nombre',
                     ],
                     
-                     [
-                        'label' => 'Docente',
-                        'value' => function($model){
-                            if($model->docente0 != null)
-                                return $model->docente0['apellido'].', '.$model->docente0['nombre'];
-                            else
-                                return '';
-                        }
-                    ],
-                                     
                     
-                    'descripcion:ntext',
+                   'descripcion:ntext',
                     [
 
                         'label' => 'Estado',
@@ -156,8 +139,3 @@ $this->title = 'Novedades del parte';
                     ],
                 ],
             ]); ?>
-        </div>
-    </div>
-    
-    
-</div>

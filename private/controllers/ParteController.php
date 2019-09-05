@@ -221,8 +221,8 @@ class ParteController extends Controller
         $searchModelavisosinasistencias = new AvisoinasistenciaSearch();
         $dataProvideravisosinasistencias = $searchModelavisosinasistencias->providerFromParte($model->fecha);
         
-
-        return $this->render('view', [
+        if($model->preceptoria != 8){
+           return $this->render('view', [
             'model' => $model,
             'modeldetalle' => Detalleparte::find()->where([
                 'parte' => $id,
@@ -240,7 +240,23 @@ class ParteController extends Controller
 
             'searchModelavisosinasistencias' => $searchModelavisosinasistencias,
             'dataProvideravisosinasistencias' => $dataProvideravisosinasistencias,
-        ]);
+        ]); 
+        }else{
+            return $this->render('/novedadesparte/_edilicias', [
+            
+
+            'searchModel' => $searchModelnovedades,
+            'dataProvider' => $dataProvidernovedades,
+
+            'searchModelnovedadesEdilicias' => $searchModelnovedadesEdilicias,
+            'dataProvidernovedadesEdilicias' => $dataProvidernovedadesEdilicias,
+            
+            'model' => $model,
+
+            
+            ]); 
+        }
+        
     }
 
     /**

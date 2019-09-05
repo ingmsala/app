@@ -138,8 +138,10 @@ class NovedadesparteController extends Controller
         $modelexn = new Estadoxnovedad();
         
         $model->parte = $parte;
-
-        $tiponovedades = Tiponovedad::find()->all();
+        if($model->parte0->preceptoria != 8)
+            $tiponovedades = Tiponovedad::find()->all();
+        else
+            $tiponovedades = Tiponovedad::find()->where(['in', 'id', [2,3]])->all();
         $preceptores = Docente::find()
                         ->orderBy('apellido, nombre')
                         ->all();
@@ -236,7 +238,10 @@ class NovedadesparteController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $tiponovedades = Tiponovedad::find()->all();
+        if($model->parte0->preceptoria != 8)
+            $tiponovedades = Tiponovedad::find()->all();
+        else
+            $tiponovedades = Tiponovedad::find()->where(['in', 'id', [2,3]])->all();
         $preceptores = Docente::find()
                         ->orderBy('apellido, nombre')
                         ->all();
@@ -316,7 +321,10 @@ class NovedadesparteController extends Controller
 
         $searchModel = new NovedadesparteSearch();
         $tiponovedad = $this->tiponovedad();
-        $dataProvider = $searchModel->novedadesactivas(Globales::TIPO_NOV_X_USS[$tiponovedad]);
+        if(isset(Yii::$app->request->get()["NovedadesparteSearch"]["descripcion"]) && Yii::$app->request->get()["NovedadesparteSearch"]["descripcion"] != '')
+            $dataProvider = $searchModel->novedadesactivas(Globales::TIPO_NOV_X_USS[$tiponovedad], Yii::$app->request->get()["NovedadesparteSearch"]["descripcion"]);
+        else
+            $dataProvider = $searchModel->novedadesactivas(Globales::TIPO_NOV_X_USS[$tiponovedad], null);
         /*$estados = Estadonovedad::find()
                     ->where(['<>', 'id', 1])
                     ->all();*/
@@ -377,7 +385,7 @@ class NovedadesparteController extends Controller
         $modelexn->save();
         
         if($model->tiponovedad == 2 || $model->tiponovedad == 3){
-            $forzarpreceptoria = [9,10,11,6,7,8];
+            $forzarpreceptoria = [9,10,11,6,7,8,39,44];
             $preceptoria = $model->parte0->preceptoria;
             
             $novs = new NotificacionSearch(); 

@@ -52,8 +52,8 @@ if(in_array (Yii::$app->user->identity->role, [1,4]))
                     $hoy = date("Y-m-d");
                     $tomorrow = strtotime ( '+1 day' , strtotime ( $hoy ) ) ;
                     $fourdays = strtotime ( '+4 day' , strtotime ( $hoy ) ) ;
-                    $tomorrow = date ( 'Y-m-j' , $tomorrow );
-                    $fourdays = date ( 'Y-m-j' , $fourdays );
+                    $tomorrow = date ( 'Y-m-d' , $tomorrow );
+                    $fourdays = date ( 'Y-m-d' , $fourdays );
                     if ($model['desde'] == $hoy){
                         return '<span class="label label-primary">HOY</span>';
                     }elseif($model['desde'] == $tomorrow ){
@@ -77,7 +77,7 @@ if(in_array (Yii::$app->user->identity->role, [1,4]))
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
                     $hoy = date("Y-m-d");
                     $tomorrow = strtotime ( '+1 day' , strtotime ( $hoy ) ) ;
-                    $tomorrow = date ( 'Y-m-j' , $tomorrow );
+                    $tomorrow = date ( 'Y-m-d' , $tomorrow );
                     
                     if ($model['hasta'] == $hoy){
                         return '<span class="label label-primary">HOY</span>';
