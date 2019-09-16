@@ -18,7 +18,7 @@ class EstadonovedadSearch extends Estadonovedad
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'orderstate'], 'integer'],
             [['nombre'], 'safe'],
         ];
     }

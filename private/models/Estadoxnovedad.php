@@ -20,6 +20,8 @@ class Estadoxnovedad extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public $finddescrip;
+    
     public static function tableName()
     {
         return 'estadoxnovedad';

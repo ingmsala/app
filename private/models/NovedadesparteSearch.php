@@ -208,26 +208,51 @@ class NovedadesparteSearch extends Novedadesparte
         return $dataProvider;
     }
 
-    public function novedadesall($tipodenovedadXusuario)
+    public function novedadesall($tipodenovedadXusuario, $descrip)
     {
-        if(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA)
-            $query = Novedadesparte::find()
-                    ->joinWith(['tiponovedad0', 'parte0', 'estadoxnovedads', 'parte0.preceptoria0'])
-                    ->where(['in', 'tiponovedad', $tipodenovedadXusuario])
-                    ->andWhere(['preceptoria.nombre' => Yii::$app->user->identity->username])
-                    ->orderBy('parte.fecha');
-        elseif(Yii::$app->user->identity->role == Globales::US_NOVEDADES)
-            $query = Novedadesparte::find()
-                    ->joinWith(['tiponovedad0', 'parte0', 'estadoxnovedads'])
-                    ->where(['activo' => 2])
-                    ->andWhere(['in', 'tiponovedad', $tipodenovedadXusuario])
-                    ->orderBy('parte.fecha');
-        else
-            $query = Novedadesparte::find()
-                    ->joinWith(['tiponovedad0', 'parte0', 'estadoxnovedads'])
-                    ->where(['activo' => 2])
-                    ->andWhere(['in', 'tiponovedad', $tipodenovedadXusuario])
-                    ->orderBy('parte.fecha');
+        if ($descrip != null){
+            if(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA)
+                            $query = Novedadesparte::find()
+                                    ->joinWith(['tiponovedad0', 'parte0', 'estadoxnovedads', 'parte0.preceptoria0'])
+                                    ->where(['in', 'tiponovedad', $tipodenovedadXusuario])
+                                    ->andWhere(['preceptoria.nombre' => Yii::$app->user->identity->username])
+                                    ->andWhere(['like', 'novedadesparte.descripcion', $descrip])
+                                    ->orderBy('novedadesparte.descripcion, parte.fecha');
+                        elseif(Yii::$app->user->identity->role == Globales::US_NOVEDADES)
+                            $query = Novedadesparte::find()
+                                    ->joinWith(['tiponovedad0', 'parte0', 'estadoxnovedads'])
+                                    ->where(['activo' => 2])
+                                    ->andWhere(['in', 'tiponovedad', $tipodenovedadXusuario])
+                                    ->andWhere(['like', 'novedadesparte.descripcion', $descrip])
+                                    ->orderBy('parte.fecha');
+                        else
+                            $query = Novedadesparte::find()
+                                    ->joinWith(['tiponovedad0', 'parte0', 'estadoxnovedads'])
+                                    ->where(['activo' => 2])
+                                    ->andWhere(['in', 'tiponovedad', $tipodenovedadXusuario])
+                                    ->andWhere(['like', 'novedadesparte.descripcion', $descrip])
+                                    ->orderBy('parte.fecha');
+                }else{
+                        if(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA)
+                            $query = Novedadesparte::find()
+                                    ->joinWith(['tiponovedad0', 'parte0', 'estadoxnovedads', 'parte0.preceptoria0'])
+                                    ->where(['in', 'tiponovedad', $tipodenovedadXusuario])
+                                    ->andWhere(['preceptoria.nombre' => Yii::$app->user->identity->username])
+                                    ->orderBy('novedadesparte.descripcion, parte.fecha');
+                        elseif(Yii::$app->user->identity->role == Globales::US_NOVEDADES)
+                            $query = Novedadesparte::find()
+                                    ->joinWith(['tiponovedad0', 'parte0', 'estadoxnovedads'])
+                                    ->where(['activo' => 2])
+                                    ->andWhere(['in', 'tiponovedad', $tipodenovedadXusuario])
+                                    ->orderBy('parte.fecha');
+                        else
+                            $query = Novedadesparte::find()
+                                    ->joinWith(['tiponovedad0', 'parte0', 'estadoxnovedads'])
+                                    ->where(['activo' => 2])
+                                    ->andWhere(['in', 'tiponovedad', $tipodenovedadXusuario])
+                                    ->orderBy('parte.fecha');
+                }
+        
 
         // add conditions that should always apply here
 
@@ -252,6 +277,8 @@ class NovedadesparteSearch extends Novedadesparte
         ]);
 
         $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);
+        $query->andFilterWhere(['like', 'activo', $this->activo]);
+
 
         return $dataProvider;
     }

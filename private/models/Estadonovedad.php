@@ -28,7 +28,7 @@ class Estadonovedad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre'], 'required'],
+            [['nombre', 'orderstate'], 'required'],
             [['nombre'], 'string', 'max' => 40],
         ];
     }
@@ -41,6 +41,7 @@ class Estadonovedad extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nombre' => 'Nombre',
+            'orderstate' => 'orderstate',
         ];
     }
 

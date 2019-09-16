@@ -9,6 +9,7 @@ use app\models\Actividad;
 use app\models\NotificacionSearch;
 use app\models\Estadonovedad;
 use app\models\Estadoxnovedad;
+use app\models\EstadoxnovedadSearch;
 use app\modules\optativas\models\Alumno;
 use app\models\Division;
 use app\models\Parte;
@@ -343,10 +344,13 @@ class NovedadesparteController extends Controller
 
     public function actionPanelnovedadeshist()
     {
-
+        $model = new NovedadesparteSearch();
         $searchModel = new NovedadesparteSearch();
         $tiponovedad = $this->tiponovedad();
-        $dataProvider = $searchModel->novedadesall(Globales::TIPO_NOV_X_USS[$tiponovedad]);
+        if(isset(Yii::$app->request->get()["NovedadesparteSearch"]["descripcion"]) && Yii::$app->request->get()["NovedadesparteSearch"]["descripcion"] != '')
+            $dataProvider = $searchModel->novedadesall(Globales::TIPO_NOV_X_USS[$tiponovedad], Yii::$app->request->get()["NovedadesparteSearch"]["descripcion"]);
+        else
+            $dataProvider = $searchModel->novedadesall(Globales::TIPO_NOV_X_USS[$tiponovedad], null);
         /*$estados = Estadonovedad::find()
                     ->where(['<>', 'id', 1])
                     ->all();*/
@@ -355,10 +359,41 @@ class NovedadesparteController extends Controller
         $nov = $novs::providerXuser();
         $nov->cantidad = 0;
         $nov->save();*/
+        $estados = Estadonovedad::find()->all();
         return $this->render('panelnovedadeshist', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'tiponovedad' => $tiponovedad,
+            'estados' => $estados,
+            'model' => $model,
+            
+        ]);
+    }
+
+     public function actionPanelnovedadesprec()
+    {
+        $model = new EstadoxnovedadSearch();
+        $searchModel = new EstadoxnovedadSearch();
+        
+        $tiponovedad = $this->tiponovedad();
+
+        $dataProvider = $searchModel->novedadesall(Globales::TIPO_NOV_X_USS[$tiponovedad], Yii::$app->request->get());
+        /*$estados = Estadonovedad::find()
+                    ->where(['<>', 'id', 1])
+                    ->all();*/
+        
+        /*$novs = new NotificacionSearch(); 
+        $nov = $novs::providerXuser();
+        $nov->cantidad = 0;
+        $nov->save();*/
+        $estados = Estadonovedad::find()->all();
+        return $this->render('panelnovedadesprec', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'tiponovedad' => $tiponovedad,
+            'estados' => $estados,
+            'model' => $model,
+            'param' => Yii::$app->request->get(),
             
         ]);
     }

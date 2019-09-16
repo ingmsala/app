@@ -7,6 +7,8 @@ use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
 use app\config\Globales;
+use yii\helpers\ArrayHelper;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\DetalleparteSearch */
@@ -37,14 +39,31 @@ $this->title = 'Historial Panel de Novedades';
         Modal::end();
     ?>
 
+<?php 
+    $form = ActiveForm::begin([
+        'id' => 'create-update-detalle-catedra-form',
+        'enableAjaxValidation' => true
+    ]);
+    $listestados=ArrayHelper::map($estados,'id','nombre');
+    $bot = '';
+    if(Yii::$app->user->identity->role != Globales::US_PRECEPTORIA){
+        
 
-<?php Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
+        $bot .= Html::a('Activos', ['panelnovedades'], ['class' => 'btn btn-default']);
+    }else{
+        $bot = '';
+
+    }
+    ActiveForm::end();
+?>
+
 
     <?= 
 
 GridView::widget([
         'id' => 'grid',
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'panel' => [
             'type' => GridView::TYPE_DEFAULT,
             'heading' => Html::encode($this->title),
@@ -57,11 +76,21 @@ GridView::widget([
                 
                 //'alertMsg' => false,
             ],
+            GridView::PDF => ['label' => 'PDF',
+                'filename' =>Html::encode($this->title),
+                'options' => ['title' => 'Portable Document Format'],
+                'config' => [
+                    'methods' => [ 
+                        'SetHeader'=>[Html::encode($this->title).' - Colegio Nacional de Monserrat'], 
+                        'SetFooter'=>[date('d/m/Y').' - Página '.'{PAGENO}'],
+                    ]
+                ],
+            ],
             
 
         ],
         'toolbar'=>[
-            ['content' => (Yii::$app->user->identity->role != Globales::US_PRECEPTORIA) ? Html::a('Activos', ['panelnovedades'], ['class' => 'btn btn-default']) : ''
+            ['content' => $bot
 
             ],
             '{export}',
@@ -75,6 +104,7 @@ GridView::widget([
                 'format' => 'raw',
                 'label' => '',
                 //'attribute' => 'estadonovedad0.nombre',
+                'hiddenFromExport' => true,
                 'value' => function($model){
                     $itemsc = [];
                     
@@ -137,7 +167,15 @@ GridView::widget([
             [
                 'format' => 'raw',
                 'label' => 'Estado',
-                //'attribute' => 'estadonovedad0.nombre',
+                /*'attribute' => 'activo',
+                 'width'=>'20%',
+               'filterType' => GridView::FILTER_SELECT2,
+                    'filter' => $listestados, 
+                    'filterWidgetOptions' => [
+                        'pluginOptions' => ['allowClear' => true],
+                    ],
+                    'filterInputOptions' => ['placeholder' => 'Todos'], // allows multiple authors to be chosen
+                */
                 'value' => function($model){
                         $itemsc = [];
                         $max=-1;
@@ -173,6 +211,7 @@ GridView::widget([
             [
                 'format' => 'raw',
                 'label' => 'Tiempo respuesta',
+                'hiddenFromExport' => true,
                 //'attribute' => 'estadonovedad0.nombre',
                 'value' => function($model){
                         $itemsc = [];
@@ -295,12 +334,11 @@ GridView::widget([
 
             
         ],
-        'pjax' => true,
+        
 ]);
 
 
 
-Pjax::end();
     
  ?>
 </div>
