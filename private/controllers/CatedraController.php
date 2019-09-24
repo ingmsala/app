@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Catedra;
+use app\models\HorarioSearch;
 use app\models\CatedraSearch;
 use app\models\Actividad;
 use app\models\Division;
@@ -97,7 +98,7 @@ class CatedraController extends Controller
         $searchModel = new CatedraSearch();
         $dataProvider = $searchModel->providercatedras($param);
         $divisiones = Division::find()->all();
-        $condiciones = Condicion::find()->all();
+        $condiciones = Condicion::find()->where(['<>', 'id', 6])->all();
         $propuestasall = Propuesta::find()->all();
         $resoluciones = Detallecatedra::find()
                     ->select('resolucion')->distinct()->all();
@@ -150,6 +151,9 @@ class CatedraController extends Controller
         $searchModel = new DetallecatedraSearch();
         $dataProvideractivo = $searchModel->providerxcatedra($id,Globales::DETCAT_ACTIVO);
         $dataProviderinactivo = $searchModel->providerxcatedra($id,Globales::DETCAT_ACTIVO);
+        
+        $searchModelHorario = new HorarioSearch();
+        $dataProviderHoras = $searchModelHorario->search($id);
 
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -160,6 +164,7 @@ class CatedraController extends Controller
             'searchModel' => $searchModel,
             'dataProvideractivo' => $dataProvideractivo,
             'dataProviderinactivo' => $dataProviderinactivo,
+            'dataProviderHoras' => $dataProviderHoras,
             
         ]);
     }

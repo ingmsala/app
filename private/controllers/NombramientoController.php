@@ -88,7 +88,7 @@ class NombramientoController extends Controller
         $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $revistas = Revista::find()->all();
         $divisiones = Division::find()->all();
-        $condiciones = Condicion::find()->all();
+        $condiciones = Condicion::find()->where(['<>', 'id', 6])->all();
         
         $resoluciones = Nombramiento::find()
                     ->select('resolucion')->distinct()
@@ -167,10 +167,11 @@ class NombramientoController extends Controller
 
         $cargos = Cargo::find()->all();
         $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
-        $revistas = Revista::find()->all();
+        $revistas = Revista::find()->where(['<>', 'id', 6])->all();
         $divisiones = Division::find()->all();
         $condiciones = Condicion::find()
                         ->where(['<>','id',Globales::COND_SUPL])
+                        ->andWhere(['<>', 'id', 6])
                         ->all();
         $suplentes = Nombramiento::find()->all();
         $extensiones = Extension::find()->all();
@@ -248,9 +249,9 @@ class NombramientoController extends Controller
 
         $cargos = Cargo::find()->all();
         $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
-        $revistas = Revista::find()->all();
+        $revistas = Revista::find()->where(['<>', 'id', 6])->all();
         $divisiones = Division::find()->all();
-        $condiciones = Condicion::find()->all();
+        $condiciones = Condicion::find()->andWhere(['<>', 'id', 6])->all();
         $suplentes = Nombramiento::find()->all();
         $extensiones = Extension::find()->all();
 
@@ -418,9 +419,9 @@ class NombramientoController extends Controller
         $model = Nombramiento::findOne($idx);
         $cargos = Cargo::find()->all();
         $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
-        $revistas = Revista::find()->all();
+        $revistas = Revista::find()->where(['<>', 'id', 6])->all();
         $divisiones = Division::find()->all();
-        $condiciones = Condicion::find()->all();
+        $condiciones = Condicion::find()->where(['<>', 'id', 6])->all();
         $extensiones = Extension::find()->all();
         
         $subQuery = Nombramiento::find()->select('suplente')->all();
@@ -474,12 +475,12 @@ class NombramientoController extends Controller
              $model->horas = $nombramientoParent->horas;
 
             $cargos = Cargo::find()->all();
-            $revistas = Revista::find()->all();
+            
             $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
-            $revistas = Revista::find()->all();
+            $revistas = Revista::find()->where(['<>', 'id', 6])->all();
             $divisiones = Division::find()->all();
             $extensiones = Extension::find()->all();
-            $condiciones = Condicion::find()->all();
+            $condiciones = Condicion::find()->where(['<>', 'id', 6])->all();
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 $nombramientoParent->suplente = $model->id;
@@ -518,9 +519,9 @@ class NombramientoController extends Controller
 
         $cargos = Cargo::find()->all();
         $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
-        $revistas = Revista::find()->all();
+        $revistas = Revista::find()->where(['<>', 'id', 6])->all();
         $divisiones = Division::find()->all();
-        $condiciones = Condicion::find()->all();
+        $condiciones = Condicion::find()->where(['<>', 'id', 6])->all();
         
         $extensiones = Extension::find()->all();
 

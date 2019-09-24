@@ -20,6 +20,7 @@ class Globales
 	const US_SACADEMICA = 12;
 	const US_COORDINACION = 13;
 	const US_SREI = 14;
+	const US_HORARIO = 16;
 	
 	
 	const COND_SUPL = 5;

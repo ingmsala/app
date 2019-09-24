@@ -78,11 +78,21 @@ class DetallecatedraSearch extends Detallecatedra
 
     public function providerxcatedra($id, $activo)
     {
-        $query = Detallecatedra::find()
+        if(Yii::$app->user->identity->role == Globales::US_SUPER){
+            $query = Detallecatedra::find()
             ->where(['catedra' => $id,
                     'activo' => $activo, 
             ])
             ->orderBy('condicion ASC', 'id ASC');
+        }else{
+            $query = Detallecatedra::find()
+            ->where(['catedra' => $id,
+                    'activo' => $activo, 
+            ])
+            ->andWhere(['<>', 'condicion', 6])
+            ->orderBy('condicion ASC', 'id ASC');
+        }
+        
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -104,6 +114,7 @@ class DetallecatedraSearch extends Detallecatedra
             ->where(['docente' => $id,
                 'activo' => $activo //suplente
             ])
+            ->andWhere(['<>', 'condicion', 6])
             ->orderBy('revista ASC', 'id ASC');
 
         $dataProvider = new ActiveDataProvider([
@@ -129,6 +140,7 @@ class DetallecatedraSearch extends Detallecatedra
                         'docente' => $id,
                         'activo' => Globales::DETCAT_ACTIVO,
                 ])
+                ->andWhere(['<>', 'condicion', 6])
                 ->andWhere(['<>', 'revista', Globales::LIC_SINGOCE])->one();//no licencia sin goce
        
 
@@ -284,6 +296,34 @@ class DetallecatedraSearch extends Detallecatedra
 
             
 
+    }
+
+    public function horario_doce_divi($division)
+    {
+        $query = Detallecatedra::find()
+            ->joinWith(['catedra0', 'catedra0.actividad0'])
+            ->where(['catedra.division' => $division])
+            ->andWhere(['revista' => 6])
+            ->orderBy('actividad.nombre');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+       // $this->load($dia, $curso);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        
+
+        return $dataProvider;
     }
 
     

@@ -34,7 +34,7 @@ class DetallecatedraController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'inactive', 'fechafin'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'inactive', 'fechafin', 'migrate'],
                 'rules' => [
                     [
                         'actions' => ['create', 'update', 'delete', 'inactive', 'fechafin'],   
@@ -55,6 +55,19 @@ class DetallecatedraController extends Controller
                         'matchCallback' => function ($rule, $action) {
                             try{
                                 return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                     [
+                        'actions' => ['migrate'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -94,11 +107,46 @@ class DetallecatedraController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
+
+
     public function actionView($id)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    public function actionMigrate()
+    {
+        $dc = DetalleCatedra::find()
+            ->select(['docente', 'catedra'])
+            ->distinct()
+            ->joinWith(['catedra0', 'catedra0.division0'])
+            ->where(['revista' => 1])
+            ->andWhere(['activo' => 1])
+            ->andWhere(['in', 'division.turno',[1,2] ])
+            ->orderBy('division.id')
+            ->all();
+        
+        $txt = '';
+        foreach ($dc as $dcx) {
+            $model = new DetalleCatedra();
+            $model->docente = $dcx->docente;
+            $model->catedra = $dcx->catedra;
+            $model->hora = $dcx->catedra0->actividad0->cantHoras;
+            $model->condicion = 6;
+            $model->revista = 6;
+            $model->save();
+            $txt .= var_dump($model);
+            //$txt .= $dcx->catedra0->division0->nombre.' - '.$dcx->catedra0->actividad0->nombre.' - '.$dcx->docente0->apellido.'<br/>';
+        }
+        return $txt;
+
+        /*if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['catedra/view', 'id' => $catedra]);
+        }*/
+
+        
     }
 
     /**
@@ -122,8 +170,15 @@ class DetallecatedraController extends Controller
 
         
         $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
-        $condiciones=Condicion::find()->all();
-        $revistas=Revista::find()->all();
+
+        if(Yii::$app->user->identity->role == Globales::US_SUPER){
+            $condiciones=Condicion::find()->all();
+            $revistas=Revista::find()->all();
+        }else{
+            $condiciones=Condicion::find()->where(['<>', 'id', 6])->all();
+            $revistas=Revista::find()->where(['<>', 'id', 6])->all();
+        }
+        
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
 
@@ -172,8 +227,13 @@ class DetallecatedraController extends Controller
 
         
         $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
-        $condiciones=Condicion::find()->all();
-        $revistas=Revista::find()->all();
+        if(Yii::$app->user->identity->role == Globales::US_SUPER){
+            $condiciones=Condicion::find()->all();
+            $revistas=Revista::find()->all();
+        }else{
+            $condiciones=Condicion::find()->where(['<>', 'id', 6])->all();
+            $revistas=Revista::find()->where(['<>', 'id', 6])->all();
+        }
 
        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
 
@@ -189,6 +249,43 @@ class DetallecatedraController extends Controller
         }
 
         return $this->renderAjax('update', [
+            'model' => $model,
+            'catedra' => $catedra,
+
+            'catedras' => $catedrax,
+            'docentes' => $docentes,
+            'condiciones' => $condiciones,
+            'revistas' => $revistas,
+        ]);
+    }
+
+    public function actionUpdatehorario($id)
+    {
+
+        $model = $this->findModel($id);
+        $catedra = $model->catedra0->id;
+        $catedrax= Catedra::findOne($catedra);
+        
+        
+        $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+        $condiciones=Condicion::find()->where(['=', 'id', 6])->all();
+        $revistas=Revista::find()->where(['=', 'id', 6])->all();
+
+       if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return ActiveForm::validate($model);
+
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->catedra = $catedra;
+            if($model->save())
+                return $this->redirect(['horario/completoxcurso', 'division' => $catedrax->division, 'vista' => 'docentes']);
+        }
+
+        return $this->render('updatehorario', [
             'model' => $model,
             'catedra' => $catedra,
 

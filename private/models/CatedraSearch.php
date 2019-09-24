@@ -12,7 +12,7 @@ use app\config\Globales;
 
 
 /**
- * CatedraSearch represents the model behind the search form of `app\models\Catedra`.
+ * CatedraSearch represents the model behind the search form of app\models\Catedra.
  */
 class CatedraSearch extends Catedra
 {
@@ -114,7 +114,7 @@ class CatedraSearch extends Catedra
         left join condicion con ON dc.condicion = con.id
         left join revista rev ON dc.revista = rev.id
         left join propuesta pro ON a.propuesta = pro.id
-        where true';
+        where dc.condicion <> 6';
         if (!isset($params['Catedra']['activo']) or $params['Catedra']['activo'] == 0){
             $sql .= ' AND (dc.activo is null or dc.activo='.Globales::DETCAT_ACTIVO.')';
         }else{
@@ -186,6 +186,92 @@ class CatedraSearch extends Catedra
         'asc' => ['docente' => SORT_ASC],
         'desc' => ['docente' => SORT_DESC],
         ];
+
+        // grid filtering conditions
+        
+
+        return $dataProvider;
+
+    }
+
+
+    public function diferenciacatedras()
+    {
+        
+        $sql='SELECT c0.id, di.nombre as division, act.nombre as actividad, (
+    SELECT 
+        distinct(concat(doc.apellido, ", ", doc.nombre))
+    FROM
+        catedra c
+    LEFT JOIN detallecatedra dc ON
+        dc.catedra = c.id
+    LEFT JOIN docente doc ON
+        dc.docente = doc.id
+    WHERE
+        dc.revista = 1 AND dc.activo = 1 AND c.id = c0.id
+) as vigente, 
+
+(
+    SELECT 
+        
+        distinct(concat(doc2.apellido, ", ", doc2.nombre))
+    FROM
+        catedra c2
+    LEFT JOIN detallecatedra dc2 ON
+        dc2.catedra = c2.id
+    LEFT JOIN docente doc2 ON
+        dc2.docente = doc2.id
+    WHERE
+        dc2.revista = 6 AND dc2.activo = 1 AND c2.id = c0.id
+) as horario
+    
+FROM
+    catedra c0
+left join division di ON c0.division = di.id
+left join actividad act ON c0.actividad = act.id
+where (
+    SELECT 
+        distinct(doc.id)
+    FROM
+        catedra c
+    LEFT JOIN detallecatedra dc ON
+        dc.catedra = c.id
+    LEFT JOIN docente doc ON
+        dc.docente = doc.id
+    WHERE
+        dc.revista = 1 AND dc.activo = 1 AND c.id = c0.id
+) not in
+(
+    SELECT 
+        
+        DISTINCT(doc2.id)
+    FROM
+        catedra c2
+    LEFT JOIN detallecatedra dc2 ON
+        dc2.catedra = c2.id
+    LEFT JOIN docente doc2 ON
+        dc2.docente = doc2.id
+    WHERE
+        dc2.revista = 6 AND dc2.activo = 1 AND c2.id = c0.id
+) 
+and (di.turno = 1 or di.turno = 2) and (act.id <> 23) and (di.id <> 47)
+ORDER BY
+    di.id, act.nombre';
+
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $sql,
+            'pagination' => false,
+            
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+
 
         // grid filtering conditions
         

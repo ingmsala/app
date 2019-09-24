@@ -70,6 +70,10 @@ class SiteController extends Controller
                 return $this->redirect(['/optativas']);
                 
         }
+        elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
+                $this->layout = 'mainvacio';
+                return $this->redirect(['/horario/panelprincipal']);
+            }
         return $this->render('index');
     }
 
@@ -92,7 +96,11 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) {
             if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
                 return $this->redirect(['/optativas']);
+            }elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
+                $this->layout = 'mainvacio';
+                return $this->redirect(['/horario/panelprincipal']);
             }
+            
             return $this->goHome();
         }
 
@@ -100,6 +108,9 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
                 return $this->redirect(['/optativas']);
+            }elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
+                $this->layout = 'mainvacio';
+                return $this->redirect(['/horario/panelprincipal']);
             }
             return $this->goBack();
         }

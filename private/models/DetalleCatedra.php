@@ -44,7 +44,7 @@ class Detallecatedra extends \yii\db\ActiveRecord
             [['docente', 'catedra', 'condicion', 'revista', 'hora'], 'required'],
             [['docente', 'catedra', 'condicion', 'revista', 'hora'], 'integer'],
             [['fechaInicio', 'fechaFin', 'resolucion'], 'safe'],
-            ['hora', 'compare', 'compareValue' => Catedra::findOne($_REQUEST['catedra'])->actividad0->cantHoras, 'operator' => '<=', 'type' => 'number'],
+            /*['hora', 'compare', 'compareValue' => Catedra::findOne($_REQUEST['catedra'])->actividad0->cantHoras, 'operator' => '<=', 'type' => 'number'],*/
             [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
             [['catedra'], 'exist', 'skipOnError' => true, 'targetClass' => Catedra::className(), 'targetAttribute' => ['catedra' => 'id']],
             [['condicion'], 'exist', 'skipOnError' => true, 'targetClass' => Condicion::className(), 'targetAttribute' => ['condicion' => 'id']],

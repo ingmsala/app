@@ -6,7 +6,7 @@ use yii\helpers\Url;
 use yii\widgets\DetailView;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\bootstrap\Progress;
 
@@ -62,205 +62,263 @@ $this->params['breadcrumbs'][] = $this->title;
         Modal::end();
     ?>
 
-    
-    <h3>Docentes Nombrados</h3>
-    <?= Html::button('Agregar Docente', ['value' => Url::to('index.php?r=detallecatedra/create&catedra='.$model->id), 'class' => 'btn btn-success', 'id'=>'modalButton']) ?>
+<div>
+	        <h3>Docentes Nombrados</h3>
+	    <?= Html::button('Agregar Docente', ['value' => Url::to('index.php?r=detallecatedra/create&catedra='.$model->id), 'class' => 'btn btn-success', 'id'=>'modalButton']) ?>
 
 
-<ul class="nav nav-tabs">
-  <li class="active"><a data-toggle="tab" href="#home">Activo</a></li>
-  <li><a data-toggle="tab" href="#menu1">Historial</a></li>
-  
-</ul>
+	<ul class="nav nav-tabs">
+	  <li class="active"><a data-toggle="tab" href="#home">Activo</a></li>
+	  <li><a data-toggle="tab" href="#menu1">Historial</a></li>
+	  
+	</ul>
 
-<div class="tab-content">
-  <div id="home" class="tab-pane fade in active">
-    
-    <p>
+	<div class="tab-content">
+	  <div id="home" class="tab-pane fade in active">
+	    
+	    <p>
 
-        <?= GridView::widget([
-        'dataProvider' => $dataProvideractivo,
-        'rowOptions' => function($model){
-            if ($model->condicion0->nombre !='SUPL'){
-                return ['class' => 'info'];
-            }
-            return ['class' => 'warning'];
-        },
-        'columns' => [
+	        <?= GridView::widget([
+	        'dataProvider' => $dataProvideractivo,
+	        'rowOptions' => function($model){
+	            if ($model->condicion0->nombre !='SUPL'){
+	                return ['class' => 'info'];
+	            }
+	            return ['class' => 'warning'];
+	        },
+	        'columns' => [
 
-            
-            [   
-                'label' => 'Condición',
-                'attribute' => 'condicion0.nombre'
-            ],
-            
-            [   
-                'label' => 'Apellido',
-                'attribute' => 'docente0.apellido'
-            ],
+	            
+	            [   
+	                'label' => 'Condición',
+	                'attribute' => 'condicion0.nombre'
+	            ],
+	            
+	            [   
+	                'label' => 'Apellido',
+	                'attribute' => 'docente0.apellido'
+	            ],
 
-            [   
-                'label' => 'Nombre',
-                'attribute' => 'docente0.nombre'
-            ],
-            
-            [   
-                'label' => 'Revista',
-                'attribute' => 'revista0.nombre'
-            ],
+	            [   
+	                'label' => 'Nombre',
+	                'attribute' => 'docente0.nombre'
+	            ],
+	            
+	            [   
+	                'label' => 'Revista',
+	                'attribute' => 'revista0.nombre'
+	            ],
 
-            [
-                'label' => 'Fecha Inicio',
-                'attribute' => 'fechaInicio',
-                'format' => 'raw',
-                'value' => function($model){
-                    date_default_timezone_set('America/Argentina/Buenos_Aires');
-                    return Yii::$app->formatter->asDate($model->fechaInicio, 'dd-MM-yyyy');
-                }
-            ],
+	            [
+	                'label' => 'Fecha Inicio',
+	                'attribute' => 'fechaInicio',
+	                'format' => 'raw',
+	                'value' => function($model){
+	                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+	                    return Yii::$app->formatter->asDate($model->fechaInicio, 'dd-MM-yyyy');
+	                }
+	            ],
 
-            [
-                'label' => 'Fecha Fin',
-                'attribute' => 'fechaFin',
-                'format' => 'raw',
-                'value' => function($model){
-                    date_default_timezone_set('America/Argentina/Buenos_Aires');
-                    return Yii::$app->formatter->asDate($model->fechaFin, 'dd-MM-yyyy');
-                }
-            ],
+	            [
+	                'label' => 'Fecha Fin',
+	                'attribute' => 'fechaFin',
+	                'format' => 'raw',
+	                'value' => function($model){
+	                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+	                    return Yii::$app->formatter->asDate($model->fechaFin, 'dd-MM-yyyy');
+	                }
+	            ],
 
-            
-            [
-                'label' => 'Horas',
-                'format' => 'raw',
-                'value' => function($model){
-                    return '<center>'.$model->hora.Progress::widget([
-                            'options' => ['class' => 'progress-warning progress-striped'],
-                            'percent' => $model->hora*100/$model->catedra0->actividad0->cantHoras,
-                            'label' => round($model->hora*100/$model->catedra0->actividad0->cantHoras).'%'.'</center>',
-                    ]);
-                }
-            ],
+	            
+	            [
+	                'label' => 'Horas',
+	                'format' => 'raw',
+	                'value' => function($model){
+	                    return '<center>'.$model->hora.Progress::widget([
+	                            'options' => ['class' => 'progress-warning progress-striped'],
+	                            'percent' => $model->hora*100/$model->catedra0->actividad0->cantHoras,
+	                            'label' => round($model->hora*100/$model->catedra0->actividad0->cantHoras).'%'.'</center>',
+	                    ]);
+	                }
+	            ],
 
-           // ['class' => 'yii\grid\ActionColumn'],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{viewdetcat} {updatedetcat} {deletedetcat}',
-                
-                'buttons' => [
-                    'viewdetcat' => function($url, $model, $key){
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-eye-open"></span>',
-                            '?r=detallecatedra/view&id='.$model->id);
-                    },
-                    'updatedetcat' => function($url, $model, $key){
-                        return Html::button('<span class="glyphicon glyphicon-pencil"></span>',
-                            ['value' => Url::to('index.php?r=detallecatedra/update&id='.$model->id.'&catedra=' .$model->catedra),
-                                'class' => 'modala btn btn-link', 'id'=>'modala']);
-
-
-                    },
-                    'deletedetcat' => function($url, $model, $key){
-                        return Html::button('<span class="glyphicon glyphicon-inbox"></span>', 
-                            ['value' => Url::to('index.php?r=detallecatedra/fechafin&id='.$model->id.'&catedra=' .$model->catedra), 
-                           'class' => 'modalafinfe btn btn-link', 'id'=>'modalafinfe']);
-                    },
-                ]
-
-            ],
-        ],
-    ]); ?>
-
-    </p>
-  </div>
-  <div id="menu1" class="tab-pane fade">
-    
-    <p>
-        
-        <?= GridView::widget([
-        'dataProvider' => $dataProviderinactivo,
-        'rowOptions' => ['class' => 'active'],
-        'columns' => [
-
-            [   
-                'label' => 'Desde',
-                'attribute' => 'fechaInicio'
-            ],
-
-            [   
-                'label' => 'Hasta',
-                'attribute' => 'fechaFin'
-            ],
-            
-            [   
-                'label' => 'Condición',
-                'attribute' => 'condicion0.nombre'
-            ],
-            
-            [   
-                'label' => 'Apellido',
-                'attribute' => 'docente0.apellido'
-            ],
-
-            [   
-                'label' => 'Nombre',
-                'attribute' => 'docente0.nombre'
-            ],
-            
-            [   
-                'label' => 'Revista',
-                'attribute' => 'revista0.nombre'
-            ],
-
-            
-            [
-                'label' => 'Horas',
-                'format' => 'raw',
-                'value' => function($model){
-                    return '<center>'.$model->hora.Progress::widget([
-                            'options' => ['class' => 'progress-warning progress-striped'],
-                            'percent' => $model->hora*100/$model->catedra0->actividad0->cantHoras,
-                            'label' => round($model->hora*100/$model->catedra0->actividad0->cantHoras).'%'.'</center>',
-                    ]);
-                }
-            ],
-
-           // ['class' => 'yii\grid\ActionColumn'],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{viewdetcat} {updatedetcat} {deletedetcat}',
-                
-                'buttons' => [
-                    'viewdetcat' => function($url, $model, $key){
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-eye-open"></span>',
-                            '?r=detallecatedra/view&id='.$model->id);
-                    },
-                    'updatedetcat' => function($url, $model, $key){
-                        return Html::button('<span class="glyphicon glyphicon-pencil"></span>',
-                            ['value' => Url::to('index.php?r=detallecatedra/update&id='.$model->id.'&catedra=' .$model->catedra),
-                                'class' => 'modala btn btn-link', 'id'=>'modala']);
+	           // ['class' => 'yii\grid\ActionColumn'],
+	            [
+	                'class' => 'yii\grid\ActionColumn',
+	                'template' => '{viewdetcat} {updatedetcat} {deletedetcat}',
+	                
+	                'buttons' => [
+	                    'viewdetcat' => function($url, $model, $key){
+	                        return Html::a(
+	                            '<span class="glyphicon glyphicon-eye-open"></span>',
+	                            '?r=detallecatedra/view&id='.$model->id);
+	                    },
+	                    'updatedetcat' => function($url, $model, $key){
+	                        return Html::button('<span class="glyphicon glyphicon-pencil"></span>',
+	                            ['value' => Url::to('index.php?r=detallecatedra/update&id='.$model->id.'&catedra=' .$model->catedra),
+	                                'class' => 'modala btn btn-link', 'id'=>'modala']);
 
 
-                    },
-                    'deletedetcat' => function($url, $model, $key){
-                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=detallecatedra/delete&id='.$model->id, 
-                            ['data' => [
-                            'confirm' => 'Está seguro de querer eliminar este elemento?',
-                            'method' => 'post',
-                             ]
-                            ]);
-                    },
-                ]
+	                    },
+	                    'deletedetcat' => function($url, $model, $key){
+	                        return Html::button('<span class="glyphicon glyphicon-inbox"></span>', 
+	                            ['value' => Url::to('index.php?r=detallecatedra/fechafin&id='.$model->id.'&catedra=' .$model->catedra), 
+	                           'class' => 'modalafinfe btn btn-link', 'id'=>'modalafinfe']);
+	                    },
+	                ]
 
-            ],
-        ],
-    ]); ?>
+	            ],
+	        ],
+	    ]); ?>
 
-    </p>
-  </div>
-  
+	    </p>
+	  </div>
+	  <div id="menu1" class="tab-pane fade">
+	    
+	    <p>
+	        
+	        <?= GridView::widget([
+	        'dataProvider' => $dataProviderinactivo,
+	        'rowOptions' => ['class' => 'active'],
+	        'columns' => [
+
+	            [   
+	                'label' => 'Desde',
+	                'attribute' => 'fechaInicio'
+	            ],
+
+	            [   
+	                'label' => 'Hasta',
+	                'attribute' => 'fechaFin'
+	            ],
+	            
+	            [   
+	                'label' => 'Condición',
+	                'attribute' => 'condicion0.nombre'
+	            ],
+	            
+	            [   
+	                'label' => 'Apellido',
+	                'attribute' => 'docente0.apellido'
+	            ],
+
+	            [   
+	                'label' => 'Nombre',
+	                'attribute' => 'docente0.nombre'
+	            ],
+	            
+	            [   
+	                'label' => 'Revista',
+	                'attribute' => 'revista0.nombre'
+	            ],
+
+	            
+	            [
+	                'label' => 'Horas',
+	                'format' => 'raw',
+	                'value' => function($model){
+	                    return '<center>'.$model->hora.Progress::widget([
+	                            'options' => ['class' => 'progress-warning progress-striped'],
+	                            'percent' => $model->hora*100/$model->catedra0->actividad0->cantHoras,
+	                            'label' => round($model->hora*100/$model->catedra0->actividad0->cantHoras).'%'.'</center>',
+	                    ]);
+	                }
+	            ],
+
+	           // ['class' => 'yii\grid\ActionColumn'],
+	            [
+	                'class' => 'yii\grid\ActionColumn',
+	                'template' => '{viewdetcat} {updatedetcat} {deletedetcat}',
+	                
+	                'buttons' => [
+	                    'viewdetcat' => function($url, $model, $key){
+	                        return Html::a(
+	                            '<span class="glyphicon glyphicon-eye-open"></span>',
+	                            '?r=detallecatedra/view&id='.$model->id);
+	                    },
+	                    'updatedetcat' => function($url, $model, $key){
+	                        return Html::button('<span class="glyphicon glyphicon-pencil"></span>',
+	                            ['value' => Url::to('index.php?r=detallecatedra/update&id='.$model->id.'&catedra=' .$model->catedra),
+	                                'class' => 'modala btn btn-link', 'id'=>'modala']);
+
+
+	                    },
+	                    'deletedetcat' => function($url, $model, $key){
+	                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=detallecatedra/delete&id='.$model->id, 
+	                            ['data' => [
+	                            'confirm' => 'Está seguro de querer eliminar este elemento?',
+	                            'method' => 'post',
+	                             ]
+	                            ]);
+	                    },
+	                ]
+
+	            ],
+	        ],
+	    ]); ?>
+
+	    </p>
+	  </div>
+	  
+	</div>	
 </div>
+
+<div>
+	<h3>Horarios</h3>
+	    <?=
+	    Html::a('Nuevo Horario', ['horario/create', 'catedra' => $model->id], ['class' => 'btn btn-success']);
+	    
+	    /*Html::button('Agregar Horario', ['value' => Url::to('index.php?r=horario/create&catedra='.$model->id), 'class' => 'btn btn-success', 'id'=>'modalButtonHorario'])*/ ?>
+    	<?= GridView::widget([
+	        'dataProvider' => $dataProviderHoras,
+	        'rowOptions' => ['class' => 'active'],
+	        'columns' => [
+
+	            [   
+	                'label' => 'Tipo de Hora',
+	                'attribute' => 'tipo0.nombre'
+	            ],
+
+	            [   
+	                'label' => 'Día',
+	                'attribute' => 'diasemana0.nombre'
+	            ],
+	            
+	            [   
+	                'label' => 'Hora',
+	                'attribute' => 'hora0.nombre'
+	            ],
+
+	            [
+	                'class' => 'kartik\grid\ActionColumn',
+
+	                'template' => '{viewdetcat} {deletedetcat}',
+
+	                
+	                'buttons' => [
+	                    'viewdetcat' => function($url, $model, $key){
+	                        return Html::a(
+	                            '<span class="glyphicon glyphicon-eye-open"></span>',
+	                            '?r=horario/view&id='.$model['id']);
+	                    },
+	                    
+	                    'deletedetcat' => function($url, $model, $key){
+	                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=horario/delete&id='.$model['id'], 
+	                            ['data' => [
+	                            'confirm' => 'Está seguro de querer eliminar este elemento?',
+	                            'method' => 'post',
+	                             ]
+	                            ]);
+	                    },
+	                ]
+
+            	],
+	            
+	            
+	        ],
+	    ]); ?>
+</div>    
+
 
     
 

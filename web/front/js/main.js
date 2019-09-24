@@ -54,6 +54,15 @@ $(function(){
 });
 
 $(function(){
+	$('#modalButtonHorario').click(function(){
+		$('#modal').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+		document.getElementById('modalHeader').innerHTML ='Agregar Horario';
+	})
+});
+
+$(function(){
 	$('#modalaModificarNovedad').click(function(){
 		$('#modal').modal('show')
 			.find('#modalContent')

@@ -122,6 +122,8 @@ try {
                             '<div class="dropdown-divider"></div>',
                             ['label' => 'Padrones', 'url' => ['/reporte/padrones/padrones']],
                             '<div class="dropdown-divider"></div>',
+                            ['label' => 'Diferencia Planta Doc. y Horario', 'url' => ['/reporte/diferenciahorario']],
+                            '<div class="dropdown-divider"></div>',
 
                             [
                                 'label' => 'Parte Docente',
@@ -183,6 +185,8 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Tipo de Actividad', 'url' => ['/actividadtipo']],
                                 ['label' => 'Notificaciones', 'url' => ['/notificacion']],
+                                '<div class="dropdown-divider"></div>',
+                                ['label' => 'Horarios', 'url' => ['/horario/panelprincipal']],
                                 '<div class="dropdown-divider"></div>',
                             ],
 
@@ -295,6 +299,8 @@ try {
                             ['label' => 'Horas de actividades por Cátedra', 'url' => ['/reporte/horasmateriaxcatedra']],
                             '<div class="dropdown-divider"></div>',
                             ['label' => 'Padrones', 'url' => ['/reporte/padrones/padrones']],
+                            '<div class="dropdown-divider"></div>',
+                            ['label' => 'Diferencia Planta Doc. y Horario', 'url' => ['/reporte/diferenciahorario']],
                             '<div class="dropdown-divider"></div>',
 
                             [
@@ -556,6 +562,8 @@ try {
                             ['label' => 'Horas de actividades por Cátedra', 'url' => ['/reporte/horasmateriaxcatedra']],
                             '<div class="dropdown-divider"></div>',
                             ['label' => 'Padrones', 'url' => ['/reporte/padrones/padrones']],
+                            '<div class="dropdown-divider"></div>',
+                            ['label' => 'Diferencia Planta Doc. y Horario', 'url' => ['/reporte/diferenciahorario']],
                             '<div class="dropdown-divider"></div>',
 
                             [
