@@ -33,7 +33,23 @@ AppAsset::register($this);
     <?php $this->beginBody() ?>
 
 <?php 
+    //$item = $this->params['itemnav'];
+    $item = [
+                ['label' => '<div class="menuHorarios" href="#" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span><br />Menú</center></div>',
+                            'items' => [isset($this->params['itemnav']) ? $this->params['itemnav'] : '', isset($this->params['itemnav2']) ? $this->params['itemnav2'] : '', ['label' => '<a class="menuHorarios" href="index.php?r=horario/panelprincipal" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>'],  ]
+                ]
 
+            ];
+    /*$item = [];
+    if(isset($this->params['itemnav']))
+        array_push($item, $this->params['itemnav']);
+
+    
+    if(isset($this->params['itemnav2']))
+        array_push($item, $this->params['itemnav2']);
+
+    array_push($item, ['label' => '<a class="menuHorarios" href="index.php?r=horario/panelprincipal" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>']);
+*/
     NavBar::begin([
             'brandLabel' => '<img src="assets/images/logo-encabezado.png" class="pull-left"/><div>'.$this->title.'</div>'.'<div class="pull-right"></div>',
             'brandUrl' => Yii::$app->homeUrl,
@@ -45,30 +61,7 @@ AppAsset::register($this);
         echo Nav::widget([
             'encodeLabels' => false,
             'options' => ['class' => 'navbar-nav navbar-right'],
-            'items' => [
-                        
-                    ['label' => '<a class="menuHorarios" href="index.php?r=horario/panelprincipal" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>'],  /*                
-                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
-                            
-                            'items' => [
-                                            
-                                                                            
-                                            [
-                                                'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                                'url' => ['/site/logout'],
-                                                'linkOptions' => ['data-method' => 'post'],
-                                            
-                                    
-                                            ],
-                                            '<div class="dropdown-divider"></div>',
-                                
-                             ],
-                    ],*/
-
-
-
-
-                ]
+            'items' => $item
         ]);
 NavBar::end();
 
@@ -79,6 +72,7 @@ NavBar::end();
 
     <?= Alert::widget() ?>
     <?= $content ?>
+    
 </div>
 </div>
 

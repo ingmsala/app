@@ -9,12 +9,14 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Docente;
+use app\models\Preceptoria;
+use app\models\Division;
 use app\models\Revista;
 use app\models\Condicion;
 use app\models\Catedra;
 use yii\filters\AccessControl;
 use app\config\Globales;
-
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm; // Ajaxvalidation
 
 use yii\web\Response; // Ajaxvalidation
@@ -34,7 +36,7 @@ class DetallecatedraController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'inactive', 'fechafin', 'migrate'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'inactive', 'fechafin', 'migrate', 'updatehorario'],
                 'rules' => [
                     [
                         'actions' => ['create', 'update', 'delete', 'inactive', 'fechafin'],   
@@ -62,12 +64,32 @@ class DetallecatedraController extends Controller
 
                     ],
 
-                     [
-                        'actions' => ['migrate'],   
+                    [
+                        'actions' => ['updatehorario'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+                                        return true;
+                                    }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
+
+                                        $dc = $this->findModel(Yii::$app->request->queryParams['id']);
+                                        
+
+                                        $division = $dc->catedra0->division;
+                                        $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+                                        $aut = Division::find()
+                                            ->where(['preceptoria' => $pre->id])
+                                            ->andWhere(['id' => $division])
+                                            ->all();
+                                        if(count($aut)>0)
+                                            return true;
+                                        else
+                                            return false;
+
+                                    }else{
+                                        return false;
+                                    }
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -348,6 +370,68 @@ class DetallecatedraController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionDocxhorario($diasemana)
+    {
+        
+        
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+        
+        if (isset($_POST['depdrop_parents'])) {
+            
+            $parents = $_POST['depdrop_parents'];
+            $falta_id = empty($parents[1]) ? null : $parents[1];
+            if ($parents != null) {
+
+                $division_id = $parents[0];
+                
+                if($falta_id == 3 || $falta_id == 1){
+                    $detallecat = Detallecatedra::find()
+                    ->joinWith(['docente0', 'catedra0', 'catedra0.horarios'])
+                    ->where(['catedra.division' => $division_id])
+                    ->andWhere(['revista' => 6])
+                    ->andWhere(['horario.diasemana' => $diasemana])
+                    ->orderBy('docente.apellido, docente.nombre')
+                    ->all();
+                }else{
+                    $detallecat = Detallecatedra::find()
+                    ->joinWith(['docente0', 'catedra0', 'catedra0.horarios'])
+                    ->where(['catedra.division' => $division_id])
+                    ->andWhere(['revista' => 6])
+                    //->andWhere(['horario.diasemana' => $diasemana])
+                    ->orderBy('docente.apellido, docente.nombre')
+                    ->all();
+                }
+                
+
+
+
+                
+                
+       
+
+                $listDocentes=ArrayHelper::toArray($detallecat, [
+                    'app\models\Detallecatedra' => [
+                        'id' => function($detallecatedra) {
+                            return $detallecatedra['docente0']['id'];},
+                        'name' => function($detallecatedra) {
+                            return $detallecatedra['docente0']['apellido'].', '.$detallecatedra['docente0']['nombre'].' ('.$detallecatedra['catedra0']['actividad0']['nombre'].')';},
+                    ],
+                ]);
+                $out = $listDocentes;
+                
+                return ['output'=>$out, 'selected'=>''];
+            }
+
+        }
+
+        return ['output'=>'', 'selected'=>''];
+
+        
+        
+        
     }
 
     

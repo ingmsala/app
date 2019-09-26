@@ -15,6 +15,7 @@ if($vista == 'docentes')
 else
 	$txt = 'Materias';
 $this->title = 'Horario de Clases: '.$paramdia->nombre;
+$this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="index.php?r=horario/menuxdia" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>'];
 
 ?>
 <div class="horario-view">
@@ -66,6 +67,8 @@ JS;
 	<?= GridView::widget([
 		        'dataProvider' => $provider,
 		        //'filterModel' => $searchModel,
+		        'floatHeader' => true,
+		        'floatHeaderOptions' => (Yii::$app->user->identity->role == Globales::US_HORARIO) ? ['top' => 130] : ['top' => 50],
 		        'summary' => false,
 		        'columns' => [
 		            //['class' => 'yii\grid\SerialColumn'],

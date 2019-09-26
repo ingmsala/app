@@ -8,6 +8,7 @@ use app\models\HorarioSearch;
 use app\models\DetallecatedraSearch;
 use app\models\Hora;
 use app\models\Division;
+use app\models\Preceptoria;
 use app\models\Catedra;
 use app\models\Docente;
 use app\models\Diasemana;
@@ -19,6 +20,7 @@ use yii\filters\VerbFilter;
 use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use yii\helpers\ArrayHelper;
 
 /**
  * HorarioController implements the CRUD actions for Horario model.
@@ -36,16 +38,83 @@ class HorarioController extends Controller
                 'only' => ['index', 'view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario'],
                 'rules' => [
                     [
-                        'actions' => ['menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal'],   
+                        'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
                                     if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA])){
                                         return true;
+                                    /*}elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
+
+                                        $division = Yii::$app->request->queryParams['division'];
+                                        $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+                                        $aut = Division::find()
+                                            ->where(['preceptoria' => $pre->id])
+                                            ->andWhere(['id' => $division])
+                                            ->all();
+                                        if(count($aut)>0)
+                                            return true;
+                                        else
+                                            return false;*/
+                                        }else{
+                                        return false;
                                     }
 
+                                    
+                                }catch(\Exception $exception){
                                     return false;
+                            }
+                        },
+                        
+
+                    ],
+
+                    [
+                        'actions' => ['completoxcurso'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA])){
+                                        return true;
+                                    }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
+
+                                        $division = Yii::$app->request->queryParams['division'];
+                                        $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+                                        $aut = Division::find()
+                                            ->where(['preceptoria' => $pre->id])
+                                            ->andWhere(['id' => $division])
+                                            ->all();
+                                        if(count($aut)>0)
+                                            return true;
+                                        else
+                                            return false;
+                                        }else{
+                                        return false;
+                                    }
+
+                                    
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        },
+                        
+
+                    ],
+
+                    [
+                        'actions' => ['menuxdivision'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_PRECEPTORIA])){
+                                        return true;
+                                    
+                                    }else{
+                                        return false;
+                                    }
 
                                     
                                 }catch(\Exception $exception){
@@ -75,7 +144,24 @@ class HorarioController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO]);
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+                                    return true;
+                                }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
+
+                                        $division = Yii::$app->request->queryParams['division'];
+                                        $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+                                        $aut = Division::find()
+                                            ->where(['preceptoria' => $pre->id])
+                                            ->andWhere(['id' => $division])
+                                            ->all();
+                                        if(count($aut)>0)
+                                            return true;
+                                        else
+                                            return false;
+
+                                    }else{
+                                        return false;
+                                    }
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -118,14 +204,25 @@ class HorarioController extends Controller
         return $this->render('panelprincipal');
     }
 
+
+
     public function actionMenuxdivision()
     {
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
-        $divisiones = Division::find()
-        				->where(['in', 'turno', [1,2]])
-        				->orderBy('id')
-        				->all();
+        if(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
+            $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+            $divisiones = Division::find()
+                        ->where(['preceptoria' => $pre->id])
+                        ->orderBy('id')
+                        ->all();
+        }else{
+            $divisiones = Division::find()
+                                    ->where(['in', 'turno', [1,2]])
+                                    ->orderBy('id')
+                                    ->all();
+        }
+        
         $echodiv = '';
         foreach ($divisiones as $division) {
         		$echodiv .= '<div class="col-md-1 col-lg-1 col-sm-1 col-lx-1" style="height: 16vh; width: 16vh; vertical-align: middle;">';
@@ -806,4 +903,72 @@ class HorarioController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
+    public function actionHoraxdivisionxdocente($diasemana)
+    {
+        
+        
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+        
+        if (isset($_POST['depdrop_parents'])) {
+            
+            $parents = $_POST['depdrop_parents'];
+
+            $division_id = empty($parents[0]) ? null : $parents[0];
+            $docente_id = empty($parents[1]) ? null : $parents[1];
+            $falta_id = empty($parents[2]) ? null : $parents[2];
+
+            if ($parents != null &&  $division_id != null && $docente_id != null && $falta_id != null) {
+
+                if($falta_id == 3 || $falta_id == 1){
+
+                    $horario = Horario::find()
+                                ->joinWith(['catedra0', 'catedra0.detallecatedras', ])
+                                ->where(['catedra.division' => $division_id])
+                                ->andWhere(['detallecatedra.revista' => 6])
+                                ->andWhere(['detallecatedra.docente' => $docente_id])
+                                ->andWhere(['horario.diasemana' => $diasemana])
+                                ->orderBy('horario.hora')
+                                ->all();
+                }else{
+                    $horario = Horario::find()
+                                ->joinWith(['catedra0', 'catedra0.detallecatedras', ])
+                                ->where(['catedra.division' => $division_id])
+                                ->andWhere(['detallecatedra.revista' => 6])
+                                //->andWhere(['detallecatedra.docente' => $docente_id])
+                                ->andWhere(['horario.diasemana' => $diasemana])
+                                ->orderBy('horario.hora')
+                                ->all();
+                }
+
+
+
+                
+                
+       
+
+                $listhorario=ArrayHelper::toArray($horario, [
+                    'app\models\Horario' => [
+                        'id' => function($horax) {
+                            return $horax['hora0']['id'];},
+                        'name' => function($horax) {
+                            return $horax['hora0']['nombre'];},
+                    ],
+                ]);
+                $out = $listhorario;
+                
+                return ['output'=>$out, 'selected'=>''];
+            }
+
+        }
+
+        return ['output'=>'', 'selected'=>''];
+
+        
+        
+        
+    }
+
 }

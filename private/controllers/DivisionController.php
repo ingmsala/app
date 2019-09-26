@@ -211,4 +211,41 @@ class DivisionController extends Controller
                 
         
     }
+
+    public function actionDivixprec($preceptoria)
+    {   
+        $searchModel = new DivisionSearch();
+        
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+
+        if (isset($_POST['depdrop_parents'])) {
+            
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+
+                $propuesta_id = $parents[0];
+                $divisiones = Division::find()
+                ->where(['preceptoria' => $preceptoria])
+                ->orderBy('nombre ASC')
+                ->all();
+                
+
+                $listDivisiones=ArrayHelper::toArray($divisiones, [
+                    'app\models\Division' => [
+                        'id',
+                        'name' => 'nombre',
+                    ],
+                ]);
+                $out = $listDivisiones;
+                return ['output'=>$out, 'selected'=>''];
+            }
+
+        }
+
+        return ['output'=>'', 'selected'=>''];
+        
+                
+        
+    }
 }

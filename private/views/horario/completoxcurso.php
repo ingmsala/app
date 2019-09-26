@@ -15,7 +15,12 @@ else
 	$txt = 'Materias';
 
 $this->title = 'Horario de Clases: '.$paramdivision->nombre;
+$this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="index.php?r=horario/menuxdivision" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>'];
 
+if($vista == 'docentes')
+	        	$this->params['itemnav2'] = ['label' => '<a class="menuHorarios" href="index.php?r=horario/completoxcurso&division='.$paramdivision->id.'&vista=materias" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-book" aria-hidden="true"></span><br />Materias</center></a>'];
+	        else
+	        	$this->params['itemnav2'] = ['label' =>   '<a class="menuHorarios" href="index.php?r=horario/completoxcurso&division='.$paramdivision->id.'&vista=docentes" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-education" aria-hidden="true"></span><br />Docentes</center></a>'];
 ?>
 <div class="horario-view">
 

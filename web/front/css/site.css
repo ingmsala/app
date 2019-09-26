@@ -393,11 +393,18 @@ a.desc:after {
 }
 
 .navbar-default-horarios .container {
-    
+    width: auto;
     margin-left: 20px;
+    
     
 
 }
+
+.collapse navbar-collapse{
+    margin-right: -12.5%;!important;
+}
+
+
 .navbar-default-horarios .navbar-brand:hover,
 .navbar-default-horarios .navbar-brand:focus {
     color: #f5f5f5;

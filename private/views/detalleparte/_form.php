@@ -4,14 +4,16 @@ use yii\helpers\Html;
 use kartik\form\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
+use kartik\depdrop\DepDrop;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Detalleparte */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="alert alert-info" role="alert">
-     <b>Nuevo</b> Se pueden marcar horas vacantes dejando el campo de "Docente" vacío y en "Tipo de Falta" marcar la opción "Hora vacante"
+<div class="alert alert-danger" role="alert">
+     <b>Info</b> Si no se corresponde el docente en la hora seleccionada debe actualizar el horario antes de guardar la inasistencia.
     </div>
 
 <div class="detalleparte-form">
@@ -28,45 +30,6 @@ use kartik\select2\Select2;
 
     <?php $listDivisiones=ArrayHelper::map($divisiones,'id','nombre'); ?>
 
-    <?= $form->field($model, 'parte')->hiddenInput(['value'=> $partes->id])->label(false) ?>
-
-    <?= $form->field($model, 'division')->dropDownList($listDivisiones, ['prompt'=>'Seleccionar...']); ?>
-
-    
-    <?= 
-
-        $form->field($model, 'docente')->widget(Select2::classname(), [
-            'data' => $listDocentes,
-            'options' => ['placeholder' => 'Seleccionar...'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]);
-
-    ?>
-
-   
-
-     <?php 
-        if ($origen=='create')
-            $labelhora = 'Horas <small><span class="text-muted">(Puede seleccionar más de una hora)</mark></small>';
-        else
-            $labelhora = 'Hora';
-
-        echo $form->field($model, 'hora')->widget(Select2::classname(), [
-            'data' => $listHoras,
-            'options' => [
-                'prompt' => '...',
-                'multiple' => ($origen=='create') ? true : false,
-            ],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ])->label($labelhora);
-
-    ?>
-
-   
     <?= 
 
         $form->field($model, 'falta')->widget(Select2::classname(), [
@@ -110,6 +73,100 @@ use kartik\select2\Select2;
         ]);
 
     ?>
+
+    <?= $form->field($model, 'parte')->hiddenInput(['value'=> $partes->id])->label(false) ?>
+
+    <?php /*echo $form->field($model, 'division')->dropDownList($listDivisiones, ['prompt'=>'Seleccionar...', 'id' => 'division_id']);*/ ?>
+
+    <?php /*
+        if ($origen=='create')
+            $labelhora = 'Horas <small><span class="text-muted">(Puede seleccionar más de una hora)</mark></small>';
+        else
+            $labelhora = 'Hora';
+
+        echo $form->field($model, 'hora')->widget(Select2::classname(), [
+            'data' => $listHoras,
+
+            'options' => [
+                'prompt' => '...',
+                
+                'multiple' => ($origen=='create') ? true : false,
+            ],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ])->label($labelhora);*/
+
+    ?>
+
+    <?php 
+/*
+        $form->field($model, 'docente')->widget(Select2::classname(), [
+            'data' => $listDocentes,
+            'options' => ['placeholder' => 'Seleccionar...', 'readonly' => true, 'disabled' => 'disabled'],
+            'pluginOptions' => [
+                'allowClear' => true,
+
+            ],
+        ]);
+*/
+    ?>
+
+    
+    <?php echo $form->field($model, 'division')->widget(DepDrop::classname(), [
+        //'type' => DepDrop::TYPE_SELECT2,
+        //'name' => 'catedra',
+        
+        'options' => ['id' => 'division_id'],
+        'pluginOptions' => [
+           'depends'  => ['falta'],
+           'placeholder' => 'Seleccionar...',
+           'url' => Url::to(['/division/divixprec', 'preceptoria' => $partes->preceptoria])
+        ]
+    ]);  ?>
+
+    <?php /*echo date("w",strtotime($partes->fecha));*/  ?>
+    
+                                <?php echo $form->field($model, 'docente')->widget(DepDrop::classname(), [
+                                    //'type' => DepDrop::TYPE_SELECT2,
+                                    //'name' => 'catedra',
+                                    
+                                    'options' => ['id'=>'catedra-id'],
+                                    'pluginOptions' => [
+                                       'depends'  => ['division_id', 'falta'],
+                                       'placeholder' => 'Seleccionar...',
+                                       'url' => Url::to(['/detallecatedra/docxhorario', 'diasemana' => date("w",strtotime($partes->fecha))+1])
+                                    ]
+                                ])->label('Docente (Materia)');  ?>
+
+    <?php 
+
+        if ($origen=='create')
+            $labelhora = 'Horas <small><span class="text-muted">(Puede seleccionar más de una hora)</mark></small>';
+        else
+            $labelhora = 'Hora';
+
+    ?>
+
+     <?php echo $form->field($model, 'hora')->widget(DepDrop::classname(), [
+        'type' => DepDrop::TYPE_SELECT2,
+        //'name' => 'hora',
+        
+        'options' => ['id'=>'hora-id', 'multiple' => ($origen=='create') ? true : false,],
+        'pluginOptions' => [
+           'depends'  => ['division_id', 'catedra-id', 'falta'],
+           'placeholder' => 'Seleccionar...',
+
+           'url' => Url::to(['/horario/horaxdivisionxdocente', 'diasemana' => date("w",strtotime($partes->fecha))+1])
+        ]
+    ])->label($labelhora);  ?>
+
+   
+
+     
+
+   
+    
 
     <div id="retaus" style="display: none;">
         <?= $form->field($model, 'llego')->textInput(['id'=>'llego']) ?>

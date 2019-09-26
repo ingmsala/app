@@ -9,6 +9,7 @@ use app\config\Globales;
 /* @var $model app\models\Horario */
 
 $this->title = $docenteparam->apellido.', '.$docenteparam->nombre;
+$this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$app->request->referrer.'" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>'];
 
 
 ?>

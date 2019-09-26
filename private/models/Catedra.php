@@ -100,6 +100,11 @@ class Catedra extends \yii\db\ActiveRecord
         return $this->hasMany(Detallecatedra::className(), ['catedra' => 'id']);
     }
 
+    public function getHorarios()
+    {
+        return $this->hasMany(Horario::className(), ['catedra' => 'id']);
+    }
+
     public function getDocentes()
     {
         return $this->hasMany(Docente::className(), ['id' => 'docente'])->via('detallecatedras');
