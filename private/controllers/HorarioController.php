@@ -43,7 +43,7 @@ class HorarioController extends Controller
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
-                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA])){
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_COORDINACION, Globales::US_PRECEPTORIA])){
                                         return true;
                                     /*}elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
 
@@ -76,7 +76,7 @@ class HorarioController extends Controller
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
-                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA])){
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_COORDINACION])){
                                         return true;
                                     }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
 
@@ -109,7 +109,7 @@ class HorarioController extends Controller
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
-                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_PRECEPTORIA])){
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_SECRETARIA, Globales::US_COORDINACION])){
                                         return true;
                                     
                                     }else{
@@ -146,7 +146,7 @@ class HorarioController extends Controller
                             try{
                                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
                                     return true;
-                                }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
+                                }/*elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
 
                                         $division = Yii::$app->request->queryParams['division'];
                                         $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
@@ -159,7 +159,7 @@ class HorarioController extends Controller
                                         else
                                             return false;
 
-                                    }else{
+                                    }*/else{
                                         return false;
                                     }
                             }catch(\Exception $exception){
@@ -500,7 +500,7 @@ class HorarioController extends Controller
         		# code...
                 if($cd == 0)
                     $array[$hora->id][$cd] = $h[$ch+1]; 
-                if (Yii::$app->user->identity->role != Globales::US_HORARIO)
+                if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]))
         		  $array[$hora->id][$dia->id] = '<a class="btn btn-info btn-sm" href="?r=horario/createdesdehorario&division='.$division.'&hora='.$hora->id.'&diasemana='.$dia->id.'&tipo=1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>';
                 else
                     $array[$hora->id][$dia->id] = "-";
@@ -536,7 +536,7 @@ class HorarioController extends Controller
 		                	}
 		                   //return $salida;
 		    if($vista == 'docentes'){
-                if (Yii::$app->user->identity->role != Globales::US_HORARIO)
+                if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]))
                     $array[$horariox->hora][$horariox->diasemana] = $salida.'<div class="pull-right"><a class="btn btn-success btn-sm" href="?r=horario/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&diasemana='.$horariox->diasemana.'&tipo=1"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></div>';
                 else
                     $array[$horariox->hora][$horariox->diasemana] = $salida;

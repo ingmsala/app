@@ -24,15 +24,16 @@ $this->title = 'Seleccione un docente';
 JS;
 
 ?>
-    <div style="display: none;">
-         <div class="pull-right" style="margin-bottom: 10px;margin-left: 5px;">
-            <?php 
-              	echo  '<a class="menuHorarios" href="index.php?r=horario/panelprincipal" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>';
-            ?>
-        </div>
-    </div>
-
-<div class="clearfix"></div>
+    <div class="row">
+<?php $userhorario = (Yii::$app->user->identity->role == Globales::US_HORARIO)? "none" : "block" ?>
+   <div style="display: <?= $userhorario ?>;">
+      <div  class="pull-right">
+          <?php 
+              echo  '<a class = "btn btn-default" href="index.php?r=horario/panelprincipal"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>';
+          ?>
+      </div>
+  </div>
+</div>
 <?php $form = ActiveForm::begin(); ?>
 
          <?= 

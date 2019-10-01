@@ -318,6 +318,11 @@ AppAsset::register($this);
                         ['label' => '<span class="glyphicon glyphicon-user"></span><br>'.Yii::$app->user->identity->username.'',
                         
                             'items' => [
+
+                                 [
+                                    'label' => 'Perfil Administración',
+                                    'url' => ['/horario/panelprincipal'],
+                                ],
                                                            [
                                     'label' => 'Cambiar contraseña',
                                     'url' => ['/user/cambiarpass'],

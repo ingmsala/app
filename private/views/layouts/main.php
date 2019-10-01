@@ -141,6 +141,8 @@ try {
                                     '<div class="dropdown-divider"></div>',
                                     ['label' => 'Comparación por Turno en un año', 'url' => ['/reporte/parte/faltasxanioxturnototal']],
                                     '<div class="dropdown-divider"></div>',
+                                    ['label' => 'Estado de Justificación de Inasistencias', 'url' => ['/reporte/parte/estadoinasistenciasdocentes']],
+                                    '<div class="dropdown-divider"></div>',
                                     ['label' => 'Distribución de faltas por rango de días', 'url' => ['/reporte/parte/distribuciondediasxmes']],
                                     '<div class="dropdown-divider"></div>',
                                     ['label' => 'Distribución de faltas por día y hora', 'url' => ['/reporte/parte/distribuciondediasyhoras']],
@@ -303,6 +305,18 @@ try {
                             ['label' => 'Diferencia Planta Doc. y Horario', 'url' => ['/reporte/diferenciahorario']],
                             '<div class="dropdown-divider"></div>',
 
+                            ['label' => 'Horarios', 
+                                    'itemsOptions'=>['class'=>'dropdown-submenu'],
+                                    'submenuOptions'=>['class'=>'dropdown-menu'],
+                                    'items' => [
+                                        
+                                        ['label' => 'Clases', 'url' => ['horario/panelprincipal']],
+                                        '<div class="dropdown-divider"></div>',
+                                        
+                                        
+                                    ],
+                            ],
+
                             [
                                 'label' => 'Parte Docente',
                                 'itemsOptions'=>['class'=>'dropdown-submenu'],
@@ -318,6 +332,8 @@ try {
                                     ['label' => 'Cantidad de Faltas por Turno', 'url' => ['/reporte/parte/faltasxmesesxturno']],
                                     '<div class="dropdown-divider"></div>',
                                     ['label' => 'Comparación por Turno en un año', 'url' => ['/reporte/parte/faltasxanioxturnototal']],
+                                    '<div class="dropdown-divider"></div>',
+                                    ['label' => 'Estado de Justificación de Inasistencias', 'url' => ['/reporte/parte/estadoinasistenciasdocentes']],
                                     '<div class="dropdown-divider"></div>',
                                     ['label' => 'Distribución de faltas por rango de días', 'url' => ['/reporte/parte/distribuciondediasxmes']],
                                     '<div class="dropdown-divider"></div>',
@@ -404,7 +420,17 @@ try {
                 $items = [
 
                     ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
-                        
+                    
+                    ['label' => 'Horarios', 
+                            'items' => [
+                                
+                                ['label' => 'Clases', 'url' => ['horario/panelprincipal']],
+                                '<div class="dropdown-divider"></div>',
+                                
+                                
+                            ],
+                    ],
+
                     ['label' => 'Parte Docente', 
                             'items' => [
                                 
@@ -505,6 +531,16 @@ try {
                 $items = [
 
                     ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
+
+                    ['label' => 'Horarios', 
+                            'items' => [
+                                
+                                ['label' => 'Clases', 'url' => ['horario/panelprincipal']],
+                                '<div class="dropdown-divider"></div>',
+                                
+                                
+                            ],
+                    ],
                         
                     ['label' => ' Parte Docente', 
                             'items' => [
@@ -581,6 +617,8 @@ try {
                                     ['label' => 'Cantidad de Faltas por Turno', 'url' => ['/reporte/parte/faltasxmesesxturno']],
                                     '<div class="dropdown-divider"></div>',
                                     ['label' => 'Comparación por Turno en un año', 'url' => ['/reporte/parte/faltasxanioxturnototal']],
+                                    '<div class="dropdown-divider"></div>',
+                                    ['label' => 'Estado de Justificación de Inasistencias', 'url' => ['/reporte/parte/estadoinasistenciasdocentes']],
                                     '<div class="dropdown-divider"></div>',
                                     ['label' => 'Distribución de faltas por rango de días', 'url' => ['/reporte/parte/distribuciondediasxmes']],
                                     '<div class="dropdown-divider"></div>',
@@ -722,6 +760,41 @@ try {
                                                 'label' => 'Cambiar contraseña',
                                                 'url' => ['/user/cambiarpass'],
                                             ],
+                                
+                                            [
+                                                'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                                                'url' => ['/site/logout'],
+                                                'linkOptions' => ['data-method' => 'post'],
+                                            
+                                    
+                                            ],
+                                            '<div class="dropdown-divider"></div>',
+                                
+                             ],
+                    ],
+
+
+
+
+                ];
+
+
+            }else if(Yii::$app->user->identity->role == Globales::US_COORDINACION){
+
+                
+                $items = [
+                        
+                   [
+                            'label' => 'Espacios Optativos', 
+                            'url' => ['/optativas'],
+                    ],
+                    
+                    
+                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
+                            
+                            'items' => [
+                                            
+                                           
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',

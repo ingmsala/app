@@ -47,18 +47,24 @@ JS;
     ?>
 
     <h1><?= (Yii::$app->user->identity->role != Globales::US_HORARIO) ? Html::encode($this->title).'    <span class="badge">'.$txt.'</span>' : '' ?>
-    <div style="display: none;">
-    	<div  class="pull-right" style="margin-bottom: 10px;margin-left: 5px;">
+    <?php $userhorario = (Yii::$app->user->identity->role == Globales::US_HORARIO)? "none" : "block" ?>
+    <div style="display: <?= $userhorario ?>;">
+    	<div  class="pull-right">
 	        <?php 
-	          	echo  '<a class="menuHorarios" href="index.php?r=horario/panelprincipal" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>';
+	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/panelprincipal"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>';
 	        ?>
 	    </div>
-	    <div class="pull-right" style="margin-bottom: 10px;margin-left: 5px;">
+	    <div class="pull-right">
 	        <?php 
 	        if($vista == 'docentes')
-	        	echo  '<a class="menuHorarios" href="index.php?r=horario/completoxcurso&division='.$paramdivision->id.'&vista=materias" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-book" aria-hidden="true"></span><br />Materias</center></a>';
+	        	echo  '<a class = "btn btn-default" href="index.php?r=horario/completoxcurso&division='.$paramdivision->id.'&vista=materias"><center><span class="glyphicon glyphicon-book" aria-hidden="true"></span><br />Materias</center></a>';
 	        else
-	        	echo  '<a class="menuHorarios" href="index.php?r=horario/completoxcurso&division='.$paramdivision->id.'&vista=docentes" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-education" aria-hidden="true"></span><br />Docentes</center></a>';
+	        	echo  '<a class = "btn btn-default" href="index.php?r=horario/completoxcurso&division='.$paramdivision->id.'&vista=docentes"><center><span class="glyphicon glyphicon-education" aria-hidden="true"></span><br />Docentes</center></a>';
+	        ?>
+	    </div>
+	    <div  class="pull-right">
+	        <?php 
+	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/menuxdivision"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>';
 	        ?>
 	    </div>
     </div>
@@ -171,7 +177,7 @@ JS;
 	                'class' => 'kartik\grid\ActionColumn',
 
 	                'template' => '{viewdetcat}',
-	                'visible' => (Yii::$app->user->identity->role == Globales::US_HORARIO) ? false : true,
+	                'visible' => (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTORIA])) ? true : false,
 	                
 	                'buttons' => [
 	                    'viewdetcat' => function($url, $model, $key){

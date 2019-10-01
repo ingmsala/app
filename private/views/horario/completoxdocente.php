@@ -16,13 +16,21 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 <div class="horario-view">
 
     <h1><?= (Yii::$app->user->identity->role != Globales::US_HORARIO) ? Html::encode('Horario de Clases: '.$this->title) : '' ?>
-    <div style="display: none;">
-	     <div class="pull-right" style="margin-bottom: 10px;margin-left: 5px;">
+    <div class="row">
+<?php $userhorario = (Yii::$app->user->identity->role == Globales::US_HORARIO)? "none" : "block" ?>
+	 <div style="display: <?= $userhorario ?>;">
+    	<div  class="pull-right">
 	        <?php 
-	          	echo  '<a class="menuHorarios" href="index.php?r=horario/panelprincipal" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>';
+	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/panelprincipal"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>';
+	        ?>
+	    </div>
+	    <div  class="pull-right">
+	        <?php 
+	          	echo  '<a class = "btn btn-default" href="'.Yii::$app->request->referrer.'"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>';
 	        ?>
 	    </div>
 	</div>
+</div>
     
     
    
