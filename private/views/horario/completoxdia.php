@@ -73,6 +73,7 @@ JS;
 	<?= GridView::widget([
 		        'dataProvider' => $provider,
 		        //'filterModel' => $searchModel,
+		        'responsiveWrap' => false,
 		        'floatHeader' => true,
 		        'floatHeaderOptions' => (Yii::$app->user->identity->role == Globales::US_HORARIO) ? ['top' => 130] : ['top' => 50],
 		        'summary' => false,

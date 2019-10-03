@@ -225,7 +225,7 @@ class HorarioController extends Controller
         
         $echodiv = '';
         foreach ($divisiones as $division) {
-        		$echodiv .= '<div class="col-md-1 col-lg-1 col-sm-1 col-lx-1" style="height: 16vh; width: 16vh; vertical-align: middle;">';
+        		$echodiv .= '<div class="pull-left" style="height: 16vh; width: 16vh; vertical-align: middle;">';
         		$echodiv .= '<center><div>';
                 $echodiv .= '<a class="menuHorarios" href="index.php?r=horario/completoxcurso&division='.$division->id.'&vista=docentes" role="button" style="font-size:5vh; width:15vh; height: 15vh;">'.$division->nombre.'</a>';
                 $echodiv .= '</div></center>';
@@ -246,7 +246,7 @@ class HorarioController extends Controller
                         ->all();
         $echodiv = '';
         foreach ($dias as $dia) {
-                $echodiv .= '<div class="col-md-3 col-lg-3 col-sm-3 col-lx-3" style="height: 16vh; vertical-align: middle;">';
+                $echodiv .= '<div class="pull-left" style="height: 16vh; width: 37vh; vertical-align: middle;">';
                 $echodiv .= '<div>';
                 $echodiv .= '<center><a class="menuHorarios" href="index.php?r=horario/completoxdia&dia='.$dia->id.'&vista=docentes" role="button" style="font-size:5vh; width:30vh; height: 15vh;">'.$dia->nombre.'</a>';
                 $echodiv .= '</div><center>';
@@ -840,14 +840,15 @@ class HorarioController extends Controller
         $abecedario = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','Ñ','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
         //$docentes = Docente::find()->select('id, LEFT(apellido, 1) AS inicial, apellido, nombre')->orderBy('apellido, nombre')->all();
         $echodiv = '';
+        $echodiv .= '<div class="row">';
         foreach ($abecedario as $letra) {
-                $echodiv .= '<div class="col-md-1 col-lg-1 col-sm-1 col-lx-1" style="height: 16vh; width: 16vh; vertical-align: middle;">';
+                $echodiv .= '<div class="pull-left" style="height: 16vh; width: 16vh; vertical-align: middle;">';
                 $echodiv .= '<center><div>';
                 $echodiv .= '<a class="menuHorarios" href="index.php?r=horario/menuxdocenteletra&letra='.$letra.'" role="button" style="font-size:5vh; width:15vh; height: 15vh;">'.$letra.'</a>';
                 $echodiv .= '</div></center>';
                 $echodiv .= '</div>';
         }
-        
+        $echodiv .= '</div>';
 
         /*if ($model->load(Yii::$app->request->post())) {
             $id = Yii::$app->request->post()['Docente']['apellido'];
@@ -875,7 +876,7 @@ class HorarioController extends Controller
 
         $echodiv = '';
         foreach ($docentes as $doc) {
-                $echodiv .= '<div class="col-md-2 col-lg-2 col-sm-2 col-lx-2" style="height: 21vh; width:29vh; vertical-align: middle;">';
+                $echodiv .= '<div class="pull-left" style="height: 21vh; width:29vh; vertical-align: middle;">';
                 $echodiv .= '<div>';
                 $echodiv .= '<center><a class="menuHorarios" href="index.php?r=horario/completoxdocente&docente='.$doc->id.'" role="button" style="font-size:2.5vh; width:28vh; height: 20vh;">'.$doc->apellido.', '.$doc->nombre.'</a>';
                 $echodiv .= '</div><center>';

@@ -42,6 +42,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
     		<?= GridView::widget([
 		        'dataProvider' => $providerTm,
 		        //'filterModel' => $searchModel,
+		        'responsiveWrap' => false,
 		        'summary' => false,
 		        'columns' => [
 		            ['class' => 'yii\grid\SerialColumn'],
@@ -121,6 +122,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
     		<?= GridView::widget([
 		        'dataProvider' => $providerTt,
 		        //'filterModel' => $searchModel,
+		        'responsiveWrap' => false,
 		        'summary' => false,
 		        'columns' => [
 		            ['class' => 'yii\grid\SerialColumn'],

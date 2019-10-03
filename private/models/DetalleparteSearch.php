@@ -10,7 +10,7 @@ use app\models\Detalleparte;
 use app\config\Globales;
 
 /**
- * DetalleparteSearch represents the model behind the search form of `app\models\Detalleparte`.
+ * DetalleparteSearch represents the model behind the search form of app\models\Detalleparte`.
  */
 class DetalleparteSearch extends Detalleparte
 {
@@ -616,12 +616,13 @@ class DetalleparteSearch extends Detalleparte
     {
         
         $sql='
-            SELECT p.fecha, di.nombre as division, h.nombre as hora, dp.llego, dp.retiro, f.nombre as falta
+            SELECT p.fecha, di.nombre as division, h.nombre as hora, dp.llego, dp.retiro, f.nombre as falta, ei.nombre as estadoinasistencia
             FROM detalleparte dp
             LEFT JOIN parte p ON dp.parte = p.id
             LEFT JOIN hora h ON dp.hora = h.id
             LEFT JOIN division di ON dp.division = di.id
             LEFT JOIN falta f ON dp.falta = f.id
+            LEFT JOIN estadoinasistencia ei ON dp.estadoinasistencia = ei.id
             WHERE YEAR(p.fecha) = '.$anio.'
             AND dp.docente = '.$id;
             
@@ -634,6 +635,7 @@ class DetalleparteSearch extends Detalleparte
         $dataProvider = new SqlDataProvider([
             
             'sql' => $sql,
+            'pagination' => false
         ]);
 
         if (!$this->validate()) {
@@ -675,6 +677,96 @@ class DetalleparteSearch extends Detalleparte
 
         return $dataProvider;
 
+    }
+
+    public function estadoinasistenciaXdocente($mes, $anio, $docente)
+    {
+        $query = 'SELECT
+    `docente`.`id` AS `docente`,
+    `docente`.`apellido`,
+    `docente`.`nombre`,
+    (
+    SELECT
+        COUNT(dp2.estadoinasistencia)
+    FROM
+        detalleparte dp2
+    WHERE
+        dp2.docente = detalleparte.docente AND dp2.estadoinasistencia = 4 AND(dp2.`falta` IN(1, 2)) AND(
+            `detalleparte`.`docente` IS NOT NULL
+        ) AND(YEAR(parte.fecha) = '.$anio.')
+) AS estadoinasistencia,
+(
+    (
+    SELECT
+        COUNT(dp.id)
+    FROM
+        detalleparte AS dp
+    WHERE
+        dp.docente = detalleparte.docente AND(dp.falta = 1 OR dp.falta = 2) AND(YEAR(parte.fecha) = '.$anio.')
+) -(
+    SELECT
+        COUNT(dp.id)
+    FROM
+        detalleparte AS dp
+    WHERE
+        dp.docente = detalleparte.docente AND(
+            dp.falta = 4 OR dp.falta = 6 OR dp.falta = 7
+        ) AND(YEAR(parte.fecha) = '.$anio.')
+)
+) AS id
+FROM
+    `detalleparte`
+LEFT JOIN `docente` ON `detalleparte`.`docente` = `docente`.`id`
+LEFT JOIN `parte` ON `detalleparte`.`parte` = `parte`.`id`
+WHERE
+    (`falta` IN(1, 2)) AND(
+        `detalleparte`.`docente` IS NOT NULL
+    ) AND(YEAR(parte.fecha) = '.$anio.')
+GROUP BY
+    `docente`.`id`,
+    `docente`.`apellido`,
+    `docente`.`nombre`
+ORDER BY
+    (
+        (
+        SELECT
+            COUNT(dp.id)
+        FROM
+            detalleparte AS dp
+        WHERE
+            dp.docente = detalleparte.docente AND(
+                dp.falta = 1 OR dp.falta = 2 OR dp.falta = 3
+            )
+    ) -(
+    SELECT
+        COUNT(dp.id)
+    FROM
+        detalleparte AS dp
+    WHERE
+        dp.docente = detalleparte.docente AND(
+            dp.falta = 4 OR dp.falta = 6 OR dp.falta = 7
+        )
+)
+    )
+DESC';
+
+        // add conditions that should always apply here
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $query,
+            //'pagination' => false
+        ]);
+
+        
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        
+        return $dataProvider;
     }
 
     

@@ -8,6 +8,8 @@ use app\modules\optativas\models\ContactoalumnoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use app\config\Globales;
 
 /**
  * ContactoalumnoController implements the CRUD actions for Contactoalumno model.

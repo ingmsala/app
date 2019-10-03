@@ -31,7 +31,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'mail',
             'telefono',
             //'parentezco',
-            //'alumno',
+
+            [
+                'label' => "Alumno",
+                'value' => function($model){
+                    return $model->alumno0->apellido.', '.$model->alumno0->nombre;
+                }
+
+            ],
+            
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

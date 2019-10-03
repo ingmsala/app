@@ -10,7 +10,7 @@ use app\config\Globales;
 
 $this->title = 'Seleccione una opción';
 ?>
-<div class="row" style="margin-top: 100px;">
+<div class="row contpanelprincipal">
         <div class="col-md-1"></div>
         <div class="col-md-3">           
           <?= 

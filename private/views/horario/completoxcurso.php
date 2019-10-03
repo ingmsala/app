@@ -77,6 +77,7 @@ JS;
 		        'dataProvider' => $provider,
 		        //'filterModel' => $searchModel,
 		        'summary' => false,
+		        'responsiveWrap' => false,
 		        'columns' => [
 		            ['class' => 'yii\grid\SerialColumn'],
 		            [
@@ -152,6 +153,7 @@ JS;
 	  <?= GridView::widget([
 		        'dataProvider' => $dataProvider,
 		        //'filterModel' => $searchModel,
+		        'responsiveWrap' => false,
 		        'summary' => false,
 		        'columns' => [
 		            ['class' => 'yii\grid\SerialColumn'],

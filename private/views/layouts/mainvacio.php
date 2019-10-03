@@ -36,7 +36,13 @@ AppAsset::register($this);
     //$item = $this->params['itemnav'];
     $item = [
                 ['label' => '<div class="menuHorarios" href="#" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span><br />Menú</center></div>',
-                            'items' => [isset($this->params['itemnav']) ? $this->params['itemnav'] : '', isset($this->params['itemnav2']) ? $this->params['itemnav2'] : '', ['label' => '<a class="menuHorarios" href="index.php?r=horario/panelprincipal" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>'],  ]
+                            'items' => [isset($this->params['itemnav']) ? $this->params['itemnav'] : '', isset($this->params['itemnav2']) ? $this->params['itemnav2'] : '', ['label' => '<a class="menuHorarios" href="index.php?r=horario/panelprincipal" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>'], (Yii::$app->user->identity->username == "horarios") ? [
+                                                'label' => Html::tag('span', '', ['class'=>'btn btn-default glyphicon glyphicon-log-out']).' Cerrar sesión',
+                                                'url' => ['/site/logout'],
+                                                'linkOptions' => ['data-method' => 'post'],
+                                            
+                                    
+                                            ] : ''  ]
                 ]
 
             ];
@@ -51,7 +57,7 @@ AppAsset::register($this);
     array_push($item, ['label' => '<a class="menuHorarios" href="index.php?r=horario/panelprincipal" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>']);
 */
     NavBar::begin([
-            'brandLabel' => '<img src="assets/images/logo-encabezado.png" class="pull-left"/><div>'.$this->title.'</div>'.'<div class="pull-right"></div>',
+            'brandLabel' => '<img src="assets/images/logo-encabezado.png" class="pull-left"/><span>'.$this->title.'</span>'.'<span class="pull-right"></span>',
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
                 'class' => 'navbar-default-horarios navbar-fixed-top',
@@ -68,7 +74,7 @@ NavBar::end();
 ?>
        
 <div class='wraphorario'>
-    <div class="container">
+    <div class="container2">
 
     <?= Alert::widget() ?>
     <?= $content ?>

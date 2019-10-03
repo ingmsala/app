@@ -5,14 +5,13 @@ use yii\widgets\DetailView;
 use kartik\grid\GridView;
 use yii\web\View;
 use miloschuman\highcharts\Highcharts;
-use yii\helpers\Url;
 
 
 /* @var $this yii\web\View */
 /* @var $model app\models\DetalleCatedra */
 
 $docente = $model->apellido.', '.$model->nombre;
-$this->title = $docente;
+
 ?>
 <div class="detalle-catedra-view">
 
@@ -32,16 +31,26 @@ $this->title = $docente;
         },
         'panel' => [
             'type' => GridView::TYPE_DEFAULT,
-            'heading' => Html::encode('Detalle Ausencias: '). $docente,
+            'heading' => Html::encode('Detalle Ausencias'),
             //'beforeOptions' => ['class'=>'kv-panel-before'],
         ],
-        
-        'toolbar'=>[
-            ['content' => 
-                Html::a('<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Imprimir', Url::to(['all', 'docente' => $model->id]), ['class' => 'btn btn-default'])
-
+        'exportConfig' => [
+            GridView::EXCEL => [
+                'label' => 'Excel',
+                'showConfirmAlert' => false,
+                'filename' => 'Detalle Ausencias',
+                
+                'alertMsg' => false,
+                'config' => [
+                    'worksheet' => $model->apellido
+                ],
             ],
-           
+            
+
+        ],
+        'toolbar'=>[
+            
+            '{export}',
             
         ],
         'columns' => [
@@ -70,12 +79,6 @@ $this->title = $docente;
                 'attribute' => 'falta',
                 
             ],
-
-            [   
-                'label' => 'Estado',
-                'attribute' => 'estadoinasistencia',
-                
-            ],
             
 
             
@@ -96,7 +99,7 @@ $this->title = $docente;
         $arr[] = ['Tardanza/Ret. Anticipado', $tar];
     if ($rec!=0)
         $arr[] = ['Recupera/Adelanta', $rec];
-   echo Highcharts::widget([
+   Highcharts::widget([
         'options' => [
             'title' => ['text' => null],
             'chart' => ['renderTo' => 'modalContentGrafico'],
@@ -123,7 +126,7 @@ $this->title = $docente;
             ],
         ],
     ]); 
-/*
+
 Highcharts::widget(
 
     [
@@ -191,7 +194,7 @@ Highcharts::widget(
        ]
         ]
 
-);*/
+);
 
 ?>
 

@@ -18,9 +18,6 @@ $this->title = 'Seleccione una letra';
 	        ?>
 	    </div>
 	</div>
-</div>
-<div class="row">
-        <?= 
+</div><?= 
     $echodiv;
      ?>
-    </div>
