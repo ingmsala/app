@@ -124,6 +124,8 @@ try {
                             '<div class="dropdown-divider"></div>',
                             ['label' => 'Diferencia Planta Doc. y Horario', 'url' => ['/reporte/diferenciahorario']],
                             '<div class="dropdown-divider"></div>',
+                            ['label' => 'Diferencia Hora materia y Horario', 'url' => ['/reporte/diferenciahorarioyhoras']],
+                            '<div class="dropdown-divider"></div>',
 
                             [
                                 'label' => 'Parte Docente',
@@ -426,9 +428,23 @@ try {
                                 
                                 ['label' => 'Clases', 'url' => ['horario/panelprincipal']],
                                 '<div class="dropdown-divider"></div>',
-                                
+                                [
+                                    'label' => 'Reportes',
+                                    'itemsOptions'=>['class'=>'dropdown-submenu'],
+                                    'submenuOptions'=>['class'=>'dropdown-menu'],
+                                    'items' => [
+
+                                        ['label' => 'Diferencia de horas', 'url' => ['/reporte/diferenciahorarioyhoras']],
+                                        '<div class="dropdown-divider"></div>',
+                                        
+
+                                    ],
+
+                                ],
                                 
                             ],
+
+                            
                     ],
 
                     ['label' => 'Parte Docente', 

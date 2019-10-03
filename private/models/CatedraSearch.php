@@ -279,6 +279,42 @@ ORDER BY
         return $dataProvider;
 
     }
+
+
+    public function diferenciacatedrasyhoras()
+    {
+        
+        $sql='SELECT ac.id as actid, ac.nombre as materia, di.id as divid, di.nombre as division, ac.cantHoras as horasmat, count(h.id) as horashorario 
+        FROM `catedra` c 
+        left join horario h ON h.catedra = c.id
+        left join actividad ac ON c.actividad = ac.id
+        left join division di ON c.division = di.id
+        where (di.turno = 1 or di.turno = 2) and (ac.id <> 23)
+        group by ac.id, ac.nombre, di.id, di.nombre, ac.cantHoras 
+        having ac.cantHoras <> count(h.id)
+        ORDER BY `c`.`id` ASC';
+
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $sql,
+            'pagination' => false,
+            
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+
+
+        // grid filtering conditions
+        
+
+        return $dataProvider;
+
+    }
     
 
 
