@@ -187,7 +187,7 @@ class DetalleparteController extends Controller
             }
             
         }
-
+        $depdr = ($partex->preceptoria == 7) ? false : true;
         return $this->renderAjax('create', [
             'model' => $model,
             'docentes' => $docentes,
@@ -196,6 +196,7 @@ class DetalleparteController extends Controller
             'parte' => $parte,
             'horas' => $horas,
             'faltas' => $faltas,
+            'depdr' => $depdr,
         ]);
     }
 

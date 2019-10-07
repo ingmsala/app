@@ -13,7 +13,9 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
+    <?php $rnd = ($depdr) ? '_form' : '_formnosecundario'; ?>
+
+    <?= $this->render($rnd, [
         'model' => $model,
         'partes' => $partes,
         'parte' => $parte,
