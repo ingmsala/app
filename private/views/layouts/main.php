@@ -122,10 +122,28 @@ try {
                             '<div class="dropdown-divider"></div>',
                             ['label' => 'Padrones', 'url' => ['/reporte/padrones/padrones']],
                             '<div class="dropdown-divider"></div>',
-                            ['label' => 'Diferencia Planta Doc. y Horario', 'url' => ['/reporte/diferenciahorario']],
-                            '<div class="dropdown-divider"></div>',
-                            ['label' => 'Diferencia Hora materia y Horario', 'url' => ['/reporte/diferenciahorarioyhoras']],
-                            '<div class="dropdown-divider"></div>',
+                            
+
+                            [
+                                    'label' => 'Horarios',
+                                    'itemsOptions'=>['class'=>'dropdown-submenu'],
+                                    'submenuOptions'=>['class'=>'dropdown-menu'],
+                                    'items' => [
+                                        ['label' => 'Horarios de Clase', 'url' => ['/horario/panelprincipal']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Diferencia de horas', 'url' => ['/reporte/diferenciahorarioyhoras']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Diferencia Planta Doc. y Horario', 'url' => ['/reporte/diferenciahorario']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Filtro por materia', 'url' => ['/horario/filtropormateria']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Horario completo', 'url' => ['/horario/horariocompleto']],
+                                        '<div class="dropdown-divider"></div>',
+                                        
+
+                                    ],
+
+                                ],
 
                             [
                                 'label' => 'Parte Docente',
@@ -190,8 +208,7 @@ try {
                                 ['label' => 'Tipo de Actividad', 'url' => ['/actividadtipo']],
                                 ['label' => 'Notificaciones', 'url' => ['/notificacion']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Horarios', 'url' => ['/horario/panelprincipal']],
-                                '<div class="dropdown-divider"></div>',
+                                
                             ],
 
 
@@ -335,7 +352,7 @@ try {
                                     '<div class="dropdown-divider"></div>',
                                     ['label' => 'Comparación por Turno en un año', 'url' => ['/reporte/parte/faltasxanioxturnototal']],
                                     '<div class="dropdown-divider"></div>',
-                                    ['label' => 'Estado de Justificación de Inasistencias', 'url' => ['/reporte/parte/estadoinasistenciasdocentes']],
+                                    /*['label' => 'Estado de Justificación de Inasistencias', 'url' => ['/reporte/parte/estadoinasistenciasdocentes']],*/
                                     '<div class="dropdown-divider"></div>',
                                     ['label' => 'Distribución de faltas por rango de días', 'url' => ['/reporte/parte/distribuciondediasxmes']],
                                     '<div class="dropdown-divider"></div>',
@@ -435,6 +452,10 @@ try {
                                     'items' => [
 
                                         ['label' => 'Diferencia de horas', 'url' => ['/reporte/diferenciahorarioyhoras']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Filtro por materia', 'url' => ['/horario/filtropormateria']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Horario completo', 'url' => ['/horario/horariocompleto']],
                                         '<div class="dropdown-divider"></div>',
                                         
 
@@ -615,8 +636,26 @@ try {
                             '<div class="dropdown-divider"></div>',
                             ['label' => 'Padrones', 'url' => ['/reporte/padrones/padrones']],
                             '<div class="dropdown-divider"></div>',
-                            ['label' => 'Diferencia Planta Doc. y Horario', 'url' => ['/reporte/diferenciahorario']],
-                            '<div class="dropdown-divider"></div>',
+
+                            [
+                                    'label' => 'Horarios',
+                                    'itemsOptions'=>['class'=>'dropdown-submenu'],
+                                    'submenuOptions'=>['class'=>'dropdown-menu'],
+                                    'items' => [
+                                        ['label' => 'Horarios de Clase', 'url' => ['/horario/panelprincipal']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Diferencia de horas', 'url' => ['/reporte/diferenciahorarioyhoras']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Filtro por materia', 'url' => ['/horario/filtropormateria']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Horario completo', 'url' => ['/horario/horariocompleto']],
+                                        '<div class="dropdown-divider"></div>',
+                                        
+
+                                    ],
+
+                                ],
+                            
 
                             [
                                 'label' => 'Parte Docente',
@@ -634,7 +673,7 @@ try {
                                     '<div class="dropdown-divider"></div>',
                                     ['label' => 'Comparación por Turno en un año', 'url' => ['/reporte/parte/faltasxanioxturnototal']],
                                     '<div class="dropdown-divider"></div>',
-                                    ['label' => 'Estado de Justificación de Inasistencias', 'url' => ['/reporte/parte/estadoinasistenciasdocentes']],
+                                    /*['label' => 'Estado de Justificación de Inasistencias', 'url' => ['/reporte/parte/estadoinasistenciasdocentes']],*/
                                     '<div class="dropdown-divider"></div>',
                                     ['label' => 'Distribución de faltas por rango de días', 'url' => ['/reporte/parte/distribuciondediasxmes']],
                                     '<div class="dropdown-divider"></div>',
@@ -679,7 +718,7 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Control de Secretaría', 'url' => ['parte/controlsecretaria']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Panel de Novedades '.$cantnot, 'url' => ['novedadesparte/panelnovedades']],
+                                ['label' => 'Panel de Novedades ', 'url' => ['novedadesparte/panelnovedades']],
                                 '<div class="dropdown-divider"></div>',
                                 
                             ],

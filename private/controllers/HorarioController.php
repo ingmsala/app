@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Horario;
+use app\models\Actividad;
+use app\models\Detallecatedra;
 use app\models\HorarioSearch;
 use app\models\DetallecatedraSearch;
 use app\models\Hora;
@@ -35,10 +37,10 @@ class HorarioController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto'],
                 'rules' => [
                     [
-                        'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal'],   
+                        'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'filtropormateria', 'horariocompleto'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
@@ -970,6 +972,388 @@ class HorarioController extends Controller
         
         
         
+    }
+
+    public function actionFiltropormateria()
+    {
+        //$division = 1;
+        //$dia = 3;
+        
+        $param = Yii::$app->request->queryParams;
+        $model = new Actividad();
+        $repetido = false;
+        $matexp = '';
+
+        try{
+             $largo = count($param['Actividad']['id']);
+         }catch(\Exception $exception){
+            $largo = 0;
+        }
+
+        $materiasfiltro = [];
+        if($largo<1){
+            $materiasfiltro = isset($param['Actividad']['id']) ? [$param['Actividad']['id']] : [0];
+            $model->id = $materiasfiltro;
+            
+        }else{
+            if(isset($param['Actividad']['id']))
+                $materiasfiltro = $param['Actividad']['id'];
+            $model->id = $materiasfiltro;
+
+            
+            $cm = 0;
+            foreach ($materiasfiltro as $value) {
+                if($cm == 0)
+                    $matexp .= ': '.Actividad::findOne($value)->nombre;
+                else
+                    $matexp .= ' - '.Actividad::findOne($value)->nombre;
+                
+                $cm++;
+            }
+
+            $divi = [];
+            
+            //$query = "SUBSTRING([[division]].[[nombre]],1) as [[hh]]";
+            foreach ($materiasfiltro as $mat) {
+                $divi[] = Division::find()
+                            ->joinWith('catedras', 'catedras.division0')
+                            ->where(['in', 'catedra.actividad', $mat])
+                            ->andWhere(['in', 'division.turno', [1,2]])
+                            ->orderBy('division.turno, division.id')
+                            ->one()->nombre;
+                
+            }
+            $cantmaterias = count($divi);
+            $valores = array_count_values($divi);
+            //$repetido = false;
+            foreach ($valores  as $key => $value) {
+                if ($value > 1){
+                    $repetido = true;
+                }
+            }
+            
+            //return var_dump($valores);
+        }
+
+        if($repetido && $cantmaterias>1){
+            Yii::$app->session->setFlash('info', "Está seleccionando más de una materia de un año de cursada.");
+            $rep = true;
+                //return $this->redirect(['/optativas']); 
+                //$materiasfiltro = [0];
+        }else{
+            $rep = false;
+        }
+
+        if(Yii::$app->user->identity->role == Globales::US_HORARIO)
+            $this->layout = 'mainvacio';
+        $searchModel = new HorarioSearch();
+        //$paramdia = Diasemana::findOne($dia);
+        
+        
+        $horarios = Horario::find()
+            ->joinWith(['catedra0'])
+            ->where(['in', 'catedra.actividad', $materiasfiltro])
+            //->andWhere(['catedra.division' => $division])
+            ->andWhere(['tipo' => 1])
+            ->orderBy('diasemana, hora')
+            ->all();
+
+        $divisiones = Division::find()
+                        ->distinct()
+                        ->joinWith('catedras', 'catedras.division0')
+                        ->where(['in', 'catedra.actividad', $materiasfiltro])
+                        ->andWhere(['in', 'division.turno', [1,2]])
+                        ->orderBy('division.turno, division.id')
+                        ->all();
+        $horas = Diasemana::find()->where(['not in', 'id',[1,7]])->all();
+        $cd = 0;
+        //return var_dump($dias);
+        
+        $arrayaux = [];
+
+        $salida = '';
+        foreach ($divisiones as $division) {
+            $ch = 0;
+            foreach ($horas as $hora) {
+
+                if($ch == 0){
+                    $arrayaux[999][998] = 'MAÑANA';
+                    $arrayaux[998][998] = 'TARDE';
+                    $arrayaux[999][1] = 'Hora';
+                    $arrayaux[998][1] = 'Hora';
+
+                    $arrayaux[$division->id][$ch+1] = $division->nombre;
+                }
+                if($ch == 1){
+                    $arrayaux[$division->id][999] = '';
+                    $arrayaux[$division->id][998] = '';
+                    $arrayaux[999][999] = 'Libre';
+                    $arrayaux[998][999] = 'Libre';
+
+                }
+
+                $ch = $ch + 1;
+                
+
+                $arrayaux[$division->id][$hora->id] = '';
+                if($hora->id >= 2){
+                    $c = 0;
+                    foreach (['1°', '2°','3°','4°','5°','6°','7°','8°'] as $conthor) {
+                        if ($c == 0){
+                            $arrayaux[999][$hora->id] = '<span><div style="font-size:12pt;" class="label label-success pull-left">'.$conthor.'</div></span>';
+                            $arrayaux[998][$hora->id] = '<span><div style="font-size:12pt;" class="label label-success pull-left">'.$conthor.'</div></span>';
+                        }else{
+                            $arrayaux[999][$hora->id] = str_replace('</span>', '<div style="font-size:12pt;" class="label label-success pull-left">'.$conthor.'</div></span>', $arrayaux[999][$hora->id]);
+                            $arrayaux[998][$hora->id] = str_replace('</span>', '<div style="font-size:12pt;" class="label label-success pull-left">'.$conthor.'</div></span>', $arrayaux[998][$hora->id]);
+                        }
+                        $c = $c + 1;
+                        /*$arrayaux[998][$hora->id] = '<span><div style="font-size:12pt;" class="label label-success pull-left">'.$conthor.'</div></span>';*/
+                    }
+                }
+                    
+                
+
+                                
+            }
+            
+        }
+        //return var_dump($arrayaux);
+        $salida = '';
+        foreach ($horarios as $horariox) {
+            
+                            foreach ($horariox->catedra0->detallecatedras as $dc) {
+
+                                $salida = '';
+                                if ($dc->revista == 6){
+                                    //return var_dump($dc['revista']==1);
+                                    //$superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->diasemana);
+                                    //if ($superpuesto[0]){
+                                        $doc = $dc->docente0->apellido.', '.$dc->docente0->nombre;
+                                        $turno = $dc->catedra0->division0->turno0->nombre;
+                                        $salida = $horariox->hora0->nombre;
+                                    break 1;
+                                }else{
+                                    $salida = '';
+                                }
+                            }
+                           //return $salida;
+            
+                if( in_array($horariox->catedra0->actividad0->id,$materiasfiltro)){
+                    if($arrayaux[$horariox->catedra0->division][$horariox->diasemana] == ''){
+                        $arrayaux[$horariox->catedra0->division][999] = $doc;
+                        $arrayaux[$horariox->catedra0->division][998] = $turno;
+                        $va = true;
+
+                        if($turno == "MAÑANA"){
+                            $divit = 999;
+                        }elseif($turno == "TARDE"){
+                            $divit = 998;
+                        
+                        }
+                        
+                        $arrayaux[$divit][$horariox->diasemana] = str_replace('<div style="font-size:12pt;" class="label label-success pull-left">'.$salida.'</div>', '', $arrayaux[$divit][$horariox->diasemana]);
+
+                        $arrayaux[$horariox->catedra0->division][$horariox->diasemana] = '<span><div style="font-size:12pt;" class="label label-danger pull-left">'.$salida.'</div></span>';
+                    }else{
+                        $va = false;
+
+                        if($turno == "MAÑANA"){
+                            $divit = 999;
+                        }elseif($turno == "TARDE"){
+                            $divit = 998;
+                        
+                        }
+                        
+                        $arrayaux[$divit][$horariox->diasemana] = str_replace('<div style="font-size:12pt;" class="label label-success pull-left">'.$salida.'</div>', '', $arrayaux[$divit][$horariox->diasemana]);
+
+                        $arrayaux[$horariox->catedra0->division][$horariox->diasemana] = str_replace('</span>', '<div style="font-size:12pt;" class="label label-danger pull-left">'.$salida.'</div></span>', $arrayaux[$horariox->catedra0->division][$horariox->diasemana]);
+                    }
+                        
+                        
+                    /*if($va){
+                        $arrayaux[$horariox->catedra0->division][$horariox->diasemana] = '</ul>';
+                    }*/
+                }
+            
+        }
+
+        $provider = new ArrayDataProvider([
+            'allModels' => $arrayaux,
+            'pagination' => false,
+            
+        ]);
+        //return var_dump($array);
+
+        //$docente_materia_search = new DetallecatedraSearch();
+       // $dataProvider = $docente_materia_search->horario_doce_divi($division);
+
+        $actividades = Actividad::find()
+                        ->joinWith(['catedras', 'catedras.division0'])
+                        ->where(['<>', 'actividad.id', 23])
+                        ->andWhere(['in', 'division.turno',[1,2]])
+                        ->orderBy('actividad.nombre')
+                        ->all();
+
+        return $this->render('filtropormateria', [
+            'model' => $model,
+            'actividades' => $actividades,
+            'rep' => $rep,
+            //'searchModel' => $searchModel,
+            //'dataProvider' => $dataProvider,
+            //'dataProviderMartes' => $dataProviderMartes,
+            'provider' => $provider,
+            'matexp' => $matexp,
+            
+        ]);
+    }
+
+    public function actionHorariocompleto()
+    {
+        
+        $model = new Actividad();
+        if(Yii::$app->user->identity->role == Globales::US_HORARIO)
+            $this->layout = 'mainvacio';
+        $searchModel = new HorarioSearch();
+        //$paramdia = Diasemana::findOne($dia);
+        
+        
+        $horarios = Horario::find()
+            ->joinWith(['catedra0'])
+            ->andWhere(['tipo' => 1])
+            ->orderBy('diasemana, hora')
+            ->all();
+
+        $divisiones = Division::find()
+                        ->distinct()
+                        ->joinWith('catedras', 'catedras.division0')
+                        ->where(['in', 'division.turno', [1,2]])
+                        ->orderBy('division.turno, division.id')
+                        ->all();
+        $horas = Diasemana::find()->where(['not in', 'id',[1,7]])->all();
+        $cd = 0;
+        //return var_dump($dias);
+        
+        $arrayaux = [];
+
+        $salida = '';
+        foreach ($divisiones as $division) {
+            $ch = 0;
+            foreach ($horas as $hora) {
+
+                if($ch == 0){
+                    $arrayaux[$division->id][$ch+1] = $division->nombre;
+                }
+                if($ch == 1){
+                    $arrayaux[$division->id][999] = '';
+                    $arrayaux[$division->id][998] = '';
+
+                    $dc = Detallecatedra::find()
+                        ->joinWith(['catedra0', 'catedra0.actividad0'])
+                        ->where(['catedra.division' => $division->id])
+                        ->andWhere(['revista' => 6])
+                        ->orderBy('actividad.nombre')->all();
+                    $docymat = '';
+                    $c2 = 0;
+                    foreach ($dc as $d) {
+                        if($c2 == 0)
+                            $arrayaux[$division->id][999] = '<ol><li><span class="label label-info">'.$d->catedra0->actividad0->nombre.': </span><span class="label" style="color:black;">'.$d->docente0->apellido.', '.$d->docente0->nombre.'</li></ol>';
+                        else{
+                            $arrayaux[$division->id][999] = str_replace('</ol>', '<li><span class="label label-info">'.$d->catedra0->actividad0->nombre.': </span><span class="label" style="color:black;">'.$d->docente0->apellido.', '.$d->docente0->nombre.'</li></ol>', $arrayaux[$division->id][999]);
+                        }
+                        $c2++;
+                    }
+
+                   // $arrayaux[$division->id][999] = $docymat;
+                }
+
+                $ch = $ch + 1;
+                
+
+                $arrayaux[$division->id][$hora->id] = '';
+                
+                    
+                
+
+                                
+            }
+            
+        }
+        //return var_dump($arrayaux);
+        $salida = '';
+        foreach ($horarios as $horariox) {
+            
+                            foreach ($horariox->catedra0->detallecatedras as $dc) {
+
+                                $salida = '';
+                                if ($dc->revista == 6){
+                                    //return var_dump($dc['revista']==1);
+                                    //$superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->diasemana);
+                                    //if ($superpuesto[0]){
+                                        $doc = $dc->docente0->apellido.', '.$dc->docente0->nombre;
+                                        $turno = $dc->catedra0->division0->turno0->nombre;
+                                        $salida = $horariox->hora0->nombre.' - '.$doc;
+                                    break 1;
+                                }else{
+                                    $salida = '';
+                                }
+                            }
+                           //return $salida;
+            
+                //if( in_array($horariox->catedra0->actividad0->id,$materiasfiltro)){
+                    if($arrayaux[$horariox->catedra0->division][$horariox->diasemana] == ''){
+                        //$arrayaux[$horariox->catedra0->division][999] = $doc;
+                        //$arrayaux[$horariox->catedra0->division][998] = $turno;
+                        $va = true;
+                        $arrayaux[$horariox->catedra0->division][998] = $turno;
+                         
+                        
+                        $arrayaux[$horariox->catedra0->division][$horariox->diasemana] = '<span><div style="font-size:12pt;" class="label label-default pull-left">'.$salida.'</div></span>';
+                    }else{
+                        $va = false;
+
+                        
+                        $arrayaux[$horariox->catedra0->division][998] = $turno;
+                         
+
+                        $arrayaux[$horariox->catedra0->division][$horariox->diasemana] = str_replace('</span>', '<div style="font-size:12pt;" class="label label-default pull-left">'.$salida.'</div></span>', $arrayaux[$horariox->catedra0->division][$horariox->diasemana]);
+                    }
+                        
+                        
+                    /*if($va){
+                        $arrayaux[$horariox->catedra0->division][$horariox->diasemana] = '</ul>';
+                    }*/
+                //}
+            
+        }
+
+        $provider = new ArrayDataProvider([
+            'allModels' => $arrayaux,
+            'pagination' => false,
+            
+        ]);
+        //return var_dump($array);
+
+        //$docente_materia_search = new DetallecatedraSearch();
+       // $dataProvider = $docente_materia_search->horario_doce_divi($division);
+
+        $actividades = Actividad::find()
+                        ->joinWith(['catedras', 'catedras.division0'])
+                        ->where(['<>', 'actividad.id', 23])
+                        ->andWhere(['in', 'division.turno',[1,2]])
+                        ->orderBy('actividad.nombre')
+                        ->all();
+
+        return $this->render('horariocompleto', [
+            'model' => $model,
+            'actividades' => $actividades,
+            //'rep' => $rep,
+            //'searchModel' => $searchModel,
+            //'dataProvider' => $dataProvider,
+            //'dataProviderMartes' => $dataProviderMartes,
+            'provider' => $provider,
+            //'matexp' => $matexp,
+            
+        ]);
     }
 
 }
