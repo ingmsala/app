@@ -131,6 +131,8 @@ try {
                                     'items' => [
                                         ['label' => 'Horarios de Clase', 'url' => ['/horario/panelprincipal']],
                                         '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Horarios de Trimestrales', 'url' => ['/horariotrimestral/panelprincipal']],
+                                        '<div class="dropdown-divider"></div>',
                                         ['label' => 'Diferencia de horas', 'url' => ['/reporte/diferenciahorarioyhoras']],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Diferencia Planta Doc. y Horario', 'url' => ['/reporte/diferenciahorario']],
@@ -207,6 +209,8 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Tipo de Actividad', 'url' => ['/actividadtipo']],
                                 ['label' => 'Notificaciones', 'url' => ['/notificacion']],
+                                '<div class="dropdown-divider"></div>',
+                                ['label' => 'Habilitar Trimestrales', 'url' => ['/anioxtrimestral']],
                                 '<div class="dropdown-divider"></div>',
                                 
                             ],

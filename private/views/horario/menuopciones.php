@@ -22,12 +22,12 @@ else{
 
 ?>
 <div class="row contpanelprincipal">
-        <div class="col-md-2"></div>
+        <div class="col-md-3"></div>
         <div class="col-md-3">           
           <?= 
-            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-user"></span><h2>Horario</h2><h3>POR DOCENTE</h3><span class="label label-primary">CLASES</span>',
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-user"></span><h2>Horario</h2><span class="label label-primary">CLASES</span>',
 
-           ['menuxletra'],
+           ['/horario/panelprincipal'],
 
            [
 
@@ -40,30 +40,14 @@ else{
           ?>
       
       </div>
-      <div class="col-md-3">           
-          <?= 
-            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-calendar"></span><h2>Horario</h2><h3>POR DÍA</h3><span class="label label-primary">CLASES</span>',
-
-           ['menuxdia'],
-
-           [
-
-               //'id' => 'modalButtonIngreso',
-               'class' => $classclient,
-               // modalCall
-
-           ]);
-
-          ?>
-          
-      </div>
+      
       <div class="col-md-3"> 
           <?= 
-            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-sd-video"></span><h2>Horario</h2><h3>POR DIVISIÓN</h3><span class="label label-primary">CLASES</span>',
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-sd-video"></span><h2>Horarios</h2><span class="label label-info">TRIMESTRALES</span>',
 
            
 
-           ['menuxdivision'],
+            ['/horariotrimestral/panelprincipal'],
 
            [
 
@@ -75,5 +59,5 @@ else{
           ?>
 
       </div>
-      <div class="col-md-1"></div>
+      <div class="col-md-3"></div>
     </div>

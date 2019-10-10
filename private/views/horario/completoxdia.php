@@ -69,7 +69,7 @@ JS;
    
 </h1>
 <?php //echo var_dump($provider) ?>
-    <div class="clearfix"></div>	
+    <div class="clearfix" style="padding-bottom: 10px;"></div>	
 	<?= GridView::widget([
 		        'dataProvider' => $provider,
 		        //'filterModel' => $searchModel,

@@ -10,7 +10,7 @@ use app\config\Globales;
 $this->title = 'Seleccione un docente';
 $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="index.php?r=horario/menuxletra" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>'];
 ?>
-<div class="row">
+<div class="row" style="padding-bottom: 10px;">
 <?php $userhorario = (Yii::$app->user->identity->role == Globales::US_HORARIO)? "none" : "block" ?>
 	 <div style="display: <?= $userhorario ?>;">
     	<div  class="pull-right">

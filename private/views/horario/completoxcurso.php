@@ -72,7 +72,7 @@ JS;
     
    
 </h1>
-    <div class="clearfix"></div>	
+    <div class="clearfix" style="padding-bottom: 10px;"></div>	
 	<?= GridView::widget([
 		        'dataProvider' => $provider,
 		        //'filterModel' => $searchModel,
@@ -185,7 +185,7 @@ JS;
 	                    'viewdetcat' => function($url, $model, $key){
 	                        return Html::a(
 	                            '<span class="glyphicon glyphicon-eye-open"></span>',
-	                            '?r=detallecatedra/updatehorario&id='.$model['id']);
+	                            '?r=detallecatedra/updatehorario&or=hc&id='.$model['id']);
 	                    },
 
 	                    'updatedetcat' => function($url, $model, $key){

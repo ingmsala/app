@@ -1356,4 +1356,11 @@ class HorarioController extends Controller
         ]);
     }
 
+    public function actionMenuopciones()
+    {
+        if(Yii::$app->user->identity->role == Globales::US_HORARIO)
+            $this->layout = 'mainvacio';
+        return $this->render('menuopciones');
+    }
+
 }

@@ -14,7 +14,13 @@ $this->title = 'Seleccione una letra';
 	 <div style="display: <?= $userhorario ?>;">
     	<div  class="pull-right">
 	        <?php 
-	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/panelprincipal"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>';
+	          	echo  '<a class = "btn btn-default" href="index.php?r=horariotrimestral/panelprincipal"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>';
+	        ?>
+	    </div>
+	    <div  class="pull-right">
+	        <?php 
+	          	
+	          	echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir Citaciones</center>', Url::to(['print', 'docente' => '', 'all' => true]), ['class' => 'btn btn-default'])
 	        ?>
 	    </div>
 	</div>

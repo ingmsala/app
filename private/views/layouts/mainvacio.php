@@ -36,7 +36,7 @@ AppAsset::register($this);
     //$item = $this->params['itemnav'];
     $item = [
                 ['label' => '<div class="menuHorarios" href="#" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span><br />Menú</center></div>',
-                            'items' => [isset($this->params['itemnav']) ? $this->params['itemnav'] : '', isset($this->params['itemnav2']) ? $this->params['itemnav2'] : '', ['label' => '<a class="menuHorarios" href="index.php?r=horario/panelprincipal" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>'], (Yii::$app->user->identity->username == "horarios") ? [
+                            'items' => [isset($this->params['itemnav']) ? $this->params['itemnav'] : '', isset($this->params['itemnav2']) ? $this->params['itemnav2'] : '', ['label' => '<a class="menuHorarios" href="index.php?r=horario/menuopciones" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>'], (Yii::$app->user->identity->username == "horarios") ? [
                                                 'label' => Html::tag('span', '', ['class'=>'btn btn-default glyphicon glyphicon-log-out']).' Cerrar sesión',
                                                 'url' => ['/site/logout'],
                                                 'linkOptions' => ['data-method' => 'post'],

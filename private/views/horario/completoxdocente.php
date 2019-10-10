@@ -16,7 +16,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 <div class="horario-view">
 
     <h1><?= (Yii::$app->user->identity->role != Globales::US_HORARIO) ? Html::encode('Horario de Clases: '.$this->title) : '' ?>
-    <div class="row">
+    <div class="row" style="padding-bottom: 10px;">
 <?php $userhorario = (Yii::$app->user->identity->role == Globales::US_HORARIO)? "none" : "block" ?>
 	 <div style="display: <?= $userhorario ?>;">
     	<div  class="pull-right">

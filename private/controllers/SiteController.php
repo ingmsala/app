@@ -72,7 +72,7 @@ class SiteController extends Controller
         }
         elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
-                return $this->redirect(['/horario/panelprincipal']);
+                return $this->redirect(['/horario/menuopciones']);
             }
         return $this->render('index');
     }
@@ -98,7 +98,7 @@ class SiteController extends Controller
                 return $this->redirect(['/optativas']);
             }elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
-                return $this->redirect(['/horario/panelprincipal']);
+                return $this->redirect(['/horario/menuopciones']);
             }
             
             return $this->goHome();
@@ -110,7 +110,7 @@ class SiteController extends Controller
                 return $this->redirect(['/optativas']);
             }elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
-                return $this->redirect(['/horario/panelprincipal']);
+                return $this->redirect(['/horario/menuopciones']);
             }
             return $this->goBack();
         }
