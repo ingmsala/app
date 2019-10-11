@@ -4,13 +4,13 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Horariotrimestral */
+/* @var $model app\models\Horarioexamen */
 
-$this->title = 'Create Horariotrimestral';
-$this->params['breadcrumbs'][] = ['label' => 'Horariotrimestrals', 'url' => ['index']];
+$this->title = 'Create Horarioexamen';
+$this->params['breadcrumbs'][] = ['label' => 'Horarioexamens', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="horariotrimestral-create">
+<div class="horarioexamen-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

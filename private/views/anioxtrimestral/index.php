@@ -1,14 +1,21 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
+use app\config\Globales;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\AnioxtrimestralSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Trimestral por año';
+$this->title = 'Exámenes por año';
 $this->params['breadcrumbs'][] = $this->title;
+
+if(Yii::$app->user->identity->role==Globales::US_SUPER)
+     $template = '{viewdetcat} {deletedetcat}';
+else
+    $template = '{viewdetcat}';
+
 ?>
 <div class="anioxtrimestral-index">
 
@@ -16,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Nuevo Trimestral', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Nuevo Examen', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -27,7 +34,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             
             'aniolectivo0.nombre',
-            'trimestral0.nombre',
+            [
+                'label' => 'Instancia',
+                'attribute' => 'trimestral0.nombre',
+            ],
             [
                 'label' => 'Inicio',
                 'value' => function($model){
@@ -56,7 +66,30 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'kartik\grid\ActionColumn',
+
+                'template' => $template,
+
+                
+                'buttons' => [
+                    'viewdetcat' => function($url, $model, $key){
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            '?r=anioxtrimestral/update&id='.$model->id);
+                    },
+                    
+                    'deletedetcat' => function($url, $model, $key){
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=anioxtrimestral/delete&id='.$model->id, 
+                            ['data' => [
+                            'confirm' => 'Está seguro de querer eliminar este elemento?',
+                            'method' => 'post',
+                             ]
+                            ]);
+                    },
+                ]
+
+            ],
         ],
     ]); ?>
 </div>

@@ -41,7 +41,7 @@ class AnioxtrimestralSearch extends Anioxtrimestral
      */
     public function search($params)
     {
-        $query = Anioxtrimestral::find();
+        $query = Anioxtrimestral::find()->orderBy('aniolectivo desc, trimestral desc');
 
         // add conditions that should always apply here
 

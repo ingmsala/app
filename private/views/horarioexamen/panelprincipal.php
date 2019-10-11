@@ -25,9 +25,9 @@ else{
         <div class="col-md-2"></div>
         <div class="col-md-3">           
           <?= 
-            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-user"></span><h2>Horario</h2><h3>POR DOCENTE</h3><span class="label label-info">TRIMESTALES</span>',
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-user"></span><h2>Horario</h2><h3>POR DOCENTE</h3><span class="label label-info">'.$infoexamen.'</span>',
 
-           ['menuxletra'],
+           ['menuxletra', 'col'=>$col],
 
            [
 
@@ -42,9 +42,9 @@ else{
       </div>
       <div class="col-md-3">           
           <?= 
-            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-calendar"></span><h2>Horario</h2><h3>POR DÍA</h3><span class="label label-info">TRIMESTALES</span>',
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-calendar"></span><h2>Horario</h2><h3>POR DÍA</h3><span class="label label-info">'.$infoexamen.'</span>',
 
-           ['menuxdia'],
+           ['menuxdia', 'col'=>$col],
 
            [
 
@@ -59,11 +59,11 @@ else{
       </div>
       <div class="col-md-3"> 
           <?= 
-            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-sd-video"></span><h2>Horario</h2><h3>POR DIVISIÓN</h3><span class="label label-info">TRIMESTALES</span>',
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-sd-video"></span><h2>Horario</h2><h3>POR DIVISIÓN</h3><span class="label label-info">'.$infoexamen.'</span>',
 
            
 
-           ['menuxdivision'],
+           ['menuxdivision', 'col'=>$col],
 
            [
 

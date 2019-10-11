@@ -131,7 +131,9 @@ try {
                                     'items' => [
                                         ['label' => 'Horarios de Clase', 'url' => ['/horario/panelprincipal']],
                                         '<div class="dropdown-divider"></div>',
-                                        ['label' => 'Horarios de Trimestrales', 'url' => ['/horariotrimestral/panelprincipal']],
+                                        ['label' => 'Horarios de Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Horarios de Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Diferencia de horas', 'url' => ['/reporte/diferenciahorarioyhoras']],
                                         '<div class="dropdown-divider"></div>',
@@ -210,7 +212,7 @@ try {
                                 ['label' => 'Tipo de Actividad', 'url' => ['/actividadtipo']],
                                 ['label' => 'Notificaciones', 'url' => ['/notificacion']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Habilitar Trimestrales', 'url' => ['/anioxtrimestral']],
+                                ['label' => 'Gestionar Exámenes', 'url' => ['/anioxtrimestral']],
                                 '<div class="dropdown-divider"></div>',
                                 
                             ],

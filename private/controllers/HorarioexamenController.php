@@ -3,8 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Horariotrimestral;
-use app\models\HorariotrimestralSearch;
+use app\models\Horarioexamen;
+use app\models\HorarioexamenSearch;
 use app\models\Anioxtrimestral;
 use app\models\Catedra;
 use app\models\Preceptoria;
@@ -24,19 +24,20 @@ use kartik\date\DatePicker;
 use kartik\form\ActiveForm;
 
 /**
- * HorariotrimestralController implements the CRUD actions for Horariotrimestral model.
+ * HorarioexamenController implements the CRUD actions for Horarioexamen model.
  */
-class HorariotrimestralController extends Controller
+class HorarioexamenController extends Controller
 {
     /**
      * {@inheritdoc}
      */
+   
     public function behaviors()
     {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto', 'print', 'printcursos', 'migracionfechas'],
                 'rules' => [
                     [
                         'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'filtropormateria', 'horariocompleto'],   
@@ -72,7 +73,7 @@ class HorariotrimestralController extends Controller
                     ],
 
                     [
-                        'actions' => ['completoxcurso'],   
+                        'actions' => ['completoxcurso', 'printcursos'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
@@ -141,7 +142,7 @@ class HorariotrimestralController extends Controller
 
                     ],
                     [
-                        'actions' => ['createdesdehorario','updatedesdehorario'],   
+                        'actions' => ['createdesdehorario','updatedesdehorario', 'print', 'migracionfechas'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -183,12 +184,12 @@ class HorariotrimestralController extends Controller
     }
 
     /**
-     * Lists all Horariotrimestral models.
+     * Lists all Horarioexamen models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new HorariotrimestralSearch();
+        $searchModel = new HorarioexamenSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -198,7 +199,7 @@ class HorariotrimestralController extends Controller
     }
 
     /**
-     * Displays a single Horariotrimestral model.
+     * Displays a single Horarioexamen model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -211,13 +212,13 @@ class HorariotrimestralController extends Controller
     }
 
     /**
-     * Creates a new Horariotrimestral model.
+     * Creates a new Horarioexamen model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Horariotrimestral();
+        $model = new Horarioexamen();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -229,7 +230,7 @@ class HorariotrimestralController extends Controller
     }
 
     /**
-     * Updates an existing Horariotrimestral model.
+     * Updates an existing Horarioexamen model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -249,7 +250,7 @@ class HorariotrimestralController extends Controller
     }
 
     /**
-     * Deletes an existing Horariotrimestral model.
+     * Deletes an existing Horarioexamen model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -263,33 +264,33 @@ class HorariotrimestralController extends Controller
     }
 
     /**
-     * Finds the Horariotrimestral model based on its primary key value.
+     * Finds the Horarioexamen model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Horariotrimestral the loaded model
+     * @return Horarioexamen the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Horariotrimestral::findOne($id)) !== null) {
+        if (($model = Horarioexamen::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionCompletoxcurso($division, $vista, $prt=0){
-        return $this->generarHorarioCurso($division, $vista, $prt);
+    public function actionCompletoxcurso($division, $vista, $prt=0, $col=0){
+        return $this->generarHorarioCurso($division, $vista, $prt, $col);
     }
 
-    public function generarHorarioCurso($division, $vista, $prt)
+    public function generarHorarioCurso($division, $vista, $prt, $col=0)
     {
         //$division = 1;
         //$dia = 3;
 
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
-        $searchModel = new HorarioTrimestralSearch();
+        $searchModel = new HorarioexamenSearch();
         $paramdivision = Division::findOne($division);
         $h= [];
         if($paramdivision->turno == 1){
@@ -301,21 +302,32 @@ class HorariotrimestralController extends Controller
             $h[2] = '14:45 a 15:45';
             
         }
-
-        $anioxtrim = Anioxtrimestral::find()
-                        ->where(['activo' => 1])->one();
+        if ($col == 0){
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['<', 'trimestral', 4])
+                            ->one();
+            $tipo = 2;
+        }
+        else{
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['trimestral' => 4])
+                            ->one();
+            $tipo = 3;
+        }
 
         if($anioxtrim == null){
-            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario a trimestrales");
-            return $this->redirect(['/horariotrimestral/panelprincipal']);
+            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario");
+            return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
         }else{
             if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]) && $anioxtrim->publicado !=1){
-                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario de los exámenes trimestrales");
-                return $this->redirect(['/horariotrimestral/panelprincipal']);
+                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario");
+                return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
             }
         }
 
-        $horarios = Horariotrimestral::find()
+        $horarios = Horarioexamen::find()
             ->joinWith(['catedra0'])
             ->where(['anioxtrimestral' => $anioxtrim->id])
             ->andWhere(['catedra.division' => $division])
@@ -388,7 +400,7 @@ class HorariotrimestralController extends Controller
                         if($prt==1)
                             $array[$hora->id][$fechats] = "-";
                         else
-                            $array[$hora->id][$fechats] = '<a class="btn btn-info btn-sm" href="?r=horariotrimestral/createdesdehorario&division='.$division.'&hora='.$hora->id.'&fecha='.$fechats.'&tipo=2&alxtrim='.$anioxtrim->id.'"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>';
+                            $array[$hora->id][$fechats] = '<a class="btn btn-info btn-sm" href="?r=horarioexamen/createdesdehorario&division='.$division.'&hora='.$hora->id.'&fecha='.$fechats.'&tipo='.$tipo.'&alxtrim='.$anioxtrim->id.'&col='.$col.'"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>';
                     else
                         $array[$hora->id][$fechats] = "-";
                     //$key = array_search($hora->id, array_column($horarios, 'hora'));
@@ -413,7 +425,7 @@ class HorariotrimestralController extends Controller
                                 $salida = '';
                                 if ($dc->revista == 6){
                                     //return var_dump($dc['revista']==1);
-                                    $superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->fecha);
+                                    $superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->fecha, $tipo);
                                     if ($superpuesto[0]){
                                         ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
                                         $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1).'</span>'.'</span>';
@@ -432,7 +444,7 @@ class HorariotrimestralController extends Controller
                     if($prt==1)
                         $array[$horariox->hora][$horariox->fecha] = $salida;
                     else
-                        $array[$horariox->hora][$horariox->fecha] = $salida.'<div class="pull-right"><a class="btn btn-success btn-sm" href="?r=horariotrimestral/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&fecha='.$horariox->fecha.'&tipo=2&alxtrim='.$anioxtrim->id.'"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></div>';
+                        $array[$horariox->hora][$horariox->fecha] = $salida.'<div class="pull-right"><a class="btn btn-success btn-sm" href="?r=horarioexamen/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&fecha='.$horariox->fecha.'&tipo='.$tipo.'&alxtrim='.$anioxtrim->id.'&col='.$col.'"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></div>';
                 else
                     $array[$horariox->hora][$horariox->fecha] = $salida;
             }else
@@ -459,9 +471,10 @@ class HorariotrimestralController extends Controller
                 'vista' => $vista,
                 'diasgrid' => $diasgrid,
                 'al' => $anioxtrim->aniolectivo,
-                'trimestral' => $anioxtrim->trimestral,
+                'trimestral' => $anioxtrim->trimestral0->nombre,
                 'prt' => $prt,
                 'listdc' => $listdc,
+                'col' => $col,
 
             ]);
         return $this->render('completoxcurso', [
@@ -474,16 +487,17 @@ class HorariotrimestralController extends Controller
             'vista' => $vista,
             'diasgrid' => $diasgrid,
             'al' => $anioxtrim->aniolectivo,
-            'trimestral' => $anioxtrim->trimestral,
+            'trimestral' => $anioxtrim->trimestral0->nombre,
             'prt' => $prt,
             'listdc' => $listdc,
+            'col' => $col,
 
         ]);
     }
 
-    public function actionCreatedesdehorario($division, $hora, $fecha, $tipo, $alxtrim)
+    public function actionCreatedesdehorario($division, $hora, $fecha, $tipo, $alxtrim, $col)
     {
-        $model = new Horariotrimestral();
+        $model = new Horarioexamen();
         //$model->scenario = $model::SCENARIO_CREATEHORARIO;
         $model->hora = $hora;
         $model->fecha = $fecha;
@@ -492,7 +506,7 @@ class HorariotrimestralController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             
-               return $this->redirect(['/horariotrimestral/completoxcurso', 'division' => $division, 'vista' => 'docentes']);
+               return $this->redirect(['/horarioexamen/completoxcurso', 'division' => $division, 'vista' => 'docentes', 'col' => $col]);
         }
 
         
@@ -510,16 +524,16 @@ class HorariotrimestralController extends Controller
         ]);
     }
 
-    public function horaSuperpuesta($dc, $hora, $fecha){
+    public function horaSuperpuesta($dc, $hora, $fecha, $tipo){
         $docente = $dc->docente;
-        $horarios = Horariotrimestral::find()
+        $horarios = Horarioexamen::find()
             ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
             ->where(['detallecatedra.docente' => $docente])
             ->andWhere(['detallecatedra.revista' => 6])
             ->andWhere(['<>', 'detallecatedra.id', $dc->id])
-            ->andWhere(['horariotrimestral.hora' => $hora])
-            ->andWhere(['horariotrimestral.fecha' => $fecha])
-            ->andWhere(['horariotrimestral.tipo' => 2])
+            ->andWhere(['horarioexamen.hora' => $hora])
+            ->andWhere(['horarioexamen.fecha' => $fecha])
+            ->andWhere(['horarioexamen.tipo' => $tipo])
             ->andWhere(['division.turno' => $dc->catedra0->division0->turno])
             ->all();
         if (count($horarios)>0){
@@ -535,9 +549,9 @@ class HorariotrimestralController extends Controller
             return [false, ''];
     }
 
-    public function actionUpdatedesdehorario($division, $hora, $fecha, $tipo, $alxtrim)
+    public function actionUpdatedesdehorario($division, $hora, $fecha, $tipo, $alxtrim, $col)
     {
-        $model = Horariotrimestral::find()
+        $model = Horarioexamen::find()
                     ->joinWith(['catedra0'])
                     ->where(['catedra.division' => $division])
                     ->andWhere(['hora' => $hora])
@@ -553,7 +567,7 @@ class HorariotrimestralController extends Controller
             $model->anioxtrimestral = $alxtrim;
            $model->save();
 
-            return $this->redirect(['/horariotrimestral/completoxcurso', 'division' => $division, 'vista' => 'docentes']);
+            return $this->redirect(['/horarioexamen/completoxcurso', 'division' => $division, 'vista' => 'docentes', 'col' => $col]);
         }
 
         
@@ -570,21 +584,34 @@ class HorariotrimestralController extends Controller
         ]);
     }
 
-    public function actionMenuxdivision()
+    public function actionMenuxdivision($col = 0)
     {
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
 
-        $anioxtrim = Anioxtrimestral::find()
-                        ->where(['activo' => 1])->one();
+        if ($col == 0){
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['<', 'trimestral', 4])
+                            ->one();
+            $tipo = 2;
+        }
+        else{
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['trimestral' => 4])
+                            ->one();
+            $tipo = 3;
+        }
 
+        
         if($anioxtrim == null){
-            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario a trimestrales");
-            return $this->redirect(['/horariotrimestral/panelprincipal']);
+            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario");
+            return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
         }else{
             if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]) && $anioxtrim->publicado !=1){
-                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario de los exámenes trimestrales");
-                return $this->redirect(['/horariotrimestral/panelprincipal']);
+                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario");
+                return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
             }
         }
 
@@ -605,36 +632,58 @@ class HorariotrimestralController extends Controller
         foreach ($divisiones as $division) {
                 $echodiv .= '<div class="pull-left" style="height: 16vh; width: 16vh; vertical-align: middle;">';
                 $echodiv .= '<center><div>';
-                $echodiv .= '<a class="menuHorarios" href="index.php?r=horariotrimestral/completoxcurso&division='.$division->id.'&vista=docentes&prt=0" role="button" style="font-size:5vh; width:15vh; height: 15vh;">'.$division->nombre.'</a>';
+                $echodiv .= '<a class="menuHorarios" href="index.php?r=horarioexamen/completoxcurso&division='.$division->id.'&vista=docentes&prt=0&col='.$col.'" role="button" style="font-size:5vh; width:15vh; height: 15vh;">'.$division->nombre.'</a>';
                 $echodiv .= '</div></center>';
                 $echodiv .= '</div>';
         }
         return $this->render('menuxdivision', [
             'echodiv' => $echodiv,
+            'col' => $col,
+            'anioxtrim' => $anioxtrim,
         ]);
     }
 
-    public function actionPanelprincipal()
+    public function actionPanelprincipal($col)
     {
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
-        return $this->render('panelprincipal');
+        if($col == 0)
+            $infoexamen = "TRIMESTRALES";
+        else{
+            $infoexamen = "COLOQUIOS";
+        }
+        return $this->render('panelprincipal', [
+            'infoexamen' => $infoexamen,
+            'col' => $col,
+        ]);
     }
-    public function actionMenuxletra()
+    public function actionMenuxletra($col = 0)
     {
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
 
-        $anioxtrim = Anioxtrimestral::find()
-                        ->where(['activo' => 1])->one();
+        if ($col == 0){
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['<', 'trimestral', 4])
+                            ->one();
+            $tipo = 2;
+        }
+        else{
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['trimestral' => 4])
+                            ->one();
+            $tipo = 3;
+        }
 
         if($anioxtrim == null){
-            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario a trimestrales");
-            return $this->redirect(['/horariotrimestral/panelprincipal']);
+            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario");
+            return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
         }else{
             if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]) && $anioxtrim->publicado !=1){
-                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario de los exámenes trimestrales");
-                return $this->redirect(['/horariotrimestral/panelprincipal']);
+                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario");
+                return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
             }
         }
         $model = new Docente();
@@ -645,7 +694,7 @@ class HorariotrimestralController extends Controller
         foreach ($abecedario as $letra) {
                 $echodiv .= '<div class="pull-left" style="height: 16vh; width: 16vh; vertical-align: middle;">';
                 $echodiv .= '<center><div>';
-                $echodiv .= '<a class="menuHorarios" href="index.php?r=horariotrimestral/menuxdocenteletra&letra='.$letra.'" role="button" style="font-size:5vh; width:15vh; height: 15vh;">'.$letra.'</a>';
+                $echodiv .= '<a class="menuHorarios" href="index.php?r=horarioexamen/menuxdocenteletra&letra='.$letra.'&col='.$col.'" role="button" style="font-size:5vh; width:15vh; height: 15vh;">'.$letra.'</a>';
                 $echodiv .= '</div></center>';
                 $echodiv .= '</div>';
         }
@@ -659,25 +708,38 @@ class HorariotrimestralController extends Controller
         return $this->render('menuxletra', [
             
             'echodiv' => $echodiv,
+            'col' => $col,
             
         ]);
     }
 
-    public function actionMenuxdocenteletra($letra)
+    public function actionMenuxdocenteletra($letra, $col = 0)
     {
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
 
-        $anioxtrim = Anioxtrimestral::find()
-                        ->where(['activo' => 1])->one();
+        if ($col == 0){
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['<', 'trimestral', 4])
+                            ->one();
+            $tipo = 2;
+        }
+        else{
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['trimestral' => 4])
+                            ->one();
+            $tipo = 3;
+        }
 
         if($anioxtrim == null){
-            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario a trimestrales");
-            return $this->redirect(['/horariotrimestral/panelprincipal']);
+            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario");
+            return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
         }else{
             if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]) && $anioxtrim->publicado !=1){
-                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario de los exámenes trimestrales");
-                return $this->redirect(['/horariotrimestral/panelprincipal']);
+                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario");
+                return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
             }
         }
         $model = new Docente();
@@ -692,25 +754,26 @@ class HorariotrimestralController extends Controller
         foreach ($docentes as $doc) {
                 $echodiv .= '<div class="pull-left" style="height: 21vh; width:29vh; vertical-align: middle;">';
                 $echodiv .= '<div>';
-                $echodiv .= '<center><a class="menuHorarios" href="index.php?r=horariotrimestral/completoxdocente&docente='.$doc->id.'" role="button" style="font-size:2.5vh; width:28vh; height: 20vh;">'.$doc->apellido.', '.$doc->nombre.'</a>';
+                $echodiv .= '<center><a class="menuHorarios" href="index.php?r=horarioexamen/completoxdocente&docente='.$doc->id.'&col='.$col.'" role="button" style="font-size:2.5vh; width:28vh; height: 20vh;">'.$doc->apellido.', '.$doc->nombre.'</a>';
                 $echodiv .= '</div><center>';
                 $echodiv .= '</div>';
         }
 
         return $this->render('menuxdocenteletra', [
             'echodiv' => $echodiv,
+            'col' => $col,
             
         ]);
     }
 
 
-    public function actionCompletoxdocente($docente)
+    public function actionCompletoxdocente($docente, $col)
     {
         //$division = 1;
         //$dia = 3;
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
-        $searchModel = new HorariotrimestralSearch();
+        $searchModel = new HorarioexamenSearch();
         $docenteparam = Docente::findOne($docente);
 
         $h= [];
@@ -722,45 +785,64 @@ class HorariotrimestralController extends Controller
         
             $j[1] = '13:30 a 14:30';
             $j[2] = '14:45 a 15:45';
+
+        if ($col == 0){
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['<', 'trimestral', 4])
+                            ->one();
+            $tipo = 2;
+            date_default_timezone_set('America/Argentina/Buenos_Aires');
+            $fecha1print = Yii::$app->formatter->asDate($anioxtrim->inicio, 'dd/MM/yyyy');
+            $fecha2print = Yii::$app->formatter->asDate($anioxtrim->fin, 'dd/MM/yyyy');
+            $infocabecera = "Se comumica que los exámenes trimestrales correspondientes al <b>{$anioxtrim->trimestral0->nombre}</b> comenzarán el <b>{$fecha1print}</b> y teminarán el <b>{$fecha2print}</b>. Deberá entregarlos con las correciones pertinentes con un plazo máximo de <b><u>TRES DÍAS</u></b> siguientes a su recepción. Luego se archivarán en preceptoría.<br/>
+            Saludamos a Usted muy atte.";
+        }
+        else{
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['trimestral' => 4])
+                            ->one();
+            $tipo = 3;
+            $infocabecera = '';
+        }
             
         
                 
-        $horariosTm = Horariotrimestral::find()
+        $horariosTm = Horarioexamen::find()
             ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
             //->where(['diasemana' => 2])
             ->where(['detallecatedra.docente' => $docente])
             ->andWhere(['division.turno' => 1])
             ->andWhere(['detallecatedra.revista' => 6])
-            ->andWhere(['horariotrimestral.tipo' => 2])
-            ->orderBy('horariotrimestral.fecha, horariotrimestral.hora')
+            ->andWhere(['horarioexamen.tipo' => $tipo])
+            ->orderBy('horarioexamen.fecha, horarioexamen.hora')
             ->all();
 
-        $horariosTt = Horariotrimestral::find()
+        $horariosTt = Horarioexamen::find()
             ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
             //->where(['diasemana' => 2])
             ->where(['detallecatedra.docente' => $docente])
             ->andWhere(['division.turno' => 2])
             ->andWhere(['detallecatedra.revista' => 6])
-            ->andWhere(['horariotrimestral.tipo' => 2])
-            ->orderBy('horariotrimestral.fecha, horariotrimestral.hora')
+            ->andWhere(['horarioexamen.tipo' => $tipo])
+            ->orderBy('horarioexamen.fecha, horarioexamen.hora')
             ->all();
 
-        $anioxtrimestral = Anioxtrimestral::find()
-                        ->where(['activo' => 1])->one();
-
-        if($anioxtrimestral == null){
-            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario a trimestrales");
-            return $this->redirect(['/horariotrimestral/panelprincipal']);
+        
+        if($anioxtrim == null){
+            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario");
+            return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
         }else{
             if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]) && $anioxtrim->publicado !=1){
-                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario de los exámenes trimestrales");
-                return $this->redirect(['/horariotrimestral/panelprincipal']);
+                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario");
+                return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
             }
         }
 
 
-        $start = $anioxtrimestral->inicio;
-        $end = $anioxtrimestral->fin;
+        $start = $anioxtrim->inicio;
+        $end = $anioxtrim->fin;
 
         $range = [];
 
@@ -933,18 +1015,20 @@ class HorariotrimestralController extends Controller
             'docenteparam' => $docenteparam,
             'diasgridtm' => $diasgridtm,
             'diasgridtt' => $diasgridtt,
-            'anioxtrimestral' => $anioxtrimestral,
+            'anioxtrimestral' => $anioxtrim,
+            'infocabecera' => $infocabecera,
+            'col' => $col,
             
         ]);
     }
 
-    public function generarFicha($docente)
+    public function generarFicha($docente, $col)
     {
         //$division = 1;
         //$dia = 3;
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
-        $searchModel = new HorariotrimestralSearch();
+        $searchModel = new HorarioexamenSearch();
         $docenteparam = Docente::findOne($docente);
 
         $h= [];
@@ -956,44 +1040,62 @@ class HorariotrimestralController extends Controller
         
             $j[1] = '13:30 a 14:30';
             $j[2] = '14:45 a 15:45';
-            
+          
+        if ($col == 0){
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['<', 'trimestral', 4])
+                            ->one();
+            $tipo = 2;
+            date_default_timezone_set('America/Argentina/Buenos_Aires');
+            $fecha1print = Yii::$app->formatter->asDate($anioxtrim->inicio, 'dd/MM/yyyy');
+            $fecha2print = Yii::$app->formatter->asDate($anioxtrim->fin, 'dd/MM/yyyy');
+            $infocabecera = "Se comumica que los exámenes trimestrales correspondientes al <b>{$anioxtrimestral->trimestral0->nombre}</b> comenzarán el <b>{$fecha1print}</b> y teminarán el <b>{$fecha2print}</b>. Deberá entregarlos con las correciones pertinentes con un plazo máximo de <b><u>TRES DÍAS</u></b> siguientes a su recepción. Luego se archivarán en preceptoría.<br/>
+            Saludamos a Usted muy atte.";
+        }
+        else{
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['trimestral' => 4])
+                            ->one();
+            $tipo = 3;
+            $infocabecera = '';
+        }  
         
                 
-        $horariosTm = Horariotrimestral::find()
+        $horariosTm = Horarioexamen::find()
             ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
             //->where(['diasemana' => 2])
             ->where(['detallecatedra.docente' => $docente])
             ->andWhere(['division.turno' => 1])
             ->andWhere(['detallecatedra.revista' => 6])
-            ->andWhere(['horariotrimestral.tipo' => 2])
-            ->orderBy('horariotrimestral.fecha, horariotrimestral.hora')
+            ->andWhere(['horarioexamen.tipo' => $tipo])
+            ->orderBy('horarioexamen.fecha, horarioexamen.hora')
             ->all();
 
-        $horariosTt = Horariotrimestral::find()
+        $horariosTt = Horarioexamen::find()
             ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
             //->where(['diasemana' => 2])
             ->where(['detallecatedra.docente' => $docente])
             ->andWhere(['division.turno' => 2])
             ->andWhere(['detallecatedra.revista' => 6])
-            ->andWhere(['horariotrimestral.tipo' => 2])
-            ->orderBy('horariotrimestral.fecha, horariotrimestral.hora')
+            ->andWhere(['horarioexamen.tipo' => $tipo])
+            ->orderBy('horarioexamen.fecha, horarioexamen.hora')
             ->all();
 
-        $anioxtrimestral = Anioxtrimestral::find()
-                        ->where(['activo' => 1])->one();
-
-        if($anioxtrimestral == null){
-            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario a trimestrales");
-            return $this->redirect(['/horariotrimestral/panelprincipal']);
+        
+        if($anioxtrim == null){
+            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario");
+            return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
         }else{
             if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]) && $anioxtrim->publicado !=1){
-                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario de los exámenes trimestrales");
-                return $this->redirect(['/horariotrimestral/panelprincipal']);
+                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario");
+                return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
             }
         }
 
-        $start = $anioxtrimestral->inicio;
-        $end = $anioxtrimestral->fin;
+        $start = $anioxtrim->inicio;
+        $end = $anioxtrim->fin;
 
         $range = [];
 
@@ -1162,23 +1264,37 @@ class HorariotrimestralController extends Controller
             'docenteparam' => $docenteparam,
             'diasgridtm' => $diasgridtm,
             'diasgridtt' => $diasgridtt,
-            'anioxtrimestral' => $anioxtrimestral,
+            'anioxtrimestral' => $anioxtrim,
+            'infocabecera' => $infocabecera,
+            'col' => $col,
             
         ]);
     }
 
-    public function actionPrint($docente, $all){
+    public function actionPrint($docente, $all, $col = 0){
         //$this->layout = 'print';
-        $anioxtrim = Anioxtrimestral::find()
-                        ->where(['activo' => 1])->one();
+        if ($col == 0){
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['<', 'trimestral', 4])
+                            ->one();
+            $tipo = 2;
+        }
+        else{
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['trimestral' => 4])
+                            ->one();
+            $tipo = 3;
+        }
 
         if($anioxtrim == null){
-            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario a trimestrales");
-            return $this->redirect(['/horariotrimestral/panelprincipal']);
+            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario");
+            return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
         }else{
             if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]) && $anioxtrim->publicado !=1){
-                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario de los exámenes trimestrales");
-                return $this->redirect(['/horariotrimestral/panelprincipal']);
+                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario");
+                return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
             }
         }
         if (YII_ENV_DEV) {
@@ -1197,15 +1313,16 @@ class HorariotrimestralController extends Controller
 
             
             foreach ($docentes as $doc) {
-            $salidaimpar .= $this->generarFicha($doc->id);
+            $salidaimpar .= $this->generarFicha($doc->id, $col);
             
             }
-           
-            $filename = "Citaciones Trimestral".".pdf";
+            $filnamesinext = "{$anioxtrim->aniolectivo0->nombre} - Citaciones {$anioxtrim->trimestral0->nombre}";
+            $filename = $filnamesinext.".pdf";
         }else{
             $mat = Docente::findOne($docente);
-            $salidaimpar = $this->generarFicha($docente);
-            $filename = $mat->apellido.'_'.$mat->nombre.'.pdf';
+            $salidaimpar = $this->generarFicha($docente, $col);
+            $filnamesinext = $mat->apellido.'_'.$mat->nombre;
+            $filename = $filnamesinext.'.pdf';
         }
         
         
@@ -1239,7 +1356,7 @@ class HorariotrimestralController extends Controller
                         width: 7%;
                         
                    } 
-                .horariotrimestral-view{
+                .horarioexamen-view{
                     margin-top: -70px;
                     max-height: 100%;
                     overflow: hidden;
@@ -1263,7 +1380,7 @@ class HorariotrimestralController extends Controller
         'methods' => [ 
             //'defaultheaderline' => 0,
             'SetHeader'=>['<span><img src="assets/images/logo-encabezado.png" /></span>'], 
-            'SetFooter'=>[date('d/m/Y').' - Citación de Examen Trimestral - '.$filename ],
+            'SetFooter'=>[date('d/m/Y').' - '.$filnamesinext ],
         ]
     ]);
     
@@ -1272,18 +1389,30 @@ class HorariotrimestralController extends Controller
     return $pdf->render(); 
     }
 
-    public function actionPrintcursos($division, $all){
+    public function actionPrintcursos($division, $all, $col = 0){
         //$this->layout = 'print';
-        $anioxtrim = Anioxtrimestral::find()
-                        ->where(['activo' => 1])->one();
+        if ($col == 0){
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['<', 'trimestral', 4])
+                            ->one();
+            $tipo = 2;
+        }
+        else{
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['trimestral' => 4])
+                            ->one();
+            $tipo = 3;
+        }
 
         if($anioxtrim == null){
-            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario a trimestrales");
-            return $this->redirect(['/horariotrimestral/panelprincipal']);
+            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario");
+            return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
         }else{
             if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]) && $anioxtrim->publicado !=1){
-                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario de los exámenes trimestrales");
-                return $this->redirect(['/horariotrimestral/panelprincipal']);
+                Yii::$app->session->setFlash('danger', "No se encuentra publicado el horario");
+                return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
             }
         }
         if (YII_ENV_DEV) {
@@ -1309,15 +1438,16 @@ class HorariotrimestralController extends Controller
 
             
             foreach ($divisiones as $divi) {
-                $salidaimpar .= $this->generarHorarioCurso($divi->id, 'materias', 1);
+                $salidaimpar .= $this->generarHorarioCurso($divi->id, 'materias', 1, $col);
             
             }
-           
-            $filename = "Horario Trimestral".".pdf";
+            $filenamesext = "{$anioxtrim->aniolectivo0->nombre} - Horario Completo - {$anioxtrim->trimestral0->nombre}";
+            $filename = $filenamesext.".pdf";
         }else{
             $di = Division::findOne($division);
-            $salidaimpar = $this->generarHorarioCurso($division, 'materias', 1);
-            $filename = $di->nombre.'.pdf';
+            $salidaimpar = $this->generarHorarioCurso($division, 'materias', 1, $col);
+            $filenamesext = "{$anioxtrim->aniolectivo0->nombre} - Horario {$anioxtrim->trimestral0->nombre} - {$di->nombre}";
+            $filename =$filenamesext.".pdf";
         }
         
         
@@ -1375,7 +1505,7 @@ class HorariotrimestralController extends Controller
         'methods' => [ 
             //'defaultheaderline' => 0,
             'SetHeader'=>['<span><img src="assets/images/logo-encabezado.png" /></span>'], 
-            'SetFooter'=>[date('d/m/Y').' - Horario de Examenes Trimestrales - '.$filename ],
+            'SetFooter'=>[date('d/m/Y')." - ".$filenamesext],
         ]
     ]);
     
@@ -1387,67 +1517,36 @@ class HorariotrimestralController extends Controller
     public function actionMigracionfechas($anioxtrimestral){
         $axt = Anioxtrimestral::findOne($anioxtrimestral);
         
-        $diasgridtm = [];
-        $diasgridtm['columns'][] =['class' => 'yii\grid\SerialColumn'];
-        $diasgridtm['columns'][] =[
-                        'label' => 'Fecha actual activa',
-                        'vAlign' => 'middle',
-                        'hAlign' => 'center',
-                        'format' => 'raw',
-                        'value' => function($model){
-                            //return var_dump($model);
-
-                            return DatePicker::widget([
-                                'name' => 'birth_date',
-                                'value' => $model->fecha,
-                                'removeButton' => false,
-                                'pluginOptions' => [
-                                    'autoclose'=>true,
-                                    'disable' => 'disable',
-                                    'format' => 'dd/mm/yyyy'
-                                ]
-                            ]);
-                        }
-                        
-                    ];
-        $diasgridtm['columns'][] =[
-                        'label' => '',
-                        'vAlign' => 'middle',
-                        'hAlign' => 'center',
-                        'format' => 'raw',
-                        'value' => function (){return '<span class="glyphicon glyphicon-arrow-right"></span>';},
-                        
-                    ];
-        $diasgridtm['columns'][] =[
-                        'label' => $axt->aniolectivo0->nombre.' - '.$axt->trimestral0->nombre,
-                        'vAlign' => 'middle',
-                        'hAlign' => 'center',
-                        'format' => 'raw',
-                        'value' => function($model) use ($axt){
-                            //return var_dump($model);
-
-                            return DatePicker::widget([
-                                'name' => $model->fecha,
-                                //'value' => '12/31/2010',
-                                'removeButton' => false,
-                                'pluginOptions' => [
-                                    'autoclose'=>true,
-                                    'format' => 'yyyy-mm-dd',
-                                    'startDate' => $axt->inicio,
-                                    'endDate' => $axt->fin,
-                                ]
-                            ]);
-                        }
-                        
-                        
-                    ];
+        
         $dias2 = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado","Domingo"];
 
-        $ht = Horariotrimestral::find()
+        if($axt->trimestral<4){
+            $tipo = 2;
+            $col = 0;
+        }else{
+            $tipo = 3;
+            $col = 1;
+        }
+
+        $ht = Horarioexamen::find()
                 ->select('fecha')
                 ->distinct()
+                ->where(['tipo' => 2])
                 ->orderBy('fecha')
                 ->all();
+
+        $htexamen = Horarioexamen::find()
+                ->select('fecha')
+                ->distinct()
+                ->where(['tipo' => 3])
+                ->orderBy('fecha')
+                ->all();
+
+        if(count($htexamen)==0 && $tipo == 3){
+            $nuevoexamen = true;
+        }else{
+            $nuevoexamen = false;
+        }
 
         $salida = '';
         $salida .='<div class="content">';
@@ -1531,42 +1630,63 @@ class HorariotrimestralController extends Controller
             $keys = array_keys($params);
             //return var_dump(Yii::$app->request->post());
 
-            $horarios = Horariotrimestral::find()
+            $horarios = Horarioexamen::find()
+                ->where(['tipo' => 2])
                 ->orderBy('fecha')
                 ->all();
             $query = '';
-
+            $ch = 0;
             foreach ($horarios as $horario) {
-                //$horario->fecha = $params[$horario->fecha];
-                 $horario->cambiada =1;
-                 $horario->anioxtrimestral =$axt->id;
-                $horario->save();
+
+                if($nuevoexamen){
+                    $nuevohorarioexamen = new Horarioexamen();
+                    $nuevohorarioexamen->catedra = $horario->catedra;
+                    $nuevohorarioexamen->hora = $horario->hora;
+                    $nuevohorarioexamen->tipo = 3;
+                    $nuevohorarioexamen->anioxtrimestral =$axt->id;
+                    $nuevohorarioexamen->fecha = $params[$horario->fecha];
+                    $nuevohorarioexamen->cambiada = 1;
+                    
+                    $nuevohorarioexamen->save();
+
+                }else{
+                    if($tipo == 2){
+                        $horario->fecha = $params[$horario->fecha];
+                        $horario->cambiada =1;
+                        $horario->anioxtrimestral =$axt->id;
+                        $horario->save();
+                    }elseif($tipo == 3){
+                        $horarioexamenanterior = Horarioexamen::find()
+                                    ->where(['catedra'=>$horario->catedra])
+                                    ->andWhere(['tipo' => 3])
+                                    ->one();
+                        $horarioexamenanterior->hora = $horarioexamenanterior->hora;
+                        $horarioexamenanterior->anioxtrimestral =$axt->id;
+                        $horarioexamenanterior->fecha = $params[$horario->fecha];
+                        $horarioexamenanterior->cambiada = 1;
+                        $horarioexamenanterior->save();
+                        
+                    }
+                    
+                }
+
+                
+                 $ch++;
                  //return var_dump($horario);
             }
 
-            foreach ($keys as $fechaactual) {
-               if($fechaactual != "_csrf" && $fechaactual != "Horariotrimestral"){
-                    $sal = $params[$fechaactual];
-                    $query .= "update horariotr set {$fechaactual} = {$sal}";
-               }
-                
-
-            }
-            return $query;
-            return var_dump($keys);
+            Yii::$app->session->setFlash('success', "Se realizó la actualización de {$ch} horarios");
+            return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
+            //return var_dump($keys);
         }
 
 
-        $providerTm = new ArrayDataProvider([
-            'allModels' => $ht,
-            
-        ]);
         return $this->render('migracionfechas', [
             
-            'providerTm' => $providerTm,
+            
             'form' => $form,
             
-            'diasgridtm' => $diasgridtm,
+            
             'echodiv' => $echodiv,
             'anioxtrimestral' => $anioxtrimestral,
             

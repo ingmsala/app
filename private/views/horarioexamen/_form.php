@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Horariotrimestral */
+/* @var $model app\models\Horarioexamen */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="horariotrimestral-form">
+<div class="horarioexamen-form">
 
     <?php $form = ActiveForm::begin(); ?>
 

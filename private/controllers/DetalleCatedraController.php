@@ -281,16 +281,19 @@ class DetallecatedraController extends Controller
         ]);
     }
 
-    public function actionUpdatehorario($id, $or='hc')
+    public function actionUpdatehorario($id, $or='hc', $col=-1)
     {
 
         $model = $this->findModel($id);
         $catedra = $model->catedra0->id;
         $catedrax= Catedra::findOne($catedra);
-        if($or == 'hc')
+        if($or == 'hc'){
             $ur = 'horario';
-        else
-            $ur = 'horariotrimestral';
+            $col = -1;
+        }
+        else{
+            $ur = 'horarioexamen';
+        }
         $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $condiciones=Condicion::find()->where(['=', 'id', 6])->all();
         $revistas=Revista::find()->where(['=', 'id', 6])->all();
@@ -306,7 +309,7 @@ class DetallecatedraController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->catedra = $catedra;
             if($model->save())
-                return $this->redirect([$ur.'/completoxcurso', 'division' => $catedrax->division, 'vista' => 'docentes']);
+                return $this->redirect([$ur.'/completoxcurso', 'col' => $col, 'division' => $catedrax->division, 'vista' => 'docentes']);
         }
 
         return $this->render('updatehorario', [

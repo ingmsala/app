@@ -14,13 +14,13 @@ if($vista == 'docentes')
 else
 	$txt = 'Materias';
 
-$this->title = 'Horario de Trimestrales: '.$paramdivision->nombre;
-$this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="index.php?r=horariotrimestral/menuxdivision" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>'];
+$this->title = "Horario de {$trimestral}: ".$paramdivision->nombre;
+$this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="index.php?r=horarioexamen/menuxdivision&col='.$col.'" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>'];
 
 if($vista == 'docentes')
-	        	$this->params['itemnav2'] = ['label' => '<a class="menuHorarios" href="index.php?r=horariotrimestral/completoxcurso&division='.$paramdivision->id.'&vista=materias" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-book" aria-hidden="true"></span><br />Materias</center></a>'];
+	        	$this->params['itemnav2'] = ['label' => '<a class="menuHorarios" href="index.php?r=horarioexamen/completoxcurso&division='.$paramdivision->id.'&vista=materias&col='.$col.'" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-book" aria-hidden="true"></span><br />Materias</center></a>'];
 	        else
-	        	$this->params['itemnav2'] = ['label' =>   '<a class="menuHorarios" href="index.php?r=horariotrimestral/completoxcurso&division='.$paramdivision->id.'&vista=docentes" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-education" aria-hidden="true"></span><br />Docentes</center></a>'];
+	        	$this->params['itemnav2'] = ['label' =>   '<a class="menuHorarios" href="index.php?r=horarioexamen/completoxcurso&division='.$paramdivision->id.'&vista=docentes&col='.$col.'" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-education" aria-hidden="true"></span><br />Docentes</center></a>'];
 ?>
 <div class="horarioxcurso-view">
 
@@ -51,26 +51,26 @@ JS;
     <div style="display: <?= $userhorario ?>;">
     	<div  class="pull-right">
 	        <?php 
-	          	echo  '<a class = "btn btn-default" href="index.php?r=horariotrimestral/panelprincipal"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>';
+	          	echo  '<a class = "btn btn-default" href="index.php?r=horarioexamen/panelprincipal&col='.$col.'"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>';
 	        ?>
 	    </div>
 	    <div class="pull-right">
 	        <?php 
 	        if($vista == 'docentes')
-	        	echo  '<a class = "btn btn-default" href="index.php?r=horariotrimestral/completoxcurso&division='.$paramdivision->id.'&vista=materias"><center><span class="glyphicon glyphicon-book" aria-hidden="true"></span><br />Materias</center></a>';
+	        	echo  '<a class = "btn btn-default" href="index.php?r=horarioexamen/completoxcurso&division='.$paramdivision->id.'&vista=materias&col='.$col.'"><center><span class="glyphicon glyphicon-book" aria-hidden="true"></span><br />Materias</center></a>';
 	        else
-	        	echo  '<a class = "btn btn-default" href="index.php?r=horariotrimestral/completoxcurso&division='.$paramdivision->id.'&vista=docentes"><center><span class="glyphicon glyphicon-education" aria-hidden="true"></span><br />Docentes</center></a>';
+	        	echo  '<a class = "btn btn-default" href="index.php?r=horarioexamen/completoxcurso&division='.$paramdivision->id.'&vista=docentes&col='.$col.'"><center><span class="glyphicon glyphicon-education" aria-hidden="true"></span><br />Docentes</center></a>';
 	        ?>
 	    </div>
 	    <div  class="pull-right">
 	        <?php 
-	          	echo  '<a class = "btn btn-default" href="index.php?r=horariotrimestral/menuxdivision"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>';
+	          	echo  '<a class = "btn btn-default" href="index.php?r=horarioexamen/menuxdivision&col='.$col.'"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>';
 	        ?>
 	    </div>
 	    <div  class="pull-right">
 	        <?php 
 	          	
-	          	echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center>', Url::to(['printcursos', 'division' => $paramdivision->id, 'all' => false]), ['class' => 'btn btn-default'])
+	          	echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center>', Url::to(['printcursos', 'division' => $paramdivision->id, 'all' => false, 'col' => $col]), ['class' => 'btn btn-default'])
 	        ?>
 	    </div>
     </div>
@@ -170,16 +170,16 @@ JS;
 	                'visible' => (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTORIA]) && $prt==0) ? true : false,
 	                
 	                'buttons' => [
-	                    'viewdetcat' => function($url, $model, $key){
+	                    'viewdetcat' => function($url, $model, $key) use ($col) {
 	                        return Html::a(
 	                            '<span class="glyphicon glyphicon-eye-open"></span>',
-	                            '?r=detallecatedra/updatehorario&or=ht&id='.$model['id']);
+	                            '?r=detallecatedra/updatehorario&or=ht&col='.$col.'&id='.$model['id']);
 	                    },
 
-	                    'updatedetcat' => function($url, $model, $key){
+	                    'updatedetcat' => function($url, $model, $key) use ($col) {
                         
                         return Html::button('<span class="glyphicon glyphicon-pencil"></span>',
-                            ['value' => Url::to('index.php?r=detallecatedra/updatehorario&id='.$model['id']),
+                            ['value' => Url::to('index.php?r=detallecatedra/updatehorario&col='.$col.'&id='.$model['id']),
                                 'class' => 'modala btn btn-link', 'id'=>'modala']);
 
 

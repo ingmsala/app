@@ -11,6 +11,11 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\filters\AccessControl;
+use app\config\Globales;
+
+
+
 
 /**
  * AnioxtrimestralController implements the CRUD actions for Anioxtrimestral model.
@@ -23,6 +28,39 @@ class AnioxtrimestralController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['view', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['index', 'create', 'update', 'publicadotruefalse'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
+                    ],
+
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -97,9 +135,15 @@ class AnioxtrimestralController extends Controller
 
             if ($model->save())
             {
-                $cant = $this->inactivarAnioxTrim($model->id);
-                Yii::$app->session->setFlash('info', "{$cant} trimestral/es a estado <b>inactivo</b>");
-                return $this->redirect(['horariotrimestral/migracionfechas', 'anioxtrimestral' => $model->id]);
+                if($model->trimestral < 4){
+                    $cant = $this->inactivarAnioxTrim($model->id, false);
+                    Yii::$app->session->setFlash('info', "{$cant} trimestral cambió a estado <b>inactivo</b>");
+                }else{
+                    $cant = $this->inactivarAnioxTrim($model->id, true);
+                    Yii::$app->session->setFlash('info', "{$cant} examen cambió a estado <b>inactivo</b>");
+                }
+                
+                return $this->redirect(['horarioexamen/migracionfechas', 'anioxtrimestral' => $model->id]);
             }
 
 
@@ -113,9 +157,20 @@ class AnioxtrimestralController extends Controller
         ]);
     }
 
-    public function inactivarAnioxTrim($id){
-        $anioxtrimestrales = Anioxtrimestral::find()
+    public function inactivarAnioxTrim($id, $col){
+        if($col)
+            $anioxtrimestrales = Anioxtrimestral::find()
                 ->where(['<>', 'id', $id])
+                ->andWhere(['trimestral' => 4])
+                ->andWhere(['or', 
+                        ['activo' => 1],
+                        ['publicado' => 1]
+                    ])
+                ->all();
+        else
+            $anioxtrimestrales = Anioxtrimestral::find()
+                ->where(['<>', 'id', $id])
+                ->andWhere(['<', 'trimestral', 4])
                 ->andWhere(['or', 
                         ['activo' => 1],
                         ['publicado' => 1]

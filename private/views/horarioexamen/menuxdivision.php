@@ -12,7 +12,7 @@ $this->title = 'Seleccione una división';
 <div class="row">
 <?php $userhorario = (Yii::$app->user->identity->role == Globales::US_HORARIO)? "none" : "block" ?>
 	 <h1 style="display: <?= $userhorario ?>;">
-    	Horarios de Exámenes Trimestrales
+    	Horarios de <?= $anioxtrim->trimestral0->nombre ?>
 	</h1>
 </div>
 <div class="row" style="padding-bottom: 10px;">
@@ -20,13 +20,16 @@ $this->title = 'Seleccione una división';
 	 <div style="display: <?= $userhorario ?>;">
     	<div  class="pull-right">
 	        <?php 
-	          	echo  '<a class = "btn btn-default" href="index.php?r=horariotrimestral/panelprincipal"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>';
+	          	echo  '<a class = "btn btn-default" href="index.php?r=horarioexamen/panelprincipal&col='.$col.'"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>';
 	        ?>
 	    </div>
 	    <div  class="pull-right">
 	        <?php 
 	          	
-	          	echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir Todos</center>', Url::to(['printcursos', 'division' => '', 'all' => true]), ['class' => 'btn btn-default'])
+	          	echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir Todos</center>', Url::to(['printcursos', 'division' => '', 'all' => true, 'col' => $col]),['data' => [
+                            'confirm' => 'La generción del reporte puede tardar algunos minutos. NO recargue la página hasta que no se descargue el pdf.',
+                            'method' => 'get',
+                             ],  'class' => 'btn btn-default'])
 	        ?>
 	    </div>
 	</div>

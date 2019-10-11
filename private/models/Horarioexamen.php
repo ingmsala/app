@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "horariotrimestral".
+ * This is the model class for table "horarioexamen".
  *
  * @property int $id
  * @property int $catedra
@@ -20,14 +20,14 @@ use Yii;
  * @property Tipoparte $tipo0
  * @property Hora $hora0
  */
-class Horariotrimestral extends \yii\db\ActiveRecord
+class Horarioexamen extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'horariotrimestral';
+        return 'horarioexamen';
     }
 
     /**

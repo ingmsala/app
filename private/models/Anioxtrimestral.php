@@ -17,7 +17,7 @@ use Yii;
  *
  * @property Aniolectivo $aniolectivo0
  * @property Trimestral $trimestral0
- * @property Horariotrimestral[] $horariotrimestrals
+ * @property Horarioexamen[] $horarioexamens
  */
 class Anioxtrimestral extends \yii\db\ActiveRecord
 {
@@ -50,8 +50,8 @@ class Anioxtrimestral extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'aniolectivo' => 'Aniolectivo',
-            'trimestral' => 'Trimestral',
+            'aniolectivo' => 'Año Lectivo',
+            'trimestral' => 'Instancia',
             'inicio' => 'Inicio',
             'fin' => 'Fin',
             'activo' => 'Activo',
@@ -78,8 +78,8 @@ class Anioxtrimestral extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getHorariotrimestrals()
+    public function getHorarioexamens()
     {
-        return $this->hasMany(Horariotrimestral::className(), ['anioxtrimestral' => 'id']);
+        return $this->hasMany(Horarioexamen::className(), ['anioxtrimestral' => 'id']);
     }
 }

@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Horariotrimestral;
+use app\models\Horarioexamen;
 
 /**
- * HorariotrimestralSearch represents the model behind the search form of `app\models\Horariotrimestral`.
+ * HorarioexamenSearch represents the model behind the search form of `app\models\Horarioexamen`.
  */
-class HorariotrimestralSearch extends Horariotrimestral
+class HorarioexamenSearch extends Horarioexamen
 {
     /**
      * {@inheritdoc}
@@ -41,7 +41,7 @@ class HorariotrimestralSearch extends Horariotrimestral
      */
     public function search($params)
     {
-        $query = Horariotrimestral::find();
+        $query = Horarioexamen::find();
 
         // add conditions that should always apply here
 
