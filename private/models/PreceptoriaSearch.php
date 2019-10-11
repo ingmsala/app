@@ -18,7 +18,7 @@ class PreceptoriaSearch extends Preceptoria
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'piso'], 'integer'],
             [['nombre', 'descripcion'], 'safe'],
         ];
     }

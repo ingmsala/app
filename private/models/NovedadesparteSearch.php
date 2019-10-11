@@ -117,11 +117,11 @@ class NovedadesparteSearch extends Novedadesparte
         $fecha = $model->fecha;
         $nuevafecha = strtotime ( '-10 day' , strtotime ( $fecha ) ) ;
         $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
-
+        //return var_dump($model);
         $query = Novedadesparte::find()
-                    ->joinWith(['tiponovedad0', 'estadoxnovedads', 'parte0'])
+                    ->joinWith(['tiponovedad0', 'estadoxnovedads', 'parte0','parte0.preceptoria0'])
                     //->where(['activ' => 1])
-                    ->andWhere(['parte.preceptoria' => $model->preceptoria])
+                    ->andWhere(['preceptoria.piso' => $model->preceptoria0->piso])
                     ->andWhere(['in', 'tiponovedad', Globales::TIPO_NOV_X_USS[3]])
                     ->andWhere(['or', 
                                 ['and',

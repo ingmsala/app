@@ -33,7 +33,7 @@ class Preceptoria extends \yii\db\ActiveRecord
     {
         return [
             [['nombre', 'turno'], 'required'],
-            [['turno'], 'integer'],
+            [['turno', 'pisos'], 'integer'],
             [['nombre'], 'string', 'max' => 20],
             [['descripcion'], 'string', 'max' => 50],
             [['turno'], 'exist', 'skipOnError' => true, 'targetClass' => Turno::className(), 'targetAttribute' => ['turno' => 'id']],

@@ -40,18 +40,11 @@ $this->title = 'Novedades del parte';
                 'columns' => [
                     
                       
-                    [   
-                        'label' => 'Fecha',
-                        'attribute' => 'parte0.fecha',
-                       
-                        'value' => function($model){
-                            //var_dump($model);
-                            $formatter = \Yii::$app->formatter;
-                            return $formatter->asDate($model->parte0->fecha, 'dd/MM/yyyy');
-                            
-                        }
+                    [
+
+                        'label' => '',
+                        'attribute' => 'parte0.preceptoria0.nombre',
                     ],
-                    
                     [
 
                         'label' => 'Tipo de Novedad',
