@@ -3,23 +3,25 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Novedadesparte;
-use app\models\Tiponovedad;
+use app\config\Globales;
 use app\models\Actividad;
-use app\models\NotificacionSearch;
+use app\models\Division;
+use app\models\Docente;
 use app\models\Estadonovedad;
 use app\models\Estadoxnovedad;
 use app\models\EstadoxnovedadSearch;
-use app\modules\optativas\models\Alumno;
-use app\models\Division;
-use app\models\Parte;
-use app\models\Docente;
+use app\models\NotificacionSearch;
+use app\models\Novedadesparte;
 use app\models\NovedadesparteSearch;
+use app\models\Parte;
+use app\models\Tiponovedad;
+use app\models\Trimestral;
+use app\modules\optativas\models\Alumno;
+use app\modules\optativas\models\Aniolectivo;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use app\config\Globales;
 
 /**
  * NovedadesparteController implements the CRUD actions for Novedadesparte model.
@@ -34,7 +36,7 @@ class NovedadesparteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'panelnovedades', 'nuevoestado', 'panelnovedadeshist'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'panelnovedades', 'nuevoestado', 'panelnovedadeshist', 'panelnovedadesprec'],
                 'rules' => [
                     [
                         'actions' => ['index', 'view'],   
@@ -50,7 +52,7 @@ class NovedadesparteController extends Controller
                     ],
 
                     [
-                        'actions' => ['create', 'update', 'delete', 'panelnovedadeshist'],   
+                        'actions' => ['create', 'update', 'delete', 'panelnovedadeshist', 'panelnovedadesprec'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -372,28 +374,38 @@ class NovedadesparteController extends Controller
 
      public function actionPanelnovedadesprec()
     {
-        $model = new EstadoxnovedadSearch();
+        $model = new Estadoxnovedad();
         $searchModel = new EstadoxnovedadSearch();
-        
-        $tiponovedad = $this->tiponovedad();
+        $model->scenario = $model::FIND_NOVEDAD;
+        //$dataProvider = 'null';
 
-        $dataProvider = $searchModel->novedadesall(Globales::TIPO_NOV_X_USS[$tiponovedad], Yii::$app->request->get());
-        /*$estados = Estadonovedad::find()
-                    ->where(['<>', 'id', 1])
-                    ->all();*/
+        $tiponovedad = $this->tiponovedad();
+        $dataProvider = $searchModel->novedadesall(Globales::TIPO_NOV_X_USS[$tiponovedad], Yii::$app->request->post());
+
+        if($model->load(Yii::$app->request->post())){
+            $collapse = '';
+        }else{
+            $collapse = 'in';
+        }
+
         
-        /*$novs = new NotificacionSearch(); 
-        $nov = $novs::providerXuser();
-        $nov->cantidad = 0;
-        $nov->save();*/
+        $trimestrales = Trimestral::find()
+            ->where(['<', 'id', 4])
+            ->all();
+        $aniolectivo = Aniolectivo::find()
+            ->orderBy('id desc')
+            ->all();
         $estados = Estadonovedad::find()->all();
         return $this->render('panelnovedadesprec', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'tiponovedad' => $tiponovedad,
             'estados' => $estados,
+            'trimestrales' => $trimestrales,
+            'aniolectivo' => $aniolectivo,
             'model' => $model,
-            'param' => Yii::$app->request->get(),
+            'collapse' => $collapse,
+            'param' => Yii::$app->request->post(),
             
         ]);
     }

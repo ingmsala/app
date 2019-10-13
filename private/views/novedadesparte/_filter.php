@@ -11,9 +11,11 @@ use kartik\select2\Select2;
 /* @var $model app\models\Nombramiento */
 /* @var $form yii\widgets\ActiveForm */
 $listestados=ArrayHelper::map($estados,'id','nombre');
+$listtrimestrales=ArrayHelper::map($trimestrales,'id','nombre');
+$listanioslectivos=ArrayHelper::map($aniolectivo,'id','nombre');
 ?>
 
-   
+  
     
 <div id="accordion" class="panel-group">
         <div class="panel panel-info">
@@ -22,20 +24,34 @@ $listestados=ArrayHelper::map($estados,'id','nombre');
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
 
                         <span class="badge badge-light"><span class="glyphicon glyphicon-filter"></span> Filtros</span>
-
+                        <?= ($collapse=='in') ? '&nbsp&nbsp <b>Alumnos ausentes a Exámenes trimestrales</b>' : '' ?>
                         <?php 
                             $filtro = false;
-                            if(isset($param['EstadoxnovedadSearch']['finddescrip'])){
-                                if($param['EstadoxnovedadSearch']['finddescrip']!=''){
+                            if(isset($param['Estadoxnovedad']['aniolectivo'])){
+                                if($param['Estadoxnovedad']['aniolectivo']!=''){
                                     $filtro = true;
-                                    echo '<b> - Descripción: </b>'.$param['EstadoxnovedadSearch']['finddescrip'];
+                                    echo '<b> - Año lectivo: </b>'.$listanioslectivos[$param['Estadoxnovedad']['aniolectivo']];
                                 }
                             }
 
-                            if(isset($param['EstadoxnovedadSearch']['estadonovedad'])){
-                                if($param['EstadoxnovedadSearch']['estadonovedad']!=''){
+                            if(isset($param['Estadoxnovedad']['trimestral'])){
+                                if($param['Estadoxnovedad']['trimestral']!=''){
                                     $filtro = true;
-                                    echo '<b> - Docente: </b>'.$listestados[$param['EstadoxnovedadSearch']['estadonovedad']];
+                                    echo '<b> - Instancia: </b>'.$listtrimestrales[$param['Estadoxnovedad']['trimestral']];
+                                }
+                            }
+
+                            if(isset($param['Estadoxnovedad']['finddescrip'])){
+                                if($param['Estadoxnovedad']['finddescrip']!=''){
+                                    $filtro = true;
+                                    echo '<b> - Descripción: </b>'.$param['Estadoxnovedad']['finddescrip'];
+                                }
+                            }
+
+                            if(isset($param['Estadoxnovedad']['estadonovedad'])){
+                                if($param['Estadoxnovedad']['estadonovedad']!=''){
+                                    $filtro = true;
+                                    echo '<b> - Docente: </b>'.$listestados[$param['Estadoxnovedad']['estadonovedad']];
                                     
                                 }
                             }
@@ -54,7 +70,7 @@ $listestados=ArrayHelper::map($estados,'id','nombre');
                 </h4>
             </div>
 
-            <div id="collapseOne" class="panel-collapse collapse">
+            <div id="collapseOne" class=<?='"panel-collapse collapse '.$collapse.'"' ?>>
 
                 <div class="row">
                     <div class="col-md-6">
@@ -63,8 +79,32 @@ $listestados=ArrayHelper::map($estados,'id','nombre');
 
                                  $form = ActiveForm::begin([
                                     'action' => ['/novedadesparte/panelnovedadesprec'],
-                                    'method' => 'get',
+                                    'method' => 'post',
                                 ]); ?>
+
+                            <?= 
+                                
+                                $form->field($model, 'aniolectivo')->widget(Select2::classname(), [
+                                    'data' => $listanioslectivos,
+                                    'options' => ['placeholder' => 'Seleccionar...'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ])->label("Año lectivo");
+
+                            ?>
+
+                            <?= 
+                                
+                                $form->field($model, 'trimestral')->widget(Select2::classname(), [
+                                    'data' => $listtrimestrales,
+                                    'options' => ['placeholder' => 'Seleccionar...'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ])->label("Trimestral");
+
+                            ?>
 
                             <?= 
 
@@ -83,6 +123,8 @@ $listestados=ArrayHelper::map($estados,'id','nombre');
                                 ])->label("Estado");
 
                             ?>
+
+                            
 
                            
 

@@ -20,11 +20,22 @@ class Estadoxnovedad extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public $trimestral;
+    public $aniolectivo;
     public $finddescrip;
     
     public static function tableName()
     {
         return 'estadoxnovedad';
+    }
+
+    const FIND_NOVEDAD = 'filtro';
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::FIND_NOVEDAD] = ['trimestral', 'aniolectivo', 'estadonovedad', 'finddescrip'];
+        return $scenarios;
     }
 
     /**
@@ -33,7 +44,8 @@ class Estadoxnovedad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['novedadesparte', 'estadonovedad', 'fecha'], 'required'],
+            [['novedadesparte', 'fecha'], 'required'],
+            [['trimestral', 'aniolectivo'], 'required', 'message' => "Campo obligatorio", 'on'=>self::FIND_NOVEDAD],
             [['novedadesparte', 'estadonovedad'], 'integer'],
             [['fecha'], 'safe'],
             [['novedadesparte'], 'exist', 'skipOnError' => true, 'targetClass' => Novedadesparte::className(), 'targetAttribute' => ['novedadesparte' => 'id']],

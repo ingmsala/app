@@ -15,7 +15,7 @@ use app\models\Estadonovedad;
 /* @var $searchModel app\models\DetalleparteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Historial Panel de Novedades';
+$this->title = 'Alumnos ausentes a Exámenes trimestrales';
 $listestados=ArrayHelper::map($estados,'id','nombre');
 ?>
 
@@ -25,9 +25,11 @@ $listestados=ArrayHelper::map($estados,'id','nombre');
     
      <?= $this->render('_filter', [
         'model' => $model,
-
+        'trimestrales' => $trimestrales,
+        'aniolectivo' => $aniolectivo,
         'estados' => $estados,
         'param' => $param,
+        'collapse' => $collapse,
         
     ]) ?>
 
@@ -47,13 +49,13 @@ $listestados=ArrayHelper::map($estados,'id','nombre');
     ?>
 <?php Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
 
-    <?= 
-
-GridView::widget([
+    <?php 
+if($collapse=="")
+echo GridView::widget([
         'id' => 'grid',
         'pjax'=>true,
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'panel' => [
             'type' => GridView::TYPE_DEFAULT,
             'heading' => Html::encode($this->title),

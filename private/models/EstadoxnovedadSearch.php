@@ -3,9 +3,10 @@
 namespace app\models;
 
 use Yii;
+use app\models\Anioxtrimestral;
+use app\models\Estadoxnovedad;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Estadoxnovedad;
 
 /**
  * EstadoxnovedadSearch represents the model behind the search form of `app\models\Estadoxnovedad`.
@@ -70,14 +71,37 @@ class EstadoxnovedadSearch extends Estadoxnovedad
 
     public function novedadesall($tipodenovedadXusuario, $param)
     {
-        if(isset($param['EstadoxnovedadSearch']['finddescrip']) && $param['EstadoxnovedadSearch']['finddescrip'] != '')
-            $descrip = $param['EstadoxnovedadSearch']['finddescrip'];
+        if(isset($param['Estadoxnovedad']['finddescrip']) && $param['Estadoxnovedad']['finddescrip'] != '')
+            $descrip = $param['Estadoxnovedad']['finddescrip'];
         else
             $descrip = '';
-        if(isset($param['EstadoxnovedadSearch']['estadonovedad']) && $param['EstadoxnovedadSearch']['estadonovedad'] != '')
-            $estado = $param['EstadoxnovedadSearch']['estadonovedad'];
+        if(isset($param['Estadoxnovedad']['estadonovedad']) && $param['Estadoxnovedad']['estadonovedad'] != '')
+            $estado = $param['Estadoxnovedad']['estadonovedad'];
         else
             $estado = [10,20,30,40,50];
+
+        if(isset($param['Estadoxnovedad']['aniolectivo']) && $param['Estadoxnovedad']['aniolectivo'] != '')
+            $aniolectivo = $param['Estadoxnovedad']['aniolectivo'];
+        else
+            $aniolectivo = 0;
+
+        if(isset($param['Estadoxnovedad']['trimestral']) && $param['Estadoxnovedad']['trimestral'] != '')
+            $trimestral = $param['Estadoxnovedad']['trimestral'];
+        else
+            $trimestral = 0;
+
+        $anioxtrim = Anioxtrimestral::find()
+            ->where(['trimestral' => $trimestral])
+            ->andWhere(['aniolectivo' => $aniolectivo])
+            ->one();
+
+        if($anioxtrim != null){
+            $inicio =  $anioxtrim->inicio;
+            $fin = $anioxtrim->fin;
+        }else{
+            $inicio =  0;
+            $fin = 0;
+        }
         
         if($estado == 1 || $estado == 2)
             $estado = [10,20];
@@ -94,6 +118,8 @@ class EstadoxnovedadSearch extends Estadoxnovedad
                 ->where(['in', 'novedadesparte.tiponovedad', $tipodenovedadXusuario])
                 ->andWhere(['preceptoria.nombre' => Yii::$app->user->identity->username])
                 ->andWhere(['like', 'novedadesparte.descripcion', $descrip])
+                ->andWhere(['<=', 'parte.fecha', $fin])
+                ->andWhere(['>=', 'parte.fecha', $inicio])
                 ->having(['in', 'MAX(estadonovedad.orderstate)', $estado])
                 ->groupBy(['estadoxnovedad.novedadesparte'])
                 ->orderBy('parte.fecha');
