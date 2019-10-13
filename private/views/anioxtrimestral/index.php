@@ -12,7 +12,7 @@ $this->title = 'Exámenes por año';
 $this->params['breadcrumbs'][] = $this->title;
 
 if(Yii::$app->user->identity->role==Globales::US_SUPER)
-     $template = '{viewdetcat} {deletedetcat}';
+     $template = '{dethorarios} {viewdetcat} {deletedetcat}';
 else
     $template = '{viewdetcat}';
 
@@ -73,6 +73,12 @@ else
 
                 
                 'buttons' => [
+                    'dethorarios' => function($url, $model, $key){
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>',
+                            '?r=horarioexamen/index&id='.$model->id);
+                    },
+
                     'viewdetcat' => function($url, $model, $key){
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>',

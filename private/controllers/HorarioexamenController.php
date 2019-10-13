@@ -22,7 +22,7 @@ use yii\filters\AccessControl;
 use kartik\mpdf\Pdf;
 use kartik\date\DatePicker;
 use kartik\form\ActiveForm;
-
+use yii\base\ErrorException;
 /**
  * HorarioexamenController implements the CRUD actions for Horarioexamen model.
  */
@@ -40,7 +40,7 @@ class HorarioexamenController extends Controller
                 'only' => ['index', 'view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto', 'print', 'printcursos', 'migracionfechas'],
                 'rules' => [
                     [
-                        'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'filtropormateria', 'horariocompleto'],   
+                        'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'filtropormateria', 'horariocompleto', 'printcursos'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
@@ -73,7 +73,7 @@ class HorarioexamenController extends Controller
                     ],
 
                     [
-                        'actions' => ['completoxcurso', 'printcursos'],   
+                        'actions' => ['completoxcurso'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
@@ -81,7 +81,7 @@ class HorarioexamenController extends Controller
                                     if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_COORDINACION])){
                                         return true;
                                     }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
-
+                                        
                                         $division = Yii::$app->request->queryParams['division'];
                                         $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
                                         $aut = Division::find()
@@ -130,7 +130,7 @@ class HorarioexamenController extends Controller
                    
 
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'actions' => ['view', 'create', 'update'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -142,7 +142,7 @@ class HorarioexamenController extends Controller
 
                     ],
                     [
-                        'actions' => ['createdesdehorario','updatedesdehorario', 'print', 'migracionfechas'],   
+                        'actions' => ['index', 'createdesdehorario','updatedesdehorario', 'print', 'migracionfechas', 'delete'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -187,10 +187,10 @@ class HorarioexamenController extends Controller
      * Lists all Horarioexamen models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($id)
     {
         $searchModel = new HorarioexamenSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search($id);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -258,9 +258,11 @@ class HorarioexamenController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $horarioexamen = $this->findModel($id);
+        $anioxtrimestral = $horarioexamen->anioxtrimestral;
+        $horarioexamen->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index', 'id'=>$anioxtrimestral]);
     }
 
     /**
@@ -425,14 +427,27 @@ class HorarioexamenController extends Controller
                                 $salida = '';
                                 if ($dc->revista == 6){
                                     //return var_dump($dc['revista']==1);
+                                    $listdc[] = $dc->id;
+                                    $cant = array_count_values($listdc)[$dc->id];
                                     $superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->fecha, $tipo);
+                                    
                                     if ($superpuesto[0]){
+                                        if($cant>1){
+                                            $superpuesto[1] = str_replace('</ul>', $horariox->catedra0->division0->nombre."</ul>", $superpuesto[1]);
+                                        }
                                         ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
                                         $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1).'</span>'.'</span>';
                                     }
-                                    else
-                                        $salida = $dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1);
-                                    $listdc[] = $dc->id;
+                                    else{
+                                        if($cant>1){
+                                            ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
+                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.'<ul>'.$horariox->catedra0->division0->nombre.'</ul>'.'">'.$dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1).'</span>'.'</span>';
+                                        }else{
+                                            $salida = $dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1);
+
+                                        }
+                                    }
+                                    
                                     break 1;
                                 }else{
                                     $salida = 'vacante';
@@ -444,7 +459,8 @@ class HorarioexamenController extends Controller
                     if($prt==1)
                         $array[$horariox->hora][$horariox->fecha] = $salida;
                     else
-                        $array[$horariox->hora][$horariox->fecha] = $salida.'<div class="pull-right"><a class="btn btn-success btn-sm" href="?r=horarioexamen/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&fecha='.$horariox->fecha.'&tipo='.$tipo.'&alxtrim='.$anioxtrim->id.'&col='.$col.'"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></div>';
+                        //$array[$horariox->hora][$horariox->fecha] = $salida.'<div class="pull-right"><a class="btn btn-success btn-sm" href="?r=horarioexamen/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&fecha='.$horariox->fecha.'&tipo='.$tipo.'&alxtrim='.$anioxtrim->id.'&col='.$col.'"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></div>';
+                        $array[$horariox->hora][$horariox->fecha] = '<a class="btn btn-link btn-sm" href="?r=horarioexamen/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&fecha='.$horariox->fecha.'&tipo='.$tipo.'&alxtrim='.$anioxtrim->id.'&col='.$col.'">'.$salida.'</a>';
                 else
                     $array[$horariox->hora][$horariox->fecha] = $salida;
             }else
@@ -513,12 +529,12 @@ class HorarioexamenController extends Controller
 
         $catedras = Catedra::find()->where(['division' => $division])->all();
         $horas = Hora::find()->where(['in', 'id', [2,3]])->all();
-        //$dias = Diasemana::find()->all();
+        $division = Division::findOne($division);
         $tipos = Tipoparte::find()->all();
         return $this->render('createdesdehorario', [
             'model' => $model,
             'horas' => $horas,
-            //'dias' => $dias,
+            'division' => $division,
             'tipos' => $tipos,
             'catedras' => $catedras,
         ]);
@@ -570,7 +586,7 @@ class HorarioexamenController extends Controller
             return $this->redirect(['/horarioexamen/completoxcurso', 'division' => $division, 'vista' => 'docentes', 'col' => $col]);
         }
 
-        
+        $division = Division::findOne($division);
         $catedras = Catedra::find()->where(['division' => $division])->all();
         $horas = Hora::find()->all();
         //$dias = Diasemana::find()->all();
@@ -578,7 +594,7 @@ class HorarioexamenController extends Controller
         return $this->render('updatedesdehorario', [
             'model' => $model,
             'horas' => $horas,
-            //'dias' => $dias,
+            'division' => $division,
             'tipos' => $tipos,
             'catedras' => $catedras,
         ]);
@@ -627,12 +643,18 @@ class HorarioexamenController extends Controller
                                     ->orderBy('id')
                                     ->all();
         }
+
+        if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_REGENCIA])){
+            $vista = 'docentes';
+        }else{
+            $vista = 'materias';
+        }
         
         $echodiv = '';
         foreach ($divisiones as $division) {
                 $echodiv .= '<div class="pull-left" style="height: 16vh; width: 16vh; vertical-align: middle;">';
                 $echodiv .= '<center><div>';
-                $echodiv .= '<a class="menuHorarios" href="index.php?r=horarioexamen/completoxcurso&division='.$division->id.'&vista=docentes&prt=0&col='.$col.'" role="button" style="font-size:5vh; width:15vh; height: 15vh;">'.$division->nombre.'</a>';
+                $echodiv .= '<a class="menuHorarios" href="index.php?r=horarioexamen/completoxcurso&division='.$division->id.'&vista='.$vista.'&prt=0&col='.$col.'" role="button" style="font-size:5vh; width:15vh; height: 15vh;">'.$division->nombre.'</a>';
                 $echodiv .= '</div></center>';
                 $echodiv .= '</div>';
         }
@@ -1535,6 +1557,7 @@ class HorarioexamenController extends Controller
                 ->orderBy('fecha')
                 ->all();
 
+
         $htexamen = Horarioexamen::find()
                 ->select('fecha')
                 ->distinct()
@@ -1573,7 +1596,7 @@ class HorarioexamenController extends Controller
             ])->label($dias2[date("w",strtotime($htx->fecha)-1)]).'</div>';
             $salida .='<div class="col-md-1" style="width:auto; padding-top:35px;"><span class="glyphicon glyphicon-arrow-right"></span></div>';
             $salida .='<div class="col-md-3">'.
-            '<label><b>'.$axt->aniolectivo0->nombre.' - '.$axt->trimestral0->nombre.'</b>'.
+            '<label class="lblmigracion"><b>'.$axt->aniolectivo0->nombre.' - '.$axt->trimestral0->nombre.'</b>'.
             DatePicker::widget([
                                 'name' => $htx->fecha,
                                 //'value' => '12/31/2010',
@@ -1600,31 +1623,17 @@ class HorarioexamenController extends Controller
         $salida .='</div>';
         $echodiv = $salida;
 
-        /*foreach ($ht as $htx) {
-            $ch = 0;
-            $fechats = $htx;
+        $horariostr = Horarioexamen::find()
+                ->where(['tipo' => 2])
+                ->orderBy('fecha')
+                ->all();
 
-           
-            date_default_timezone_set('America/Argentina/Buenos_Aires');
-            $dia = Yii::$app->formatter->asDate($htx, 'dd/MM/yyyy');
+        foreach ($horariostr as $htr) {
+           $axtant = $htr->anioxtrimestral0;
+           break;
+        }
 
-            
-
-            $salida = '';
-        foreach ($horariosTm as $horarioxTm) {
-                
-                if($arrayTm[$horarioxTm->hora][$horarioxTm->fecha] != ''){
-                    $arrayTm[$horarioxTm->hora][$horarioxTm->fecha] .= ' - '.'<span style="color:red;">';
-                    $arrayTm[$horarioxTm->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.'<br/>'.$horarioxTm->catedra0->actividad0->nombre.'</span>';
-        
-                }else{
-                    $arrayTm[$horarioxTm->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.'<br/>'.$horarioxTm->catedra0->actividad0->nombre;
-                }
-                
-        }*/
-
-
-        $query = '';
+              
         if (Yii::$app->request->post()) {
             $params = Yii::$app->request->post();
             $keys = array_keys($params);
@@ -1634,48 +1643,160 @@ class HorarioexamenController extends Controller
                 ->where(['tipo' => 2])
                 ->orderBy('fecha')
                 ->all();
-            $query = '';
+
+            
+            
             $ch = 0;
-            foreach ($horarios as $horario) {
+            /*$transaction = Horarioexamen::getDb()->beginTransaction();
+            try {
+                foreach ($horarios as $horario) {
 
-                if($nuevoexamen){
-                    $nuevohorarioexamen = new Horarioexamen();
-                    $nuevohorarioexamen->catedra = $horario->catedra;
-                    $nuevohorarioexamen->hora = $horario->hora;
-                    $nuevohorarioexamen->tipo = 3;
-                    $nuevohorarioexamen->anioxtrimestral =$axt->id;
-                    $nuevohorarioexamen->fecha = $params[$horario->fecha];
-                    $nuevohorarioexamen->cambiada = 1;
-                    
-                    $nuevohorarioexamen->save();
+                    if($nuevoexamen){
+                        $nuevohorarioexamen = new Horarioexamen();
+                        $nuevohorarioexamen->scenario = $nuevohorarioexamen::SCENARIO_MIGRACIONHORARIO;
+                        $nuevohorarioexamen->catedra = $horario->catedra;
+                        $nuevohorarioexamen->hora = $horario->hora;
+                        $nuevohorarioexamen->tipo = 3;
+                        $nuevohorarioexamen->anioxtrimestral =$axt->id;
+                        $nuevohorarioexamen->fecha = $params[$horario->fecha];
+                        $nuevohorarioexamen->cambiada = 2;
+                        
+                        $nuevohorarioexamen->save();
 
-                }else{
-                    if($tipo == 2){
-                        $horario->fecha = $params[$horario->fecha];
-                        $horario->cambiada =1;
-                        $horario->anioxtrimestral =$axt->id;
-                        $horario->save();
-                    }elseif($tipo == 3){
-                        $horarioexamenanterior = Horarioexamen::find()
-                                    ->where(['catedra'=>$horario->catedra])
-                                    ->andWhere(['tipo' => 3])
-                                    ->one();
-                        $horarioexamenanterior->hora = $horarioexamenanterior->hora;
-                        $horarioexamenanterior->anioxtrimestral =$axt->id;
-                        $horarioexamenanterior->fecha = $params[$horario->fecha];
-                        $horarioexamenanterior->cambiada = 1;
-                        $horarioexamenanterior->save();
+                    }else{
+                        if($tipo == 2){
+                            $horario->scenario = $horario::SCENARIO_MIGRACIONHORARIO;
+                            $horario->fecha = $params[$horario->fecha];
+                            $horario->cambiada = 2;
+                            $horario->anioxtrimestral =$axt->id;
+                            $horario->save();
+                        }elseif($tipo == 3){
+                            $horarioexamenanterior = Horarioexamen::find()
+                                        ->where(['catedra'=>$horario->catedra])
+                                        ->andWhere(['tipo' => 3])
+                                        ->one();
+                            $horarioexamenanterior->scenario = $horarioexamenanterior::SCENARIO_MIGRACIONHORARIO;             
+                            $horarioexamenanterior->hora = $horarioexamenanterior->hora;
+                            $horarioexamenanterior->anioxtrimestral =$axt->id;
+                            $horarioexamenanterior->fecha = $params[$horario->fecha];
+                            $horarioexamenanterior->cambiada = 2;
+                            $horarioexamenanterior->save();
+                            
+                        }
                         
                     }
-                    
-                }
 
-                
-                 $ch++;
-                 //return var_dump($horario);
+                    
+                     $ch++;
+                     //return var_dump($horario);
+                }
+                $transaction->commit();
+            } catch (Exception $e) {
+                $transaction->rollBack();
+                throw $e;
             }
 
-            Yii::$app->session->setFlash('success', "Se realizó la actualización de {$ch} horarios");
+            foreach ($horarios as $horario) {
+                $horario->scenario = $horario::SCENARIO_MIGRACIONHORARIO2;
+                $horario->cambiada = 1;
+                $horario->save();
+
+            }*/
+
+                $nsm = 0;
+                $detalle = '<ul>';
+            
+                foreach ($horarios as $horario) {
+
+                    if($ch == 0)
+                        $anioxtrimdesdemigrar = $horario->anioxtrimestral;
+
+                    if($nuevoexamen){
+                        $nuevohorarioexamen = new Horarioexamen();
+                        try {
+                            $nuevohorarioexamen->scenario = $nuevohorarioexamen::SCENARIO_MIGRACIONHORARIO;
+                            $nuevohorarioexamen->catedra = $horario->catedra;
+                            $nuevohorarioexamen->hora = $horario->hora;
+                            $nuevohorarioexamen->tipo = 3;
+                            $nuevohorarioexamen->anioxtrimestral =$axt->id;
+                            $nuevohorarioexamen->fecha = $params[$horario->fecha];
+                            $nuevohorarioexamen->cambiada = 2;
+                            $nuevohorarioexamen->save();
+                            $ch++;
+                        } catch (ErrorException $e) {
+                            $nsm ++;
+                            $detalle .= "<li>{$horario->catedra0->division0->nombre} - {$horario->catedra0->actividad0->nombre}</li>";
+                        }
+                            
+                        
+                        
+
+                    }else{
+                        if($tipo == 2){
+                            try {
+                                $horario->scenario = $horario::SCENARIO_MIGRACIONHORARIO;
+                                $horario->fecha = $params[$horario->fecha];
+                                $horario->cambiada = 2;
+                                $horario->anioxtrimestral =$axt->id;
+                                $horario->save();
+                                $ch++;
+                            } catch (ErrorException $e) {
+                               $nsm ++;
+                               $detalle .= "<li>{$horario->catedra0->division0->nombre} - {$horario->catedra0->actividad0->nombre}</li>";
+                            }
+
+                            
+                            
+                        }elseif($tipo == 3){
+                            $horarioexamenanterior = Horarioexamen::find()
+                                        ->where(['catedra'=>$horario->catedra])
+                                        ->andWhere(['tipo' => 3])
+                                        ->one();
+                            try {
+                                $horarioexamenanterior->scenario = $horarioexamenanterior::SCENARIO_MIGRACIONHORARIO;             
+                                $horarioexamenanterior->hora = $horarioexamenanterior->hora;
+                                $horarioexamenanterior->anioxtrimestral =$axt->id;
+                                $horarioexamenanterior->fecha = $params[$horario->fecha];
+                                $horarioexamenanterior->cambiada = 2;
+                                $horarioexamenanterior->save();
+                                $ch++;
+                            } catch (ErrorException $e) {
+                                $nsm ++;
+                                $detalle .= "<li>{$horario->catedra0->division0->nombre} - {$horario->catedra0->actividad0->nombre}</li>";
+                            }
+                            
+                            
+                        }
+                        
+                    }
+
+                    
+                    
+                     //return var_dump($horario);
+                }
+                
+                $detalle .= '</ul>';
+            
+            $horarios = Horarioexamen::find()
+                ->where(['tipo' => $tipo])
+                ->andWhere(['cambiada' => 2])
+                ->orderBy('fecha')
+                ->all();
+
+            foreach ($horarios as $horario) {
+                $horario->scenario = $horario::SCENARIO_MIGRACIONHORARIO2;
+                $horario->cambiada = 1;
+                $horario->save();
+
+            }
+            
+            if($nsm>0){
+                Yii::$app->session->setFlash('danger', "Se realizó la actualización de {$ch} horarios. Por superposiciones quedaron sin migrar {$nsm} horarios.<br />{$detalle}");
+                    return $this->redirect(['/horarioexamen/index', 'id' => $anioxtrimdesdemigrar]);
+            }else{
+                Yii::$app->session->setFlash('success', "Se realizó la actualización de {$ch} horarios.");
+            }
+            
             return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
             //return var_dump($keys);
         }
@@ -1688,6 +1809,7 @@ class HorarioexamenController extends Controller
             
             
             'echodiv' => $echodiv,
+            'axt' => $axtant,
             'anioxtrimestral' => $anioxtrimestral,
             
         ]);

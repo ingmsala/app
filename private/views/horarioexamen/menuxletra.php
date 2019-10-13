@@ -20,10 +20,7 @@ $this->title = 'Seleccione una letra';
 	    <div  class="pull-right">
 	        <?php 
 	          	
-	          	echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir Citaciones</center>', Url::to(['print', 'docente' => '', 'all' => true, 'col' => $col]), ['data' => [
-                            'confirm' => 'La generción del reporte puede tardar algunos minutos. NO recargue la página hasta que no se descargue el pdf.',
-                            'method' => 'get',
-                             ],  'class' => 'btn btn-default'])
+	          	echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir Citaciones</center>', Url::to(['print', 'docente' => '', 'all' => true, 'col' => $col]), ['class' => 'btn btn-default'])
 	        ?>
 	    </div>
 	</div>

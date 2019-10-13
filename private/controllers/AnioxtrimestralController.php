@@ -137,10 +137,12 @@ class AnioxtrimestralController extends Controller
             {
                 if($model->trimestral < 4){
                     $cant = $this->inactivarAnioxTrim($model->id, false);
-                    Yii::$app->session->setFlash('info', "{$cant} trimestral cambió a estado <b>inactivo</b>");
+                    if($cant>0)
+                        Yii::$app->session->setFlash('info', "{$cant} trimestral cambió a estado <b>inactivo</b>");
                 }else{
                     $cant = $this->inactivarAnioxTrim($model->id, true);
-                    Yii::$app->session->setFlash('info', "{$cant} examen cambió a estado <b>inactivo</b>");
+                    if($cant>0)
+                        Yii::$app->session->setFlash('info', "{$cant} examen cambió a estado <b>inactivo</b>");
                 }
                 
                 return $this->redirect(['horarioexamen/migracionfechas', 'anioxtrimestral' => $model->id]);

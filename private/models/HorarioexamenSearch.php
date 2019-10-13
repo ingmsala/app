@@ -39,9 +39,9 @@ class HorarioexamenSearch extends Horarioexamen
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($id)
     {
-        $query = Horarioexamen::find();
+        $query = Horarioexamen::find()->joinWith(['catedra0', 'catedra0.division0'])->where(['anioxtrimestral' => $id])->orderBy('division.id, horarioexamen.fecha, horarioexamen.hora');
 
         // add conditions that should always apply here
 
@@ -49,7 +49,7 @@ class HorarioexamenSearch extends Horarioexamen
             'query' => $query,
         ]);
 
-        $this->load($params);
+        //$this->load($params);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails

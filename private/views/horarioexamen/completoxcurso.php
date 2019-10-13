@@ -154,9 +154,12 @@ JS;
 
 		            [
 		            	'label' => 'Docente',
-		            	'value' => function($model){
-
-		            		return $model->docente0->apellido.', '.$model->docente0->nombre;
+		            	'format' => 'raw',
+		            	'value' => function($model) use ($col, $prt) {
+		            		if($prt == 0)
+		            			return Html::a($model->docente0->apellido.', '.$model->docente0->nombre, Url::to(['horarioexamen/completoxdocente', 'docente' => $model->docente, 'col' => $col]));
+		            		else
+		            			return $model->docente0->apellido.', '.$model->docente0->nombre;
 		            	}
 
 		            ],

@@ -256,7 +256,7 @@ where (
 ) 
 and (di.turno = 1 or di.turno = 2) and (act.id <> 23) and (di.id <> 47)
 ORDER BY
-    di.id, act.nombre';
+    act.nombre, di.id';
 
 
         $dataProvider = new SqlDataProvider([

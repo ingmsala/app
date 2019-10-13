@@ -130,7 +130,7 @@ class HorarioController extends Controller
                    
 
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'actions' => ['index', 'view', 'create', 'update'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -142,7 +142,7 @@ class HorarioController extends Controller
 
                     ],
                     [
-                        'actions' => ['createdesdehorario','updatedesdehorario'],   
+                        'actions' => ['createdesdehorario','updatedesdehorario', 'delete'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -378,11 +378,13 @@ class HorarioController extends Controller
         $horas = Hora::find()->all();
         $dias = Diasemana::find()->all();
         $tipos = Tipoparte::find()->all();
+        $division = Division::findOne($division);
         return $this->render('createdesdehorario', [
             'model' => $model,
             'horas' => $horas,
             'dias' => $dias,
             'tipos' => $tipos,
+            'division' => $division,
             'catedras' => $catedras,
         ]);
     }
@@ -407,7 +409,7 @@ class HorarioController extends Controller
             return $this->redirect(['/horario/completoxcurso', 'division' => $division, 'vista' => 'docentes']);
         }
 
-        
+        $division = Division::findOne($division);
         $catedras = Catedra::find()->where(['division' => $division])->all();
         $horas = Hora::find()->all();
         $dias = Diasemana::find()->all();
@@ -415,6 +417,7 @@ class HorarioController extends Controller
         return $this->render('updatedesdehorario', [
             'model' => $model,
             'horas' => $horas,
+            'division' => $division,
             'dias' => $dias,
             'tipos' => $tipos,
             'catedras' => $catedras,
@@ -449,7 +452,11 @@ class HorarioController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $horario = $this->findModel($id);
+        $division = $horario->catedra0->division;
+        $horario->delete();
+
+        return $this->redirect(['/horario/completoxcurso', 'division' => $division, 'vista' => 'docentes']);
 
         return $this->redirect(['index']);
     }
@@ -539,7 +546,7 @@ class HorarioController extends Controller
 		                   //return $salida;
 		    if($vista == 'docentes'){
                 if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]))
-                    $array[$horariox->hora][$horariox->diasemana] = $salida.'<div class="pull-right"><a class="btn btn-success btn-sm" href="?r=horario/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&diasemana='.$horariox->diasemana.'&tipo=1"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></div>';
+                    $array[$horariox->hora][$horariox->diasemana] = '<a class="btn btn-link btn-sm" href="?r=horario/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&diasemana='.$horariox->diasemana.'&tipo=1">'.$salida.'</a>';
                 else
                     $array[$horariox->hora][$horariox->diasemana] = $salida;
             }else

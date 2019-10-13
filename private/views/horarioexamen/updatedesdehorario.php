@@ -30,7 +30,9 @@ $listtipos=ArrayHelper::map($tipos,'id','nombre');
 JS;
 
 ?>
-
+<div class="panel panel-default">
+    <div class="panel-heading"><?= 'Modificar docente de '.Html::encode($division->nombre); ?></div>
+    <div class="panel-body">
 <div class="horario-form">
 
     <?php $form = ActiveForm::begin(['id' => 'category-edit']); ?>
@@ -84,6 +86,7 @@ JS;
 
     <?php ActiveForm::end(); ?>
 
+</div></div>
 </div>
 
 <?php $this->registerJs($js, yii\web\View::POS_READY); ?>

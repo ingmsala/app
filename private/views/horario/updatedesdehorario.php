@@ -9,10 +9,10 @@ use kartik\select2\Select2;
 /* @var $model app\models\Horario */
 /* @var $form yii\widgets\ActiveForm */
 $listcatedras=ArrayHelper::map($catedras,'id',function($cat){
-    $doc = '';
+    $doc = 'VACANTE';
     foreach ($cat->detallecatedras as $dc) {
         if($dc->revista == 6){
-            $doc = $dc->docente0->apellido.''.$dc->docente0->nombre;
+            $doc = $dc->docente0->apellido.', '.$dc->docente0->nombre;
             break;
         }
     }
@@ -29,7 +29,9 @@ $listtipos=ArrayHelper::map($tipos,'id','nombre');
 JS;
 
 ?>
-
+<div class="panel panel-default">
+    <div class="panel-heading"><?= 'Modificar docente de '.Html::encode($division->nombre); ?></div>
+    <div class="panel-body">
 <div class="horario-form">
 
     <?php $form = ActiveForm::begin(['id' => 'category-edit']); ?>
@@ -76,10 +78,19 @@ JS;
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Eliminar horario', ['delete', 'id' => $model->id], [
+            'class' => 'btn btn-danger pull-right',
+            'data' => [
+                'confirm' => 'Está seguro de querer eliminar este elemento?',
+                'method' => 'post',
+            ],
+        ]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
 
-</div>
+    
+
+</div></div></div>
 
 <?php $this->registerJs($js, yii\web\View::POS_READY); ?>

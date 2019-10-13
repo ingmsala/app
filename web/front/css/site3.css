@@ -973,3 +973,7 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
 .nose2  {
     /*display: none;*/
 }
+
+.lblmigracion > .input-group{
+    padding-top: 6px;
+}

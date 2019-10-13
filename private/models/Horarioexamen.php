@@ -1,6 +1,8 @@
 <?php
 
 namespace app\models;
+use yii\web\NotFoundHttpException;
+
 
 use Yii;
 
@@ -22,6 +24,16 @@ use Yii;
  */
 class Horarioexamen extends \yii\db\ActiveRecord
 {
+    const SCENARIO_MIGRACIONHORARIO = 'migracionfechas';
+    const SCENARIO_MIGRACIONHORARIO2 = 'migracionfechas2';
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_MIGRACIONHORARIO] = ['catedra', 'hora', 'diasemana', 'tipo', 'cambiada'];
+        $scenarios[self::SCENARIO_MIGRACIONHORARIO2] = ['catedra', 'hora', 'diasemana', 'tipo', 'cambiada'];
+        return $scenarios;
+    }
     /**
      * {@inheritdoc}
      */
@@ -43,7 +55,26 @@ class Horarioexamen extends \yii\db\ActiveRecord
             [['anioxtrimestral'], 'exist', 'skipOnError' => true, 'targetClass' => Anioxtrimestral::className(), 'targetAttribute' => ['anioxtrimestral' => 'id']],
             [['tipo'], 'exist', 'skipOnError' => true, 'targetClass' => Tipoparte::className(), 'targetAttribute' => ['tipo' => 'id']],
             [['hora'], 'exist', 'skipOnError' => true, 'targetClass' => Hora::className(), 'targetAttribute' => ['hora' => 'id']],
+            ['tipo', 'yaExiste', 'on' => self::SCENARIO_MIGRACIONHORARIO],
         ];
+    }
+
+    public function yaExiste($attribute, $params, $validator)
+    {
+        $horarios = Horarioexamen::find()
+            ->joinWith(['catedra0'])
+            ->where(['fecha' => $this->fecha])
+            ->andWhere(['catedra.division' => $this->catedra0->division])
+            ->andWhere(['tipo' => $this->tipo])
+            ->andWhere(['hora' => $this->hora])
+            ->andWhere(['cambiada' => 2])
+            ->all();
+        //return var_dump(count($horarios)); 
+
+        if (count($horarios)>0){
+           
+           $h = 10/0;
+        }
     }
 
     /**

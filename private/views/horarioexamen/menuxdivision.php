@@ -26,10 +26,7 @@ $this->title = 'Seleccione una división';
 	    <div  class="pull-right">
 	        <?php 
 	          	
-	          	echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir Todos</center>', Url::to(['printcursos', 'division' => '', 'all' => true, 'col' => $col]),['data' => [
-                            'confirm' => 'La generción del reporte puede tardar algunos minutos. NO recargue la página hasta que no se descargue el pdf.',
-                            'method' => 'get',
-                             ],  'class' => 'btn btn-default'])
+	          	echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir Todos</center>', Url::to(['printcursos', 'division' => '', 'all' => true, 'col' => $col]),['class' => 'btn btn-default'])
 	        ?>
 	    </div>
 	</div>

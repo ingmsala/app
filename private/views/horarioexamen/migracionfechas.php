@@ -11,21 +11,29 @@ use kartik\form\ActiveForm;
 $this->title = 'Migración de fechas';
 
 ?>
-
-<?php $form; ?>
-<?php /*echo GridView::widget([
-		        'dataProvider' => $providerTm,
-		        //'filterModel' => $searchModel,
-		        'responsiveWrap' => false,
-		        'summary' => false,
-		        'columns' => $diasgridtm['columns'],
-	    	]); */?>
+<div class="panel panel-default">
+	<!-- Default panel contents -->
+	<div class="panel-heading">Migración de Horarios desde el <?= $axt->trimestral0->nombre.' de '.$axt->aniolectivo0->nombre ?></div>
+	<div class="panel-body">
+			
+			<?php $form; ?>
+			<?php /*echo GridView::widget([
+					        'dataProvider' => $providerTm,
+					        //'filterModel' => $searchModel,
+					        'responsiveWrap' => false,
+					        'summary' => false,
+					        'columns' => $diasgridtm['columns'],
+				    	]); */?>
 
 
 	    	<?= $echodiv ?>
 
 	    	<div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success', 'id' => 'btnausentes']) ?>
-    </div>
+		        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success', 'id' => 'btnausentes']) ?>
+		    </div>
 
-    <?php ActiveForm::end(); ?>
+   			 <?php ActiveForm::end(); ?>
+	</div>
+
+	
+</div>

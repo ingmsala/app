@@ -168,9 +168,11 @@ JS;
 
 		            [
 		            	'label' => 'Docente',
+		            	'format' => 'raw',
 		            	'value' => function($model){
 
-		            		return $model->docente0->apellido.', '.$model->docente0->nombre;
+		            			return Html::a($model->docente0->apellido.', '.$model->docente0->nombre, Url::to(['horario/completoxdocente', 'docente' => $model->docente]));
+		            		 
 		            	}
 
 		            ],
