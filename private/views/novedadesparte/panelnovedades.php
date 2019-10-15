@@ -1,10 +1,11 @@
 <?php
 
-use yii\helpers\Html;
+use app\config\Globales;
 use kartik\grid\GridView;
 use kartik\select2\Select2;
-use yii\helpers\Url;
 use yii\bootstrap\Modal;
+use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
@@ -63,7 +64,7 @@ GridView::widget([
         'toolbar'=>[
             '{toggleData}',
             ['content' => 
-                Html::a('Historial', ['panelnovedadeshist'], ['class' => 'btn btn-default'])
+                (Yii::$app->user->identity->role == Globales::US_REGENCIA) ? Html::a('Historial', ['panelnovedadesprec'], ['class' => 'btn btn-default']) : Html::a('Historial', ['panelnovedadeshist'], ['class' => 'btn btn-default'])
 
             ],
             '{export}',

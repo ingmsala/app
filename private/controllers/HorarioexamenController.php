@@ -1628,6 +1628,10 @@ class HorarioexamenController extends Controller
                 ->orderBy('fecha')
                 ->all();
 
+        if(count($horariostr)==0){
+            return $this->redirect(['/anioxtrimestral']);
+        }
+
         foreach ($horariostr as $htr) {
            $axtant = $htr->anioxtrimestral0;
            break;

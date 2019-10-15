@@ -3,10 +3,12 @@
 namespace app\models;
 
 use Yii;
+use app\config\Globales;
 use app\models\Anioxtrimestral;
 use app\models\Estadoxnovedad;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+
 
 /**
  * EstadoxnovedadSearch represents the model behind the search form of `app\models\Estadoxnovedad`.
@@ -111,18 +113,36 @@ class EstadoxnovedadSearch extends Estadoxnovedad
             $estado = 50;
         elseif($estado == 6)
             $estado = 30;
-            
-        $query = Estadoxnovedad::find()
-                ->select(['estadoxnovedad.novedadesparte', 'estadoxnovedad.id as id, MAX(estadonovedad.orderstate) as estadonovedad'])
-                ->joinWith(['novedadesparte0', 'novedadesparte0.tiponovedad0', 'novedadesparte0.parte0', 'novedadesparte0.parte0.preceptoria0', 'estadonovedad0'])
-                ->where(['in', 'novedadesparte.tiponovedad', $tipodenovedadXusuario])
-                ->andWhere(['preceptoria.nombre' => Yii::$app->user->identity->username])
-                ->andWhere(['like', 'novedadesparte.descripcion', $descrip])
-                ->andWhere(['<=', 'parte.fecha', $fin])
-                ->andWhere(['>=', 'parte.fecha', $inicio])
-                ->having(['in', 'MAX(estadonovedad.orderstate)', $estado])
-                ->groupBy(['estadoxnovedad.novedadesparte'])
-                ->orderBy('parte.fecha');
+
+        if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]) ){
+
+            $query = Estadoxnovedad::find()
+                    ->select(['estadoxnovedad.novedadesparte', 'estadoxnovedad.id as id, MAX(estadonovedad.orderstate) as estadonovedad'])
+                    ->joinWith(['novedadesparte0', 'novedadesparte0.tiponovedad0', 'novedadesparte0.parte0', 'novedadesparte0.parte0.preceptoria0', 'estadonovedad0'])
+                    ->where(['in', 'novedadesparte.tiponovedad', $tipodenovedadXusuario])
+                    
+                    ->andWhere(['like', 'novedadesparte.descripcion', $descrip])
+                    ->andWhere(['<=', 'parte.fecha', $fin])
+                    ->andWhere(['>=', 'parte.fecha', $inicio])
+                    ->having(['in', 'MAX(estadonovedad.orderstate)', $estado])
+                    ->groupBy(['estadoxnovedad.novedadesparte'])
+                    ->orderBy('parte.fecha');
+
+        }
+
+        else{
+            $query = Estadoxnovedad::find()
+                    ->select(['estadoxnovedad.novedadesparte', 'estadoxnovedad.id as id, MAX(estadonovedad.orderstate) as estadonovedad'])
+                    ->joinWith(['novedadesparte0', 'novedadesparte0.tiponovedad0', 'novedadesparte0.parte0', 'novedadesparte0.parte0.preceptoria0', 'estadonovedad0'])
+                    ->where(['in', 'novedadesparte.tiponovedad', $tipodenovedadXusuario])
+                    ->andWhere(['preceptoria.nombre' => Yii::$app->user->identity->username])
+                    ->andWhere(['like', 'novedadesparte.descripcion', $descrip])
+                    ->andWhere(['<=', 'parte.fecha', $fin])
+                    ->andWhere(['>=', 'parte.fecha', $inicio])
+                    ->having(['in', 'MAX(estadonovedad.orderstate)', $estado])
+                    ->groupBy(['estadoxnovedad.novedadesparte'])
+                    ->orderBy('parte.fecha');
+        }
                                                 
                             
 

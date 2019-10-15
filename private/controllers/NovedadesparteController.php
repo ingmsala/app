@@ -78,7 +78,7 @@ class NovedadesparteController extends Controller
                     ],
 
                     [
-                        'actions' => ['panelnovedades', 'panelnovedadeshist'],   
+                        'actions' => ['panelnovedades', 'panelnovedadeshist', 'panelnovedadesprec'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
