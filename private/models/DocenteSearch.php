@@ -45,9 +45,7 @@ class DocenteSearch extends Docente
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => [
-                'pageSize' => 50,
-            ],
+            'pagination' => false
         ]);
 
         $this->load($params);
@@ -164,7 +162,7 @@ class DocenteSearch extends Docente
     public function getPadronsumarizado()
         {
         
-            $sql='select d.apellido, d.nombre, (
+            $sql='select d.legajo, d.apellido, d.nombre, (
     select count(distinct d2.id) from docente d2
     inner join detallecatedra dc2 ON dc2.docente = d2.id
     inner join catedra c2 ON dc2.catedra = c2.id

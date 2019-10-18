@@ -1726,7 +1726,7 @@ class HorarioexamenController extends Controller
         'methods' => [ 
             //'defaultheaderline' => 0,
             'SetHeader'=>['<span><img src="assets/images/logo-encabezado.png" /></span>'], 
-            'SetFooter'=>[date('d/m/Y').' - '.$filnamesinext ],
+            'SetFooter'=>['<span class"pull-left" style="font-size: 8px;">Puede consultar su horario online ingresando su legajo o DNI en la web <a href="http://admin.cnm.unc.edu.ar/horario">admin.cnm.unc.edu.ar/horario</a></span>    -    '.date('d/m/Y').' - '.$filnamesinext ],
         ]
     ]);
     

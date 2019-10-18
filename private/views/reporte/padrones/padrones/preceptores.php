@@ -59,7 +59,12 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'columns' => [
            
-
+            [
+                'label' => 'Legajo',
+                'value' => function($model){
+                    return $model['legajo'];
+                }
+            ],
             
             [
                 'label' => 'Preceptor/a',

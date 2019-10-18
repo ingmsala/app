@@ -35,7 +35,7 @@ $this->title = 'Padrón Docente - Por Agente';
         'beforeHeader' => [
             [
                 'columns' => [
-                    ['content' => '', 'options' => ['colspan' => 1, 'class' => 'text-center']],
+                    ['content' => '', 'options' => ['colspan' => 2, 'class' => 'text-center']],
                     ['content' => 'Secundario', 'options' => ['colspan' => 4, 'class' => 'text-center info']],
                     ['content' => 'Pregrado', 'options' => ['colspan' => 4, 'class' => 'text-center warning']],
                 ],
@@ -59,6 +59,13 @@ $this->title = 'Padrón Docente - Por Agente';
             
         ],
         'columns' => [
+
+            [
+                'label' => 'Legajo',
+                'value' => function($model){
+                    return $model['legajo'];
+                }
+            ],
            
 
             [
