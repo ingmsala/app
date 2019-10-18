@@ -37,15 +37,48 @@ class HorarioexamenController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto', 'print', 'printcursos', 'migracionfechas'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto', 'print', 'printcursos', 'migracionfechas', 'revisarhorarios'],
                 'rules' => [
                     [
-                        'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'filtropormateria', 'horariocompleto', 'printcursos'],   
+                        'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'filtropormateria', 'horariocompleto'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
                                     if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_COORDINACION, Globales::US_PRECEPTORIA])){
+                                        return true;
+                                    /*}elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
+
+                                        $division = Yii::$app->request->queryParams['division'];
+                                        $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+                                        $aut = Division::find()
+                                            ->where(['preceptoria' => $pre->id])
+                                            ->andWhere(['id' => $division])
+                                            ->all();
+                                        if(count($aut)>0)
+                                            return true;
+                                        else
+                                            return false;*/
+                                        }else{
+                                        return false;
+                                    }
+
+                                    
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        },
+                        
+
+                    ],
+
+                    [
+                        'actions' => ['printcursos'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTORIA])){
                                         return true;
                                     /*}elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
 
@@ -142,7 +175,7 @@ class HorarioexamenController extends Controller
 
                     ],
                     [
-                        'actions' => ['index', 'createdesdehorario','updatedesdehorario', 'print', 'migracionfechas', 'delete'],   
+                        'actions' => ['index', 'createdesdehorario','updatedesdehorario', 'print', 'migracionfechas', 'delete', 'revisarhorarios'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -2108,6 +2141,29 @@ class HorarioexamenController extends Controller
             'axt' => $axtant,
             'anioxtrimestral' => $anioxtrimestral,
             
+        ]);
+    }
+
+    public function actionRevisarhorarios($id)
+    {
+        $axt = Anioxtrimestral::findOne($id);
+        $tipo = ($axt->trimestral < 4) ? 2 : 3;
+        $col =  ($tipo==2) ? 0 : 1;
+
+        $searchModel = new HorarioexamenSearch();
+        $providercursos = $searchModel->getSuperposicionCursos($tipo);
+
+        $searchModel2 = new HorarioexamenSearch();
+        $providerdocentes = $searchModel2->getSuperposicionDocentes($tipo);
+
+        $searchModel3 = new HorarioexamenSearch();
+        $providermaterias = $searchModel3->getMateriasNocargadas($tipo);
+
+        return $this->render('revisarhorarios', [
+            'providercursos' => $providercursos,
+            'providerdocentes' => $providerdocentes,
+            'providermaterias' => $providermaterias,
+            'col' => $col,
         ]);
     }
 }

@@ -321,7 +321,7 @@ AppAsset::register($this);
 
                                  [
                                     'label' => 'Perfil Administración',
-                                    'url' => ['/horario/panelprincipal'],
+                                    'url' => ['/horario/menuopciones'],
                                 ],
                                                            [
                                     'label' => 'Cambiar contraseña',

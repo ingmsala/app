@@ -22,7 +22,7 @@ $this->title = 'Diferencia de Horas de la materia vs Horario';
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'panel' => [
-            'type' => GridView::TYPE_DEFAULT,
+            'type' => ($dataProvider->totalCount > 0) ? GridView::TYPE_DANGER : GridView::TYPE_SUCCESS,
 
             'heading' => Html::encode($this->title)
             

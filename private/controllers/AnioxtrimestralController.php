@@ -3,16 +3,19 @@
 namespace app\controllers;
 
 use Yii;
+use app\config\Globales;
 use app\models\Anioxtrimestral;
-use app\models\Trimestral;
 use app\models\AnioxtrimestralSearch;
+use app\models\HorarioexamenSearch;
+use app\models\Trimestral;
 use app\modules\optativas\models\Aniolectivo;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
-use yii\filters\AccessControl;
-use app\config\Globales;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 
 
@@ -46,11 +49,29 @@ class AnioxtrimestralController extends Controller
                     ],
 
                     [
-                        'actions' => ['index', 'create', 'update', 'publicadotruefalse'],   
+                        'actions' => ['index', 'create', 'publicadotruefalse'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
                                     return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]);
+                                    
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['update'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action){
+                                try{
+
+                                    $axt = $this->findModel(Yii::$app->request->queryParams['id']);
+                                    if($axt->activo==1 || Yii::$app->user->identity->role==Globales::US_SUPER)
+                                        return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]);
+                                    return false;
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -253,11 +274,23 @@ class AnioxtrimestralController extends Controller
             $model->save();
             return $this->redirect(['index']);
         }
+        $tipo = ($model->trimestral < 4) ? 2 : 3;
+        $searchModel = new HorarioexamenSearch();
+        $inconvcursos = $searchModel->getSuperposicionCursos($tipo)->totalCount;
+        $inconvdocentes = $searchModel->getSuperposicionDocentes($tipo)->totalCount;
+        $inconvmaterias = $searchModel->getMateriasNocargadas($tipo)->totalCount;
+        $totalinconv = $inconvcursos + $inconvdocentes + $inconvmaterias;
 
+        if($totalinconv>0){
+            Yii::$app->session->setFlash('danger', "Se detectaron {$totalinconv} inconveniente/s en el horario. Se recomienda revisarlo/s <b>".Html::a('acá', 'index.php?r=horarioexamen/revisarhorarios&id='.$model->id)."</b> antes de publicar el mismo.");
+            //return $this->redirect(['/horarioexamen/revisarhorarios', 'id' => $model->id]);
+        }
         return $this->render('update', [
             'model' => $model,
             'anio' => $anio,
             'trimestral' => $trimestral,
+            
+           
         ]);
     }
 

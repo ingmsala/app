@@ -6,9 +6,9 @@ use yii\helpers\Html;
 /* @var $model app\models\Anioxtrimestral */
 
 $this->title = 'Modificar: ' . $model->aniolectivo0->nombre.' - '.$model->trimestral0->nombre;
-$this->params['breadcrumbs'][] = ['label' => 'Trimestrales', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->aniolectivo0->nombre.' - '.$model->trimestral0->nombre, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = ['label' => 'Exámenes', 'url' => ['index']];
+
+$this->params['breadcrumbs'][] = 'Modificar';
 ?>
 <div class="anioxtrimestral-update">
 
@@ -20,4 +20,5 @@ $this->params['breadcrumbs'][] = 'Update';
         'trimestral' => $trimestral,
     ]) ?>
 
+    
 </div>

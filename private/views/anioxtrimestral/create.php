@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Anioxtrimestral */
 
-$this->title = 'Nuevo Trimestral';
+$this->title = 'Nuevo Examen';
 $this->params['breadcrumbs'][] = ['label' => 'Trimestrales', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

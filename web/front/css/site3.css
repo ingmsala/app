@@ -494,7 +494,7 @@ a.desc:after {
         color: #777777;
     }
 
-    .dropdown-menu > li {
+    .navbar-default-horarios .navbar-nav .open .dropdown-menu > li {
         background-color: #ababab;
     }
 

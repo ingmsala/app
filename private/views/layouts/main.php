@@ -337,6 +337,10 @@ try {
                                         
                                         ['label' => 'Clases', 'url' => ['horario/panelprincipal']],
                                         '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
+                                        '<div class="dropdown-divider"></div>',
                                         
                                         
                                     ],
@@ -462,6 +466,8 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
+                                        '<div class="dropdown-divider"></div>',
                                 [
                                     'label' => 'Reportes',
                                     'itemsOptions'=>['class'=>'dropdown-submenu'],
@@ -591,6 +597,10 @@ try {
                                 
                                 ['label' => 'Clases', 'url' => ['horario/panelprincipal']],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
+                                '<div class="dropdown-divider"></div>',
+                                ['label' => 'Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
+                                        '<div class="dropdown-divider"></div>',
                                 
                                 
                             ],
@@ -659,7 +669,11 @@ try {
                                     'itemsOptions'=>['class'=>'dropdown-submenu'],
                                     'submenuOptions'=>['class'=>'dropdown-menu'],
                                     'items' => [
-                                        ['label' => 'Horarios de Clase', 'url' => ['/horario/panelprincipal']],
+                                        ['label' => 'Clases', 'url' => ['horario/panelprincipal']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Diferencia de horas', 'url' => ['/reporte/diferenciahorarioyhoras']],
                                         '<div class="dropdown-divider"></div>',

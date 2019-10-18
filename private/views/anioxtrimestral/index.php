@@ -12,9 +12,9 @@ $this->title = 'Exámenes por año';
 $this->params['breadcrumbs'][] = $this->title;
 
 if(Yii::$app->user->identity->role==Globales::US_SUPER)
-     $template = '{dethorarios} {viewdetcat} {deletedetcat}';
+     $template = '{dethorarios} {viewdetcat} {deletedetcat} {validar}';
 else
-    $template = '{viewdetcat}';
+    $template = '{viewdetcat} {validar}';
 
 ?>
 <div class="anioxtrimestral-index">
@@ -80,9 +80,10 @@ else
                     },
 
                     'viewdetcat' => function($url, $model, $key){
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-pencil"></span>',
-                            '?r=anioxtrimestral/update&id='.$model->id);
+                        if ($model->activo==1 || Yii::$app->user->identity->role==Globales::US_SUPER)
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-pencil"></span>',
+                                '?r=anioxtrimestral/update&id='.$model->id);
                     },
                     
                     'deletedetcat' => function($url, $model, $key){
@@ -92,6 +93,11 @@ else
                             'method' => 'post',
                              ]
                             ]);
+                    },
+                    'validar' => function($url, $model, $key){
+                        if ($model->activo==1 && $model->trimestral < 4)
+                            return Html::a('<span class="glyphicon glyphicon-check"></span>', '?r=horarioexamen/revisarhorarios&id='.$model->id);
+                            
                     },
                 ]
 
