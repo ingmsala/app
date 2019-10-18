@@ -395,7 +395,7 @@ class NovedadesparteController extends Controller
         $aniolectivo = Aniolectivo::find()
             ->orderBy('id desc')
             ->all();
-        $estados = Estadonovedad::find()->all();
+        $estados = Estadonovedad::find()->where(['<>', 'id', 3])->all();
         return $this->render('panelnovedadesprec', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

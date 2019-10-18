@@ -445,11 +445,22 @@ try {
                 $items = [
 
                     ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
+
+                    ['label' => 'Administración',
+                            'items' => [
+
+                                ['label' => 'Gestionar Exámenes', 'url' => ['/anioxtrimestral']],
+                                '<div class="dropdown-divider"></div>',
+                                
+                            ],
+                    ],
                     
                     ['label' => 'Horarios', 
                             'items' => [
                                 
                                 ['label' => 'Clases', 'url' => ['horario/panelprincipal']],
+                                '<div class="dropdown-divider"></div>',
+                                ['label' => 'Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
                                 '<div class="dropdown-divider"></div>',
                                 [
                                     'label' => 'Reportes',
@@ -590,7 +601,7 @@ try {
                                 
                                 ['label' => 'Parte docente', 'url' => ['/parte']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Reporte - Ausencia a trimestrales', 'url' => ['novedadesparte/panelnovedadeshist']],
+                                ['label' => 'Reporte - Ausencia a trimestrales', 'url' => ['novedadesparte/panelnovedadesprec']],
                             ],
                     ],
 

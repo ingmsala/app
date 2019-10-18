@@ -22,6 +22,21 @@ class Docente extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    const SCENARIO_FINDHORARIOLOGIN = 'logindoc';
+    const SCENARIO_ABM = 'abmdoc';
+   
+
+    
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_FINDHORARIOLOGIN] = ['legajo'];
+        $scenarios[self::SCENARIO_ABM] = ['apellido', 'nombre', 'genero','legajo'];
+        
+        return $scenarios;
+    }
+
     public static function tableName()
     {
         return 'docente';
@@ -33,13 +48,25 @@ class Docente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apellido', 'nombre', 'genero'], 'required'],
+            [['apellido', 'nombre', 'genero'], 'required', 'on' => self::SCENARIO_ABM],
+            [['legajo'], 'required',  'on' => self::SCENARIO_FINDHORARIOLOGIN],
             [['genero'], 'integer'],
             [['legajo'], 'string', 'max' => 8],
             [['apellido', 'nombre'], 'string', 'max' => 70],
-            [['legajo'], 'unique'],
+            [['legajo'], 'unique', 'on' => self::SCENARIO_ABM],
             [['genero'], 'exist', 'skipOnError' => true, 'targetClass' => Genero::className(), 'targetAttribute' => ['genero' => 'id']],
+            [['legajo'], 'findDoc', 'on' => self::SCENARIO_FINDHORARIOLOGIN],
         ];
+    }
+
+    public function findDoc($attribute, $params, $validator)
+    {
+        $doc = Docente::find()
+            ->joinWith('detallecatedras')
+            ->where(['=', 'detallecatedra.revista', 6])
+            ->andWhere(['legajo' => $this->legajo])->all();
+        if (count($doc)<1)
+            $this->addError($attribute, 'El legajo no corresponde a un docente con un horario activo. Pruebe con su DNI. De persistir el inconveniente consulte en regencia');
     }
 
     /**

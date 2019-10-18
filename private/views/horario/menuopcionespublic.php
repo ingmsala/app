@@ -9,8 +9,9 @@ use app\config\Globales;
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = 'Seleccione una opción';
+$this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Url::to('index.php?r=horario/login').'" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span><br />Salir</center></a>'];
 
-$usph = (Yii::$app->user->identity->username == 'pantallahorarios');
+$usph = false;
 if($usph){
   $classlogo ='logo3';
   $classclient ='client3';
@@ -27,7 +28,7 @@ else{
           <?= 
             Html::a('<span class="'.$classlogo.' glyphicon glyphicon-user"></span><h2>Horario</h2><span class="label label-primary">CLASES</span>',
 
-           ['/horario/panelprincipal'],
+           ['/horario/horarioclasespublic', 'h' => $h, 'docente' => $docente],
 
            [
 
@@ -47,7 +48,7 @@ else{
 
            
 
-            ['/horarioexamen/panelprincipal', 'col' => 0],
+            ['/horarioexamen/horariostrimestrales', 'h' => $h, 'docente' => $docente, 'col' => 0],
 
            [
 
@@ -65,7 +66,7 @@ else{
 
            
 
-            ['/horarioexamen/panelprincipal', 'col' => 1],
+            ['/horarioexamen/horariostrimestrales', 'h' => $h, 'docente' => $docente, 'col' => 1],
 
            [
 

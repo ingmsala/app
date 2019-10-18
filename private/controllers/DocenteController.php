@@ -112,6 +112,7 @@ class DocenteController extends Controller
     public function actionCreate()
     {
         $model = new Docente();
+        $model->scenario = Docente::SCENARIO_ABM;
         $generos = Genero::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -138,6 +139,7 @@ class DocenteController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->scenario = Docente::SCENARIO_ABM;
         $generos = Genero::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {

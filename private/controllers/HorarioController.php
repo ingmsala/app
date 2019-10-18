@@ -37,7 +37,7 @@ class HorarioController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto', 'menuopciones'],
+                'only' => ['view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto', 'menuopciones'],
                 'rules' => [
                     [
                         'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'filtropormateria', 'horariocompleto', 'menuopciones'],   
@@ -187,15 +187,39 @@ class HorarioController extends Controller
      * Lists all Horario models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        
-        $searchModel = new HorarioSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    
+    public function actionLogin(){
+        $model = new Docente();
+        $model->scenario = Docente::SCENARIO_FINDHORARIOLOGIN;
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+        if($model->load(Yii::$app->request->post())){
+            if($model->validate()){
+                
+                $docente = Docente::find()
+                ->joinWith('detallecatedras')
+                ->where(['=', 'detallecatedra.revista', 6])
+                ->andWhere(['=', 'docente.legajo', $model->legajo])
+                ->one();
+
+            return $this->redirect(['/horario/menuopcionespublic', 'h' => Yii::$app->security->generateRandomString(254), 'docente' => $docente->legajo]);
+            }
+            
+        }
+        return $this->render('login', [
+            'model' => $model,
+            
+        ]);
+    }
+
+    public function actionMenuopcionespublic($h, $docente)
+    {
+        $this->layout = 'mainpublic';
+        //return $this->redirect(['horario/panelprincipal']);
+        return $this->render('menuopcionespublic', [
+            'h' => $h,
+            'docente' => $docente,
+            
+
         ]);
     }
 
@@ -689,12 +713,35 @@ class HorarioController extends Controller
         ]);
     }
 
+    public function actionHorarioclasespublic($docente)
+    {
+        $this->layout = 'mainpublic';
+        $docente = Docente::find()
+                ->joinWith('detallecatedras')
+                ->where(['=', 'detallecatedra.revista', 6])
+                ->andWhere(['=', 'docente.legajo', $docente])
+                ->one();
+        return $this->getCompletoxdocentepage($docente->id, 1);
+    }
+
     public function actionCompletoxdocente($docente)
+    {
+        return $this->getCompletoxdocentepage($docente);
+    }
+
+    public function getCompletoxdocentepage($docente, $horario = 0)
     {
     	//$division = 1;
     	//$dia = 3;
-        if(Yii::$app->user->identity->role == Globales::US_HORARIO)
-            $this->layout = 'mainvacio';
+        $userhorario = false;
+        if($horario == 0){
+            if(Yii::$app->user->identity->role == Globales::US_HORARIO){
+                $this->layout = 'mainvacio';
+                $userhorario = true;
+            }
+        }else{
+            $userhorario = true;
+        }
     	$searchModel = new HorarioSearch();
         $docenteparam = Docente::findOne($docente);
 
@@ -813,7 +860,7 @@ class HorarioController extends Controller
 	    ]);
 
         return $this->render('completoxdocente', [
-            
+            'userhorario' => $userhorario,
             'providerTm' => $providerTm,
             'providerTt' => $providerTt,
             'docenteparam' => $docenteparam,
@@ -1367,7 +1414,7 @@ class HorarioController extends Controller
     {
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
-        return $this->redirect(['horario/panelprincipal']);
+        //return $this->redirect(['horario/panelprincipal']);
         return $this->render('menuopciones');
     }
 

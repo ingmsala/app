@@ -8,17 +8,17 @@ use app\config\Globales;
 /* @var $this yii\web\View */
 /* @var $model app\models\Horario */
 
-$this->title = $docenteparam->apellido.', '.$docenteparam->nombre;
+$this->title = $docenteparam['apellido'].', '.$docenteparam['nombre'];
 $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$app->request->referrer.'" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>'];
 
 
 ?>
 <div class="horario-view">
 
-    <h1><?= (Yii::$app->user->identity->role != Globales::US_HORARIO) ? Html::encode('Horario de Clases: '.$this->title) : '' ?>
+    <h1><?= (!$userhorario) ? Html::encode('Horario de Clases: '.$this->title) : '' ?>
     <div class="row" style="padding-bottom: 10px;">
-<?php $userhorario = (Yii::$app->user->identity->role == Globales::US_HORARIO)? "none" : "block" ?>
-	 <div style="display: <?= $userhorario ?>;">
+<?php $dipl = ($userhorario) ? "none" : "block" ?>
+	 <div style="display: <?=  $dipl  ?>;">
     	<div  class="pull-right">
 	        <?php 
 	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/panelprincipal"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>';

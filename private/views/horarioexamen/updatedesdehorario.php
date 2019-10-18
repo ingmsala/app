@@ -82,6 +82,13 @@ JS;
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Eliminar horario', ['delete', 'id' => $model->id, 'h' => 1, 'col' => $col], [
+            'class' => 'btn btn-danger pull-right',
+            'data' => [
+                'confirm' => 'Está seguro de querer eliminar este elemento?',
+                'method' => 'post',
+            ],
+        ]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

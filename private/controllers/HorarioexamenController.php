@@ -256,13 +256,18 @@ class HorarioexamenController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($id, $h=0, $col=0)
     {
         $horarioexamen = $this->findModel($id);
         $anioxtrimestral = $horarioexamen->anioxtrimestral;
+        $division = $horarioexamen->catedra0->division;
         $horarioexamen->delete();
-
-        return $this->redirect(['index', 'id'=>$anioxtrimestral]);
+        if($h == 0){
+            return $this->redirect(['index', 'id'=>$anioxtrimestral]);
+        }else{
+            return $this->redirect(['/horarioexamen/completoxcurso', 'division' => $division, 'vista' => 'docentes', 'prt'=>0, 'col'=>$col]);
+        }
+        
     }
 
     /**
@@ -597,6 +602,7 @@ class HorarioexamenController extends Controller
             'division' => $division,
             'tipos' => $tipos,
             'catedras' => $catedras,
+            'col' => $col,
         ]);
     }
 
@@ -1044,6 +1050,290 @@ class HorarioexamenController extends Controller
         ]);
     }
 
+    public function actionHorariostrimestrales($docente, $col = 0){
+        //$this->layout = 'print';
+        
+        if ($col == 0){
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['<', 'trimestral', 4])
+                            ->one();
+            $tipo = 2;
+        }
+        else{
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['trimestral' => 4])
+                            ->one();
+            $tipo = 3;
+        }
+
+        if($anioxtrim == null || $anioxtrim->publicado !=1){
+            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario");
+            return $this->redirect(['/horario/menuopcionespublic', 'h' => Yii::$app->security->generateRandomString(254), 'docente' =>$docente]);
+        }
+       
+        
+        
+            
+            $docente = Docente::find()
+                ->joinWith('detallecatedras')
+                ->where(['=', 'detallecatedra.revista', 6])
+                ->andWhere(['=', 'docente.legajo', $docente])
+                ->one();
+
+            
+            
+            return $this->generarFicha2($docente->id, $col);
+            
+    }
+
+    public function generarFicha2($docente, $col)
+    {
+        //$division = 1;
+        //$dia = 3;
+        
+        $this->layout = 'mainpublic';
+        $searchModel = new HorarioexamenSearch();
+        $docenteparam = Docente::findOne($docente);
+
+        $h= [];
+        $j= [];
+        
+            $h[1] = '8:00 a 9:00';
+            $h[2] = '9:15 a 10:15';
+            
+        
+            $j[1] = '13:30 a 14:30';
+            $j[2] = '14:45 a 15:45';
+          
+        if ($col == 0){
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['<', 'trimestral', 4])
+                            ->one();
+            $tipo = 2;
+            date_default_timezone_set('America/Argentina/Buenos_Aires');
+            $fecha1print = Yii::$app->formatter->asDate($anioxtrim->inicio, 'dd/MM/yyyy');
+            $fecha2print = Yii::$app->formatter->asDate($anioxtrim->fin, 'dd/MM/yyyy');
+            $infocabecera = "Se comumica que los exámenes trimestrales correspondientes al <b>{$anioxtrim->trimestral0->nombre}</b> comenzarán el <b>{$fecha1print}</b> y teminarán el <b>{$fecha2print}</b>. Deberá entregarlos con las correciones pertinentes con un plazo máximo de <b><u>TRES DÍAS</u></b> siguientes a su recepción. Luego se archivarán en preceptoría.<br/>
+            Saludamos a Usted muy atte.";
+        }
+        else{
+            $anioxtrim = Anioxtrimestral::find()
+                            ->where(['activo' => 1])
+                            ->andWhere(['trimestral' => 4])
+                            ->one();
+            $tipo = 3;
+            $infocabecera = '';
+        }  
+        
+                
+        $horariosTm = Horarioexamen::find()
+            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
+            //->where(['diasemana' => 2])
+            ->where(['detallecatedra.docente' => $docente])
+            ->andWhere(['division.turno' => 1])
+            ->andWhere(['detallecatedra.revista' => 6])
+            ->andWhere(['horarioexamen.tipo' => $tipo])
+            ->orderBy('horarioexamen.fecha, horarioexamen.hora')
+            ->all();
+
+        $horariosTt = Horarioexamen::find()
+            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
+            //->where(['diasemana' => 2])
+            ->where(['detallecatedra.docente' => $docente])
+            ->andWhere(['division.turno' => 2])
+            ->andWhere(['detallecatedra.revista' => 6])
+            ->andWhere(['horarioexamen.tipo' => $tipo])
+            ->orderBy('horarioexamen.fecha, horarioexamen.hora')
+            ->all();
+
+        
+        if($anioxtrim == null || $anioxtrim->publicado !=1){
+            Yii::$app->session->setFlash('danger', "No se encuentra activo el horario");
+            return $this->redirect(['/horarioexamen/panelprincipal', 'col' => $col]);
+        }
+
+        $start = $anioxtrim->inicio;
+        $end = $anioxtrim->fin;
+
+        $range = [];
+
+
+
+        if (is_string($start) === true) $start = strtotime($start);
+        if (is_string($end) === true ) $end = strtotime($end);
+        do {
+            $range[] = date('Y-m-d', $start);
+            $start = strtotime("+ 1 day", $start);
+        } while($start <= $end);
+
+        $dias = $range;
+        $horas = Hora::find()->where(['in', 'id', [2,3]])->all();
+        $cd = 0;
+        //return var_dump($dias);
+        $arrayTm = [];
+        $salida = '';
+
+        $diasgridtm = [];
+        $diasgridtm['columns'][] =['class' => 'yii\grid\SerialColumn'];
+        $diasgridtm['columns'][] =[
+                        'label' => 'Horario',
+                        'vAlign' => 'middle',
+                        'hAlign' => 'center',
+                        'format' => 'raw',
+                        'attribute' => '999',
+                        
+                    ];
+        $dias2 = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado","Domingo"];
+
+        foreach ($dias as $dia) {
+            $ch = 0;
+            $fechats = $dia;
+
+            if (!in_array(date("w",strtotime($fechats)), [0,6])){
+                date_default_timezone_set('America/Argentina/Buenos_Aires');
+                $dia = Yii::$app->formatter->asDate($dia, 'dd/MM/yyyy');
+                $diasgridtm['columns'][] =  [
+                            'header' => $dias2[date("w",strtotime($fechats)-1)].'<br/>'.$dia,
+                            'vAlign' => 'middle',
+                            'hAlign' => 'center',
+                            'format' => 'raw',
+                            'attribute' => $fechats
+                            /*'value' => function($model){
+                                return var_dump($model);
+                            }*/
+                        ];
+                foreach ($horas as $hora) {
+                    # code...
+                    if($cd == 0)
+                        $arrayTm[$hora->id][999] = $h[$ch+1]; 
+                    $arrayTm[$hora->id][$fechats] = '';
+                    //$key = arrayTm_search($hora->id, arrayTm_column($horarios, 'hora'));
+                    //$salida .= $key;
+                    /*if ($horario->hora == $hora->id && $horario->diasemana == $dia->id){
+
+                    
+                    }*/
+                    $ch = $ch + 1;
+                }
+            }
+            $cd = $cd + 1;
+        }
+        $salida = '';
+        foreach ($horariosTm as $horarioxTm) {
+                
+                if($arrayTm[$horarioxTm->hora][$horarioxTm->fecha] != ''){
+                    $arrayTm[$horarioxTm->hora][$horarioxTm->fecha] .= ' - '.'<span style="color:red;">';
+                    $arrayTm[$horarioxTm->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.'<br/>'.$horarioxTm->catedra0->actividad0->nombre.'</span>';
+        
+                }else{
+                    $arrayTm[$horarioxTm->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.'<br/>'.$horarioxTm->catedra0->actividad0->nombre;
+                }
+                
+        }
+
+        $providerTm = new ArrayDataProvider([
+            'allModels' => $arrayTm,
+            
+        ]);
+        
+        $arrayTt = [];
+        $salida = '';
+
+        $dias = $range;
+        $horas = Hora::find()->where(['in', 'id', [2,3]])->all();
+        $cd = 0;
+
+        $diasgridtt = [];
+        $diasgridtt['columns'][] =['class' => 'yii\grid\SerialColumn'];
+        $diasgridtt['columns'][] =[
+                        'label' => 'Horario',
+                        'vAlign' => 'middle',
+                        'hAlign' => 'center',
+                        'format' => 'raw',
+                        'attribute' => '999',
+                        
+                    ];
+
+        foreach ($dias as $dia) {
+            $ch = 0;
+            $fechats = $dia;
+
+
+            if (!in_array(date("w",strtotime($fechats)), [0,6])){
+                date_default_timezone_set('America/Argentina/Buenos_Aires');
+                $dia = Yii::$app->formatter->asDate($dia, 'dd/MM/yyyy');
+                $diasgridtt['columns'][] =  [
+                            'header' => $dias2[date("w",strtotime($fechats)-1)].'<br/>'.$dia,
+                            'vAlign' => 'middle',
+                            'hAlign' => 'center',
+                            'format' => 'raw',
+                            'contentOptions' => function ($model, $key, $index, $column) use($fechats) {
+                                    return ['style' => 'background-color:' 
+                                . (strpos($model[$fechats], ' - ') === true) ? 'red' : 'black'];
+                             },
+                            'attribute' => $fechats
+                            /*'value' => function($model){
+                                return var_dump($model);
+                            }*/
+                        ];
+                foreach ($horas as $hora) {
+                    # code...
+                    if($cd == 0)
+                        $arrayTt[$hora->id][999] = $j[$ch+1];
+                    $arrayTt[$hora->id][$fechats] = '';
+                    //$key = arrayTt_search($hora->id, arrayTt_column($horarios, 'hora'));
+                    //$salida .= $key;
+                    /*if ($horario->hora == $hora->id && $horario->diasemana == $dia->id){
+
+                    
+                    }*/
+                    $ch = $ch + 1;
+                }
+            }   
+            $cd = $cd + 1;
+        }
+        $salida = '';
+        //return var_dump($diasgridtt);
+        foreach ($horariosTt as $horarioxTt) {
+            
+                            
+                           //return $salida;
+            /*if($vista == 'docentes')
+                $arrayTt[$horarioxTt->hora][$horarioxTt->diasemana] = $salida;
+            else*/
+                if($arrayTt[$horarioxTt->hora][$horarioxTt->fecha] != ''){
+                    $arrayTt[$horarioxTt->hora][$horarioxTt->fecha] .= ' - '.'<span style="color:red;">';
+                    $arrayTt[$horarioxTt->hora][$horarioxTt->fecha] .= $horarioxTt->catedra0->division0->nombre.'<br/>'.$horarioxTt->catedra0->actividad0->nombre.'</span>';
+        
+                }else{
+                    $arrayTt[$horarioxTt->hora][$horarioxTt->fecha] .= $horarioxTt->catedra0->division0->nombre.'<br/>'.$horarioxTt->catedra0->actividad0->nombre;
+                }
+        }
+
+        $providerTt = new ArrayDataProvider([
+            'allModels' => $arrayTt,
+            
+        ]);
+
+        return $this->render('completoxdocentepublic', [
+            
+            'providerTm' => $providerTm,
+            'providerTt' => $providerTt,
+            'docenteparam' => $docenteparam,
+            'diasgridtm' => $diasgridtm,
+            'diasgridtt' => $diasgridtt,
+            'anioxtrimestral' => $anioxtrim,
+            'infocabecera' => $infocabecera,
+            'col' => $col,
+            
+        ]);
+    }
+
+
+
     public function generarFicha($docente, $col)
     {
         //$division = 1;
@@ -1072,7 +1362,7 @@ class HorarioexamenController extends Controller
             date_default_timezone_set('America/Argentina/Buenos_Aires');
             $fecha1print = Yii::$app->formatter->asDate($anioxtrim->inicio, 'dd/MM/yyyy');
             $fecha2print = Yii::$app->formatter->asDate($anioxtrim->fin, 'dd/MM/yyyy');
-            $infocabecera = "Se comumica que los exámenes trimestrales correspondientes al <b>{$anioxtrimestral->trimestral0->nombre}</b> comenzarán el <b>{$fecha1print}</b> y teminarán el <b>{$fecha2print}</b>. Deberá entregarlos con las correciones pertinentes con un plazo máximo de <b><u>TRES DÍAS</u></b> siguientes a su recepción. Luego se archivarán en preceptoría.<br/>
+            $infocabecera = "Se comumica que los exámenes trimestrales correspondientes al <b>{$anioxtrim->trimestral0->nombre}</b> comenzarán el <b>{$fecha1print}</b> y teminarán el <b>{$fecha2print}</b>. Deberá entregarlos con las correciones pertinentes con un plazo máximo de <b><u>TRES DÍAS</u></b> siguientes a su recepción. Luego se archivarán en preceptoría.<br/>
             Saludamos a Usted muy atte.";
         }
         else{
@@ -1295,6 +1585,7 @@ class HorarioexamenController extends Controller
 
     public function actionPrint($docente, $all, $col = 0){
         //$this->layout = 'print';
+        
         if ($col == 0){
             $anioxtrim = Anioxtrimestral::find()
                             ->where(['activo' => 1])
@@ -1413,6 +1704,7 @@ class HorarioexamenController extends Controller
 
     public function actionPrintcursos($division, $all, $col = 0){
         //$this->layout = 'print';
+        
         if ($col == 0){
             $anioxtrim = Anioxtrimestral::find()
                             ->where(['activo' => 1])
