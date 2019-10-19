@@ -34,6 +34,8 @@ use yii\bootstrap\Modal;
 
     <?= $form->field($model, 'legajo')->textInput(['maxlength' => true]) ?>
 
+     <?= $form->field($model, 'documento')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'apellido')->textInput(['maxlength' => true, 'style'=>'text-transform:uppercase;']) ?>
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true, 'style'=>'text-transform:uppercase;']) ?>

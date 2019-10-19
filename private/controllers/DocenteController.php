@@ -12,6 +12,9 @@ use app\models\Genero;
 use yii\filters\AccessControl;
 use app\config\Globales;
 
+use kartik\grid\EditableColumnAction;
+use yii\helpers\ArrayHelper;
+
 /**
  * DocenteController implements the CRUD actions for Docente model.
  */
@@ -25,10 +28,10 @@ class DocenteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'editdocumento'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update'],   
+                        'actions' => ['create', 'update', 'editdocumento'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
@@ -75,6 +78,24 @@ class DocenteController extends Controller
             ],
         ];
     }
+
+    public function actions()
+   {
+       return ArrayHelper::merge(parent::actions(), [
+           'editdocumento' => [                                       
+               'class' => EditableColumnAction::className(),     
+               'modelClass' => Docente::className(),                
+               'outputValue' => function ($model, $attribute, $key, $index) {
+                    //$fmt = Yii::$app->formatter;
+                    return $model->$attribute;                 
+               },
+               'outputMessage' => function($model, $attribute, $key, $index) {
+                     return '';                                  
+               },
+               
+           ]
+       ]);
+   }
 
     /**
      * Lists all Docente models.

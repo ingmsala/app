@@ -22,7 +22,7 @@ class DocenteSearch extends Docente
     {
         return [
             [['id', ], 'integer'],
-            [['legajo', 'apellido', 'nombre', 'genero'], 'safe'],
+            [['legajo', 'apellido', 'nombre', 'genero', 'documento'], 'safe'],
         ];
     }
 
@@ -39,7 +39,7 @@ class DocenteSearch extends Docente
     {
         $query = Docente::find()
             ->joinWith(['genero0'])
-            ->orderBy('apellido', 'nombre', 'legajo');
+            ->orderBy('apellido', 'nombre', 'legajo')->indexBy('id');
 
         // add conditions that should always apply here
 
@@ -70,9 +70,13 @@ class DocenteSearch extends Docente
         ]);
 
         $query->andFilterWhere(['like', 'legajo', $this->legajo])
-            ->andFilterWhere(['like', 'apellido', $this->apellido])
-            ->andFilterWhere(['like', 'docente.nombre', $this->nombre])
-            ->andFilterWhere(['like', 'genero.nombre', $this->genero]);
+            ->andFilterWhere(['or', 
+                ['like', 'apellido', $this->apellido], 
+                ['like', 'docente.nombre', $this->apellido]
+            ])
+            ->andFilterWhere(['like', 'apellido', $this->nombre])
+            ->andFilterWhere(['like', 'genero.nombre', $this->genero])
+            ->andFilterWhere(['like', 'documento', $this->documento]);
 
         return $dataProvider;
     }

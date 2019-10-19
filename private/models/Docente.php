@@ -12,6 +12,7 @@ use Yii;
  * @property string $apellido
  * @property string $nombre
  * @property int $genero
+ * @property string $documento
  *
  * @property Detallecatedra[] $detallecatedras
  * @property Genero $genero0
@@ -32,7 +33,7 @@ class Docente extends \yii\db\ActiveRecord
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_FINDHORARIOLOGIN] = ['legajo'];
-        $scenarios[self::SCENARIO_ABM] = ['apellido', 'nombre', 'genero','legajo'];
+        $scenarios[self::SCENARIO_ABM] = ['apellido', 'nombre', 'genero','legajo', 'documento'];
         
         return $scenarios;
     }
@@ -48,12 +49,15 @@ class Docente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apellido', 'nombre', 'genero'], 'required', 'on' => self::SCENARIO_ABM],
+            [['apellido', 'nombre', 'genero','documento'], 'required', 'on' => self::SCENARIO_ABM],
             [['legajo'], 'required',  'on' => self::SCENARIO_FINDHORARIOLOGIN],
             [['genero'], 'integer'],
+            [['documento'], 'string', 'max' => 8],
+            [['documento'], 'string', 'min' => 7],
             [['legajo'], 'string', 'max' => 8],
             [['apellido', 'nombre'], 'string', 'max' => 70],
             [['legajo'], 'unique', 'on' => self::SCENARIO_ABM],
+            [['documento'], 'unique'],
             [['genero'], 'exist', 'skipOnError' => true, 'targetClass' => Genero::className(), 'targetAttribute' => ['genero' => 'id']],
             [['legajo'], 'findDoc', 'on' => self::SCENARIO_FINDHORARIOLOGIN],
         ];
@@ -80,6 +84,7 @@ class Docente extends \yii\db\ActiveRecord
             'apellido' => 'Apellido',
             'nombre' => 'Nombre',
             'genero' => 'Genero',
+            'documento' => 'Documento',
         ];
     }
 
