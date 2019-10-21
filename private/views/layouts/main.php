@@ -5,7 +5,7 @@
 
 use app\widgets\Alert;
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
+use kartik\nav\NavX;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
@@ -950,12 +950,13 @@ try {
             'options' => [
                 'class' => 'navbar-default navbar-fixed-top',
                 'style' => (Yii::$app->user->isGuest or in_array (Yii::$app->user->identity->role, [8])) ? 'visibility: hidden' : '',
-            ],
+            ],  
         ]);
-        echo Nav::widget([
+        echo NavX::widget([
             'encodeLabels' => false,
             'options' => ['class' => 'navbar-nav navbar-right'],
-            'items' => $items
+            'items' => $items,
+            //'activateParents' => true,
         ]);
 NavBar::end();
 ?>
