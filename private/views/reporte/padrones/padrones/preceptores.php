@@ -65,6 +65,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model['legajo'];
                 }
             ],
+
+            [
+                'label' => 'Documento',
+                'value' => function($model){
+                    return $model['documento'];
+                }
+            ],
             
             [
                 'label' => 'Preceptor/a',

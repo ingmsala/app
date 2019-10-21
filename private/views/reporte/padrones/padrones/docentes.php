@@ -65,6 +65,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
 
+            [
+                'label' => 'Documento',
+                'value' => function($model){
+                    return $model['documento'];
+                }
+            ],
+
             
             [
                 'label' => 'Docente',

@@ -28,10 +28,10 @@ class PadronesController extends \yii\web\Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'preceptores', 'jefespreceptor', 'docentes', 'otrosdocentes'],
+                'only' => ['index', 'preceptores', 'jefespreceptor', 'docentes', 'otrosdocentes', 'getall'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'preceptores', 'jefespreceptor', 'docentes', 'otrosdocentes'],   
+                        'actions' => ['index', 'preceptores', 'jefespreceptor', 'docentes', 'otrosdocentes', 'getall'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{

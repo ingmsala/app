@@ -97,6 +97,13 @@ $listcargos=ArrayHelper::map($cargos,'id','nombre');
                     return $model['legajo'];
                 }
             ],
+
+            [
+                'label' => 'Documento',
+                'value' => function($model){
+                    return $model['documento'];
+                }
+            ],
             
             [
                 'label' => 'Docente',
