@@ -176,6 +176,7 @@ class FichadelalumnoController extends \yii\web\Controller
             $ids = ArrayHelper::getColumn($listClasescomision, 0);
             $echodiv='';
             $i=0;
+            $ca = 0;
             foreach ($listClasescomision as $key => $value) {
 
                 if($value == "P"){
@@ -188,17 +189,23 @@ class FichadelalumnoController extends \yii\web\Controller
                 }
                 else
                     break;
-                $echodiv .= '<div class="col-md-2 col-lg-2 col-sm-2 col-lx-2">';
-                $echodiv .= '<div class="panel panel-'.$paneltype.'" style="height: 12vh; margin:2px">';
-                $echodiv .= '<div class="panel-heading" style="height: 5vh;">'.'<center>'.$key.'</center>'.'</div>';
-                $echodiv .= '<div class="panel-body"><span class="align-top">';
-                //$echodiv .= Html::checkbox("scripts", $sel, ['label' => 'Se Ausentó', 'value' => $matricula["id"]]);
-                $echodiv .= '<center>'.$prt.'</center>';
-                $echodiv .= '</span></div>
-                                </div>
-                              </div>';
+                if($value == "A"){
+                    $ca ++;
+                    $echodiv .= '<div class="col-md-2 col-lg-2 col-sm-2 col-lx-2">';
+                    $echodiv .= '<div class="panel panel-'.$paneltype.'" style="height: 12vh; margin:2px">';
+                    $echodiv .= '<div class="panel-heading" style="height: 5vh;">'.'<center>'.$key.'</center>'.'</div>';
+                    $echodiv .= '<div class="panel-body"><span class="align-top">';
+                    //$echodiv .= Html::checkbox("scripts", $sel, ['label' => 'Se Ausentó', 'value' => $matricula["id"]]);
+                    $echodiv .= '<center>'.$prt.'</center>';
+                    $echodiv .= '</span></div>
+                                    </div>
+                                  </div>';
+                }
+                
                 $i=$i+1;
             }
+
+            $porcentajeausencia = round($ca*100/($i+$ca));
 
             $searchModelSeguimientos  = new SeguimientoSearch();
             $dataProviderSeguimientos = $searchModelSeguimientos->seguimientosdelalumno($id);
@@ -208,6 +215,7 @@ class FichadelalumnoController extends \yii\web\Controller
                 'dataProviderInasistencias' => $dataProviderInasistencias,
                 'listClasescomision' => $listClasescomision,
                 'dataProviderSeguimientos' => $dataProviderSeguimientos,
+                'porcentajeausencia' => $porcentajeausencia,
                 'echodiv' => $echodiv,
                 'model' => $this->findModel($id),
             ]);

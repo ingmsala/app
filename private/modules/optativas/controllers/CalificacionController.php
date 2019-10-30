@@ -58,7 +58,7 @@ class CalificacionController extends Controller
     {
         $this->layout = 'main';
         $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
-        if(false){
+        if(true){
             $searchModel = new CalificacionSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

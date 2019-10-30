@@ -33,7 +33,7 @@ class ClaseController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'viewgrid'],
                 'rules' => [
                     [
                         'actions' => ['index'],   

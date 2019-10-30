@@ -84,4 +84,9 @@ class Comision extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Matricula::className(), ['comision' => 'id']);
     }
+
+    public function getActas()
+    {
+        return $this->hasMany(Acta::className(), ['comision' => 'id']);
+    }
 }

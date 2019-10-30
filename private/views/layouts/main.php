@@ -277,6 +277,10 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Interfaz yacaré', 'url' => ['/optativas/interfazyacare']],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'Libro de actas', 'url' => ['/optativas/libroacta']],
+                                '<div class="dropdown-divider"></div>',
+                                ['label' => 'Escala de notas', 'url' => ['/optativas/escalanota']],
+                                '<div class="dropdown-divider"></div>',
                                 
                             ],
                     ],

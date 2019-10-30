@@ -52,4 +52,9 @@ class Aniolectivo extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Optativa::className(), ['aniolectivo' => 'id']);
     }
+
+    public function getLibroactas()
+    {
+        return $this->hasMany(Libroacta::className(), ['aniolectivo' => 'id']);
+    }
 }

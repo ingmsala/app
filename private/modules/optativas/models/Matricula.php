@@ -156,4 +156,9 @@ class Matricula extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Division::className(), ['id' => 'division']);
     }
+
+    public function getDetalleactas()
+    {
+        return $this->hasMany(Detalleacta::className(), ['matricula' => 'id']);
+    }
 }

@@ -115,6 +115,42 @@ class MatriculaSearch extends Matricula
         return $dataProvider;
     }
 
+    public function alumnosxcomisionSinActa($comsion, $ids)
+    {
+        //$subcons = 
+        $query = Matricula::find()
+                ->joinWith(['alumno0', 'comision0', 'detalleactas'])
+                ->where(['comision.id' => $comsion])
+                ->andWhere(['not in', 'matricula.id', $ids])
+                ->orderBy('alumno.apellido, alumno.nombre');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        $this->load($comsion);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'fecha' => $this->fecha,
+            'alumno' => $this->alumno,
+            'comision' => $this->comision,
+            'estadomatricula' => $this->estadomatricula,
+        ]);
+
+        return $dataProvider;
+    }
+
     public function alumnosxcomisionmails($comsion)
     {
          $sql="SELECT DISTINCT alumno.apellido, alumno.nombre, contactoalumno.mail FROM matricula LEFT JOIN alumno ON matricula.alumno = alumno.id LEFT JOIN comision ON matricula.comision = comision.id LEFT JOIN optativa ON comision.optativa = optativa.id LEFT JOIN actividad ON optativa.actividad = actividad.id LEFT JOIN contactoalumno ON alumno.id = contactoalumno.alumno WHERE comision.id=".$comsion." ORDER BY actividad.nombre, comision.nombre, alumno.apellido, alumno.nombre";

@@ -49,9 +49,9 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error' => [
+            /*'error' => [
                 'class' => 'yii\web\ErrorAction',
-            ],
+            ],*/
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
@@ -131,6 +131,17 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    public function actionError()
+    {
+       $excepcion = Yii::$app->errorHandler->exception;
+       if($excepcion !==null){
+        Yii::$app->session->setFlash('danger', "No tiene credenciales para acceder a la operación");
+            return $this->redirect(Yii::$app->request->referrer ?: Yii::$app->homeUrl);
+        }
+
+        
     }
 
     /**

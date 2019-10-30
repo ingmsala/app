@@ -66,7 +66,7 @@ $this->title = 'Ficha del alumno: '.$al;
         ],
     ]) ?>
 
-    <h3><?= Html::encode('Asistencia') ?></h3>
+    <h3><?= Html::encode('Ausencia: (~').$porcentajeausencia.'%)' ?></h3>
 
         <?= $this->render('_inasistenciasxalumno', [
             'dataProviderInasistencias' => $dataProviderInasistencias,

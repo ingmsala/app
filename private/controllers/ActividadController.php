@@ -47,7 +47,7 @@ class ActividadController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                            try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA]);
                             }catch(\Exception $exception){
                                 return false;
                             }

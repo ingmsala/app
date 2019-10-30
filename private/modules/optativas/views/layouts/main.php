@@ -42,7 +42,30 @@ AppAsset::register($this);
                                             
                         ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
                         ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
-                        ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><div>Calificaciones</div>', 'url' => ['/optativas/calificacion']],
+                       
+                        ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><br>Calificaciones', 
+
+                            'items' => [
+                                [
+                                    'label' => 'Cargar nota',
+                                    'url' => ['/optativas/acta/actas', 'cl' => 0],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+
+                                [
+                                    'label' => 'Cerrar acta',
+                                    'url' => ['/optativas/acta/actas', 'cl' => 1],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+
+                                
+
+                                
+                            
+                            ],
+                        ],
                         ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/optativas/seguimiento']],
                         ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
 
@@ -107,7 +130,10 @@ AppAsset::register($this);
                     
                         ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
                         ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
-                        ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><div>Calificaciones</div>', 'url' => ['/optativas/calificacion']],
+                         ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><br>Calificaciones', 
+
+                            
+                        ],
                         ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/optativas/seguimiento']],
                         ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
 
@@ -161,7 +187,10 @@ AppAsset::register($this);
                     
                         ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
                         ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
-                        ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><div>Calificaciones</div>', 'url' => ['/optativas/calificacion']],
+                         ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><br>Calificaciones', 
+
+                            
+                        ],
                         ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/optativas/seguimiento']],
                         ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
 
@@ -222,7 +251,10 @@ AppAsset::register($this);
                     
                         ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
                         ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
-                        ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><div>Calificaciones</div>', 'url' => ['/optativas/calificacion']],
+                         ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><br>Calificaciones', 
+
+                            
+                        ],
                         ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/optativas/seguimiento']],
                         ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
 
@@ -286,7 +318,10 @@ AppAsset::register($this);
                     
                         ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
                         ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
-                        ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><div>Calificaciones</div>', 'url' => ['/optativas/calificacion']],
+                         ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><br>Calificaciones', 
+
+                            
+                        ],
                         ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/optativas/seguimiento']],
                         ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
 
