@@ -14,6 +14,8 @@ use yii\widgets\Pjax;
 
 
 $listnotas = ArrayHelper::map($detalleescalas, 'id', 'nota');
+$listseguimientos = ArrayHelper::map($seguimientos, 'matricula', 'estadoseguimiento');
+$listestadoseguimiento = ArrayHelper::map($estadoseguimiento, 'id', 'nombre');
 
 if($acta->estadoacta==221){
     $botones = '{eliminar}';
@@ -104,6 +106,20 @@ foreach ($docentes as $docente) {
                     return Yii::$app->formatter->asDate($model->acta0->fecha, 'dd/MM/yyyy');
                 }
             ],
+
+            [
+                'label' => 'Trabajo Final',
+                'vAlign' => 'middle',
+                'value' => function($model) use($listseguimientos, $listestadoseguimiento){
+                    try {
+                        return $listestadoseguimiento[$listseguimientos[$model->matricula]];
+                    } catch (Exception $e) {
+                        return 'Sin calificar';
+                    }
+                    
+                }
+            ],
+
             [
                 'label' => 'Nota',
                 'class' => 'kartik\grid\EditableColumn',
@@ -149,7 +165,7 @@ foreach ($docentes as $docente) {
                 
             ],
 
-            [
+            /*[
                 'label' => 'Observaciones',
                 'class' => 'kartik\grid\EditableColumn',
                 
@@ -179,7 +195,7 @@ foreach ($docentes as $docente) {
                 'vAlign' => 'middle',
                 //'width' => '7%',
                 
-            ],
+            ],*/
             
             [
                 'label' => 'Condición',
@@ -194,7 +210,7 @@ foreach ($docentes as $docente) {
                 }
             ],
             
-            [
+            /*[
                     'class' => 'kartik\grid\ActionColumn',
                     
                     'template' => $botones,
@@ -215,7 +231,7 @@ foreach ($docentes as $docente) {
                         
                     ]
 
-            ],
+            ],*/
         ],
     ]); ?>
 

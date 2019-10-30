@@ -34,7 +34,7 @@ class Detalleescalanota extends \yii\db\ActiveRecord
         return [
             [['nota', 'escalanota', 'condicionnota'], 'required'],
             [['escalanota', 'condicionnota'], 'integer'],
-            [['nota'], 'string', 'max' => 10],
+            [['nota'], 'string', 'max' => 30],
             [['escalanota'], 'exist', 'skipOnError' => true, 'targetClass' => Escalanota::className(), 'targetAttribute' => ['escalanota' => 'id']],
             [['condicionnota'], 'exist', 'skipOnError' => true, 'targetClass' => Condicionnota::className(), 'targetAttribute' => ['condicionnota' => 'id']],
         ];

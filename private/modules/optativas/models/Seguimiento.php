@@ -30,11 +30,14 @@ class Seguimiento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['matricula', 'fecha', 'descripcion'], 'required'],
+            [['matricula', 'fecha', 'descripcion', 'tiposeguimiento'], 'required'],
             [['matricula'], 'integer'],
+            [['matricula', 'tiposeguimiento', 'estadoseguimiento'], 'integer'],
             [['descripcion'], 'safe'],
             [['fecha'], 'safe'],
             [['matricula'], 'exist', 'skipOnError' => true, 'targetClass' => Matricula::className(), 'targetAttribute' => ['matricula' => 'id']],
+            [['tiposeguimiento'], 'exist', 'skipOnError' => true, 'targetClass' => Tiposeguimiento::className(), 'targetAttribute' => ['tiposeguimiento' => 'id']], 
+            [['estadoseguimiento'], 'exist', 'skipOnError' => true, 'targetClass' => Estadoseguimiento::className(), 'targetAttribute' => ['estadoseguimiento' => 'id']], 
         ];
     }
 
@@ -48,6 +51,8 @@ class Seguimiento extends \yii\db\ActiveRecord
             'matricula' => 'Matricula',
             'fecha' => 'Fecha',
             'descripcion' => 'Descripcion',
+            'tiposeguimiento' => 'Tipo de seguimiento', 
+            'estadoseguimiento' => 'Estado de seguimiento', 
         ];
     }
 
@@ -58,4 +63,20 @@ class Seguimiento extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Matricula::className(), ['id' => 'matricula']);
     }
+
+     /** 
+    * @return \yii\db\ActiveQuery 
+    */ 
+   public function getTiposeguimiento0() 
+   { 
+       return $this->hasOne(Tiposeguimiento::className(), ['id' => 'tiposeguimiento']); 
+   } 
+ 
+   /** 
+    * @return \yii\db\ActiveQuery 
+    */ 
+   public function getEstadoseguimiento0() 
+   { 
+       return $this->hasOne(Estadoseguimiento::className(), ['id' => 'estadoseguimiento']); 
+   } 
 }

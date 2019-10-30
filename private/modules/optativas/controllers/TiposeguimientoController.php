@@ -3,17 +3,17 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;
-use app\modules\optativas\models\Tipoacta;
-use app\modules\optativas\models\TipoactaSearch;
+use app\modules\optativas\models\Tiposeguimiento;
+use app\modules\optativas\models\TiposeguimientoSearch;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * TipoactaController implements the CRUD actions for Tipoacta model.
+ * TiposeguimientoController implements the CRUD actions for Tiposeguimiento model.
  */
-class TipoactaController extends Controller
+class TiposeguimientoController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -49,14 +49,13 @@ class TipoactaController extends Controller
             ],
         ];
     }
-
     /**
-     * Lists all Tipoacta models.
+     * Lists all Tiposeguimiento models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new TipoactaSearch();
+        $searchModel = new TiposeguimientoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -66,7 +65,7 @@ class TipoactaController extends Controller
     }
 
     /**
-     * Displays a single Tipoacta model.
+     * Displays a single Tiposeguimiento model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -79,13 +78,13 @@ class TipoactaController extends Controller
     }
 
     /**
-     * Creates a new Tipoacta model.
+     * Creates a new Tiposeguimiento model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Tipoacta();
+        $model = new Tiposeguimiento();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -97,7 +96,7 @@ class TipoactaController extends Controller
     }
 
     /**
-     * Updates an existing Tipoacta model.
+     * Updates an existing Tiposeguimiento model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -117,7 +116,7 @@ class TipoactaController extends Controller
     }
 
     /**
-     * Deletes an existing Tipoacta model.
+     * Deletes an existing Tiposeguimiento model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -131,15 +130,15 @@ class TipoactaController extends Controller
     }
 
     /**
-     * Finds the Tipoacta model based on its primary key value.
+     * Finds the Tiposeguimiento model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Tipoacta the loaded model
+     * @return Tiposeguimiento the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Tipoacta::findOne($id)) !== null) {
+        if (($model = Tiposeguimiento::findOne($id)) !== null) {
             return $model;
         }
 

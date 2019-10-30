@@ -5,21 +5,21 @@ namespace app\modules\optativas\models;
 use Yii;
 
 /**
- * This is the model class for table "condicionnota".
+ * This is the model class for table "estadoseguimiento".
  *
  * @property int $id
  * @property string $nombre
  *
- * @property Detalleescalanota[] $detalleescalanotas
+ * @property Seguimiento[] $seguimientos
  */
-class Condicionnota extends \yii\db\ActiveRecord
+class Estadoseguimiento extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'condicionnota';
+        return 'estadoseguimiento';
     }
 
     /**
@@ -29,7 +29,7 @@ class Condicionnota extends \yii\db\ActiveRecord
     {
         return [
             [['nombre'], 'required'],
-            [['nombre'], 'string', 'max' => 30],
+            [['nombre'], 'string', 'max' => 50],
         ];
     }
 
@@ -47,8 +47,8 @@ class Condicionnota extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDetalleescalanotas()
+    public function getSeguimientos()
     {
-        return $this->hasMany(Detalleescalanota::className(), ['condicionnota' => 'id']);
+        return $this->hasMany(Seguimiento::className(), ['estadoseguimiento' => 'id']);
     }
 }

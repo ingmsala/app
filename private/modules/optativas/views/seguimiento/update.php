@@ -14,6 +14,8 @@ $this->title = 'Modificar Seguimiento: ' . $model->matricula0->alumno0->apellido
 
     <?= $this->render('_form', [
         'model' => $model,
+        'estados' => $estados,
+        'tipos' => $tipos,
     ]) ?>
 
 </div>

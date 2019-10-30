@@ -3,20 +3,22 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;
+use app\config\Globales;
 use app\modules\optativas\models\Acta;
 use app\modules\optativas\models\Detalleacta;
 use app\modules\optativas\models\DetalleactaSearch;
 use app\modules\optativas\models\Detalleescalanota;
+use app\modules\optativas\models\Estadoseguimiento;
+use app\modules\optativas\models\Seguimiento;
 use kartik\grid\EditableColumnAction;
 use kartik\mpdf\Pdf;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\AccessControl;
-use app\config\Globales;
 
 /**
  * DetalleactaController implements the CRUD actions for Detalleacta model.
@@ -181,6 +183,12 @@ class DetalleactaController extends Controller
             $url = 'cerraracta';
         }
         $detalleescalas = Detalleescalanota::find()->where(['escalanota' => $acta->escalanota])->all();
+        $seguimientos = Seguimiento::find()
+                            ->joinWith(['matricula0'])
+                            ->where(['matricula.comision' => $acta->comision])
+                            ->andWhere(['tiposeguimiento' => 2])
+                            ->orderBy('id')->all();
+        $estadoseguimiento = Estadoseguimiento::find()->all();
         
         $searchModel = new DetalleactaSearch();
         $dataProvider = $searchModel->alumnosXacta($acta_id);
@@ -198,6 +206,8 @@ class DetalleactaController extends Controller
             'zRegulares' => $zRegulares,
             'zLibres' => $zLibres,
             'btncerrar' => $btncerrar,
+            'seguimientos' => $seguimientos,
+            'estadoseguimiento' => $estadoseguimiento,
         ]);
     }
 

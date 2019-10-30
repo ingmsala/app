@@ -3,14 +3,16 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;
-use app\modules\optativas\models\Seguimiento;
+use app\modules\optativas\models\Estadoseguimiento;
 use app\modules\optativas\models\Matricula;
-use app\modules\optativas\models\SeguimientoSearch;
 use app\modules\optativas\models\MatriculaSearch;
+use app\modules\optativas\models\Seguimiento;
+use app\modules\optativas\models\SeguimientoSearch;
+use app\modules\optativas\models\Tiposeguimiento;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 
 /**
  * SeguimientoController implements the CRUD actions for Seguimiento model.
@@ -137,6 +139,8 @@ class SeguimientoController extends Controller
         $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         if($com != 0){
             $model = new Seguimiento();
+            $estados = Estadoseguimiento::find()->all();
+            $tipos = Tiposeguimiento::find()->all();
             date_default_timezone_set('America/Argentina/Buenos_Aires');
             $model->fecha = date("Y-m-d");
             $model->matricula = $id;
@@ -147,6 +151,8 @@ class SeguimientoController extends Controller
 
             return $this->render('create', [
                 'model' => $model,
+                'estados' => $estados,
+                'tipos' => $tipos,
                 'matr' => Matricula::findOne($id),
             ]);
         }else{
@@ -169,6 +175,8 @@ class SeguimientoController extends Controller
         $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         if($com != 0){
             $model = $this->findModel($id);
+            $estados = Estadoseguimiento::find()->all();
+            $tipos = Tiposeguimiento::find()->all();
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->matricula]);
@@ -176,6 +184,8 @@ class SeguimientoController extends Controller
 
             return $this->render('update', [
                 'model' => $model,
+                'estados' => $estados,
+                'tipos' => $tipos,
             ]);
         }else{
         Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');

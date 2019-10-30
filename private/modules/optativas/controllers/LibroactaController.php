@@ -7,6 +7,7 @@ use app\modules\optativas\models\Aniolectivo;
 use app\modules\optativas\models\Estadolibro;
 use app\modules\optativas\models\Libroacta;
 use app\modules\optativas\models\LibroactaSearch;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -19,9 +20,29 @@ class LibroactaController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+   public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [1]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

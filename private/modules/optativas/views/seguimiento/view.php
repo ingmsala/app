@@ -23,7 +23,11 @@ in_array (Yii::$app->user->identity->role, [1,8]) ? $template = '{update} {delet
         'dataProvider' => $dataProvider,
         'columns' => [
             
-            
+            [
+                'label' => 'Tipo',
+                'attribute' => 'tiposeguimiento0.nombre',
+                
+            ],
             [
                 'label' => 'Fecha',
                 'attribute' => 'fecha',
@@ -36,6 +40,12 @@ in_array (Yii::$app->user->identity->role, [1,8]) ? $template = '{update} {delet
             'descripcion',
 
             [
+                'label' => 'Estado',
+                'attribute' => 'estadoseguimiento0.nombre',
+                
+            ],
+
+            /*[
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => $template,
                 
@@ -56,7 +66,7 @@ in_array (Yii::$app->user->identity->role, [1,8]) ? $template = '{update} {delet
                     
                 ]
 
-            ],
+            ],*/
             
         ],
     ]); ?>

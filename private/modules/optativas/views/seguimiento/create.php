@@ -18,6 +18,8 @@ $this->title = $matr->alumno0->apellido.', '.$matr->alumno0->nombre;
     ?></h3>
     <?= $this->render('_form', [
         'model' => $model,
+        'estados' => $estados,
+        'tipos' => $tipos,
     ]) ?>
 
 </div>

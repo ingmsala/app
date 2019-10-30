@@ -16,13 +16,25 @@ use kartik\grid\GridView;
         'summary' => false,
         'columns' => [
             [
+                'label' => 'Tipo',
+                'attribute' => 'tiposeguimiento0.nombre',
+                
+            ],
+            [
                 'label' => 'Fecha',
-                //'attribute' => 'fecha',
+                'attribute' => 'fecha',
                 'format' => 'raw',
                 'value' => function($model){
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
                     return Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy');
-                },
+                }
+            ],
+            
+
+            [
+                'label' => 'Estado',
+                'attribute' => 'estadoseguimiento0.nombre',
+                
             ],
             [
                 'label' => 'Descripción',
