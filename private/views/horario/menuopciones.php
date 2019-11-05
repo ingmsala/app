@@ -22,10 +22,10 @@ else{
 
 ?>
 <div class="row contpanelprincipal">
-        <div class="col-md-2"></div>
+        
         <div class="col-md-3">           
           <?= 
-            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-user"></span><h2>Horario</h2><span class="label label-primary">CLASES</span>',
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-time"></span><h2>Horario</h2><span class="label label-primary">CLASES</span>',
 
            ['/horario/panelprincipal'],
 
@@ -43,7 +43,7 @@ else{
       
       <div class="col-md-3"> 
           <?= 
-            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-sd-video"></span><h2>Horarios</h2><span class="label label-info">TRIMESTRALES</span>',
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-calendar"></span><h2>Horarios</h2><span class="label label-info">TRIMESTRALES</span>',
 
            
 
@@ -61,7 +61,7 @@ else{
       </div>
       <div class="col-md-3"> 
           <?= 
-            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-sd-video"></span><h2>Horarios</h2><span class="label label-success">COLOQUIOS</span>',
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-copyright-mark"></span><h2>Horarios</h2><span class="label label-success">COLOQUIOS</span>',
 
            
 
@@ -77,5 +77,22 @@ else{
           ?>
 
       </div>
-      <div class="col-md-2"></div>
+      <div class="col-md-3"> 
+          <?= 
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-ruble"></span><h2>Exámenes</h2><span class="label label-danger">PREVIOS</span>',
+
+           
+
+           ['pdfprevios'],
+
+           [
+
+               //'id' => 'modalButtonIngreso',
+               'class' => $classclient,
+               // modalCall
+
+           ]);
+          ?>
+
+      </div>
     </div>

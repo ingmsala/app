@@ -479,7 +479,7 @@ a.desc:after {
 
 .contpanelprincipal{
         margin-top: 100px;
-        margin-left: -150px;
+        margin-left: 0px;
 
 }
 @media (max-width: 797px) {
