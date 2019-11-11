@@ -135,7 +135,7 @@ use yii\helpers\Url;
                                     'pluginOptions' => [
                                        'depends'  => ['division_id', 'falta'],
                                        'placeholder' => 'Seleccionar...',
-                                       'url' => Url::to(['/detallecatedra/docxhorario', 'diasemana' => date("w",strtotime($partes->fecha))+1])
+                                       'url' => Url::to(['/detallecatedra/docxhorario', 'diasemana' => date("w",strtotime($partes->fecha))+1, 'tipoparte' =>$partes->tipoparte])
                                     ]
                                 ])->label('Docente (Materia)');  ?>
 

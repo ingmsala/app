@@ -289,7 +289,7 @@ ORDER BY
         left join horario h ON h.catedra = c.id
         left join actividad ac ON c.actividad = ac.id
         left join division di ON c.division = di.id
-        where (di.turno = 1 or di.turno = 2) and (ac.id <> 23)
+        where (di.turno = 1 or di.turno = 2) and (ac.id <> 23) and (ac.id <> 31) and (ac.id <> 33)
         group by ac.id, ac.nombre, di.id, di.nombre, ac.cantHoras 
         having ac.cantHoras <> count(h.id)
         ORDER BY `c`.`id` ASC';

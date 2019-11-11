@@ -377,7 +377,7 @@ class DetallecatedraController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionDocxhorario($diasemana)
+    public function actionDocxhorario($diasemana, $tipoparte)
     {
         
         
@@ -391,8 +391,8 @@ class DetallecatedraController extends Controller
             if ($parents != null) {
 
                 $division_id = $parents[0];
-                
-                if($falta_id == 3 || $falta_id == 1){
+                                
+                if(($falta_id == 3 || $falta_id == 1) && $tipoparte == 1){
                     $detallecat = Detallecatedra::find()
                     ->joinWith(['docente0', 'catedra0', 'catedra0.horarios'])
                     ->where(['catedra.division' => $division_id])

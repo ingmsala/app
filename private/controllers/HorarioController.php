@@ -469,7 +469,10 @@ class HorarioController extends Controller
         }
 
         $division = Division::findOne($division);
-        $catedras = Catedra::find()->where(['division' => $division])->all();
+        $catedras = Catedra::find()->joinWith('detallecatedras')
+                        ->where(['division' => $division->id])
+                        //->andWhere(['detallecatedra.revista' => 6])
+                        ->all();
         $horas = Hora::find()->all();
         $dias = Diasemana::find()->all();
         $tipos = Tipoparte::find()->all();
@@ -607,10 +610,10 @@ class HorarioController extends Controller
                                     $superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->diasemana);
                                     if ($superpuesto[0]){
                                         ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
-                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1).'</span>'.'</span>';
+                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),1,0).'</span>'.'</span>';
                                     }
                                     else
-                                        $salida = $dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1);
+                                        $salida = $dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1);
 		                			break 1;
 		                		}else{
 		                			$salida = 'ss';

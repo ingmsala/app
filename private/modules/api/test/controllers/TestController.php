@@ -113,9 +113,15 @@ public function behaviors()
 	    public function actionSeguimiento($enrollment_id)
 	    {
 	        return new SqlDataProvider([
-	            'sql' => "SELECT id as tracking_id, fecha as tracking_date, descripcion as tracking_detail
-	            			FROM seguimiento 
-	            			WHERE matricula=".$enrollment_id,
+	            'sql' => 'SELECT
+						    seg.id AS tracking_id,
+						    fecha AS tracking_date,
+						    CONCAT(ts.nombre, " - ", descripcion) AS tracking_detail
+						    FROM
+						        seguimiento seg
+						    LEFT JOIN 
+						        tiposeguimiento ts ON seg.tiposeguimiento = ts.id
+						    WHERE seg.matricula='.$enrollment_id,
 	            'pagination' => false,
 	        ]);
 	    }
