@@ -25,7 +25,7 @@ class MysqlDumpManager extends BaseDumpManager
         }
         if (YII_ENV_DEV) {
             $arguments = [
-                        'C:/wamp/bin/mysql/mysql5.5.24/bin/mysqldump',
+                        'C:/wamp64/bin/mysql/mysql5.7.26/bin/mysqldump',
                         '--host=' . $dbInfo['host'],
                         '--port=' . $dbInfo['port'],
                         '--user=' . $dbInfo['username'],
@@ -78,7 +78,7 @@ class MysqlDumpManager extends BaseDumpManager
         }
         if (YII_ENV_DEV) {
             $arguments = ArrayHelper::merge($arguments, [
-            'C:/wamp/bin/mysql/mysql5.5.24/bin/mysql',
+            'C:/wamp64/bin/mysql/mysql5.7.26/bin/mysql',
             '--host=' . $dbInfo['host'],
             '--port=' . $dbInfo['port'],
             '--user=' . $dbInfo['username'],

@@ -10,9 +10,9 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
-        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '180092cfc969a12e06f2132a203a3184' => __DIR__ . '/..' . '/codeception/verify/src/Codeception/function.php',
     );
 
@@ -90,6 +90,8 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         'M' => 
         array (
             'Mpdf\\' => 5,
+            'Monolog\\' => 8,
+            'Mero\\Monolog\\' => 13,
         ),
         'L' => 
         array (
@@ -304,6 +306,14 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         'Mpdf\\' => 
         array (
             0 => __DIR__ . '/..' . '/mpdf/mpdf/src',
+        ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'Mero\\Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mero/yii2-monolog/src/Mero/Monolog',
         ),
         'League\\Flysystem\\' => 
         array (

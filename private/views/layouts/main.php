@@ -294,7 +294,8 @@ try {
                                             '<div class="dropdown-divider"></div>',
                                             ['label' => 'Backup', 'url' => ['/db-manager']],
                                             '<div class="dropdown-divider"></div>',
-
+                                            ['label' => 'Logs', 'url' => ['/logs']],
+                                            '<div class="dropdown-divider"></div>',
                                             [
                                                 'label' => 'Cambiar contraseña',
                                                 'url' => ['/user/cambiarpass'],

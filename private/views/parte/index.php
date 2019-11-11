@@ -201,9 +201,9 @@ if(in_array (Yii::$app->user->identity->role, [1]))
                 'value' => function($model){
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
                    if ($model['fecha'] == date('Y-m-d')){
-                        return Yii::$app->formatter->asDate($model['fecha'], 'dd-MM-yyyy').' (HOY)';
+                        return Yii::$app->formatter->asDate($model['fecha'], 'dd/MM/yyyy').' (HOY)';
                    } 
-                   return Yii::$app->formatter->asDate($model['fecha'], 'dd-MM-yyyy');
+                   return Yii::$app->formatter->asDate($model['fecha'], 'dd/MM/yyyy');
                 }
             ],
             [   

@@ -133,7 +133,7 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    public function actionError()
+   /* public function actionError()
     {
        $excepcion = Yii::$app->errorHandler->exception;
        if($excepcion !==null){
@@ -142,7 +142,7 @@ class SiteController extends Controller
         }
 
         
-    }
+    }*/
 
     /**
      * Displays contact page.

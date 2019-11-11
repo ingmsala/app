@@ -303,6 +303,7 @@ class DetallecatedraSearch extends Detallecatedra
         $query = Detallecatedra::find()
             ->joinWith(['catedra0', 'catedra0.actividad0'])
             ->where(['catedra.division' => $division])
+            ->andWhere(['<>', 'actividad.id', 183])
             ->andWhere(['revista' => 6])
             ->orderBy('actividad.nombre');
 

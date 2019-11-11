@@ -294,6 +294,18 @@ class HorarioexamenController extends Controller
         $horarioexamen = $this->findModel($id);
         $anioxtrimestral = $horarioexamen->anioxtrimestral;
         $division = $horarioexamen->catedra0->division;
+
+        $monologComponent = Yii::$app->monolog;
+            if($horarioexamen->tipo == 2)
+                $logger = $monologComponent->getLogger("horarioexamen");
+            else
+                $logger = $monologComponent->getLogger("horariocoloquio");
+            $logger->log('error', json_encode([
+                "username" => Yii::$app->user->identity->username,
+                "action" => Yii::$app->controller->action->id,
+                "modelnew" => $horarioexamen->getAttributes(),
+                "modelold" => [],
+            ]));
         $horarioexamen->delete();
         if($h == 0){
             return $this->redirect(['index', 'id'=>$anioxtrimestral]);
@@ -558,9 +570,22 @@ class HorarioexamenController extends Controller
         $model->tipo = $tipo;
         $model->anioxtrimestral = $alxtrim;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            
-               return $this->redirect(['/horarioexamen/completoxcurso', 'division' => $division, 'vista' => 'docentes', 'col' => $col]);
+        if ($model->load(Yii::$app->request->post())) {
+
+
+            $model->save();
+            $monologComponent = Yii::$app->monolog;
+            if($tipo == 2)
+                $logger = $monologComponent->getLogger("horarioexamen");
+            else
+                $logger = $monologComponent->getLogger("horariocoloquio");
+            $logger->log('info', json_encode([
+                "username" => Yii::$app->user->identity->username,
+                "action" => Yii::$app->controller->action->id,
+                "modelnew" => $model->getAttributes(),
+                "modelold" => [],
+            ]));
+            return $this->redirect(['/horarioexamen/completoxcurso', 'division' => $division, 'vista' => 'docentes', 'col' => $col]);
         }
 
         
@@ -619,6 +644,18 @@ class HorarioexamenController extends Controller
            //    $model->catedra = $model->catedra;
 
             $model->anioxtrimestral = $alxtrim;
+
+            $monologComponent = Yii::$app->monolog;
+            if($tipo == 2)
+                $logger = $monologComponent->getLogger("horarioexamen");
+            else
+                $logger = $monologComponent->getLogger("horariocoloquio");
+            $logger->log('warning', json_encode([
+                "username" => Yii::$app->user->identity->username,
+                "action" => Yii::$app->controller->action->id,
+                "modelnew" => $model->getAttributes(),
+                "modelold" => $model->getOldAttributes(),
+            ]));
            $model->save();
 
             return $this->redirect(['/horarioexamen/completoxcurso', 'division' => $division, 'vista' => 'docentes', 'col' => $col]);

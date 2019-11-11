@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="well">
         <?php $form = ActiveForm::begin([
-            'action' => ['create'],
+            'action' => ['nuevoajax'],
             'method' => 'post',
             'layout' => 'inline',
         ]) ?>

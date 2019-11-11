@@ -3,26 +3,26 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Horario;
+use app\config\Globales;
 use app\models\Actividad;
-use app\models\Detallecatedra;
-use app\models\HorarioSearch;
-use app\models\DetallecatedraSearch;
-use app\models\Hora;
-use app\models\Division;
-use app\models\Preceptoria;
 use app\models\Catedra;
-use app\models\Docente;
+use app\models\Detallecatedra;
+use app\models\DetallecatedraSearch;
 use app\models\Diasemana;
+use app\models\Division;
+use app\models\Docente;
+use app\models\Hora;
+use app\models\Horario;
+use app\models\HorarioSearch;
+use app\models\Preceptoria;
 use app\models\Tipoparte;
-
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
-use app\config\Globales;
+use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 /**
  * HorarioController implements the CRUD actions for Horario model.
@@ -37,7 +37,7 @@ class HorarioController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto', 'menuopciones'],
+                'only' => ['view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto', 'menuopciones'.'migrarhorarioprueba'],
                 'rules' => [
                     [
                         'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'filtropormateria', 'horariocompleto', 'menuopciones'],   
@@ -130,7 +130,7 @@ class HorarioController extends Controller
                    
 
                     [
-                        'actions' => ['index', 'view', 'create', 'update'],   
+                        'actions' => ['index', 'view', 'create', 'update', 'readlog', 'migrarhorarioprueba'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -218,6 +218,22 @@ class HorarioController extends Controller
         return $this->render('menuopcionespublic', [
             'h' => $h,
             'docente' => $docente,
+            
+
+        ]);
+    }
+
+    public function actionPdfprevios()
+    {
+         if(isset(Yii::$app->user->identity->role))
+                $this->layout = 'mainvacio';
+            else
+                $this->layout = 'mainpublic';
+        
+        
+       
+        return $this->render('pdfprevios', [
+            
             
 
         ]);
@@ -382,8 +398,16 @@ class HorarioController extends Controller
                 //return var_dump($model2);
                 $valid = $model2->validate();
                 if($valid){
-                    
+
                     $model2->save();
+                    $monologComponent = Yii::$app->monolog;
+                    $logger = $monologComponent->getLogger("horarioclase");
+                    $logger->log('info', json_encode([
+                        "username" => Yii::$app->user->identity->username,
+                        "action" => Yii::$app->controller->action->id,
+                        "modelnew" => $model2->getAttributes(),
+                        "modelold" => [],
+                    ]));
                 }else{
                     $tr = false;
                     $model->addError('tipo', 'Ya está asignada la hora');
@@ -428,7 +452,18 @@ class HorarioController extends Controller
            //    $model->catedra = $model->catedra;
 
 
-           $model->save();
+           
+
+           $monologComponent = Yii::$app->monolog;
+                    $logger = $monologComponent->getLogger("horarioclase");
+                    $logger->log('warning', json_encode([
+                        "username" => Yii::$app->user->identity->username,
+                        "action" => Yii::$app->controller->action->id,
+                        "modelold" => $model->getOldAttributes(),
+                        "modelnew" => $model->getAttributes(),
+                    ]));
+
+            $model->save();
 
             return $this->redirect(['/horario/completoxcurso', 'division' => $division, 'vista' => 'docentes']);
         }
@@ -478,6 +513,16 @@ class HorarioController extends Controller
     {
         $horario = $this->findModel($id);
         $division = $horario->catedra0->division;
+
+        $monologComponent = Yii::$app->monolog;
+        $logger = $monologComponent->getLogger("horarioclase");
+        $logger->log('error', json_encode([
+            "username" => Yii::$app->user->identity->username,
+            "action" => Yii::$app->controller->action->id,
+            "modelnew" => $horario->getAttributes(),
+            "modelold" => [],
+        ]));
+
         $horario->delete();
 
         return $this->redirect(['/horario/completoxcurso', 'division' => $division, 'vista' => 'docentes']);
@@ -489,6 +534,10 @@ class HorarioController extends Controller
     {
     	//$division = 1;
     	//$dia = 3;
+        if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
+            return $this->redirect(Yii::$app->request->referrer);
+        }
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
     	$searchModel = new HorarioSearch();
@@ -627,6 +676,10 @@ class HorarioController extends Controller
     {
         //$division = 1;
         //$dia = 3;
+        if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
+            return $this->redirect(Yii::$app->request->referrer);
+        }
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
         $searchModel = new HorarioSearch();
@@ -715,6 +768,8 @@ class HorarioController extends Controller
 
     public function actionHorarioclasespublic($docente)
     {
+        Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
+        return $this->redirect(Yii::$app->request->referrer);
         $this->layout = 'mainpublic';
         $docente = Docente::find()
                 ->joinWith('detallecatedras')
@@ -726,6 +781,10 @@ class HorarioController extends Controller
 
     public function actionCompletoxdocente($docente)
     {
+        if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
+            return $this->redirect(Yii::$app->request->referrer);
+        }
         return $this->getCompletoxdocentepage($docente);
     }
 
@@ -1417,5 +1476,127 @@ class HorarioController extends Controller
         //return $this->redirect(['horario/panelprincipal']);
         return $this->render('menuopciones');
     }
+
+    public function actionReadlog($tipo)
+    {
+        if($tipo == 1){
+            $path = Url::to("@app/runtime/logs/")."horarioclase.log";
+            $title = "Horario a clases";
+        }
+        elseif($tipo == 2){
+            $path = Url::to("@app/runtime/logs/")."horarioexamen.log";
+            $title = "Horario a trimestrales";
+        }
+        elseif($tipo == 3){
+            $path = Url::to("@app/runtime/logs/")."horariocoloquio.log";
+            $title = "Horario a coloquios";
+        }
+        $file = new \SplFileObject($path);
+        $out = [];
+        while (!$file->eof()) {
+            $out[]= explode (" ", $file->fgets());
+            //$out[]=$file->fgets();
+            //$line = explode("\t", $line);
+          
+        }
+        $out2 = [];
+        foreach ($out as $line) {
+            if(isset($line[1])){
+                $line[0] = substr($line[0],1);
+                $line[1] = substr($line[1],0,8);
+                if($line[2] == 'horarioclase.INFO:')
+                    $line[2] = "Alta";
+                elseif($line[2] == 'horarioclase.WARNING:')
+                    $line[2] = "Actualización";
+                else
+                    $line[2] = "Borrado";
+                $line[3] = json_decode( $line[3]);
+                unset($line[4]);
+                unset($line[5]);
+                $out2[] = $line;
+            }
+            
+            
+        }
+
+        
+
+        $filteredresultData = array_filter($out2, function ($item) {
+            $mailfilter = Yii::$app->request->getQueryParam('filteremail', '');
+            $materiafilter = Yii::$app->request->getQueryParam('filtermateria', '');
+            if (strlen($mailfilter) > 0 || strlen($materiafilter) > 0) {
+                $materiafilter = strtoupper($materiafilter);
+
+                $cat = Catedra::findOne($item['3']->modelnew->catedra);
+
+                foreach ($cat->detallecatedras as $dc) {
+                    if ($dc->revista == 6){
+                        $doc = $dc->docente0->apellido.', '.$dc->docente0->nombre;
+                        break;
+                    }
+                }
+                $div = strlen($mailfilter) > 0 ? strpos(Catedra::findOne($item['3']->modelnew->catedra)->division0->nombre, $mailfilter) : true;
+                $mat = false;
+                if (strlen($materiafilter) > 0)
+
+                   if(strpos($doc,$materiafilter) !== false){
+                        $mat = true;
+                   }else{
+                        $mat = strpos(Catedra::findOne($item['3']->modelnew->catedra)->actividad0->nombre, $materiafilter);
+                   }
+                else
+                    $mat = true;
+
+                if ($div !== false && $mat !== false) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        });
+
+
+        $mailfilter = Yii::$app->request->getQueryParam('filteremail', '');
+        $materiafilter = Yii::$app->request->getQueryParam('filtermateria', '');
+
+        $searchModel = ['ee' => $mailfilter, 'materia' => $materiafilter];
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => array_reverse($filteredresultData),
+            'pagination' => false,
+            'sort' => [
+                'attributes' => ['0', '1'],
+            ]
+            
+        ]);
+        return $this->render('readlog', [
+            'dataProvider' => $dataProvider,
+            'title' => $title,
+            'searchModel' => $searchModel,
+            'divisiones' => Division::find()->all(),
+            
+        ]);
+        
+
+    }
+
+    public function actionMigrarhorarioprueba($aniolectivo)
+    {
+        $horariosactuales = Horario::find()->where(['aniolectivo' => $aniolectivo])->all();
+        $c = 0;
+        foreach ($horariosactuales as $horario) {
+            $nuevohorario = new Horario();
+            $nuevohorario = $horario;
+            $nuevohorario->aniolectivo = $horario->aniolectivo+1;
+            //$nuevohorario->save();
+            $c++;
+        }
+        Yii::$app->session->setFlash('success', "Se realizó la migración de {$c} horarios.");
+        return $this->redirect(['/horario/panelprincipal']);
+    }
+
+
 
 }

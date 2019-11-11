@@ -55,6 +55,51 @@ $config = [
                 ],
             ],
         ],
+        'monolog' => [
+            'class' => '\Mero\Monolog\MonologComponent',
+            'channels' => [
+                'main' => [
+                    'handler' => [
+                        [
+                            'type' => 'stream',
+                            'path' => '@app/runtime/logs/main_' . date('Y-m-d') . '.log',
+                            'level' => 'debug'
+                        ]
+                    ],
+                    'processor' => [],
+                ],
+                'horarioclase' => [
+                    'handler' => [
+                        [
+                            'type' => 'stream',
+                            'path' => '@app/runtime/logs/horarioclase.log',
+                            'level' => 'debug',
+                        ]
+                    ],
+                    'processor' => [],
+                ],
+                'horarioexamen' => [
+                    'handler' => [
+                        [
+                            'type' => 'stream',
+                            'path' => '@app/runtime/logs/horarioexamen.log',
+                            'level' => 'debug',
+                        ]
+                    ],
+                    'processor' => [],
+                ],
+                'horariocoloquio' => [
+                    'handler' => [
+                        [
+                            'type' => 'stream',
+                            'path' => '@app/runtime/logs/horariocoloquio.log',
+                            'level' => 'debug',
+                        ]
+                    ],
+                    'processor' => [],
+                ],
+            ],
+        ],
         'db' => $db,
         'assetManager' => [
             'bundles' => [

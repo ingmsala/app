@@ -43,7 +43,7 @@ class DefaultController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_PRECEPTORIA]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -149,12 +149,12 @@ class DefaultController extends Controller
     {
         //date_default_timezone_set('America/Argentina/Buenos_Aires');
         $param = Yii::$app->request->post();
-        $id = $param['id'];
+        $id = "ok";
         $dataArray = $this->prepareFileData();
 
         $todayBackup = false;
 
-        foreach ($dataArray as $backup) {
+        /*foreach ($dataArray as $backup) {
             $createAt = Yii::$app->formatter->asDate($backup['create_at'], 'yyyy-MM-dd');
             if ($createAt == date('Y-m-d')){
                 $todayBackup = true;
@@ -162,10 +162,10 @@ class DefaultController extends Controller
             
         }
 
-        //return var_dump($dataArray[]['create_at']);
+        
 
          
-        if(!$todayBackup){
+        if(!$todayBackup){*/
 
 
             $model = new Dump($this->getModule()->dbList, $this->getModule()->customDumpOptions);
@@ -182,9 +182,11 @@ class DefaultController extends Controller
                 $this->runProcess($dumpCommand);
             }
         
-        }else{
+        /*}else{
+            Yii::$app->session->setFlash('error', 'Ya hay creada una del dia');
             $id='no se creo xq existe';
-        }
+        }*/
+        return $this->redirect(['index']);
         return $id;
     }
 

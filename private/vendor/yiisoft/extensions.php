@@ -256,4 +256,13 @@ return array (
       '@kartik/nav' => $vendorDir . '/kartik-v/yii2-nav-x/src',
     ),
   ),
+  'mero/yii2-monolog' => 
+  array (
+    'name' => 'mero/yii2-monolog',
+    'version' => '0.1.2.0',
+    'alias' => 
+    array (
+      '@Mero/Monolog' => $vendorDir . '/mero/yii2-monolog/src/Mero/Monolog',
+    ),
+  ),
 );
