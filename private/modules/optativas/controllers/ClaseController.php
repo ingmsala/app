@@ -4,6 +4,7 @@ namespace app\modules\optativas\controllers;
 
 use Yii;
 use app\modules\optativas\models\Clase;
+use app\modules\optativas\models\Acta;
 use app\modules\optativas\models\Comision;
 use app\modules\optativas\models\Optativa;
 use app\modules\optativas\models\Matricula;
@@ -52,6 +53,12 @@ class ClaseController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
+                                $clase = Clase::findOne(Yii::$app->request->queryParams['id']);
+                                if(
+                                    count(Acta::find()->where(['comision' => $clase->comision])->andWhere(['estadoacta' => 2])->all()) > 0){
+                                    Yii::$app->session->setFlash('info', "No se puede realizar la acción ya que la comisión tiene un acta en estado cerrado");
+                                    return false;
+                                }
                                 return in_array (Yii::$app->user->identity->role, [1,8,9]);
                             }catch(\Exception $exception){
                                 return false;

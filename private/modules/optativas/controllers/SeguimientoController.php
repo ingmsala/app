@@ -3,6 +3,9 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;
+use app\models\Docente;
+use app\modules\optativas\models\Acta;
+use app\modules\optativas\models\Docentexcomision;
 use app\modules\optativas\models\Estadoseguimiento;
 use app\modules\optativas\models\Matricula;
 use app\modules\optativas\models\MatriculaSearch;
@@ -34,7 +37,34 @@ class SeguimientoController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1,8]);
+                                if(in_array (Yii::$app->user->identity->role, [1,8])){
+                                    $autoriza = false;
+                                    if($_GET['r'] == 'optativas/seguimiento/create')
+                                        $matricula = Matricula::findOne(Yii::$app->request->queryParams['id']);
+                                    else
+                                        $matricula = Seguimiento::findOne(Yii::$app->request->queryParams['id'])->matricula0;
+                                    
+                                    $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    $cant = count(Docentexcomision::find()
+                                                        ->where(['comision' => $matricula->comision])
+                                                        ->andWhere(['docente' => $docente->id])
+                                                        ->all());
+                                        if($cant>0){
+                                            $autoriza = true;
+                                        }
+
+
+                                    
+
+                                    if(
+                                        count(Acta::find()->where(['comision' => $matricula->comision])->andWhere(['estadoacta' => 2])->all()) > 0){
+                                        Yii::$app->session->setFlash('info', "No se puede realizar la acción ya que la comisión tiene un acta en estado cerrado");
+                                        $autoriza = false;
+                                    }
+                                    return $autoriza;
+                                }
+                                return false;
+                                
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -42,11 +72,39 @@ class SeguimientoController extends Controller
 
                     ],
                     [
-                        'actions' => ['index', 'view'],   
+                        'actions' => ['index'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
                                 return in_array (Yii::$app->user->identity->role, [1,3,6,8,9,12,13]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['view'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                if(in_array (Yii::$app->user->identity->role, [1,3,6,12,13]))
+                                    return true;
+                                elseif(in_array (Yii::$app->user->identity->role, [8,9])){
+                                    $matricula = Matricula::findOne(Yii::$app->request->queryParams['id']);
+                                    $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    $cant = count(Docentexcomision::find()
+                                                    ->where(['comision' => $matricula->comision])
+                                                    ->andWhere(['docente' => $docente->id])
+                                                    ->all());
+                                    if($cant>0){
+                                        return true;
+                                    }
+                                }
+                                    
+                                
+                                
+                                return false;
                             }catch(\Exception $exception){
                                 return false;
                             }

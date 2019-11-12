@@ -49,9 +49,9 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            /*'error' => [
+            'error' => [
                 'class' => 'yii\web\ErrorAction',
-            ],*/
+            ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
@@ -64,6 +64,8 @@ class SiteController extends Controller
      *
      * @return string
      */
+    
+
     public function actionIndex()
     {
         if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){

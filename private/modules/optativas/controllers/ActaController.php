@@ -41,7 +41,20 @@ class ActaController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_DOCENTE, Globales::US_PRECEPTOR]);
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_COORDINACION]))
+                                    return true;
+                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+                                    $acta = $this->findModel(Yii::$app->request->queryParams['id']);
+                                    $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    $cant = count(Docentexcomision::find()
+                                                    ->where(['comision' => $acta->comision])
+                                                    ->andWhere(['docente' => $docente->id])
+                                                    ->all());
+                                    if($cant>0){
+                                        return true;
+                                    }
+                                }
+                                return false;
                                 
                             }catch(\Exception $exception){
                                 return false;
@@ -85,7 +98,21 @@ class ActaController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_PRECEPTOR]);
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]))
+                                    return true;
+                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+                                    $acta = $this->findModel(Yii::$app->request->queryParams['id']);
+                                    $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    $cant = count(Docentexcomision::find()
+                                                    ->where(['comision' => $acta->comision])
+                                                    ->andWhere(['docente' => $docente->id])
+                                                    ->all());
+                                    if($cant>0){
+                                        return true;
+                                    }
+                                }
+                                return false;
+                                
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -98,7 +125,21 @@ class ActaController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_PRECEPTOR]);
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]))
+                                    return true;
+                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+                                    $acta = $this->findModel(Yii::$app->request->queryParams['id']);
+                                    $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    $cant = count(Docentexcomision::find()
+                                                    ->where(['comision' => $acta->comision])
+                                                    ->andWhere(['docente' => $docente->id])
+                                                    ->all());
+                                    if($cant>0){
+                                        return true;
+                                    }
+                                }
+                                return false;
+                                
                             }catch(\Exception $exception){
                                 return false;
                             }

@@ -4,10 +4,12 @@ namespace app\modules\optativas\controllers;
 
 use Yii;
 use app\config\Globales;
+use app\models\Docente;
 use app\modules\optativas\models\Acta;
 use app\modules\optativas\models\Detalleacta;
 use app\modules\optativas\models\DetalleactaSearch;
 use app\modules\optativas\models\Detalleescalanota;
+use app\modules\optativas\models\Docentexcomision;
 use app\modules\optativas\models\Estadoseguimiento;
 use app\modules\optativas\models\Seguimiento;
 use kartik\grid\EditableColumnAction;
@@ -40,7 +42,21 @@ class DetalleactaController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_PRECEPTOR, Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_COORDINACION]);
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_COORDINACION]))
+                                    return true;
+                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+                                    $acta = Acta::findOne(Yii::$app->request->queryParams['acta_id']);
+                                    $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    $cant = count(Docentexcomision::find()
+                                                    ->where(['comision' => $acta->comision])
+                                                    ->andWhere(['docente' => $docente->id])
+                                                    ->all());
+                                    if($cant>0){
+                                        return true;
+                                    }
+                                }
+                                return false;
+                                
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -52,8 +68,22 @@ class DetalleactaController extends Controller
                         'actions' => ['editdetalleacta'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
-                            try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_PRECEPTOR]);
+                           try{
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]))
+                                    return true;
+                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+                                    $acta = Acta::findOne(Yii::$app->request->queryParams['acta_id']);
+                                    $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    $cant = count(Docentexcomision::find()
+                                                    ->where(['comision' => $acta->comision])
+                                                    ->andWhere(['docente' => $docente->id])
+                                                    ->all());
+                                    if($cant>0){
+                                        return true;
+                                    }
+                                }
+                                return false;
+                                
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -66,7 +96,21 @@ class DetalleactaController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_PRECEPTOR]);
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]))
+                                    return true;
+                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+                                    $acta = Acta::findOne(Yii::$app->request->queryParams['acta_id']);
+                                    $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    $cant = count(Docentexcomision::find()
+                                                    ->where(['comision' => $acta->comision])
+                                                    ->andWhere(['docente' => $docente->id])
+                                                    ->all());
+                                    if($cant>0){
+                                        return true;
+                                    }
+                                }
+                                return false;
+                                
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -193,9 +237,9 @@ class DetalleactaController extends Controller
         $searchModel = new DetalleactaSearch();
         $dataProvider = $searchModel->alumnosXacta($acta_id);
 
-        $zAprobados = count(Detalleacta::find()->where(['acta' => $acta_id])->andWhere(['detalleescala' => 1])->all());
-        $zRegulares = count(Detalleacta::find()->where(['acta' => $acta_id])->andWhere(['detalleescala' => 2])->all());
-        $zLibres = count(Detalleacta::find()->where(['acta' => $acta_id])->andWhere(['detalleescala' => 3])->all());
+        $zAprobados = count(Detalleacta::find()->joinWith(['detalleescala0'])->where(['acta' => $acta_id])->andWhere(['detalleescalanota.condicionnota' => 1])->all());
+        $zRegulares = count(Detalleacta::find()->joinWith(['detalleescala0'])->where(['acta' => $acta_id])->andWhere(['detalleescalanota.condicionnota' => 2])->all());
+        $zLibres = count(Detalleacta::find()->joinWith(['detalleescala0'])->where(['acta' => $acta_id])->andWhere(['detalleescalanota.condicionnota' => 3])->all());
 
         return $this->render($url, [
             //'searchModel' => $searchModel,

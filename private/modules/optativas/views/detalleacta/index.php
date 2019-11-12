@@ -1,6 +1,7 @@
 <?php
 
 use app\config\Globales;
+use kartik\editable\Editable;
 use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -56,22 +57,17 @@ foreach ($docentes as $docente) {
                     'bordered' => false,
                     
                     'after' => '<div id="foot" class="container-fluid"><div class="row" style="text-align: center;">
-                                    <div class="col-xs-3">
+                                    <div class="col-xs-6">
                                         <center>
-                                            Aprobado <br />
+                                            Aprobados <br />
                                             '.$zAprobados.'
                                         </center>
                                         
                                     </div>
-                                    <div class="col-xs-3">
+                                    
+                                    <div class="col-xs-6">
                                         <center>
-                                            Regular <br />
-                                            '.$zRegulares.'
-                                        </center>
-                                    </div>
-                                    <div class="col-xs-3">
-                                        <center>
-                                            Libre <br />
+                                            Desaprobados <br />
                                             '.$zLibres.'
                                         </center>
                                     </div>
@@ -124,6 +120,8 @@ foreach ($docentes as $docente) {
                 'label' => 'Nota',
                 'class' => 'kartik\grid\EditableColumn',
                 'attribute' => 'detalleescala',
+                
+                
                 'contentOptions' => function ($model, $key, $index, $column) {
                     return ['style' => 'background-color:' 
                         . (empty($model->detalleescala)

@@ -45,7 +45,7 @@ in_array (Yii::$app->user->identity->role, [1,8]) ? $template = '{update} {delet
                 
             ],
 
-            /*[
+            [
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => $template,
                 
@@ -66,7 +66,7 @@ in_array (Yii::$app->user->identity->role, [1,8]) ? $template = '{update} {delet
                     
                 ]
 
-            ],*/
+            ],
             
         ],
     ]); ?>

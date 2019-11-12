@@ -116,11 +116,13 @@ public function behaviors()
 	            'sql' => 'SELECT
 						    seg.id AS tracking_id,
 						    fecha AS tracking_date,
-						    CONCAT(ts.nombre, " - ", descripcion) AS tracking_detail
+						    CONCAT(UPPER(ts.nombre), " - ", descripcion, " - ", COALESCE(UPPER(es.nombre), "")) AS tracking_detail
 						    FROM
 						        seguimiento seg
 						    LEFT JOIN 
 						        tiposeguimiento ts ON seg.tiposeguimiento = ts.id
+						    LEFT JOIN 
+						        estadoseguimiento es ON seg.estadoseguimiento = es.id
 						    WHERE seg.matricula='.$enrollment_id,
 	            'pagination' => false,
 	        ]);

@@ -60,8 +60,8 @@ if(Yii::$app->request->get('cl')==1){
         ],
 
         'toolbar'=>[
-            ['content' => 
-                Html::submitButton('Nueva Acta', ['class' => 'btn btn-success'])
+            ['content' => !(Yii::$app->request->get('cl')==1) ?
+                Html::submitButton('Nueva Acta', ['class' => 'btn btn-success']) : ''
 
             ],
             

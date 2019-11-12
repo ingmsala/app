@@ -318,6 +318,8 @@ class ParteController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        
+        //return var_dump($newdatedesde);
         $tiposparte = Tipoparte::find()->all();
         if (isset ($_REQUEST['precepx'])) {
             $precepx = $_REQUEST['precepx'] ;
@@ -331,12 +333,17 @@ class ParteController extends Controller
         }
         if ($model->load(Yii::$app->request->post())) {
 
-            $desdeexplode = explode("/",$model->fecha);
-            $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
-            $model->fecha = $newdatedesde;
+            $desdeexplode2 = explode("/",$model->fecha);
+            
+            $newdatedesde2 = date("Y-m-d", mktime(0, 0, 0, $desdeexplode2[1], $desdeexplode2[0], $desdeexplode2[2]));
+            $model->fecha = $newdatedesde2;
             if($model->save())
                 return $this->redirect(['view', 'id' => $model->id]);
         }
+
+        $desdeexplode = explode("-",$model->fecha);
+        $newdatedesde = date("d/m/Y", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[2], $desdeexplode[0]));
+        $model->fecha = $newdatedesde;
 
         return $this->render('update', [
             'model' => $model,

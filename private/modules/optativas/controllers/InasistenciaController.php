@@ -3,12 +3,14 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;
+use app\modules\optativas\models\Acta;
+use app\modules\optativas\models\Clase;
 use app\modules\optativas\models\Inasistencia;
 use app\modules\optativas\models\InasistenciaSearch;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 
 /**
  * InasistenciaController implements the CRUD actions for Inasistencia model.
@@ -29,7 +31,17 @@ class InasistenciaController extends Controller
                         'actions' => ['index', 'view', 'create', 'update', 'delete', 'procesarausentes'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
+                            
+                            
                             try{
+
+                                $clase = Clase::findOne($_POST['clase']);
+                                                                
+                                if(
+                                    count(Acta::find()->where(['comision' => $clase->comision])->andWhere(['estadoacta' => 2])->all()) > 0){
+                                    Yii::$app->session->setFlash('info', "No se puede realizar la acción ya que la comisión tiene un acta en estado cerrado");
+                                    return false;
+                                }
                                 return in_array (Yii::$app->user->identity->role, [1,8,9]);
                             }catch(\Exception $exception){
                                 return false;
