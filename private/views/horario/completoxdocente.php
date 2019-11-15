@@ -29,6 +29,11 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 	          	echo  '<a class = "btn btn-default" href="'.Yii::$app->request->referrer.'"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>';
 	        ?>
 	    </div>
+	    <div  class="pull-right">
+	        <?php 
+	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/printxdocente&docente='.$docenteparam->id.'"><center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center></a>';;
+	        ?>
+	    </div>
 	</div>
 </div>
     
@@ -44,6 +49,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		        //'filterModel' => $searchModel,
 		        'responsiveWrap' => false,
 		        'summary' => false,
+		        //'condensed' => ($pr==0) ? false : true,
 		        'columns' => [
 		            ['class' => 'yii\grid\SerialColumn'],
 		            [
@@ -52,8 +58,10 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		                'hAlign' => 'center',
 		                'format' => 'raw',
 		                'attribute' => '0',
-		                'value' => function($model){
-		                	return '<span class="badge">'.$model['0'].'</span>';
+		                'value' => function($model) use($pr){
+		                	if($pr == 0)
+		                		return '<span class="badge">'.$model['0'].'</span>';
+		                	return $model['0'];
 		                }
 		            ],
 		            [
@@ -124,6 +132,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		        //'filterModel' => $searchModel,
 		        'responsiveWrap' => false,
 		        'summary' => false,
+		        //'condensed' => ($pr==0) ? false : true,
 		        'columns' => [
 		            ['class' => 'yii\grid\SerialColumn'],
 		            [
@@ -132,8 +141,10 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		                'hAlign' => 'center',
 		                'format' => 'raw',
 		                'attribute' => '0',
-		                'value' => function($model){
-		                	return '<span class="badge">'.$model['0'].'</span>';
+		                'value' => function($model) use($pr){
+		                	if($pr == 0)
+		                		return '<span class="badge">'.$model['0'].'</span>';
+		                	return $model['0'];
 		                }
 		            ],
 		            [

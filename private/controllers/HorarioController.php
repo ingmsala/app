@@ -16,6 +16,7 @@ use app\models\Horario;
 use app\models\HorarioSearch;
 use app\models\Preceptoria;
 use app\models\Tipoparte;
+use kartik\mpdf\Pdf;
 use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -37,7 +38,7 @@ class HorarioController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto', 'menuopciones'.'migrarhorarioprueba'],
+                'only' => ['view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto', 'menuopciones'.'migrarhorarioprueba', 'printxcurso', 'printxdocente'],
                 'rules' => [
                     [
                         'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'filtropormateria', 'horariocompleto', 'menuopciones'],   
@@ -73,7 +74,7 @@ class HorarioController extends Controller
                     ],
 
                     [
-                        'actions' => ['completoxcurso'],   
+                        'actions' => ['completoxcurso', 'printxcurso'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
@@ -142,7 +143,7 @@ class HorarioController extends Controller
 
                     ],
                     [
-                        'actions' => ['createdesdehorario','updatedesdehorario', 'delete'],   
+                        'actions' => ['createdesdehorario','updatedesdehorario', 'delete', 'printxdocente'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -533,17 +534,14 @@ class HorarioController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionCompletoxcurso($division, $vista)
-    {
-    	//$division = 1;
-    	//$dia = 3;
+    public function generarHorarioxCurso($division, $vista, $pr){
         if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
             Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
             return $this->redirect(Yii::$app->request->referrer);
         }
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
-    	$searchModel = new HorarioSearch();
+        $searchModel = new HorarioSearch();
         $paramdivision = Division::findOne($division);
         $h= [];
         if($paramdivision->turno == 1){
@@ -566,12 +564,12 @@ class HorarioController extends Controller
             $h[8] = '18:50 a 19:30';
         }
         $horarios = Horario::find()
-        	->joinWith(['catedra0'])
-        	//->where(['diasemana' => 2])
-        	->andWhere(['catedra.division' => $division])
-        	->andWhere(['tipo' => 1])
-        	->orderBy('diasemana, hora')
-        	->all();
+            ->joinWith(['catedra0'])
+            //->where(['diasemana' => 2])
+            ->andWhere(['catedra.division' => $division])
+            ->andWhere(['tipo' => 1])
+            ->orderBy('diasemana, hora')
+            ->all();
 
         $dias = Diasemana::find()->where(['not in', 'id',[1,7] ])->all();
         $horas = Hora::find()->all();
@@ -580,33 +578,33 @@ class HorarioController extends Controller
         $array = [];
         $salida = '';
         foreach ($dias as $dia) {
-			$ch = 0;
-        	foreach ($horas as $hora) {
-        		# code...
+            $ch = 0;
+            foreach ($horas as $hora) {
+                # code...
                 if($cd == 0)
                     $array[$hora->id][$cd] = $h[$ch+1]; 
                 if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]))
-        		  $array[$hora->id][$dia->id] = '<a class="btn btn-info btn-sm" href="?r=horario/createdesdehorario&division='.$division.'&hora='.$hora->id.'&diasemana='.$dia->id.'&tipo=1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>';
+                  $array[$hora->id][$dia->id] = '<a class="btn btn-info btn-sm" href="?r=horario/createdesdehorario&division='.$division.'&hora='.$hora->id.'&diasemana='.$dia->id.'&tipo=1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>';
                 else
                     $array[$hora->id][$dia->id] = "-";
-        		//$key = array_search($hora->id, array_column($horarios, 'hora'));
-        		//$salida .= $key;
-        		/*if ($horario->hora == $hora->id && $horario->diasemana == $dia->id){
+                //$key = array_search($hora->id, array_column($horarios, 'hora'));
+                //$salida .= $key;
+                /*if ($horario->hora == $hora->id && $horario->diasemana == $dia->id){
 
-        		
-        		}*/
-        		$ch = $ch + 1;
-        	}
-        	$cd = $cd + 1;
+                
+                }*/
+                $ch = $ch + 1;
+            }
+            $cd = $cd + 1;
         }
         $salida = '';
         foreach ($horarios as $horariox) {
-        	
-		                	foreach ($horariox->catedra0->detallecatedras as $dc) {
+            
+                            foreach ($horariox->catedra0->detallecatedras as $dc) {
 
-		                		$salida = '';
-		                		if ($dc->revista == 6){
-		                			//return var_dump($dc['revista']==1);
+                                $salida = '';
+                                if ($dc->revista == 6){
+                                    //return var_dump($dc['revista']==1);
                                     $superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->diasemana);
                                     if ($superpuesto[0]){
                                         ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
@@ -614,26 +612,29 @@ class HorarioController extends Controller
                                     }
                                     else
                                         $salida = $dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1);
-		                			break 1;
-		                		}else{
-		                			$salida = 'ss';
-		                		}
-		                	}
-		                   //return $salida;
-		    if($vista == 'docentes'){
+                                    break 1;
+                                }else{
+                                    $salida = 'ss';
+                                }
+                            }
+                           //return $salida;
+            if($vista == 'docentes'){
                 if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]))
+                    if($pr == 0)
                     $array[$horariox->hora][$horariox->diasemana] = '<a class="btn btn-link btn-sm" href="?r=horario/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&diasemana='.$horariox->diasemana.'&tipo=1">'.$salida.'</a>';
+                    else
+                        $array[$horariox->hora][$horariox->diasemana] = $salida;
                 else
                     $array[$horariox->hora][$horariox->diasemana] = $salida;
             }else
-        		$array[$horariox->hora][$horariox->diasemana] = $horariox->catedra0->actividad0->nombre;
+                $array[$horariox->hora][$horariox->diasemana] = $horariox->catedra0->actividad0->nombre;
         }
 
         $provider = new ArrayDataProvider([
-	        'allModels' => $array,
-	        
-	    ]);
-		//return var_dump($array);
+            'allModels' => $array,
+            
+        ]);
+        //return var_dump($array);
 
         $docente_materia_search = new DetallecatedraSearch();
         $dataProvider = $docente_materia_search->horario_doce_divi($division);
@@ -646,7 +647,124 @@ class HorarioController extends Controller
             'provider' => $provider,
             'paramdivision' => $paramdivision,
             'vista' => $vista,
+            'pr' => $pr,
         ]);
+    }
+
+    public function actionCompletoxcurso($division, $vista)
+    {
+    	return $this->generarHorarioxCurso($division, $vista, 0);
+        
+    }
+
+    public function actionPrintxcurso($division, $vista, $all = 0)
+    {
+        if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+        $this->layout = 'mainpublic';
+        if (YII_ENV_DEV) {
+            Yii::$app->getModule('debug')->instance->allowedIPs = [];
+        }
+        $salidaimpar = '';
+        
+        if($all){
+            ini_set("pcre.backtrack_limit", "5000000");
+            
+            if(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
+                $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+                $divisiones = Division::find()
+                        ->where(['preceptoria' => $pre->id])
+                        ->orderBy('id')
+                        ->all();
+            }else{
+                $divisiones = Division::find()
+                                        ->where(['in', 'turno', [1,2]])
+                                        ->orderBy('id')
+                                        ->all();
+            }
+
+            
+            foreach ($divisiones as $divi) {
+                $salidaimpar .=  $this->generarHorarioxCurso($divi->id, $vista, 1);
+            
+            }
+            $filenamesext = "Horario Completo de Clases";
+            $filename = $filenamesext.".pdf";
+        }else{
+            $di = Division::findOne($division);
+            $salidaimpar = $this->generarHorarioxCurso($division, $vista, 1);
+            $filenamesext = "Horario de Clases - {$di->nombre}";
+            $filename =$filenamesext.".pdf";
+        }
+        
+        
+        $content = $this->renderAjax('all', [
+                'salidaimpar' => $salidaimpar,
+                
+               
+            ]);
+
+        $pdf = new Pdf([
+        // set to use core fonts only
+        'mode' => Pdf::MODE_CORE, 
+        // A4 paper format
+        'format' => Pdf::FORMAT_A4, 
+        'marginTop' => 45,
+        // portrait orientation
+        'orientation' => Pdf::ORIENT_LANDSCAPE, 
+        // stream to browser inline
+        'destination' => Pdf::DEST_DOWNLOAD, 
+        'filename' => $filename, 
+        // your html content input
+        'content' => $content,  
+        // format content from your own css file if needed or use the
+        // enhanced bootstrap css built by Krajee for mPDF formatting 
+        //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+        // any css to be embedded if required
+        'cssInline' => '
+                
+                .horario-view{
+                    font-size = 8px;
+                }
+                .col-sm-2 {
+                        width: 7%;
+                        
+                   } 
+                .horarioxcurso-view{
+                    margin-top: -70px;
+                    max-height: 100%;
+                    overflow: hidden;
+                    page-break-after: always;
+                }
+
+                .pull-right {
+                    display: none;
+                }
+                
+
+                #encabezado{ 
+                    padding-bottom: 500px;
+                    
+                    width: 200px;
+
+                }', 
+         // set mPDF properties on the fly
+        'options' => ['title' => 'Colegio Nacional de Monserrat'],
+         // call mPDF methods on the fly
+        'methods' => [ 
+            //'defaultheaderline' => 0,
+            'SetHeader'=>['<span><img src="assets/images/logo-encabezado.png" /></span>'], 
+            'SetFooter'=>[date('d/m/Y')." - ".$filenamesext],
+        ]
+    ]);
+    
+    // return the pdf output as per the destination setting
+    
+    return $pdf->render();
+       
+        
     }
 
     public function horaSuperpuesta($dc, $hora, $diasemana){
@@ -779,7 +897,7 @@ class HorarioController extends Controller
                 ->where(['=', 'detallecatedra.revista', 6])
                 ->andWhere(['=', 'docente.legajo', $docente])
                 ->one();
-        return $this->getCompletoxdocentepage($docente->id, 1);
+        return $this->getCompletoxdocentepage($docente->id, 0, 0, 1);
     }
 
     public function actionCompletoxdocente($docente)
@@ -788,10 +906,115 @@ class HorarioController extends Controller
             Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
             return $this->redirect(Yii::$app->request->referrer);
         }
-        return $this->getCompletoxdocentepage($docente);
+        return $this->getCompletoxdocentepage($docente, 0, 0, 0);
     }
 
-    public function getCompletoxdocentepage($docente, $horario = 0)
+    public function actionPrintxdocente($docente, $all=0)
+    {
+        if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+
+        $this->layout = 'mainpublic';
+        if (YII_ENV_DEV) {
+            Yii::$app->getModule('debug')->instance->allowedIPs = [];
+        }
+        $salidaimpar = '';
+        
+        if($all){
+            ini_set("pcre.backtrack_limit", "5000000");
+            
+             $docentes = Docente::find()
+                            ->joinWith(['detallecatedras'])
+                            ->where(['=', 'detallecatedra.revista', 6])
+                            ->orderBy('docente.apellido, docente.nombre')
+                            ->all();
+            
+
+            
+            foreach ($docentes as $doce) {
+                $salidaimpar .=  $this->getCompletoxdocentepage($doce->id, 1, 1, 0);
+            
+            }
+            $filenamesext = "Horario de Clases por Docente Completo ";
+            $filename = $filenamesext.".pdf";
+        }else{
+            $docente = Docente::findOne($docente);
+            $salidaimpar = $this->getCompletoxdocentepage($docente->id, 1, 0, 0);
+            $filenamesext = "Horario de Clases - {$docente->apellido}, {$docente->nombre}";
+            $filename =$filenamesext.".pdf";
+        }
+        
+        
+        $content = $this->renderAjax('all', [
+                'salidaimpar' => $salidaimpar,
+                
+               
+            ]);
+
+        $pdf = new Pdf([
+        // set to use core fonts only
+        'mode' => Pdf::MODE_CORE, 
+        // A4 paper format
+        'format' => Pdf::FORMAT_A4, 
+        'marginTop' => 45,
+        // portrait orientation
+        'orientation' => Pdf::ORIENT_LANDSCAPE, 
+        // stream to browser inline
+        'destination' => Pdf::DEST_DOWNLOAD, 
+        'filename' => $filename, 
+        // your html content input
+        'content' => $content,  
+        // format content from your own css file if needed or use the
+        // enhanced bootstrap css built by Krajee for mPDF formatting 
+        //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+        // any css to be embedded if required
+        'cssInline' => '
+                
+                .horario-view{
+                    font-size = 8px;
+                }
+                .col-md-6 {
+                        width: 45%;
+                        float: left;
+                        
+                   } 
+                .horarioxcurso-view{
+                    margin-top: -70px;
+                    max-height: 100%;
+                    overflow: hidden;
+                    page-break-after: always;
+                }
+
+                .pull-right {
+                    display: none;
+                }
+                
+
+                #encabezado{ 
+                    padding-bottom: 500px;
+                    
+                    width: 200px;
+
+                }', 
+         // set mPDF properties on the fly
+        'options' => ['title' => 'Colegio Nacional de Monserrat'],
+         // call mPDF methods on the fly
+        'methods' => [ 
+            //'defaultheaderline' => 0,
+            'SetHeader'=>['<span><img src="assets/images/logo-encabezado.png" /></span>'], 
+            'SetFooter'=>[date('d/m/Y')." - ".$filenamesext],
+        ]
+    ]);
+    
+    // return the pdf output as per the destination setting
+    //return $salidaimpar;
+    return $pdf->render();
+        
+    }
+
+    public function getCompletoxdocentepage($docente, $pr = 0, $all = 0, $horario = 0)
     {
     	//$division = 1;
     	//$dia = 3;
@@ -926,6 +1149,7 @@ class HorarioController extends Controller
             'providerTm' => $providerTm,
             'providerTt' => $providerTt,
             'docenteparam' => $docenteparam,
+            'pr' => $pr,
             
         ]);
     }

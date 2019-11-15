@@ -67,6 +67,11 @@ JS;
 	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/menuxdivision"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>';
 	        ?>
 	    </div>
+	    <div  class="pull-right">
+	        <?php 
+	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/printxcurso&division='.$paramdivision->id.'&vista=materias"><center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center></a>';;
+	        ?>
+	    </div>
     </div>
     
     
@@ -78,6 +83,7 @@ JS;
 		        //'filterModel' => $searchModel,
 		        'summary' => false,
 		        'responsiveWrap' => false,
+		        'condensed' => ($pr==0) ? false : true,
 		        'columns' => [
 		            ['class' => 'yii\grid\SerialColumn'],
 		            [
@@ -86,8 +92,10 @@ JS;
 		                'hAlign' => 'center',
 		                'format' => 'raw',
 		                'attribute' => '0',
-		                'value' => function($model){
-		                	return '<span class="badge">'.$model['0'].'</span>';
+		                'value' => function($model) use ($pr){
+		                	if ($pr == 0)
+		                		return '<span class="badge">'.$model['0'].'</span>';
+		                	return $model['0'];
 		                }
 		            ],
 		            [
@@ -155,6 +163,7 @@ JS;
 		        //'filterModel' => $searchModel,
 		        'responsiveWrap' => false,
 		        'summary' => false,
+		        'condensed' => ($pr==0) ? false : true,
 		        'columns' => [
 		            ['class' => 'yii\grid\SerialColumn'],
 		            
@@ -169,10 +178,11 @@ JS;
 		            [
 		            	'label' => 'Docente',
 		            	'format' => 'raw',
-		            	'value' => function($model){
-
-		            			return Html::a($model->docente0->apellido.', '.$model->docente0->nombre, Url::to(['horario/completoxdocente', 'docente' => $model->docente]));
-		            		 
+		            	'value' => function($model) use($pr){
+		            			if($pr==0)
+		            				return Html::a($model->docente0->apellido.', '.$model->docente0->nombre, Url::to(['horario/completoxdocente', 'docente' => $model->docente]));
+		            		 	else
+		            		 		return $model->docente0->apellido.', '.$model->docente0->nombre;
 		            	}
 
 		            ],
@@ -181,7 +191,7 @@ JS;
 	                'class' => 'kartik\grid\ActionColumn',
 
 	                'template' => '{viewdetcat}',
-	                'visible' => (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTORIA])) ? true : false,
+	                'visible' => (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTORIA]) && ($pr==0)) ? true : false,
 	                
 	                'buttons' => [
 	                    'viewdetcat' => function($url, $model, $key){

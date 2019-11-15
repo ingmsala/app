@@ -17,6 +17,11 @@ $this->title = 'Seleccione una letra';
 	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/panelprincipal"><center><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br />Inicio</center></a>';
 	        ?>
 	    </div>
+	    <div  class="pull-right">
+	        <?php 
+	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/printxdocente&docente=0&all=1"><center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center></a>';;
+	        ?>
+	    </div>
 	</div>
 </div><?= 
     $echodiv;
