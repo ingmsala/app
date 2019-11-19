@@ -711,7 +711,8 @@ class HorarioController extends Controller
         'mode' => Pdf::MODE_CORE, 
         // A4 paper format
         'format' => Pdf::FORMAT_A4, 
-        'marginTop' => 45,
+        'marginTop' => 25,
+        'defaultFontSize' => '7pt',
         // portrait orientation
         'orientation' => Pdf::ORIENT_LANDSCAPE, 
         // stream to browser inline
@@ -725,8 +726,8 @@ class HorarioController extends Controller
         // any css to be embedded if required
         'cssInline' => '
                 
-                .horario-view{
-                    font-size = 8px;
+                .body{
+                    font-size = 7pt;
                 }
                 .col-sm-2 {
                         width: 7%;
@@ -742,14 +743,15 @@ class HorarioController extends Controller
                 .pull-right {
                     display: none;
                 }
-                
 
-                #encabezado{ 
-                    padding-bottom: 500px;
-                    
+                img{
                     width: 200px;
+                }
 
-                }', 
+                h1{
+                    font-size:x-large;
+                }
+                ', 
          // set mPDF properties on the fly
         'options' => ['title' => 'Colegio Nacional de Monserrat'],
          // call mPDF methods on the fly

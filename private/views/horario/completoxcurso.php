@@ -69,7 +69,7 @@ JS;
 	    </div>
 	    <div  class="pull-right">
 	        <?php 
-	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/printxcurso&division='.$paramdivision->id.'&vista=materias"><center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center></a>';;
+	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/printxcurso&division='.$paramdivision->id.'&vista='.$vista.'"><center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center></a>';;
 	        ?>
 	    </div>
     </div>
