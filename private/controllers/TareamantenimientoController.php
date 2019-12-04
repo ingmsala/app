@@ -33,11 +33,24 @@ class TareamantenimientoController extends Controller
                 'rules' => [
                     
                     [
-                        'actions' => ['index', 'view', 'create', 'historial'],   
+                        'actions' => ['create'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
                                     return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_MANTENIMIENTO, Globales::US_NOVEDADES]);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['index', 'view', 'historial'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_MANTENIMIENTO, Globales::US_NOVEDADES, Globales::US_CONSULTA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }

@@ -214,7 +214,19 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Gestionar Exámenes', 'url' => ['/anioxtrimestral']],
                                 '<div class="dropdown-divider"></div>',
+                                  ['label' => 'Mantenimiento',
+                            'items' => [
+
+                                ['label' => 'Tareas', 'url' => ['/tareamantenimiento']],
+                                '<div class="dropdown-divider"></div>',
+                                ['label' => 'Personal', 'url' => ['/nodocente']],
+                                '<div class="dropdown-divider"></div>',
                                 
+                                
+                            ],
+
+
+                    ],
                             ],
 
 
@@ -739,6 +751,19 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Espacios Optativos', 'url' => ['/optativas']],
                                 '<div class="dropdown-divider"></div>',
+                                  ['label' => 'Mantenimiento',
+                                    'items' => [
+
+                                        ['label' => 'Tareas', 'url' => ['/tareamantenimiento']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Personal', 'url' => ['/nodocente']],
+                                        '<div class="dropdown-divider"></div>',
+                                
+                                
+                            ],
+
+
+                    ],
                                 
                             ],
 

@@ -43,7 +43,7 @@ class TareamantenimientoSearch extends Tareamantenimiento
      */
     public function activos($params)
     {
-        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_NOVEDADES]))
+        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_NOVEDADES, Globales::US_CONSULTA]))
             $query = Tareamantenimiento::find()->where(['<>', 'estadotarea', 4])
                         ->orderBy('id DESC');
         else{
@@ -89,7 +89,7 @@ class TareamantenimientoSearch extends Tareamantenimiento
 
     public function realizados($params)
     {
-        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_NOVEDADES]))
+        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_NOVEDADES, Globales::US_CONSULTA]))
             $query = Tareamantenimiento::find()->where(['=', 'estadotarea', 4])->orderBy('id DESC');
         else{
             $query = Tareamantenimiento::find()
