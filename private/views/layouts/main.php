@@ -909,11 +909,72 @@ try {
 
                 
                 $items = [
+
+                    ['label' => 'Mantenimiento',
+                            'items' => [
+
+                                ['label' => 'Tareas', 'url' => ['/tareamantenimiento']],
+                                '<div class="dropdown-divider"></div>',
+                                ['label' => 'Personal', 'url' => ['/nodocente']],
+                                '<div class="dropdown-divider"></div>',
+                                
+                                
+                            ],
+
+
+                    ],
                         
                    ['label' => 'Panel de Novedades', 'url' => ['novedadesparte/panelnovedades']],
                           
                           ['label' => '<span id="button_cont"><i id="glibell" class="glyphicon glyphicon-bell" aria-hidden="true"></i><div style="display:'.$visi.'" class="button__badge">'.$cantnot.'</div></span>', 'url' => ['novedadesparte/panelnovedades']],      
                     
+                    
+                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
+                            
+                            'items' => [
+                                            
+                                            [
+                                                'label' => 'Cambiar contraseña',
+                                                'url' => ['/user/cambiarpass'],
+                                            ],
+                                
+                                            [
+                                                'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                                                'url' => ['/site/logout'],
+                                                'linkOptions' => ['data-method' => 'post'],
+                                            
+                                    
+                                            ],
+                                            '<div class="dropdown-divider"></div>',
+                                
+                             ],
+                    ],
+
+
+
+
+                ];
+
+
+            }elseif(Yii::$app->user->identity->role == Globales::US_MANTENIMIENTO){
+
+                
+                $items = [
+
+                    ['label' => 'Mantenimiento',
+                            'items' => [
+
+                                ['label' => 'Tareas', 'url' => ['/tareamantenimiento']],
+                                '<div class="dropdown-divider"></div>',
+                                
+                                
+                                
+                            ],
+
+
+                    ],
+                        
+                                       
                     
                     ['label' => 'Usuario: '.Yii::$app->user->identity->username,
                             

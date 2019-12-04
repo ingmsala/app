@@ -21,6 +21,7 @@ class Globales
 	const US_COORDINACION = 13;
 	const US_SREI = 14;
 	const US_HORARIO = 16;
+	const US_MANTENIMIENTO = 17;
 	
 	
 	const COND_SUPL = 5;

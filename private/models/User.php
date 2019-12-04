@@ -211,4 +211,10 @@ public function removePasswordResetToken() {
         return $this->hasOne(Docente::className(), ['legajo' => 'username']);
     }
 
+     public function getNodocente0()
+    {
+        return $this->hasOne(Nodocente::className(), ['legajo' => 'username']);
+    }
+
+
 }

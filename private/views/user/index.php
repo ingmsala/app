@@ -31,6 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function($model){
                     if ($model->docente0 != null)
                         return $model->docente0['apellido'].', '.$model->docente0['nombre'];
+                    elseif ($model->nodocente0 != null)
+                        return $model->nodocente0['apellido'].', '.$model->nodocente0['nombre'];
                     return '';
                 },
             ],

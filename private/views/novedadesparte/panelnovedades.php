@@ -1,6 +1,7 @@
 <?php
 
 use app\config\Globales;
+use app\models\Tareamantenimiento;
 use kartik\grid\GridView;
 use kartik\select2\Select2;
 use yii\bootstrap\Modal;
@@ -170,11 +171,28 @@ GridView::widget([
                             ($max>=$aux) ? $max=$max : $max=$aux;
                             $c=$c+1;
                         }
+
+                        if(in_array( $model->tiponovedad , [2,3])){
+                            if ($max ==  1)
+                                return '<center><span style="color:black;">Activo</span></center>';
+                            $tarea = Tareamantenimiento::find()->where(['novedadparte' => $model->id])->one();
+                            try {
+                                if($tarea->estadotarea0->nombre == 'Realizada')
+                                    return '<center><span style="color:green;">'.$tarea->estadotarea0->nombre.'</span></center>';
+                                elseif($tarea->estadotarea0->nombre == 'En trabajo')
+                                    return '<center><span style="color:red;">'.$tarea->estadotarea0->nombre.'</span></center>';
+                                return '<center><span style="color:orange;">'.$tarea->estadotarea0->nombre.'</span></center>';
+                            } catch (Exception $e) {
+                                
+                            }
+                            
+                        }
+
                         //return var_dump($model->estadoxnovedads);
                         if ($max ==  1)
-                            return '<center><span style="color:orange;">Activo</span></center>';
+                            return '<center><span style="color:black;">Activo</span></center>';
                         elseif($max ==  2)          
-                            return '<center><span style="color:green;">En proceso</span></center>';
+                            return '<center><span style="color:orange;">En proceso</span></center>';
                         elseif($max ==  3)          
                             return '<center><span style="color:green;">Finalizado</span></center>';
                         elseif($max ==  4)          
@@ -271,11 +289,12 @@ GridView::widget([
                         }
                         else
                             {
+                                $divbtn = '';
                                 if($model->tiponovedad == 7){
                                     $lab = ["Rechazar", "danger", "Pasar la ausencia a trimestral a estado 'Rechazada' y guardarla en el historial?",5];
                                     $lab2 = ["Aprobar", "success", "Pasar la ausencia a trimestral a estado 'Aceptada' y guardarla en el historial?",4];
                                     $lab3 = ["Presentó nota", "info", "Pasar la ausencia a trimestral a estado 'Presentó Nota - Pendiente de revisión'?",6];
-                                    $divbtn = '';
+                                    
                                     if($max != 2.5){
                                         $divbtn .= Html::a($lab3[0], '?r=novedadesparte/nuevoestado&id='.$model['id'].'&estado='.$lab3[3].'&page='.$page, ['class' => 'btn btn-'.$lab3[1].' btn-sm',
                                             'data' => [
@@ -302,14 +321,45 @@ GridView::widget([
                                 }
 
                                 else{
-                                    $lab = ["Finalizar", "success", "Pasar la novedad a estado 'Finalizada' y guardarla en el historial?",3];
-                                    $divbtn = Html::a($lab[0], '?r=novedadesparte/nuevoestado&id='.$model['id'].'&estado='.$lab[3].'&page='.$page, ['class' => 'btn btn-'.$lab[1].' btn-sm',
+                                    if(in_array( $model->tiponovedad , [2,3])){
+                                        $tarea = Tareamantenimiento::find()->where(['novedadparte' => $model->id])->one();
+
+                                        if($tarea == null){
+                                            $divbtn .= Html::button('Asignar tarea', ['value' => Url::to('index.php?r=tareamantenimiento/create&novedadesparte='.$model['id']), 'class' => 'modala btn btn-primary']);
+                                            $lab = ["Finalizar", "success", "Pasar la novedad a estado 'Finalizada' y guardarla en el historial?",3];
+                                            $divbtn .= Html::a($lab[0], '?r=novedadesparte/nuevoestado&id='.$model['id'].'&estado='.$lab[3].'&page='.$page, ['class' => 'btn btn-'.$lab[1].' btn-sm',
+                                            'data' => [
+                                            'confirm' => $lab[2],
+                                            'method' => 'post',
+                                             ]
+                                            
+                                            ]);
+                                        }
+                                        else{
+                                            $divbtn .= Html::button('Detalle de tarea', ['value' => Url::to('index.php?r=tareamantenimiento/view&id='.$tarea->id), 'class' => 'modala btn btn-info']);
+                                            if($tarea->estadotarea == 4){
+                                                $lab = ["Finalizar", "success", "Pasar la novedad a estado 'Finalizada' y guardarla en el historial?",3];
+                                                $divbtn .= Html::a($lab[0], '?r=novedadesparte/nuevoestado&id='.$model['id'].'&estado='.$lab[3].'&page='.$page, ['class' => 'btn btn-'.$lab[1].' btn-sm',
+                                                'data' => [
+                                                'confirm' => $lab[2],
+                                                'method' => 'post',
+                                                 ]
+                                                
+                                            ]);
+                                            }
+                                        }
+
+                                    }else{
+                                        $lab = ["Finalizar", "success", "Pasar la novedad a estado 'Finalizada' y guardarla en el historial?",3];
+                                        $divbtn .= Html::a($lab[0], '?r=novedadesparte/nuevoestado&id='.$model['id'].'&estado='.$lab[3].'&page='.$page, ['class' => 'btn btn-'.$lab[1].' btn-sm',
                                         'data' => [
                                         'confirm' => $lab[2],
                                         'method' => 'post',
                                          ]
                                         
                                         ]);
+                                    }
+                                    
                                 }
                             }
 

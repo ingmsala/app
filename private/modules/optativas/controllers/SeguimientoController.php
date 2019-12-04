@@ -39,6 +39,9 @@ class SeguimientoController extends Controller
                             try{
                                 if(in_array (Yii::$app->user->identity->role, [1,8])){
                                     $autoriza = false;
+                                     if(in_array (Yii::$app->user->identity->role, [1])){
+                                         return true;
+                                    }
                                     if($_GET['r'] == 'optativas/seguimiento/create')
                                         $matricula = Matricula::findOne(Yii::$app->request->queryParams['id']);
                                     else
@@ -53,7 +56,7 @@ class SeguimientoController extends Controller
                                             $autoriza = true;
                                         }
 
-
+                                   
                                     
 
                                     if(

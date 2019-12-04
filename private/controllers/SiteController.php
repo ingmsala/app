@@ -76,6 +76,9 @@ class SiteController extends Controller
                 $this->layout = 'mainvacio';
                 return $this->redirect(['/horario/menuopciones']);
             }
+        elseif(Yii::$app->user->identity->role == Globales::US_MANTENIMIENTO){
+            return $this->redirect(['/tareamantenimiento']);
+        }
         return $this->render('index');
     }
 
@@ -101,6 +104,8 @@ class SiteController extends Controller
             }elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
                 return $this->redirect(['/horario/menuopciones']);
+            }elseif(Yii::$app->user->identity->role == Globales::US_MANTENIMIENTO){
+                return $this->redirect(['/tareamantenimiento']);
             }
             
             return $this->goHome();
@@ -113,6 +118,8 @@ class SiteController extends Controller
             }elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
                 return $this->redirect(['/horario/menuopciones']);
+            }elseif(Yii::$app->user->identity->role == Globales::US_MANTENIMIENTO){
+                return $this->redirect(['/tareamantenimiento']);
             }
             return $this->goBack();
         }
