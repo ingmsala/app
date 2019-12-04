@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => "Género",
                 'attribute' => 'genero0.nombre',
             ],
+            'mail',
             
             
 

@@ -1,5 +1,7 @@
 <?php
 
+use app\config\Globales;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -44,7 +46,15 @@ $config = [
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => true,
+            'useFileTransport' => false,
+            'transport' => [
+                 'class' => 'Swift_SmtpTransport',
+                 'host' => 'smtp.gmail.com',  // ej. smtp.mandrillapp.com o smtp.gmail.com
+                 'username' => Globales::MAIL,
+                 'password' => Globales::PASS_MAIL,
+                 'port' => '587', // El puerto 25 es un puerto común también
+                 'encryption' => 'tls', // Es usado también a menudo, revise la configuración del servidor
+             ],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

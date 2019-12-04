@@ -19,7 +19,7 @@ class NodocenteSearch extends Nodocente
     {
         return [
             [['id', 'genero'], 'integer'],
-            [['legajo', 'apellido', 'nombre', 'documento'], 'safe'],
+            [['legajo', 'apellido', 'nombre', 'documento', 'mail'], 'safe'],
         ];
     }
 

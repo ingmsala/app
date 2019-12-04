@@ -13,7 +13,8 @@ use Yii;
  * @property string $nombre
  * @property int $genero
  * @property string $documento
- *
+ * @property string $mail 
+
  * @property Tareamantenimiento[] $tareamantenimientos
  */
 class Nodocente extends \yii\db\ActiveRecord
@@ -36,6 +37,8 @@ class Nodocente extends \yii\db\ActiveRecord
             [['genero'], 'integer'],
             [['legajo', 'documento'], 'string', 'max' => 8],
             [['apellido', 'nombre'], 'string', 'max' => 70],
+            [['mail'], 'string', 'max' => 150],
+            ['mail', 'email'],
             [['genero'], 'exist', 'skipOnError' => true, 'targetClass' => Genero::className(), 'targetAttribute' => ['genero' => 'id']],
             [['documento'], 'unique'],
             [['legajo'], 'unique'],
@@ -54,6 +57,7 @@ class Nodocente extends \yii\db\ActiveRecord
             'nombre' => 'Nombre',
             'genero' => 'Genero',
             'documento' => 'Documento',
+            'mail' => 'Mail',
         ];
     }
 

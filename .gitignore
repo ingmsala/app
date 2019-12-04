@@ -32,4 +32,5 @@ tests/_support/_generated
 #vagrant folder
 /.vagrant
 /private/config/db.php
+/private/config/globales.php
 /private/backup/*

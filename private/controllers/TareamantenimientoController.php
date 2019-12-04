@@ -13,6 +13,7 @@ use app\models\Tareamantenimiento;
 use app\models\TareamantenimientoSearch;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -187,6 +188,26 @@ class TareamantenimientoController extends Controller
         //$usuario = User::select()->find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if(false){
+                  if(Yii::$app->user->identity->role != Globales::US_MANTENIMIENTO){
+                    if($model->responsable != null){
+
+                        $responsable = Nodocente::findOne($model->responsable);
+                        if($responsable->mail != null){
+                            Yii::$app->mailer->compose()
+                             ->setFrom(Globales::MAIL)
+                             ->setTo($responsable->mail)
+                             ->setSubject('Nueva asignación de tarea')
+                             ->setHtmlBody('Se le ha asignado una nueva tarea de mantenimiento. Puede consultarla haciendo click '.Html::a('aquí', $url = 'http://admin.cnm.unc.edu.ar'))
+                             ->send();
+                        }
+                        
+                    }
+                    
+                }  
+            }
+            
+            
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
