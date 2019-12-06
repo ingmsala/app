@@ -188,7 +188,7 @@ class TareamantenimientoController extends Controller
         //$usuario = User::select()->find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if(false){
+            
                   if(Yii::$app->user->identity->role != Globales::US_MANTENIMIENTO){
                     if($model->responsable != null){
 
@@ -205,7 +205,7 @@ class TareamantenimientoController extends Controller
                     }
                     
                 }  
-            }
+            
             
             
             return $this->redirect(['view', 'id' => $model->id]);

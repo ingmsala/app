@@ -150,7 +150,7 @@ class CatedraController extends Controller
         
         $searchModel = new DetallecatedraSearch();
         $dataProvideractivo = $searchModel->providerxcatedra($id,Globales::DETCAT_ACTIVO);
-        $dataProviderinactivo = $searchModel->providerxcatedra($id,Globales::DETCAT_ACTIVO);
+        $dataProviderinactivo = $searchModel->providerxcatedra($id,Globales::DETCAT_INACTIVO);
         
         $searchModelHorario = new HorarioSearch();
         $dataProviderHoras = $searchModelHorario->search($id);

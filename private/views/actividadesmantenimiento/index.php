@@ -43,7 +43,23 @@ $this->title = 'Actividades de mantenimientos';
                     return $nodoc->apellido.', '.$nodoc->nombre;
                 }
             ],*/
-            'usuario0.username',
+            [
+                'label' => 'Usuario',
+                'value' => function($model){
+                        
+                         $nodocentes= Nodocente::find()
+                            ->where(['legajo' => $model->usuario0->username])
+                            ->orderBy('apellido, nombre')
+                            ->one();
+                            if($nodocentes == null){
+                                return $model->usuario0->username;
+                            }
+                            return $nodocentes->apellido.', '.$nodocentes->nombre;
+                        
+                    
+                }
+            ],
+            
             'observaciones:ntext',
 
             /*['class' => 'yii\grid\ActionColumn'],*/

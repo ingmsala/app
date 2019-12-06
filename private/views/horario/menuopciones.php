@@ -77,6 +77,12 @@ else{
           ?>
 
       </div>
+      
+
+    </div>
+
+    <div class="row contpanelprincipal">
+
       <div class="col-md-3"> 
           <?= 
             Html::a('<span class="'.$classlogo.' glyphicon glyphicon-ruble"></span><h2>Exámenes</h2><span class="label label-danger">PREVIOS</span>',
@@ -95,4 +101,21 @@ else{
           ?>
 
       </div>
-    </div>
+        <div class="col-md-3">
+          <?= 
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-pencil"></span><h2>Exámenes</h2><span class="label label-warning">FEBRERO / MARZO</span>',
+
+           
+
+           ['marzo'],
+
+           [
+
+               //'id' => 'modalButtonIngreso',
+               'class' => $classclient,
+               // modalCall
+
+           ]);
+          ?>
+        </div>
+      </div>

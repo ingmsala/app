@@ -485,6 +485,8 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
                                         '<div class="dropdown-divider"></div>',
+                                ['label' => 'Febrero/Marzo', 'url' => ['horario/marzo',  'col' => 1]],
+                                        '<div class="dropdown-divider"></div>',
                                 [
                                     'label' => 'Reportes',
                                     'itemsOptions'=>['class'=>'dropdown-submenu'],

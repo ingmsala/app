@@ -240,6 +240,23 @@ class HorarioController extends Controller
         ]);
     }
 
+        public function actionMarzo()
+    {
+         if(isset(Yii::$app->user->identity->role))
+                $this->layout = 'mainvacio';
+            else
+                $this->layout = 'mainpublic';
+        
+        
+       
+        return $this->render('marzo', [
+            
+            
+
+        ]);
+    }
+
+
     public function actionPanelprincipal()
     {
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
