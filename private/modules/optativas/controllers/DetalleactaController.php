@@ -72,15 +72,16 @@ class DetalleactaController extends Controller
                                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]))
                                     return true;
                                 elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
-                                    $acta = Acta::findOne(Yii::$app->request->queryParams['acta_id']);
+                                    /*$acta = Acta::findOne(Yii::$app->request->queryParams['acta_id']);
                                     $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
-                                                    ->where(['comision' => $acta->comision])
-                                                    ->andWhere(['docente' => $docente->id])
+                                                    //->where(['comision' => $acta->comision])
+                                                    ->Where(['docente' => $docente->id])
                                                     ->all());
                                     if($cant>0){
                                         return true;
-                                    }
+                                    }*/
+                                    return true;
                                 }
                                 return false;
                                 
@@ -99,7 +100,7 @@ class DetalleactaController extends Controller
                                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]))
                                     return true;
                                 elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
-                                    $acta = Acta::findOne(Yii::$app->request->queryParams['acta_id']);
+                                    $acta = Acta::findOne(Yii::$app->request->queryParams['id']);
                                     $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                     ->where(['comision' => $acta->comision])

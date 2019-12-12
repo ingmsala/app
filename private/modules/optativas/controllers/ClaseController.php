@@ -58,10 +58,12 @@ class ClaseController extends Controller
                                     count(Acta::find()->where(['comision' => $clase->comision])->andWhere(['estadoacta' => 2])->all()) > 0){
                                     Yii::$app->session->setFlash('info', "No se puede realizar la acción ya que la comisión tiene un acta en estado cerrado");
                                     return false;
+                                }else{
+                                    return in_array (Yii::$app->user->identity->role, [1,8,9]);
                                 }
-                                return in_array (Yii::$app->user->identity->role, [1,8,9]);
+                                
                             }catch(\Exception $exception){
-                                return false;
+                                return in_array (Yii::$app->user->identity->role, [1,8,9]);
                             }
                         }
 

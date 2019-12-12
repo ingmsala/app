@@ -232,7 +232,20 @@ class ComisionController extends Controller
                     ],
                 ]);
                 $out = $listComisiones;
-                $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
+                $session = Yii::$app->session;
+                if(isset($_SESSION['comisionx'])){
+                    $com = $_SESSION['comisionx'];
+                    
+                    $comx = Comision::findOne($com);
+                    if($comx != null)
+                        $session->set('aniolectivox', $comx->optativa0->aniolectivo);
+                    else
+                        $session->set('aniolectivox', $anio_id);
+                }else{
+                    $com = 0;
+                    $session->set('aniolectivox', $anio_id);
+                }
+                
                 return ['output'=>$out, 'selected'=>$com];
             }
 

@@ -3,18 +3,20 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;
-use app\modules\optativas\models\Matricula;
-use app\modules\optativas\models\Alumno;
-use app\modules\optativas\models\Comision;
 use app\models\Division;
-use app\modules\optativas\models\Optativa;
+use app\modules\optativas\models\Admisionoptativa;
+use app\modules\optativas\models\Alumno;
 use app\modules\optativas\models\Aniolectivo;
+use app\modules\optativas\models\Comision;
 use app\modules\optativas\models\Estadomatricula;
+use app\modules\optativas\models\Matricula;
 use app\modules\optativas\models\MatriculaSearch;
+use app\modules\optativas\models\Optativa;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 
 /**
  * MatriculaController implements the CRUD actions for Matricula model.
@@ -123,7 +125,10 @@ class MatriculaController extends Controller
                         ->all();
         $estadosmatricula = Estadomatricula::find()->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->fecha = date('Y-m-d');
+            $model->estadomatricula = 1;
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -198,6 +203,70 @@ class MatriculaController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionInscripcion($dni)
+    {
+        $this->layout = 'mainautogestion';
+        $model = new Matricula();
+        $model->scenario = $model::SCENARIO_CREATE;
+        $alumnos = Alumno::find()
+                    ->where(['dni' => $dni])
+                    ->orderBy('apellido, nombre')
+                    ->all();
+        $alumno = Alumno::find()
+                    ->where(['dni' => $dni])
+                    ->one();
+        $model->alumno = $alumno->id;
+        $admision = Admisionoptativa::find()->where(['alumno' => $alumno->id])->all();
+        $admision = ArrayHelper::map($admision,'id','curso');
+        if(count($admision)==0)
+            $admision =[99];
+        $optativas = Optativa::find()
+                        ->where(['in', 'curso', $admision])
+                        ->orWhere(['curso' => $alumno->curso])
+                        ->all();
+        $divisiones = Division::find()
+                        ->where(['propuesta' => 1])
+                        ->all();
+        $comisiones = Comision::find()
+                        ->joinWith(['optativa0', 'optativa0.actividad0','optativa0.aniolectivo0'])
+                        ->where(['in', 'optativa.curso', $admision])
+                        //->orWhere(['optativa.curso' => $alumno->curso])
+                        ->andWhere(['aniolectivo.activo' => 1])
+                        ->orderBy('aniolectivo.nombre', 'actividad.nombre', 'comision.nombre')
+                        ->all();
+        $estadosmatricula = Estadomatricula::find()->where(['id' => 1])->all();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->fecha = date('Y-m-d');
+            $model->estadomatricula = 1;
+
+            if($this->controlDeCupo($model->comision)){
+                if($this->controlDeDuplicadoMismoCurso($model->alumno, count($admision))){
+                    $model->save();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }else{
+                    Yii::$app->session->setFlash('danger', "El alumno ya está matriculado en la cantidad máxima de Espacios Optativos para este año lectivo");
+                }
+                
+            }else{
+                            Yii::$app->session->setFlash('danger', "El Espacio Optativo seleccionado tiene el cupo completo. Deberá inscribirse en uno diferente");
+
+            }
+            
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+            'alumnos' => $alumnos,
+            'optativas' => $optativas,
+            'comisiones' => $comisiones,
+            'estadosmatricula' => $estadosmatricula,
+            'divisiones' => $divisiones,
+
+
+        ]);
+    }
+
     /**
      * Finds the Matricula model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -205,6 +274,30 @@ class MatriculaController extends Controller
      * @return Matricula the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+    protected function controlDeCupo($comision)
+    {
+       
+        $matriculas = count(Matricula::find()->where(['comision' => $comision])->all());
+        $comision = Comision::findOne($comision);
+        if( $matriculas < $comision->cupo)
+            return true;
+        return false;
+    }
+
+    protected function controlDeDuplicadoMismoCurso($alumno, $admision)
+    {
+       
+        $matriculas = count(Matricula::find()
+                                ->joinWith(['comision0.optativa0.aniolectivo0'])
+                                ->where(['alumno' => $alumno])
+                                ->andWhere(['aniolectivo.activo' => 1])
+                                ->all()) - $admision;
+        
+        if( $matriculas > 0)
+            return false;
+        return true;
+    }
+
     protected function findModel($id)
     {
         if (($model = Matricula::findOne($id)) !== null) {

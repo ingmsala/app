@@ -57,6 +57,8 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'duracion')->textInput() ?>
 
+    <?= $form->field($model, 'curso')->textInput() ?>
+
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>

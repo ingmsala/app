@@ -548,7 +548,7 @@ NavBar::end();
                                 'comisiones' => $search->comisionesxdocente(Yii::$app->user->identity->username),
                                 'model' => new Docentexcomision(),
                                 'model2' => new Matricula(),
-                                'aniolectivos' => Aniolectivo::find()->where(['activo' => 1])->all(),
+                                'aniolectivos' => Aniolectivo::find()/*->where(['activo' => 1])*/->orderBy('id DESC')->all(),
                             ]);
                     }
                     ?>

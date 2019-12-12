@@ -2,8 +2,9 @@
 
 namespace app\modules\optativas\controllers;
 
-use yii\web\Controller;
 use Yii;use yii\filters\AccessControl;
+use app\modules\optativas\models\Comision;
+use yii\web\Controller;
 
 
 /**
@@ -52,6 +53,8 @@ class DefaultController extends Controller
 
         $session = Yii::$app->session;
 		$session->set('comisionx', $_GET['id']);
+        $session->set('aniolectivox', Comision::findOne($id)->optativa0->aniolectivo);
+       
         return $id;
     }
 }

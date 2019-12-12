@@ -15,7 +15,6 @@ use kartik\select2\Select2;
             return $alumno['apellido'].', '.$alumno['nombre'];}
         ); ?>
 
-<?php $listComisiones=ArrayHelper::map($comisiones,'id','nombre'); ?>
 <?php $listDivisiones=ArrayHelper::map($divisiones,'id','nombre'); ?>
 
 <?php $listEstadosMatricula=ArrayHelper::map($estadosmatricula,'id','nombre'); ?>
@@ -28,23 +27,6 @@ use kartik\select2\Select2;
 
     <?php $form = ActiveForm::begin(); ?>
 
-
-<div style="width: 20%;">
-    <?= 
-$form->field($model, 'fecha')->widget(DatePicker::classname(), [
-    //'name' => 'dp_3',
-    'type' => DatePicker::TYPE_COMPONENT_APPEND,
-    //'value' => '23-Feb-1982',
-    'readonly' => true,
-    'pluginOptions' => [
-        'autoclose'=>true,
-        'format' => 'yyyy-mm-dd',
-        
-    ],
-    
-]); ?>
-
-</div>
 
     <?= 
 
@@ -78,24 +60,14 @@ $form->field($model, 'fecha')->widget(DatePicker::classname(), [
             'pluginOptions' => [
                 'allowClear' => true
             ],
-        ]);
+        ])->label('Espacio Optativo');
 
     ?>
 
-    <?= 
-
-        $form->field($model, 'estadomatricula')->widget(Select2::classname(), [
-            'data' => $listEstadosMatricula,
-            'options' => ['placeholder' => 'Seleccionar...'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]);
-
-    ?>
+   
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -4,35 +4,32 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\modules\optativas\models\OptativaSearch */
+/* @var $searchModel app\modules\optativas\models\AdmisionoptativaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Optativas';
+$this->title = 'Admisiones: Espacios Optativos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="optativa-index">
+<div class="admisionoptativa-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Nueva Optativa', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Nueva Admisión', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        //'filterModel' => $searchModel,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'actividad0.nombre',
-            'aniolectivo0.nombre',
-            'duracion',
-            [
-                'label' => 'Área de Optativa' , 
-                'attribute' => 'areaoptativa0.nombre',
-            ],
+            'alumno0.apellido',
+            'alumno0.nombre',
+            'alumno0.dni',
             'curso',
+            'aniolectivo0.nombre',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

@@ -35,8 +35,8 @@ class Optativa extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['actividad', 'aniolectivo', 'areaoptativa'], 'required'],
-            [['actividad', 'aniolectivo', 'duracion', 'areaoptativa'], 'integer'],
+            [['actividad', 'aniolectivo', 'areaoptativa', 'curso'], 'required'],
+            [['actividad', 'aniolectivo', 'duracion', 'areaoptativa', 'curso'], 'integer'],
             [['actividad'], 'exist', 'skipOnError' => true, 'targetClass' => Actividad::className(), 'targetAttribute' => ['actividad' => 'id']],
             [['aniolectivo'], 'exist', 'skipOnError' => true, 'targetClass' => Aniolectivo::className(), 'targetAttribute' => ['aniolectivo' => 'id']],
             [['areaoptativa'], 'exist', 'skipOnError' => true, 'targetClass' => Areaoptativa::className(), 'targetAttribute' => ['areaoptativa' => 'id']],
@@ -54,6 +54,7 @@ class Optativa extends \yii\db\ActiveRecord
             'aniolectivo' => 'Año Lectivo',
             'duracion' => 'Duración (horas)',
             'areaoptativa' => 'Area de optativa',
+            'curso' => 'Curso',
         ];
     }
 

@@ -186,7 +186,7 @@ class MatriculaSearch extends Matricula
         $query = Matricula::find()
             ->joinWith(['comision0', 'estadomatricula0', 'comision0.optativa0', 'comision0.optativa0.aniolectivo0', 'alumno0'])
             ->where(['alumno.dni' => $dni])
-            ->orderBy('aniolectivo.nombre');
+            ->orderBy('aniolectivo.nombre DESC');
 
         // add conditions that should always apply here
 

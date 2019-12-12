@@ -7,8 +7,7 @@ use yii\helpers\Html;
 /* @var $model app\modules\optativas\models\Matricula */
 
 $this->title = 'Nueva Matrícula';
-$this->params['breadcrumbs'][] = ['label' => 'Matrículas', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="matricula-create">
 

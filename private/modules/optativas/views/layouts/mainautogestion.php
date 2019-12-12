@@ -61,7 +61,7 @@ AppAsset::register($this);
                     ],
 
                     [
-                        'label' => '<span class="glyphicon glyphicon-check"></span><div>Preinscripciones</div>', 
+                        'label' => '<span class="glyphicon glyphicon-check"></span><div>Inscripciones</div>', 
                         'url' => ['autogestion/preinscripcion'],
                     ],
 

@@ -273,7 +273,7 @@ try {
 
                                 ['label' => 'Home', 'url' => ['/optativas']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Preinscripción', 'url' => ['/optativas/preinscripcion']],
+                                ['label' => 'Preinscripción', 'url' => ['/preinscripcion']],
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Matrícula', 'url' => ['/optativas/matricula']],
                                 '<div class="dropdown-divider"></div>',
@@ -292,6 +292,8 @@ try {
                                 ['label' => 'Libro de actas', 'url' => ['/optativas/libroacta']],
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Escala de notas', 'url' => ['/optativas/escalanota']],
+                                '<div class="dropdown-divider"></div>',
+                                ['label' => 'Admisión', 'url' => ['/optativas/admisionoptativa']],
                                 '<div class="dropdown-divider"></div>',
                                 
                             ],

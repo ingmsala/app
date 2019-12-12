@@ -119,8 +119,10 @@ use kartik\depdrop\DepDrop;
 
     $js=<<< JS
      $("#alertinfo").animate({opacity: 1.0}, 3000).fadeOut("slow");
-     $('#anio-id').val(1).trigger('change').trigger('depdrop:change');
+     $('#anio-id').val(aniolectivovar).trigger('change').trigger('depdrop:change');
 JS;
+
+
 $js2=<<< JS
      $ ( ' #comision-id ' ). on ( ' depdrop: change ' , function ( event , id , value, count ) {
       console.log(id); console.log(this.value); console.log(count);
@@ -130,12 +132,14 @@ $js2=<<< JS
                                 
                                 window.location.replace("index.php?r=optativas");
                                 //$('#anio-id').val(1).trigger('change').trigger('depdrop:change');
+                                //$('#anio-id').val(1).trigger('change').trigger('depdrop:change');
                               });
 
                             
 
 });
 JS;
+$this->registerJsVar('aniolectivovar', isset($_SESSION['aniolectivox']) ? $_SESSION['aniolectivox'] : 2, yii\web\View::POS_READY);
 
 $this->registerJs($js, yii\web\View::POS_READY);
 $this->registerJs($js2, yii\web\View::POS_READY);

@@ -4,35 +4,30 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\modules\optativas\models\OptativaSearch */
+/* @var $searchModel app\models\PreinscripcionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Optativas';
+$this->title = 'Preinscripcions';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="optativa-index">
+<div class="preinscripcion-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Nueva Optativa', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Nuevo Preinscripcion', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        //'filterModel' => $searchModel,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'actividad0.nombre',
-            'aniolectivo0.nombre',
-            'duracion',
-            [
-                'label' => 'Área de Optativa' , 
-                'attribute' => 'areaoptativa0.nombre',
-            ],
-            'curso',
+            'id',
+            'descripcion',
+            'activo',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

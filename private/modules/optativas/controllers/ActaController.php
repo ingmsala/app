@@ -7,6 +7,7 @@ use app\config\Globales;
 use app\models\Docente;
 use app\modules\optativas\models\Acta;
 use app\modules\optativas\models\ActaSearch;
+use app\modules\optativas\models\Admisionoptativa;
 use app\modules\optativas\models\Aniolectivo;
 use app\modules\optativas\models\Comision;
 use app\modules\optativas\models\Detalleacta;
@@ -44,15 +45,19 @@ class ActaController extends Controller
                                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_COORDINACION]))
                                     return true;
                                 elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
-                                    $acta = $this->findModel(Yii::$app->request->queryParams['id']);
-                                    $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    //$acta = $this->findModel(Yii::$app->request->queryParams['id']);
+                                    /*if($acta == null){
+                                        return true;
+                                    }*/
+                                    /*$docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                     ->where(['comision' => $acta->comision])
                                                     ->andWhere(['docente' => $docente->id])
                                                     ->all());
                                     if($cant>0){
                                         return true;
-                                    }
+                                    }*/
+                                    return true;
                                 }
                                 return false;
                                 
@@ -101,7 +106,7 @@ class ActaController extends Controller
                                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]))
                                     return true;
                                 elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
-                                    $acta = $this->findModel(Yii::$app->request->queryParams['id']);
+                                    $acta = $this->findModel(Yii::$app->request->queryParams['acta']);
                                     $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                     ->where(['comision' => $acta->comision])
@@ -128,10 +133,10 @@ class ActaController extends Controller
                                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]))
                                     return true;
                                 elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
-                                    $acta = $this->findModel(Yii::$app->request->queryParams['id']);
+                                    $com = Comision::findOne(Yii::$app->request->queryParams['Matricula']['comision']);
                                     $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
-                                                    ->where(['comision' => $acta->comision])
+                                                    ->where(['comision' => $com])
                                                     ->andWhere(['docente' => $docente->id])
                                                     ->all());
                                     if($cant>0){
@@ -396,18 +401,31 @@ class ActaController extends Controller
                 ->all();
 
         $c = 0;
+        
         foreach ($da2 as $detalleacta) {
+            $rep = 1;
+            $aniolectivo = $model->libro0->aniolectivo+1;
             $matricula = Matricula::findOne($detalleacta->matricula);
             if($detalleacta->detalleescala0->condicionnota == 1){
                 $estado = 3;
             }elseif ($detalleacta->detalleescala0->condicionnota == 2) {
                 $estado = 1;
+                $rep = 0;
             }elseif ($detalleacta->detalleescala0->condicionnota == 3) {
                 $estado = 2;
+                $rep = 0;
             }
             $matricula->estadomatricula = $estado;
             $matricula->save();
             $c++;
+            for ($i=1; $i >= $rep; $i--) { 
+                $admision = new Admisionoptativa();
+                $admision->alumno = $matricula->alumno;
+                $admision->curso = $matricula->comision0->optativa0->curso+$i;
+                $admision->aniolectivo = $aniolectivo;
+                $admision->save();
+            }
+            
         }
 
         $model->estadoacta = 2;
