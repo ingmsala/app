@@ -143,6 +143,8 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Horario completo', 'url' => ['/horario/horariocompleto']],
                                         '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Docentes con superposición', 'url' => ['/horario/horassuperpuestas']],
+                                        '<div class="dropdown-divider"></div>',
                                         
 
                                     ],
@@ -501,6 +503,8 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Horario completo', 'url' => ['/horario/horariocompleto']],
                                         '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Docentes con superposición', 'url' => ['/horario/horassuperpuestas']],
+                                        '<div class="dropdown-divider"></div>',
                                         
 
                                     ],
@@ -701,6 +705,8 @@ try {
                                         ['label' => 'Filtro por materia', 'url' => ['/horario/filtropormateria']],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Horario completo', 'url' => ['/horario/horariocompleto']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Docentes con superposición', 'url' => ['/horario/horassuperpuestas']],
                                         '<div class="dropdown-divider"></div>',
                                         
 

@@ -1155,7 +1155,9 @@ class HorarioController extends Controller
 		    /*if($vista == 'docentes')
         		$arrayTt[$horarioxTt->hora][$horarioxTt->diasemana] = $salida;
         	else*/
-        		$arrayTt[$horarioxTt->hora][$horarioxTt->diasemana] = $horarioxTt->catedra0->division0->nombre;
+                if($arrayTt[$horarioxTt->hora][$horarioxTt->diasemana] != '')
+                    $arrayTt[$horarioxTt->hora][$horarioxTt->diasemana] .= ' - ';
+        		$arrayTt[$horarioxTt->hora][$horarioxTt->diasemana] .= $horarioxTt->catedra0->division0->nombre;
         }
 
         $providerTt = new ArrayDataProvider([
@@ -1841,6 +1843,19 @@ class HorarioController extends Controller
         }
         Yii::$app->session->setFlash('success', "Se realizó la migración de {$c} horarios.");
         return $this->redirect(['/horario/panelprincipal']);
+    }
+
+    public function actionHorassuperpuestas(){
+
+        $searchModel = new HorarioSearch;
+        $dataProvider = $searchModel->horassuperpuestas();
+
+        return $this->render('horassuperpuestas', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            
+            
+        ]);
     }
 
 
