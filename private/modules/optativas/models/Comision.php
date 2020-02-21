@@ -35,6 +35,8 @@ class Comision extends \yii\db\ActiveRecord
         return [
             [['nombre', 'optativa'], 'required'],
             [['optativa', 'cupo'], 'integer'],
+            [['horario'], 'string'], 
+            [['aula'], 'string', 'max' => 150], 
             [['nombre'], 'string', 'max' => 20],
             [['optativa'], 'exist', 'skipOnError' => true, 'targetClass' => Optativa::className(), 'targetAttribute' => ['optativa' => 'id']],
         ];
@@ -50,6 +52,9 @@ class Comision extends \yii\db\ActiveRecord
             'nombre' => 'Nombre',
             'optativa' => 'Optativa',
             'cupo' => 'Cupo',
+
+            'horario' => 'Horario', 
+            'aula' => 'Aula', 
         ];
     }
 

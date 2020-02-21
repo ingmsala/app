@@ -41,8 +41,30 @@ AppAsset::register($this);
                 $items = [
                                             
                         ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
-                        ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
                        
+                        ['label' => '<span class="glyphicon glyphicon-book"></span><br>Clases', 
+
+                            'items' => [
+                                [
+                                    'label' => 'Comisión',
+                                    'url' => ['/optativas/clase', 'cl' => 0],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+
+                                [
+                                    'label' => 'Agenda',
+                                    'url' => ['/optativas/clase/claseshoy'],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+
+                                
+
+                                
+                            
+                            ],
+                        ],
                         ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><br>Calificaciones', 
 
                             'items' => [
@@ -205,7 +227,29 @@ AppAsset::register($this);
                 $items = [
                     
                         ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
-                        ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
+                        ['label' => '<span class="glyphicon glyphicon-book"></span><br>Clases', 
+
+                            'items' => [
+                                [
+                                    'label' => 'Comisión',
+                                    'url' => ['/optativas/clase', 'cl' => 0],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+
+                                [
+                                    'label' => 'Agenda',
+                                    'url' => ['/optativas/clase/claseshoy'],
+                                ],
+                            
+                                '<div class="dropdown-divider"></div>',
+
+                                
+
+                                
+                            
+                            ],
+                        ],
                         ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><br>Calificaciones', 
 
                             'items' => [

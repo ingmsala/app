@@ -45,7 +45,7 @@ class ClaseSearch extends Clase
         $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         $query = Clase::find()
             ->where(['comision' => $com])
-            ->orderBy('fecha ASC');
+            ->orderBy('fecha DESC');
 
         // add conditions that should always apply here
 
@@ -121,6 +121,33 @@ class ClaseSearch extends Clase
         ]);
 
         $query->andFilterWhere(['like', 'tema', $this->tema]);
+
+        return $dataProvider;
+    }
+
+
+    public function getClasesHoy()
+    {
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $query = Clase::find()
+            ->where(['fecha' => date('Y-m-d')])
+            ->orderBy('hora asc');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+       
 
         return $dataProvider;
     }

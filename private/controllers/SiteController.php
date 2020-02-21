@@ -68,10 +68,12 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
+        if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
                 return $this->redirect(['/optativas']);
                 
-        }
+        }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+                 return $this->redirect(['/optativas/clase/claseshoy']);
+            }
         elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
                 return $this->redirect(['/horario/menuopciones']);
@@ -99,8 +101,10 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
-            if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
+            if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
                 return $this->redirect(['/optativas']);
+            }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+                 return $this->redirect(['/optativas/clase/claseshoy']);
             }elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
                 return $this->redirect(['/horario/menuopciones']);
@@ -113,8 +117,10 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
+            if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
                 return $this->redirect(['/optativas']);
+            }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+                 return $this->redirect(['/optativas/clase/claseshoy']);
             }elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
                 return $this->redirect(['/horario/menuopciones']);

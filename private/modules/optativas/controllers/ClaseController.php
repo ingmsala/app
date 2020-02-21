@@ -34,7 +34,7 @@ class ClaseController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'viewgrid'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'viewgrid', 'claseshoy', 'claseinterhoy'],
                 'rules' => [
                     [
                         'actions' => ['index'],   
@@ -65,6 +65,14 @@ class ClaseController extends Controller
                             }catch(\Exception $exception){
                                 return in_array (Yii::$app->user->identity->role, [1,8,9]);
                             }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['claseshoy', 'claseinterhoy'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            return in_array (Yii::$app->user->identity->role, [1,9]);
                         }
 
                     ],
@@ -418,5 +426,98 @@ class ClaseController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+
+    public function actionClaseshoy()
+    {
+        $this->layout = 'main';
+        $searchModel = new ClaseSearch();
+        $dataProvider = $searchModel->getClasesHoy(Yii::$app->request->queryParams);
+
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $clasesdehoy = Clase::find()
+            ->where(['fecha' => date('Y-m-d')])
+            ->orderBy('hora asc')->all();
+
+        $clasesproximas = Clase::find()
+            ->where(['BETWEEN', 'fecha', date('Y-m-d', strtotime("+1 days")), date('Y-m-d', strtotime("+7 days"))])
+            ->orderBy('fecha ASC, hora asc')->all();
+
+        if(count($clasesdehoy)>0){
+            $echo = '<div>';
+            foreach ($clasesdehoy as $clase) {
+                $echo .= '<a href="?r=optativas/clase/claseinterhoy&id='.$clase->id.'"><div class="col-6 col-md-6 col-lg-4">';
+                 $echo .= '<div class="panel panel-default" style="height: 25vh;">
+                  <div class="panel-heading">'.$clase->comision0->optativa0->actividad0->nombre.'</div>
+                  <div class="panel-body">
+                    <ul>
+                        <li>Comisión: '.$clase->comision0->nombre.'</li>
+                        <li>Horario: '.$clase->hora.'</li>
+                    </ul>
+                    
+                  </div>
+                </div>
+                </div></a>';
+            }
+            $echo .= '</div>'; 
+        }else{
+            $echo = "No hay clases pautadas para hoy.";
+        }
+        
+        if(count($clasesproximas)>0){
+            
+            $echo2 = '<div>';
+            foreach ($clasesproximas as $clase2) {
+                $echo2 .= '<a href="?r=optativas/clase/claseinterhoy&id='.$clase2->id.'"><div class="col-6 col-md-6 col-lg-4">';
+                 $echo2 .= '<div class="panel panel-success" style="height: 25vh;">
+                  <div class="panel-heading">'.$clase2->comision0->optativa0->actividad0->nombre.'</div>
+                  <div class="panel-body">
+                    <ul>
+                        <li>Fecha: '.Yii::$app->formatter->asDate($clase2->fecha, 'dd/MM/yyyy').'</li>
+                        <li>Comisión: '.$clase2->comision0->nombre.'</li>
+                        <li>Horario: '.$clase2->hora.'</li>
+                    </ul>
+                    
+                  </div>
+                </div>
+                </div></a>';
+            }
+            $echo2 .= '</div>'; 
+        }else{
+            $echo2 = "No hay clases pautadas para los proximos 7 días.";
+        }
+
+        
+
+        $com = $_SESSION['comisionx'] = 0;
+        
+        //$comision = Comision::findOne($com);
+       // $optativa = Optativa::findOne($comision->optativa);
+        
+
+        return $this->render('claseshoy', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'echo' => $echo,
+            'echo2' => $echo2,
+            
+
+        ]); 
+       
+    }
+
+    public function actionClaseinterhoy($id)
+    {
+        $this->layout = 'main';
+
+        $clase = $this->findModel($id);
+
+        $_SESSION['aniolectivox'] = $clase->comision0->optativa0->aniolectivo;
+        $_SESSION['comisionx'] = $clase->comision;
+
+        
+
+        return $this->redirect(['view', 'id' => $id]);
     }
 }

@@ -59,6 +59,10 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'curso')->textInput() ?>
 
+     <?= $form->field($model, 'resumen')->textarea(['rows' => 6]) ?> 
+ 
+   
+
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>

@@ -19,7 +19,7 @@ class ComisionSearch extends Comision
     {
         return [
             [['id', 'optativa', 'cupo'], 'integer'],
-            [['nombre'], 'safe'],
+            [['nombre','horario', 'aula'], 'safe'],
         ];
     }
 

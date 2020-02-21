@@ -32,6 +32,10 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'cupo')->textInput() ?>
 
+    <?= $form->field($model, 'horario')->textarea(['rows' => 6]) ?> 
+ 
+   <?= $form->field($model, 'aula')->textInput(['maxlength' => true]) ?> 
+
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>

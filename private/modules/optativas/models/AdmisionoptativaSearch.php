@@ -3,9 +3,10 @@
 namespace app\modules\optativas\models;
 
 use Yii;
+use app\modules\optativas\models\Admisionoptativa;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\optativas\models\Admisionoptativa;
+use yii\data\SqlDataProvider;
 
 /**
  * AdmisionoptativaSearch represents the model behind the search form of `app\modules\optativas\models\Admisionoptativa`.
@@ -64,6 +65,29 @@ class AdmisionoptativaSearch extends Admisionoptativa
             'aniolectivo' => $this->aniolectivo,
         ]);
 
+        return $dataProvider;
+    }
+
+    public function porAlumno($id)
+    {
+        $sql = "SELECT alumno, curso, count(id) as cantidad FROM admisionoptativa  WHERE alumno = ".$id." and aniolectivo = 2  group by alumno, curso";
+
+        // add conditions that should always apply here
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $sql,
+            'pagination' => false,
+        ]);
+
+        $this->load($id);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        
         return $dataProvider;
     }
 }

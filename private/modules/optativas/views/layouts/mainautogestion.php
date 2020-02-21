@@ -105,7 +105,7 @@ NavBar::end();
                     
 
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-11">
                 
                 <?= Breadcrumbs::widget([
                     'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

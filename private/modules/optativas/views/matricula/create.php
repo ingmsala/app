@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\optativas\models\Matricula */
 
-$this->title = 'Nueva Matrícula';
+$this->title = 'Matriculación';
 
 ?>
 <div class="matricula-create">
