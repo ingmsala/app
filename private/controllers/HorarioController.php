@@ -14,6 +14,7 @@ use app\models\Docente;
 use app\models\Hora;
 use app\models\Horario;
 use app\models\HorarioSearch;
+use app\models\Parametros;
 use app\models\Preceptoria;
 use app\models\Tipoparte;
 use kartik\mpdf\Pdf;
@@ -226,6 +227,24 @@ class HorarioController extends Controller
 
     public function actionPdfprevios()
     {
+        $estadopublicacion = Parametros::findOne(2)->estado;
+
+        if ($estadopublicacion == 0){
+            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes previos");
+            return $this->redirect(Yii::$app->request->referrer);
+        }elseif($estadopublicacion == 2){
+            try {
+                if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes previos");
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+            } catch (\Throwable $th) {
+                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes previos");
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+            
+        }//1 ok
+        
          if(isset(Yii::$app->user->identity->role))
                 $this->layout = 'mainvacio';
             else
@@ -242,6 +261,23 @@ class HorarioController extends Controller
 
         public function actionMarzo()
     {
+        $estadopublicacion = Parametros::findOne(3)->estado;
+
+        if ($estadopublicacion == 0){
+            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes febrero/marzo");
+            return $this->redirect(Yii::$app->request->referrer);
+        }elseif($estadopublicacion == 2){
+            try {
+                if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes febrero/marzo");
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+            } catch (\Throwable $th) {
+                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes febrero/marzo");
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+            
+        }//1 ok
          if(isset(Yii::$app->user->identity->role))
                 $this->layout = 'mainvacio';
             else
@@ -552,10 +588,23 @@ class HorarioController extends Controller
     }
 
     public function generarHorarioxCurso($division, $vista, $pr){
-        if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
-            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
+        $estadopublicacion = Parametros::findOne(1)->estado;
+
+        if ($estadopublicacion == 0){
+            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
             return $this->redirect(Yii::$app->request->referrer);
-        }
+        }elseif($estadopublicacion == 2){
+            try {
+                if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+            } catch (\Throwable $th) {
+                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+            
+        }//1 ok
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
         $searchModel = new HorarioSearch();
@@ -670,16 +719,15 @@ class HorarioController extends Controller
 
     public function actionCompletoxcurso($division, $vista)
     {
+        
     	return $this->generarHorarioxCurso($division, $vista, 0);
         
     }
 
     public function actionPrintxcurso($division, $vista, $all = 0)
     {
-        if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
-            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
-            return $this->redirect(Yii::$app->request->referrer);
-        }
+        
+
         $this->layout = 'mainpublic';
         if (YII_ENV_DEV) {
             Yii::$app->getModule('debug')->instance->allowedIPs = [];
@@ -816,10 +864,24 @@ class HorarioController extends Controller
     {
         //$division = 1;
         //$dia = 3;
-        if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
-            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
+        
+        $estadopublicacion = Parametros::findOne(1)->estado;
+
+        if ($estadopublicacion == 0){
+            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
             return $this->redirect(Yii::$app->request->referrer);
-        }
+        }elseif($estadopublicacion == 2){
+            try {
+                if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+            } catch (\Throwable $th) {
+                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+            
+        }//1 ok
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
         $searchModel = new HorarioSearch();
@@ -908,8 +970,23 @@ class HorarioController extends Controller
 
     public function actionHorarioclasespublic($docente)
     {
-        Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
-        return $this->redirect(Yii::$app->request->referrer);
+        $estadopublicacion = Parametros::findOne(1)->estado;
+
+        if ($estadopublicacion == 0){
+            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
+            return $this->redirect(Yii::$app->request->referrer);
+        }elseif($estadopublicacion == 2){
+            try {
+                if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+            } catch (\Throwable $th) {
+                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+            
+        }//1 ok
         $this->layout = 'mainpublic';
         $docente = Docente::find()
                 ->joinWith('detallecatedras')
@@ -921,19 +998,29 @@ class HorarioController extends Controller
 
     public function actionCompletoxdocente($docente)
     {
-        if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
-            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
+        $estadopublicacion = Parametros::findOne(1)->estado;
+
+        if ($estadopublicacion == 0){
+            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
             return $this->redirect(Yii::$app->request->referrer);
-        }
+        }elseif($estadopublicacion == 2){
+            try {
+                if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+            } catch (\Throwable $th) {
+                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+            
+        }//1 ok
         return $this->getCompletoxdocentepage($docente, 0, 0, 0);
     }
 
     public function actionPrintxdocente($docente, $all=0)
     {
-        if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
-            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
-            return $this->redirect(Yii::$app->request->referrer);
-        }
+        
 
         $this->layout = 'mainpublic';
         if (YII_ENV_DEV) {
@@ -1414,7 +1501,7 @@ class HorarioController extends Controller
         $horarios = Horario::find()
             ->joinWith(['catedra0'])
             ->where(['in', 'catedra.actividad', $materiasfiltro])
-            //->andWhere(['catedra.division' => $division])
+            ->andWhere(['<>', 'catedra.division', 77])
             ->andWhere(['tipo' => 1])
             ->orderBy('diasemana, hora')
             ->all();
@@ -1580,6 +1667,7 @@ class HorarioController extends Controller
         
         $horarios = Horario::find()
             ->joinWith(['catedra0'])
+            ->andWhere(['<>', 'catedra.division', 77])
             ->andWhere(['tipo' => 1])
             ->orderBy('diasemana, hora')
             ->all();
