@@ -17,9 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php $listInasistenciasdeldia=ArrayHelper::map($inasistenciasdeldia,'matricula','matricula'); ?>
 <?php $listAlumnosdecomision=ArrayHelper::map($alumnosdecomision,'id','id'); ?>
+
 <?php 
      $presentes =array_diff($listAlumnosdecomision, $listInasistenciasdeldia);
      $presentestxt = implode(",",$listAlumnosdecomision);
+     $listtardanzasdeldia = json_encode($listtardanzasdeldia);
 
 ?>
 
@@ -33,10 +35,16 @@ $this->params['breadcrumbs'][] = $this->title;
     e.preventDefault();
 
     var array = []
+    var array2 = []
 var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
-
+var droplist = document.querySelectorAll('select')
 for (var i = 0; i < checkboxes.length; i++) {
   array.push(checkboxes[i].name)
+}
+
+for (var i = 0; i < droplist.length; i++) {
+  if(droplist[i].value > 0)
+    array2.push(droplist[i].name + ' - ' + droplist[i].value)
 }
 
 //alert(array);
@@ -49,17 +57,24 @@ for (var i = 0; i < checkboxes.length; i++) {
     if(keys.length < 1){
         keys = [0];
     }
+    var keys2 = array2;
+
+
+    if(keys2.length < 1){
+        keys2 = [0];
+    }
         
         var deleteUrl     = 'index.php?r=optativas/inasistencia/procesarausentes';
         var clase     = ".$clase.";
         var presentes     = '".$presentestxt."';
+        var tardanzas     = '".$listtardanzasdeldia."';
         var pjaxContainer = 'test';
         var pjaxContainer2 = 'test2';
                     
                     $.ajax({
                       url:   deleteUrl,
                       type:  'post',
-                      data: {id: keys, clase: clase, presentes: presentes},
+                      data: {id: keys, clase: clase, presentes: presentes, tardanzas: JSON.stringify(tardanzas), keys2: keys2},
                       
                       error: function (xhr, status, error) {
                         alert(error);

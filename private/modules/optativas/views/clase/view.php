@@ -20,9 +20,10 @@ $this->title = Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy').' - Com
         'inasistenciasdeldia' => $inasistenciasdeldia,
         'alumnosdecomision' => $alumnosdecomision,
         'alumnosdecomisionprueba' => $alumnosdecomisionprueba,
-
+        'listtardanzasdeldia' => $listtardanzasdeldia,
         'echodiv' => $echodiv,
         
     ]) ?>
 
+    
 </div>

@@ -5,6 +5,7 @@ namespace app\modules\optativas\controllers;
 use Yii;
 use app\modules\optativas\models\Acta;
 use app\modules\optativas\models\Clase;
+use app\modules\optativas\models\Detalletardanza;
 use app\modules\optativas\models\Inasistencia;
 use app\modules\optativas\models\InasistenciaSearch;
 use yii\filters\AccessControl;
@@ -151,9 +152,13 @@ class InasistenciaController extends Controller
     {
         
         $param = Yii::$app->request->post();
-        //return $param['presentes'];
-        $presentes = explode(",", $param['presentes']);
+        //return var_dump($param['keys2']);
         
+        $presentes = explode(",", $param['presentes']);
+        $tardanzas = json_decode($param['tardanzas']);
+        $tardanzas = explode(",", $param['tardanzas']);
+        
+        //return $tardanzas;
         $clase = $param['clase'];
         //return $param['clase'][0];
 
@@ -177,6 +182,22 @@ class InasistenciaController extends Controller
                 $this->findModel($inasistenciax->id)->delete();
             }
 
+            $existe3 = Detalletardanza::find()
+                ->select('id')
+                ->where(['clase' => $clase])
+                ->andWhere(['matricula' => $presente])
+                ->count();
+            
+
+            if($existe3>0){
+                $tardanzax = Detalletardanza::find()
+                    ->select('id')
+                    ->where(['clase' => $clase])
+                    ->andWhere(['matricula' => $presente])
+                    ->one();
+                $this->findTardanza($tardanzax->id)->delete();
+            }
+
            
         }
         $c = 0;
@@ -191,6 +212,19 @@ class InasistenciaController extends Controller
 
             
         }
+
+        foreach ($param['keys2'] as $tardanza2) {
+            $tardanzasactivas = explode(" - ", $tardanza2); 
+            $model = new Detalletardanza();
+            $model->clase = $clase;
+            $model->matricula = $tardanzasactivas[0];
+            $model->tardanza = $tardanzasactivas[1];
+            if ($model->save())
+                $c=$c+1;
+        
+
+        
+    }
 
         Yii::$app->session->set('info', '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> La asistencia se cargó correctamente.<br/><b>Total: '.$c.' ausentes</b>');
 
@@ -207,6 +241,15 @@ class InasistenciaController extends Controller
     protected function findModel($id)
     {
         if (($model = Inasistencia::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    protected function findTardanza($id)
+    {
+        if (($model = Detalletardanza::findOne($id)) !== null) {
             return $model;
         }
 

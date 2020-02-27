@@ -19,8 +19,8 @@ class ClaseSearch extends Clase
     public function rules()
     {
         return [
-            [['id', 'tipoclase', 'comision', 'horascatedra'], 'integer'],
-            [['fecha', 'tema', 'hora'], 'safe'],
+            [['id', 'tipoclase', 'comision', 'horascatedra', 'tipoasistencia'], 'integer'],
+            [['fecha', 'tema', 'hora', 'horafin'], 'safe'],
         ];
     }
 
@@ -95,7 +95,7 @@ class ClaseSearch extends Clase
         $com = $params['id'];
         $query = Clase::find()
             ->where(['comision' => $com])
-            ->orderBy('fecha ASC');
+            ->orderBy('fecha DESC');
 
         // add conditions that should always apply here
 

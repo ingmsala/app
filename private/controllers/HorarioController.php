@@ -891,7 +891,7 @@ class HorarioController extends Controller
         $horarios = Horario::find()
             ->joinWith(['catedra0'])
             ->where(['diasemana' => $dia])
-            //->andWhere(['catedra.division' => $division])
+            ->andWhere(['<>','catedra.division',77])
             ->andWhere(['tipo' => 1])
             ->orderBy('diasemana, hora')
             ->all();

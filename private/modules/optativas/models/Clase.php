@@ -33,12 +33,13 @@ class Clase extends \yii\db\ActiveRecord
     {
         return [
             [['tipoclase', 'comision'], 'required'],
-            [['fecha', 'hora'], 'safe'],
+            [['fecha', 'hora', 'horafin'], 'safe'],
             [['horascatedra'], 'number'],
             [['tipoclase', 'comision'], 'integer'],
             [['tema'], 'string', 'max' => 200],
             [['comision'], 'exist', 'skipOnError' => true, 'targetClass' => Comision::className(), 'targetAttribute' => ['comision' => 'id']], 
             [['tipoclase'], 'exist', 'skipOnError' => true, 'targetClass' => Tipoclase::className(), 'targetAttribute' => ['tipoclase' => 'id']], 
+            [['tipoasistencia'], 'exist', 'skipOnError' => true, 'targetClass' => Tipoclase::className(), 'targetAttribute' => ['tipoasistencia' => 'id']], 
 
         ];
     }
@@ -55,8 +56,10 @@ class Clase extends \yii\db\ActiveRecord
             'tipoclase' => 'Tipo de clase',
             'comision' => 'Comision',
             'horascatedra' => 'Horas Cátedra',
-            'hora' => 'Horario',
+            'hora' => 'Hora de Inicio',
+            'horafin' => 'Hora de fin',
             'fechaconf' => 'Confirmación de Fecha',
+            'tipoasistencia' => 'Tipo de asistencia',
         ];
     }
 
@@ -76,5 +79,9 @@ class Clase extends \yii\db\ActiveRecord
     public function getTipoclase0()
     {
         return $this->hasOne(Tipoclase::className(), ['id' => 'tipoclase']);
+    }
+    public function getTipoasistencia0()
+    {
+        return $this->hasOne(Tipoasistencia::className(), ['id' => 'tipoasistencia']);
     }
 }

@@ -16,6 +16,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\helpers\ArrayHelper;
 
 /**
  * SeguimientoController implements the CRUD actions for Seguimiento model.
@@ -195,7 +196,7 @@ class SeguimientoController extends Controller
      */
     public function actionCreate($id)
     {
-        
+        $trimestre = [1=>'1° trimestre',2=>'2° trimestre',3=>'3° trimestre'];
         $this->layout = 'main';
         $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         if($com != 0){
@@ -205,6 +206,7 @@ class SeguimientoController extends Controller
             date_default_timezone_set('America/Argentina/Buenos_Aires');
             $model->fecha = date("Y-m-d");
             $model->matricula = $id;
+            //$trimestre = ArrayHelper::map($trimestre,0,1);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->matricula]);
@@ -213,6 +215,7 @@ class SeguimientoController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'estados' => $estados,
+                'trimestre' => $trimestre,
                 'tipos' => $tipos,
                 'matr' => Matricula::findOne($id),
             ]);
@@ -231,7 +234,7 @@ class SeguimientoController extends Controller
      */
     public function actionUpdate($id)
     {
-        
+        $trimestre = [1=>'1° trimestre',2=>'2° trimestre',3=>'3° trimestre'];
         $this->layout = 'main';
         $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         if($com != 0){
@@ -247,6 +250,7 @@ class SeguimientoController extends Controller
                 'model' => $model,
                 'estados' => $estados,
                 'tipos' => $tipos,
+                'trimestre' => $trimestre,
             ]);
         }else{
         Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Espacio Optativo</b>');

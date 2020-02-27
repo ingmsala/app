@@ -116,45 +116,40 @@ $this->title = 'Agenda de Clases';
                    return Yii::$app->formatter->asDate($model['fecha'], 'dd/MM/yyyy');
                 }
             ],
-            [
-                'label' => 'Tipo de Clase',
-                'attribute' => 'tipoclase0.nombre',
-            ],
+            
             [
                 'label' => 'Horario',
                 'format' => 'raw',
                 'value' => function($model){
-                    if($model->hora != null)
-                        return $model->hora;
+                    if($model->hora != null){
+                        $ini = Yii::$app->formatter->asDate($model['hora'], 'HH:mm');
+                        if($model->horafin != null){
+                            $fin = Yii::$app->formatter->asDate($model['horafin'], 'HH:mm');
+                            return $ini.' a '.$fin;
+                        }
+                            
+                        else
+                        return $ini;
+                    }
                     else
                         return '<span style="color: red;"><i>(A definir)</i><span>';
                 }
             ],
             
          
-            
-            [
-                'label' => 'Duración',
-                'value' => function($model){
-                    $hora_reloj = $model->horascatedra / 1.5;
-                    
-                    $h = intval($hora_reloj);
-                    $m = round((((($hora_reloj - $h) / 100.0) * 60.0) * 100), 0);
-                    if ($m == 60)
-                    {
-                        $h++;
-                        $m = 0;
-                    }
-                    $retval = sprintf("%02d:%02d", $h, $m);
-                    
-                    return $retval.' hs.';
-                },
-            ],
           [
                 'label' => 'Tema',
                 'value' => function($model){
                     return $model->tema;
                 },
+            ],
+            [
+                'label' => 'Tipo de Clase',
+                'attribute' => 'tipoclase0.nombre',
+            ],
+            [
+                'label' => 'Tipo de Asistencia',
+                'attribute' => 'tipoasistencia0.nombre',
             ],
             
         ],

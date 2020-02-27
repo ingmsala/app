@@ -20,7 +20,7 @@ $this->title = 'Clases';
     <h2>
     <?php 
         date_default_timezone_set('America/Argentina/Buenos_Aires');
-        echo Yii::$app->formatter->asDate(date('Y-m-d'), 'dd/MM/yyyy').' (HOY)';
+        echo 'Agenda: '.Yii::$app->formatter->asDate(date('Y-m-d'), 'dd/MM/yyyy').' (HOY)';
      ?>
     </h2>
    <?= $echo ?>

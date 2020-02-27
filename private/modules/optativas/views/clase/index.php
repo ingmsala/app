@@ -92,22 +92,32 @@ in_array (Yii::$app->user->identity->role, [1,8,9]) ? $template = '{view} {updat
                 'label' => 'Horario',
                 'format' => 'raw',
                 'value' => function($model){
-                    if($model->hora != null)
-                        return $model->hora;
+                    if($model->hora != null){
+                        $ini = Yii::$app->formatter->asDate($model['hora'], 'HH:mm');
+                        if($model->horafin != null){
+                            $fin = Yii::$app->formatter->asDate($model['horafin'], 'HH:mm');
+                            return $ini.' a '.$fin;
+                        }
+                            
+                        else
+                        return $ini;
+                    }
                     else
                         return '<span style="color: red;"><i>(A definir)</i><span>';
                 }
             ],
+            
             'tema',
-            [
-                'label' => 'Comisión',
-                'attribute' => 'comision0.nombre',
-            ],
+            
             [
                 'label' => 'Tipo de Clase',
                 'attribute' => 'tipoclase0.nombre',
             ],
-            'horascatedra',
+            [
+                'label' => 'Tipo de Asistencia',
+                'attribute' => 'tipoasistencia0.nombre',
+            ],
+            
             [
                 'label' => 'Ausentes',
                 //'attribute' => 'estadomatricula0.nombre',

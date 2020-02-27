@@ -27,12 +27,49 @@ $this->registerJs("
             }); 
         });
 
+        $(document).ready(function() { 
+            $('#clase-hora').change(function() {
+            	var hc;
+            	hc = $('#hr').val() * 1.5;
+                hc = Math.round(hc * 100) / 100
+            	$('#hc').val(hc);
+            }); 
+        });
+
+        $(document).ready(function() { 
+            $('#clase-horafin').change(function() {
+                
+                inicio = document.getElementById('clase-hora').value;
+                fin = document.getElementById('clase-horafin').value;
+                
+                inicioMinutos = parseInt(inicio.substr(3,2));
+                inicioHoras = parseInt(inicio.substr(0,2));
+                
+                finMinutos = parseInt(fin.substr(3,2));
+                finHoras = parseInt(fin.substr(0,2));
+
+                transcurridoMinutos = finMinutos - inicioMinutos;
+                transcurridoHoras = finHoras - inicioHoras;
+                
+                if (transcurridoMinutos < 0) {
+                    transcurridoHoras--;
+                    transcurridoMinutos = 60 + transcurridoMinutos;
+                }
+
+                $('#hr').val(transcurridoHoras+(transcurridoMinutos/60));
+            	hc = $('#hr').val() * 1.5;
+                hc = Math.round(hc * 100) / 100
+            	$('#hc').val(hc);
+            }); 
+        });
+
 ");
 
 ?>
 
 
 <?php $tipos=ArrayHelper::map($tiposclase,'id','nombre'); ?>
+<?php $tiposasistencia=ArrayHelper::map($tiposasistencia,'id','nombre'); ?>
 <?php $meses = [ 1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12=> 'Diciembre']; ?>
 <?php $conf = [ 0 => 'A definir', 1 => 'Confirmada']; ?>
 
@@ -50,9 +87,12 @@ $this->registerJs("
                                 if(conf==0){
                                     $("#divsindef").show();
                                     $("#divconf").hide();
+                                    $("#calculohoras").show();
+                                    
                                 }else{
                                     $("#divconf").show();
                                     $("#divsindef").hide();
+                                    $("#calculohoras").hide();
                                 }
 
                 ',
@@ -88,6 +128,18 @@ $this->registerJs("
                     ]
 
                 ]); ?>
+
+                <?= $form->field($model, 'horafin')->widget(TimePicker::classname(), [
+
+                'pluginOptions' => [
+                        
+                        'showMeridian' => false,
+                        'minuteStep' => 1,
+                        'defaultTime' => false,
+
+                    ]
+
+                ]); ?>
             </div>
             
 
@@ -100,7 +152,7 @@ $this->registerJs("
 </div>
 
     <?= $form->field($model, 'tipoclase')->dropDownList($tipos, ['prompt'=>'Seleccionar...']); ?>
-    <div class="panel panel-default" style="width:50%;">
+    <div class="panel panel-default" style="width:50%;" id="calculohoras">
 		<div class="panel-heading">Convertir a hora cátedra <span data-toggle="tooltip" title="Sólo se guarda el valor de la hora cátedra" class="glyphicon glyphicon-info-sign"></span></div>
 		<div class="panel-body">
 	    	<label>Hora reloj</label>
@@ -110,7 +162,7 @@ $this->registerJs("
 
 		</div>
 	</div>
-    
+    <?= $form->field($model, 'tipoasistencia')->dropDownList($tiposasistencia, ['prompt'=>'Seleccionar...']); ?>
     <?= $form->field($model, 'tema')->textInput(['maxlength' => true]) ?>
 
     

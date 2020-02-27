@@ -89,6 +89,7 @@ class FichadelalumnoController extends \yii\web\Controller
 
         $clasescomision = Clase::find()
                             ->where(['comision' => $comision])
+                            ->where(['BETWEEN', 'fecha', date('Y-m-d', strtotime("+0 days")), date('Y-m-d', strtotime("+0 days"))])
                             ->orderBy('fecha ASC')
                             ->all();
 

@@ -18,7 +18,7 @@ class SeguimientoSearch extends Seguimiento
     public function rules()
     {
         return [
-            [['id', 'matricula'], 'integer'],
+            [['id', 'matricula', 'trimestre'], 'integer'],
             [['fecha', 'descripcion'], 'safe'],
         ];
     }

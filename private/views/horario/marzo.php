@@ -16,2686 +16,997 @@ $this->title = '';
 
 <style id="EXÁMENES COMPLEMENTARIOS FEBRERO MARZO 2020_18688_Styles">
 <!--table
-	{mso-displayed-decimal-separator:"\,";
-	mso-displayed-thousand-separator:"\.";}
-.font018688
-	{color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;}
-.font518688
-	{color:red;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;}
-.xl1518688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:general;
-	vertical-align:bottom;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl6318688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl6418688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:700;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:1.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:1.5pt solid black;
-	border-left:1.5pt solid black;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl6518688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:700;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:1.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:1.5pt solid black;
-	border-left:.5pt solid black;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl6618688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:700;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:1.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:1.5pt solid black;
-	border-left:.5pt solid black;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl6718688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:none;
-	border-right:.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl6818688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:none;
-	border-right:1.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl6918688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl7018688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl7118688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl7218688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl7318688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:1.5pt solid black;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl7418688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:1.5pt solid black;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl7518688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:none;
-	border-right:.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl7618688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:none;
-	border-right:.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl7718688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:none;
-	border-right:1.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl7818688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl7918688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl8018688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl8118688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:"Short Time";
-	text-align:center;
-	vertical-align:middle;
-	border-top:1.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:none;
-	border-left:1.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl8218688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:1.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl8318688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:1.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl8418688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:"Short Time";
-	text-align:center;
-	vertical-align:middle;
-	border-top:none;
-	border-right:.5pt solid black;
-	border-bottom:none;
-	border-left:1.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl8518688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:none;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl8618688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:none;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl8718688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:none;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl8818688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl8918688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:1.5pt solid black;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl9018688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:1.5pt solid black;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl9118688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:1.5pt solid black;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl9218688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:1.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl9318688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:1.5pt solid black;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl9418688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:1.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl9518688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:1.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl9618688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:1.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl9718688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:none;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl9818688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:none;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl9918688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:none;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl10018688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:windowtext;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl10118688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:windowtext;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl10218688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:none;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl10318688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:windowtext;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:1.5pt solid black;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl10418688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:1.5pt solid black;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl10518688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:1.5pt solid black;
-	border-bottom:1.5pt solid black;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl10618688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:middle;
-	border-top:none;
-	border-right:1.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl10718688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:16.0pt;
-	font-weight:700;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Cambria;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:center;
-	vertical-align:bottom;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl10818688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:"d\/m";
-	text-align:center;
-	vertical-align:middle;
-	border-top:none;
-	border-right:.5pt solid black;
-	border-bottom:none;
-	border-left:1.5pt solid black;
-	background:white;
-	mso-pattern:white none;
-	white-space:nowrap;}
-.xl10918688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:windowtext;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:general;
-	vertical-align:bottom;
-	border-top:none;
-	border-right:.5pt solid black;
-	border-bottom:none;
-	border-left:1.5pt solid black;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl11018688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:windowtext;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:general;
-	vertical-align:bottom;
-	border-top:none;
-	border-right:.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:1.5pt solid black;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl11118688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:"Short Time";
-	text-align:center;
-	vertical-align:middle;
-	border-top:none;
-	border-right:.5pt solid black;
-	border-bottom:none;
-	border-left:.5pt solid black;
-	background:#F3F3F3;
-	mso-pattern:#F3F3F3 none;
-	white-space:nowrap;}
-.xl11218688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:windowtext;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:general;
-	vertical-align:bottom;
-	border-top:none;
-	border-right:.5pt solid black;
-	border-bottom:none;
-	border-left:.5pt solid black;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl11318688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:windowtext;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:general;
-	vertical-align:bottom;
-	border-top:none;
-	border-right:.5pt solid black;
-	border-bottom:1.5pt solid black;
-	border-left:.5pt solid black;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl11418688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:"Short Time";
-	text-align:center;
-	vertical-align:middle;
-	border-top:none;
-	border-right:.5pt solid black;
-	border-bottom:none;
-	border-left:.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
-.xl11518688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:windowtext;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:general;
-	vertical-align:bottom;
-	border-top:none;
-	border-right:.5pt solid black;
-	border-bottom:.5pt solid black;
-	border-left:.5pt solid black;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl11618688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:windowtext;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:general;
-	vertical-align:bottom;
-	border-top:none;
-	border-right:.5pt solid black;
-	border-bottom:1.5pt solid black;
-	border-left:1.5pt solid black;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl11718688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:"d\/m";
-	text-align:center;
-	vertical-align:middle;
-	border-top:.5pt solid black;
-	border-right:none;
-	border-bottom:none;
-	border-left:1.5pt solid black;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl11818688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:windowtext;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:general;
-	vertical-align:bottom;
-	border-top:none;
-	border-right:none;
-	border-bottom:none;
-	border-left:1.5pt solid black;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl11918688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:windowtext;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:general;
-	vertical-align:bottom;
-	border-top:none;
-	border-right:none;
-	border-bottom:.5pt solid black;
-	border-left:1.5pt solid black;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl12018688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:windowtext;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:general;
-	vertical-align:bottom;
-	border-top:none;
-	border-right:none;
-	border-bottom:1.5pt solid black;
-	border-left:1.5pt solid black;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl12118688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:"Short Time";
-	text-align:center;
-	vertical-align:middle;
-	border-top:1.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:none;
-	border-left:1.5pt solid black;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	white-space:nowrap;}
-.xl12218688
-	{padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Arial;
-	mso-generic-font-family:auto;
-	mso-font-charset:0;
-	mso-number-format:"Short Time";
-	text-align:center;
-	vertical-align:middle;
-	border-top:1.5pt solid black;
-	border-right:.5pt solid black;
-	border-bottom:none;
-	border-left:1.5pt solid black;
-	background:#D9D9D9;
-	mso-pattern:#D9D9D9 none;
-	white-space:nowrap;}
+table.blueTable {
+  border: 1px solid #1C6EA4;
+  background-color: #EEEEEE;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+table.blueTable td, table.blueTable th {
+  border: 1px solid #AAAAAA;
+  padding: 3px 2px;
+}
+table.blueTable tbody td {
+  font-size: 13px;
+}
+table.blueTable tr:nth-child(even) {
+  background: #D0E4F5;
+}
+table.blueTable thead {
+  background: #1C6EA4;
+  background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+  background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+  background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+  border-bottom: 2px solid #444444;
+}
+table.blueTable thead th {
+  font-size: 15px;
+  font-weight: bold;
+  color: #FFFFFF;
+  border-left: 2px solid #D0E4F5;
+}
+table.blueTable thead th:first-child {
+  border-left: none;
+}
+
+table.blueTable tfoot {
+  font-size: 14px;
+  font-weight: bold;
+  color: #FFFFFF;
+  background: #D0E4F5;
+  background: -moz-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  background: -webkit-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  background: linear-gradient(to bottom, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  border-top: 2px solid #444444;
+}
+table.blueTable tfoot td {
+  font-size: 14px;
+}
+table.blueTable tfoot .links {
+  text-align: right;
+}
+table.blueTable tfoot .links a{
+  display: inline-block;
+  background: #1C6EA4;
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: 5px;
+}
 -->
 </style>
 <div>
         
-<table border=0 cellpadding=0 cellspacing=0 width=1307 style='border-collapse:
- collapse;table-layout:fixed;width:982pt'>
- <col width=101 span=2 style='width:76pt'>
- <col width=262 style='mso-width-source:userset;mso-width-alt:9581;width:197pt'>
- <col width=101 style='width:76pt'>
- <col width=121 style='mso-width-source:userset;mso-width-alt:4425;width:91pt'>
- <col width=419 style='mso-width-source:userset;mso-width-alt:15323;width:314pt'>
- <col width=101 span=2 style='width:76pt'>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td colspan=6 height=35 class=xl10718688 width=1105 style='height:26.25pt;
-  width:830pt'>EXÁMENES COMPLEMENTARIOS FEBRERO – MARZO 2020</td>
-  <td class=xl6318688 width=101 style='width:76pt'></td>
-  <td class=xl1518688 width=101 style='width:76pt'></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6418688 style='height:26.25pt'>Día</td>
-  <td class=xl6518688 style='border-left:none'>Horario</td>
-  <td class=xl6518688 style='border-left:none'>Materia</td>
-  <td class=xl6518688 style='border-left:none'>Año</td>
-  <td class=xl6518688 style='border-left:none'>Sección</td>
-  <td class=xl6618688 style='border-left:none'>Docentes</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=14 height=490 class=xl10818688 style='border-bottom:.5pt solid black;
-  height:367.5pt'>20/2</td>
-  <td rowspan=7 class=xl11118688 style='border-bottom:1.5pt solid black'>08:00</td>
-  <td class=xl6718688 style='border-left:none'>LENGUA Y CULTURA LATINAS</td>
-  <td class=xl6718688 style='border-left:none'>1º</td>
-  <td class=xl6718688 style='border-left:none'>E-F-G-H</td>
-  <td class=xl6818688 style='border-left:none'>RIVERO, C. – SPINASSI - S. D'
-  AVILA - ROBLEDO</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENG.Y CULT. CASTELLANAS</td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>2º</td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl7018688 style='border-top:none;border-left:none'>DELICIA –
-  CACHAGUA- VILLAFAÑE - TIMOSSI</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>FORMACION MUSICAL</td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>3º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>RIVERO, R. –
-  ORTIZ MORAN – ARGÜELLO - GREIFF</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>HISTORIA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>SARTORI –
-  DAMIANI – PETRI - FERRINO</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>FRANCÉS<span style='mso-spacerun:yes'>  </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>GEBAUER –
-  CUEVAS- BENAVIDES - FUENTE</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENGUAY LITERATURA</td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>TARBINE –
-  TEOBALDI, D., FURLAN - RUPIL</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7318688 style='height:26.25pt;border-top:none;
-  border-left:none'>ANÁLISIS MAT. Y GEO. ANAL.<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7318688 style='border-top:none;border-left:none'>7º</td>
-  <td class=xl7318688 style='border-top:none;border-left:none'>A-B-C-G<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7418688 style='border-top:none;border-left:none'>PATOCO, O. –
-  GOMEZ – SANDIN - YUSZCZYK</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=7 height=245 class=xl11418688 style='border-bottom:.5pt solid black;
-  height:183.75pt'>13:30</td>
-  <td class=xl7518688 style='border-left:none'>ESTRATEGIAS</td>
-  <td class=xl7518688 style='border-left:none'>1º</td>
-  <td class=xl7618688 style='border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl7718688 style='border-left:none'>LOPEZ FABRE – ECHAVARRIA-
-  GARUTTI- MARTINEZ</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>EDUCACIÓN PARA LA SALUD</td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>2º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>CEJAS, E. – BAJO
-  – LAVANDERA- FERRERO, C.</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>MATEMÁTICA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>3º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>ANGELONI –
-  MANZANO – YUSZCZYK - GIGENA</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>GEOGRAFÍA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>ZANGHI – CAEIRO
-  – PEREYRA- PERALTA</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>INGLÉS<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>BIAZZUTTI –
-  CORNET – VACA NARVAJA - MASSA</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENGUA Y CULTURA GRIEGAS<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>D-E-F</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>BRUSCO – AGÜERO
-  SOLIS – RIVERO, C. - PALMISANO</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>FILOSOFÍA</td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>7º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>MONTOYA – FITA –
-  CAMAÑO - AMAYA</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=14 height=490 class=xl11718688 style='border-bottom:.5pt solid black;
-  height:367.5pt;border-top:none'>21/2</td>
-  <td class=xl8118688>08:00</td>
-  <td class=xl8218688 style='border-left:none'>GEOGRAFÍA<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl8218688 style='border-left:none'>1º</td>
-  <td class=xl8218688 style='border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8318688 style='border-left:none'>ZANGHI – CANDELA – CAIERO –
-  FLORES, E.</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl8418688 style='height:26.25pt'>&nbsp;</td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>LENGUA Y CULTURA
-  INGLESAS<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>2º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl7018688 style='border-top:none;border-left:none'>DE MONTE –
-  RODRIGUEZ, J. – ESPINOSA - MASSA</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl8418688 style='height:26.25pt'>&nbsp;</td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>LENGUA Y
-  LITERATURA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>3º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>MALDONADO –
-  TIMOSSI – CONSTENLA - CACHAGUA</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl8418688 style='height:26.25pt'>&nbsp;</td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>FISICO - QUIMICA</td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>FONTANA –
-  GUERRERO – BALANZINO - MARIANI</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl8418688 style='height:26.25pt'>&nbsp;</td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>ESTADISTICA Y
-  PROBABILIDADES<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>LEONETTO –
-  YUSZCZYK – MENOYO - PISONI</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=2 height=70 class=xl8418688 style='border-bottom:1.5pt solid black;
-  height:52.5pt'>&nbsp;</td>
-  <td class=xl8518688 style='border-top:none;border-left:none'>HISTORIA</td>
-  <td class=xl8518688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl8618688 style='border-top:none;border-left:none'>A-B-C</td>
-  <td class=xl8718688 style='border-top:none;border-left:none'>GONZALEZ ACHAVAL
-  – DAINOTTO – DAMIANI - PETRI</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl8518688 style='height:26.25pt;border-left:none'>ELEMENTOS
-  DEL DERECHO</td>
-  <td class=xl8518688 style='border-left:none'>7º</td>
-  <td class=xl8618688 style='border-left:none'>A-B-C-D-E-F-G<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl8718688 style='border-left:none'>TABORDA – CIMA – FERLA - EUSEBIO</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=7 height=245 class=xl11418688 style='height:183.75pt'>13:30</td>
-  <td class=xl7818688 style='border-left:none'>MATEMÁTICA</td>
-  <td class=xl7818688 style='border-left:none'>1º</td>
-  <td class=xl7818688 style='border-left:none'><span
-  style='mso-spacerun:yes'> </span>A-B-C-D<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl8018688 style='border-left:none'>MUÑOZ – ROMERO – GIMENEZ -
-  TOLEDO</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENGUA Y CULTURA LATINAS<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>2º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>RIVERO, C. –
-  SPINASSI – AGÜERO SOLIS – GALAN</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>HISTORIA DEL ARTE<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>3º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>BARBERIS –
-  TEOBALDI, S. - LÓPEZ ARZUAGA - MOLINA</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>HISTORIA</td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl8818688 style='border-top:none;border-left:none'>FERRINO – SEVERI
-  – PETRI – FLORES, S.</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>FILOSOFÍA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>MONTOYA –
-  RABINOVICH – CAMAÑO - AMAYA</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>HISTORIA DE LA CULTURA<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>FITA – SARTORI –
-  CAMAÑO – FLORES,S.</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl8918688 style='height:26.25pt;border-top:none;
-  border-left:none'>FÍSICA</td>
-  <td class=xl8918688 style='border-top:none;border-left:none'>7º</td>
-  <td class=xl9018688 style='border-top:none;border-left:none'>D-E-F</td>
-  <td class=xl9118688 style='border-top:none;border-left:none'>GIGENA –
-  MARTINEZ H – LAMISOWSKY - DIPIERRI</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=14 height=490 class=xl11718688 style='border-bottom:.5pt solid black;
-  height:367.5pt;border-top:none'>26/2</td>
-  <td rowspan=7 class=xl8418688 style='border-bottom:1.5pt solid black'>08:00</td>
-  <td class=xl8218688 style='border-top:none;border-left:none'>FORMACION
-  MUSICAL</td>
-  <td class=xl8218688 style='border-top:none;border-left:none'>1º</td>
-  <td class=xl9218688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8318688 style='border-top:none;border-left:none'>RIVERO, R. –
-  ORTIZ MORAN – ARGÜELLO - GREIFF</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>FORMACION PLÁSTICA</td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>2º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>GABRIELLI –
-  BARIO – MOYA - VILLARRUEL</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>MATEMÁTICA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>3º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>MANZANO –
-  GIMENEZ – YUSZCZYK - GIGENA</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>INGLÉS</td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>CORNET –
-  RODRIGUEZ, J. –ALCAZAR – DE MONTE</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>HISTORIA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>SARTORI – SEVERI
-  – FLORES, S. - DAMIANI</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>GEOMETRIA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>ANGELONI –
-  TOLEDO – DIPIERRI - MENOYO</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7318688 style='height:26.25pt;border-top:none;
-  border-left:none'>BIOLOGÍA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7318688 style='border-top:none;border-left:none'>7º</td>
-  <td class=xl9318688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G</td>
-  <td class=xl7418688 style='border-top:none;border-left:none'>FERRERO, C. –
-  BAJO – CEJAS, E. - VILARO</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=7 height=245 class=xl12218688 style='border-bottom:1.5pt solid black;
-  height:183.75pt;border-top:none'>13:30</td>
-  <td class=xl9418688 style='border-top:none;border-left:none'>LENG.Y CULT.
-  LATINAS</td>
-  <td class=xl9418688 style='border-top:none;border-left:none'>1º</td>
-  <td class=xl9518688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl9618688 style='border-top:none;border-left:none'>RIVERO, C. –
-  SPINASSI - DIAZ M- ROBLEDO</td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENG.Y LIT. CASTELLANAS</td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>2º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>DELICIA –
-  FERNANDEZ, V. – CACHAGUA -<font class="font518688"> </font><font
-  class="font018688">MALDONADO</font></td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>HISTORIA</td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>3º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>GONZALEZ ACHAVAL
-  – SEVERI – FERRINO - PETRI</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENGUA Y LITERATURA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>TARBINE – FURLAN
-  – ACOSTA - VOLOJ</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>ESTADISTICA Y PROBABILIDADES<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>LEONETTO –
-  YUSZCZYK – MENOYO - PISONI</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>FISICA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>D-E-F</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>LAMISOWSKY–
-  GIGENA – TOLEDO - MARTINEZ</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl8918688 style='height:26.25pt;border-top:none;
-  border-left:none'>SOCIOLOGÍA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl8918688 style='border-top:none;border-left:none'>7º</td>
-  <td class=xl9018688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G</td>
-  <td class=xl9118688 style='border-top:none;border-left:none'>TORRES – CIMA –
-  EUSEBIO - ESCALERA</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=14 height=490 class=xl11718688 style='border-bottom:.5pt solid black;
-  height:367.5pt;border-top:none'>27/2</td>
-  <td rowspan=7 class=xl8118688 style='border-bottom:1.5pt solid black;
-  border-top:none'>08:00</td>
-  <td class=xl8218688 style='border-top:none;border-left:none'>FORMACION
-  PLÁSTICA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl8218688 style='border-top:none;border-left:none'>1º</td>
-  <td class=xl9218688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8318688 style='border-top:none;border-left:none'>MOYA – TEOBALDI
-  S– JEREZ - BARIO</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENGUA Y CULTURA LATINAS<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>2º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>RUIZ DE LOS
-  LLANOS- DEL AGUILA - DIAZ M- GALAN</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>GEOGRAFÍA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>3º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>FLORES,E. –
-  CAIERO – BAROFFIO - CANDELA</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>MATEMÁTICA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>ANGELONI –
-  MENOYO – YUSZCZYK - LEONETTO</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>ALGEBRA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>GUERRA – GIGENA
-  – TOLEDO - SANDIN</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>INFORMÁTICA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>TORTI –
-  FRAGUEIRO – GOMEZ – SALA DIAZ, M.</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7318688 style='height:26.25pt;border-top:none;
-  border-left:none'>HISTORIA DE LA CULTURA<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7318688 style='border-top:none;border-left:none'>7º</td>
-  <td class=xl7318688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G</td>
-  <td class=xl7418688 style='border-top:none;border-left:none'>GONZALEZ ACHAVAL
-  – FITA – DAMIANI - AMAYA</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=7 height=245 class=xl11418688 style='border-bottom:.5pt solid black;
-  height:183.75pt'>13:30</td>
-  <td class=xl7518688 style='border-left:none'>LENGUA Y CULTURA INGLESAS<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7518688 style='border-left:none'>1º</td>
-  <td class=xl7618688 style='border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl7718688 style='border-left:none'>ALCAZAR – CORNET – HELALE – VACA
-  NARVAJA</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>HISTORIA<span style='mso-spacerun:yes'>  </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>2º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>FLORES, S. –
-  GARCIA MARTIN – GONZALEZ ACHAVAL - CEBALLOS</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENGUA Y LITERATURA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>3º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>VILLAFAÑE –
-  CACHAGUA - DELICIA - MALDONADO</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>PLÁSTICA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>BARIO –
-  VILLARRUEL – SONZINI ASTUDILLO – TEOBALDI, S.</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENGUA Y LITERATURA<span style='mso-spacerun:yes'>  </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>RUPIL –
-  TARBINE-TEOBALDI, D. - VOLOJ</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>TRIGONOMETRIA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>GOMEZ – DIPIERRI
-  – ANGELONI - GIGENA</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl9718688 style='height:26.25pt;border-top:none;
-  border-left:none'>FRANCÉS<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl9718688 style='border-top:none;border-left:none'>7º</td>
-  <td class=xl9818688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G</td>
-  <td class=xl9918688 style='border-top:none;border-left:none'>BENAVIDES –
-  GATTI – MASSA - GEBAUER</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=14 height=490 class=xl11718688 style='border-bottom:.5pt solid black;
-  height:367.5pt;border-top:none'>28/2</td>
-  <td rowspan=7 class=xl8118688 style='border-bottom:1.5pt solid black'>08:00</td>
-  <td class=xl8218688 style='border-left:none'>CS. DE LA VIDA Y DE LA TIERRA</td>
-  <td class=xl8218688 style='border-left:none'>1º</td>
-  <td class=xl9218688 style='border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8318688 style='border-left:none'>VILARO – CEJAS, E. – BALANZINO -
-  DEMMEL</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>MATEMÁTICA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>2º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>GUERRA –
-  YUSZCZYK – GIMENEZ - GIGENA</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENG. Y CULT. LATINAS<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>3º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>DEL AGUILA –
-  SPINASSI – MANCINI – RIVERO, C.</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>FORMACIÓN ÉTICA Y CÍVICA<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>PORTELA –
-  BARRALE – AGHEMO - TABORDA</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENGUA Y CULTURA LATINAS<span
-  style='mso-spacerun:yes'>  </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>ROBLEDO - S. D'
-  AVILA – AGÜERO SOLIS - YANTORNO</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>FILOSOFÍA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>CAMAÑO – MONTOYA
-  – AMAYA - FITA</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7318688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENGUA Y LITERATURA<span style='mso-spacerun:yes'>  </span></td>
-  <td class=xl7318688 style='border-top:none;border-left:none'>7º</td>
-  <td class=xl9318688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G</td>
-  <td class=xl7418688 style='border-top:none;border-left:none'>TARBINE –
-  TEOBALDI, D. – FURLAN - DELICIA</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=7 height=245 class=xl11418688 style='border-bottom:.5pt solid black;
-  height:183.75pt'>13:30</td>
-  <td class=xl7518688 style='border-left:none'>HISTORIA</td>
-  <td class=xl7518688 style='border-left:none'>1º</td>
-  <td class=xl7618688 style='border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl7718688 style='border-left:none'>DAMIANI – GONZALEZ ACHAVAL –
-  FERRINO – FLORES, S.</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>FORMACION MUSICAL<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>2º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>RIVERO, R. –
-  ORTIZ MORAN – ARGÜELLO - GREIFF</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>PLASTICA</td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>3º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>VILLARRUEL –
-  BARIO – TEOBALDI - BARBERIS</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>BIOLOGÍA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>FERRERO, C. –
-  DIAZ GAVIER – MALDONADO, L. - DEMMEL</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENGUA Y CULTURA GRIEGAS<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>PALMISANO –
-  FERRERO, CARLA – BRUSCO – AGÜERO SOLIS</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>INGLÉS<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>CORNET – MASSA –
-  VACA NARVAJA - ALCAZAR</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl9718688 style='height:26.25pt;border-top:none;
-  border-left:none'>ANÁLISIS MAT. Y GEO. ANAL.<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl9718688 style='border-top:none;border-left:none'>7º</td>
-  <td class=xl9818688 style='border-top:none;border-left:none'>D-E-F</td>
-  <td class=xl9918688 style='border-top:none;border-left:none'>PATOCO, O. –
-  GOMEZ – SANDIN - YUSZCZYK</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=14 height=490 class=xl11718688 style='border-bottom:.5pt solid black;
-  height:367.5pt;border-top:none'>2/3</td>
-  <td rowspan=7 class=xl8118688 style='border-bottom:1.5pt solid black'>08:00</td>
-  <td class=xl8218688 style='border-left:none'>LENG. Y LIT. CASTELLANAS<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl8218688 style='border-left:none'>1º</td>
-  <td class=xl9218688 style='border-left:none'>A-B-C-D</td>
-  <td class=xl8318688 style='border-left:none'>FURLAN – DELICIA – ACOSTA –
-  FERNANDEZ, V.</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>FORMACIÓN ÉTICA Y CIUDADANA<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>2º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>SOUBERAN –
-  GARCÍA MARTIN– BARRALE - AGHEMO</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>HISTORIA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>3º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>FERRINO –
-  FLORES,S – SEVERI – GONZALEZ ACHAVAL</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>FORMACIÓN ÉTICA Y CÍVICA<span
-  style='mso-spacerun:yes'>  </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>CAFURE – BRITOS
-  – BARROS - TAPIA</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>METODOLOGÍA DE LA INVESTIG.<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>GOMEZ – SUAREZ –
-  MONTOYA - VILARO</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>BIOLOGÍA</td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>FERRERO, C. –
-  CEJAS, E. – INFANZON - MARIANI</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7318688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENGUA Y CULTURA GRIEGAS<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7318688 style='border-top:none;border-left:none'>7º</td>
-  <td class=xl9318688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G</td>
-  <td class=xl7418688 style='border-top:none;border-left:none'>BRUSCO –
-  RIVERO,C. – GALAN – AGÜERO SOLIS</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=7 height=245 class=xl11418688 style='border-bottom:.5pt solid black;
-  height:183.75pt'>13:30</td>
-  <td class=xl7518688 style='border-left:none'>MATEMATICA<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7518688 style='border-left:none'>1º</td>
-  <td class=xl7618688 style='border-left:none'>E-F-G-H</td>
-  <td class=xl7718688 style='border-left:none'>MANZANO– SOSA – GIMENEZ - TOLEDO</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>GEOGRAFIA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>2º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>ZANGHI –
-  CANDELA- FLORES, E. – CAIERO - BAROFFIO</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>FORMACIÓN ÉTICA Y CIUDADANA<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>3º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>FERLA – CIMA –
-  TABORDA - RAHAL</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENG. Y CULTURA LATINAS<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>AGÜERO SOLIS –
-  MANCINI – YANTORNO - SPINASSI</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>ALGEBRA<span style='mso-spacerun:yes'>  </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>GUERRA –
-  LEONETTO – GIGENA - YUSZCZYK</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>GEOMETRIA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>D-E-F</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>DIPIERRI –
-  SANDIN – MENOYO- PISONI</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl9718688 style='height:26.25pt;border-top:none;
-  border-left:none'>PSICOLOGÍA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl9718688 style='border-top:none;border-left:none'>7º</td>
-  <td class=xl9818688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G</td>
-  <td class=xl9918688 style='border-top:none;border-left:none'>ZARATE – LOPEZ
-  FABRE – GARUTTI - SUAREZ</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=14 height=490 class=xl11718688 style='border-bottom:.5pt solid black;
-  height:367.5pt;border-top:none'>3/3</td>
-  <td rowspan=7 class=xl8118688 style='border-bottom:1.5pt solid black'>08:00</td>
-  <td class=xl8218688 style='border-left:none'>FORMACIÓN ÉTICA Y CIUDADANA<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl8218688 style='border-left:none'>1º</td>
-  <td class=xl9218688 style='border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8318688 style='border-left:none'>AGHEMO – CIMA – TAPIA - TABORDA</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>HISTORIA<span style='mso-spacerun:yes'>  </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>2º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>FLORES, S. –
-  SARTORI – FERRINO - PETRI</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>CS. NATURALES<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>3º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>CEJAS, W. – BAJO
-  – BALANZINO – FERRERO, C.</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENGUA Y LITERATURA</td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>TARBINE –
-  CONSTENLA – FURLAN – TEOBALDI, D.</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENGUA Y CULTURA GRIEGAS<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl7018688 style='border-top:none;border-left:none'>BRUSCO –
-  SPINASSI – YANTORNO - MANCINI</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>FÍSICA</td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C</td>
-  <td class=xl10018688 style='border-top:none;border-left:none'><span
-  style='mso-spacerun:yes'> </span>LAMISOWSKY – TOLEDO – GIGENA - MARTINEZ</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7318688 style='height:26.25pt;border-top:none;
-  border-left:none'>INFORMÁTICA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7318688 style='border-top:none;border-left:none'>7º</td>
-  <td class=xl7318688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7418688 style='border-top:none;border-left:none'>TORTI –
-  FRAGUEIRO – GOMEZ – SALA DIAZ</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=7 height=245 class=xl11418688 style='border-bottom:.5pt solid black;
-  height:183.75pt'>13:30</td>
-  <td class=xl7518688 style='border-left:none'>LENG. Y LIT. CASTELLANAS<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7518688 style='border-left:none'>1º</td>
-  <td class=xl7618688 style='border-left:none'>E-F-G-H</td>
-  <td class=xl7718688 style='border-left:none'>RUPIL – ACOSTA – DELICIA - VOLOJ</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>MATEMÁTICA</td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>2º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>SOSA – TOLEDO –
-  LEONETTO - GIGENA</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENG. Y CULT. LATINAS</td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>3º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>SPINASSI –
-  MANCINI - S. D'AVILA - GALAN</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>HISTORIA DEL ARTE</td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl10118688 style='border-top:none;border-left:none'>LÓPEZ ARZUAGA,
-  R– VILLARRUEL – TEOBALDI,S. - GABRIELLI</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>QUIMICA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'><span
-  style='mso-spacerun:yes'> </span>BALANZINO – GUERRERO – TORTONE - MARIANI</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>HISTORIA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>D-E-F</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'>DAINOTTO – PETRI
-  – SARTORI - DAMIANI</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl9718688 style='height:26.25pt;border-top:none;
-  border-left:none'>ECONOMÍA POLÍTICA</td>
-  <td class=xl9718688 style='border-top:none;border-left:none'>7º</td>
-  <td class=xl9718688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G</td>
-  <td class=xl10218688 style='border-top:none;border-left:none'>PRADO – FLORES,
-  S. – SOSA - FERLA</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=9 height=315 class=xl11718688 style='border-bottom:.5pt solid black;
-  height:236.25pt;border-top:none'>4/3</td>
-  <td rowspan=5 class=xl12118688 style='border-bottom:1.5pt solid black'>08:00</td>
-  <td class=xl8218688 style='border-left:none'>INGLÉS<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl8218688 style='border-left:none'>3º</td>
-  <td class=xl9218688 style='border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8318688 style='border-left:none'>ALCAZAR – ALTAMIRANO – BIAZZUTTI
-  – DE MONTE</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENG. Y CULTURA LATINAS<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'>GALAN –
-  RIVERO,C. – SPINASSI - YANTORNO</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>GEOGRAFÍA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl7218688 style='border-top:none;border-left:none'><span
-  style='mso-spacerun:yes'> </span>PERALTA – FLORES, E. – CAEIRO - CANDELA</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl6918688 style='height:26.25pt;border-top:none;
-  border-left:none'>FRANCÉS<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl6918688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl7118688 style='border-top:none;border-left:none'>A-B-C-D-E-F</td>
-  <td class=xl7018688 style='border-top:none;border-left:none'>BENAVIDES –
-  GATTI – MASSA - FUENTE</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7318688 style='height:26.25pt;border-top:none;
-  border-left:none'>FÍSICA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7318688 style='border-top:none;border-left:none'>7º</td>
-  <td class=xl9318688 style='border-top:none;border-left:none'>A-B-C-D-G</td>
-  <td class=xl10318688 style='border-top:none;border-left:none'>GIGENA – TOLEDO
-  – LAMISOWSKY - SCARAFIA</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=4 height=140 class=xl12218688 style='border-bottom:1.5pt solid black;
-  height:105.0pt;border-top:none'>13:30</td>
-  <td class=xl9418688 style='border-top:none;border-left:none'>MATEMÁTICA</td>
-  <td class=xl9418688 style='border-top:none;border-left:none'>4º</td>
-  <td class=xl9518688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl9618688 style='border-top:none;border-left:none'>MENOYO – MANZANO
-  – PISONI - YUSZCZYK</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENGUA Y CULTURA LATINAS<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>E-F-G-H</td>
-  <td class=xl8818688 style='border-top:none;border-left:none'>SPINASSI –
-  MANCINI - S. D'AVILA - GALAN</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7818688 style='height:26.25pt;border-top:none;
-  border-left:none'>GEOGRAFÍA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl7818688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl7918688 style='border-top:none;border-left:none'>A-B-C-D-E-F</td>
-  <td class=xl8018688 style='border-top:none;border-left:none'><span
-  style='mso-spacerun:yes'> </span>PEREYRA – PERALTA- FLORES, E. - ZANGHI</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl8918688 style='height:26.25pt;border-top:none;
-  border-left:none'>HISTORIA</td>
-  <td class=xl8918688 style='border-top:none;border-left:none'>7º</td>
-  <td class=xl9018688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G</td>
-  <td class=xl10418688 style='border-top:none;border-left:none'>DAMIANI –
-  SARTORI – FLORES, S. - DAINOTTO</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=4 height=140 class=xl11718688 style='border-bottom:1.5pt solid black;
-  height:105.0pt;border-top:none'>5/3</td>
-  <td rowspan=2 class=xl8118688 style='border-bottom:1.5pt solid black;
-  border-top:none'>08:00</td>
-  <td class=xl8218688 style='border-top:none;border-left:none'>BIOLOGÍA<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl8218688 style='border-top:none;border-left:none'>5º</td>
-  <td class=xl9218688 style='border-top:none;border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl8318688 style='border-top:none;border-left:none'><span
-  style='mso-spacerun:yes'> </span>DIAZ GAVIER – DEMMEL – LAVANDERA – FERRERO,
-  C.</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl7318688 style='height:26.25pt;border-top:none;
-  border-left:none'>LENGUA Y CULTURA GRIEGAS<span
-  style='mso-spacerun:yes'> </span></td>
-  <td class=xl7318688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl9318688 style='border-top:none;border-left:none'>A-B-C</td>
-  <td class=xl10518688 style='border-top:none;border-left:none'>BRUSCO – AGÜERO
-  SOLIS – RIVERO, C. - SPINASSI</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td rowspan=2 height=70 class=xl11418688 style='border-bottom:1.5pt solid black;
-  height:52.5pt'>13:30</td>
-  <td class=xl7518688 style='border-left:none'>INFORMÁTICA</td>
-  <td class=xl7518688 style='border-left:none'>5º</td>
-  <td class=xl7618688 style='border-left:none'>A-B-C-D-E-F-G-H</td>
-  <td class=xl10618688 style='border-left:none'>PATOCO – TORTI – FRAGUEIRO -
-  SALA DIAZ</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=35 style='mso-height-source:userset;height:26.25pt'>
-  <td height=35 class=xl8918688 style='height:26.25pt;border-top:none;
-  border-left:none'>QUÍMICA<span style='mso-spacerun:yes'> </span></td>
-  <td class=xl8918688 style='border-top:none;border-left:none'>6º</td>
-  <td class=xl9018688 style='border-top:none;border-left:none'>A-B-C-D-E-F</td>
-  <td class=xl9118688 style='border-top:none;border-left:none'>NIEVAS – DI
-  TOFINO – GUERRERO - TORTONE</td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=17 style='height:12.75pt'>
-  <td height=17 class=xl6318688 style='height:12.75pt'></td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=17 style='height:12.75pt'>
-  <td height=17 class=xl6318688 style='height:12.75pt'></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=17 style='height:12.75pt'>
-  <td height=17 class=xl6318688 style='height:12.75pt'></td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=17 style='height:12.75pt'>
-  <td height=17 class=xl6318688 style='height:12.75pt'></td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=17 style='height:12.75pt'>
-  <td height=17 class=xl6318688 style='height:12.75pt'></td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
- </tr>
- <tr height=17 style='height:12.75pt'>
-  <td height=17 class=xl6318688 style='height:12.75pt'></td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
-  <td class=xl6318688></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
-  <td class=xl1518688></td>
- </tr>
- <![if supportMisalignedColumns]>
- <tr height=0 style='display:none'>
-  <td width=101 style='width:76pt'></td>
-  <td width=101 style='width:76pt'></td>
-  <td width=262 style='width:197pt'></td>
-  <td width=101 style='width:76pt'></td>
-  <td width=121 style='width:91pt'></td>
-  <td width=419 style='width:314pt'></td>
-  <td width=101 style='width:76pt'></td>
-  <td width=101 style='width:76pt'></td>
- </tr>
- <![endif]>
+<p><strong>EX&Aacute;MENES COMPLEMENTARIOS &ndash; FEBRERO 2020</strong></p>
+<table class="blueTable">
+<tbody>
+<tr>
+<td width="87"><strong>D&iacute;a</strong></td>
+<td width="87"><strong>Horario</strong></td>
+<td width="148"><strong>Materia</strong></td>
+<td width="74"><strong>A&ntilde;o</strong></td>
+<td width="68"><strong>Secci&oacute;n</strong></td>
+<td width="231"><strong>Docentes</strong></td>
+</tr>
+<tr>
+<td width="87">19/2</td>
+<td width="87">11:00hs</td>
+<td width="148">EDUCACI&Oacute;N F&Iacute;SICA</td>
+<td colspan="2" width="142">PREVIOS Y LIBRES</td>
+<td width="231">CASINI A &ndash; BALDI F &ndash; ONTIVERO M &ndash; ROMERO J</td>
+</tr>
+<tr>
+<td width="87">20/2</td>
+<td width="87">8:00</td>
+<td width="148">LENGUA Y CULTURA LATINAS</td>
+<td width="74">1&ordm;</td>
+<td width="68">E-F-G-H</td>
+<td width="231">RIVERO, C. &ndash; SPINASSI &ndash; S. D&rsquo; AVILA &ndash; ROBLEDO</td>
+</tr>
+<tr>
+<td width="87">20/2</td>
+<td width="87">8:00</td>
+<td width="148">LENG.Y CULT. CASTELLANAS</td>
+<td width="74">2&ordm;</td>
+<td width="68">E-F-G-H</td>
+<td width="231">DELICIA &ndash; CACHAGUA- VILLAFA&Ntilde;E &ndash; TIMOSSI</td>
+</tr>
+<tr>
+<td width="87">20/2</td>
+<td width="87">8:00</td>
+<td width="148">FORMACION MUSICAL</td>
+<td width="74">3&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="231">RIVERO, R. &ndash; ORTIZ MORAN &ndash; ARG&Uuml;ELLO &ndash; GREIFF</td>
+</tr>
+<tr>
+<td width="87">20/2</td>
+<td width="87">8:00</td>
+<td width="148">HISTORIA</td>
+<td width="74">4&ordm;</td>
+<td width="68">A-B-C-D</td>
+<td width="231">SARTORI &ndash; DAMIANI &ndash; PETRI &ndash; FERRINO</td>
+</tr>
+<tr>
+<td width="87">20/2</td>
+<td width="87">8:00</td>
+<td width="148">FRANC&Eacute;S</td>
+<td width="74">5&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="231">GEBAUER &ndash; CUEVAS- BENAVIDES &ndash; FUENTE</td>
+</tr>
+<tr>
+<td width="87">20/2</td>
+<td width="87">8:00</td>
+<td width="148">LENGUAY LITERATURA</td>
+<td width="74">6&ordm;</td>
+<td width="68">A-B-C-D-E-F</td>
+<td width="231">TARBINE &ndash; TEOBALDI, D., FURLAN &ndash; RUPIL</td>
+</tr>
+<tr>
+<td width="87">20/2</td>
+<td width="87">8:00</td>
+<td width="148">AN&Aacute;LISIS MAT. Y GEO. ANAL.</td>
+<td width="74">7&ordm;</td>
+<td width="68">A-B-C-G</td>
+<td width="231">PATOCO, O. &ndash; GOMEZ &ndash; SANDIN &ndash; YUSZCZYK</td>
+</tr>
+<tr>
+<td width="87">20/2</td>
+<td width="87">13:30</td>
+<td width="148">ESTRATEGIAS</td>
+<td width="74">1&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="231">LOPEZ FABRE &ndash; ECHAVARRIA- GARUTTI- MARTINEZ</td>
+</tr>
+<tr>
+<td width="87">20/2</td>
+<td width="87">13:30</td>
+<td width="148">EDUCACI&Oacute;N PARA LA SALUD</td>
+<td width="74">2&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="231">CEJAS, E. &ndash; BAJO &ndash; LAVANDERA- FERRERO, C.</td>
+</tr>
+<tr>
+<td width="87">20/2</td>
+<td width="87">13:30</td>
+<td width="148">MATEM&Aacute;TICA</td>
+<td width="74">3&ordm;</td>
+<td width="68">E-F-G-H</td>
+<td width="231">ANGELONI &ndash; MANZANO &ndash; YUSZCZYK &ndash; GIGENA</td>
+</tr>
+<tr>
+<td width="87">20/2</td>
+<td width="87">13:30</td>
+<td width="148">GEOGRAF&Iacute;A</td>
+<td width="74">4&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="231">ZANGHI &ndash; CAEIRO &ndash; PEREYRA- PERALTA</td>
+</tr>
+<tr>
+<td width="87">20/2</td>
+<td width="87">13:30</td>
+<td width="148">INGL&Eacute;S</td>
+<td width="74">5&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="231">BIAZZUTTI &ndash; CORNET &ndash; VACA NARVAJA &ndash; MASSA</td>
+</tr>
+<tr>
+<td width="87">20/2</td>
+<td width="87">13:30</td>
+<td width="148">LENGUA Y CULTURA GRIEGAS</td>
+<td width="74">6&ordm;</td>
+<td width="68">D-E-F</td>
+<td width="231">BRUSCO &ndash; AG&Uuml;ERO SOLIS &ndash; RIVERO, C. &ndash; PALMISANO</td>
+</tr>
+<tr>
+<td width="87">20/2</td>
+<td width="87">13:30</td>
+<td width="148">FILOSOF&Iacute;A</td>
+<td width="74">7&ordm;</td>
+<td width="68">A-B-C-D-E-F-G</td>
+<td width="231">MONTOYA &ndash; FITA &ndash; CAMA&Ntilde;O &ndash; AMAYA</td>
+</tr>
+
+<tr>
+<td width="57">21/2</td>
+<td width="88">8:00</td>
+<td width="182">GEOGRAF&Iacute;A</td>
+<td width="72">1&ordm;</td>
+<td width="65">A-B-C-D-E-F-G-H</td>
+<td width="231">ZANGHI &ndash; CANDELA &ndash; CAIERO &ndash; FLORES, E.</td>
+</tr>
+<tr>
+<td width="57">21/2</td>
+<td width="88">8:00</td>
+<td width="182">LENGUA Y CULTURA INGLESAS</td>
+<td width="72">2&ordm;</td>
+<td width="65">A-B-C-D-E-F-G-H</td>
+<td width="231">DE MONTE &ndash; RODRIGUEZ, J. &ndash; ESPINOSA &ndash; MASSA</td>
+</tr>
+<tr>
+<td width="57">21/2</td>
+<td width="88">8:00</td>
+<td width="182">LENGUA Y LITERATURA</td>
+<td width="72">3&ordm;</td>
+<td width="65">A-B-C-D</td>
+<td width="231">MALDONADO &ndash; TIMOSSI &ndash; CONSTENLA &ndash; CACHAGUA</td>
+</tr>
+<tr>
+<td width="57">21/2</td>
+<td width="88">8:00</td>
+<td width="182">FISICO &ndash; QUIMICA</td>
+<td width="72">4&ordm;</td>
+<td width="65">A-B-C-D-E-F-G-H</td>
+<td width="231">FONTANA &ndash; GUERRERO &ndash; BALANZINO &ndash; MARIANI</td>
+</tr>
+<tr>
+<td width="57">21/2</td>
+<td width="88">8:00</td>
+<td width="182">ESTADISTICA Y PROBABILIDADES</td>
+<td width="72">5&ordm;</td>
+<td width="65">A-B-C-D</td>
+<td width="231">LEONETTO &ndash; YUSZCZYK &ndash; MENOYO &ndash; PISONI</td>
+</tr>
+<tr>
+<td width="57">21/2</td>
+<td width="88">8:00</td>
+<td width="182">HISTORIA</td>
+<td width="72">6&ordm;</td>
+<td width="65">A-B-C</td>
+<td width="231">GONZALEZ ACHAVAL &ndash; DAINOTTO &ndash; DAMIANI &ndash; PETRI</td>
+</tr>
+<tr>
+<td width="57">21/2</td>
+<td width="88">8:00</td>
+<td width="182">ELEMENTOS DEL DERECHO</td>
+<td width="72">7&ordm;</td>
+<td width="65">A-B-C-D-E-F-G</td>
+<td width="231">TABORDA &ndash; CIMA &ndash; FERLA &ndash; EUSEBIO</td>
+</tr>
+<tr>
+<td width="57">21/2</td>
+<td width="88">13:30</td>
+<td width="182">MATEM&Aacute;TICA</td>
+<td width="72">1&ordm;</td>
+<td width="65">A-B-C-D</td>
+<td width="231">MU&Ntilde;OZ &ndash; ROMERO &ndash; GIMENEZ &ndash; TOLEDO</td>
+</tr>
+<tr>
+<td width="57">21/2</td>
+<td width="88">13:30</td>
+<td width="182">LENGUA Y CULTURA LATINAS</td>
+<td width="72">2&ordm;</td>
+<td width="65">A-B-C-D</td>
+<td width="231">RIVERO, C. &ndash; SPINASSI &ndash; AG&Uuml;ERO SOLIS &ndash; GALAN</td>
+</tr>
+<tr>
+<td width="57">21/2</td>
+<td width="88">13:30</td>
+<td width="182">HISTORIA DEL ARTE</td>
+<td width="72">3&ordm;</td>
+<td width="65">A-B-C-D-E-F-G-H</td>
+<td width="231">BARBERIS &ndash; TEOBALDI, S. &ndash; L&Oacute;PEZ ARZUAGA &ndash; MOLINA</td>
+</tr>
+<tr>
+<td width="57">21/2</td>
+<td width="88">13:30</td>
+<td width="182">HISTORIA</td>
+<td width="72">4&ordm;</td>
+<td width="65">E-F-G-H</td>
+<td width="231">FERRINO &ndash; SEVERI &ndash; PETRI &ndash; FLORES, S.</td>
+</tr>
+<tr>
+<td width="57">21/2</td>
+<td width="88">13:30</td>
+<td width="182">FILOSOF&Iacute;A</td>
+<td width="72">5&ordm;</td>
+<td width="65">A-B-C-D-E-F-G-H</td>
+<td width="231">MONTOYA &ndash; RABINOVICH &ndash; CAMA&Ntilde;O &ndash; AMAYA</td>
+</tr>
+<tr>
+<td width="57">21/2</td>
+<td width="88">13:30</td>
+<td width="182">HISTORIA DE LA CULTURA</td>
+<td width="72">6&ordm;</td>
+<td width="65">A-B-C-D-E-F</td>
+<td width="231">FITA &ndash; SARTORI &ndash; CAMA&Ntilde;O &ndash; FLORES,S.</td>
+</tr>
+<tr>
+<td width="57">21/2</td>
+<td width="88">13:30</td>
+<td width="182">F&Iacute;SICA</td>
+<td width="72">7&ordm;</td>
+<td width="65">D-E-F</td>
+<td width="231">GIGENA &ndash; MARTINEZ H &ndash; LAMISOWSKY &ndash; DIPIERRI</td>
+</tr>
+
+<tr>
+<td width="62">26/2
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</td>
+<td width="61">8:00</td>
+<td width="179">FORMACION MUSICAL</td>
+<td width="75">1&ordm;</td>
+<td width="71">A-B-C-D-E-F-G-H</td>
+<td width="248">RIVERO, R. &ndash; ORTIZ MORAN &ndash; ARG&Uuml;ELLO &ndash; GREIFF</td>
+</tr>
+<tr>
+<td width="62">26/2
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</td>
+<td width="61">8:00</td>
+<td width="179">FORMACION PL&Aacute;STICA</td>
+<td width="75">2&ordm;</td>
+<td width="71">A-B-C-D-E-F-G-H</td>
+<td width="248">GABRIELLI &ndash; BARIO &ndash; MOYA &ndash; VILLARRUEL</td>
+</tr>
+<tr>
+<td width="62">26/2
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</td>
+<td width="61">8:00</td>
+<td width="179">MATEM&Aacute;TICA</td>
+<td width="75">3&ordm;</td>
+<td width="71">A-B-C-D</td>
+<td width="248">MANZANO &ndash; GIMENEZ &ndash; YUSZCZYK &ndash; GIGENA</td>
+</tr>
+
+<tr>
+<td width="57">26/2</td>
+<td width="88">8:00</td>
+<td width="181">INGL&Eacute;S</td>
+<td width="72">4&ordm;</td>
+<td width="64">A-B-C-D-E-F-G-H</td>
+<td width="233">CORNET &ndash; RODRIGUEZ, J. &ndash;ALCAZAR &ndash; DE MONTE</td>
+</tr>
+<tr>
+<td width="57">26/2</td>
+<td width="88">8:00</td>
+<td width="181">HISTORIA</td>
+<td width="72">5&ordm;</td>
+<td width="64">A-B-C-D-E-F-G-H</td>
+<td width="233">SARTORI &ndash; SEVERI &ndash; FLORES, S. &ndash; DAMIANI</td>
+</tr>
+<tr>
+<td width="57">26/2</td>
+<td width="88">8:00</td>
+<td width="181">GEOMETRIA</td>
+<td width="72">6&ordm;</td>
+<td width="64">A-B-C</td>
+<td width="233">ANGELONI &ndash; TOLEDO &ndash; DIPIERRI &ndash; MENOYO</td>
+</tr>
+<tr>
+<td width="57">26/2</td>
+<td width="88">8:00</td>
+<td width="181">BIOLOG&Iacute;A</td>
+<td width="72">7&ordm;</td>
+<td width="64">A-B-C-D-E-F-G</td>
+<td width="233">FERRERO, C. &ndash; BAJO &ndash; CEJAS, E. &ndash; VILARO</td>
+</tr>
+<tr>
+<td width="57">26/2</td>
+<td width="88">13:30</td>
+<td width="181">LENG.Y CULT. LATINAS</td>
+<td width="72">1&ordm;</td>
+<td width="64">A-B-C-D</td>
+<td width="233">RIVERO, C. &ndash; SPINASSI &ndash; DIAZ M- ROBLEDO</td>
+</tr>
+<tr>
+<td width="57">26/2</td>
+<td width="88">13:30</td>
+<td width="181">LENG.Y LIT. CASTELLANAS</td>
+<td width="72">2&ordm;</td>
+<td width="64">A-B-C-D</td>
+<td width="233">DELICIA &ndash; FERNANDEZ, V. &ndash; CACHAGUA &ndash; MALDONADO</td>
+</tr>
+<tr>
+<td width="57">26/2</td>
+<td width="88">13:30</td>
+<td width="181">HISTORIA</td>
+<td width="72">3&ordm;</td>
+<td width="64">A-B-C-D</td>
+<td width="233">GONZALEZ ACHAVAL &ndash; SEVERI &ndash; FERRINO &ndash; PETRI</td>
+</tr>
+<tr>
+<td width="57">26/2</td>
+<td width="88">13:30</td>
+<td width="181">LENGUA Y LITERATURA</td>
+<td width="72">4&ordm;</td>
+<td width="64">E-F-G-H</td>
+<td width="233">TARBINE &ndash; FURLAN &ndash; ACOSTA &ndash; VOLOJ</td>
+</tr>
+<tr>
+<td width="57">26/2</td>
+<td width="88">13:30</td>
+<td width="181">ESTADISTICA Y PROBABILIDADES</td>
+<td width="72">5&ordm;</td>
+<td width="64">E-F-G-H</td>
+<td width="233">LEONETTO &ndash; YUSZCZYK &ndash; MENOYO &ndash; PISONI</td>
+</tr>
+<tr>
+<td width="57">26/2</td>
+<td width="88">13:30</td>
+<td width="181">FISICA</td>
+<td width="72">6&ordm;</td>
+<td width="64">D-E-F</td>
+<td width="233">LAMISOWSKY&ndash; GIGENA &ndash; TOLEDO &ndash; MARTINEZ</td>
+</tr>
+<tr>
+<td width="57">26/2</td>
+<td width="88">13:30</td>
+<td width="181">SOCIOLOG&Iacute;A</td>
+<td width="72">7&ordm;</td>
+<td width="64">A-B-C-D-E-F-G</td>
+<td width="233">TORRES &ndash; CIMA &ndash; EUSEBIO &ndash; ESCALERA</td>
+</tr>
+
+<tr>
+<td width="59">27/2</td>
+<td width="76">8:00</td>
+<td width="185">FORMACION PL&Aacute;STICA</td>
+<td width="73">1&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="240">MOYA &ndash; TEOBALDI S&ndash; JEREZ &ndash; BARIO</td>
+</tr>
+<tr>
+<td width="59">27/2</td>
+<td width="76">8:00</td>
+<td width="185">LENGUA Y CULTURA LATINAS</td>
+<td width="73">2&ordm;</td>
+<td width="68">E-F-G-H</td>
+<td width="240">RUIZ DE LOS LLANOS- DEL AGUILA &ndash; DIAZ M- GALAN</td>
+</tr>
+<tr>
+<td width="59">27/2</td>
+<td width="76">8:00</td>
+<td width="185">GEOGRAF&Iacute;A</td>
+<td width="73">3&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="240">FLORES,E. &ndash; CAIERO &ndash; BAROFFIO &ndash; CANDELA</td>
+</tr>
+<tr>
+<td width="59">27/2</td>
+<td width="76">8:00</td>
+<td width="185">MATEM&Aacute;TICA</td>
+<td width="73">4&ordm;</td>
+<td width="68">A-B-C-D</td>
+<td width="240">ANGELONI &ndash; MENOYO &ndash; YUSZCZYK &ndash; LEONETTO</td>
+</tr>
+<tr>
+<td width="59">27/2</td>
+<td width="76">8:00</td>
+<td width="185">ALGEBRA</td>
+<td width="73">5&ordm;</td>
+<td width="68">A-B-C-D</td>
+<td width="240">GUERRA &ndash; GIGENA &ndash; TOLEDO &ndash; SANDIN</td>
+</tr>
+<tr>
+<td width="59">27/2</td>
+<td width="76">8:00</td>
+<td width="185">INFORM&Aacute;TICA</td>
+<td width="73">6&ordm;</td>
+<td width="68">A-B-C-D-E-F</td>
+<td width="240">TORTI &ndash; FRAGUEIRO &ndash; GOMEZ &ndash; SALA DIAZ, M.</td>
+</tr>
+<tr>
+<td width="59">27/2</td>
+<td width="76">8:00</td>
+<td width="185">HISTORIA DE LA CULTURA</td>
+<td width="73">7&ordm;</td>
+<td width="68">A-B-C-D-E-F-G</td>
+<td width="240">GONZALEZ ACHAVAL &ndash; FITA &ndash; DAMIANI &ndash; AMAYA</td>
+</tr>
+<tr>
+<td width="59">27/2</td>
+<td width="76">13:30</td>
+<td width="185">LENGUA Y CULTURA INGLESAS</td>
+<td width="73">1&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="240">ALCAZAR &ndash; CORNET &ndash; HELALE &ndash; VACA NARVAJA</td>
+</tr>
+<tr>
+<td width="59">27/2</td>
+<td width="76">13:30</td>
+<td width="185">HISTORIA</td>
+<td width="73">2&ordm;</td>
+<td width="68">A-B-C-D</td>
+<td width="240">FLORES, S. &ndash; GARCIA MARTIN &ndash; GONZALEZ ACHAVAL &ndash; CEBALLOS</td>
+</tr>
+<tr>
+<td width="59">27/2</td>
+<td width="76">13:30</td>
+<td width="185">LENGUA Y LITERATURA</td>
+<td width="73">3&ordm;</td>
+<td width="68">E-F-G-H</td>
+<td width="240">VILLAFA&Ntilde;E &ndash; CACHAGUA &ndash; DELICIA &ndash; MALDONADO</td>
+</tr>
+<tr>
+<td width="59">27/2</td>
+<td width="76">13:30</td>
+<td width="185">PL&Aacute;STICA</td>
+<td width="73">4&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="240">BARIO &ndash; VILLARRUEL &ndash; SONZINI ASTUDILLO &ndash; TEOBALDI, S.</td>
+</tr>
+<tr>
+<td width="59">27/2</td>
+<td width="76">13:30</td>
+<td width="185">LENGUA Y LITERATURA</td>
+<td width="73">5&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="240">RUPIL &ndash; TARBINE-TEOBALDI, D. &ndash; VOLOJ</td>
+</tr>
+<tr>
+<td width="59">27/2</td>
+<td width="76">13:30</td>
+<td width="185">TRIGONOMETRIA</td>
+<td width="73">6&ordm;</td>
+<td width="68">A-B-C-D-E-F</td>
+<td width="240">GOMEZ &ndash; DIPIERRI &ndash; ANGELONI &ndash; GIGENA</td>
+</tr>
+<tr>
+<td width="59">27/2</td>
+<td width="76">13:30</td>
+<td width="185">FRANC&Eacute;S</td>
+<td width="73">7&ordm;</td>
+<td width="68">A-B-C-D-E-F-G</td>
+<td width="240">BENAVIDES &ndash; GATTI &ndash; MASSA &ndash; GEBAUER</td>
+</tr>
+
+<tr>
+<td width="59">28/2</td>
+<td width="76">8:00</td>
+<td width="175">CS. DE LA VIDA Y DE LA TIERRA</td>
+<td width="74">1&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="243">VILARO &ndash; CEJAS, E. &ndash; BALANZINO &ndash; DEMMEL</td>
+</tr>
+<tr>
+<td width="59">28/2</td>
+<td width="76">8:00</td>
+<td width="175">MATEM&Aacute;TICA</td>
+<td width="74">2&ordm;</td>
+<td width="68">E-F-G-H</td>
+<td width="243">GUERRA &ndash; YUSZCZYK &ndash; GIMENEZ &ndash; GIGENA</td>
+</tr>
+<tr>
+<td width="59">28/2</td>
+<td width="76">8:00</td>
+<td width="175">LENG. Y CULT. LATINAS</td>
+<td width="74">3&ordm;</td>
+<td width="68">A-B-C-D</td>
+<td width="243">DEL AGUILA &ndash; SPINASSI &ndash; MANCINI &ndash; RIVERO, C.</td>
+</tr>
+<tr>
+<td width="59">28/2</td>
+<td width="76">8:00</td>
+<td width="175">FORMACI&Oacute;N &Eacute;TICA Y C&Iacute;VICA</td>
+<td width="74">4&ordm;</td>
+<td width="68">A-B-C-D</td>
+<td width="243">PORTELA &ndash; BARRALE &ndash; AGHEMO &ndash; TABORDA</td>
+</tr>
+<tr>
+<td width="59">28/2</td>
+<td width="76">8:00</td>
+<td width="175">LENGUA Y CULTURA LATINAS</td>
+<td width="74">5&ordm;</td>
+<td width="68">A-B-C-D</td>
+<td width="243">ROBLEDO &ndash; S. D&rsquo; AVILA &ndash; AG&Uuml;ERO SOLIS &ndash; YANTORNO</td>
+</tr>
+<tr>
+<td width="59">28/2</td>
+<td width="76">8:00</td>
+<td width="175">FILOSOF&Iacute;A</td>
+<td width="74">6&ordm;</td>
+<td width="68">A-B-C-D-E-F</td>
+<td width="243">CAMA&Ntilde;O &ndash; MONTOYA &ndash; AMAYA &ndash; FITA</td>
+</tr>
+<tr>
+<td width="59">28/2</td>
+<td width="76">8:00</td>
+<td width="175">LENGUA Y LITERATURA</td>
+<td width="74">7&ordm;</td>
+<td width="68">A-B-C-D-E-F-G</td>
+<td width="243">TARBINE &ndash; TEOBALDI, D. &ndash; FURLAN &ndash; DELICIA</td>
+</tr>
+<tr>
+<td width="59">28/2</td>
+<td width="76">13:30</td>
+<td width="175">HISTORIA</td>
+<td width="74">1&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="243">DAMIANI &ndash; GONZALEZ ACHAVAL &ndash; FERRINO &ndash; FLORES, S.</td>
+</tr>
+<tr>
+<td width="59">28/2</td>
+<td width="76">13:30</td>
+<td width="175">FORMACION MUSICAL</td>
+<td width="74">2&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="243">RIVERO, R. &ndash; ORTIZ MORAN &ndash; ARG&Uuml;ELLO &ndash; GREIFF</td>
+</tr>
+<tr>
+<td width="59">28/2</td>
+<td width="76">13:30</td>
+<td width="175">PLASTICA</td>
+<td width="74">3&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="243">VILLARRUEL &ndash; BARIO &ndash; TEOBALDI &ndash; BARBERIS</td>
+</tr>
+<tr>
+<td width="59">28/2</td>
+<td width="76">13:30</td>
+<td width="175">BIOLOG&Iacute;A</td>
+<td width="74">4&ordm;</td>
+<td width="68">A-B-C-D-E-F-G-H</td>
+<td width="243">FERRERO, C. &ndash; DIAZ GAVIER &ndash; MALDONADO, L. &ndash; DEMMEL</td>
+</tr>
+<tr>
+<td width="59">28/2</td>
+<td width="76">13:30</td>
+<td width="175">LENGUA Y CULTURA GRIEGAS</td>
+<td width="74">5&ordm;</td>
+<td width="68">E-F-G-H</td>
+<td width="243">PALMISANO &ndash; FERRERO, CARLA &ndash; BRUSCO &ndash; AG&Uuml;ERO SOLIS</td>
+</tr>
+<tr>
+<td width="59">28/2</td>
+<td width="76">13:30</td>
+<td width="175">INGL&Eacute;S</td>
+<td width="74">6&ordm;</td>
+<td width="68">A-B-C-D-E-F</td>
+<td width="243">CORNET &ndash; MASSA &ndash; VACA NARVAJA &ndash; ALCAZAR</td>
+</tr>
+<tr>
+<td width="59">28/2</td>
+<td width="76">13:30</td>
+<td width="175">AN&Aacute;LISIS MAT. Y GEO. ANAL.</td>
+<td width="74">7&ordm;</td>
+<td width="68">D-E-F</td>
+<td width="243">PATOCO, O. &ndash; GOMEZ &ndash; SANDIN &ndash; YUSZCZYK</td>
+</tr>
+
+<tr>
+<td width="84">2/3</td>
+<td width="88">8:00</td>
+<td width="172">LENG. Y LIT. CASTELLANAS</td>
+<td width="71">1&ordm;</td>
+<td width="61">A-B-C-D</td>
+<td width="219">FURLAN &ndash; DELICIA &ndash; ACOSTA &ndash; FERNANDEZ, V.</td>
+</tr>
+<tr>
+<td width="84">2/3</td>
+<td width="88">8:00</td>
+<td width="172">FORMACI&Oacute;N &Eacute;TICA Y CIUDADANA</td>
+<td width="71">2&ordm;</td>
+<td width="61">A-B-C-D-E-F-G-H</td>
+<td width="219">SOUBERAN &ndash; GARC&Iacute;A MARTIN&ndash; BARRALE &ndash; AGHEMO</td>
+</tr>
+<tr>
+<td width="84">2/3</td>
+<td width="88">8:00</td>
+<td width="172">HISTORIA</td>
+<td width="71">3&ordm;</td>
+<td width="61">E-F-G-H</td>
+<td width="219">FERRINO &ndash; FLORES,S &ndash; SEVERI &ndash; GONZALEZ ACHAVAL</td>
+</tr>
+<tr>
+<td width="84">2/3</td>
+<td width="88">8:00</td>
+<td width="172">FORMACI&Oacute;N &Eacute;TICA Y C&Iacute;VICA</td>
+<td width="71">4&ordm;</td>
+<td width="61">E-F-G-H</td>
+<td width="219">CAFURE &ndash; BRITOS &ndash; BARROS &ndash; TAPIA</td>
+</tr>
+<tr>
+<td width="84">2/3</td>
+<td width="88">8:00</td>
+<td width="172">METODOLOG&Iacute;A DE LA INVESTIG.</td>
+<td width="71">5&ordm;</td>
+<td width="61">A-B-C-D-E-F-G-H</td>
+<td width="219">GOMEZ &ndash; SUAREZ &ndash; MONTOYA &ndash; VILARO</td>
+</tr>
+<tr>
+<td width="84">2/3</td>
+<td width="88">8:00</td>
+<td width="172">BIOLOG&Iacute;A</td>
+<td width="71">6&ordm;</td>
+<td width="61">A-B-C-D-E-F</td>
+<td width="219">FERRERO, C. &ndash; CEJAS, E. &ndash; INFANZON &ndash; MARIANI</td>
+</tr>
+<tr>
+<td width="84">2/3</td>
+<td width="88">8:00</td>
+<td width="172">LENGUA Y CULTURA GRIEGAS</td>
+<td width="71">7&ordm;</td>
+<td width="61">A-B-C-D-E-F-G</td>
+<td width="219">BRUSCO &ndash; RIVERO,C. &ndash; GALAN &ndash; AG&Uuml;ERO SOLIS</td>
+</tr>
+<tr>
+<td width="84">&nbsp;</td>
+<td rowspan="2" width="88">13:30</td>
+<td rowspan="2" width="172">MATEMATICA</td>
+<td rowspan="2" width="71">1&ordm;</td>
+<td rowspan="2" width="61">E-F-G-H</td>
+<td rowspan="2" width="219">MANZANO&ndash; SOSA &ndash; GIMENEZ &ndash; TOLEDO</td>
+</tr>
+<tr>
+<td width="84">2/3</td>
+</tr>
+<tr>
+<td width="84">2/3</td>
+<td width="88">13:30</td>
+<td width="172">GEOGRAFIA</td>
+<td width="71">2&ordm;</td>
+<td width="61">A-B-C-D-E-F-G-H</td>
+<td width="219">ZANGHI &ndash; CANDELA- FLORES, E. &ndash; CAIERO &ndash; BAROFFIO</td>
+</tr>
+
+<tr>
+<td width="57">2/3</td>
+<td width="76">13:30</td>
+<td width="175">FORMACI&Oacute;N &Eacute;TICA Y CIUDADANA</td>
+<td width="74">3&ordm;</td>
+<td width="69">A-B-C-D-E-F-G-H</td>
+<td width="242">FERLA &ndash; CIMA &ndash; TABORDA &ndash; RAHAL</td>
+</tr>
+<tr>
+<td width="57">2/3</td>
+<td width="76">13:30</td>
+<td width="175">LENG. Y CULTURA LATINAS</td>
+<td width="74">4&ordm;</td>
+<td width="69">E-F-G-H</td>
+<td width="242">AG&Uuml;ERO SOLIS &ndash; MANCINI &ndash; YANTORNO &ndash; SPINASSI</td>
+</tr>
+<tr>
+<td width="57">2/3</td>
+<td width="76">13:30</td>
+<td width="175">ALGEBRA</td>
+<td width="74">5&ordm;</td>
+<td width="69">E-F-G-H</td>
+<td width="242">GUERRA &ndash; LEONETTO &ndash; GIGENA &ndash; YUSZCZYK</td>
+</tr>
+<tr>
+<td width="57">2/3</td>
+<td width="76">13:30</td>
+<td width="175">GEOMETRIA</td>
+<td width="74">6&ordm;</td>
+<td width="69">D-E-F</td>
+<td width="242">DIPIERRI &ndash; SANDIN &ndash; MENOYO- PISONI</td>
+</tr>
+<tr>
+<td width="57">2/3</td>
+<td width="76">13:30</td>
+<td width="175">PSICOLOG&Iacute;A</td>
+<td width="74">7&ordm;</td>
+<td width="69">A-B-C-D-E-F-G</td>
+<td width="242">ZARATE &ndash; LOPEZ FABRE &ndash; GARUTTI &ndash; SUAREZ</td>
+</tr>
+
+<tr>
+<td width="84">3/3</td>
+<td width="88">8:00</td>
+<td width="169">FORMACI&Oacute;N &Eacute;TICA Y CIUDADANA</td>
+<td width="71">1&ordm;</td>
+<td width="62">A-B-C-D-E-F-G-H</td>
+<td width="220">AGHEMO &ndash; CIMA &ndash; TAPIA &ndash; TABORDA</td>
+</tr>
+<tr>
+<td width="84">3/3</td>
+<td width="88">8:00</td>
+<td width="169">HISTORIA</td>
+<td width="71">2&ordm;</td>
+<td width="62">E-F-G-H</td>
+<td width="220">FLORES, S. &ndash; SARTORI &ndash; FERRINO &ndash; PETRI</td>
+</tr>
+<tr>
+<td width="84">3/3</td>
+<td width="88">8:00</td>
+<td width="169">CS. NATURALES</td>
+<td width="71">3&ordm;</td>
+<td width="62">A-B-C-D-E-F-G-H</td>
+<td width="220">CEJAS, W. &ndash; BAJO &ndash; BALANZINO &ndash; FERRERO, C.</td>
+</tr>
+<tr>
+<td width="84">3/3</td>
+<td width="88">8:00</td>
+<td width="169">LENGUA Y LITERATURA</td>
+<td width="71">4&ordm;</td>
+<td width="62">A-B-C-D</td>
+<td width="220">TARBINE &ndash; CONSTENLA &ndash; FURLAN &ndash; TEOBALDI, D.</td>
+</tr>
+<tr>
+<td width="84">3/3</td>
+<td width="88">8:00</td>
+<td width="169">LENGUA Y CULTURA GRIEGAS</td>
+<td width="71">5&ordm;</td>
+<td width="62">A-B-C-D</td>
+<td width="220">BRUSCO &ndash; SPINASSI &ndash; YANTORNO &ndash; MANCINI</td>
+</tr>
+<tr>
+<td width="84">3/3</td>
+<td width="88">8:00</td>
+<td width="169">F&Iacute;SICA</td>
+<td width="71">6&ordm;</td>
+<td width="62">A-B-C</td>
+<td width="220">LAMISOWSKY &ndash; TOLEDO &ndash; GIGENA &ndash; MARTINEZ</td>
+</tr>
+<tr>
+<td width="84">3/3</td>
+<td width="88">8:00</td>
+<td width="169">INFORM&Aacute;TICA</td>
+<td width="71">7&ordm;</td>
+<td width="62">A-B-C-D-E-F-G</td>
+<td width="220">TORTI &ndash; FRAGUEIRO &ndash; GOMEZ &ndash; SALA DIAZ</td>
+</tr>
+<tr>
+<td width="84">3/3</td>
+<td width="88">13:30</td>
+<td width="169">LENG. Y LIT. CASTELLANAS</td>
+<td width="71">1&ordm;</td>
+<td width="62">E-F-G-H</td>
+<td width="220">RUPIL &ndash; ACOSTA &ndash; DELICIA &ndash; VOLOJ</td>
+</tr>
+<tr>
+<td width="84">3/3</td>
+<td width="88">13:30</td>
+<td width="169">MATEM&Aacute;TICA</td>
+<td width="71">2&ordm;</td>
+<td width="62">A-B-C-D</td>
+<td width="220">SOSA &ndash; TOLEDO &ndash; LEONETTO &ndash; GIGENA</td>
+</tr>
+<tr>
+<td width="84">3/3</td>
+<td width="88">13:30</td>
+<td width="169">LENG. Y CULT. LATINAS</td>
+<td width="71">3&ordm;</td>
+<td width="62">E-F-G-H</td>
+<td width="220">SPINASSI &ndash; MANCINI &ndash; S. D&rsquo;AVILA &ndash; GALAN</td>
+</tr>
+<tr>
+<td width="84">3/3</td>
+<td width="88">13:30</td>
+<td width="169">HISTORIA DEL ARTE</td>
+<td width="71">4&ordm;</td>
+<td width="62">A-B-C-D-E-F-G-H</td>
+<td width="220">L&Oacute;PEZ ARZUAGA, R&ndash; VILLARRUEL &ndash; TEOBALDI,S. &ndash; GABRIELLI</td>
+</tr>
+
+<tr>
+<td width="58">3/3</td>
+<td width="77">13:30</td>
+<td width="172">QUIMICA</td>
+<td width="74">5&ordm;</td>
+<td width="70">A-B-C-D-E-F-G-H</td>
+<td width="243">BALANZINO &ndash; GUERRERO &ndash; TORTONE &ndash; MARIANI</td>
+</tr>
+<tr>
+<td width="58">3/3</td>
+<td width="77">13:30</td>
+<td width="172">HISTORIA</td>
+<td width="74">6&ordm;</td>
+<td width="70">D-E-F</td>
+<td width="243">DAINOTTO &ndash; PETRI &ndash; SARTORI &ndash; DAMIANI</td>
+</tr>
+<tr>
+<td width="58">3/3</td>
+<td width="77">13:30</td>
+<td width="172">ECONOM&Iacute;A POL&Iacute;TICA</td>
+<td width="74">7&ordm;</td>
+<td width="70">A-B-C-D-E-F-G</td>
+<td width="243">PRADO &ndash; FLORES, S. &ndash; SOSA &ndash; FERLA</td>
+</tr>
+
+<tr>
+<td width="84">4/3</td>
+<td width="88">8:00</td>
+<td width="165">INGL&Eacute;S</td>
+<td width="71">3&ordm;</td>
+<td width="62">A-B-C-D-E-F-G-H</td>
+<td width="223">ALCAZAR &ndash; ALTAMIRANO &ndash; BIAZZUTTI &ndash; DE MONTE</td>
+</tr>
+<tr>
+<td width="84">4/3</td>
+<td width="88">8:00</td>
+<td width="165">LENG. Y CULTURA LATINAS</td>
+<td width="71">4&ordm;</td>
+<td width="62">A-B-C-D</td>
+<td width="223">GALAN &ndash; RIVERO,C. &ndash; SPINASSI &ndash; YANTORNO</td>
+</tr>
+<tr>
+<td width="84">4/3</td>
+<td width="88">8:00</td>
+<td width="165">GEOGRAF&Iacute;A</td>
+<td width="71">5&ordm;</td>
+<td width="62">A-B-C-D-E-F-G-H</td>
+<td width="223">PERALTA &ndash; FLORES, E. &ndash; CAEIRO &ndash; CANDELA</td>
+</tr>
+<tr>
+<td width="84">4/3</td>
+<td width="88">8:00</td>
+<td width="165">FRANC&Eacute;S</td>
+<td width="71">6&ordm;</td>
+<td width="62">A-B-C-D-E-F</td>
+<td width="223">BENAVIDES &ndash; GATTI &ndash; MASSA &ndash; FUENTE</td>
+</tr>
+<tr>
+<td width="84">4/3</td>
+<td width="88">8:00</td>
+<td width="165">F&Iacute;SICA</td>
+<td width="71">7&ordm;</td>
+<td width="62">A-B-C-G</td>
+<td width="223">GIGENA &ndash; TOLEDO &ndash; LAMISOWSKY &ndash; SCARAFIA</td>
+</tr>
+<tr>
+<td width="84">4/3</td>
+<td width="88">13:30</td>
+<td width="165">MATEM&Aacute;TICA</td>
+<td width="71">4&ordm;</td>
+<td width="62">E-F-G-H</td>
+<td width="223">MENOYO &ndash; MANZANO &ndash; PISONI &ndash; YUSZCZYK</td>
+</tr>
+<tr>
+<td width="84">4/3</td>
+<td width="88">13:30</td>
+<td width="165">LENGUA Y CULTURA LATINAS</td>
+<td width="71">5&ordm;</td>
+<td width="62">E-F-G-H</td>
+<td width="223">SPINASSI &ndash; MANCINI &ndash; S. D&rsquo;AVILA &ndash; GALAN</td>
+</tr>
+<tr>
+<td width="84">4/3</td>
+<td width="88">13:30</td>
+<td width="165">GEOGRAF&Iacute;A</td>
+<td width="71">6&ordm;</td>
+<td width="62">A-B-C-D-E-F</td>
+<td width="223">PEREYRA &ndash; PERALTA- FLORES, E. &ndash; ZANGHI</td>
+</tr>
+<tr>
+<td width="84">4/3</td>
+<td width="88">13:30</td>
+<td width="165">HISTORIA</td>
+<td width="71">7&ordm;</td>
+<td width="62">A-B-C-D-E-F-G</td>
+<td width="223">DAMIANI &ndash; SARTORI &ndash; FLORES, S. &ndash; DAINOTTO</td>
+</tr>
+
+<tr>
+<td width="84">5/3</td>
+<td width="88">8:00</td>
+<td width="168">BIOLOG&Iacute;A</td>
+<td width="71">5&ordm;</td>
+<td width="62">A-B-C-D-E-F-G-H</td>
+<td width="220">DIAZ GAVIER &ndash; DEMMEL &ndash; LAVANDERA &ndash; FERRERO, C.</td>
+</tr>
+<tr>
+<td width="84">5/3</td>
+<td width="88">8:00</td>
+<td width="168">LENGUA Y CULTURA GRIEGAS</td>
+<td width="71">6&ordm;</td>
+<td width="62">A-B-C</td>
+<td width="220">BRUSCO &ndash; AG&Uuml;ERO SOLIS &ndash; RIVERO, C. &ndash; SPINASSI</td>
+</tr>
+<tr>
+<td width="84">5/3</td>
+<td width="88">13:30</td>
+<td width="168">INFORM&Aacute;TICA</td>
+<td width="71">5&ordm;</td>
+<td width="62">A-B-C-D-E-F-G-H</td>
+<td width="220">PATOCO &ndash; TORTI &ndash; FRAGUEIRO &ndash; SALA M</td>
+</tr>
+<tr>
+<td width="84">5/3</td>
+<td width="88">13:30</td>
+<td width="168">QU&Iacute;MICA</td>
+<td width="71">6&ordm;</td>
+<td width="62">A-B-C-D-E-F</td>
+<td width="220">NIEVAS &ndash; DI TOFINO &ndash; GUERRERO &ndash; TORTONE</td>
+</tr>
+</tbody>
 </table>
         
 </div>

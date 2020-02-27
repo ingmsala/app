@@ -17,9 +17,7 @@ $this->title = 'Ficha del alumno';
     </center>
 
     <h3><?= Html::encode($this->title) ?></h3>
-    <div class="pull-right" style="margin-bottom: 10px;">
-        <button class="btn btn-default hidden-print" onclick="javascript:window.print()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Imprimir</button>
-    </div>
+    
     
 
     <?= DetailView::widget([
@@ -93,14 +91,6 @@ $this->title = 'Ficha del alumno';
             
         ]) ?>
 
-    <h3><?= Html::encode('Producción Final') ?></h3>
-
-    <h3><?= Html::encode('Calificación Final') ?></h3>
-
-    <div id="firma">
-        ....................................
-        <br>
-        <span>Firma</span>
-    </div>
+    
 
 </div>

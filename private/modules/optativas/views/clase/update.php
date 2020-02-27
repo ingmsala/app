@@ -15,6 +15,7 @@ $this->title = 'Modificar Clase: ' . $model->id;
     <?= $this->render('_form', [
         'model' => $model,
         'tiposclase' => $tiposclase,
+        'tiposasistencia' => $tiposasistencia,
         'mesx' => $mesx,
     ]) ?>
 

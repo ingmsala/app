@@ -4,14 +4,18 @@ namespace app\modules\optativas\controllers;
 
 use Yii;
 use app\modules\optativas\models\Clase;
+use app\modules\optativas\models\Myfunction;
 use app\modules\optativas\models\Acta;
 use app\modules\optativas\models\Comision;
 use app\modules\optativas\models\Optativa;
 use app\modules\optativas\models\Matricula;
 use app\modules\optativas\models\Tipoclase;
 use app\modules\optativas\models\ClaseSearch;
+use app\modules\optativas\models\Detalletardanza;
 use app\modules\optativas\models\Inasistencia;
 use app\modules\optativas\models\MatriculaSearch;
+use app\modules\optativas\models\Tardanza;
+use app\modules\optativas\models\Tipoasistencia;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,6 +24,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 
 use kartik\switchinput\SwitchInput;
+
 
 /**
  * ClaseController implements the CRUD actions for Clase model.
@@ -49,7 +54,7 @@ class ClaseController extends Controller
 
                     ],
                     [
-                        'actions' => ['create', 'update', 'delete'],   
+                        'actions' => ['create', 'update', 'delete', 'claseshoy', 'claseinterhoy'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -68,14 +73,14 @@ class ClaseController extends Controller
                         }
 
                     ],
-                    [
+                    /*[
                         'actions' => ['claseshoy', 'claseinterhoy'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             return in_array (Yii::$app->user->identity->role, [1,9]);
                         }
 
-                    ],
+                    ],*/
                     [
                         'actions' => ['view'],   
                         'allow' => true,
@@ -199,9 +204,29 @@ class ClaseController extends Controller
 
             $listInasistenciasdeldia=ArrayHelper::map($inasistenciasdeldia,'matricula','matricula');
             $echodiv='';
+
+            $tardanzasdeldia = Detalletardanza::find()
+                        ->where(['clase' => $id])
+                        ->all();
+
+            $listtardanzasdeldia=ArrayHelper::map($tardanzasdeldia,'matricula','tardanza');
+            $listtardanzasdeldiaaux=ArrayHelper::map($tardanzasdeldia,'matricula','matricula');
+            //array_keys($listtardanzasdeldia, $matricula["id"])
+
+            $tardanzas = Tardanza::find()->all();
+            $tardanzas=ArrayHelper::map($tardanzas,'id','descripcion');
+            
+            
             foreach ($alumnosdecomisionprueba as $matricula) {
 
                 $sel = in_array ($matricula["id"], $listInasistenciasdeldia);
+
+                
+                if(in_array ($matricula["id"], $listtardanzasdeldiaaux)){
+                    $seltar = $listtardanzasdeldia[$matricula["id"]];
+                }else{
+                    $seltar = 0;
+                }
                 if($sel)
                     $paneltype = 'danger';
                 else
@@ -222,9 +247,11 @@ class ClaseController extends Controller
                                 'onColor' => 'danger',
                             ]
                         ]);
+                $echodiv .= 'Tardanza: '.Html::dropDownList($matricula["id"], $seltar, $tardanzas, ['prompt' => 'No', 'class' => 'your_class']	);    
                 $echodiv .= '</span></div>
                                 </div>
                               </div>';
+               // break;
             }
             
 
@@ -238,6 +265,9 @@ class ClaseController extends Controller
                 'alumnosdecomision' => $alumnosdecomision,
                 'alumnosdecomisionprueba' => $alumnosdecomisionprueba,
                 'echodiv' => $echodiv,
+               
+                'listtardanzasdeldia' => $listtardanzasdeldia,
+                
                
 
             ]);
@@ -299,6 +329,7 @@ class ClaseController extends Controller
             $model->comision = $com;
             
             $tiposclase = Tipoclase::find()->all();
+            $tiposasistencia = Tipoasistencia::find()->all();
 
             if ($model->load(Yii::$app->request->post())) {
                 $model->fechaconf = Yii::$app->request->post()['Clase']['fechaconf'];
@@ -329,6 +360,7 @@ class ClaseController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'tiposclase' => $tiposclase,
+                'tiposasistencia' => $tiposasistencia,
                 'mesx' => $mesx,
             ]);
         }else{
@@ -353,6 +385,7 @@ class ClaseController extends Controller
         if($com != 0){
             $model = $this->findModel($id);
             $tiposclase = Tipoclase::find()->all();
+            $tiposasistencia = Tipoasistencia::find()->all();
 
             if ($model->load(Yii::$app->request->post())) {
                 $model->fechaconf = Yii::$app->request->post()['Clase']['fechaconf'];
@@ -381,6 +414,7 @@ class ClaseController extends Controller
             return $this->render('update', [
                 'model' => $model,
                 'tiposclase' => $tiposclase,
+                'tiposasistencia' => $tiposasistencia,
                 'mesx' => $mesx,
             ]);
         }else{
@@ -428,82 +462,23 @@ class ClaseController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-
-    public function actionClaseshoy()
-    {
+    public function claseHoyView(){
         $this->layout = 'main';
-        $searchModel = new ClaseSearch();
-        $dataProvider = $searchModel->getClasesHoy(Yii::$app->request->queryParams);
-
-        date_default_timezone_set('America/Argentina/Buenos_Aires');
-        $clasesdehoy = Clase::find()
-            ->where(['fecha' => date('Y-m-d')])
-            ->orderBy('hora asc')->all();
-
-        $clasesproximas = Clase::find()
-            ->where(['BETWEEN', 'fecha', date('Y-m-d', strtotime("+1 days")), date('Y-m-d', strtotime("+7 days"))])
-            ->orderBy('fecha ASC, hora asc')->all();
-
-        if(count($clasesdehoy)>0){
-            $echo = '<div>';
-            foreach ($clasesdehoy as $clase) {
-                $echo .= '<a href="?r=optativas/clase/claseinterhoy&id='.$clase->id.'"><div class="col-6 col-md-6 col-lg-4">';
-                 $echo .= '<div class="panel panel-default" style="height: 25vh;">
-                  <div class="panel-heading">'.$clase->comision0->optativa0->actividad0->nombre.'</div>
-                  <div class="panel-body">
-                    <ul>
-                        <li>Comisión: '.$clase->comision0->nombre.'</li>
-                        <li>Horario: '.$clase->hora.'</li>
-                    </ul>
-                    
-                  </div>
-                </div>
-                </div></a>';
-            }
-            $echo .= '</div>'; 
-        }else{
-            $echo = "No hay clases pautadas para hoy.";
-        }
-        
-        if(count($clasesproximas)>0){
-            
-            $echo2 = '<div>';
-            foreach ($clasesproximas as $clase2) {
-                $echo2 .= '<a href="?r=optativas/clase/claseinterhoy&id='.$clase2->id.'"><div class="col-6 col-md-6 col-lg-4">';
-                 $echo2 .= '<div class="panel panel-success" style="height: 25vh;">
-                  <div class="panel-heading">'.$clase2->comision0->optativa0->actividad0->nombre.'</div>
-                  <div class="panel-body">
-                    <ul>
-                        <li>Fecha: '.Yii::$app->formatter->asDate($clase2->fecha, 'dd/MM/yyyy').'</li>
-                        <li>Comisión: '.$clase2->comision0->nombre.'</li>
-                        <li>Horario: '.$clase2->hora.'</li>
-                    </ul>
-                    
-                  </div>
-                </div>
-                </div></a>';
-            }
-            $echo2 .= '</div>'; 
-        }else{
-            $echo2 = "No hay clases pautadas para los proximos 7 días.";
-        }
-
-        
-
-        $com = $_SESSION['comisionx'] = 0;
-        
-        //$comision = Comision::findOne($com);
-       // $optativa = Optativa::findOne($comision->optativa);
+        $claseHoyView = Myfunction::claseHoyView();
         
 
         return $this->render('claseshoy', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'echo' => $echo,
-            'echo2' => $echo2,
-            
-
+            'searchModel' => $claseHoyView['searchModel'],
+            'dataProvider' => $claseHoyView['dataProvider'],
+            'echo' => $claseHoyView['echo'],
+            'echo2' => $claseHoyView['echo2'],
         ]); 
+    }
+
+
+    public function actionClaseshoy()
+    {
+        return $this->claseHoyView();
        
     }
 

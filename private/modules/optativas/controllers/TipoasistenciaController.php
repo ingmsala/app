@@ -1,19 +1,18 @@
 <?php
 
-namespace app\controllers;
+namespace app\modules\optativas\controllers;
 
 use Yii;
-use app\models\Parametros;
-use app\models\ParametrosSearch;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
+use app\modules\optativas\models\Tipoasistencia;
+use app\modules\optativas\models\TipoasistenciaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
 /**
- * ParametrosController implements the CRUD actions for Parametros model.
+ * TipoasistenciaController implements the CRUD actions for Tipoasistencia model.
  */
-class ParametrosController extends Controller
+class TipoasistenciaController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -21,26 +20,6 @@ class ParametrosController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
-                'rules' => [
-                    [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
-                        'allow' => true,
-                        'matchCallback' => function ($rule, $action) {
-                            try{
-                                return in_array (Yii::$app->user->identity->role, [1]);
-                            }catch(\Exception $exception){
-                                return false;
-                            }
-                        }
-
-                    ],
-
-                    
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -51,12 +30,12 @@ class ParametrosController extends Controller
     }
 
     /**
-     * Lists all Parametros models.
+     * Lists all Tipoasistencia models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ParametrosSearch();
+        $searchModel = new TipoasistenciaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -66,7 +45,7 @@ class ParametrosController extends Controller
     }
 
     /**
-     * Displays a single Parametros model.
+     * Displays a single Tipoasistencia model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -79,13 +58,13 @@ class ParametrosController extends Controller
     }
 
     /**
-     * Creates a new Parametros model.
+     * Creates a new Tipoasistencia model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Parametros();
+        $model = new Tipoasistencia();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -97,7 +76,7 @@ class ParametrosController extends Controller
     }
 
     /**
-     * Updates an existing Parametros model.
+     * Updates an existing Tipoasistencia model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -117,7 +96,7 @@ class ParametrosController extends Controller
     }
 
     /**
-     * Deletes an existing Parametros model.
+     * Deletes an existing Tipoasistencia model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -131,15 +110,15 @@ class ParametrosController extends Controller
     }
 
     /**
-     * Finds the Parametros model based on its primary key value.
+     * Finds the Tipoasistencia model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Parametros the loaded model
+     * @return Tipoasistencia the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Parametros::findOne($id)) !== null) {
+        if (($model = Tipoasistencia::findOne($id)) !== null) {
             return $model;
         }
 

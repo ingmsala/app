@@ -22,6 +22,14 @@ in_array (Yii::$app->user->identity->role, [1,8]) ? $template = '{update} {delet
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
+
+            [
+                'label' => 'Trimestre',
+                'value' => function($model){
+                    return $model->trimestre.'°trimestre';
+                },
+                
+            ],
             
             [
                 'label' => 'Tipo',

@@ -308,6 +308,8 @@ try {
                                             '<div class="dropdown-divider"></div>',
                                             ['label' => 'Roles', 'url' => ['/role']],
                                             '<div class="dropdown-divider"></div>',
+                                            ['label' => 'Parametros', 'url' => ['/parametros']],
+                                            '<div class="dropdown-divider"></div>',
                                             ['label' => 'Backup', 'url' => ['/db-manager']],
                                             '<div class="dropdown-divider"></div>',
                                             ['label' => 'Logs', 'url' => ['/logs']],

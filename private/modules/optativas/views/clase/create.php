@@ -16,6 +16,7 @@ $this->title = 'Nueva Clase';
     <?= $this->render('_form', [
         'model' => $model,
         'tiposclase' => $tiposclase,
+        'tiposasistencia' => $tiposasistencia,
         'mesx' => $mesx,
     ]) ?>
 

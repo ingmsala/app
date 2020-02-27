@@ -20,6 +20,7 @@ $this->title = $matr->alumno0->apellido.', '.$matr->alumno0->nombre;
         'model' => $model,
         'estados' => $estados,
         'tipos' => $tipos,
+        'trimestre' => $trimestre,
     ]) ?>
 
 </div>

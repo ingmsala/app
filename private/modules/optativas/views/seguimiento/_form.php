@@ -18,6 +18,8 @@ $listtipos = ArrayHelper::map($tipos, 'id', 'nombre');
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($model, 'trimestre')->dropDownList($trimestre, ['prompt'=>'Seleccionar...']); ?>
+
     <?= $form->field($model, 'tiposeguimiento')->widget(Select2::classname(), [
             'data' => $listtipos,
             'options' => ['placeholder' => 'Seleccionar...'],
@@ -26,7 +28,7 @@ $listtipos = ArrayHelper::map($tipos, 'id', 'nombre');
             ],
             'pluginEvents' => [
                 'select2:select' => 'function() {
-                    if ($(this).val()==1) {
+                    if ($(this).val()!=2) {
                           
                            $( "#divestado" ).hide();
                            
@@ -43,7 +45,7 @@ $listtipos = ArrayHelper::map($tipos, 'id', 'nombre');
     ?>
 
     <?= $form->field($model, 'descripcion')->textarea(['rows' => '8']) ?>
-
+    
     <div id="divestado" style="display: none;">
     	<?= $form->field($model, 'estadoseguimiento')->dropDownList($listestados, ['prompt'=>'Seleccionar...']); ?>
 	</div>

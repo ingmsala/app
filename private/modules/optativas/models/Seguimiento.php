@@ -31,7 +31,7 @@ class Seguimiento extends \yii\db\ActiveRecord
     {
         return [
             [['matricula', 'fecha', 'descripcion', 'tiposeguimiento'], 'required'],
-            [['matricula'], 'integer'],
+            [['matricula', 'trimestre'], 'integer'],
             [['matricula', 'tiposeguimiento', 'estadoseguimiento'], 'integer'],
             [['descripcion'], 'safe'],
             [['fecha'], 'safe'],
@@ -53,6 +53,7 @@ class Seguimiento extends \yii\db\ActiveRecord
             'descripcion' => 'Descripcion',
             'tiposeguimiento' => 'Tipo de seguimiento', 
             'estadoseguimiento' => 'Estado de seguimiento', 
+            'trimestre' => 'Trimestre', 
         ];
     }
 

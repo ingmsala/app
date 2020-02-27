@@ -4,6 +4,7 @@ namespace app\modules\optativas\controllers;
 
 use Yii;use yii\filters\AccessControl;
 use app\modules\optativas\models\Comision;
+use app\modules\optativas\models\Myfunction;
 use yii\web\Controller;
 
 
@@ -44,8 +45,23 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-    	$this->layout = 'main';
-        return $this->render('index');
+        $this->layout = 'main';
+        
+        $claseHoyView = Myfunction::claseHoyView();
+        
+
+        $echo = $this->renderPartial('/clase/claseshoy', [
+            'searchModel' => $claseHoyView['searchModel'],
+            'dataProvider' => $claseHoyView['dataProvider'],
+            'echo' => $claseHoyView['echo'],
+            'echo2' => $claseHoyView['echo2'],
+        ]);
+
+        return $this->render('index', [
+            
+            'echo' => $echo,
+            
+        ]);
     }
 
     public function actionSetsession($id)

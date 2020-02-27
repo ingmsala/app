@@ -195,7 +195,7 @@ class TareamantenimientoController extends Controller
                         $responsable = Nodocente::findOne($model->responsable);
                         if($responsable->mail != null){
                             Yii::$app->mailer->compose()
-                             ->setFrom(Globales::MAIL)
+                             ->setFrom([Globales::MAIL => 'Nueva Tarea'])
                              ->setTo($responsable->mail)
                              ->setSubject('Nueva asignación de tarea')
                              ->setHtmlBody('Se le ha asignado una nueva tarea de mantenimiento. Puede consultarla haciendo click '.Html::a('aquí', $url = 'http://admin.cnm.unc.edu.ar'))
