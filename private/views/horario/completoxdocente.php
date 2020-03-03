@@ -67,7 +67,8 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		            [
 		                'label' => 'Lunes',
 		                'vAlign' => 'middle',
-		                'hAlign' => 'center',
+						'hAlign' => 'center',
+						'format' => 'raw',
 		                'contentOptions' => function ($model, $key, $index, $column) {
 					        return ['style' => 'background-color:' 
 					            . (strlen($model['2'])>2) ? 'red' : 'black'];
@@ -81,7 +82,8 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		            [
 		                'label' => 'Martes',
 		                'vAlign' => 'middle',
-		                'hAlign' => 'center',
+						'hAlign' => 'center',
+						'format' => 'raw',
 		                'attribute' => '3'
 		                /*'value' => function($model){
 		                	return var_dump($model);
@@ -91,7 +93,8 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		            [
 		                'label' => 'Miercoles',
 		                'vAlign' => 'middle',
-		                'hAlign' => 'center',
+						'hAlign' => 'center',
+						'format' => 'raw',
 		                'contentOptions' => function ($model, $key, $index, $column) {
 					        return ['style' => (strlen($model['4'])>2) ? 'background-color:#e1998e' : ''];
 					    },
@@ -102,7 +105,8 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		            [
 		                'label' => 'Jueves',
 		                'vAlign' => 'middle',
-		                'hAlign' => 'center',
+						'hAlign' => 'center',
+						'format' => 'raw',
 		                'attribute' => '5'
 		                /*'value' => function($model){
 		                	return var_dump($model);
@@ -112,7 +116,8 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		            [
 		                'label' => 'Viernes',
 		                'vAlign' => 'middle',
-		                'hAlign' => 'center',
+						'hAlign' => 'center',
+						'format' => 'raw',
 		                'attribute' => '6'
 		                /*'value' => function($model){
 		                	return var_dump($model);
@@ -150,7 +155,8 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		            [
 		                'label' => 'Lunes',
 		                'vAlign' => 'middle',
-		                'hAlign' => 'center',
+						'hAlign' => 'center',
+						'format' => 'raw',
 		                'attribute' => '2'
 		                /*'value' => function($model){
 		                	return var_dump($model);
@@ -160,7 +166,8 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		            [
 		                'label' => 'Martes',
 		                'vAlign' => 'middle',
-		                'hAlign' => 'center',
+						'hAlign' => 'center',
+						'format' => 'raw',
 		                'attribute' => '3'
 		                /*'value' => function($model){
 		                	return var_dump($model);
@@ -170,7 +177,8 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		            [
 		                'label' => 'Miercoles',
 		                'vAlign' => 'middle',
-		                'hAlign' => 'center',
+						'hAlign' => 'center',
+						'format' => 'raw',
 		                'attribute' => '4'
 		                /*'value' => function($model){
 		                	return var_dump($model);
@@ -180,7 +188,8 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		            [
 		                'label' => 'Jueves',
 		                'vAlign' => 'middle',
-		                'hAlign' => 'center',
+						'hAlign' => 'center',
+						'format' => 'raw',
 		                'attribute' => '5'
 		                /*'value' => function($model){
 		                	return var_dump($model);
@@ -190,7 +199,8 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		            [
 		                'label' => 'Viernes',
 		                'vAlign' => 'middle',
-		                'hAlign' => 'center',
+						'hAlign' => 'center',
+						'format' => 'raw',
 		                'attribute' => '6'
 		                /*'value' => function($model){
 		                	return var_dump($model);

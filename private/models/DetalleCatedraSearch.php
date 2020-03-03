@@ -300,22 +300,15 @@ class DetallecatedraSearch extends Detallecatedra
 
     public function horario_doce_divi($division)
     {
-        if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
-            $query = Detallecatedra::find()
+        
+        $query = Detallecatedra::find()
             ->joinWith(['catedra0', 'catedra0.actividad0'])
             ->where(['catedra.division' => $division])
             ->andWhere(['<>', 'actividad.id', 31])
             ->andWhere(['<>', 'actividad.id', 33])
             ->andWhere(['revista' => 6])
             ->orderBy('actividad.nombre');
-        }else{
-            $query = Detallecatedra::find()
-            ->joinWith(['catedra0', 'catedra0.actividad0'])
-            ->where(['catedra.division' => $division])
-            ->andWhere(['<>', 'actividad.id', 183])
-            ->andWhere(['revista' => 6])
-            ->orderBy('actividad.nombre');
-        }
+        
         
 
         // add conditions that should always apply here

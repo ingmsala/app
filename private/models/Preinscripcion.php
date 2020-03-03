@@ -10,6 +10,8 @@ use Yii;
  * @property int $id
  * @property string $descripcion
  * @property int $activo
+ * @property string $inicio
+ * @property string $fin
  */
 class Preinscripcion extends \yii\db\ActiveRecord
 {
@@ -29,6 +31,7 @@ class Preinscripcion extends \yii\db\ActiveRecord
         return [
             [['descripcion', 'activo'], 'required'],
             [['activo'], 'integer'],
+            [['inicio', 'fin'], 'safe'],
             [['descripcion'], 'string', 'max' => 50],
         ];
     }
@@ -42,6 +45,8 @@ class Preinscripcion extends \yii\db\ActiveRecord
             'id' => 'ID',
             'descripcion' => 'Descripcion',
             'activo' => 'Activo',
+            'inicio' => 'Inicio',
+            'fin' => 'Fin',
         ];
     }
 }

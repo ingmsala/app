@@ -74,17 +74,24 @@ class PreinscripcionController extends Controller
      */
     public function actionIndex()
     {
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
         $this->layout = 'mainautogestion';
         $preinscripcion = Preinscripcion::findOne(1);
         $estadoinscripcion = $preinscripcion->activo;
-        if($estadoinscripcion == 0){
+        if($estadoinscripcion == 0){//inactivo
             Yii::$app->session->setFlash('error', "No existe un periodo de <b>Inscripción</b> activo.");
             return $this->redirect(['/optativas/autogestion/agenda/index']);
-        }
-
-         if($estadoinscripcion == 2){
+        }elseif($estadoinscripcion == 2){//publicado
             Yii::$app->session->setFlash('error', "No existe un periodo de <b>Inscripción</b> activo.");
             //return $this->redirect(['/optativas/autogestion/agenda/index']);
+        }elseif($estadoinscripcion == 3){//regido por fecha
+            //Yii::$app->session->setFlash('error', "No existe un periodo de <b>Inscripción</b> activo.");
+            //return $this->redirect(['/optativas/autogestion/agenda/index']);
+            if ($preinscripcion->inicio <= date('Y-m-d H:i:s') && $preinscripcion->fin >= date('Y-m-d H:i:s')){
+                
+            }else{
+                Yii::$app->session->setFlash('error', "No existe un periodo de <b>Inscripción</b> activo.");
+            }
         }
     
         $dni = Yii::$app->session->get('dni');
@@ -103,6 +110,10 @@ class PreinscripcionController extends Controller
             ->where(['alumno' => $alumno->id])
             ->andWhere(['aniolectivo.activo' => 1])
             ->all();
+        if(count($admision)==0){
+            Yii::$app->session->setFlash('error', "El alumno no está habilitado para cursar ningún espacio optativo. Si considera que es un error deberá dirigirse personalmente al Establecimiento.");
+            return $this->redirect(['/optativas/autogestion/agenda/index']);
+        }
         $aniolectivo = $admision[0]->aniolectivo0->nombre;
         $admision = ArrayHelper::map($admision,'id','curso');
         if(count($admision)==0)
@@ -179,6 +190,7 @@ class PreinscripcionController extends Controller
             'alumno' => $alumno->id,
             'aniolectivo' => $aniolectivo,
             'instancia' => $preinscripcion->descripcion,
+            'preinscripcion' => $preinscripcion,
 
         ]);
     

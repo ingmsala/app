@@ -145,6 +145,8 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Docentes con superposición', 'url' => ['/horario/horassuperpuestas']],
                                         '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Horarios con movilidad deshabilitada', 'url' => ['/horario/deshabilitados']],
+                                        '<div class="dropdown-divider"></div>',
                                         
 
                                     ],
@@ -506,6 +508,8 @@ try {
                                         ['label' => 'Horario completo', 'url' => ['/horario/horariocompleto']],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Docentes con superposición', 'url' => ['/horario/horassuperpuestas']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Horarios con movilidad deshabilitada', 'url' => ['/horario/deshabilitados']],
                                         '<div class="dropdown-divider"></div>',
                                         
 

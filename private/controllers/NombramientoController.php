@@ -587,7 +587,51 @@ class NombramientoController extends Controller
 
     }
 
-    
+    public function actionAbmpreceptor($nom,$div)
+    {
+        
+        if($nom == 0)
+            $model = new Nombramiento();
+        else
+            $model = $this->findModel($nom);
+        $model->scenario = $model::SCENARIO_ABMDIVISION;
+        
+        $preceptores = Nombramiento::find()
+                ->joinWith(['docente0'])
+                ->where(['cargo' => Globales::CARGO_PREC])
+                ->orderBy('docente.apellido, docente.nombre')->all();
+
+        if ($model->load(Yii::$app->request->post())) {
+            //return var_dump(Yii::$app->request->post());
+
+            //$nomx = Nombramiento::findOne(Yii::$app->request->post()['Nombramiento']['id']);
+            if($nom != 0){
+                 $model3 = $this->findModel($nom);
+                 $model3->division = null;
+                 $model3->save();
+            }
+               
+            $model2 = $this->findModel(Yii::$app->request->post()['Nombramiento']['id']);
+            $model2->division = $div;
+            $model2->save();
+            return $this->redirect(['reporte/preceptores/preceptores']);
+        }
+
+        if(Yii::$app->request->isAjax){
+
+            return $this->renderAjax('abmpreceptor', [
+                'model' => $model,
+                'preceptor' => $preceptores,
+                
+            ]);
+        }
+        return $this->render('abmpreceptor', [
+                'model' => $model,
+                'preceptor' => $preceptores,
+                
+            ]);
+
+    }    
 
 
     

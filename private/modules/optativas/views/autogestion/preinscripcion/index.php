@@ -159,18 +159,24 @@ $this->title = 'Matriculación '.$aniolectivo.' - '.$instancia;
             [
             	'label' => 'Acción',
             	'format' => 'raw',
-            	'value' => function($model) use ($matriculasalumno, $alumno, $estadoinscripcion){
-            		if($estadoinscripcion == 2)
-            			return '';
-            		if(in_array($model['idcomi'], $matriculasalumno))
-            			return "Matriculado";
-            		return Html::a('Inscribirse', ['inscripcion', 'c' => $model['idcomi'], 'a' => $alumno], [
-	            				'class' => 'btn btn-success btn-sm',
-					            'data' => [
-					                'confirm' => '¿Está seguro de querer inscrbirse en <b>'.$model['actividad'].'</b> comisión <b>'.$model['comision'].'</b>?',
-					                'method' => 'post',
-			            ],
-        			]);
+            	'value' => function($model) use ($matriculasalumno, $alumno, $estadoinscripcion, $preinscripcion){
+                     
+                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+            		if($estadoinscripcion == 1 || ($estadoinscripcion == 3 && $preinscripcion->inicio <= date('Y-m-d H:i:s') && $preinscripcion->fin >= date('Y-m-d H:i:s')))
+            			{
+                            if(in_array($model['idcomi'], $matriculasalumno))
+                                return "Matriculado";
+                            return Html::a('Inscribirse', ['inscripcion', 'c' => $model['idcomi'], 'a' => $alumno], [
+                                        'class' => 'btn btn-success btn-sm',
+                                        'data' => [
+                                            'confirm' => '¿Está seguro de querer inscrbirse en <b>'.$model['actividad'].'</b> comisión <b>'.$model['comision'].'</b>?',
+                                            'method' => 'post',
+                                ],
+                            ]);
+                        }else{
+                            return '';
+                        }
+            		
             	}
             ],
             

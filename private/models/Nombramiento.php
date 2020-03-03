@@ -51,7 +51,7 @@ class Nombramiento extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_ABMNOMBRAMIENTO] = ['cargo', 'horas', 'docente', 'revista', 'condicion', 'extension', 'suplente', 'fechaInicio', 'docente', 'division',  'fechaFin', 'resolucion', 'fechaInicioext', 'fechaFinext', 'resolucionext', 'activo'];
+        $scenarios[self::SCENARIO_ABMNOMBRAMIENTO] = ['nombre', 'cargo', 'horas', 'docente', 'revista', 'condicion', 'extension', 'suplente', 'fechaInicio', 'docente', 'division',  'fechaFin', 'resolucion', 'fechaInicioext', 'fechaFinext', 'resolucionext', 'activo'];
         $scenarios[self::SCENARIO_ABMDIVISION] = ['division'];
         return $scenarios;
     }

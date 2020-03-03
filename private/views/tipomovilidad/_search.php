@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\PreinscripcionSearch */
+/* @var $model app\models\TipomovilidadSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="preinscripcion-search">
+<div class="tipomovilidad-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -17,13 +17,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'descripcion') ?>
-
-    <?= $form->field($model, 'activo') ?>
-
-    <?= $form->field($model, 'inicio') ?>
-
-    <?= $form->field($model, 'fin') ?>
+    <?= $form->field($model, 'nombre') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

@@ -19,7 +19,7 @@ class HorarioSearch extends Horario
     public function rules()
     {
         return [
-            [['id', 'catedra', 'hora', 'diasemana', 'tipo'], 'integer'],
+            [['id', 'catedra', 'hora', 'diasemana', 'tipo', 'tipomovilidad'], 'integer'],
         ];
     }
 
@@ -152,6 +152,40 @@ class HorarioSearch extends Horario
         
         // grid filtering conditions
         
+
+        return $dataProvider;
+    }
+
+    public function getDeshabilitados()
+    {
+        $query = Horario::find()
+                    ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.actividad0', 'catedra0.division0'])
+                    ->where(['tipomovilidad' => 2])
+                    ->andWhere(['tipo' => 1])
+                    ->andWhere(['detallecatedra.revista' => 6])
+                    ->orderBy('actividad.nombre, division.nombre, horario.diasemana, horario.hora');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'catedra' => $this->catedra,
+            'hora' => $this->hora,
+            'diasemana' => $this->diasemana,
+            'tipo' => $this->tipo,
+        ]);
 
         return $dataProvider;
     }

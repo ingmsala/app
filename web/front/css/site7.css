@@ -983,3 +983,7 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
 .lblmigracion > .input-group{
     padding-top: 6px;
 }
+
+.bordermov{
+    border: 1px dotted rgb(138, 45, 114);
+}

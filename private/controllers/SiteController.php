@@ -73,7 +73,10 @@ class SiteController extends Controller
                 
         }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
                  return $this->redirect(['/optativas/clase/claseshoy']);
-            }
+            
+        }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
+            return $this->redirect(['/reporte/preceptores/preceptores']);
+       }
         elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
                 return $this->redirect(['/horario/menuopciones']);
@@ -105,6 +108,8 @@ class SiteController extends Controller
                 return $this->redirect(['/optativas']);
             }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
                  return $this->redirect(['/optativas/clase/claseshoy']);
+            }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
+                return $this->redirect(['//reporte/preceptores/preceptores']);
             }elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
                 return $this->redirect(['/horario/menuopciones']);
@@ -121,6 +126,8 @@ class SiteController extends Controller
                 return $this->redirect(['/optativas']);
             }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
                  return $this->redirect(['/optativas/clase/claseshoy']);
+            }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
+                    return $this->redirect(['//reporte/preceptores/preceptores']);
             }elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
                 return $this->redirect(['/horario/menuopciones']);

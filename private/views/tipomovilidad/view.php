@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Preinscripcion */
+/* @var $model app\models\Tipomovilidad */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Preinscripcions', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Tipomovilidads', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="preinscripcion-view">
+<div class="tipomovilidad-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -29,10 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'descripcion',
-            'activo',
-            'inicio',
-            'fin',
+            'nombre',
         ],
     ]) ?>
 

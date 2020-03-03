@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Preinscripcion;
+use app\models\Tipomovilidad;
 
 /**
- * PreinscripcionSearch represents the model behind the search form of `app\models\Preinscripcion`.
+ * TipomovilidadSearch represents the model behind the search form of `app\models\Tipomovilidad`.
  */
-class PreinscripcionSearch extends Preinscripcion
+class TipomovilidadSearch extends Tipomovilidad
 {
     /**
      * {@inheritdoc}
@@ -18,8 +18,8 @@ class PreinscripcionSearch extends Preinscripcion
     public function rules()
     {
         return [
-            [['id', 'activo'], 'integer'],
-            [['descripcion', 'inicio', 'fin'], 'safe'],
+            [['id'], 'integer'],
+            [['nombre'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class PreinscripcionSearch extends Preinscripcion
      */
     public function search($params)
     {
-        $query = Preinscripcion::find();
+        $query = Tipomovilidad::find();
 
         // add conditions that should always apply here
 
@@ -60,12 +60,9 @@ class PreinscripcionSearch extends Preinscripcion
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'activo' => $this->activo,
-            'inicio' => $this->inicio,
-            'fin' => $this->fin,
         ]);
 
-        $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);
+        $query->andFilterWhere(['like', 'nombre', $this->nombre]);
 
         return $dataProvider;
     }

@@ -12,11 +12,13 @@ use Yii;
  * @property int $hora
  * @property int $diasemana
  * @property int $tipo
+ * @property int $tipomovilidad
  *
  * @property Diasemana $diasemana0
  * @property Hora $hora0
  * @property Tipoparte $tipo0
  * @property Catedra $catedra0
+ * @property Tipomovilidad $tipomovilidad0
  */
 class Horario extends \yii\db\ActiveRecord
 {
@@ -44,14 +46,15 @@ class Horario extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['catedra', 'hora', 'diasemana', 'tipo'], 'required'],
-            [['catedra', 'hora', 'diasemana', 'tipo'], 'integer'],
+            [['catedra', 'hora', 'diasemana', 'tipo', 'tipomovilidad'], 'required'],
+            [['catedra', 'hora', 'diasemana', 'tipo', 'tipomovilidad'], 'integer'],
             
             
             [['diasemana'], 'exist', 'skipOnError' => true, 'targetClass' => Diasemana::className(), 'targetAttribute' => ['diasemana' => 'id']],
             [['hora'], 'exist', 'skipOnError' => true, 'targetClass' => Hora::className(), 'targetAttribute' => ['hora' => 'id']],
             [['tipo'], 'exist', 'skipOnError' => true, 'targetClass' => Tipoparte::className(), 'targetAttribute' => ['tipo' => 'id']],
             [['catedra'], 'exist', 'skipOnError' => true, 'targetClass' => Catedra::className(), 'targetAttribute' => ['catedra' => 'id']],
+            [['tipomovilidad'], 'exist', 'skipOnError' => true, 'targetClass' => Tipomovilidad::className(), 'targetAttribute' => ['tipomovilidad' => 'id']],
             ['tipo', 'yaExiste', 'on' => self::SCENARIO_CREATEHORARIO],
         ];
     }
@@ -84,6 +87,7 @@ class Horario extends \yii\db\ActiveRecord
             'hora' => 'Hora',
             'diasemana' => 'Diasemana',
             'tipo' => 'Tipo',
+            'tipomovilidad' => 'Movilidad',
         ];
     }
 
@@ -117,5 +121,13 @@ class Horario extends \yii\db\ActiveRecord
     public function getCatedra0()
     {
         return $this->hasOne(Catedra::className(), ['id' => 'catedra']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTipomovilidad0()
+    {
+        return $this->hasOne(Tipomovilidad::className(), ['id' => 'tipomovilidad']);
     }
 }

@@ -97,6 +97,7 @@ class ParteSearch extends Parte
         }
         if ( in_array (Yii::$app->user->identity->role, [5])) {
             $sql .= ' and pr.nombre="'.Yii::$app->user->identity->username.'"';
+            $sql .= ' and year(p.fecha)="'.date('Y').'"';
         }
         if (isset($params['Parte']['preceptoria']) && $params['Parte']['preceptoria'] != ''){
             $sql .= ' and p.preceptoria = '.$params["Parte"]["preceptoria"];

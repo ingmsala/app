@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\form\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Horario */
@@ -21,6 +22,7 @@ $listcatedras=ArrayHelper::map($catedras,'id',function($cat){
 $listhoras=ArrayHelper::map($horas,'id','nombre');
 $listdias=ArrayHelper::map($dias,'id','nombre');
 $listtipos=ArrayHelper::map($tipos,'id','nombre');
+$listtipomovilidad=ArrayHelper::map($tipomovilidad,'id','nombre');
 ?>
 <?php  
  $js=<<< JS
@@ -29,19 +31,26 @@ $listtipos=ArrayHelper::map($tipos,'id','nombre');
 JS;
 
 ?>
+
+<?php 
+
+echo Html::a('< Volver', Url::to(['horario/completoxcurso', 'division' => $division->id, 'vista' => 'docentes']), [
+            'class' => 'btn btn-default pull-right',
+        ]); ?>
 <div class="panel panel-default">
     <div class="panel-heading"><?= 'Modificar docente de '.Html::encode($division->nombre); ?></div>
     <div class="panel-body">
 <div class="horario-form">
+    
 
     <?php $form = ActiveForm::begin(['id' => 'category-edit']); ?>
-
-    <?= $form->field($model, 'diasemana')->dropDownList($listdias, 
+   <?= $form->field($model, 'diasemana')->dropDownList($listdias, 
         [
             'prompt' => 'Seleccionar...',
             'disabled' => 'disabled',
             
         ])->label('Día de la Semana'); ?>
+    
     
     <?= $form->field($model, 'catedra')->widget(Select2::classname(), [
             'data' => $listcatedras,
@@ -51,7 +60,8 @@ JS;
                 
             ],
             'pluginOptions' => [
-                'allowClear' => true
+                'allowClear' => true,
+                'disabled' => ($model->tipomovilidad == 1) ? false : 'disabled',
             ],
         ]); ?>
 
@@ -76,16 +86,44 @@ JS;
             
         ])->label('Tipo de horario'); ?>
 
+    
+            
+            <?= $form->field($model, 'tipomovilidad')->dropDownList($listtipomovilidad, 
+            [
+                'prompt' => 'Seleccionar...',
+                'class' => 'form-control',
+                'disabled' => 'disabled',
+                
+            ])->label('Tipo de horario'); ?>
+        
+            
+                
+           
+ 
+
+    
+
     <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Eliminar horario', ['delete', 'id' => $model->id], [
+        <?php echo ($model->tipomovilidad == 1) ? Html::submitButton('Guardar', ['class' => 'btn btn-success']) : '' ?>
+        
+        <?php echo ($model->tipomovilidad == 1) ? Html::a('Eliminar horario', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger pull-right',
             'data' => [
                 'confirm' => 'Está seguro de querer eliminar este elemento?',
                 'method' => 'post',
             ],
-        ]) ?>
+        ]) : '' ?>
+        
     </div>
+    <?php   
+                    echo Html::a('Cambiar <br />movilidad', ['cambiarmovilidad', 'id' => $model->id], [
+                        'class' => 'btn btn-warning pull-right',
+                        'data' => [
+                            'confirm' => 'Está seguro de querer cambiar la movilidad de esta hora?',
+                            'method' => 'post',
+                        ],
+                    ])
+                ?>
 
     <?php ActiveForm::end(); ?>
 

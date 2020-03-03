@@ -42,7 +42,7 @@ class ClaseController extends Controller
                 'only' => ['index', 'view', 'create', 'update', 'delete', 'viewgrid', 'claseshoy', 'claseinterhoy'],
                 'rules' => [
                     [
-                        'actions' => ['index'],   
+                        'actions' => ['index', 'claseinterhoy'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -54,7 +54,7 @@ class ClaseController extends Controller
 
                     ],
                     [
-                        'actions' => ['create', 'update', 'delete', 'claseshoy', 'claseinterhoy'],   
+                        'actions' => ['create', 'update', 'delete', 'claseshoy'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -64,6 +64,7 @@ class ClaseController extends Controller
                                     Yii::$app->session->setFlash('info', "No se puede realizar la acción ya que la comisión tiene un acta en estado cerrado");
                                     return false;
                                 }else{
+                                    Yii::$app->session->setFlash('info', "No se puede realizar la acción ya que la comisión tiene un acta en estado cerrado");
                                     return in_array (Yii::$app->user->identity->role, [1,8,9]);
                                 }
                                 

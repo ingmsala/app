@@ -16,6 +16,7 @@ use app\models\Horario;
 use app\models\HorarioSearch;
 use app\models\Parametros;
 use app\models\Preceptoria;
+use app\models\Tipomovilidad;
 use app\models\Tipoparte;
 use kartik\mpdf\Pdf;
 use yii\data\ArrayDataProvider;
@@ -39,7 +40,7 @@ class HorarioController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto', 'menuopciones'.'migrarhorarioprueba', 'printxcurso', 'printxdocente'],
+                'only' => ['view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto', 'menuopciones'.'migrarhorarioprueba', 'printxcurso', 'printxdocente', 'deshabilitados', 'cambiarmovilidad'],
                 'rules' => [
                     [
                         'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'filtropormateria', 'horariocompleto', 'menuopciones'],   
@@ -144,7 +145,7 @@ class HorarioController extends Controller
 
                     ],
                     [
-                        'actions' => ['createdesdehorario','updatedesdehorario', 'delete', 'printxdocente'],   
+                        'actions' => ['createdesdehorario','updatedesdehorario', 'delete', 'printxdocente', 'deshabilitados', 'cambiarmovilidad'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -180,6 +181,7 @@ class HorarioController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'cambiarmovilidad' => ['POST'],
                 ],
             ],
         ];
@@ -504,11 +506,9 @@ class HorarioController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
            //    $model->catedra = $model->catedra;
-
-
            
-
-           $monologComponent = Yii::$app->monolog;
+            if($model->tipomovilidad == 1){
+                $monologComponent = Yii::$app->monolog;
                     $logger = $monologComponent->getLogger("horarioclase");
                     $logger->log('warning', json_encode([
                         "username" => Yii::$app->user->identity->username,
@@ -517,12 +517,20 @@ class HorarioController extends Controller
                         "modelnew" => $model->getAttributes(),
                     ]));
 
-            $model->save();
+                $model->save();
 
-            return $this->redirect(['/horario/completoxcurso', 'division' => $division, 'vista' => 'docentes']);
+                return $this->redirect(['/horario/completoxcurso', 'division' => $division, 'vista' => 'docentes']);
+            }else{
+                Yii::$app->session->setFlash('danger', "No se puede cambiar un horario que no sea 'Móvil'.");
+                return $this->redirect(['/horario/completoxcurso', 'division' => $division, 'vista' => 'docentes']);
+            }
+           
+
+           
         }
 
         $division = Division::findOne($division);
+        $tipomovilidad = Tipomovilidad::find()->all();
         $catedras = Catedra::find()->joinWith('detallecatedras')
                         ->where(['division' => $division->id])
                         //->andWhere(['detallecatedra.revista' => 6])
@@ -537,6 +545,7 @@ class HorarioController extends Controller
             'dias' => $dias,
             'tipos' => $tipos,
             'catedras' => $catedras,
+            'tipomovilidad' => $tipomovilidad,
         ]);
     }
     /**
@@ -559,6 +568,22 @@ class HorarioController extends Controller
         ]);
     }
 
+    public function actionCambiarmovilidad($id)
+    {
+        $model = $this->findModel($id);
+
+        
+        if($model->tipomovilidad == 1)
+            $model->tipomovilidad = 2;
+        else
+            $model->tipomovilidad = 1;
+        $model->save();
+        Yii::$app->session->setFlash('success', "Se cambió correctamente el estado de movilidad de la hora");
+        return $this->redirect(Yii::$app->request->referrer);
+        
+
+    }
+
     /**
      * Deletes an existing Horario model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -569,22 +594,28 @@ class HorarioController extends Controller
     public function actionDelete($id)
     {
         $horario = $this->findModel($id);
-        $division = $horario->catedra0->division;
+        if($horario->tipomovilidad == 1){
+            $division = $horario->catedra0->division;
 
-        $monologComponent = Yii::$app->monolog;
-        $logger = $monologComponent->getLogger("horarioclase");
-        $logger->log('error', json_encode([
-            "username" => Yii::$app->user->identity->username,
-            "action" => Yii::$app->controller->action->id,
-            "modelnew" => $horario->getAttributes(),
-            "modelold" => [],
-        ]));
+            $monologComponent = Yii::$app->monolog;
+            $logger = $monologComponent->getLogger("horarioclase");
+            $logger->log('error', json_encode([
+                "username" => Yii::$app->user->identity->username,
+                "action" => Yii::$app->controller->action->id,
+                "modelnew" => $horario->getAttributes(),
+                "modelold" => [],
+            ]));
 
-        $horario->delete();
+            $horario->delete();
 
-        return $this->redirect(['/horario/completoxcurso', 'division' => $division, 'vista' => 'docentes']);
+            return $this->redirect(['/horario/completoxcurso', 'division' => $division, 'vista' => 'docentes']);
+        }else{
+            Yii::$app->session->setFlash('danger', "No se puede eliminar un horario que no sea 'Móvil'.");
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+        
 
-        return $this->redirect(['index']);
+        
     }
 
     public function generarHorarioxCurso($division, $vista, $pr){
@@ -686,8 +717,12 @@ class HorarioController extends Controller
                            //return $salida;
             if($vista == 'docentes'){
                 if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]))
-                    if($pr == 0)
-                    $array[$horariox->hora][$horariox->diasemana] = '<a class="btn btn-link btn-sm" href="?r=horario/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&diasemana='.$horariox->diasemana.'&tipo=1">'.$salida.'</a>';
+                    if($pr == 0){
+                        if($horariox->tipomovilidad==1)
+                            $array[$horariox->hora][$horariox->diasemana] = '<a class="btn btn-link btn-sm" href="?r=horario/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&diasemana='.$horariox->diasemana.'&tipo=1">'.$salida.'</a>';
+                        else
+                            $array[$horariox->hora][$horariox->diasemana] = '<span class="bordermov"><a class="btn btn-link btn-sm" href="?r=horario/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&diasemana='.$horariox->diasemana.'&tipo=1">'.$salida.'</a></span>';
+                    }
                     else
                         $array[$horariox->hora][$horariox->diasemana] = $salida;
                 else
@@ -1021,7 +1056,7 @@ class HorarioController extends Controller
     public function actionPrintxdocente($docente, $all=0)
     {
         
-
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
         $this->layout = 'mainpublic';
         if (YII_ENV_DEV) {
             Yii::$app->getModule('debug')->instance->allowedIPs = [];
@@ -1206,7 +1241,10 @@ class HorarioController extends Controller
                 
                 if($arrayTm[$horarioxTm->hora][$horarioxTm->diasemana] != '')
                     $arrayTm[$horarioxTm->hora][$horarioxTm->diasemana] .= ' - ';
-        		$arrayTm[$horarioxTm->hora][$horarioxTm->diasemana] .= $horarioxTm->catedra0->division0->nombre;
+                if($horarioxTm->tipomovilidad == 1)
+        		    $arrayTm[$horarioxTm->hora][$horarioxTm->diasemana] .= $horarioxTm->catedra0->division0->nombre;
+                else
+                    $arrayTm[$horarioxTm->hora][$horarioxTm->diasemana] .= '<span class="bordermov">'.$horarioxTm->catedra0->division0->nombre.'</span>';
         }
 
         $providerTm = new ArrayDataProvider([
@@ -1244,7 +1282,10 @@ class HorarioController extends Controller
         	else*/
                 if($arrayTt[$horarioxTt->hora][$horarioxTt->diasemana] != '')
                     $arrayTt[$horarioxTt->hora][$horarioxTt->diasemana] .= ' - ';
-        		$arrayTt[$horarioxTt->hora][$horarioxTt->diasemana] .= $horarioxTt->catedra0->division0->nombre;
+                if($horarioxTt->tipomovilidad == 1)
+        		    $arrayTt[$horarioxTt->hora][$horarioxTt->diasemana] .= $horarioxTt->catedra0->division0->nombre;
+                else
+                    $arrayTt[$horarioxTt->hora][$horarioxTt->diasemana] .= '<span class="bordermov">'.$horarioxTt->catedra0->division0->nombre.'</span>';
         }
 
         $providerTt = new ArrayDataProvider([
@@ -1943,6 +1984,17 @@ class HorarioController extends Controller
             'searchModel' => $searchModel,
             
             
+        ]);
+    }
+
+    public function actionDeshabilitados()
+    {
+        $searchModel = new HorarioSearch();
+        $dataProvider = $searchModel->getDeshabilitados();
+
+        return $this->render('deshabilitados', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
