@@ -480,6 +480,8 @@ try {
 
                                 ['label' => 'Gestionar Exámenes', 'url' => ['/anioxtrimestral']],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'Inscripción Espacios Optativos', 'url' => ['preinscripcion/update', 'id' => 1]],
+                                '<div class="dropdown-divider"></div>',
                                 
                             ],
                     ],

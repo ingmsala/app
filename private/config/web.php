@@ -30,6 +30,7 @@ $config = [
         'class' => 'yii\i18n\Formatter',
         'nullDisplay' => '',
         'dateFormat' => 'dd/mm/yyyy',
+        'defaultTimeZone' => 'America/Argentina/Buenos_Aires',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',

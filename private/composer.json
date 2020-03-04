@@ -34,7 +34,8 @@
         "kartik-v/yii2-date-range": "dev-master",
         "kartik-v/yii2-editable": "dev-master",
         "kartik-v/yii2-nav-x": "*",
-        "mero/yii2-monolog": "^0.1.2"
+        "mero/yii2-monolog": "^0.1.2",
+        "kartik-v/yii2-widget-datetimepicker": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

@@ -2,7 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\widgets\DateTimePicker;
+use kartik\datetime\DateTimePicker;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Preinscripcion */
@@ -11,34 +12,36 @@ use kartik\widgets\DateTimePicker;
 
 <div class="preinscripcion-form">
 
+
+
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true, 'disabled'=>(Yii::$app->user->identity->role == 4) ? 'disabled' : false]) ?>
 
-    <?= $form->field($model, 'activo')->textInput() ?>
-
-    <?= $form->field($model, 'inicio')->textInput() ?>
-
-    <?= $form->field($model, 'fin')->textInput() ?>
+    <?= $form->field($model, 'activo')->dropDownList($tipodepublicacion, ['prompt'=>'Seleccionar...']); ?>
 
     <?php
-        echo DateTimePicker::widget([
-            'name' => 'dp_5',
-            'type' => DateTimePicker::TYPE_BUTTON,
-            'value' => '23-Feb-1982 01:10',
-            'layout' => '{picker} {remove} {input}',
-            'options' => [
-                'type' => 'text',
-                'readonly' => true,
-                'class' => 'text-muted small',
-                'style' => 'border:none;background:none'
-            ],
+        echo $form->field($model, 'inicio')->widget(DateTimePicker::classname(), [
+            'options' => ['placeholder' => 'Fecha y hora de inicio'],
+            'readonly' => true,
             'pluginOptions' => [
-                'format' => 'dd-M-yyyy hh:ii',
-                'autoclose' => true
+                'autoclose' => true,
+                'format' => 'dd/mm/yyyy hh:ii'
             ]
         ]);
     ?>
+
+<?php
+        echo $form->field($model, 'fin')->widget(DateTimePicker::classname(), [
+            'options' => ['placeholder' => 'Fecha y hora de fin'],
+            'readonly' => true,
+            'pluginOptions' => [
+                'autoclose' => true,
+                'format' => 'dd/mm/yyyy hh:ii'
+            ]
+        ]);
+    ?>
+
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

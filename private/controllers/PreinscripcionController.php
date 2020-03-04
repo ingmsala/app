@@ -26,11 +26,24 @@ class PreinscripcionController extends Controller
                 'only' => ['index', 'view', 'create', 'update', 'delete'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'actions' => ['index', 'view', 'create', 'delete'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
                                 return in_array (Yii::$app->user->identity->role, [1]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['update'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [1,4]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -77,6 +90,7 @@ class PreinscripcionController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
+    
 
     /**
      * Creates a new Preinscripcion model.
@@ -86,6 +100,13 @@ class PreinscripcionController extends Controller
     public function actionCreate()
     {
         $model = new Preinscripcion();
+        $tipodepublicacion=[
+            0=> 'Inactivo',
+            1=> 'Habilitado para inscripción',
+            2=> 'Sólo Publicación',
+            3=> 'Regido por fecha',
+
+        ];
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -93,6 +114,7 @@ class PreinscripcionController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'tipodepublicacion' => $tipodepublicacion,
         ]);
     }
 
@@ -105,14 +127,62 @@ class PreinscripcionController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        //date_default_timezone_set('America/Argentina/Buenos_Aires');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        
+
+        if(Yii::$app->user->identity->role == 4 && $id != 1){
+            Yii::$app->session->setFlash('error', "No tiene permisos para modificar el elemento");
+            return $this->goHome();
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+        
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $model = $this->findModel($id);
+        $model->inicio=Yii::$app->formatter->asDatetime($model->inicio, 'dd/MM/Y HH:mm');
+        $model->fin=Yii::$app->formatter->asDatetime($model->fin, 'dd/MM/Y HH:mm');
+        $tipodepublicacion=[
+            0=> 'Inactivo',
+            1=> 'Habilitado para inscripción',
+            2=> 'Sólo Publicación',
+            3=> 'Regido por fecha',
+
+        ];
+
+        if ($model->load(Yii::$app->request->post())) {
+           /* $datatime = explode(" ",$model->inicio);
+            $data = $datatime[0];
+            $time = $datatime[1];
+            $data = explode("-",$data);
+            $data = date("Y-m-d", mktime(0, 0, 0, $data[1], $data[0], $data[2]));
+            return $data;*/
+            date_default_timezone_set('America/Argentina/Buenos_Aires');
+            
+            $explode = explode(' ', $model->inicio);
+            $date =   $explode[0];
+            $date = explode('/',$date);
+            $time = $explode[1];
+            $date = $date[2].'-'.$date[1].'-'.$date[0];
+            //$date = date("Y-m-d", mktime(0, 0, 0, $date[1], $date[0], $date[2]));
+            $model->inicio=$date.' '.$time;
+            //$model->fin=Yii::$app->formatter->asDatetime($model->fin);
+            //date_default_timezone_set('America/Argentina/Buenos_Aires');
+            $explode2 = explode(' ', $model->fin);
+            $date2 =   $explode2[0];
+            $date2 = explode('/',$date2);
+            $time2 = $explode2[1];
+            $date2 = $date2[2].'-'.$date2[1].'-'.$date2[0];
+            //$date2 = date("Y-m-d", mktime(0, 0, 0, $date2[1], $date2[0], $date2[2]));
+            $model->fin=$date2.' '.$time2;
+            $model->save();
+            Yii::$app->session->setFlash('success', "Se modificó correctamente la preinscripción");
+                
+            return $this->redirect(['update', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'tipodepublicacion' => $tipodepublicacion,
         ]);
     }
 
