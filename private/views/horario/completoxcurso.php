@@ -77,6 +77,11 @@ JS;
     
    
 </h1>
+	<?php
+		if($preceptor != null){
+			echo '<h4><i>Preceptor: '.$preceptor->docente0->apellido.', '.$preceptor->docente0->nombre.'</i></h4>';
+		}
+	?>
     <div class="clearfix" style="padding-bottom: 10px;"></div>	
 	<?= GridView::widget([
 		        'dataProvider' => $provider,

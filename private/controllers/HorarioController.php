@@ -14,6 +14,7 @@ use app\models\Docente;
 use app\models\Hora;
 use app\models\Horario;
 use app\models\HorarioSearch;
+use app\models\Nombramiento;
 use app\models\Parametros;
 use app\models\Preceptoria;
 use app\models\Tipomovilidad;
@@ -640,6 +641,10 @@ class HorarioController extends Controller
             $this->layout = 'mainvacio';
         $searchModel = new HorarioSearch();
         $paramdivision = Division::findOne($division);
+
+        $preceptor = Nombramiento::find()
+                        ->where(['division' => $paramdivision->id])
+                        ->one();
         $h= [];
         if($paramdivision->turno == 1){
             $h[1] = '7:15 a 7:55';
@@ -749,6 +754,8 @@ class HorarioController extends Controller
             'paramdivision' => $paramdivision,
             'vista' => $vista,
             'pr' => $pr,
+            'preceptor' => $preceptor,
+
         ]);
     }
 

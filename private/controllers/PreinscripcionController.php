@@ -141,13 +141,21 @@ class PreinscripcionController extends Controller
         $model = $this->findModel($id);
         $model->inicio=Yii::$app->formatter->asDatetime($model->inicio, 'dd/MM/Y HH:mm');
         $model->fin=Yii::$app->formatter->asDatetime($model->fin, 'dd/MM/Y HH:mm');
-        $tipodepublicacion=[
-            0=> 'Inactivo',
-            1=> 'Habilitado para inscripción',
-            2=> 'Sólo Publicación',
-            3=> 'Regido por fecha',
 
-        ];
+        if(Yii::$app->user->identity->role == 4){
+            $tipodepublicacion=[
+                0=> 'Inactivo',
+                3=> 'Habilitado según fechas',
+            ];
+        }else{
+            $tipodepublicacion=[
+                0=> 'Inactivo',
+                1=> 'Habilitado para inscripción',
+                2=> 'Sólo Publicación',
+                3=> 'Regido por fecha',
+            ];
+        }
+        
 
         if ($model->load(Yii::$app->request->post())) {
            /* $datatime = explode(" ",$model->inicio);

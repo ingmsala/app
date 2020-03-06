@@ -662,7 +662,7 @@ class HorarioexamenController extends Controller
         }
 
         $division = Division::findOne($division);
-        $catedras = Catedra::find()->where(['division' => $division])->all();
+        $catedras = Catedra::find()->where(['division' => $division->id])->all();
         $horas = Hora::find()->all();
         //$dias = Diasemana::find()->all();
         $tipos = Tipoparte::find()->all();

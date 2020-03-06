@@ -11,6 +11,10 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use app\models\Division;
+use app\models\DivisionSearch;
+use app\models\Nombramiento;
+use yii\data\ArrayDataProvider;
 
 /**
  * PreceptoriaController implements the CRUD actions for Preceptoria model.
@@ -86,10 +90,61 @@ class PreceptoriaController extends Controller
      */
     public function actionView($id)
     {
+        $echo = $this->divisiones($id);
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'echo' => $echo
         ]);
     }
+
+
+    public function divisiones($id)
+	    {
+	        
+            $preceptores = Nombramiento::find()
+                ->where(['cargo' => Globales::CARGO_PREC])
+                ->orderBy('revista, division')->all();
+
+            $pre = Preceptoria::find()->where(['id' => $id])->one();
+            $divisiones = Division::find()
+                        ->where(['preceptoria' => $pre->id])
+                        ->orderBy('id')
+                        ->all();
+
+            $array = [];
+            
+            foreach ($divisiones as $division) {
+                $array[$division->id][0] = $division->id;
+                
+                $array[$division->id][1] = $division->nombre;
+                try {
+                    $nombramiento = Nombramiento::find()
+                    ->where(['cargo' => Globales::CARGO_PREC])
+                    ->where(['division' => $division->id])
+                    ->one();
+                    $docente = $nombramiento->docente0->apellido.', '.$nombramiento->docente0->nombre;
+                    $array[$division->id][999] = $nombramiento->id;
+                } catch (\Throwable $th) {
+                    $docente = '';
+                    $array[$division->id][999] = 0;
+                }
+                
+                $array[$division->id][2] = $docente;
+            }
+
+            $provider = new ArrayDataProvider([
+                'allModels' => $array,
+                
+            ]);
+
+	        return $this->renderPartial('/reporte/preceptores/preceptores', 
+	        [
+                
+	            'provider' => $provider,
+	            'preceptores' => $preceptores,
+                
+	        ]);
+	    }
 
     /**
      * Creates a new Preceptoria model.
