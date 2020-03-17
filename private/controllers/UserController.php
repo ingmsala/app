@@ -202,7 +202,7 @@ class UserController extends Controller
     }
     
     if(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
-        $this->layout = '@app/modules/optativas/views/layouts/main';
+        $this->layout = '@app/modules/curriculares/views/layouts/main';
     }
     
     return $this->render('cambiarpass',

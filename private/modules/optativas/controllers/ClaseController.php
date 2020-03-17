@@ -3,19 +3,19 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;
-use app\modules\optativas\models\Clase;
-use app\modules\optativas\models\Myfunction;
-use app\modules\optativas\models\Acta;
-use app\modules\optativas\models\Comision;
-use app\modules\optativas\models\Optativa;
-use app\modules\optativas\models\Matricula;
-use app\modules\optativas\models\Tipoclase;
-use app\modules\optativas\models\ClaseSearch;
-use app\modules\optativas\models\Detalletardanza;
-use app\modules\optativas\models\Inasistencia;
-use app\modules\optativas\models\MatriculaSearch;
-use app\modules\optativas\models\Tardanza;
-use app\modules\optativas\models\Tipoasistencia;
+use app\modules\curriculares\models\Clase;
+use app\modules\curriculares\models\Myfunction;
+use app\modules\curriculares\models\Acta;
+use app\modules\curriculares\models\Comision;
+use app\modules\curriculares\models\Espaciocurricular;
+use app\modules\curriculares\models\Matricula;
+use app\modules\curriculares\models\Tipoclase;
+use app\modules\curriculares\models\ClaseSearch;
+use app\modules\curriculares\models\Detalletardanza;
+use app\modules\curriculares\models\Inasistencia;
+use app\modules\curriculares\models\MatriculaSearch;
+use app\modules\curriculares\models\Tardanza;
+use app\modules\curriculares\models\Tipoasistencia;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -126,12 +126,12 @@ class ClaseController extends Controller
     {
         $this->layout = 'main';
         $searchModel = new ClaseSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 1);
 
         $com = isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0;
         if($com != 0){
            $comision = Comision::findOne($com);
-        $optativa = Optativa::findOne($comision->optativa);
+        $optativa = Espaciocurricular::findOne($comision->espaciocurricular);
         $duracion = $optativa->duracion;
 
         $inasistencias = Inasistencia::find()
@@ -465,7 +465,7 @@ class ClaseController extends Controller
 
     public function claseHoyView(){
         $this->layout = 'main';
-        $claseHoyView = Myfunction::claseHoyView();
+        $claseHoyView = Myfunction::claseHoyView(1);
         
 
         return $this->render('claseshoy', [
@@ -489,7 +489,7 @@ class ClaseController extends Controller
 
         $clase = $this->findModel($id);
 
-        $_SESSION['aniolectivox'] = $clase->comision0->optativa0->aniolectivo;
+        $_SESSION['aniolectivox'] = $clase->comision0->espaciocurricular0->aniolectivo;
         $_SESSION['comisionx'] = $clase->comision;
 
         

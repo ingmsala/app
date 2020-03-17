@@ -9,7 +9,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $model app\modules\optativas\models\Comision */
 
-$this->title = $model->optativa0->actividad0->nombre.' - Comisión: '.$model->nombre;
+$this->title = $model->espaciocurricular0->actividad0->nombre.' - Comisión: '.$model->nombre;
 
 ?>
 <div class="comision-view">

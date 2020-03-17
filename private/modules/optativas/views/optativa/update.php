@@ -3,10 +3,10 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\optativas\models\Optativa */
+/* @var $model app\modules\optativas\models\Espaciocurricular */
 
-$this->title = 'Modificar Optativa: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Optativas', 'url' => ['index']];
+$this->title = 'Modificar Espacio Optativo: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Espaciocurriculars', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>

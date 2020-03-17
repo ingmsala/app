@@ -131,6 +131,9 @@ $config = [
     ],
     'modules' => [
          'gridview' => ['class' => 'kartik\grid\Module'],
+         'curriculares' => [
+            'class' => 'app\modules\curriculares\Curriculares',
+        ],
          'optativas' => [
                 'class' => 'app\modules\optativas\Optativas',
          ],
@@ -143,6 +146,11 @@ $config = [
                 'class' => 'app\modules\api\test\Test',
                                 
          ],
+
+         'sociocomunitarios' => [
+            'class' => 'app\modules\sociocomunitarios\Sociocomunitarios',
+                            
+        ],
 
          'db-manager' => [
                 'class' => 'bs\dbManager\Module',

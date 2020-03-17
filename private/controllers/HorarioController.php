@@ -1534,7 +1534,7 @@ class HorarioController extends Controller
         if($repetido && $cantmaterias>1){
             Yii::$app->session->setFlash('info', "Está seleccionando más de una materia de un año de cursada.");
             $rep = true;
-                //return $this->redirect(['/optativas']); 
+                
                 //$materiasfiltro = [0];
         }else{
             $rep = false;

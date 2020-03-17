@@ -14,7 +14,7 @@ use yii\filters\VerbFilter;
 use app\models\Genero;
 use yii\filters\AccessControl;
 use app\config\Globales;
-use app\modules\optativas\models\Aniolectivo;
+use app\modules\curriculares\models\Aniolectivo;
 
 class EstadoinasistenciasdocentesController extends \yii\web\Controller
 {

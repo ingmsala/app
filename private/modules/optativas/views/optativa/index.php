@@ -4,10 +4,10 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\modules\optativas\models\OptativaSearch */
+/* @var $searchModel app\modules\optativas\models\EspaciocurricularSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Optativas';
+$this->title = 'Espacios Optativos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="optativa-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Nueva Optativa', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Nueva Espaciocurricular', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'aniolectivo0.nombre',
             'duracion',
             [
-                'label' => 'Área de Optativa' , 
+                'label' => 'Área de Espaciocurricular' , 
                 'attribute' => 'areaoptativa0.nombre',
             ],
             'curso',

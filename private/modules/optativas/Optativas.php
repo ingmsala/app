@@ -3,7 +3,7 @@
 namespace app\modules\optativas;
 
 /**
- * optativas module definition class
+ * espaciocurriculars module definition class
  */
 class Optativas extends \yii\base\Module
 {

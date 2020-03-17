@@ -4,10 +4,10 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\optativas\models\Optativa */
+/* @var $model app\modules\optativas\models\Espaciocurricular */
 
-$this->title = 'Nueva Optativa';
-$this->params['breadcrumbs'][] = ['label' => 'Optativas', 'url' => ['index']];
+$this->title = 'Nuevo Espacio Optativo';
+$this->params['breadcrumbs'][] = ['label' => 'Espaciocurriculars', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="optativa-create">

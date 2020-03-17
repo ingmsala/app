@@ -3,8 +3,8 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;
-use app\modules\optativas\models\Detalletardanza;
-use app\modules\optativas\models\DetalletardanzaSearch;
+use app\modules\curriculares\models\Detalletardanza;
+use app\modules\curriculares\models\DetalletardanzaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

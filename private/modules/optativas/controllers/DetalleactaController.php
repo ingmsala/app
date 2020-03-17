@@ -5,13 +5,13 @@ namespace app\modules\optativas\controllers;
 use Yii;
 use app\config\Globales;
 use app\models\Docente;
-use app\modules\optativas\models\Acta;
-use app\modules\optativas\models\Detalleacta;
-use app\modules\optativas\models\DetalleactaSearch;
-use app\modules\optativas\models\Detalleescalanota;
-use app\modules\optativas\models\Docentexcomision;
-use app\modules\optativas\models\Estadoseguimiento;
-use app\modules\optativas\models\Seguimiento;
+use app\modules\curriculares\models\Acta;
+use app\modules\curriculares\models\Detalleacta;
+use app\modules\curriculares\models\DetalleactaSearch;
+use app\modules\curriculares\models\Detalleescalanota;
+use app\modules\curriculares\models\Docentexcomision;
+use app\modules\curriculares\models\Estadoseguimiento;
+use app\modules\curriculares\models\Seguimiento;
 use kartik\grid\EditableColumnAction;
 use kartik\mpdf\Pdf;
 use yii\filters\AccessControl;
@@ -210,7 +210,7 @@ class DetalleactaController extends Controller
         
         if (Yii::$app->request->post('hasEditable')) {
             $keys = unserialize(Yii::$app->request->post('editableKey'));
-            return $keyss;
+            return $keys;
         }
        
         //return var_dump($acta_id);
@@ -308,7 +308,7 @@ class DetalleactaController extends Controller
                 $item[] = [$docente->docente0->apellido, $docente->docente0->nombre];
         }
 
-        $filenamesext = "{$actaX->libro0->aniolectivo0->nombre} - Acta de {$actaX->comision0->optativa0->actividad0->nombre}";
+        $filenamesext = "{$actaX->libro0->aniolectivo0->nombre} - Acta de {$actaX->comision0->espaciocurricular0->actividad0->nombre}";
         $filename =$filenamesext.".pdf";
 
         if (YII_ENV_DEV) {
@@ -400,7 +400,7 @@ class DetalleactaController extends Controller
                                     <div class="col-xs-3">
                                         <ul style="padding-left: 0px;list-style:none;">
                                             <li><span class="bold">MÓDULO:</span> Espacios Optativos</li>
-                                            <li><span class="bold">ACTIVIDAD:</span> '.$actaX->comision0->optativa0->actividad0->nombre.'</li>
+                                            <li><span class="bold">ACTIVIDAD:</span> '.$actaX->comision0->espaciocurricular0->actividad0->nombre.'</li>
                                             <li><span class="bold">AÑO LECTIVO:</span> '.$actaX->libro0->aniolectivo0->nombre.'</li>
                                         </ul>
                                     </div>

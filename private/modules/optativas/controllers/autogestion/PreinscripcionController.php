@@ -5,15 +5,15 @@ namespace app\modules\optativas\controllers\autogestion;
 use Yii;
 use app\models\Division;
 use app\models\Preinscripcion;
-use app\modules\optativas\models\Admisionoptativa;
-use app\modules\optativas\models\AdmisionoptativaSearch;
-use app\modules\optativas\models\Alumno;
-use app\modules\optativas\models\CalificacionSearch;
-use app\modules\optativas\models\Comision;
-use app\modules\optativas\models\Estadomatricula;
-use app\modules\optativas\models\Matricula;
-use app\modules\optativas\models\Optativa;
-use app\modules\optativas\models\OptativaSearch;
+use app\modules\curriculares\models\Admisionoptativa;
+use app\modules\curriculares\models\AdmisionoptativaSearch;
+use app\modules\curriculares\models\Alumno;
+use app\modules\curriculares\models\CalificacionSearch;
+use app\modules\curriculares\models\Comision;
+use app\modules\curriculares\models\Estadomatricula;
+use app\modules\curriculares\models\Matricula;
+use app\modules\curriculares\models\Espaciocurricular;
+use app\modules\curriculares\models\EspaciocurricularSearch;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
@@ -118,7 +118,7 @@ class PreinscripcionController extends Controller
         $admision = ArrayHelper::map($admision,'id','curso');
         if(count($admision)==0)
             $admision =[99];
-        $optativas = Optativa::find()
+        $optativas = Espaciocurricular::find()
                         ->where(['in', 'curso', $admision])
                         ->orWhere(['curso' => $alumno->curso])
                         ->all();
@@ -126,8 +126,8 @@ class PreinscripcionController extends Controller
                         ->where(['propuesta' => 1])
                         ->all();
         $comisiones = Comision::find()
-                        ->joinWith(['optativa0', 'optativa0.actividad0','optativa0.aniolectivo0'])
-                        ->where(['in', 'optativa.curso', $admision])
+                        ->joinWith(['espaciocurricular0', 'espaciocurricular0.actividad0','espaciocurricular0.aniolectivo0'])
+                        ->where(['in', 'espaciocurricular.curso', $admision])
                         //->orWhere(['optativa.curso' => $alumno->curso])
                         ->andWhere(['aniolectivo.activo' => 1])
                         ->orderBy('aniolectivo.nombre, actividad.nombre, comision.nombre')
@@ -143,13 +143,13 @@ class PreinscripcionController extends Controller
                                 ->joinWith('aniolectivo0')
                                 ->where(['alumno' => $alumno->id])
                                 ->andWhere(['aniolectivo.activo' => 1])
-                                ->andWhere(['curso' => $model->comision0->optativa0->curso])
+                                ->andWhere(['curso' => $model->comision0->espaciocurricular0->curso])
                                 ->all();
                  $admisionxcurso = ArrayHelper::map($admisionxcurso,'id','curso');
 
-                if($this->controlDeDuplicadoMismoCurso($model->alumno, count($admisionxcurso), $model->comision0->optativa0->curso)){
+                if($this->controlDeDuplicadoMismoCurso($model->alumno, count($admisionxcurso), $model->comision0->espaciocurricular0->curso)){
                     $model->save();
-                    //Yii::$app->session->setFlash('danger', $model->comision0->optativa0->curso);
+                    //Yii::$app->session->setFlash('danger', $model->comision0->espaciocurricular0->curso);
                     Yii::$app->session->setFlash('success', "Se realizó la matrícula correctamente. Puede verificar la agenda de clases en esta pantalla.");
                     return $this->redirect(['autogestion/agenda/index', 'id' => $model->id]);
                 }else{
@@ -164,7 +164,7 @@ class PreinscripcionController extends Controller
         }
 
         $matriculasalumno = Matricula::find()
-            ->joinWith(['comision0.optativa0.aniolectivo0'])
+            ->joinWith(['comision0.espaciocurricular0.aniolectivo0'])
             ->where(['alumno' => $alumno->id])
             ->all();
         $matriculasalumno = ArrayHelper::map($matriculasalumno,'comision','comision');
@@ -173,8 +173,8 @@ class PreinscripcionController extends Controller
         $admisionSearch  = new AdmisionoptativaSearch();
         $dataProviderAdmision = $admisionSearch->porAlumno($alumno->id);
 
-        $optativaSearch  = new OptativaSearch();
-        $dataProviderOptativa = $optativaSearch->porCursos($alumno->id);
+        $optativaSearch  = new EspaciocurricularSearch();
+        $dataProviderEspaciocurricular = $optativaSearch->porCursos($alumno->id);
 
         return $this->render('index', [
             'model' => $model,
@@ -185,7 +185,7 @@ class PreinscripcionController extends Controller
             'divisiones' => $divisiones,
             'admision' => $dataProviderAdmision,
             'matriculasalumno' => $matriculasalumno,
-            'dataProviderOptativa' => $dataProviderOptativa,
+            'dataProviderEspaciocurricular' => $dataProviderEspaciocurricular,
             'estadoinscripcion' => $estadoinscripcion,
             'alumno' => $alumno->id,
             'aniolectivo' => $aniolectivo,
@@ -210,7 +210,7 @@ class PreinscripcionController extends Controller
     {
        
         $matriculas = $admision - count(Matricula::find()
-                                ->joinWith(['comision0.optativa0.aniolectivo0'])
+                                ->joinWith(['comision0.espaciocurricular0.aniolectivo0'])
                                 ->where(['alumno' => $alumno])
                                 ->andWhere(['aniolectivo.activo' => 1])
                                 ->andWhere(['curso' => $curso])
@@ -236,13 +236,13 @@ class PreinscripcionController extends Controller
                                 ->joinWith('aniolectivo0')
                                 ->where(['alumno' => $a])
                                 ->andWhere(['aniolectivo.activo' => 1])
-                                ->andWhere(['curso' => $model->comision0->optativa0->curso])
+                                ->andWhere(['curso' => $model->comision0->espaciocurricular0->curso])
                                 ->all();
                  $admisionxcurso = ArrayHelper::map($admisionxcurso,'id','curso');
 
-                if($this->controlDeDuplicadoMismoCurso($model->alumno, count($admisionxcurso), $model->comision0->optativa0->curso)){
+                if($this->controlDeDuplicadoMismoCurso($model->alumno, count($admisionxcurso), $model->comision0->espaciocurricular0->curso)){
                     $model->save();
-                    //Yii::$app->session->setFlash('danger', $model->comision0->optativa0->curso);
+                    //Yii::$app->session->setFlash('danger', $model->comision0->espaciocurricular0->curso);
                     Yii::$app->session->setFlash('success', "Se realizó la matrícula correctamente. Puede verificar la agenda de clases en esta pantalla.");
                     return $this->redirect(['autogestion/agenda/index', 'id' => $model->id]);
                 }else{

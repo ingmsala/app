@@ -3,8 +3,8 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;
-use app\modules\optativas\models\Calificacion;
-use app\modules\optativas\models\CalificacionSearch;
+use app\modules\curriculares\models\Calificacion;
+use app\modules\curriculares\models\CalificacionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

@@ -68,11 +68,11 @@ Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
             ['class' => 'yii\grid\SerialColumn'],
             
             /*[
-                'label' => 'Optativa',
+                'label' => 'Espaciocurricular',
                 'attribute' => 'fecha',
                 'value' => function($model){
                     //return var_dump($model);
-                    return $model['comision0']['optativa0']['actividad0']['nombre'].' - Comisión: '.$model['comision0']['nombre'];
+                    return $model['comision0']['espaciocurricular0']['actividad0']['nombre'].' - Comisión: '.$model['comision0']['nombre'];
                 },
                 'group' => true,  // enable grouping,
                 'groupedRow' => true,                    // move grouped column to a single grouped row

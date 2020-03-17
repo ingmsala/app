@@ -3,9 +3,9 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;
-use app\modules\optativas\models\Alumno;
-use app\modules\optativas\models\Matricula;
-use app\modules\optativas\models\MatriculaSearch;
+use app\modules\curriculares\models\Alumno;
+use app\modules\curriculares\models\Matricula;
+use app\modules\curriculares\models\MatriculaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -79,10 +79,10 @@ class InterfazyacareController extends Controller
                     'app\modules\optativas\models\Matricula' => [
                         'id',
                         'year' => function ($model) {
-                            return $model->comision0->optativa0->aniolectivo0->nombre;
+                            return $model->comision0->espaciocurricular0->aniolectivo0->nombre;
                          },
                         'optativa' => function ($model) {
-                            return $model->comision0->optativa0->actividad0->nombre;
+                            return $model->comision0->espaciocurricular0->actividad0->nombre;
                          }
                     ],
                 ]);

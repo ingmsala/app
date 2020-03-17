@@ -3,16 +3,16 @@
 namespace app\modules\optativas\controllers\reportes;
 
 use Yii;
-use app\modules\optativas\models\Matricula;
-use app\modules\optativas\models\Alumno;
-use app\modules\optativas\models\Comision;
-use app\modules\optativas\models\Clase;
-use app\modules\optativas\models\Optativa;
-use app\modules\optativas\models\InasistenciaSearch;
-use app\modules\optativas\models\SeguimientoSearch;
-use app\modules\optativas\models\Inasistencia;
-use app\modules\optativas\models\Estadomatricula;
-use app\modules\optativas\models\MatriculaSearch;
+use app\modules\curriculares\models\Matricula;
+use app\modules\curriculares\models\Alumno;
+use app\modules\curriculares\models\Comision;
+use app\modules\curriculares\models\Clase;
+use app\modules\curriculares\models\Espaciocurricular;
+use app\modules\curriculares\models\InasistenciaSearch;
+use app\modules\curriculares\models\SeguimientoSearch;
+use app\modules\curriculares\models\Inasistencia;
+use app\modules\curriculares\models\Estadomatricula;
+use app\modules\curriculares\models\MatriculaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -77,7 +77,7 @@ class ListadocontactoController extends \yii\web\Controller
             if($comision != 0){
                 $dataProvider = $searchModel->alumnosxcomision($comision);
                 $com = $this->findModel($comision);
-                $optnom = $com->optativa0->aniolectivo0->nombre.' - '.$com->optativa0->actividad0->nombre.' <br/> Comisión: '.$com->nombre;
+                $optnom = $com->espaciocurricular0->aniolectivo0->nombre.' - '.$com->espaciocurricular0->actividad0->nombre.' <br/> Comisión: '.$com->nombre;
                    
                 return $this->render('index', [
                     

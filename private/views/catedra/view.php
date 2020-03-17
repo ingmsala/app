@@ -161,9 +161,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	                    },
 	                    'deletedetcat' => function($url, $model, $key){
-	                        return Html::button('<span class="glyphicon glyphicon-inbox"></span>', 
+							if($model->docente != 370)
+	                        	return Html::button('<span class="glyphicon glyphicon-inbox"></span>', 
 	                            ['value' => Url::to('index.php?r=detallecatedra/fechafin&id='.$model->id.'&catedra=' .$model->catedra), 
-	                           'class' => 'modalafinfe btn btn-link', 'id'=>'modalafinfe']);
+							   'class' => 'modalafinfe btn btn-link', 'id'=>'modalafinfe']);
+							return '';
 	                    },
 	                ]
 

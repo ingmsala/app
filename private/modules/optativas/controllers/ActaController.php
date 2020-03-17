@@ -5,18 +5,18 @@ namespace app\modules\optativas\controllers;
 use Yii;
 use app\config\Globales;
 use app\models\Docente;
-use app\modules\optativas\models\Acta;
-use app\modules\optativas\models\ActaSearch;
-use app\modules\optativas\models\Admisionoptativa;
-use app\modules\optativas\models\Aniolectivo;
-use app\modules\optativas\models\Comision;
-use app\modules\optativas\models\Detalleacta;
-use app\modules\optativas\models\DetalleactaSearch;
-use app\modules\optativas\models\Docentexcomision;
-use app\modules\optativas\models\Escalanota;
-use app\modules\optativas\models\Libroacta;
-use app\modules\optativas\models\Matricula;
-use app\modules\optativas\models\MatriculaSearch;
+use app\modules\curriculares\models\Acta;
+use app\modules\curriculares\models\ActaSearch;
+use app\modules\curriculares\models\Admisionoptativa;
+use app\modules\curriculares\models\Aniolectivo;
+use app\modules\curriculares\models\Comision;
+use app\modules\curriculares\models\Detalleacta;
+use app\modules\curriculares\models\DetalleactaSearch;
+use app\modules\curriculares\models\Docentexcomision;
+use app\modules\curriculares\models\Escalanota;
+use app\modules\curriculares\models\Libroacta;
+use app\modules\curriculares\models\Matricula;
+use app\modules\curriculares\models\MatriculaSearch;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -207,7 +207,7 @@ class ActaController extends Controller
         }
 
         $searchModel = new ActaSearch();
-        $dataProvider = $searchModel->search($libro, $comision);
+        $dataProvider = $searchModel->search($comision);
 
         /*if(isset($param['Matricula']['aniolectivo']))
             $model->aniolectivo = $param['Matricula']['aniolectivo'];
@@ -238,22 +238,22 @@ class ActaController extends Controller
             $model = new Matricula();
             $model->scenario = $model::SCENARIO_SEARCHINDEX;
             $model->comision = $com;
-            $model->aniolectivo = $comision->optativa0->aniolectivo;
+            $model->aniolectivo = $comision->espaciocurricular0->aniolectivo;
             
             
-            $libro = Libroacta::find()
+            /*$libro = Libroacta::find()
                         ->where(['aniolectivo' =>  $model->aniolectivo])
-                        ->andWhere(['estado' => 1])->one()->id;
+                        ->andWhere(['estado' => 1])->one()->id;*/
             
             $searchModel = new ActaSearch();
-            $dataProvider = $searchModel->search($libro, $com);
+            $dataProvider = $searchModel->search($com);
 
         
             return $this->render('actas', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 
-                'libro' => $libro,
+                //'libro' => $libro,
                 'comision' => $model->comision,
                 'model' => $model,
                 
@@ -320,9 +320,11 @@ class ActaController extends Controller
         
 
         if ($model->load(Yii::$app->request->post())) {
-
-            $model->libro = Libroacta::find()->where(['estado' => 1])->one()->id;
-
+            
+            $libro = Libroacta::find()->where(['estado' => 1])->one();
+            $model->libro =$libro->id;
+            
+            $cant = count(Acta::find()->where(['libro' => $libro->id])->all()) + 1;
             $desdeexplode = explode("/",$model->fecha);
             $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
             $model->fecha = $newdatedesde;
@@ -332,7 +334,7 @@ class ActaController extends Controller
             
             
             $model->save();
-            $cant = $model->id;
+            //$cant = $model->id;
             if($cant<10)
                 $model->nombre = '0000'.$cant;
             elseif($cant<100)
@@ -421,7 +423,7 @@ class ActaController extends Controller
             for ($i=1; $i >= $rep; $i--) { 
                 $admision = new Admisionoptativa();
                 $admision->alumno = $matricula->alumno;
-                $admision->curso = $matricula->comision0->optativa0->curso+$i;
+                $admision->curso = $matricula->comision0->espaciocurricular0->curso+$i;
                 $admision->aniolectivo = $aniolectivo;
                 $admision->save();
             }

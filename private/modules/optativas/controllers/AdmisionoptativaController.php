@@ -3,10 +3,10 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;
-use app\modules\optativas\models\Admisionoptativa;
-use app\modules\optativas\models\AdmisionoptativaSearch;
-use app\modules\optativas\models\Alumno;
-use app\modules\optativas\models\Aniolectivo;
+use app\modules\curriculares\models\Admisionoptativa;
+use app\modules\curriculares\models\AdmisionoptativaSearch;
+use app\modules\curriculares\models\Alumno;
+use app\modules\curriculares\models\Aniolectivo;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

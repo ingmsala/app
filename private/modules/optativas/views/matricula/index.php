@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
         $listaniolectivos=ArrayHelper::map($aniolectivos,'id','nombre');
         $listComisiones=ArrayHelper::map($comisiones,'comision', function($comision) {
-          return $comision['comision0']['optativa0']['aniolectivo0']['nombre'].' - '.$comision['comision0']['optativa0']['actividad0']['nombre'].' ('.$comision['comision0']['nombre'].')';}
+          return $comision['comision0']['espaciocurricular0']['aniolectivo0']['nombre'].' - '.$comision['comision0']['espaciocurricular0']['actividad0']['nombre'].' ('.$comision['comision0']['nombre'].')';}
         );
         
     ?>
@@ -51,9 +51,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 if($param['Matricula']['comision']!=''){
                                     $filter2 = true;
                                     try {
-                                        echo '<b> - Optativa: </b>'.$listComisiones[$param['Matricula']['comision']];
+                                        echo '<b> - Espaciocurricular: </b>'.$listComisiones[$param['Matricula']['comision']];
                                     } catch (Exception $e) {
-                                        echo '<b> - Optativa: Sin Matriculados</b>';
+                                        echo '<b> - Espaciocurricular: Sin Matriculados</b>';
                                     }
                                     
                                 }
@@ -175,7 +175,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'fecha',
                 'value' => function($model){
                     //return var_dump($model);
-                    return $model['comision0']['optativa0']['aniolectivo0']['nombre'].' - '.$model['comision0']['optativa0']['actividad0']['nombre'].' - Comisión: '.$model['comision0']['nombre'];
+                    return $model['comision0']['espaciocurricular0']['aniolectivo0']['nombre'].' - '.$model['comision0']['espaciocurricular0']['actividad0']['nombre'].' - Comisión: '.$model['comision0']['nombre'];
                 },
                 'group' => true,  // enable grouping,
                 'groupedRow' => true,                    // move grouped column to a single grouped row

@@ -1,14 +1,14 @@
 <?php
 
-use app\modules\optativas\models\Admisionoptativa;
-use app\modules\optativas\models\Matricula;
+use app\modules\curriculares\models\Admisionoptativa;
+use app\modules\curriculares\models\Matricula;
 use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\optativas\models\Matricula */
+/* @var $model app\modules\espaciocurriculars\models\Matricula */
 
 $this->title = 'Matriculación '.$aniolectivo.' - '.$instancia;
 
@@ -38,7 +38,7 @@ $this->title = 'Matriculación '.$aniolectivo.' - '.$instancia;
             
             
             [
-            	'label' => 'Optativa de ',
+            	'label' => 'Espaciocurricular de ',
             	'value' => function($model){
             		return $model['curso'].'° año';
             	}
@@ -66,7 +66,7 @@ $this->title = 'Matriculación '.$aniolectivo.' - '.$instancia;
 
                 $admision = count($admisionxcurso);
             	$matriculas = $admision - count(Matricula::find()
-                                ->joinWith(['comision0.optativa0.aniolectivo0'])
+                                ->joinWith(['comision0.espaciocurricular0.aniolectivo0'])
                                 ->where(['alumno' => $model['alumno']])
                                 ->andWhere(['aniolectivo.activo' => 1])
                                 ->andWhere(['curso' => $model['curso']])
@@ -82,7 +82,7 @@ $this->title = 'Matriculación '.$aniolectivo.' - '.$instancia;
     ]); ?>
 </div>
 <?= GridView::widget([
-        'dataProvider' => $dataProviderOptativa,
+        'dataProvider' => $dataProviderEspaciocurricular,
         //'filterModel' => $searchModel,
         'responsiveWrap' => false,
         'summary' => false,
@@ -108,7 +108,7 @@ $this->title = 'Matriculación '.$aniolectivo.' - '.$instancia;
             ['class' => 'yii\grid\SerialColumn'],
 
              [
-            	'label' => 'Optativa de ',
+            	'label' => 'Espacio curricular de ',
             	'group' => true,
             	'value' => function($model){
             		return $model['curso'].'° año';
@@ -120,7 +120,7 @@ $this->title = 'Matriculación '.$aniolectivo.' - '.$instancia;
             ],
 
              [
-            	'label' => 'Optativa',
+            	'label' => 'Espacio curricular',
             	'group' => true,
             	'value' => function($model){
             		return $model['actividad'];

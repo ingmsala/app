@@ -282,8 +282,8 @@ class CatedraController extends Controller
                     ->orderBy('actividad.nombre')
                     ->all();
                 /*$comisiones = Comision::find()
-                    ->joinWith(['comision0', 'optativa0', 'optativa0.aniolectivo0', 'optativa0.actividad0', ])
-                    ->where(['optativa.aniolectivo' => $division_id])
+                    ->joinWith(['comision0', 'espaciocurricular0', 'espaciocurricular0.aniolectivo0', 'espaciocurricular0.actividad0', ])
+                    ->where(['espaciocurricular.aniolectivo' => $division_id])
                     ->orderBy('actividad.nombre')->all();*/
 
 

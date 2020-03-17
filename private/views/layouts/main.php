@@ -272,36 +272,82 @@ try {
 
 
                     ],
-                    ['label' => 'Optativas',
+
+                    
+                    
+                    ['label' => 'E. Curriculares',
                             'items' => [
 
-                                ['label' => 'Home', 'url' => ['/optativas']],
-                                '<div class="dropdown-divider"></div>',
-                                ['label' => 'Preinscripción', 'url' => ['/preinscripcion']],
-                                '<div class="dropdown-divider"></div>',
-                                ['label' => 'Matrícula', 'url' => ['/optativas/matricula']],
-                                '<div class="dropdown-divider"></div>',
-                                ['label' => 'Actividades Optativas', 'url' => ['/optativas/optativa']],
-                                '<div class="dropdown-divider"></div>',
-                                ['label' => 'Alumnos', 'url' => ['/optativas/alumno']],
-                                '<div class="dropdown-divider"></div>',
-                                ['label' => 'Tipos de clase', 'url' => ['/optativas/tipoclase']],
-                                '<div class="dropdown-divider"></div>',
-                                ['label' => 'Año Lectivo', 'url' => ['/optativas/aniolectivo']],
-                                '<div class="dropdown-divider"></div>',
-                                ['label' => 'Estado de Matrícula', 'url' => ['/optativas/estadomatricula']],
-                                '<div class="dropdown-divider"></div>',
-                                ['label' => 'Interfaz yacaré', 'url' => ['/optativas/interfazyacare']],
-                                '<div class="dropdown-divider"></div>',
-                                ['label' => 'Libro de actas', 'url' => ['/optativas/libroacta']],
-                                '<div class="dropdown-divider"></div>',
-                                ['label' => 'Escala de notas', 'url' => ['/optativas/escalanota']],
-                                '<div class="dropdown-divider"></div>',
-                                ['label' => 'Admisión', 'url' => ['/optativas/admisionoptativa']],
-                                '<div class="dropdown-divider"></div>',
                                 
+
+                                ['label' => 'Optativos',
+                                    'itemsOptions'=>['class'=>'dropdown-submenu'],
+                                    'submenuOptions'=>['class'=>'dropdown-menu'],
+                                    'items' => [
+                                
+
+                                        ['label' => 'Home', 'url' => ['/optativas']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Actividades Espaciocurriculares', 'url' => ['/optativas/espaciocurricular']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Matrícula', 'url' => ['/optativas/matricula']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Admisión', 'url' => ['/optativas/admisionoptativa']],
+                                        '<div class="dropdown-divider"></div>',
+                                
+                                    ],
+                                ],
+
+                                ['label' => 'Sociocomunitarios',
+                                    'itemsOptions'=>['class'=>'dropdown-submenu'],
+                                    'submenuOptions'=>['class'=>'dropdown-menu'],
+                                    'items' => [
+
+                                        
+
+                                        ['label' => 'Home', 'url' => ['/sociocomunitarios']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Actividades sociocomunitarias', 'url' => ['/sociocomunitarios/espaciocurricular']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Matrícula', 'url' => ['/sociocomunitarios/matricula']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Admisión', 'url' => ['/sociocomunitarios/admisionoptativa']],
+                                        '<div class="dropdown-divider"></div>',
+                                
+                                    ],
+                                ],
+
+                                ['label' => 'Administración',
+                                    'itemsOptions'=>['class'=>'dropdown-submenu'],
+                                    'submenuOptions'=>['class'=>'dropdown-menu'],
+                                    'items' => [
+                                
+
+                                        
+                                        ['label' => 'Preinscripción', 'url' => ['/preinscripcion']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Alumnos', 'url' => ['/curriculares/alumno']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Tipos de clase', 'url' => ['/curriculares/tipoclase']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Año Lectivo', 'url' => ['/curriculares/aniolectivo']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Estado de Matrícula', 'url' => ['/curriculares/estadomatricula']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Interfaz yacaré', 'url' => ['/curriculares/interfazyacare']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Libro de actas', 'url' => ['/curriculares/libroacta']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Escala de notas', 'url' => ['/curriculares/escalanota']],
+                                        '<div class="dropdown-divider"></div>',
+                                        
+                                
+                                    ],
+                                ],
                             ],
+
                     ],
+                    
                     ['label' => '<span id="button_cont"><i id="glibell" class="glyphicon glyphicon-bell" aria-hidden="true"></i><div style="display:'.$visi.'" class="button__badge">'.$cantnot.'</div></span>', 'url' => ['novedadesparte/panelnovedades']],
                     ['label' => 'Usuario: '.Yii::$app->user->identity->username,
                             
@@ -480,8 +526,22 @@ try {
 
                                 ['label' => 'Gestionar Exámenes', 'url' => ['/anioxtrimestral']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Inscripción Espacios Optativos', 'url' => ['preinscripcion/update', 'id' => 1]],
-                                '<div class="dropdown-divider"></div>',
+                                [
+                                    'label' => 'Espacios Optativos',
+                                    'itemsOptions'=>['class'=>'dropdown-submenu'],
+                                    'submenuOptions'=>['class'=>'dropdown-menu'],
+                                    'items' => [
+                                        ['label' => 'Fecha de Inscripción', 'url' => ['preinscripcion/update', 'id' => 1]],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Pendientes de inscripción', 'url' => ['/optativas/matricula/inscriptos', 'al' => 2]],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Inscriptos por cupos', 'url' => ['/optativas/matricula/pendientes', 'al' => 2]],
+                                        '<div class="dropdown-divider"></div>',
+                                        
+
+                                    ],
+
+                                ],
                                 
                             ],
                     ],
@@ -920,7 +980,7 @@ try {
                         
                    [
                             'label' => 'Espacios Optativos', 
-                            'url' => ['/optativas'],
+                            'url' => ['/curriculares'],
                     ],
                     
                     

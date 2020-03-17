@@ -8,7 +8,7 @@ use app\models\Anioxtrimestral;
 use app\models\AnioxtrimestralSearch;
 use app\models\HorarioexamenSearch;
 use app\models\Trimestral;
-use app\modules\optativas\models\Aniolectivo;
+use app\modules\curriculares\models\Aniolectivo;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
@@ -338,8 +338,8 @@ class AnioxtrimestralController extends Controller
 
                 $activo_id = $parents[0];
                 /*$comisiones = Comision::find()
-                    ->joinWith(['comision0', 'optativa0', 'optativa0.aniolectivo0', 'optativa0.actividad0', ])
-                    ->where(['optativa.aniolectivo' => $anio_id])
+                    ->joinWith(['comision0', 'espaciocurricular0', 'espaciocurricular0.aniolectivo0', 'espaciocurricular0.actividad0', ])
+                    ->where(['espaciocurricular.aniolectivo' => $anio_id])
                     ->orderBy('actividad.nombre')->all();*/
 
                 $listpublic = [];

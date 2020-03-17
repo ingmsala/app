@@ -3,11 +3,11 @@
 namespace app\modules\optativas\controllers\reportes;
 
 use Yii;
-use app\modules\optativas\models\Inasistencia;
-use app\modules\optativas\models\Aniolectivo;
+use app\modules\curriculares\models\Inasistencia;
+use app\modules\curriculares\models\Aniolectivo;
 
 use app\models\Division;
-use app\modules\optativas\models\InasistenciaSearch;
+use app\modules\curriculares\models\InasistenciaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -70,10 +70,10 @@ class InasistenciasController extends \yii\web\Controller
 
         $params = Yii::$app->request->queryParams;
 
-        if(isset($param['Inasistencia']['division']))
-            $model->division = $param['Inasistencia']['division'];
-        if(isset($param['Inasistencia']['aniolectivo']))
-            $model->aniolectivo = $param['Inasistencia']['aniolectivo'];
+        if(isset($params['Inasistencia']['division']))
+            $model->division = $params['Inasistencia']['division'];
+        if(isset($params['Inasistencia']['aniolectivo']))
+            $model->aniolectivo = $params['Inasistencia']['aniolectivo'];
         $searchModel = new InasistenciaSearch();
         $dataProvider = $searchModel->providerinasistenciasxdivision($params);
         $aniolectivos = Aniolectivo::find()->all();

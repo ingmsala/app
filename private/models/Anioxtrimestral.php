@@ -1,7 +1,7 @@
 <?php
 
 namespace app\models;
-use app\modules\optativas\models\Aniolectivo;
+use app\modules\curriculares\models\Aniolectivo;
 use Yii;
 
 /**

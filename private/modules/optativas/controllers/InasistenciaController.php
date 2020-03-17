@@ -3,11 +3,11 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;
-use app\modules\optativas\models\Acta;
-use app\modules\optativas\models\Clase;
-use app\modules\optativas\models\Detalletardanza;
-use app\modules\optativas\models\Inasistencia;
-use app\modules\optativas\models\InasistenciaSearch;
+use app\modules\curriculares\models\Acta;
+use app\modules\curriculares\models\Clase;
+use app\modules\curriculares\models\Detalletardanza;
+use app\modules\curriculares\models\Inasistencia;
+use app\modules\curriculares\models\InasistenciaSearch;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;

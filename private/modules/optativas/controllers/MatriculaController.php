@@ -4,14 +4,15 @@ namespace app\modules\optativas\controllers;
 
 use Yii;
 use app\models\Division;
-use app\modules\optativas\models\Admisionoptativa;
-use app\modules\optativas\models\Alumno;
-use app\modules\optativas\models\Aniolectivo;
-use app\modules\optativas\models\Comision;
-use app\modules\optativas\models\Estadomatricula;
-use app\modules\optativas\models\Matricula;
-use app\modules\optativas\models\MatriculaSearch;
-use app\modules\optativas\models\Optativa;
+use app\modules\curriculares\models\Admisionoptativa;
+use app\modules\curriculares\models\AdmisionoptativaSearch;
+use app\modules\curriculares\models\Alumno;
+use app\modules\curriculares\models\Aniolectivo;
+use app\modules\curriculares\models\Comision;
+use app\modules\curriculares\models\Estadomatricula;
+use app\modules\curriculares\models\Matricula;
+use app\modules\curriculares\models\MatriculaSearch;
+use app\modules\curriculares\models\Espaciocurricular;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
@@ -68,8 +69,8 @@ class MatriculaController extends Controller
         $model = new Matricula();
         $model->scenario = $model::SCENARIO_SEARCHINDEX;
         $searchModel = new MatriculaSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $aniolectivos = Aniolectivo::find()->all();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 1);
+        $aniolectivos = Aniolectivo::find()->orderBy('id DESC')->all();
 
         $comisiones = Matricula::find()->all();
 
@@ -115,12 +116,13 @@ class MatriculaController extends Controller
         $alumnos = Alumno::find()
                     ->orderBy('apellido, nombre')
                     ->all();
-        $optativas = Optativa::find()->all();
+        $optativas = Espaciocurricular::find()->all();
         $divisiones = Division::find()
                         ->where(['propuesta' => 1])
                         ->all();
         $comisiones = Comision::find()
-                        ->joinWith(['optativa0', 'optativa0.actividad0'])
+                        ->joinWith(['espaciocurricular0', 'espaciocurricular0.actividad0'])
+                        ->where(['espaciocurricular.tipoespacio' => 1])
                         ->orderBy('actividad.nombre', 'comision.nombre')
                         ->all();
         $estadosmatricula = Estadomatricula::find()->all();
@@ -160,12 +162,13 @@ class MatriculaController extends Controller
         $alumnos = Alumno::find()
                     ->orderBy('apellido, nombre')
                     ->all();
-        $optativas = Optativa::find()->all();
+        $optativas = Espaciocurricular::find()->all();
         $divisiones = Division::find()
                         ->where(['propuesta' => 1])
                         ->all();
         $comisiones = Comision::find()
-                        ->joinWith(['optativa0', 'optativa0.actividad0'])
+                        ->joinWith(['espaciocurricular0', 'espaciocurricular0.actividad0'])
+                        ->where(['espaciocurricular.tipoespacio' => 1])
                         ->orderBy('actividad.nombre', 'comision.nombre')
                         ->all();
         $estadosmatricula = Estadomatricula::find()->all();
@@ -220,7 +223,7 @@ class MatriculaController extends Controller
         $admision = ArrayHelper::map($admision,'id','curso');
         if(count($admision)==0)
             $admision =[99];
-        $optativas = Optativa::find()
+        $optativas = Espaciocurricular::find()
                         ->where(['in', 'curso', $admision])
                         ->orWhere(['curso' => $alumno->curso])
                         ->all();
@@ -228,7 +231,7 @@ class MatriculaController extends Controller
                         ->where(['propuesta' => 1])
                         ->all();
         $comisiones = Comision::find()
-                        ->joinWith(['optativa0', 'optativa0.actividad0','optativa0.aniolectivo0'])
+                        ->joinWith(['espaciocurricular0', 'espaciocurricular0.actividad0','espaciocurricular0.aniolectivo0'])
                         ->where(['in', 'optativa.curso', $admision])
                         //->orWhere(['optativa.curso' => $alumno->curso])
                         ->andWhere(['aniolectivo.activo' => 1])
@@ -288,7 +291,7 @@ class MatriculaController extends Controller
     {
        
         $matriculas = count(Matricula::find()
-                                ->joinWith(['comision0.optativa0.aniolectivo0'])
+                                ->joinWith(['comision0.espaciocurricular0.aniolectivo0'])
                                 ->where(['alumno' => $alumno])
                                 ->andWhere(['aniolectivo.activo' => 1])
                                 ->all()) - $admision;
@@ -296,6 +299,32 @@ class MatriculaController extends Controller
         if( $matriculas > 0)
             return false;
         return true;
+    }
+
+    public function actionInscriptos($al)
+    {
+        $model = new Matricula();
+        $model->scenario = $model::SCENARIO_SEARCHINDEX;
+        $searchModel = new MatriculaSearch();
+        $dataProvider = $searchModel->inscriptosPorAnioLectivo($al, 1);
+        //return var_dump($dataProvider);
+        return $this->render('inscriptos',[
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionPendientes($al)
+    {
+        $searchModel = new AdmisionoptativaSearch();
+        $dataProvider = $searchModel->alumnosPendientes($al, 1);
+      
+        return $this->render('pendientes', [
+            
+            'dataProvider' => $dataProvider,
+            
+        ]);
+
+    
     }
 
     protected function findModel($id)

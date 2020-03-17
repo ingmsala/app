@@ -11,7 +11,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use app\config\Globales;
-use app\modules\optativas\models\Aniolectivo;
+use app\modules\curriculares\models\Aniolectivo;
 
 class FaltasxmesesController extends \yii\web\Controller
 {

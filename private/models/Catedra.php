@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\controllers\CatedraController;
 use Yii;
 
 /**
@@ -54,9 +55,24 @@ class Catedra extends \yii\db\ActiveRecord
             [['actividad', 'division'], 'integer'],
             [['division'], 'exist', 'skipOnError' => true, 'targetClass' => Division::className(), 'targetAttribute' => ['division' => 'id']],
             [['actividad'], 'exist', 'skipOnError' => true, 'targetClass' => Actividad::className(), 'targetAttribute' => ['actividad' => 'id']],
-            [['actividad', 'division'], 'unique', 'targetClass' => '\app\models\Catedra', 'targetAttribute' => ['actividad', 'division'], 'message' => 'Ya existe la Cátedra que desea crear.'],
-            
+            //[['actividad', 'division'], 'unique', 'targetClass' => '\app\models\Catedra', 'targetAttribute' => ['actividad', 'division'], 'message' => 'Ya existe la Cátedra que desea crear.'],
+            [['actividad', 'division'], 'catedraDuplicada'],
         ];
+    }
+
+    public function catedraDuplicada($attribute, $params, $validator)
+    {
+        $cat = Catedra::find()
+        ->where(['actividad' => $this->actividad])
+        ->andWhere(['division' => $this->division])->one();
+        if ($cat!=null){
+            $this->addError($attribute, 'Las contraseña anterior es incorrecta');
+            //$catcon = new CatedraController();
+            Yii::$app->session->setFlash('info', "Está seleccionando más de una materia de un año de cursada.");
+            return Yii::$app->getResponse()->redirect(['catedra/view', 'id' => $cat->id]);
+            //return $this->redirect(['view', 'id' => $cat->id]);
+        }
+            
     }
 
     /**

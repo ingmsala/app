@@ -3,11 +3,11 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;
-use app\modules\optativas\models\Comision;
-use app\modules\optativas\models\Optativa;
-use app\modules\optativas\models\ComisionSearch;
-use app\modules\optativas\models\DocentexcomisionSearch;
-use app\modules\optativas\models\Docentexcomision;
+use app\modules\curriculares\models\Comision;
+use app\modules\curriculares\models\Espaciocurricular;
+use app\modules\curriculares\models\ComisionSearch;
+use app\modules\curriculares\models\DocentexcomisionSearch;
+use app\modules\curriculares\models\Docentexcomision;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -116,10 +116,10 @@ class ComisionController extends Controller
     {
         
         $model = new Comision();
-        $optativas = Optativa::find()
+        $espaciocurricular = Espaciocurricular::find()
                 ->where(['id' => $id])
                 ->all();
-        $model->optativa = $id;
+        $model->espaciocurricular = $id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -127,7 +127,7 @@ class ComisionController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'optativas' => $optativas,
+            'espaciocurricular' => $espaciocurricular,
         ]);
     }
 
@@ -142,7 +142,7 @@ class ComisionController extends Controller
     {
         
         $model = $this->findModel($id);
-        $optativas = Optativa::find()->all();
+        $espaciocurricular = Espaciocurricular::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -150,7 +150,7 @@ class ComisionController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'optativas' => $optativas,
+            'espaciocurricular' => $espaciocurricular,
         ]);
     }
 
@@ -199,8 +199,8 @@ class ComisionController extends Controller
 
                 $anio_id = $parents[0];
                 /*$comisiones = Comision::find()
-                    ->joinWith(['comision0', 'optativa0', 'optativa0.aniolectivo0', 'optativa0.actividad0', ])
-                    ->where(['optativa.aniolectivo' => $anio_id])
+                    ->joinWith(['comision0', 'espaciocurricular0', 'espaciocurricular0.aniolectivo0', 'espaciocurricular0.actividad0', ])
+                    ->where(['espaciocurricular.aniolectivo' => $anio_id])
                     ->orderBy('actividad.nombre')->all();*/
 
 
@@ -208,27 +208,29 @@ class ComisionController extends Controller
                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI, Globales::US_CONSULTA, Globales::US_SECRETARIA])){
                     $comisiones = Docentexcomision::find()
                     ->distinct()
-                    ->select(['comision', 'optativa.aniolectivo'])
-                    ->joinWith(['comision0', 'comision0.optativa0', 'comision0.optativa0.actividad0'])
-                    ->where(['optativa.aniolectivo' => $anio_id])
-                    ->orderBy('actividad.nombre', 'optativa.nombre')
+                    ->select(['comision', 'espaciocurricular.aniolectivo'])
+                    ->joinWith(['comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
+                    ->where(['espaciocurricular.aniolectivo' => $anio_id])
+                    ->andWhere(['espaciocurricular.tipoespacio' => 1])
+                    ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
                     ->all();
                 }else{
                     $comisiones = Docentexcomision::find()
-                    ->joinWith(['docente0', 'comision0', 'comision0.optativa0', 'comision0.optativa0.actividad0'])
+                    ->joinWith(['docente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
                     ->where(['docente.legajo' => Yii::$app->user->identity->username])
-                    ->andWhere(['optativa.aniolectivo' => $anio_id])
-                    ->orderBy('actividad.nombre', 'optativa.nombre')
+                    ->andWhere(['espaciocurricular.aniolectivo' => $anio_id])
+                    ->andWhere(['espaciocurricular.tipoespacio' => 1])
+                    ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
                     ->all(); 
                 }
        
 
                 $listComisiones=ArrayHelper::toArray($comisiones, [
-                    'app\modules\optativas\models\Docentexcomision' => [
+                    'app\modules\curriculares\models\Docentexcomision' => [
                         'id' => function($comision) {
                             return $comision['comision0']['id'];},
                         'name' => function($comision) {
-                            return $comision['comision0']['optativa0']['actividad0']['nombre'].' ('.$comision['comision0']['nombre'].')';},
+                            return $comision['comision0']['espaciocurricular0']['actividad0']['nombre'].' ('.$comision['comision0']['nombre'].')';},
                     ],
                 ]);
                 $out = $listComisiones;
@@ -238,7 +240,7 @@ class ComisionController extends Controller
                     
                     $comx = Comision::findOne($com);
                     if($comx != null)
-                        $session->set('aniolectivox', $comx->optativa0->aniolectivo);
+                        $session->set('aniolectivox', $comx->espaciocurricular0->aniolectivo);
                     else
                         $session->set('aniolectivox', $anio_id);
                 }else{

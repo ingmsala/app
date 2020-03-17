@@ -69,7 +69,7 @@ use kartik\depdrop\DepDrop;
 
         $form->field($model, 'actividad')->widget(DepDrop::classname(), [
             'options'=>['id'=>'actividad-id'],
-                                    
+            'type' => DepDrop::TYPE_SELECT2,                        
             'pluginOptions'=>[
                     'depends'=>['propuesta-id'],
                     'placeholder'=>'Seleccionar',

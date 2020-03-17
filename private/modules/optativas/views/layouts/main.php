@@ -9,10 +9,10 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
-use app\modules\optativas\models\DocentexcomisionSearch;
-use app\modules\optativas\models\Docentexcomision;
-use app\modules\optativas\models\Matricula;
-use app\modules\optativas\models\Aniolectivo;
+use app\modules\curriculares\models\DocentexcomisionSearch;
+use app\modules\curriculares\models\Docentexcomision;
+use app\modules\curriculares\models\Matricula;
+use app\modules\curriculares\models\Aniolectivo;
 use app\config\Globales;
 
 AppAsset::register($this);
@@ -588,8 +588,8 @@ NavBar::end();
 
                         echo $this->render('/comision/_comisionxdocente',
                             [
-                                'dataProvider' => $search->providerxdocente(Yii::$app->user->identity->username),
-                                'comisiones' => $search->comisionesxdocente(Yii::$app->user->identity->username),
+                                'dataProvider' => $search->providerxdocente(Yii::$app->user->identity->username,1),
+                                'comisiones' => $search->comisionesxdocente(Yii::$app->user->identity->username,1),
                                 'model' => new Docentexcomision(),
                                 'model2' => new Matricula(),
                                 'aniolectivos' => Aniolectivo::find()/*->where(['activo' => 1])*/->orderBy('id DESC')->all(),

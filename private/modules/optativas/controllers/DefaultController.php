@@ -3,8 +3,8 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;use yii\filters\AccessControl;
-use app\modules\optativas\models\Comision;
-use app\modules\optativas\models\Myfunction;
+use app\modules\curriculares\models\Comision;
+use app\modules\curriculares\models\Myfunction;
 use yii\web\Controller;
 
 
@@ -47,7 +47,7 @@ class DefaultController extends Controller
     {
         $this->layout = 'main';
         
-        $claseHoyView = Myfunction::claseHoyView();
+        $claseHoyView = Myfunction::claseHoyView(1);
         
 
         $echo = $this->renderPartial('/clase/claseshoy', [
@@ -69,7 +69,7 @@ class DefaultController extends Controller
 
         $session = Yii::$app->session;
 		$session->set('comisionx', $_GET['id']);
-        $session->set('aniolectivox', Comision::findOne($id)->optativa0->aniolectivo);
+        $session->set('aniolectivox', Comision::findOne($id)->espaciocurricular0->aniolectivo);
        
         return $id;
     }

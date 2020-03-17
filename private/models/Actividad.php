@@ -1,7 +1,7 @@
 <?php
 
 namespace app\models;
-use app\modules\optativas\models\Optativa;
+use app\modules\curriculares\models\Espaciocurricular;
 
 use Yii;
 
@@ -19,7 +19,7 @@ use Yii;
  * @property Actividadtipo $actividadtipo0
  * @property Propuesta $propuesta0
  * @property Catedra[] $catedras
- * @property Optativa[] $optativas
+ * @property Espaciocurricular[] $espaciocurriculars
  */
 class Actividad extends \yii\db\ActiveRecord
 {
@@ -94,8 +94,8 @@ class Actividad extends \yii\db\ActiveRecord
         return $this->hasMany(Catedra::className(), ['actividad' => 'id']);
     }
 
-    public function getOptativas()
+    public function getEspaciocurriculars()
     {
-        return $this->hasMany(Optativa::className(), ['actividad' => 'id']);
+        return $this->hasMany(Espaciocurricular::className(), ['actividad' => 'id']);
     }
 }

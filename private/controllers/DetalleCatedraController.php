@@ -352,6 +352,15 @@ class DetallecatedraController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
+            $detalleconvocatoria = new Detallecatedra();
+            $detalleconvocatoria->docente = 370;
+            $detalleconvocatoria->catedra = $model->catedra;
+            $detalleconvocatoria->hora = $model->hora;
+            $detalleconvocatoria->condicion = 4;
+            $detalleconvocatoria->revista = 1;
+            $detalleconvocatoria->activo = 1;
+            $detalleconvocatoria->save();
+
             return $this->redirect(['catedra/view', 'id' => $catedra]);
         }
 

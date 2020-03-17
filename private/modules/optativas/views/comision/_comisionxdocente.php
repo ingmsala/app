@@ -22,8 +22,8 @@ use kartik\depdrop\DepDrop;
 <?php
         
         $listComisiones=ArrayHelper::map($comisiones,'comision', function($comision) {
-          //var_dump($comision['comision0']['optativa0']['actividad0']);
-            return $comision['comision0']['optativa0']['aniolectivo0']['nombre'].' - '.$comision['comision0']['optativa0']['actividad0']['nombre'].' ('.$comision['comision0']['nombre'].')';}
+          //var_dump($comision['comision0']['espaciocurricular0']['actividad0']);
+            return $comision['comision0']['espaciocurricular0']['aniolectivo0']['nombre'].' - '.$comision['comision0']['espaciocurricular0']['actividad0']['nombre'].' ('.$comision['comision0']['nombre'].')';}
         );
         $listaniolectivos=ArrayHelper::map($aniolectivos,'id','nombre');
     ?>

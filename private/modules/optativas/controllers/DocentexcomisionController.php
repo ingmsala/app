@@ -3,12 +3,12 @@
 namespace app\modules\optativas\controllers;
 
 use Yii;
-use app\modules\optativas\models\Docentexcomision;
-use app\modules\optativas\models\Comision;
+use app\modules\curriculares\models\Docentexcomision;
+use app\modules\curriculares\models\Comision;
 use app\models\Actividad;
 use app\models\Role;
 use app\models\Docente;
-use app\modules\optativas\models\DocentexcomisionSearch;
+use app\modules\curriculares\models\DocentexcomisionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -104,7 +104,7 @@ class DocentexcomisionController extends Controller
                     ->all();
 
         $optativa = Actividad::find()
-                    ->joinWith(['optativas', 'optativas.comisions'])
+                    ->joinWith(['espaciocurriculars', 'espaciocurriculars.comisions'])
                     ->where(['comision.id' => $comisionx])
                     ->all();
 
@@ -152,7 +152,7 @@ class DocentexcomisionController extends Controller
                     ->all();
 
         $optativa = Actividad::find()
-                    ->joinWith(['optativas', 'optativas.comisions'])
+                    ->joinWith(['espaciocurriculars', 'espaciocurriculars.comisions'])
                     ->where(['comision.id' => $comisionx])
                     ->all();
 

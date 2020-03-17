@@ -3,7 +3,7 @@
 namespace app\modules\edh;
 
 /**
- * optativas module definition class
+ * espaciocurriculars module definition class
  */
 class Edh extends \yii\base\Module
 {

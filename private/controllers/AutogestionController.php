@@ -17,7 +17,7 @@ class AutogestionController extends Controller
 
 	public function actionIndex()
     {
-        return $this->redirect(['/optativas/autogestion/inicio']);
+        return $this->redirect(['/curriculares/autogestion/inicio']);
     }
 
 }
