@@ -37,7 +37,7 @@ class Comision extends \yii\db\ActiveRecord
             [['espaciocurricular', 'cupo'], 'integer'],
             [['horario'], 'string'], 
             [['aula'], 'string', 'max' => 150], 
-            [['nombre'], 'string', 'max' => 20],
+            [['nombre'], 'string', 'max' => 150],
             [['espaciocurricular'], 'exist', 'skipOnError' => true, 'targetClass' => Espaciocurricular::className(), 'targetAttribute' => ['espaciocurricular' => 'id']],
         ];
     }

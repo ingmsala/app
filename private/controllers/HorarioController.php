@@ -452,6 +452,7 @@ class HorarioController extends Controller
                 $model2->tipo = $model->tipo;
                 $model2->diasemana = $model->diasemana;
                 $model2->hora = $horas[$i];
+                $model2->tipomovilidad = 1;
                 //return var_dump($model2);
                 $valid = $model2->validate();
                 if($valid){

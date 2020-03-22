@@ -132,7 +132,7 @@ a.desc:after {
     bottom: 0;
     left: 0;
     width: 320px;
-    height: 320px;
+    height: 360px;
 }
 .dropdown-submenu>.dropdown-menu {
     top: 0;
@@ -413,8 +413,9 @@ a.desc:after {
 .navbar-default-sociocomunitarios .navbar-nav > .open > a:hover .caret,
 .navbar-default-sociocomunitarios .navbar-nav > .open > a:focus .caret {
     border-top-color:  rgb(59, 159, 59);
-}
     border-bottom-color:  rgb(59, 159, 59);
+}
+    
 }
 }
 /* Mobile version */

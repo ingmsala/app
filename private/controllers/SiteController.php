@@ -103,7 +103,8 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
+        $this->layout = 'mainlogin';
+;        if (!Yii::$app->user->isGuest) {
             if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
                 return $this->redirect(['/optativas']);
             }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){

@@ -13,9 +13,16 @@ $this->title = 'Ingresar';
 <div class="site-login">
     
 <div class="container">
+    <div class="row">
+  
+                    
+                       
+
+    </div>
    <div class="row">
     <div class="form_bg">
-        <h3><?= Html::encode($this->title) ?></h3>
+    <center><img src="assets/images/logo-encabezado.png" width="80%" /></center>
+        <br />
         <?php $form = ActiveForm::begin([
             'id' => 'login-form',
             'layout' => 'horizontal',

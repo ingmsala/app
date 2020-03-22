@@ -77,8 +77,35 @@ $this->title = 'Matrículas - Espacios Optativos';
             [
                 'label' =>'Optativa de:',
                 'value' => function($model){
-                    return $model['curso'].'°';
-                }
+                    return 'Optativa de: '.$model['curso'].'° año';
+                },
+                'group' => true,  // enable grouping,
+               /* 'groupedRow' => true,                    // move grouped column to a single grouped row
+                'groupOddCssClass' => 'kv-grouped-row',  // configure odd group cell css class
+                'groupEvenCssClass' => 'kv-grouped-row', // configure even group cell css class*/
+                'groupHeader' => function ($model, $key, $index, $widget) { // Closure method
+                    return [
+                        'mergeColumns' => [[1, 2]], // columns to merge in summary
+                        'content' => [              // content to show in each summary cell
+                            1 => 'Total (' . $model['curso'] . ')',
+                            
+                            4 => GridView::F_SUM,
+                            //6 => GridView::F_SUM,
+                        ],
+                        'contentFormats' => [      // content reformatting for each summary cell
+                            
+                            5 => ['format' => 'number', 'decimals' => 0],
+                            6 => ['format' => 'number', 'decimals' => 2],
+                        ],
+                        'contentOptions' => [      // content html attributes for each summary cell
+                            
+                            5 => ['style' => 'text-align:right'],
+                            6 => ['style' => 'text-align:right'],
+                        ],
+                        // html attributes for group summary row
+                        'options' => ['class' => 'success table-success','style' => 'font-weight:bold;']
+                    ];
+                },
             ],
 
             [

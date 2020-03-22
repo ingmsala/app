@@ -2,19 +2,20 @@
 
 namespace app\modules\sociocomunitarios\controllers;
 
+use app\models\Turno;
 use Yii;
-use app\modules\curriculares\models\Admisionoptativa;
-use app\modules\curriculares\models\AdmisionoptativaSearch;
+use app\modules\curriculares\models\Admisionsociocom;
+use app\modules\curriculares\models\AdmisionsociocomSearch;
 use app\modules\curriculares\models\Alumno;
 use app\modules\curriculares\models\Aniolectivo;
-use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
 /**
- * AdmisionoptativaController implements the CRUD actions for Admisionoptativa model.
+ * AdmisionsociocomController implements the CRUD actions for Admisionsociocom model.
  */
-class AdmisionoptativaController extends Controller
+class AdmisionsociocomController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,12 +33,12 @@ class AdmisionoptativaController extends Controller
     }
 
     /**
-     * Lists all Admisionoptativa models.
+     * Lists all Admisionsociocom models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new AdmisionoptativaSearch();
+        $searchModel = new AdmisionsociocomSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -47,7 +48,7 @@ class AdmisionoptativaController extends Controller
     }
 
     /**
-     * Displays a single Admisionoptativa model.
+     * Displays a single Admisionsociocom model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -60,15 +61,16 @@ class AdmisionoptativaController extends Controller
     }
 
     /**
-     * Creates a new Admisionoptativa model.
+     * Creates a new Admisionsociocom model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Admisionoptativa();
+        $model = new Admisionsociocom();
         $aniolectivos = Aniolectivo::find()->all();
         $alumnos = Alumno::find()->all();
+        $turnos = Turno::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -78,6 +80,7 @@ class AdmisionoptativaController extends Controller
             'model' => $model,
             'aniolectivos' => $aniolectivos,
             'alumnos' => $alumnos,
+            'turnos' => $turnos,
         ]);
     }
 
@@ -93,6 +96,7 @@ class AdmisionoptativaController extends Controller
         $model = $this->findModel($id);
         $aniolectivos = Aniolectivo::find()->all();
         $alumnos = Alumno::find()->all();
+        $turnos = Turno::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -102,11 +106,12 @@ class AdmisionoptativaController extends Controller
             'model' => $model,
             'aniolectivos' => $aniolectivos,
             'alumnos' => $alumnos,
+            'turnos' => $turnos,
         ]);
     }
 
     /**
-     * Deletes an existing Admisionoptativa model.
+     * Deletes an existing Admisionsociocom model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -120,15 +125,15 @@ class AdmisionoptativaController extends Controller
     }
 
     /**
-     * Finds the Admisionoptativa model based on its primary key value.
+     * Finds the Admisionsociocom model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Admisionoptativa the loaded model
+     * @return Admisionsociocom the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Admisionoptativa::findOne($id)) !== null) {
+        if (($model = Admisionsociocom::findOne($id)) !== null) {
             return $model;
         }
 

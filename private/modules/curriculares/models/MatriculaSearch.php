@@ -233,7 +233,9 @@ class MatriculaSearch extends Matricula
         actividad.nombre,
         comision.nombre,
         espaciocurricular.curso,
-        comision.cupo';
+        comision.cupo
+    ORDER BY 
+        espaciocurricular.curso, actividad.nombre, comision.nombre';
 
         $dataProvider = new SqlDataProvider([
             'sql' => $sql,

@@ -294,6 +294,10 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Admisión', 'url' => ['/optativas/admisionoptativa']],
                                         '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Pendientes de inscripción', 'url' => ['/optativas/matricula/pendientes', 'al' => 2]],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Inscriptos por cupos', 'url' => ['/optativas/matricula/inscriptos', 'al' => 2]],
+                                        '<div class="dropdown-divider"></div>',
                                 
                                     ],
                                 ],
@@ -311,7 +315,7 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Matrícula', 'url' => ['/sociocomunitarios/matricula']],
                                         '<div class="dropdown-divider"></div>',
-                                        ['label' => 'Admisión', 'url' => ['/sociocomunitarios/admisionoptativa']],
+                                        ['label' => 'Admisión', 'url' => ['/sociocomunitarios/admisionsociocom']],
                                         '<div class="dropdown-divider"></div>',
                                 
                                     ],
@@ -533,9 +537,9 @@ try {
                                     'items' => [
                                         ['label' => 'Fecha de Inscripción', 'url' => ['preinscripcion/update', 'id' => 1]],
                                         '<div class="dropdown-divider"></div>',
-                                        ['label' => 'Pendientes de inscripción', 'url' => ['/optativas/matricula/inscriptos', 'al' => 2]],
+                                        ['label' => 'Pendientes de inscripción', 'url' => ['/optativas/matricula/pendientes', 'al' => 2]],
                                         '<div class="dropdown-divider"></div>',
-                                        ['label' => 'Inscriptos por cupos', 'url' => ['/optativas/matricula/pendientes', 'al' => 2]],
+                                        ['label' => 'Inscriptos por cupos', 'url' => ['/optativas/matricula/inscriptos', 'al' => 2]],
                                         '<div class="dropdown-divider"></div>',
                                         
 

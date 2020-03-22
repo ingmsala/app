@@ -12,8 +12,8 @@ $this->title = 'Planta Docente';
             
         </div>
 	        <div class="row" align="center">
-	        	<div class="mx-auto" style="width: 200px; margin-top: 15%">
-	    			<img src="assets/images/logo.PNG" />
+	        	<div style="width: 50%; margin-top: 15%">
+	    			<img style="width: 40%" src="assets/images/logo-encabezado.png" />
 			</div>
             
         </div>

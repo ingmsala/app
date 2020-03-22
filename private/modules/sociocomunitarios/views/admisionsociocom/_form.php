@@ -14,6 +14,7 @@ use yii\widgets\ActiveForm;
         ); ?>
 
 <?php $listaniolectivo=ArrayHelper::map($aniolectivos,'id', 'nombre'); ?>
+<?php $listturno=ArrayHelper::map($turnos,'id', 'nombre'); ?>
 <div class="admisionoptativa-form">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -43,7 +44,18 @@ use yii\widgets\ActiveForm;
     ?>
 
     <?= $form->field($model, 'curso')->textInput() ?>
+    
+    <?= 
 
+        $form->field($model, 'turno')->widget(Select2::classname(), [
+            'data' => $listturno,
+            'options' => ['placeholder' => 'Seleccionar...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);
+
+    ?>
     
 
     <div class="form-group">
