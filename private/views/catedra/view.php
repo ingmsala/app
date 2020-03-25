@@ -1,6 +1,6 @@
 <?php
 
-
+use app\config\Globales;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
@@ -16,6 +16,12 @@ use yii\bootstrap\Progress;
 $this->title = "Catedra";
 $this->params['breadcrumbs'][] = ['label' => 'Catedras', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+if(Yii::$app->user->identity->role == Globales::US_SUPER){
+	$templateboton = '{viewdetcat} {updatedetcat} {deletedetcat} {borrardetcat}';
+}else{
+	$templateboton = '{viewdetcat} {updatedetcat} {deletedetcat}';
+}
 ?>
 <div class="catedra-view">
 
@@ -145,7 +151,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	           // ['class' => 'yii\grid\ActionColumn'],
 	            [
 	                'class' => 'yii\grid\ActionColumn',
-	                'template' => '{viewdetcat} {updatedetcat} {deletedetcat}',
+	                'template' => $templateboton,
 	                
 	                'buttons' => [
 	                    'viewdetcat' => function($url, $model, $key){
@@ -166,6 +172,14 @@ $this->params['breadcrumbs'][] = $this->title;
 	                            ['value' => Url::to('index.php?r=detallecatedra/fechafin&id='.$model->id.'&catedra=' .$model->catedra), 
 							   'class' => 'modalafinfe btn btn-link', 'id'=>'modalafinfe']);
 							return '';
+						},
+						'borrardetcat' => function($url, $model, $key){
+	                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=detallecatedra/delete&id='.$model->id, 
+	                            ['data' => [
+	                            'confirm' => 'Está seguro de querer eliminar este elemento?',
+	                            'method' => 'post',
+	                             ]
+	                            ]);
 	                    },
 	                ]
 
@@ -230,7 +244,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	           // ['class' => 'yii\grid\ActionColumn'],
 	            [
 	                'class' => 'yii\grid\ActionColumn',
-	                'template' => '{viewdetcat} {updatedetcat} {deletedetcat}',
+	                'template' => '{viewdetcat}',
 	                
 	                'buttons' => [
 	                    'viewdetcat' => function($url, $model, $key){

@@ -253,7 +253,7 @@ class DetallecatedraController extends Controller
             $condiciones=Condicion::find()->all();
             $revistas=Revista::find()->all();
         }else{
-            $condiciones=Condicion::find()->where(['<>', 'id', 6])->all();
+            $condiciones=Condicion::find()->where(['<>', 'id', 6])->andWhere(['<>', 'id', 7])->all();
             $revistas=Revista::find()->where(['<>', 'id', 6])->all();
         }
 
@@ -346,21 +346,33 @@ class DetallecatedraController extends Controller
 
         $model = $this->findModel($id);
         $catedra = $model->catedra;
-        $model->activo = Globales::CAT_INACTIVO;
         
         
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        
 
-            $detalleconvocatoria = new Detallecatedra();
-            $detalleconvocatoria->docente = 370;
-            $detalleconvocatoria->catedra = $model->catedra;
-            $detalleconvocatoria->hora = $model->hora;
-            $detalleconvocatoria->condicion = 4;
-            $detalleconvocatoria->revista = 1;
-            $detalleconvocatoria->activo = 1;
-            $detalleconvocatoria->save();
+        if ($model->load(Yii::$app->request->post())) {
+            $model->activo = Globales::DETCAT_INACTIVO;
+            $model->save();
 
+            $detallecatedras = Detallecatedra::find()
+                            ->where(['catedra' => $catedra])
+                            ->andWhere(['activo' => Globales::DETCAT_ACTIVO])
+                            ->andWhere(['<>','condicion', 6])
+                            ->all();
+            $cant = count($detallecatedras);
+            if($cant == 0){
+                $detalleconvocatoria = new Detallecatedra();
+                $detalleconvocatoria->docente = 370;
+                $detalleconvocatoria->catedra = $model->catedra;
+                $detalleconvocatoria->hora = $model->hora;
+                $detalleconvocatoria->condicion = 7;
+                $detalleconvocatoria->revista = 1;
+                $detalleconvocatoria->activo = Globales::DETCAT_ACTIVO;
+                $detalleconvocatoria->save();
+            }
+            
+            
             return $this->redirect(['catedra/view', 'id' => $catedra]);
         }
 
@@ -370,6 +382,7 @@ class DetallecatedraController extends Controller
 
     }
 
+    
     /**
      * Finds the DetalleCatedra model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
