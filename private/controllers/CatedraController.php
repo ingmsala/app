@@ -96,6 +96,20 @@ class CatedraController extends Controller
         $model = new Catedra();
         $model->scenario = $model::SCENARIO_SEARCHINDEX;
         $searchModel = new CatedraSearch();
+
+        $dataProviderRepetido = $searchModel->vigenterepetido();
+            
+            if($dataProviderRepetido->getCount()>0){
+                return $this->render('/reporte/diferenciahorario/vigenterepetido', 
+                [
+                    
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProviderRepetido,
+                    
+                ]);
+            }
+
+
         $dataProvider = $searchModel->providercatedras($param);
         $divisiones = Division::find()->all();
         $condiciones = Condicion::find()->where(['<>', 'id', 6])->all();

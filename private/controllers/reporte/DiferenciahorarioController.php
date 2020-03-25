@@ -54,7 +54,19 @@ class DiferenciahorarioController extends \yii\web\Controller
 
  	public function actionIndex()
 	    {
-	        $searchModel = new CatedraSearch();
+            $searchModel = new CatedraSearch();
+            $dataProviderRepetido = $searchModel->vigenterepetido();
+            
+            if($dataProviderRepetido->getCount()>0){
+                return $this->render('vigenterepetido', 
+                [
+                    
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProviderRepetido,
+                    
+                ]);
+            }
+
 	        $dataProvider = $searchModel->diferenciacatedras();
             	        
 

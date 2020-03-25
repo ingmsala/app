@@ -194,6 +194,49 @@ class CatedraSearch extends Catedra
 
     }
 
+    public function vigenterepetido(){
+        $sql = 'SELECT
+        count(distinct(concat(doc.apellido, ", ", doc.nombre))) as cantidad, c.id as catedra, acti.nombre as actividad, divi.nombre as division
+        FROM
+        catedra c
+        LEFT JOIN detallecatedra dc ON
+        dc.catedra = c.id
+        LEFT JOIN actividad acti ON
+        c.actividad = acti.id
+        LEFT JOIN docente doc ON
+        dc.docente = doc.id
+        LEFT JOIN division divi ON
+        c.division = divi.id
+        WHERE
+        dc.revista = 1 AND dc.activo = 1
+        AND
+        divi.turno in (1,2) 
+        AND
+        (select count(dc20.id) from detallecatedra dc20
+            LEFT JOIN catedra c2 ON dc20.catedra = c2.id
+            LEFT JOIN division divi2 ON c2.division = divi2.id
+            where divi2.turno in (1,2) 
+            and dc20.revista = 6 AND dc20.activo = 1) > 0
+        group by c.id  
+        having count(distinct(concat(doc.apellido, ", ", doc.nombre)))>1';
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $sql,
+            'pagination' => false,
+            
+        ]);
+
+        if (!$this->validate()) {
+           return $dataProvider;
+        }
+
+
+
+        return $dataProvider;
+
+
+    }
+
 
     public function diferenciacatedras()
     {
@@ -209,6 +252,8 @@ class CatedraSearch extends Catedra
         dc.docente = doc.id
     WHERE
         dc.revista = 1 AND dc.activo = 1 AND c.id = c0.id
+    AND
+        (select count(dc20.id) from detallecatedra dc20 where dc20.catedra = c0.id and dc20.revista = 6 AND dc20.activo = 1) > 0
 ) as vigente, 
 
 (
@@ -239,7 +284,7 @@ where (
     LEFT JOIN docente doc ON
         dc.docente = doc.id
     WHERE
-        dc.revista = 1 AND dc.activo = 1 AND c.id = c0.id
+        dc.revista = 1 AND dc.activo = 1 AND c.id = c0.id AND (select count(dc20.id) from detallecatedra dc20 where dc20.catedra = c0.id and dc20.revista = 6 AND dc20.activo = 1) > 0
 ) not in
 (
     SELECT 
