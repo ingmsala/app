@@ -12,7 +12,7 @@ use Yii;
  * @property string $nombre
  * @property string $mail
  * @property string $telefono
- * @property string $parentezco
+ * @property string $parentesco
  * @property int $alumno
  *
  * @property Alumno $alumno0
@@ -37,7 +37,7 @@ class Tutor extends \yii\db\ActiveRecord
             [['id', 'alumno'], 'integer'],
             [['apellido', 'nombre', 'mail'], 'string', 'max' => 150],
             [['telefono'], 'string', 'max' => 40],
-            [['parentezco'], 'string', 'max' => 30],
+            [['parentesco'], 'string', 'max' => 30],
             [['id'], 'unique'],
             [['alumno'], 'exist', 'skipOnError' => true, 'targetClass' => Alumno::className(), 'targetAttribute' => ['alumno' => 'id']],
         ];
@@ -54,7 +54,7 @@ class Tutor extends \yii\db\ActiveRecord
             'nombre' => 'Nombre',
             'mail' => 'Mail',
             'telefono' => 'Telefono',
-            'parentezco' => 'Parentezco',
+            'parentesco' => 'Parentesco',
             'alumno' => 'Alumno',
         ];
     }

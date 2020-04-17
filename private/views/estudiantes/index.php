@@ -10,7 +10,7 @@ use yii\helpers\ArrayHelper;
 /* @var $searchModel app\models\HoraSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Datos de Contacto de Estudiantes';
+$this->title = 'Tutores: Datos de Contacto';
 
 $alumnoslist=ArrayHelper::map($alumnos,'id',function($model){
     return $model->apellido.', '.$model->nombre;
@@ -25,7 +25,7 @@ $alumnoslist=ArrayHelper::map($alumnos,'id',function($model){
     <?= $form->field($alumno, 'id')->widget(Select2::classname(), [
             'data' => $alumnoslist,
             'options' => [
-                'prompt' => '...',
+                'prompt' => 'Seleccionar...',
                 'id' => 'finddoc',
                 
             ],
@@ -52,8 +52,9 @@ $alumnoslist=ArrayHelper::map($alumnos,'id',function($model){
         
                     'apellido',
                     'nombre',
-                    'parentezco',
+                    'parentesco',
                     'telefono',
+                    'mail'
         
                     
                 ],

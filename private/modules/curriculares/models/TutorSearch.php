@@ -19,7 +19,7 @@ class TutorSearch extends Tutor
     {
         return [
             [['id', 'alumno'], 'integer'],
-            [['apellido', 'nombre', 'mail', 'telefono', 'parentezco'], 'safe'],
+            [['apellido', 'nombre', 'mail', 'telefono', 'parentesco'], 'safe'],
         ];
     }
 
@@ -67,7 +67,7 @@ class TutorSearch extends Tutor
             ->andFilterWhere(['like', 'nombre', $this->nombre])
             ->andFilterWhere(['like', 'mail', $this->mail])
             ->andFilterWhere(['like', 'telefono', $this->telefono])
-            ->andFilterWhere(['like', 'parentezco', $this->parentezco]);
+            ->andFilterWhere(['like', 'parentesco', $this->parentesco]);
 
         return $dataProvider;
     }
