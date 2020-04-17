@@ -17,14 +17,14 @@ use Yii;
  *
  * @property Alumno $alumno0
  */
-class Contactoalumno extends \yii\db\ActiveRecord
+class Tutor extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'contactoalumno';
+        return 'tutor';
     }
 
     /**

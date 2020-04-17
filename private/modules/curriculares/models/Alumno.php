@@ -66,9 +66,9 @@ class Alumno extends \yii\db\ActiveRecord
         return $this->hasMany(Admisionoptativa::className(), ['alumno' => 'id']);
     }
 
-    public function getContactoalumnos()
+    public function getTutors()
     {
-        return $this->hasMany(Contactoalumno::className(), ['alumno' => 'id']);
+        return $this->hasMany(Tutor::className(), ['alumno' => 'id']);
     }
 
     public function fields()

@@ -5,12 +5,12 @@ namespace app\modules\curriculares\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\curriculares\models\Contactoalumno;
+use app\modules\curriculares\models\Tutor;
 
 /**
- * ContactoalumnoSearch represents the model behind the search form of `app\modules\optativas\models\Contactoalumno`.
+ * TutorSearch represents the model behind the search form of `app\modules\optativas\models\Tutor`.
  */
-class ContactoalumnoSearch extends Contactoalumno
+class TutorSearch extends Tutor
 {
     /**
      * {@inheritdoc}
@@ -41,7 +41,7 @@ class ContactoalumnoSearch extends Contactoalumno
      */
     public function search($params)
     {
-        $query = Contactoalumno::find();
+        $query = Tutor::find();
 
         // add conditions that should always apply here
 
@@ -68,6 +68,31 @@ class ContactoalumnoSearch extends Contactoalumno
             ->andFilterWhere(['like', 'mail', $this->mail])
             ->andFilterWhere(['like', 'telefono', $this->telefono])
             ->andFilterWhere(['like', 'parentezco', $this->parentezco]);
+
+        return $dataProvider;
+    }
+
+    public function tutoresxalumno($id)
+    {
+        $query = Tutor::find()->where(['alumno' => $id]);
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        $this->load($id);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        
 
         return $dataProvider;
     }
