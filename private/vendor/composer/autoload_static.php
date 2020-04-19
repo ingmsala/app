@@ -60,6 +60,10 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
             'kartik\\date\\' => 12,
             'kartik\\base\\' => 12,
         ),
+        'e' => 
+        array (
+            'edofre\\fullcalendar\\' => 20,
+        ),
         'c' => 
         array (
             'creocoder\\flysystem\\' => 20,
@@ -243,6 +247,10 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         'kartik\\base\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-krajee-base/src',
+        ),
+        'edofre\\fullcalendar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/edofre/yii2-fullcalendar/src',
         ),
         'creocoder\\flysystem\\' => 
         array (

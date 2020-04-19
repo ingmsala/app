@@ -122,6 +122,8 @@ try {
                             '<div class="dropdown-divider"></div>',
                             ['label' => 'Padrones', 'url' => ['/reporte/padrones/padrones']],
                             '<div class="dropdown-divider"></div>',
+                            ['label' => 'Tutores', 'url' => ['/estudiantes']],
+                            '<div class="dropdown-divider"></div>',
                             
 
                             [
@@ -135,6 +137,10 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Horarios de Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
                                         '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Administrar Clases Virtuales', 'url' => ['/clasevirtual/panelprincipal']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Cronograma de Clases Virtuales', 'url' => ['/horario/clasesvirtuales']],
+                                        '<div class="dropdown-divider"></div>',
                                         ['label' => 'Diferencia de horas', 'url' => ['/reporte/diferenciahorarioyhoras']],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Diferencia Planta Doc. y Horario', 'url' => ['/reporte/diferenciahorario']],
@@ -142,6 +148,8 @@ try {
                                         ['label' => 'Filtro por materia', 'url' => ['/horario/filtropormateria']],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Horario completo', 'url' => ['/horario/horariocompleto']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Listado de docentes en horario', 'url' => ['/horario/completodetallado']],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Docentes con superposición', 'url' => ['/horario/horassuperpuestas']],
                                         '<div class="dropdown-divider"></div>',
@@ -542,11 +550,13 @@ try {
                                         ['label' => 'Inscriptos por cupos', 'url' => ['/optativas/matricula/inscriptos', 'al' => 2]],
                                         '<div class="dropdown-divider"></div>',
                                         
+                                        
 
                                     ],
 
                                 ],
-                                
+                                ['label' => 'Tutores', 'url' => ['/estudiantes']],
+                                        '<div class="dropdown-divider"></div>',
                             ],
                     ],
                     
@@ -576,6 +586,8 @@ try {
                                         ['label' => 'Docentes con superposición', 'url' => ['/horario/horassuperpuestas']],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Horarios con movilidad deshabilitada', 'url' => ['/horario/deshabilitados']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Listado de docentes en horario', 'url' => ['/horario/completodetallado']],
                                         '<div class="dropdown-divider"></div>',
                                         
 
@@ -689,6 +701,16 @@ try {
 
                     ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
 
+                    ['label' => 'Reportes', 
+                            'items' => [
+                                
+                                ['label' => 'Tutores', 'url' => ['/estudiantes']],
+                                        '<div class="dropdown-divider"></div>',
+                                
+                                
+                            ],
+                    ],
+                    
                     ['label' => 'Horarios', 
                             'items' => [
                                 
@@ -702,6 +724,7 @@ try {
                                 
                             ],
                     ],
+                    
                         
                     ['label' => ' Parte Docente', 
                             'items' => [

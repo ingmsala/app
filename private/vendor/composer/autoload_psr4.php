@@ -37,6 +37,7 @@ return array(
     'kartik\\daterange\\' => array($vendorDir . '/kartik-v/yii2-date-range/src'),
     'kartik\\date\\' => array($vendorDir . '/kartik-v/yii2-widget-datepicker/src'),
     'kartik\\base\\' => array($vendorDir . '/kartik-v/yii2-krajee-base/src'),
+    'edofre\\fullcalendar\\' => array($vendorDir . '/edofre/yii2-fullcalendar/src'),
     'creocoder\\flysystem\\' => array($vendorDir . '/creocoder/yii2-flysystem/src'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'bs\\dbManager\\' => array($vendorDir . '/beaten-sect0r/yii2-db-manager/src'),

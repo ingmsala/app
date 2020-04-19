@@ -28,7 +28,7 @@ class DocenteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'editdocumento'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'editdocumento', 'updatedate'],
                 'rules' => [
                     [
                         'actions' => ['create', 'update', 'editdocumento'],   
@@ -44,7 +44,7 @@ class DocenteController extends Controller
                     ],
 
                     [
-                        'actions' => ['delete'],   
+                        'actions' => ['delete', 'updatedate'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -176,6 +176,22 @@ class DocenteController extends Controller
             'generos' => $generos,
         ]);
     }
+    public function actionUpdatedate($id, $fecha)
+    {
+        $model = Docente::find()->where(['legajo'=>$id])->one();
+        //$model->scenario = Docente::SCENARIO_ABM;
+        $model->apellido = $model->apellido;
+        $model->nombre = $model->nombre;
+        $model->mail = $model->mail;
+        $model->genero = $model->genero;
+        $model->fechanac = $fecha;
+        //model->save();
+        
+        return $model->save();
+        
+
+       
+    }
 
     /**
      * Deletes an existing Docente model.
@@ -206,4 +222,63 @@ class DocenteController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionCalendarioaniversario()
+    {
+        
+        $events = [];
+
+        $docs = Docente::find()->all();
+        foreach ($docs as $doc) {
+         
+            if($doc->fechanac !=null){
+                $fecha = explode("-",$doc->fechanac);
+            
+            for ($i=0; $i <= 1; $i++) { 
+                $newfecha = date('Y')+$i."-".$fecha[1]."-".$fecha[2];
+                $events[] = new \edofre\fullcalendar\models\Event([
+                    'id'               => $doc->id,
+                    'title'            => $doc->apellido.', '.$doc->nombre,
+                    'start'            => $newfecha,
+                    'end'              => $newfecha,
+                    'startEditable'    => true,
+                    //'color'            => $color,
+                    'url'              => 'index.php?r=docente/sendmail&id='.$doc->id.'&tipomail=2',
+                    'durationEditable' => true,]);
+                }
+            }
+            
+            
+            
+        }
+
+        return $this->render('calendarioaniversario', [
+            'selectable'  => true,
+            'events' => $events
+            
+        ]);
+    }
+
+    public function actionSendmail($id, $tipomail)
+    {
+        $doc = $this->findModel($id);
+
+        if($tipomail == 1){
+
+            if($doc->mail == 'msala@unc.edu.ar'){
+                        Yii::$app->mailer->compose()
+                        ->setFrom([Globales::MAIL => 'CNM'])
+                        ->setTo($doc->mail)
+                        ->setSubject('Feliz Cumpleaños')
+                        ->setHtmlBody('Le deseamos FC')
+                        ->send();
+            }
+
+        }
+        
+
+        return $this->redirect(['calendarioaniversario']);
+    }
+
+    
 }

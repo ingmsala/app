@@ -308,7 +308,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 
             ],
 
-            [
+            /*[
                     'class' => 'kartik\grid\BooleanColumn',
                     'attribute' => 'revista', 
                     'hiddenFromExport' => true,
@@ -326,7 +326,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                         return null;
                     }
-            ], 
+            ], */
 
             [
                     'label' => 'Revista',

@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use app\modules\curriculares\models\Tutor;
 
 /*CREATE TABLE `test2`.`alumnoxtutor` ( `id` BIGINT(8) NOT NULL AUTO_INCREMENT , `alumno` INT(4) NOT NULL , 
 `tutor` INT(4) NOT NULL , PRIMARY KEY (`id`), INDEX (`alumno`), INDEX (`tutor`))
@@ -71,17 +72,30 @@ class EstudiantesController extends Controller
         
 
         if (Yii::$app->request->post()) {
+            try {
+                $alumno = $this->findModel(Yii::$app->request->post()['Alumno']['id']);
+            } catch (\Throwable $th) {
+                Yii::$app->session->setFlash('danger', "Debe seleccionar un estudiante");
+                return $this->redirect(['index']);
+            }
+            
+            
+            if ($alumno != null){
+                $searchModel = new TutorSearch();
+                            $dataProvider = $searchModel->tutoresxalumno($alumno->id);
 
-            $alumno = $this->findModel(Yii::$app->request->post()['Alumno']['id']);
-            $searchModel = new TutorSearch();
-            $dataProvider = $searchModel->tutoresxalumno($alumno->id);
-
-            return $this->render('index', [
-                //'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-                'alumnos' => $alumnos,
-                'alumno' => $alumno,
-            ]);
+                            $model = Tutor::find()->where(['alumno' => $alumno->id])->all();
+ 
+                            return $this->render('index', [
+                                //'searchModel' => $searchModel,
+                                'dataProvider' => $dataProvider,
+                                'alumnos' => $alumnos,
+                                'alumno' => $alumno,
+                                'model' => $model,
+                            ]);
+            }
+            
+            
         }
 
         return $this->render('index', [

@@ -1,10 +1,13 @@
 <?php
 
+use app\components\CardWidget;
 use kartik\form\ActiveForm;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
+use yii\widgets\DetailView;
+use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\HoraSearch */
@@ -39,26 +42,69 @@ $alumnoslist=ArrayHelper::map($alumnos,'id',function($model){
     </div>
 
     <?php ActiveForm::end(); ?>
-
-    <?php 
     
-        if($dataProvider != null){
+   
+    <?php 
 
-            echo GridView::widget([
-                'dataProvider' => $dataProvider,
-                //'filterModel' => $searchModel,
-                'columns' => [
-                    ['class' => 'yii\grid\SerialColumn'],
+            
         
-                    'apellido',
-                    'nombre',
-                    'parentesco',
-                    'telefono',
-                    'mail'
-        
-                    
-                ],
-            ]);
+        if($dataProvider != null){
+            if($dataProvider->getTotalCount()>0){
+                echo '<div class="clearfix"></div>';
+                echo '<h3>Estudiante: '.$alumno->apellido.', '.$alumno->nombre.'</h3>';
+                echo '<div class="clearfix"></div>';
+                echo '<h4>Tutores</h4>';
+                
+                for ($i=0; $i < count($model); $i++) {
+                    echo '<div class="col-md-4">';
+                    echo DetailView::widget([
+                        'model' => $model[$i],
+                        'attributes' => [
+                            
+                            'nombre',
+                            'apellido',
+                            'mail',
+                            'telefono',
+                        ],
+                    ]);
+                    echo '</div>';
+                }
+                echo '<div class="clearfix"></div>';
+                echo CardWidget::widget([
+                    'dataProvider' => $dataProvider,
+                    'grid' => 4,
+                    'color' => 'primary',
+                    'titulo' => [
+                        'apellido',
+                        'nombre'
+                    ], 
+                    'columnas' => 
+                    [
+                        'parentesco' => 'Parentesco',
+                        'telefono' => 'Teléfono',
+                        'mail' => 'Mail',
+                        
+                    ]
+                ]);/*
+                echo GridView::widget([
+                    'dataProvider' => $dataProvider,
+                    //'filterModel' => $searchModel,
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+            
+                        'apellido',
+                        'nombre',
+                        'parentesco',
+                        'telefono',
+                        'mail'
+            
+                        
+                    ],
+                ]);*/
+            }else{
+                echo '<h3>No hay registros de tutores del estudiante</h3>';
+            }
+            
 
         }
     ?>

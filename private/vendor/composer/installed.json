@@ -735,6 +735,59 @@
         ]
     },
     {
+        "name": "edofre/yii2-fullcalendar",
+        "version": "V1.0.11",
+        "version_normalized": "1.0.11.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Edofre/yii2-fullcalendar.git",
+            "reference": "0eed44a374a95849093891f08df20b79942a0c62"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Edofre/yii2-fullcalendar/zipball/0eed44a374a95849093891f08df20b79942a0c62",
+            "reference": "0eed44a374a95849093891f08df20b79942a0c62",
+            "shasum": ""
+        },
+        "require": {
+            "npm-asset/fullcalendar": "v3.8.0",
+            "php": ">=5.5.0",
+            "yiisoft/yii2": ">=2.0.9",
+            "yiisoft/yii2-jui": ">=2.0.6"
+        },
+        "time": "2018-01-04T21:25:17+00:00",
+        "type": "yii2-extension",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "edofre\\fullcalendar\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Edo Freriks",
+                "email": "edofre@gmail.com"
+            }
+        ],
+        "description": "Yii2 widget for fullcalendar",
+        "homepage": "https://github.com/edofre/yii2-fullcalendar",
+        "keywords": [
+            "calendar",
+            "event",
+            "fullcalendar",
+            "javascript"
+        ]
+    },
+    {
         "name": "ezyang/htmlpurifier",
         "version": "v4.10.0",
         "version_normalized": "4.10.0.0",
@@ -2458,6 +2511,58 @@
             "duplicate",
             "object",
             "object graph"
+        ]
+    },
+    {
+        "name": "npm-asset/fullcalendar",
+        "version": "3.8.0",
+        "version_normalized": "3.8.0.0",
+        "dist": {
+            "type": "tar",
+            "url": "https://registry.npmjs.org/fullcalendar/-/fullcalendar-3.8.0.tgz",
+            "reference": null,
+            "shasum": null
+        },
+        "require": {
+            "npm-asset/jquery": ">=2,<4.0",
+            "npm-asset/moment": ">=2.9.0,<3.0.0"
+        },
+        "type": "npm-asset",
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ]
+    },
+    {
+        "name": "npm-asset/jquery",
+        "version": "3.4.1",
+        "version_normalized": "3.4.1.0",
+        "dist": {
+            "type": "tar",
+            "url": "https://registry.npmjs.org/jquery/-/jquery-3.4.1.tgz",
+            "reference": null,
+            "shasum": null
+        },
+        "type": "npm-asset",
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ]
+    },
+    {
+        "name": "npm-asset/moment",
+        "version": "2.24.0",
+        "version_normalized": "2.24.0.0",
+        "dist": {
+            "type": "tar",
+            "url": "https://registry.npmjs.org/moment/-/moment-2.24.0.tgz",
+            "reference": null,
+            "shasum": null
+        },
+        "type": "npm-asset",
+        "installation-source": "dist",
+        "license": [
+            "MIT"
         ]
     },
     {

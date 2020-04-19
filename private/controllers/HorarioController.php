@@ -6,6 +6,7 @@ use Yii;
 use app\config\Globales;
 use app\models\Actividad;
 use app\models\Catedra;
+use app\models\Clasevirtual;
 use app\models\Detallecatedra;
 use app\models\DetallecatedraSearch;
 use app\models\Diasemana;
@@ -13,6 +14,7 @@ use app\models\Division;
 use app\models\Docente;
 use app\models\Hora;
 use app\models\Horario;
+use app\models\Horarioexamen;
 use app\models\HorarioSearch;
 use app\models\Nombramiento;
 use app\models\Parametros;
@@ -41,7 +43,11 @@ class HorarioController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto', 'menuopciones'.'migrarhorarioprueba', 'printxcurso', 'printxdocente', 'deshabilitados', 'cambiarmovilidad'],
+                'only' => ['view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 
+                                    'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 
+                                    'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 
+                                    'horariocompleto', 'menuopciones','migrarhorarioprueba', 'printxcurso', 
+                                    'printxdocente', 'deshabilitados', 'cambiarmovilidad', 'completodetallado', 'prueba'],
                 'rules' => [
                     [
                         'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'filtropormateria', 'horariocompleto', 'menuopciones'],   
@@ -134,7 +140,7 @@ class HorarioController extends Controller
                    
 
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'readlog', 'migrarhorarioprueba'],   
+                        'actions' => ['index', 'view', 'create', 'update', 'readlog', 'migrarhorarioprueba','prueba'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -146,7 +152,7 @@ class HorarioController extends Controller
 
                     ],
                     [
-                        'actions' => ['createdesdehorario','updatedesdehorario', 'delete', 'printxdocente', 'deshabilitados', 'cambiarmovilidad'],   
+                        'actions' => ['createdesdehorario','updatedesdehorario', 'delete', 'printxdocente', 'deshabilitados', 'cambiarmovilidad', 'completodetallado'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -2005,6 +2011,115 @@ class HorarioController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
+    public function actionCompletodetallado()
+    {
+        $searchModel = new HorarioSearch();
+        $dataProvider = $searchModel->getCompletoDetallado();
+
+        return $this->render('completodetallado', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionPrueba($url)
+    {
+        return $this->render('prueba', [
+            'url' => $url,
+            //'legajo' => $legajo
+        ]);
+    }
+
+      
+    public function actionClasesvirtuales()
+    {
+        /*$searchModel = new HorarioSearch();
+        $dataProvider = $searchModel->getDeshabilitados();*/
+
+        $horarioexamen = Clasevirtual::find()->all();
+        $events = [];
+
+        $docs = Docente::find()->all();
+        foreach ($docs as $doc) {
+         /*foreach ($horarioexamen as $horario) {
+            $docente = '';
+            
+           foreach ($horario->catedra0->detallecatedras as $dc) {
+                
+                if ($dc->revista == 6){
+                    $docente = $dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1);
+                    break 1;
+                }
+                
+            }
+
+            if($horario->catedra0->division0->turno == 1){
+                $color = '#7986cb';
+                if($horario->hora == 2){
+                    $inicio = '08:00';
+                    $fin = '09:00';
+                }elseif($horario->hora == 3){
+                    $inicio = '09:00';
+                    $fin = '10:00';
+                }else{
+                    $inicio = '10:00';
+                    $fin = '11:00';
+                }
+            }else{
+                $color = '#4285f4';
+                if($horario->hora == 2){
+                    $inicio = '14:00';
+                    $fin = '15:00';
+                }elseif($horario->hora == 3){
+                    $inicio = '15:00';
+                    $fin = '16:00';
+                }else{
+                    $inicio = '16:00';
+                    $fin = '17:00';
+                }
+            }
+            
+            
+            $events[] = new \edofre\fullcalendar\models\Event([
+                'id'               => $horario->id,
+                'title'            => $horario->hora0->nombre.' - '.$horario->catedra0->division0->nombre.' - '.$docente,
+                'start'            => $horario->fecha,
+                'end'              => $horario->fecha,
+                'startEditable'    => true,
+                'color'            => $color,
+                'url'              => 'index.php?r=clasevirtual/completoxcurso&division='.$horario->catedra0->division.'&vista=docentes&sem='.$horario->semana,
+                'durationEditable' => true,]);*/
+            if($doc->fechanac !=null){
+                $fecha = explode("-",$doc->fechanac);
+            
+            for ($i=0; $i <= 1; $i++) { 
+                $newfecha = date('Y')+$i."-".$fecha[1]."-".$fecha[2];
+                $events[] = new \edofre\fullcalendar\models\Event([
+                    'id'               => $doc->id,
+                    'title'            => $doc->apellido.', '.$doc->nombre,
+                    'start'            => $newfecha,
+                    'end'              => $newfecha,
+                    'startEditable'    => true,
+                    //'color'            => $color,
+                    'url'              => 'index.php?r=clasevirtual/completoxcurso&division='.$doc->id.'&vista=docentes&sem='.$doc->id,
+                    'durationEditable' => true,]);
+                }
+            }
+            
+            
+            
+        }
+
+        return $this->render('clasesvirtuales', [
+            'selectable'  => true,
+            'events' => $events
+            /*'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,*/
+        ]);
+    }
+
+    
 
 
 

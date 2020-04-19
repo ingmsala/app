@@ -22,7 +22,7 @@ class DocenteSearch extends Docente
     {
         return [
             [['id', ], 'integer'],
-            [['legajo', 'apellido', 'nombre', 'genero', 'documento'], 'safe'],
+            [['legajo', 'apellido', 'nombre', 'genero', 'documento', 'mail', 'fechanac'], 'safe'],
         ];
     }
 

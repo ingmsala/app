@@ -13,7 +13,13 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="docente-index">
 
-    
+    <?php
+        if(in_array (Yii::$app->user->identity->role, [1]))
+        $template =  "{viewdetcat}";
+    else
+        $template =  " ";
+
+    ?>
     
 
     <?= GridView::widget([
@@ -92,10 +98,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->apellido.', '.$model->nombre;
                 }
             ],
-                        
+                                   
             
 
             ['class' => 'yii\grid\ActionColumn'],
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => $template,
+                'visible' => (in_array (Yii::$app->user->identity->role, [1])) ? true : false,
+                'buttons' => [
+                    'viewdetcat' => function($url, $model, $key){
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>',
+                            '?r=horario/prueba&url=https://empleados.unc.edu.ar/autogestion/traeDatosEmpleado.php?lj='.$model['legajo']);
+                    },
+                    
+                ]
+
+            ],
         ],
     ]); ?>
 </div>

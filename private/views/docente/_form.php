@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\Modal;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Docente */
@@ -41,6 +42,24 @@ use yii\bootstrap\Modal;
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true, 'style'=>'text-transform:uppercase;']) ?>
 
     <?= $form->field($model, 'genero')->dropDownList($listgeneros, ['prompt'=>'Seleccionar...']); ?>
+
+    <?= $form->field($model, 'mail')->textInput(['maxlength' => true, 'style'=>'text-transform:lowercase;']) ?>
+
+    <?= 
+        $form->field($model, 'fechanac')->widget(DatePicker::classname(), [
+            //'name' => 'dp_3',
+            'type' => DatePicker::TYPE_COMPONENT_APPEND,
+            //'value' => '23-Feb-1982',
+            'readonly' => true,
+            'pluginOptions' => [
+                'autoclose'=>true,
+                'format' => 'yyyy-mm-dd',
+                
+                
+            ],
+    
+    ]); ?>
+
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success', 'id'=>'modala']) ?>

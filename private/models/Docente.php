@@ -11,6 +11,8 @@ use Yii;
  * @property string $legajo
  * @property string $apellido
  * @property string $nombre
+ * @property string $mail
+ * @property string $fechanac
  * @property int $genero
  * @property string $documento
  *
@@ -33,7 +35,7 @@ class Docente extends \yii\db\ActiveRecord
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_FINDHORARIOLOGIN] = ['legajo'];
-        $scenarios[self::SCENARIO_ABM] = ['apellido', 'nombre', 'genero','legajo', 'documento'];
+        $scenarios[self::SCENARIO_ABM] = ['apellido', 'nombre', 'genero','legajo', 'documento', 'mail', 'fechanac'];
         
         return $scenarios;
     }
@@ -56,6 +58,8 @@ class Docente extends \yii\db\ActiveRecord
             [['documento'], 'string', 'min' => 7],
             [['legajo'], 'string', 'max' => 8],
             [['apellido', 'nombre'], 'string', 'max' => 70],
+            [['mail'], 'string', 'max' => 200],
+            [['fechanac'], 'safe'],
             [['legajo'], 'unique', 'on' => self::SCENARIO_ABM],
             [['documento'], 'unique'],
             [['genero'], 'exist', 'skipOnError' => true, 'targetClass' => Genero::className(), 'targetAttribute' => ['genero' => 'id']],

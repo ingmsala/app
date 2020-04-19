@@ -274,4 +274,13 @@ return array (
       '@kartik/grid' => $vendorDir . '/kartik-v/yii2-grid/src',
     ),
   ),
+  'edofre/yii2-fullcalendar' => 
+  array (
+    'name' => 'edofre/yii2-fullcalendar',
+    'version' => '1.0.11.0',
+    'alias' => 
+    array (
+      '@edofre/fullcalendar' => $vendorDir . '/edofre/yii2-fullcalendar/src',
+    ),
+  ),
 );
