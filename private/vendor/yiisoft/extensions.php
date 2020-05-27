@@ -283,4 +283,22 @@ return array (
       '@edofre/fullcalendar' => $vendorDir . '/edofre/yii2-fullcalendar/src',
     ),
   ),
+  'kartik-v/yii2-detail-view' => 
+  array (
+    'name' => 'kartik-v/yii2-detail-view',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@kartik/detail' => $vendorDir . '/kartik-v/yii2-detail-view/src',
+    ),
+  ),
+  'alexandernst/yii2-device-detect' => 
+  array (
+    'name' => 'alexandernst/yii2-device-detect',
+    'version' => '0.0.12.0',
+    'alias' => 
+    array (
+      '@alexandernst/devicedetect' => $vendorDir . '/alexandernst/yii2-device-detect',
+    ),
+  ),
 );

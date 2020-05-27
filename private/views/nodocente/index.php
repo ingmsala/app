@@ -1,27 +1,70 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\NodocenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'No docentes';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Personal No docente';
+
 ?>
 <div class="nodocente-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('Nuevo', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        //'condensed' => true,
+        //'hover' => true,
+        'panel' => [
+            'type' => GridView::TYPE_DEFAULT,
+            'heading' => Html::encode($this->title),
+            //'beforeOptions' => ['class'=>'kv-panel-before'],
+            'after' => '<div class="container-fluid"><div class="row" style="text-align: center;">
+                                    <div class="col-xs-3">
+                                        <center>
+                                            Planta <br />
+                                            '.$planta.'
+                                        </center>
+                                        
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <center>
+                                            Contratado <br />
+                                            '.$contratados.'
+                                        </center>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <center>
+                                            Total <br />
+                                            '.($planta + $contratados).'
+                                        </center>
+                                    </div>
+                                </div></div>',
+        ],
+        'summary' => false,
+
+        'exportConfig' => [
+            GridView::EXCEL => [
+                'label' => 'Excel',
+                'filename' =>Html::encode($this->title),
+                
+                //'alertMsg' => false,
+            ],
+            
+
+        ],
+
+        'toolbar'=>[
+            ['content' => 
+                Html::a('Agregar No docente', ['create'], ['class' => 'btn btn-success'])
+
+            ],
+            '{export}',
+            
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -31,14 +74,44 @@ $this->params['breadcrumbs'][] = $this->title;
             'apellido',
             'nombre',
             [
-                'label' => "Género",
-                'attribute' => 'genero0.nombre',
+                'label' => "Condición",
+                'attribute' => 'condicionnodocente0.nombre',
             ],
+            'area',
+            'categorianodoc',
             'mail',
-            
+                        
             
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'kartik\grid\ActionColumn',
+
+                'template' => '{view} {viewdetcat} ',
+
+                
+                'buttons' => [
+                    'view' => function($url, $model, $key){
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>',
+                            '?r=nodocente/view&id='.$model['id']);
+                    },
+                    'viewdetcat' => function($url, $model, $key){
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            '?r=nodocente/update&id='.$model['id']);
+                    },
+                    /*
+                    'deletedetcat' => function($url, $model, $key){
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=catedra/delete&id='.$model['id'], 
+                            ['data' => [
+                            'confirm' => 'Está seguro de querer eliminar este elemento?',
+                            'method' => 'post',
+                             ]
+                            ]);
+                    },*/
+                ]
+
+            ],
         ],
     ]); ?>
 </div>

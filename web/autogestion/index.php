@@ -1,4 +1,4 @@
 <?php 
-     header('Location: ../front/index.php?r=optativas/autogestion/inicio');
+     header('Location: ../front/index.php?r=curriculares/autogestion/inicio');
      exit();
 ?>

@@ -11,7 +11,7 @@ use kartik\grid\CheckboxColumn;
 /* @var $searchModel app\modules\optativas\models\MatriculaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ficha del Alumno';
+$this->title = 'Ficha del Estudiante';
 
 ?>
 

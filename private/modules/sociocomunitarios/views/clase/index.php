@@ -9,7 +9,7 @@ use yii\helpers\ArrayHelper;
 /* @var $searchModel app\modules\optativas\models\ClaseSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Clases';
+$this->title = 'Encuentros';
 
 in_array (Yii::$app->user->identity->role, [1,8,9]) ? $template = '{view} {update} {delete}' : $template = '{view}'
 
@@ -56,7 +56,7 @@ in_array (Yii::$app->user->identity->role, [1,8,9]) ? $template = '{view} {updat
         ],
         'toolbar'=>[
             ['content' => 
-                in_array (Yii::$app->user->identity->role, [1,8,9]) ? Html::a('Nueva Clase', ['create'], ['class' => 'btn btn-success']) : ''
+                in_array (Yii::$app->user->identity->role, [1,8,9]) ? Html::a('Nuevo Encuentro', ['create'], ['class' => 'btn btn-success']) : ''
             ],
             '{export}',
             
@@ -110,7 +110,7 @@ in_array (Yii::$app->user->identity->role, [1,8,9]) ? $template = '{view} {updat
             'tema',
             
             [
-                'label' => 'Tipo de Clase',
+                'label' => 'Tipo de Encuentro',
                 'attribute' => 'tipoclase0.nombre',
             ],
             [

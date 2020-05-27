@@ -69,7 +69,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
-                return $this->redirect(['/optativas']);
+                return $this->redirect(['/curriculares/menuopciones']);
                 
         }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
                  return $this->redirect(['/optativas/clase/claseshoy']);
@@ -106,7 +106,7 @@ class SiteController extends Controller
         $this->layout = 'mainlogin';
 ;        if (!Yii::$app->user->isGuest) {
             if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
-                return $this->redirect(['/optativas']);
+                return $this->redirect(['/curriculares/menuopciones']);
             }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
                  return $this->redirect(['/optativas/clase/claseshoy']);
             }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
@@ -124,7 +124,7 @@ class SiteController extends Controller
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
-                return $this->redirect(['/optativas']);
+                return $this->redirect(['/curriculares/menuopciones']);
             }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
                  return $this->redirect(['/optativas/clase/claseshoy']);
             }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){

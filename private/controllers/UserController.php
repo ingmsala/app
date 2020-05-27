@@ -173,7 +173,7 @@ class UserController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionCambiarpass()
+    public function actionCambiarpass($i = 0)
  {      
     $model = new User;
 
@@ -200,10 +200,15 @@ class UserController extends Controller
             }
         }
     }
+
     
-    if(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
-        $this->layout = '@app/modules/curriculares/views/layouts/main';
-    }
+    
+    //if(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
+        if($i == 1)
+            $this->layout = '@app/modules/optativas/views/layouts/main';
+        elseif($i == 2)
+            $this->layout = '@app/modules/sociocomunitarios/views/layouts/main';
+    //}
     
     return $this->render('cambiarpass',
         [

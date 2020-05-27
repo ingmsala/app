@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\config\Globales;
+use app\models\Condicionnodocente;
 use app\models\Genero;
 use app\models\Nodocente;
 use app\models\NodocenteSearch;
@@ -33,7 +34,7 @@ class NodocenteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_NOVEDADES]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_NOVEDADES, Globales::US_SECRETARIA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -45,7 +46,7 @@ class NodocenteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_NOVEDADES, Globales::US_CONSULTA]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_NOVEDADES, Globales::US_CONSULTA, Globales::US_SECRETARIA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -72,9 +73,14 @@ class NodocenteController extends Controller
         $searchModel = new NodocenteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $planta = Nodocente::find()->where(['condicionnodocente' => 1])->count();
+        $contratados = Nodocente::find()->where(['condicionnodocente' => 2])->count();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'planta' => $planta,
+            'contratados' => $contratados,
         ]);
     }
 
@@ -101,6 +107,7 @@ class NodocenteController extends Controller
         $model = new Nodocente();
         
         $generos = Genero::find()->all();
+        $condicion = Condicionnodocente::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -113,6 +120,7 @@ class NodocenteController extends Controller
         return $this->render('create', [
             'model' => $model,
             'generos' => $generos,
+            'condicion' => $condicion,
         ]);
     }
 
@@ -128,6 +136,7 @@ class NodocenteController extends Controller
         $model = $this->findModel($id);
         
         $generos = Genero::find()->all();
+        $condicion = Condicionnodocente::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -140,6 +149,7 @@ class NodocenteController extends Controller
         return $this->render('update', [
             'model' => $model,
             'generos' => $generos,
+            'condicion' => $condicion,
         ]);
     }
 

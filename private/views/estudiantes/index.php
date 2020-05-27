@@ -6,7 +6,7 @@ use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
-use yii\widgets\DetailView;
+use kartik\detail\DetailView;
 use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
@@ -38,7 +38,7 @@ $alumnoslist=ArrayHelper::map($alumnos,'id',function($model){
         ])->label('Estudiante'); ?>
 
 <div class="form-group">
-        <?= Html::submitButton('Buscar', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('<span class="glyphicon glyphicon-search"></span> Buscar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -51,26 +51,38 @@ $alumnoslist=ArrayHelper::map($alumnos,'id',function($model){
         if($dataProvider != null){
             if($dataProvider->getTotalCount()>0){
                 echo '<div class="clearfix"></div>';
-                echo '<h3>Estudiante: '.$alumno->apellido.', '.$alumno->nombre.'</h3>';
+                echo '<h3>Estudiante: '.$alumno->apellido.', '.$alumno->nombre.' ('.$alumno->division0->nombre.')</h3>';
                 echo '<div class="clearfix"></div>';
                 echo '<h4>Tutores</h4>';
                 
                 for ($i=0; $i < count($model); $i++) {
                     echo '<div class="col-md-4">';
+                    //echo use 
                     echo DetailView::widget([
-                        'model' => $model[$i],
-                        'attributes' => [
-                            
-                            'nombre',
-                            'apellido',
+                        'model'=>$model[$i],
+                        'condensed'=>true,
+                        'hover'=>true,
+                        'mode'=>DetailView::MODE_VIEW,
+                        'enableEditMode' => false,
+                        'panel'=>[
+                            'heading'=>$model[$i]->apellido.', '.$model[$i]->nombre,
+                            'headingOptions' => [
+                                'template' => '',
+                            ],
+                            'type'=>DetailView::TYPE_PRIMARY ,
+                        ],
+                        'attributes'=>[
+                            'parentesco',
                             'mail',
                             'telefono',
-                        ],
+                           
+                        ]
                     ]);
                     echo '</div>';
                 }
+                
                 echo '<div class="clearfix"></div>';
-                echo CardWidget::widget([
+                /*echo CardWidget::widget([
                     'dataProvider' => $dataProvider,
                     'grid' => 4,
                     'color' => 'primary',

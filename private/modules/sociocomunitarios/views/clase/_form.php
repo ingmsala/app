@@ -77,7 +77,7 @@ $this->registerJs("
 
     <?php $form = ActiveForm::begin(); ?>
     <div class="panel panel-default" style="width:50%;">
-        <div class="panel-heading">Fecha y Hora <span data-toggle="tooltip" title="En caso de no estar definida la fecha, seleccionar un mes aproximado del dictado de la clase" class="glyphicon glyphicon-info-sign"></span></div>
+        <div class="panel-heading">Fecha y Hora <span data-toggle="tooltip" title="En caso de no estar definida la fecha, seleccionar un mes aproximado del dictado del encuentro" class="glyphicon glyphicon-info-sign"></span></div>
         <div class="panel-body">
 
             <?= $form->field($model, 'fechaconf')->dropDownList($conf, ['id' => 'cmbconf',
@@ -151,7 +151,7 @@ $this->registerJs("
 
 </div>
 
-    <?= $form->field($model, 'tipoclase')->dropDownList($tipos, ['prompt'=>'Seleccionar...']); ?>
+    <?= $form->field($model, 'tipoclase')->dropDownList($tipos, ['prompt'=>'Seleccionar...'])->label('Tipo de Encuentro'); ?>
     <div class="panel panel-default" style="width:50%;" id="calculohoras">
 		<div class="panel-heading">Convertir a hora cátedra <span data-toggle="tooltip" title="Sólo se guarda el valor de la hora cátedra" class="glyphicon glyphicon-info-sign"></span></div>
 		<div class="panel-body">

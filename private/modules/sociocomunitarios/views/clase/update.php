@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\optativas\models\Clase */
 
-$this->title = 'Modificar Clase: ' . $model->id;
+$this->title = 'Modificar Encuentro: ' . $model->id;
 
 ?>
 <div class="clase-update">

@@ -131,7 +131,7 @@ AppAsset::register($this);
                             'items' => [
                                                            [
                                     'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass'],
+                                    'url' => ['/user/cambiarpass','i'=>1],
                                 ],
                                 
                                 [
@@ -207,7 +207,7 @@ AppAsset::register($this);
                             'items' => [
                                                            [
                                     'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass'],
+                                    'url' => ['/user/cambiarpass','i'=>1],
                                 ],
                                 
                                 [
@@ -312,7 +312,7 @@ AppAsset::register($this);
                             'items' => [
                                                            [
                                     'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass'],
+                                    'url' => ['/user/cambiarpass','i'=>1],
                                 ],
                                 
                                 [
@@ -398,7 +398,7 @@ AppAsset::register($this);
                             'items' => [
                                                            [
                                     'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass'],
+                                    'url' => ['/user/cambiarpass','i'=>1],
                                 ],
                                 
                                 [
@@ -480,7 +480,7 @@ AppAsset::register($this);
                                 ],
                                                            [
                                     'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass'],
+                                    'url' => ['/user/cambiarpass','i'=>1],
                                 ],
                                 
                                 [
@@ -527,7 +527,7 @@ AppAsset::register($this);
                             'items' => [
                                                            [
                                     'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass'],
+                                    'url' => ['/user/cambiarpass','i'=>1],
                                 ],
                                 
                                 [

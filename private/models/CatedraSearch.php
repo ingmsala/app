@@ -253,7 +253,7 @@ class CatedraSearch extends Catedra
     WHERE
         dc.revista = 1 AND dc.activo = 1 AND c.id = c0.id
     AND
-        (select count(dc20.id) from detallecatedra dc20 where dc20.catedra = c0.id and dc20.revista = 6 AND dc20.activo = 1) > 0
+        (select count(dc20.id) from detallecatedra dc20 where dc20.catedra = c0.id AND dc20.activo = 1) > 0
 ) as vigente, 
 
 (

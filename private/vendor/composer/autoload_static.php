@@ -54,6 +54,7 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
             'kartik\\editable\\' => 16,
             'kartik\\dropdown\\' => 16,
             'kartik\\dialog\\' => 14,
+            'kartik\\detail\\' => 14,
             'kartik\\depdrop\\' => 15,
             'kartik\\datetime\\' => 16,
             'kartik\\daterange\\' => 17,
@@ -72,6 +73,10 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         'b' => 
         array (
             'bs\\dbManager\\' => 13,
+        ),
+        'a' => 
+        array (
+            'alexandernst\\devicedetect\\' => 26,
         ),
         'S' => 
         array (
@@ -228,6 +233,10 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-dialog/src',
         ),
+        'kartik\\detail\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-detail-view/src',
+        ),
         'kartik\\depdrop\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-depdrop/src',
@@ -263,6 +272,10 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         'bs\\dbManager\\' => 
         array (
             0 => __DIR__ . '/..' . '/beaten-sect0r/yii2-db-manager/src',
+        ),
+        'alexandernst\\devicedetect\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/alexandernst/yii2-device-detect',
         ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
@@ -391,6 +404,10 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
             array (
                 0 => __DIR__ . '/..' . '/phpspec/php-diff/lib',
             ),
+            'Detection' => 
+            array (
+                0 => __DIR__ . '/..' . '/mobiledetect/mobiledetectlib/namespaced',
+            ),
         ),
         'C' => 
         array (
@@ -417,6 +434,7 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         'FilterASCII85' => __DIR__ . '/..' . '/setasign/fpdi/filters/FilterASCII85.php',
         'FilterASCIIHexDecode' => __DIR__ . '/..' . '/setasign/fpdi/filters/FilterASCIIHexDecode.php',
         'FilterLZW' => __DIR__ . '/..' . '/setasign/fpdi/filters/FilterLZW.php',
+        'Mobile_Detect' => __DIR__ . '/..' . '/mobiledetect/mobiledetectlib/Mobile_Detect.php',
         'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
         'PHPUnit\\Framework\\AssertionFailedError' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/AssertionFailedError.php',
         'PHPUnit\\Framework\\BaseTestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',

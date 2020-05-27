@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\config\Globales;
+use app\models\Actividadesmantenimiento;
 use app\models\ActividadesmantenimientoSearch;
 use app\models\Estadotarea;
 use app\models\Nodocente;
@@ -136,12 +137,15 @@ class TareamantenimientoController extends Controller
         $providerActividades = $actividadesSearch->actividadesxTarea($id);
         $estado = Estadotarea::find()->where(['in', 'id', [2,4]])->all();
 
+        $modelactividades = Actividadesmantenimiento::find()->where(['tareamantenimiento' => $id])->all();
+
         if(Yii::$app->request->isAjax)
             return $this->renderAjax('view', [
                 'model' => $this->findModel($id),
                 'providerActividades' => $providerActividades,
                 'tarea' => $id,
                 'estado' => $estado,
+                'modelactividades' => $modelactividades,
                 'bm' => (Yii::$app->user->identity->role == Globales::US_MANTENIMIENTO) ? false : true,
             ]);
         return $this->render('view', [
@@ -149,6 +153,7 @@ class TareamantenimientoController extends Controller
                 'providerActividades' => $providerActividades,
                 'tarea' => $id,
                 'estado' => $estado,
+                'modelactividades' => $modelactividades,
                 'bm' => (Yii::$app->user->identity->role == Globales::US_MANTENIMIENTO) ? false : true,
             ]);
     }

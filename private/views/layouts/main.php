@@ -475,6 +475,7 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Docentes', 'url' => ['/docente']],
                                 '<div class="dropdown-divider"></div>',
+                                
                                 ['label' => 'Nombramientos de cargo', 'url' => ['/nombramiento']],
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Espacios Optativos', 'url' => ['/optativas']],
@@ -782,6 +783,8 @@ try {
                             ['label' => 'Horas de actividades por Cátedra', 'url' => ['/reporte/horasmateriaxcatedra']],
                             '<div class="dropdown-divider"></div>',
                             ['label' => 'Padrones', 'url' => ['/reporte/padrones/padrones']],
+                            '<div class="dropdown-divider"></div>',
+                            ['label' => 'Diferencia Planta Doc. y Horario', 'url' => ['/reporte/diferenciahorario']],
                             '<div class="dropdown-divider"></div>',
 
                             [

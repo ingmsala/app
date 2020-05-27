@@ -18,8 +18,8 @@ class NodocenteSearch extends Nodocente
     public function rules()
     {
         return [
-            [['id', 'genero'], 'integer'],
-            [['legajo', 'apellido', 'nombre', 'documento', 'mail'], 'safe'],
+            [['id', 'genero', 'condicionnodocente', 'categorianodoc'], 'integer'],
+            [['legajo', 'apellido', 'nombre', 'documento', 'mail', 'area'], 'safe'],
         ];
     }
 
@@ -41,12 +41,13 @@ class NodocenteSearch extends Nodocente
      */
     public function search($params)
     {
-        $query = Nodocente::find();
+        $query = Nodocente::find()->orderBy('apellido, nombre');
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         $this->load($params);

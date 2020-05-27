@@ -715,7 +715,7 @@ class HorarioexamenController extends Controller
                         ->all();
         }else{
             $divisiones = Division::find()
-                                    ->where(['in', 'turno', [1,2]])
+                                    ->where(['in', 'preceptoria', [1,2,3,4,5,6]])
                                     ->orderBy('id')
                                     ->all();
         }

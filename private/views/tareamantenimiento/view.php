@@ -1,5 +1,7 @@
 <?php
 
+use app\models\Nodocente;
+use kartik\detail\DetailView as DetailDetailView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -66,18 +68,66 @@ $this->title = 'Tarea';
             
         ],
     ]) ?>
-
-   
     <div>
-        <?= 
-            $this->render('/actividadesmantenimiento/index', [
+    <?php
+    
+       if(Yii::$app->params['devicedetect']['isMobile']){
+        for ($i=0; $i < count($modelactividades); $i++) {
+            $modelok = $modelactividades[$i];
+            
+            date_default_timezone_set('America/Argentina/Buenos_Aires');
+            $fechaok = Yii::$app->formatter->asDate($modelok['fecha'], 'dd/MM/yyyy');
+            echo '<div class="col-md-4">';
+            echo DetailDetailView::widget([
+                'model'=>$modelactividades[$i],
+                'condensed'=>true,
+                'hover'=>true,
+                'mode'=>DetailDetailView::MODE_VIEW,
+                'enableEditMode' => false,
+                'panel'=>[
+                    'heading'=>'#'.($i+1).' - '.$fechaok,
+                    'headingOptions' => [
+                        'template' => '',
+                    ],
+                    'type'=>DetailDetailView::TYPE_PRIMARY ,
+                ],
+                'attributes'=>[
+                    
+                    [
+                        'label' => 'Usuario',
+                        'value' => function($model) use ($modelok){
+                                //return var_dump($model);
+                                 $nodocentes= Nodocente::find()
+                                    ->where(['legajo' => $modelok->usuario0->username])
+                                    ->orderBy('apellido, nombre')
+                                    ->one();
+                                    if($nodocentes == null){
+                                        return $modelok->usuario0->username;
+                                    }
+                                    return $nodocentes->apellido.', '.$nodocentes->nombre;
+                                
+                            
+                        }
+                    ],
+
+                    'observaciones:ntext',
+                ]
+            ]);
+            echo '</div>';
+        }
+        echo '<div class="clearfix"></div>'; 
+       }else{
+                echo $this->render('/actividadesmantenimiento/index', [
                 
-                'dataProvider' => $providerActividades,
-                'tarea' => $tarea,
-                'estado' => $estado,
-                'modeltarea' => $model,
-            ]); 
+                    'dataProvider' => $providerActividades,
+                    'tarea' => $tarea,
+                    'estado' => $estado,
+                    'modeltarea' => $model,
+                ]); 
+            } 
+            
         ?>
     </div>
+    
 
 </div>

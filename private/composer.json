@@ -36,7 +36,9 @@
         "kartik-v/yii2-nav-x": "*",
         "mero/yii2-monolog": "^0.1.2",
         "kartik-v/yii2-widget-datetimepicker": "dev-master",
-        "edofre/yii2-fullcalendar": "V1.0.11"
+        "edofre/yii2-fullcalendar": "V1.0.11",
+        "kartik-v/yii2-detail-view": "dev-master",
+        "alexandernst/yii2-device-detect": "0.0.12"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

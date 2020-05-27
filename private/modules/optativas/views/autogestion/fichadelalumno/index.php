@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\modules\optativas\models\Matricula */
 
-$this->title = 'Ficha del alumno';
+$this->title = 'Ficha del estudiante';
 
 ?>
 <div class="matricula-view">

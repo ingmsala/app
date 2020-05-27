@@ -10,7 +10,10 @@ $config = [
     'name' => 'Sistema de Gestión Administrativa',
     'basePath' => dirname(__DIR__),
     'language' => 'es',
-    'bootstrap' => ['log'],
+    'bootstrap' => [
+        'log',
+        'devicedetect'
+    ],
     //'catchAll' => ['site/mantenimiento'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -24,6 +27,9 @@ $config = [
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ]
+        ],
+        'devicedetect' => [
+            'class' => 'alexandernst\devicedetect\DeviceDetect'
         ],
         
         'formatter' => [

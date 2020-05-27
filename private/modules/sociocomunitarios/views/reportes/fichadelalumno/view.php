@@ -11,7 +11,7 @@ try{
                     }catch(\Exception $e){
                         $al = $model->alumno0->apellido.', '.$model->alumno0->nombre;
                     }
-$this->title = 'Ficha del alumno: '.$al;
+$this->title = 'Ficha del estudiante: '.$al;
 
 ?>
 <div class="fichadelalumnotable">
@@ -33,14 +33,14 @@ $this->title = 'Ficha del alumno: '.$al;
             
             
             [
-            	'label' => 'Espacio Optativo',
+            	'label' => 'Proyecto Sociocomunitario',
             	'value' => function($matricula){
             		return $matricula->comision0->espaciocurricular0->actividad0->nombre.'   |   Comisión: '.$matricula->comision0->nombre;
             	}
             ],
 
             [
-            	'label' => 'Profesores/as',
+            	'label' => 'Docente extensionista',
             	'format' => 'raw',
             	'value' => function($matricula){
             		$items = [];

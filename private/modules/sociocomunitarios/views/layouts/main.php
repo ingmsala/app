@@ -93,7 +93,7 @@ AppAsset::register($this);
 
                             'items' => [
                                 [
-                                    'label' => 'Ficha del Alumno',
+                                    'label' => 'Ficha del Estudiante',
                                     'url' => ['/sociocomunitarios/reportes/fichadelalumno'],
                                 ],
                             
@@ -131,7 +131,7 @@ AppAsset::register($this);
                             'items' => [
                                                            [
                                     'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass'],
+                                    'url' => ['/user/cambiarpass','i'=>2],
                                 ],
                                 
                                 [
@@ -180,7 +180,7 @@ AppAsset::register($this);
 
                             'items' => [
                                 [
-                                    'label' => 'Ficha del Alumno',
+                                    'label' => 'Ficha del Estudiante',
                                     'url' => ['/sociocomunitarios/reportes/fichadelalumno'],
                                 ],
                             
@@ -207,7 +207,7 @@ AppAsset::register($this);
                             'items' => [
                                                            [
                                     'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass'],
+                                    'url' => ['/user/cambiarpass','i'=>2],
                                 ],
                                 
                                 [
@@ -278,7 +278,7 @@ AppAsset::register($this);
 
                             'items' => [
                                 [
-                                    'label' => 'Ficha del Alumno',
+                                    'label' => 'Ficha del Estudiante',
                                     'url' => ['/sociocomunitarios/reportes/fichadelalumno'],
                                 ],
                             
@@ -312,7 +312,7 @@ AppAsset::register($this);
                             'items' => [
                                                            [
                                     'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass'],
+                                    'url' => ['/user/cambiarpass','i'=>2],
                                 ],
                                 
                                 [
@@ -361,7 +361,7 @@ AppAsset::register($this);
 
                             'items' => [
                                 [
-                                    'label' => 'Ficha del Alumno',
+                                    'label' => 'Ficha del Estudiante',
                                     'url' => ['/sociocomunitarios/reportes/fichadelalumno'],
                                 ],
                             
@@ -398,7 +398,7 @@ AppAsset::register($this);
                             'items' => [
                                                            [
                                     'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass'],
+                                    'url' => ['/user/cambiarpass','i'=>2],
                                 ],
                                 
                                 [
@@ -447,7 +447,7 @@ AppAsset::register($this);
 
                             'items' => [
                                 [
-                                    'label' => 'Ficha del Alumno',
+                                    'label' => 'Ficha del Estudiante',
                                     'url' => ['/sociocomunitarios/reportes/fichadelalumno'],
                                 ],
                             
@@ -480,7 +480,7 @@ AppAsset::register($this);
                                 ],
                                                            [
                                     'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass'],
+                                    'url' => ['/user/cambiarpass','i'=>2],
                                 ],
                                 
                                 [
@@ -527,7 +527,7 @@ AppAsset::register($this);
                             'items' => [
                                                            [
                                     'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass'],
+                                    'url' => ['/user/cambiarpass','i'=>2],
                                 ],
                                 
                                 [

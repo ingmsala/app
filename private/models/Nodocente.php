@@ -33,10 +33,11 @@ class Nodocente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apellido', 'nombre', 'genero', 'documento'], 'required'],
-            [['genero'], 'integer'],
+            [['apellido', 'nombre', 'genero', 'condicionnodocente'], 'required'],
+            [['genero', 'condicionnodocente', 'categorianodoc'], 'integer'],
             [['legajo', 'documento'], 'string', 'max' => 8],
             [['apellido', 'nombre'], 'string', 'max' => 70],
+            [['area'], 'string', 'max' => 200],
             [['mail'], 'string', 'max' => 150],
             ['mail', 'email'],
             [['genero'], 'exist', 'skipOnError' => true, 'targetClass' => Genero::className(), 'targetAttribute' => ['genero' => 'id']],
@@ -56,8 +57,11 @@ class Nodocente extends \yii\db\ActiveRecord
             'apellido' => 'Apellido',
             'nombre' => 'Nombre',
             'genero' => 'Genero',
-            'documento' => 'Documento',
+            'documento' => 'N° Documento',
+            'condicionnodocente' => 'Condición',
             'mail' => 'Mail',
+            'area' => 'Área',
+            'categorianodoc' => 'Categoría del cargo'
         ];
     }
 
@@ -72,5 +76,9 @@ class Nodocente extends \yii\db\ActiveRecord
     public function getGenero0()
     {
         return $this->hasOne(Genero::className(), ['id' => 'genero']);
+    }
+    public function getCondicionnodocente0()
+    {
+        return $this->hasOne(Condicionnodocente::className(), ['id' => 'condicionnodocente']);
     }
 }

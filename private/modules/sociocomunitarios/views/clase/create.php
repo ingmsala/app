@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\optativas\models\Clase */
 
-$this->title = 'Nueva Clase';
+$this->title = 'Nuevo Encuentro';
 
 ?>
 <div class="clase-create">

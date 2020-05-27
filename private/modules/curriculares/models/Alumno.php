@@ -2,6 +2,7 @@
 
 namespace app\modules\curriculares\models;
 
+use app\models\Division;
 use Yii;
 
 /**
@@ -70,6 +71,11 @@ class Alumno extends \yii\db\ActiveRecord
     public function getTutors()
     {
         return $this->hasMany(Tutor::className(), ['alumno' => 'id']);
+    }
+
+    public function getDivision0()
+    {
+        return $this->hasOne(Division::className(), ['id' => 'curso']);
     }
 
     public function fields()
