@@ -68,12 +68,14 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
+        if(Yii::$app->user->identity->activate == 0){
+            return $this->redirect(['/user/cambiarpass', 'i'=>4]);
+        }
+        if (in_array (Yii::$app->user->identity->role, [Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
                 return $this->redirect(['/curriculares/menuopciones']);
                 
-        }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
-                 return $this->redirect(['/optativas/clase/claseshoy']);
-            
+        }elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_NODOCENTE, Globales::US_MANTENIMIENTO, Globales::US_PRECEPTOR])){
+            return $this->redirect(['/personal/menuprincipal']);
         }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
             return $this->redirect(['/reporte/preceptores/preceptores']);
        }
@@ -104,18 +106,16 @@ class SiteController extends Controller
     public function actionLogin()
     {
         $this->layout = 'mainlogin';
-;        if (!Yii::$app->user->isGuest) {
-            if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
+        if (!Yii::$app->user->isGuest) {
+            if (in_array (Yii::$app->user->identity->role, [Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
                 return $this->redirect(['/curriculares/menuopciones']);
-            }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
-                 return $this->redirect(['/optativas/clase/claseshoy']);
+            }elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_NODOCENTE, Globales::US_MANTENIMIENTO, Globales::US_PRECEPTOR])){
+                 return $this->redirect(['/personal/menuprincipal']);
             }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
                 return $this->redirect(['//reporte/preceptores/preceptores']);
             }elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
                 return $this->redirect(['/horario/menuopciones']);
-            }elseif(Yii::$app->user->identity->role == Globales::US_MANTENIMIENTO){
-                return $this->redirect(['/tareamantenimiento']);
             }
             
             return $this->goHome();
@@ -123,17 +123,18 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            if (in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
+            if(Yii::$app->user->identity->activate == 0){
+                return $this->redirect(['/user/cambiarpass', 'i'=>4]);
+            }
+            if (in_array (Yii::$app->user->identity->role, [Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
                 return $this->redirect(['/curriculares/menuopciones']);
-            }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
-                 return $this->redirect(['/optativas/clase/claseshoy']);
+            }elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_NODOCENTE, Globales::US_MANTENIMIENTO, Globales::US_PRECEPTOR])){
+                return $this->redirect(['/personal/menuprincipal']);
             }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
                     return $this->redirect(['//reporte/preceptores/preceptores']);
             }elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
                 return $this->redirect(['/horario/menuopciones']);
-            }elseif(Yii::$app->user->identity->role == Globales::US_MANTENIMIENTO){
-                return $this->redirect(['/tareamantenimiento']);
             }
             return $this->goBack();
         }

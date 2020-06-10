@@ -43,6 +43,40 @@ $(function(){
 	})
 });
 
+$(function(){
+	$('#amodalpasividad').click(function(){
+		$('#modalpasividad').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+		document.getElementById('modalHeader').innerHTML ='Percepción de pasividades (Jubilaciones, Pensiones, Retiros, etc.)';
+	})
+});
+$(function(){
+	$('.amodalrechazar').click(function(){
+		$('#modalrechazar').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+		document.getElementById('modalHeader').innerHTML ='Motivo del rechazo de la Declaración jurada';
+	})
+});
+$(function(){
+	$('.amodalhorariojs').click(function(){
+		$('#modalpasividad').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+		document.getElementById('modalHeader').innerHTML ='Carga de horario';
+	})
+});
+
+$(function(){
+	$('#amodalnooficial').click(function(){
+		$('#modalnooficial').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+		document.getElementById('modalHeader').innerHTML ='En tareas o actividades no oficiales';
+	})
+});
+
 
 $(function(){
 	$('#modalaNovedadesParte').click(function(){

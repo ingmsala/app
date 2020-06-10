@@ -48,7 +48,7 @@ $this->title = 'Actividades de mantenimientos';
                 'value' => function($model){
                         
                          $nodocentes= Nodocente::find()
-                            ->where(['legajo' => $model->usuario0->username])
+                            ->where(['mail' => $model->usuario0->username])
                             ->orderBy('apellido, nombre')
                             ->one();
                             if($nodocentes == null){

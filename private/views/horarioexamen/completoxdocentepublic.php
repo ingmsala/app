@@ -8,7 +8,7 @@ use app\config\Globales;
 /* @var $this yii\web\View */
 /* @var $model app\models\Horario */
 
-$this->title = $docenteparam->apellido.', '.$docenteparam->nombre;
+//$this->title = $docenteparam->apellido.', '.$docenteparam->nombre;
 $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$app->request->referrer.'" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>'];
 
 
@@ -46,7 +46,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
     <div class='row' style="padding-bottom: 20px;">
     	
     	<div class="col-md-12"><center><h4>
-    		<?= (true) ? Html::encode('Docente: '.$this->title) : '' ?>
+    		<?= (true) ? Html::encode('Docente: '.$docenteparam->apellido.', '.$docenteparam->nombre) : '' ?>
     	</h4></center></div>
 
     </div>

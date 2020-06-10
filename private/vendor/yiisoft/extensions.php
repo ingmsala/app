@@ -301,4 +301,22 @@ return array (
       '@alexandernst/devicedetect' => $vendorDir . '/alexandernst/yii2-device-detect',
     ),
   ),
+  'kartik-v/yii2-builder' => 
+  array (
+    'name' => 'kartik-v/yii2-builder',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@kartik/builder' => $vendorDir . '/kartik-v/yii2-builder/src',
+    ),
+  ),
+  'kartik-v/yii2-widget-typeahead' => 
+  array (
+    'name' => 'kartik-v/yii2-widget-typeahead',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@kartik/typeahead' => $vendorDir . '/kartik-v/yii2-widget-typeahead/src',
+    ),
+  ),
 );

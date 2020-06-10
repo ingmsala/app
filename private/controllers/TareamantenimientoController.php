@@ -103,6 +103,8 @@ class TareamantenimientoController extends Controller
      */
     public function actionIndex()
     {
+        if(Yii::$app->user->identity->role ==Globales::US_MANTENIMIENTO)
+            $this->layout = 'mainpersonal';
         $searchModel = new TareamantenimientoSearch();
         $dataProvider = $searchModel->activos(Yii::$app->request->queryParams);
 
@@ -115,6 +117,8 @@ class TareamantenimientoController extends Controller
 
     public function actionHistorial()
     {
+        if(Yii::$app->user->identity->role ==Globales::US_MANTENIMIENTO)
+            $this->layout = 'mainpersonal';
         $searchModel = new TareamantenimientoSearch();
         $dataProvider = $searchModel->realizados(Yii::$app->request->queryParams);
 
@@ -132,6 +136,8 @@ class TareamantenimientoController extends Controller
      */
     public function actionView($id)
     {
+        if(Yii::$app->user->identity->role ==Globales::US_MANTENIMIENTO)
+            $this->layout = 'mainpersonal';
         $actividadesSearch = new ActividadesmantenimientoSearch();
 
         $providerActividades = $actividadesSearch->actividadesxTarea($id);
@@ -165,6 +171,8 @@ class TareamantenimientoController extends Controller
      */
     public function actionCreate($novedadesparte = "")
     {
+        if(Yii::$app->user->identity->role ==Globales::US_MANTENIMIENTO)
+            $this->layout = 'mainpersonal';
         $descripcion = '';
         $novparte = '';
         if($novedadesparte != ""){
@@ -177,7 +185,7 @@ class TareamantenimientoController extends Controller
         $prioridad = Prioridadtarea::find()->all();
         if(Yii::$app->user->identity->role == Globales::US_MANTENIMIENTO){
              $nodocentes= Nodocente::find()
-                ->where(['legajo' => Yii::$app->user->identity->username])
+                ->where(['mail' => Yii::$app->user->identity->username])
                 ->orderBy('apellido, nombre')
                 ->all();
             
@@ -194,16 +202,17 @@ class TareamantenimientoController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             
-                  if(Yii::$app->user->identity->role != Globales::US_MANTENIMIENTO){
+                  if(Yii::$app->user->identity->role == Globales::US_MANTENIMIENTO){
                     if($model->responsable != null){
 
                         $responsable = Nodocente::findOne($model->responsable);
                         if($responsable->mail != null){
                             Yii::$app->mailer->compose()
                              ->setFrom([Globales::MAIL => 'Nueva Tarea'])
-                             ->setTo($responsable->mail)
+                             //->setTo($responsable->mail)
+                             ->setTo('msala@unc.edu.ar')
                              ->setSubject('Nueva asignación de tarea')
-                             ->setHtmlBody('Se le ha asignado una nueva tarea de mantenimiento. Puede consultarla haciendo click '.Html::a('aquí', $url = 'http://admin.cnm.unc.edu.ar'))
+                             ->setHtmlBody('Se le ha asignado una nueva tarea de mantenimiento. Puede consultarla haciendo click en'.Html::a('aquí', $url = 'http://admin.cnm.unc.edu.ar'))
                              ->send();
                         }
                         
@@ -241,11 +250,13 @@ class TareamantenimientoController extends Controller
      */
     public function actionUpdate($id)
     {
+        if(Yii::$app->user->identity->role ==Globales::US_MANTENIMIENTO)
+            $this->layout = 'mainpersonal';
         $model = $this->findModel($id);
         $prioridad = Prioridadtarea::find()->all();
         if(Yii::$app->user->identity->role == Globales::US_MANTENIMIENTO){
              $nodocentes= Nodocente::find()
-                ->where(['legajo' => Yii::$app->user->identity->username])
+                ->where(['mail' => Yii::$app->user->identity->username])
                 ->orderBy('apellido, nombre')
                 ->all();
             

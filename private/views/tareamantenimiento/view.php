@@ -98,7 +98,7 @@ $this->title = 'Tarea';
                         'value' => function($model) use ($modelok){
                                 //return var_dump($model);
                                  $nodocentes= Nodocente::find()
-                                    ->where(['legajo' => $modelok->usuario0->username])
+                                    ->where(['mail' => $modelok->usuario0->username])
                                     ->orderBy('apellido, nombre')
                                     ->one();
                                     if($nodocentes == null){

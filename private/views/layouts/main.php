@@ -226,6 +226,8 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Gestionar Exámenes', 'url' => ['/anioxtrimestral']],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'Declaraciones Juradas', 'url' => ['/declaracionjurada/declaracionesjuradasadmin']],
+                                '<div class="dropdown-divider"></div>',
                                   ['label' => 'Mantenimiento',
                             'items' => [
 
@@ -475,7 +477,8 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Docentes', 'url' => ['/docente']],
                                 '<div class="dropdown-divider"></div>',
-                                
+                                ['label' => 'Personal no docente', 'url' => ['/nodocente']],
+                                '<div class="dropdown-divider"></div>',                                
                                 ['label' => 'Nombramientos de cargo', 'url' => ['/nombramiento']],
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Espacios Optativos', 'url' => ['/optativas']],
@@ -599,7 +602,7 @@ try {
                             ],
 
                             
-                    ],
+                        ],
 
                     ['label' => 'Parte Docente', 
                             'items' => [
@@ -612,6 +615,17 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Panel de Novedades', 'url' => ['novedadesparte/panelnovedades']],
                                 '<div class="dropdown-divider"></div>',
+                                [
+                                    'label' => 'Reportes',
+                                    'itemsOptions'=>['class'=>'dropdown-submenu'],
+                                    'submenuOptions'=>['class'=>'dropdown-menu'],
+                                    'items' => [
+                                        ['label' => 'Horas sin dictar por Docentes', 'url' => ['/reporte/parte/faltasdocentes']],
+                                        '<div class="dropdown-divider"></div>',
+                                    
+                                    ],
+
+                                ],
                                 
                             ],
                     ],

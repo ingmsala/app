@@ -7,7 +7,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
-    'name' => 'Sistema de Gestión Administrativa',
+    'name' => 'Gestión Administrativa',
     'basePath' => dirname(__DIR__),
     'language' => 'es',
     'bootstrap' => [
@@ -156,6 +156,10 @@ $config = [
          'sociocomunitarios' => [
             'class' => 'app\modules\sociocomunitarios\Sociocomunitarios',
                             
+        ],
+
+        'personal' => [
+            'class' => 'app\modules\personal\Personal',
         ],
 
          'db-manager' => [

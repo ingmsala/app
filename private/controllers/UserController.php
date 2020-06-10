@@ -11,6 +11,9 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\models\Role;
 use app\config\Globales;
+use app\models\Docente;
+use app\models\Nodocente;
+use yii\helpers\Html;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -25,10 +28,10 @@ class UserController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'cambiarpass'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'cambiarpass', 'importar'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'importar'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
@@ -113,6 +116,43 @@ class UserController extends Controller
         ]);
     }
 
+    public function actionImportar(){
+        $docente = Docente::find()->all();
+        $nodocente = Nodocente::find()->all();
+        ini_set("pcre.backtrack_limit", "5000000");
+        foreach ($docente as $doc) {
+            $us = User::find()->where(['username'=>$doc->mail])->one();
+            if($us == null){
+                if($doc->mail != null && $doc->documento != null){
+                    $user = new User();
+                    $user->username = $doc->mail;
+                    $user->role = Globales::US_DOCENTE;
+                    $user->activate = 0;
+                    $user->setPassword($doc->documento);
+                    $user->generateAuthKey();
+                    $user->save();
+                }
+                
+            }
+        }
+        foreach ($nodocente as $nodoc) {
+            $us2 = User::find()->where(['username'=>$nodoc->mail])->one();
+            if($us2 == null){
+                if($nodoc->mail != null && $nodoc->documento != null){
+                    $user = new User();
+                    $user->username = $nodoc->mail;
+                    $user->role = Globales::US_NODOCENTE;
+                    $user->activate = 0;
+                    $user->setPassword($nodoc->documento);
+                    $user->generateAuthKey();
+                    $user->save();
+                }
+            }
+        }
+        return $this->redirect(['index']);
+
+    }
+
     /**
      * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -139,6 +179,86 @@ class UserController extends Controller
         return $this->render('update', [
             'model' => $model,
             'roles' => $roles,
+        ]);
+    }
+
+    public function actionResetpass($t)
+    {
+        Yii::$app->user->logout();
+        $model = User::find()->where(['authKey' => $t])->one();
+        
+        if($model == null){
+            Yii::$app->session->setFlash('danger', "El link no es correcto o el token ya ha sido utilizado.");
+            return $this->goHome();
+        }
+        
+        //return var_dump($model);
+        $model->scenario = User::SCENARIO_RESETPASS;
+        
+        if($model->load(Yii::$app->request->post())){
+            
+            //$model = User::find()->where(['username' => $_POST['User']['username']])->one();
+            //$model->attributes = $_POST['User'];
+            
+            $valid = $model->validate();
+                    
+            if($valid){
+                
+                $model->generateAuthKey();
+                $model->setPassword($model->new_password);
+                $model->activate = 1;
+                    
+                           
+                if($model->save()){
+                    Yii::$app->session->setFlash('success', "Se restableció la contraseña correctamente");
+                    return $this->goHome();
+                }
+            }
+        }
+
+        
+        //return var_dump($model);
+        return $this->render('resetpass', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionSendreset()
+    {
+        Yii::$app->user->logout();
+        $model = new User();
+        
+        if(isset($_POST['User'])){
+            
+            $model->attributes = $_POST['User'];
+            $uss = User::find()->where(['username' => $model->username])->one();
+            if($uss != null){
+                
+                try {
+                    Yii::$app->mailer->compose()
+                        ->setFrom([Globales::MAIL => 'Recuperar contraseña'])
+                        ->setTo(Globales::MAIL)
+                        ->setTo($uss->username)
+                        ->setSubject('Generar nueva clave de acceso')
+                        ->setHtmlBody('Para generar una nueva contraseña ingrese al siguiente link: '.Html::a('https://admin.cnm.unc.edu.ar/front/index.php?r=user/resetpass&t='.$uss->authKey, $url = 'https://admin.cnm.unc.edu.ar/front/index.php?r=user/resetpass&t='.$uss->authKey).' Este link sólo funcionará una sola vez.')
+                        ->send();
+                    Yii::$app->session->setFlash('success', "Se ha enviado a su casilla de correo las indicaciones para recuprar la contraseña");
+                    return $this->goHome();
+                }
+                 catch (\Throwable $th) {
+                    Yii::$app->session->setFlash('danger', "No tiene permisos para recuperar la contraseña.");
+                    return $this->goHome();
+                }
+            
+                
+            }else{
+                Yii::$app->session->setFlash('danger', "El usuario no existe.");
+                return $this->goHome();
+            }
+        }
+
+        return $this->render('sendreset', [
+            'model' => $model,
         ]);
     }
 
@@ -183,7 +303,7 @@ class UserController extends Controller
 
 
     
-     if(isset($_POST['User'])){
+    if(isset($_POST['User'])){
             
         $model->attributes = $_POST['User'];
         $valid = $model->validate();
@@ -192,11 +312,13 @@ class UserController extends Controller
                 //return $this->redirect(['index']);
 
                 $model->setPassword($model->new_password);
+                $model->generateAuthKey();
+                $model->activate = 1;
                 
                        
             if($model->save()){
-                Yii::$app->session->set('success', "Se modificó la contraseña correctamente");
-                return $this->redirect(['cambiarpass']);
+                Yii::$app->session->setFlash('success', "Se modificó la contraseña correctamente");
+                return $this->goHome();
             }
         }
     }
@@ -204,15 +326,24 @@ class UserController extends Controller
     
     
     //if(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
+        $mensaje = '';
         if($i == 1)
             $this->layout = '@app/modules/optativas/views/layouts/main';
         elseif($i == 2)
             $this->layout = '@app/modules/sociocomunitarios/views/layouts/main';
+        elseif($i == 3)
+            $this->layout = '@app/modules/personal/views/layouts/mainpersonal';
+        elseif($i == 4){
+            $this->layout = '@app/views/layouts/mainactivar';
+            $mensaje = 'En el primer acceso debe cambiar la contraseña.';
+        }
+            
     //}
     
     return $this->render('cambiarpass',
         [
             'model'=>$model,
+            'mensaje'=>$mensaje,
 
         ]); 
  }

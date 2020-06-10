@@ -16,6 +16,7 @@ use app\models\Hora;
 use app\models\Horario;
 use app\models\Horarioexamen;
 use app\models\HorarioSearch;
+use app\models\Nodocente;
 use app\models\Nombramiento;
 use app\models\Parametros;
 use app\models\Preceptoria;
@@ -102,6 +103,23 @@ class HorarioController extends Controller
                                             return true;
                                         else
                                             return false;
+                                        }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+                                            $division = Yii::$app->request->queryParams['division'];
+                                            $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                            $nom = Nombramiento::find()
+                                                        ->where(['docente' => $doc->id])
+                                                        ->andWhere(['<=', 'division', 53])
+                                                        //->andWhere(['is not', 'division', 53])
+                                                        ->all();
+                                            $array = [];
+                                            foreach ($nom as $n) {
+                                                $array [] = $n->division;
+                                            }
+                                            if(in_array($division, $array))
+                                                return true;
+                                            else
+                                                return false;
+
                                         }else{
                                         return false;
                                     }
@@ -121,7 +139,7 @@ class HorarioController extends Controller
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
-                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_SECRETARIA, Globales::US_COORDINACION])){
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR, Globales::US_SECRETARIA, Globales::US_COORDINACION])){
                                         return true;
                                     
                                     }else{
@@ -222,13 +240,18 @@ class HorarioController extends Controller
         ]);
     }
 
-    public function actionMenuopcionespublic($h, $docente)
+    public function actionMenuopcionespublic()
     {
-        $this->layout = 'mainpublic';
+        $this->layout = 'mainpersonal';
         //return $this->redirect(['horario/panelprincipal']);
+        
+        $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        if($persona == null){
+            $persona = Nodocente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        }
         return $this->render('menuopcionespublic', [
-            'h' => $h,
-            'docente' => $docente,
+            'h' => Yii::$app->security->generateRandomString(254),
+            'docente' => $persona->legajo,
             
 
         ]);
@@ -255,9 +278,9 @@ class HorarioController extends Controller
         }//1 ok
         
          if(isset(Yii::$app->user->identity->role))
-                $this->layout = 'mainvacio';
+                $this->layout = 'mainpersonal';
             else
-                $this->layout = 'mainpublic';
+                $this->layout = 'mainpersonal';
         
         
        
@@ -288,9 +311,9 @@ class HorarioController extends Controller
             
         }//1 ok
          if(isset(Yii::$app->user->identity->role))
-                $this->layout = 'mainvacio';
+                $this->layout = 'mainpersonal';
             else
-                $this->layout = 'mainpublic';
+                $this->layout = 'mainpersonal';
         
         
        
@@ -321,6 +344,24 @@ class HorarioController extends Controller
                         ->where(['preceptoria' => $pre->id])
                         ->orderBy('id')
                         ->all();
+        }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+            $this->layout = 'mainpersonal';
+            $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $nom = Nombramiento::find()
+                        ->where(['docente' => $doc->id])
+                        ->andWhere(['<=', 'division', 53])
+                        //->andWhere(['is not', 'division', 53])
+                        ->all();
+            $array = [];
+            foreach ($nom as $n) {
+                $array [] = $n->division;
+            }
+            $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+            $divisiones = Division::find()
+                        ->where(['in', 'id', $array])
+                        ->orderBy('id')
+                        ->all();
+        
         }else{
             $divisiones = Division::find()
                                     ->where(['in', 'preceptoria', [1,2,3,4,5,6]])
@@ -646,6 +687,8 @@ class HorarioController extends Controller
         }//1 ok
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
+        if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR)
+        $this->layout = 'mainpersonal';
         $searchModel = new HorarioSearch();
         $paramdivision = Division::findOne($division);
 
@@ -777,7 +820,7 @@ class HorarioController extends Controller
     {
         
 
-        $this->layout = 'mainpublic';
+        $this->layout = 'mainpersonal';
         if (YII_ENV_DEV) {
             Yii::$app->getModule('debug')->instance->allowedIPs = [];
         }
@@ -1017,7 +1060,7 @@ class HorarioController extends Controller
         ]);
     }
 
-    public function actionHorarioclasespublic($docente)
+    public function actionHorarioclasespublic()
     {
         $estadopublicacion = Parametros::findOne(1)->estado;
 
@@ -1036,12 +1079,19 @@ class HorarioController extends Controller
             }
             
         }//1 ok
-        $this->layout = 'mainpublic';
-        $docente = Docente::find()
+        $this->layout = 'mainpersonal';
+        /*$docente = Docente::find()
                 ->joinWith('detallecatedras')
                 ->where(['=', 'detallecatedra.revista', 6])
                 ->andWhere(['=', 'docente.legajo', $docente])
-                ->one();
+                ->one();*/
+        if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+            return $this->redirect(['menuxdivision']);
+        }
+        $docente = Docente::find()->joinWith('detallecatedras')
+                    ->where(['mail' => Yii::$app->user->identity->username])
+                    ->andWhere(['=', 'detallecatedra.revista', 6])
+                    ->one();
         return $this->getCompletoxdocentepage($docente->id, 0, 0, 1);
     }
 
@@ -1071,7 +1121,7 @@ class HorarioController extends Controller
     {
         
         date_default_timezone_set('America/Argentina/Buenos_Aires');
-        $this->layout = 'mainpublic';
+        $this->layout = 'mainpersonal';
         if (YII_ENV_DEV) {
             Yii::$app->getModule('debug')->instance->allowedIPs = [];
         }

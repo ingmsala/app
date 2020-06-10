@@ -47,11 +47,12 @@ class TareamantenimientoSearch extends Tareamantenimiento
             $query = Tareamantenimiento::find()->where(['<>', 'estadotarea', 4])
                         ->orderBy('id DESC');
         else{
+            
             $query = Tareamantenimiento::find()
                             ->where(['or',
                                 ['is', 'responsable', null],
                                 ['=', 'responsable', Nodocente::find()
-                                                            ->where(['legajo' => Yii::$app->user->identity->username])
+                                                            ->where(['mail' => Yii::$app->user->identity->username])
                                                             ->one()->id]])
                             ->andWhere(['<>', 'estadotarea', 4])
                             ->orderBy('id DESC');
@@ -96,7 +97,7 @@ class TareamantenimientoSearch extends Tareamantenimiento
                             ->where(['or',
                                 ['is', 'responsable', null],
                                 ['=', 'responsable', Nodocente::find()
-                                                            ->where(['legajo' => Yii::$app->user->identity->username])
+                                                            ->where(['mail' => Yii::$app->user->identity->username])
                                                             ->one()->id]])
                             ->andWhere(['=', 'estadotarea', 4])
                             ->orderBy('id DESC');

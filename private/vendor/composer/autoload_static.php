@@ -38,6 +38,7 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         ),
         'k' => 
         array (
+            'kartik\\typeahead\\' => 17,
             'kartik\\time\\' => 12,
             'kartik\\switchinput\\' => 19,
             'kartik\\spinner\\' => 15,
@@ -59,6 +60,7 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
             'kartik\\datetime\\' => 16,
             'kartik\\daterange\\' => 17,
             'kartik\\date\\' => 12,
+            'kartik\\builder\\' => 15,
             'kartik\\base\\' => 12,
         ),
         'e' => 
@@ -169,6 +171,10 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         array (
             0 => __DIR__ . '/..' . '/loveorigami/yii2-modal-ajax/src',
         ),
+        'kartik\\typeahead\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-typeahead/src',
+        ),
         'kartik\\time\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-timepicker/src',
@@ -252,6 +258,10 @@ class ComposerStaticInit52ca3e900f3bf9b5199cee7211adf705
         'kartik\\date\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-datepicker/src',
+        ),
+        'kartik\\builder\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-builder/src',
         ),
         'kartik\\base\\' => 
         array (

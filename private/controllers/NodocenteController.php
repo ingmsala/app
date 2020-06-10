@@ -8,6 +8,7 @@ use app\models\Condicionnodocente;
 use app\models\Genero;
 use app\models\Nodocente;
 use app\models\NodocenteSearch;
+use app\models\User;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -113,8 +114,17 @@ class NodocenteController extends Controller
 
             $model->apellido = strtoupper($model->apellido);
             $model->nombre = strtoupper($model->nombre);
-            if($model->save())
+            if($model->save()){
+                $user = new User();
+                $user->username = $model->mail;
+                $user->role = Globales::US_DOCENTE;
+                $user->activate = 0;
+                $user->setPassword($model->documento);
+                $user->generateAuthKey();
+                $user->save();
                 return $this->redirect(['view', 'id' => $model->id]);
+            }
+                
         }
 
         return $this->render('create', [

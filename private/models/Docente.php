@@ -27,6 +27,7 @@ class Docente extends \yii\db\ActiveRecord
      */
     const SCENARIO_FINDHORARIOLOGIN = 'logindoc';
     const SCENARIO_ABM = 'abmdoc';
+    const SCENARIO_DECLARACIONJURADA = 'declaracionjurada';
    
 
     
@@ -35,7 +36,8 @@ class Docente extends \yii\db\ActiveRecord
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_FINDHORARIOLOGIN] = ['legajo'];
-        $scenarios[self::SCENARIO_ABM] = ['apellido', 'nombre', 'genero','legajo', 'documento', 'mail', 'fechanac'];
+        $scenarios[self::SCENARIO_ABM] = ['apellido', 'nombre', 'legajo', 'genero', 'documento', 'tipodocumento', 'mail', 'fechanac'];
+        $scenarios[self::SCENARIO_DECLARACIONJURADA] = ['apellido', 'nombre', 'legajo', 'documento', 'tipodocumento', 'mail', 'telefono', 'fechanac', 'cuil', 'domicilio', 'localidad'];
         
         return $scenarios;
     }
@@ -51,7 +53,8 @@ class Docente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apellido', 'nombre', 'genero','documento'], 'required', 'on' => self::SCENARIO_ABM],
+            [['apellido', 'nombre', 'genero','documento','tipodocumento', 'mail'], 'required', 'on' => self::SCENARIO_ABM],
+            [['apellido', 'nombre', 'legajo', 'documento', 'tipodocumento', 'mail', 'telefono', 'fechanac', 'cuil', 'domicilio', 'localidad'], 'required', 'on' => self::SCENARIO_DECLARACIONJURADA],
             [['legajo'], 'required',  'on' => self::SCENARIO_FINDHORARIOLOGIN],
             [['genero'], 'integer'],
             [['documento'], 'string', 'max' => 8],
@@ -60,9 +63,17 @@ class Docente extends \yii\db\ActiveRecord
             [['apellido', 'nombre'], 'string', 'max' => 70],
             [['mail'], 'string', 'max' => 200],
             [['fechanac'], 'safe'],
+            [['cuil'], 'string', 'max' => 13],
+            [['cuil'], 'string', 'min' => 13],
+            [['domicilio'], 'string', 'max' => 400],
+            [['telefono'], 'string', 'max' => 100],
             [['legajo'], 'unique', 'on' => self::SCENARIO_ABM],
             [['documento'], 'unique'],
+            [['mail'], 'unique'],
+            ['mail', 'email'],
             [['genero'], 'exist', 'skipOnError' => true, 'targetClass' => Genero::className(), 'targetAttribute' => ['genero' => 'id']],
+            [['localidad'], 'exist', 'skipOnError' => true, 'targetClass' => Localidad::className(), 'targetAttribute' => ['localidad' => 'id']],
+            [['tipodocumento'], 'exist', 'skipOnError' => true, 'targetClass' => Tipodocumento::className(), 'targetAttribute' => ['tipodocumento' => 'id']],
             [['legajo'], 'findDoc', 'on' => self::SCENARIO_FINDHORARIOLOGIN],
         ];
     }
@@ -85,10 +96,17 @@ class Docente extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'legajo' => 'Legajo',
-            'apellido' => 'Apellido',
-            'nombre' => 'Nombre',
-            'genero' => 'Genero',
+            'apellido' => 'Apellidos',
+            'nombre' => 'Nombres',
+            'genero' => 'Género',
             'documento' => 'Documento',
+            'mail' => 'Mail', 
+            'fechanac' => 'Fecha de nacimiento', 
+            'tipodocumento' => 'Tipo de documento', 
+            'localidad' => 'Localidad', 
+            'cuil' => 'CUIL', 
+            'domicilio' => 'Domicilio', 
+            'telefono' => 'Teléfono',
         ];
     }
 
@@ -127,6 +145,21 @@ class Docente extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Detalleparte::className(), ['docente' => 'id']);
     }
+    public function getDeclaracionjuradas()
+    {
+        return $this->hasMany(Declaracionjurada::className(), ['persona' => 'documento']);
+    }
+
+ 
+   public function getTipodocumento0() 
+   { 
+       return $this->hasOne(Tipodocumento::className(), ['id' => 'tipodocumento']); 
+   } 
+
+   public function getLocalidad0()
+   {
+       return $this->hasOne(Localidad::className(), ['id' => 'localidad']);
+   }
 
 
    

@@ -40,7 +40,7 @@ AppAsset::register($this);
             if(Yii::$app->user->identity->role == Globales::US_SUPER){
                 $items = [
                                             
-                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
+                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/personal/menuprincipal']],
                        
                         ['label' => '<span class="glyphicon glyphicon-book"></span><br>Clases', 
 
@@ -150,7 +150,7 @@ AppAsset::register($this);
             }else if(in_array(Yii::$app->user->identity->role, [Globales::US_DOCENTE])){
                 $items = [
                     
-                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
+                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/personal/menuprincipal']],
                         ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
                          ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><br>Calificaciones', 
 
@@ -226,7 +226,7 @@ AppAsset::register($this);
             }else if(in_array(Yii::$app->user->identity->role, [Globales::US_PRECEPTOR])){
                 $items = [
                     
-                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
+                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/personal/menuprincipal']],
                         ['label' => '<span class="glyphicon glyphicon-book"></span><br>Clases', 
 
                             'items' => [
@@ -331,7 +331,7 @@ AppAsset::register($this);
             }else if( in_array (Yii::$app->user->identity->role, [Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA])){
                 $items = [
                     
-                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
+                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/personal/menuprincipal']],
                         ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
                         ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><br>Calificaciones', 
 
@@ -417,7 +417,7 @@ AppAsset::register($this);
             }else if(Yii::$app->user->identity->role == Globales::US_COORDINACION){
                 $items = [
                     
-                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
+                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/personal/menuprincipal']],
                         ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
                         ['label' => '<span class="glyphicon glyphicon-copyright-mark"></span><br>Calificaciones', 
 
@@ -499,7 +499,7 @@ AppAsset::register($this);
             }else if(Yii::$app->user->identity->role == Globales::US_SREI){
                 $items = [
                     
-                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/optativas']],
+                        ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/personal/menuprincipal']],
 
                         ['label' => '<span class="glyphicon glyphicon-book"></span><div>Clases</div>', 'url' => ['/optativas/clase']],
                         

@@ -78,7 +78,7 @@ class ActaController extends Controller
                                 }
                                 elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
                                     $acta = $this->findModel(Yii::$app->request->queryParams['id']);
-                                    $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                     ->where(['comision' => $acta->comision])
                                                     ->andWhere(['docente' => $docente->id])
@@ -107,7 +107,7 @@ class ActaController extends Controller
                                     return true;
                                 elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
                                     $acta = $this->findModel(Yii::$app->request->queryParams['acta']);
-                                    $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                     ->where(['comision' => $acta->comision])
                                                     ->andWhere(['docente' => $docente->id])
@@ -134,7 +134,7 @@ class ActaController extends Controller
                                     return true;
                                 elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
                                     $com = Comision::findOne(Yii::$app->request->queryParams['Matricula']['comision']);
-                                    $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                     ->where(['comision' => $com])
                                                     ->andWhere(['docente' => $docente->id])

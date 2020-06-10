@@ -21,8 +21,8 @@ class DocenteSearch extends Docente
     public function rules()
     {
         return [
-            [['id', ], 'integer'],
-            [['legajo', 'apellido', 'nombre', 'genero', 'documento', 'mail', 'fechanac'], 'safe'],
+            [['id', 'tipodocumento', 'localidad'], 'integer'],
+            [['legajo', 'apellido', 'nombre', 'genero', 'documento', 'mail', 'fechanac', 'telefono', 'cuil', 'domicilio'], 'safe'],
         ];
     }
 

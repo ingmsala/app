@@ -134,6 +134,41 @@ a.desc:after {
     width: 320px;
     height: 360px;
 }
+
+.form_bg2 {
+    background-color:#eee;
+    color:#666;
+    padding:20px;
+    border-radius:10px;
+    position: absolute;
+    border:1px solid #fff;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 320px;
+    height: 260px;
+    
+}
+
+.form_bg3 {
+    background-color:#eee;
+    color:#666;
+    padding:20px;
+    border-radius:10px;
+    position: absolute;
+    border:1px solid #fff;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 320px;
+    height: 380px;
+    
+}
+
 .dropdown-submenu>.dropdown-menu {
     top: 0;
     left: 100%;
@@ -639,6 +674,88 @@ a.desc:after {
 
 }
 
+/*Nav bar personal*/
+
+.navbar-default-personal {
+    background-color: #891f02;
+    border-color: #E7E7E7;
+}
+/* Title */
+.navbar-default-personal .navbar-brand {
+    color: #f5f5f5;
+}
+.navbar-default-personal .navbar-brand:hover,
+.navbar-default-personal .navbar-brand:focus {
+    color: #f5f5f5;
+}
+/* Link */
+.navbar-default-personal .navbar-nav > li > a {
+    color: #f5f5f5;
+}
+
+.navbar-default-personal .navbar-nav > li {
+    text-align: center;
+}
+
+
+
+.navbar-default-personal .navbar-nav > li > a:hover,
+.navbar-default-personal .navbar-nav > li > a:focus {
+    color: #891f02;
+}
+.navbar-default-personal .navbar-nav > li > form > button {
+    color: #f5f5f5;
+}
+.navbar-default-personal .navbar-nav > .active > a,
+.navbar-default-personal .navbar-nav > .active > a:hover,
+.navbar-default-personal .navbar-nav > .active > a:focus {
+    color: #ccc;
+    background-color: #891f02;
+}
+.navbar-default-personal .navbar-nav > .open > a,
+.navbar-default-personal .navbar-nav > .open > a:hover,
+.navbar-default-personal .navbar-nav > .open > a:focus {
+    color: #f5f5f5;
+    background-color: #6d1703;
+}
+/* Caret */
+.navbar-default-personal .navbar-nav > .dropdown > a .caret {
+    border-top-color: #f5f5f5;
+    border-bottom-color: #f5f5f5;
+}
+.navbar-default-personal .navbar-nav > .dropdown > a:hover .caret,
+.navbar-default-personal .navbar-nav > .dropdown > a:focus .caret {
+    border-top-color: #f5f5f5;
+    border-bottom-color: #f5f5f5;
+}
+.navbar-default-personal .navbar-nav > .open > a .caret,
+.navbar-default-personal .navbar-nav > .open > a:hover .caret,
+.navbar-default-personal .navbar-nav > .open > a:focus .caret {
+    border-top-color: #891f02;
+    border-bottom-color: #891f02;
+}
+/* Mobile version */
+.navbar-default-personal .navbar-toggle {
+    border-color: #891f02;
+}
+.navbar-default-personal .navbar-toggle:hover,
+.navbar-default-personal .navbar-toggle:focus {
+    background-color: #891f02;
+}
+.navbar-default-personal .navbar-toggle .icon-bar {
+    background-color: #CCC;
+}
+@media (max-width: 767px) {
+    .navbar-default-personal .navbar-nav .open .dropdown-menu > li > a {
+        color: #fff;
+    }
+
+    .navbar-default-personal .navbar-nav .open .dropdown-menu > li > a:hover,
+    .navbar-default-personal .navbar-nav .open .dropdown-menu > li > a:focus {
+          color: #000;
+    }
+}
+
 /*Nav bar autogestion*/
 .navbar-default-autogestion {
     background-color: #f7f7f7;
@@ -1076,3 +1193,82 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
 .bordermov{
     border: 1px dotted rgb(138, 45, 114);
 }
+
+.deletebuttonhorario{
+    color:black;
+}
+
+.deletebuttonhorario:hover{
+    color:red;
+}
+
+.wrappersonal {
+    min-height: 100%;
+    height: auto;
+    margin: 0 auto -60px;
+    padding: 0 0 60px;
+}
+
+.wrappersonal > .container {
+    padding: 80px 15px 20px;
+}
+
+.leyendas{ 
+    display: none;
+}
+
+.datepicker { z-index: 1151 !important; }
+.kv-tabform-row .w1{
+    padding-bottom: 25px;
+}
+
+.flotante {
+    display:scroll;
+        position:fixed;
+        bottom:50px;
+        right:10px;
+}
+
+.flotante  > a {
+    display:block;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    
+  }
+
+  .btn-group-fab {
+    position: fixed;
+    width: 50px;
+    height: auto;
+    right: 20px; bottom: 15%;
+  }
+  .btn-group-fab div {
+    position: relative; width: 100%;
+    height: auto;
+  }
+  .btn-group-fab .btn {
+    position: absolute;
+    bottom: 0;
+    border-radius: 50%;
+    display: block;
+    margin-bottom: 4px;
+    width: 40px; height: 40px;
+    margin: 4px auto;
+  }
+  .btn-group-fab .btn-main {
+    width: 50px; height: 50px;
+    right: 50%; margin-right: -25px;
+    z-index: 100;
+    padding-top: 10px;
+    padding-left: 13px;
+    box-shadow: 5px 5px 8px #888888;
+  }
+
+  .btn-group-fab .btn-main > span {
+      
+      font-size: x-large;
+  }
+
+
+

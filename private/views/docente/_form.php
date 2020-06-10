@@ -31,17 +31,22 @@ use kartik\date\DatePicker;
     <?php $form = ActiveForm::begin(); ?>
 
     <?php $listgeneros=ArrayHelper::map($generos,'id','nombre'); ?>
+    <?php $listtipodocumento=ArrayHelper::map($tipodocumento,'id','nombre'); ?>
 
+
+    
+    <?= $form->field($model, 'tipodocumento')->dropDownList($listtipodocumento, ['prompt'=>'Seleccionar...']); ?>
+
+    <?= $form->field($model, 'documento')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'legajo')->textInput(['maxlength' => true]) ?>
-
-     <?= $form->field($model, 'documento')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'apellido')->textInput(['maxlength' => true, 'style'=>'text-transform:uppercase;']) ?>
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true, 'style'=>'text-transform:uppercase;']) ?>
 
     <?= $form->field($model, 'genero')->dropDownList($listgeneros, ['prompt'=>'Seleccionar...']); ?>
+    
 
     <?= $form->field($model, 'mail')->textInput(['maxlength' => true, 'style'=>'text-transform:lowercase;']) ?>
 

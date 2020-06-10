@@ -48,7 +48,7 @@ class SeguimientoController extends Controller
                                     else
                                         $matricula = Seguimiento::findOne(Yii::$app->request->queryParams['id'])->matricula0;
                                     
-                                    $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                         ->where(['comision' => $matricula->comision])
                                                         ->andWhere(['docente' => $docente->id])
@@ -96,7 +96,7 @@ class SeguimientoController extends Controller
                                     return true;
                                 elseif(in_array (Yii::$app->user->identity->role, [8,9])){
                                     $matricula = Matricula::findOne(Yii::$app->request->queryParams['id']);
-                                    $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                     ->where(['comision' => $matricula->comision])
                                                     ->andWhere(['docente' => $docente->id])

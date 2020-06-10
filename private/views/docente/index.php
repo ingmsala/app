@@ -98,6 +98,30 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->apellido.', '.$model->nombre;
                 }
             ],
+
+            [
+                'class' => 'kartik\grid\EditableColumn',
+                'attribute' => 'mail',
+                'contentOptions' => function ($model, $key, $index, $column) {
+                    return ['style' => 'background-color:' 
+                        . (empty($model->mail)
+                            ? '#f2dede' : '')];
+                }, 
+
+                'readonly' => function($model, $key, $index, $widget) {
+                    return (!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA])); // do not allow editing of inactive records
+                },
+
+                'editableOptions' => [
+                    'header' => 'Mail', 
+                    'inputType' => \kartik\editable\Editable::INPUT_TEXT,
+                    'formOptions' => ['action' => ['/docente/editdocumento']],
+                ],
+                'hAlign' => 'left', 
+                'vAlign' => 'middle',
+                //'width' => '7%',
+                
+            ],
                                    
             
 

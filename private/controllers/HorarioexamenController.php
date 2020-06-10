@@ -18,6 +18,7 @@ use app\models\Division;
 use app\config\Globales;
 use yii\data\ArrayDataProvider;
 use app\models\DetallecatedraSearch;
+use app\models\Nombramiento;
 use yii\filters\AccessControl;
 use kartik\mpdf\Pdf;
 use kartik\date\DatePicker;
@@ -125,7 +126,24 @@ class HorarioexamenController extends Controller
                                             return true;
                                         else
                                             return false;
-                                        }else{
+                                    }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+                                        $division = Yii::$app->request->queryParams['division'];
+                                        $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                        $nom = Nombramiento::find()
+                                                    ->where(['docente' => $doc->id])
+                                                    ->andWhere(['<=', 'division', 53])
+                                                    //->andWhere(['is not', 'division', 53])
+                                                    ->all();
+                                        $array = [];
+                                        foreach ($nom as $n) {
+                                            $array [] = $n->division;
+                                        }
+                                        if(in_array($division, $array))
+                                            return true;
+                                        else
+                                            return false;
+
+                                    }else{
                                         return false;
                                     }
 
@@ -144,7 +162,7 @@ class HorarioexamenController extends Controller
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
-                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_SECRETARIA, Globales::US_COORDINACION])){
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR, Globales::US_SECRETARIA, Globales::US_COORDINACION])){
                                         return true;
                                     
                                     }else{
@@ -342,6 +360,8 @@ class HorarioexamenController extends Controller
 
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
+        if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR)
+            $this->layout = 'mainpersonal';
         $searchModel = new HorarioexamenSearch();
         $paramdivision = Division::findOne($division);
         $h= [];
@@ -713,11 +733,29 @@ class HorarioexamenController extends Controller
                         ->where(['preceptoria' => $pre->id])
                         ->orderBy('id')
                         ->all();
+        }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+            $this->layout = 'mainpersonal';
+            $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $nom = Nombramiento::find()
+                        ->where(['docente' => $doc->id])
+                        ->andWhere(['<=', 'division', 53])
+                        //->andWhere(['is not', 'division', 53])
+                        ->all();
+            $array = [];
+            foreach ($nom as $n) {
+                $array [] = $n->division;
+            }
+            $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+            $divisiones = Division::find()
+                        ->where(['in', 'id', $array])
+                        ->orderBy('id')
+                        ->all();
+                    
         }else{
             $divisiones = Division::find()
-                                    ->where(['in', 'preceptoria', [1,2,3,4,5,6]])
-                                    ->orderBy('id')
-                                    ->all();
+                                ->where(['in', 'preceptoria', [1,2,3,4,5,6]])
+                                ->orderBy('id')
+                                ->all();
         }
 
         if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_REGENCIA])){
@@ -1120,7 +1158,7 @@ class HorarioexamenController extends Controller
         ]);
     }
 
-    public function actionHorariostrimestrales($docente, $col = 0){
+    public function actionHorariostrimestrales($col = 0){
         //$this->layout = 'print';
         
         if ($col == 0){
@@ -1138,21 +1176,28 @@ class HorarioexamenController extends Controller
             $tipo = 3;
         }
 
+        $docente = Docente::find()->joinWith('detallecatedras')
+        ->where(['mail' => Yii::$app->user->identity->username])
+        ->andWhere(['=', 'detallecatedra.revista', 6])
+        ->one();
+
         if($anioxtrim == null || $anioxtrim->publicado !=1){
             Yii::$app->session->setFlash('danger', "No se encuentra activo el horario");
-            return $this->redirect(['/horario/menuopcionespublic', 'h' => Yii::$app->security->generateRandomString(254), 'docente' =>$docente]);
+            return $this->redirect(['/horario/menuopcionespublic']);
         }
        
         
         
-            
+            /*
             $docente = Docente::find()
                 ->joinWith('detallecatedras')
                 ->where(['=', 'detallecatedra.revista', 6])
                 ->andWhere(['=', 'docente.legajo', $docente])
-                ->one();
-
-            
+                ->one();*/
+        
+        if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+            return $this->redirect(['menuxdivision']);
+        }
             
             return $this->generarFicha2($docente->id, $col);
             
@@ -1163,7 +1208,7 @@ class HorarioexamenController extends Controller
         //$division = 1;
         //$dia = 3;
         
-        $this->layout = 'mainpublic';
+        $this->layout = 'mainpersonal';
         $searchModel = new HorarioexamenSearch();
         $docenteparam = Docente::findOne($docente);
 
@@ -1387,6 +1432,7 @@ class HorarioexamenController extends Controller
             'allModels' => $arrayTt,
             
         ]);
+        
 
         return $this->render('completoxdocentepublic', [
             

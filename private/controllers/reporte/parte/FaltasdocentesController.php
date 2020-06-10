@@ -17,6 +17,7 @@ use app\config\Globales;
 use app\modules\curriculares\models\Aniolectivo;
 use kartik\mpdf\Pdf;
 
+
 class FaltasdocentesController extends \yii\web\Controller
 {
 
@@ -36,7 +37,7 @@ class FaltasdocentesController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_REGENCIA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -83,7 +84,7 @@ class FaltasdocentesController extends \yii\web\Controller
         $searchModel = new DetalleparteSearch();
         $dataProvider = $searchModel->providerfaltasdocentesview($mes, $anio, $id);
  
-        return $this->renderAjax('view', [
+        return $this->renderPartial('view', [
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

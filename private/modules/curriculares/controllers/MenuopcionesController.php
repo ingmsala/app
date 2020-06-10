@@ -65,7 +65,7 @@ class MenuopcionesController extends Controller
         
 
         $aniolectivo = Aniolectivo::find()->where(['activo' => 1])->one();
-
+        
         if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI, Globales::US_CONSULTA, Globales::US_SECRETARIA])){
             $comisionesoptativas = Docentexcomision::find()
             ->distinct()
@@ -89,7 +89,7 @@ class MenuopcionesController extends Controller
         }else{
             $comisionesoptativas = Docentexcomision::find()
             ->joinWith(['docente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
-            ->where(['docente.legajo' => Yii::$app->user->identity->username])
+            ->where(['docente.mail' => Yii::$app->user->identity->username])
             ->andWhere(['espaciocurricular.aniolectivo' => $aniolectivo->id])
             ->andWhere(['espaciocurricular.tipoespacio' => 1])
             ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
@@ -97,7 +97,7 @@ class MenuopcionesController extends Controller
 
             $comisionessociocom = Docentexcomision::find()
             ->joinWith(['docente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
-            ->where(['docente.legajo' => Yii::$app->user->identity->username])
+            ->where(['docente.mail' => Yii::$app->user->identity->username])
             ->andWhere(['espaciocurricular.aniolectivo' => $aniolectivo->id])
             ->andWhere(['espaciocurricular.tipoespacio' => 2])
             ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
@@ -106,7 +106,7 @@ class MenuopcionesController extends Controller
 
            
         if($comisionessociocom>0 && $comisionesoptativas>0){
-            $this->layout = 'mainpublic';
+            $this->layout = 'mainpersonal';
             return $this->render('index', [
                 'comisionesoptativas' => $comisionesoptativas,
                 'comisionessociocom' => $comisionessociocom,
@@ -116,9 +116,9 @@ class MenuopcionesController extends Controller
         }elseif($comisionesoptativas>0){
             return $this->redirect(['/optativas']);
         }else{
-            Yii::$app->user->logout();
+            
             Yii::$app->session->setFlash('danger', "No tiene ningun espacio curricular activo");
-            return $this->goHome();
+            return $this->redirect(['/personal/menuprincipal']);
         }
 
 

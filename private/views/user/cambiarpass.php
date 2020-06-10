@@ -29,7 +29,13 @@ $this->params['breadcrumbs'][] = $this->title;
          } ?>
            
          
-    
+    <?php
+        if($mensaje != ''){
+            echo '<div class="alert alert-info">';
+                echo $mensaje;
+            echo '</div>';
+        }
+    ?>
 
 
     <?php $form = ActiveForm::begin(); ?>

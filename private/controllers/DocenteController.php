@@ -11,7 +11,8 @@ use yii\filters\VerbFilter;
 use app\models\Genero;
 use yii\filters\AccessControl;
 use app\config\Globales;
-
+use app\models\Tipodocumento;
+use app\models\User;
 use kartik\grid\EditableColumnAction;
 use yii\helpers\ArrayHelper;
 
@@ -135,18 +136,29 @@ class DocenteController extends Controller
         $model = new Docente();
         $model->scenario = Docente::SCENARIO_ABM;
         $generos = Genero::find()->all();
+        $tipodocumento = Tipodocumento::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
 
             $model->apellido = strtoupper($model->apellido);
             $model->nombre = strtoupper($model->nombre);
-            if($model->save())
+            if($model->save()){
+                $user = new User();
+                $user->username = $model->mail;
+                $user->role = Globales::US_DOCENTE;
+                $user->activate = 0;
+                $user->setPassword($model->documento);
+                $user->generateAuthKey();
+                $user->save();
                 return $this->redirect(['view', 'id' => $model->id]);
+            }
+                
         }
 
         return $this->render('create', [
             'model' => $model,
             'generos' => $generos,
+            'tipodocumento' => $tipodocumento,
         ]);
     }
 
@@ -162,6 +174,7 @@ class DocenteController extends Controller
         $model = $this->findModel($id);
         $model->scenario = Docente::SCENARIO_ABM;
         $generos = Genero::find()->all();
+        $tipodocumento = Tipodocumento::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -174,6 +187,7 @@ class DocenteController extends Controller
         return $this->render('update', [
             'model' => $model,
             'generos' => $generos,
+            'tipodocumento' => $tipodocumento,
         ]);
     }
     public function actionUpdatedate($id, $fecha)

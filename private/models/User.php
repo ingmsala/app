@@ -28,6 +28,7 @@ class User extends \yii\db\ActiveRecord  implements IdentityInterface {
  */
 
     const SCENARIO_CHANGEPASS = 'cambiarpass';
+    const SCENARIO_RESETPASS = 'resetpass';
     public $old_password;
     public $new_password;
     public $repeat_password;
@@ -36,6 +37,7 @@ class User extends \yii\db\ActiveRecord  implements IdentityInterface {
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_CHANGEPASS] = ['username', 'old_password', 'new_password', 'repeat_password'];
+        $scenarios[self::SCENARIO_RESETPASS] = ['username', 'new_password', 'repeat_password'];
         return $scenarios;
     }
 
@@ -54,7 +56,9 @@ public function rules() {
         [['password'], 'string', 'max' => 60],
         [['authKey'], 'string', 'max' => 32],
         [['old_password', 'new_password', 'repeat_password'], 'required', 'on'=>self::SCENARIO_CHANGEPASS],
+        [['username', 'new_password', 'repeat_password'], 'required', 'on'=>self::SCENARIO_RESETPASS],
         ['repeat_password', 'compare', 'compareAttribute'=>'new_password', 'message' => 'Las contraseñas no coinciden', 'on'=>self::SCENARIO_CHANGEPASS],
+        ['repeat_password', 'compare', 'compareAttribute'=>'new_password', 'message' => 'Las contraseñas no coinciden', 'on'=>self::SCENARIO_RESETPASS],
         ['old_password', 'findPasswords', 'on' => self::SCENARIO_CHANGEPASS],
     ];
 }
@@ -116,7 +120,7 @@ public static function findIdentityByAccessToken($token, $type = null) {
  * @return static|null
  */
 public static function findByUsername($username) {
-    return static::findOne(['username' => $username, 'activate' => 1]);
+    return static::find()->where(['username' => $username])->andWhere(['<', 'activate', 2])->one();
 }
 
 /**
@@ -208,12 +212,12 @@ public function removePasswordResetToken() {
 
      public function getDocente0()
     {
-        return $this->hasOne(Docente::className(), ['legajo' => 'username']);
+        return $this->hasOne(Docente::className(), ['mail' => 'username']);
     }
 
      public function getNodocente0()
     {
-        return $this->hasOne(Nodocente::className(), ['legajo' => 'username']);
+        return $this->hasOne(Nodocente::className(), ['mail' => 'username']);
     }
 
 
