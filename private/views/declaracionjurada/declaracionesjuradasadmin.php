@@ -41,18 +41,20 @@ $this->title = 'Declaraciones Juradas';
         });
     $listanio=ArrayHelper::map($ciclolectivo,'id','nombre');
     $listdoc=ArrayHelper::map($models2,'documento','nombre');
+    
 
     //var_dump($listdoc);
     $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_VERTICAL, 'method' => 'GET']);
     
     echo $form->field($model, 'persona')->widget(Select2::classname(), [
         'data' => $listpersona,
-        'options' => ['placeholder' => 'Seleccionar...'],
+        'options' => ['placeholder' => 'Todos'],
         'pluginOptions' => [
             'allowClear' => true
         ],
     ])->label("Agente");
 
+    
     echo $form->field($model, 'fecha')->widget(Select2::classname(), [
         'data' => $listanio,
         'options' => ['placeholder' => 'Seleccionar...'],

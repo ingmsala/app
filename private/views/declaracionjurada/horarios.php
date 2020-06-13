@@ -7,7 +7,7 @@ use yii\bootstrap\Modal;
 use app\config\Globales;
 use kartik\form\ActiveForm;
 
-$this->title = 'Cuadro demostrativo del cumplimiento  de los horarios para los cargos y actividades';
+$this->title = 'Declaración jurada';
 ?>
 
 <h1><?= Html::encode('Declaración jurada') ?></h1>
@@ -38,7 +38,7 @@ $this->title = 'Cuadro demostrativo del cumplimiento  de los horarios para los c
 				'condensed' => true,
 				'panel' => [
 					'type' => GridView::TYPE_DEFAULT,
-					'heading' => Html::encode($this->title),
+					'heading' => Html::encode('Cuadro demostrativo del cumplimiento de los horarios para los cargos y actividades'),
 					'before' => false,
 					'footer' => false,
 					'after' => false,

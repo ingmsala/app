@@ -11,6 +11,11 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Division;
 use app\config\Globales;
+use app\models\CasModule;
+use app\models\User;
+use yii\helpers\Url;
+
+//use silecs\yii2auth\cas\CasModule;
 
 class LoginController extends Controller
 {
@@ -44,6 +49,10 @@ class LoginController extends Controller
 
     public function actionIndex()
     {
+        
+        //return $this->redirect(['/site/login']);
+        //return $this->redirect(['/cas/auth/login']);
+        
         $this->layout = 'mainlogin';
         if (!Yii::$app->user->isGuest) {
             if (in_array (Yii::$app->user->identity->role, [Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
@@ -84,9 +93,10 @@ class LoginController extends Controller
         ]);
     }
 
-    public function actionAuthtest(){
-        return $this->render('auth', [
-            
-        ]);
+    public function actionCas(){
+                
+        return $this->redirect(['/cas/auth/desloguear']);
     }
+
+    
 }

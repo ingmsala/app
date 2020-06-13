@@ -127,8 +127,8 @@ class UserController extends Controller
                     $user = new User();
                     $user->username = $doc->mail;
                     $user->role = Globales::US_DOCENTE;
-                    $user->activate = 0;
-                    $user->setPassword($doc->documento);
+                    $user->activate = 1;
+                    $user->setPassword($doc->documento.'3223');
                     $user->generateAuthKey();
                     $user->save();
                 }
@@ -142,8 +142,8 @@ class UserController extends Controller
                     $user = new User();
                     $user->username = $nodoc->mail;
                     $user->role = Globales::US_NODOCENTE;
-                    $user->activate = 0;
-                    $user->setPassword($nodoc->documento);
+                    $user->activate = 1;
+                    $user->setPassword($nodoc->documento.'3223');
                     $user->generateAuthKey();
                     $user->save();
                 }

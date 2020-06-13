@@ -43,6 +43,7 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\User',
+            'loginUrl' => ['/login'],
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
@@ -71,6 +72,10 @@ $config = [
                     'levels' => ['error', 'warning'],
                 ],
             ],
+        ],
+        'cas' => [
+            'class' => 'silecs\yii2auth\cas\CasModule',
+            
         ],
         'monolog' => [
             'class' => '\Mero\Monolog\MonologComponent',
@@ -160,6 +165,18 @@ $config = [
 
         'personal' => [
             'class' => 'app\modules\personal\Personal',
+        ],
+
+        'cas' => [
+            'class' => 'silecs\yii2auth\cas\CasModule',
+            'config' => [
+                'host' => 'cas-dev.psi.unc.edu.ar',
+                'port' => '443',
+                'path' => 'cas',
+                // optional parameters
+                'certfile' => '', // empty, or path to a SSL cert, or false to ignore certs
+                'debug' => true, // will add many logs into X/runtime/logs/cas.log
+            ],
         ],
 
          'db-manager' => [

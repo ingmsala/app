@@ -19,7 +19,7 @@ $this->title = 'Declaración Jurada';
 ?>
 
 <h1><?= Html::encode($this->title) ?></h1>
-    <h4 class="text-muted">De los cargos y actividades  que desempeña el causante</h4>
+    <h4 class="text-muted">Debe completar una fila por cada cargo</h4>
 
 <div class="declaracionjurada-form">
     <?php 

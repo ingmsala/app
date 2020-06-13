@@ -9,6 +9,7 @@ use app\models\Declaracionjurada;
 use app\models\DeclaracionjuradaSearch;
 use app\models\Diasemana;
 use app\models\Docente;
+use app\models\Estadodj;
 use app\models\Funciondj;
 use app\models\FunciondjSearch;
 use app\models\Horariodj;
@@ -318,6 +319,10 @@ class DeclaracionjuradaController extends Controller
         } catch (\Throwable $th) {
             
         }
+
+        if($persona->localidad == null){
+            $persona->localidad = 140077;
+        }
         
         $persona->scenario = Docente::SCENARIO_DECLARACIONJURADA;
         $tipodocumento = Tipodocumento::find()->all();
@@ -435,6 +440,7 @@ class DeclaracionjuradaController extends Controller
 
                 $model2 = new Funciondj();
                 $model2->declaracionjurada = $declaracionjurada->id;
+                $model2->reparticion = 'UNC - Colegio Nacional de Monserrat';
                 $model2->save();
             }
             if(Yii::$app->request->post()['btn_submit'] == 'ant')
@@ -449,6 +455,7 @@ class DeclaracionjuradaController extends Controller
         if(count($models)==0){
                 $model2 = new Funciondj();
                 $model2->declaracionjurada = $declaracionjurada->id;
+                $model2->reparticion = 'UNC - Colegio Nacional de Monserrat';
                 $model2->save();
 
                 $searchModel = new FunciondjSearch();
@@ -584,7 +591,7 @@ class DeclaracionjuradaController extends Controller
         $salida = '';
         foreach ($horarios as $horariox) {
             date_default_timezone_set('America/Argentina/Buenos_Aires');
-           $array[$horariox->funciondj][$horariox->diasemana] .= '<br /><div class="label label-info" style="border-style: solid;border-width: 1px;border-radius: 5px;">'.Yii::$app->formatter->asDate($horariox->inicio, 'HH:mm').' a '.Yii::$app->formatter->asDate($horariox->fin, 'HH:mm').' '.
+           $array[$horariox->funciondj][$horariox->diasemana] .= '<br /><div class="label label-info" style="border-style: solid;border-width: 1px;border-radius: 5px; font-size: 14px;">'.Yii::$app->formatter->asDate($horariox->inicio, 'HH:mm').' a '.Yii::$app->formatter->asDate($horariox->fin, 'HH:mm').' '.
             Html::a('<span class="glyphicon glyphicon-remove"></span>', '?r=horariodj/delete&id='.$horariox->id, 
            ['class' => 'deletebuttonhorario',
                'data' => [
@@ -675,7 +682,7 @@ class DeclaracionjuradaController extends Controller
         'mode' => Pdf::MODE_CORE, 
         // A4 paper format
         'format' => Pdf::FORMAT_FOLIO, 
-        'marginTop' => 25,
+        'marginTop' => 30,
         'defaultFontSize' => '8pt',
         // portrait orientation
         'orientation' => Pdf::ORIENT_PORTRAIT, 
@@ -722,6 +729,7 @@ class DeclaracionjuradaController extends Controller
 
                 img{
                     width: 200px;
+                    margin-bottom:5px;
                 }
 
                 .leyenda-center{ 
@@ -729,7 +737,7 @@ class DeclaracionjuradaController extends Controller
                 }
 
                 h1{
-                    margin-top: -50px;
+                    margin-top: 0px;
                     font-size:x-large;
                 }
 
@@ -740,7 +748,7 @@ class DeclaracionjuradaController extends Controller
          // call mPDF methods on the fly
         'methods' => [ 
             //'defaultheaderline' => 0,
-            'SetHeader'=>['<span><img src="assets/images/logo-encabezado.png" /></span>'], 
+            'SetHeader'=>['<span><img src="assets/images/unc1_a.jpg" />||</span><span><img src="assets/images/logo-encabezado.png" /></span>'], 
             'SetFooter'=>[date('d/m/Y')." - ".$filenamesext.'|Página {PAGENO}|'],
         ]
     ]);
@@ -749,17 +757,17 @@ class DeclaracionjuradaController extends Controller
     else{
         
         $path = $pdf->Output($content,Yii::getAlias('@app').'/runtime/logs/'.$filename.'.pdf',\Mpdf\Output\Destination::FILE);
-
+        //$sendemail=true;
         $sendemail=Yii::$app->mailer->compose()
                         ->attach(Yii::getAlias('@app').'/runtime/logs/'.$filename.'.pdf')
                         ->setFrom([Globales::MAIL => 'Sistemas Monserrat'])
-                        ->setTo('ingmsala@gmail.com')
+                        ->setTo($persona->mail)
                         ->setSubject('Declaración jurada')
                         ->setHtmlBody('Se ha cargado correctamente su declaración jurada. Guarde este mail como constancia.')
                         ->send();
         if($sendemail)
         {
-            unlink(Yii::getAlias('@app').'/runtime/logs/'.$filename.'.pdf');
+            //unlink(Yii::getAlias('@app').'/runtime/logs/'.$filename.'.pdf');
             Yii::$app->session->setFlash('success', "Se ha completado y enviado correctamente la Declaración Jurada. Se deja constancia de su presentación   en su casilla de correo.");
             return $this->redirect(['index']);
         }
@@ -813,6 +821,8 @@ class DeclaracionjuradaController extends Controller
         $funciones = Funciondj::find()
         ->where(['declaracionjurada' => $declaracionjurada->id])
         ->all();
+
+        
         
         $actividadnooficial = Actividadnooficial::find()->where(['declaracionjurada' => $declaracionjurada->id])->one();
         $pasividaddj = Pasividaddj::find()->where(['declaracionjurada' => $declaracionjurada->id])->one();
@@ -846,7 +856,7 @@ class DeclaracionjuradaController extends Controller
             $array[$i][4] = '-';
         }
 
-    
+        
         $provider = new ArrayDataProvider([
             'allModels' => $array,
             
@@ -863,18 +873,19 @@ class DeclaracionjuradaController extends Controller
         //return var_dump($horarios);
 
         $dias = Diasemana::find()->all();
+        
 
         $cd2 = 0;
         //return var_dump($dias);
         $array = [];
         $salida = '';
         foreach ($dias as $dia) {
-            $ch = 0;
+            $ch2 = 0;
             foreach ($funciones as $funcion) {
                 # code...
                 
                 if($cd2 == 0){
-                    $array[$funcion->id][-1] = $ch+4;
+                    $array[$funcion->id][-1] = $ch2+4;
                     $array[$funcion->id][0] = $funcion->cargo.'<br /><em>'.$funcion->reparticion.'</em>'; 
                 }
                     
@@ -885,7 +896,7 @@ class DeclaracionjuradaController extends Controller
                 else
                     $array[$funcion->id][$dia->id] = "-";
                 
-                $ch = $ch + 1;
+                $ch2 = $ch2 + 1;
             }
             $cd2 = $cd + 1;
         }
@@ -904,18 +915,23 @@ class DeclaracionjuradaController extends Controller
             }
            
         }
+        
+        //$ch2 = count($funciones);
 
-        for ($i=$ch; $i < 5 ; $i++) { 
-            $array[$i][-1] = $i+4; 
-            $array[$i][0] = '-';
-            $array[$i][1] = '-';
-            $array[$i][2] = '-';
-            $array[$i][3] = '-';
-            $array[$i][4] = '-';
-            $array[$i][5] = '-';
-            $array[$i][6] = '-';
-            $array[$i][7] = '-';
+
+        for ($i=$ch2; $i < 5 ; $i++) { 
+            $array[-$i*500][-1] = $i+4; 
+            $array[-$i*500][0] = '-';
+            $array[-$i*500][1] = '-';
+            $array[-$i*500][2] = '-';
+            $array[-$i*500][3] = '-';
+            $array[-$i*500][4] = '-';
+            $array[-$i*500][5] = '-';
+            $array[-$i*500][6] = '-';
+            $array[-$i*500][7] = '-';
         }
+
+        //return var_dump($array);
         
         $provider2 = new ArrayDataProvider([
             'allModels' => $array,
@@ -971,9 +987,10 @@ class DeclaracionjuradaController extends Controller
         
         $anio = isset(Yii::$app->request->get()['Declaracionjurada']['fecha']) ? Yii::$app->request->get()['Declaracionjurada']['fecha'] : null;
         $pers = isset(Yii::$app->request->get()['Declaracionjurada']['persona']) ? Yii::$app->request->get()['Declaracionjurada']['persona'] : null;
-       
+        
         $ciclolectivo = Aniolectivo::find()->all();
         $persona = Docente::find()->all();
+        
 
         if (Yii::$app->request->post()) {
             $params = Yii::$app->request->post();
@@ -993,22 +1010,30 @@ class DeclaracionjuradaController extends Controller
             $models = $dataProvider->getModels();
             $array = [];
             foreach ( $models as $key => $value) {
-
-                $array[$key]['documento'] = $value['documento'];
-                $array[$key]['apellido'] = $value['apellido'];
-                $array[$key]['nombre'] = $value['nombre'];
-                $array[$key]['mail'] = $value['mail'];
+               
+                    $array[$key]['documento'] = $value['documento'];
+                    $array[$key]['apellido'] = $value['apellido'];
+                    $array[$key]['nombre'] = $value['nombre'];
+                    $array[$key]['mail'] = $value['mail'];
+                
+                
                 if($anio == null){
-                    $djs = Declaracionjurada::find()->where(['persona' => $value['documento']])->all();
+                    
+                        $djs = Declaracionjurada::find()->where(['persona' => $value['documento']])->all();
                 }else{
                     $cl = Aniolectivo::findOne($anio);
-                    $djs = Declaracionjurada::find()
-                                ->where(['persona' => $value['documento']])
-                                ->andWhere(['=', 'year(fecha)', $cl->nombre])
-                                ->all(); 
+                   
+                    
+                        $djs = Declaracionjurada::find()
+                                    ->where(['persona' => $value['documento']])
+                                    ->andWhere(['=', 'year(fecha)', $cl->nombre])
+                                    ->all();
+                    
+                                    
                 }
                 
                 if($djs != null){
+                    
                     $max = 0;
                     foreach ($djs as $key2 => $dj) {
                         if($max<$dj->id){
@@ -1018,7 +1043,9 @@ class DeclaracionjuradaController extends Controller
                     }
                     foreach ($djs as $key3 => $dj3) {
                         if($max==$dj3->id){
+                            
                             $array[$key]['dj'][$key2] = $dj3->id;
+                            
                             //$max = $dj->id;
                         }
                     }
@@ -1044,6 +1071,8 @@ class DeclaracionjuradaController extends Controller
             $model->persona = $param['Declaracionjurada']['persona'];
         if(isset($param['Declaracionjurada']['fecha']))
             $model->fecha = $param['Declaracionjurada']['fecha'];
+        if(isset($param['Declaracionjurada']['estadodeclaracion']))
+            $model->estadodeclaracion = $param['Declaracionjurada']['estadodeclaracion'];
         //return var_dump($array);
         return $this->render('declaracionesjuradasadmin', [
             //'searchModel' => $searchModel,
@@ -1051,6 +1080,7 @@ class DeclaracionjuradaController extends Controller
             'models2' => $models2,
             'provider' => $dataProvider,
             'ciclolectivo' => $ciclolectivo,
+            
             //'persona' => $array,
         ]);
     }

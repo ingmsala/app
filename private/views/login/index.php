@@ -4,6 +4,7 @@
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\LoginForm */
 
+use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
@@ -15,14 +16,16 @@ $this->title = 'Ingresar';
     
 <div class="container">
 
+    <?= Alert::widget() ?>
+
     <div class="row" style="margin-top: 1%;">
   
-         <div class="pull-right"><?= Html::a('Ingreso administrativo', Url::to('index'))?></div>           
+         <div class="pull-right"><?= Html::a('Ingreso administrativo', Url::to('index.php?r=site/login'))?></div>           
                        
 
     </div>
    <div class="row">
-    <div class="form_bg">
+    <div class="form_bg2">
     <center><img src="assets/images/logo-encabezado.png" width="80%" /></center>
         <br />
         <?php $form = ActiveForm::begin([
@@ -35,7 +38,7 @@ $this->title = 'Ingresar';
         ]); ?>
             <center>
             <?php
-                echo Html::a('Iniciar sesión con cuenta UNC', Url::to('#'), $options = ['class' => 'btn btn-primary'])
+                echo Html::a('Iniciar sesión con cuenta UNC', Url::to('index.php?r=login/cas'), $options = ['class' => 'btn btn-primary'])
             ?>
             </center>
             

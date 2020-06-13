@@ -89,7 +89,7 @@ AppAsset::register($this);
                                 
                                 [
                                     'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                    'url' => ['/site/logout'],
+                                    'url' => ['/cas/auth/logout'],
                                     'linkOptions' => ['data-method' => 'post'],
                                 
                         
@@ -143,7 +143,7 @@ AppAsset::register($this);
                                 
                                 [
                                     'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                    'url' => ['/site/logout'],
+                                    'url' => ['/cas/auth/logout'],
                                     'linkOptions' => ['data-method' => 'post'],
                                 
                         
@@ -204,7 +204,7 @@ AppAsset::register($this);
                                 
                                 [
                                     'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                    'url' => ['/site/logout'],
+                                    'url' => ['/cas/auth/logout'],
                                     'linkOptions' => ['data-method' => 'post'],
                                 
                         
@@ -268,7 +268,7 @@ AppAsset::register($this);
                                 
                                 [
                                     'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                    'url' => ['/site/logout'],
+                                    'url' => ['/cas/auth/logout'],
                                     'linkOptions' => ['data-method' => 'post'],
                                 
                         
@@ -323,7 +323,7 @@ AppAsset::register($this);
                                 
                                 [
                                     'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                    'url' => ['/site/logout'],
+                                    'url' => ['/cas/auth/logout'],
                                     'linkOptions' => ['data-method' => 'post'],
                                 
                         
@@ -370,7 +370,7 @@ AppAsset::register($this);
                                 
                                 [
                                     'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                    'url' => ['/site/logout'],
+                                    'url' => ['/cas/auth/logout'],
                                     'linkOptions' => ['data-method' => 'post'],
                                 
                         

@@ -55,13 +55,10 @@ if(!Yii::$app->user->isGuest){
             
                 'items' => [
                                             
-                    [
-                        'label' => 'Cambiar contraseña',
-                        'url' => ['/user/cambiarpass','i'=>3],
-                    ],
+                    
                     [
                         'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                        'url' => ['/site/logout'],
+                        'url' => ['/cas/auth/logout'],
                         'linkOptions' => ['data-method' => 'post'],
                     
             
@@ -97,13 +94,10 @@ if(!Yii::$app->user->isGuest){
             
                 'items' => [
                                             
-                    [
-                        'label' => 'Cambiar contraseña',
-                        'url' => ['/user/cambiarpass','i'=>3],
-                    ],
+                    
                     [
                         'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                        'url' => ['/site/logout'],
+                        'url' => ['/cas/auth/logout'],
                         'linkOptions' => ['data-method' => 'post'],
                     
             
@@ -140,13 +134,10 @@ if(!Yii::$app->user->isGuest){
             
                 'items' => [
                                             
-                    [
-                        'label' => 'Cambiar contraseña',
-                        'url' => ['/user/cambiarpass','i'=>3],
-                    ],
+                    
                     [
                         'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                        'url' => ['/site/logout'],
+                        'url' => ['/cas/auth/logout'],
                         'linkOptions' => ['data-method' => 'post'],
                     
             
@@ -172,13 +163,10 @@ if(!Yii::$app->user->isGuest){
             
                 'items' => [
                                             
-                    [
-                        'label' => 'Cambiar contraseña',
-                        'url' => ['/user/cambiarpass','i'=>3],
-                    ],
+                    
                     [
                         'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                        'url' => ['/site/logout'],
+                        'url' => ['/cas/auth/logout'],
                         'linkOptions' => ['data-method' => 'post'],
                     
             
@@ -209,13 +197,10 @@ if(!Yii::$app->user->isGuest){
             
                 'items' => [
                                             
-                    [
-                        'label' => 'Cambiar contraseña',
-                        'url' => ['/user/cambiarpass','i'=>3],
-                    ],
+                    
                     [
                         'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                        'url' => ['/site/logout'],
+                        'url' => ['/cas/auth/logout'],
                         'linkOptions' => ['data-method' => 'post'],
                     
             

@@ -55,10 +55,15 @@ use yii\widgets\DetailView;
             [
                 'label' => 'Horario',
                 'value' => function($model){
-                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+                    try {
+                        date_default_timezone_set('America/Argentina/Buenos_Aires');
                     
-                    $hj =Horariodj::find()->where(['actividadnooficial' => $model->id])->one();
-                    return Yii::$app->formatter->asDate($hj->inicio, 'HH:mm').' a '.Yii::$app->formatter->asDate($hj->fin, 'HH:mm');
+                        $hj =Horariodj::find()->where(['actividadnooficial' => $model->id])->one();
+                        return Yii::$app->formatter->asDate($hj->inicio, 'HH:mm').' a '.Yii::$app->formatter->asDate($hj->fin, 'HH:mm');
+                    } catch (\Throwable $th) {
+                        return '';
+                    }
+                    
                 },
 
             ]

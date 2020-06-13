@@ -2,10 +2,14 @@
 
 namespace app\controllers;
 
+use app\config\Globales;
 use app\models\Declaracionjurada;
+use app\models\Docente;
 use Yii;
 use app\models\Mensajedj;
 use app\models\MensajedjSearch;
+use app\models\Nodocente;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -21,10 +25,42 @@ class MensajedjController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'create', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['index', 'create'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_NODOCENTE, Globales::US_PRECEPTOR, Globales::US_MANTENIMIENTO, Globales::US_REGENCIA, Globales::US_SECRETARIA]);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
+                    ],
+
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'cambiarestado' => ['POST'],
                 ],
             ],
         ];
@@ -74,6 +110,19 @@ class MensajedjController extends Controller
             $decl = Declaracionjurada::findOne($dj);
             $decl->estadodeclaracion = 4;
             $decl->save();
+
+            $persona = Docente::find()->where(['documento' => $decl->persona])->one();
+            if($persona == null){
+                $persona = Nodocente::find()->where(['documento' => $decl->persona])->one();
+            }
+
+            $sendemail=Yii::$app->mailer->compose()
+                        ->setFrom([Globales::MAIL => 'Sistemas Monserrat'])
+                        ->setTo($persona->mail)
+                        ->setSubject('Declaración jurada rechazada')
+                        ->setHtmlBody('Se ha rechazado la carga de su declaración jurada. Ingrese nuevamente y modifique los cambios solicitados: <br />'.
+                            $model->detalle)
+                        ->send();
 
             return $this->redirect(Yii::$app->request->referrer);
         }

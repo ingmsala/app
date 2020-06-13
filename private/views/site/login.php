@@ -43,11 +43,7 @@ $this->title = 'Ingresar';
                     <?= Html::submitButton('Aceptar', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-lg-offset-0 col-lg-12">
-                    <?= Html::a('Olvidé mi contraseña', $url = 'http://localhost/sistemaHoras/app/web/front/index.php?r=user/sendreset') ?>
-                </div>
-            </div>
+            
 
         <?php ActiveForm::end(); ?>
     </div>

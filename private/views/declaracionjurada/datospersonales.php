@@ -146,7 +146,7 @@ $this->title = 'Declaración Jurada';
                     
                     'attributes'=>[       // 2 column layout
                         'telefono'=>['type'=>Form::INPUT_TEXT],
-                        'mail'=>['type'=>Form::INPUT_TEXT],   
+                        'mail'=>['type'=>Form::INPUT_TEXT, 'options'=>['readOnly' =>true]],   
                     ]
                 ],
                 

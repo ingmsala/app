@@ -52,7 +52,7 @@ $this->title = 'Declaración Jurada';
                         $("#modalnooficial").modal("show")
                             .find("#modalContent")
                             .load("'.Url::to("index.php?r=actividadnooficial/create&dj=".$model->id).'");
-                            document.getElementById("modalHeader").innerHTML ="Percepción de pasividades (Jubilaciones, Pensiones, Retiros, etc.)";
+                            document.getElementById("modalHeader").innerHTML ="En tareas o actividades no oficiales";
 
                     }else{
                         $("#divnooficial").hide();

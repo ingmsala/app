@@ -383,7 +383,7 @@ try {
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                                'url' => ['/site/logout'],
+                                                'url' => ['/cas/auth/logout'],
                                                 'linkOptions' => ['data-method' => 'post'],
                                             
                                     
@@ -483,6 +483,8 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Espacios Optativos', 'url' => ['/optativas']],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'Declaraciones Juradas', 'url' => ['/declaracionjurada/declaracionesjuradasadmin']],
+                                '<div class="dropdown-divider"></div>',
                                                                 
                             ],
 
@@ -514,7 +516,7 @@ try {
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                                'url' => ['/site/logout'],
+                                                'url' => ['/cas/auth/logout'],
                                                 'linkOptions' => ['data-method' => 'post'],
                                             
                                     
@@ -642,7 +644,7 @@ try {
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                                'url' => ['/site/logout'],
+                                                'url' => ['/cas/auth/logout'],
                                                 'linkOptions' => ['data-method' => 'post'],
                                             
                                     
@@ -693,7 +695,7 @@ try {
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                                'url' => ['/site/logout'],
+                                                'url' => ['/cas/auth/logout'],
                                                 'linkOptions' => ['data-method' => 'post'],
                                             
                                     
@@ -766,7 +768,7 @@ try {
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                                'url' => ['/site/logout'],
+                                                'url' => ['/cas/auth/logout'],
                                                 'linkOptions' => ['data-method' => 'post'],
                                             
                                     
@@ -920,7 +922,7 @@ try {
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                                'url' => ['/site/logout'],
+                                                'url' => ['/cas/auth/logout'],
                                                 'linkOptions' => ['data-method' => 'post'],
                                             
                                     
@@ -965,7 +967,7 @@ try {
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                                'url' => ['/site/logout'],
+                                                'url' => ['/cas/auth/logout'],
                                                 'linkOptions' => ['data-method' => 'post'],
                                             
                                     
@@ -1001,7 +1003,7 @@ try {
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                                'url' => ['/site/logout'],
+                                                'url' => ['/cas/auth/logout'],
                                                 'linkOptions' => ['data-method' => 'post'],
                                             
                                     
@@ -1036,7 +1038,7 @@ try {
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                                'url' => ['/site/logout'],
+                                                'url' => ['/cas/auth/logout'],
                                                 'linkOptions' => ['data-method' => 'post'],
                                             
                                     
@@ -1087,7 +1089,7 @@ try {
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                                'url' => ['/site/logout'],
+                                                'url' => ['/cas/auth/logout'],
                                                 'linkOptions' => ['data-method' => 'post'],
                                             
                                     
@@ -1134,7 +1136,7 @@ try {
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
-                                                'url' => ['/site/logout'],
+                                                'url' => ['/cas/auth/logout'],
                                                 'linkOptions' => ['data-method' => 'post'],
                                             
                                     

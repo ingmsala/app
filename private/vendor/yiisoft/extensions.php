@@ -319,4 +319,13 @@ return array (
       '@kartik/typeahead' => $vendorDir . '/kartik-v/yii2-widget-typeahead/src',
     ),
   ),
+  'silecs/yii2-auth-cas' => 
+  array (
+    'name' => 'silecs/yii2-auth-cas',
+    'version' => '1.03.0.0',
+    'alias' => 
+    array (
+      '@silecs/yii2auth/cas' => $vendorDir . '/silecs/yii2-auth-cas/src',
+    ),
+  ),
 );

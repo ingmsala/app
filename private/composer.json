@@ -40,7 +40,8 @@
         "kartik-v/yii2-detail-view": "dev-master",
         "alexandernst/yii2-device-detect": "0.0.12",
         "kartik-v/yii2-builder": "dev-master",
-        "kartik-v/yii2-widget-typeahead": "dev-master"
+        "kartik-v/yii2-widget-typeahead": "dev-master",
+        "silecs/yii2-auth-cas": "^1.03"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

@@ -117,7 +117,7 @@ class MenuopcionesController extends Controller
             return $this->redirect(['/optativas']);
         }else{
             
-            Yii::$app->session->setFlash('danger', "No tiene ningun espacio curricular activo");
+            Yii::$app->session->setFlash('danger', "No está asignado a ningún espacio optativo o proyecto sociocomunitario vigente");
             return $this->redirect(['/personal/menuprincipal']);
         }
 
