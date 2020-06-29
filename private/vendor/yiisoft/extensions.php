@@ -328,4 +328,13 @@ return array (
       '@silecs/yii2auth/cas' => $vendorDir . '/silecs/yii2-auth-cas/src',
     ),
   ),
+  'kartik-v/yii2-widget-rangeinput' => 
+  array (
+    'name' => 'kartik-v/yii2-widget-rangeinput',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@kartik/range' => $vendorDir . '/kartik-v/yii2-widget-rangeinput/src',
+    ),
+  ),
 );

@@ -167,10 +167,14 @@ $config = [
             'class' => 'app\modules\personal\Personal',
         ],
 
+        'horarioespecial' => [
+            'class' => 'app\modules\horarioespecial\Horarioespecial',
+        ],
+
         'cas' => [
             'class' => 'silecs\yii2auth\cas\CasModule',
             'config' => [
-                'host' => 'cas-dev.psi.unc.edu.ar',
+                'host' => 'usuarios.unc.edu.ar',
                 'port' => '443',
                 'path' => 'cas',
                 // optional parameters

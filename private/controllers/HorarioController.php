@@ -229,8 +229,8 @@ class HorarioController extends Controller
                 ->where(['=', 'detallecatedra.revista', 6])
                 ->andWhere(['=', 'docente.legajo', $model->legajo])
                 ->one();
-
-            return $this->redirect(['/horario/menuopcionespublic', 'h' => Yii::$app->security->generateRandomString(254), 'docente' => $docente->legajo]);
+            Yii::$app->session->setFlash('danger', "Próximamente se habilitará la consuta de los horarios por medio del usuario UNC");
+            //return $this->redirect(['/horario/menuopcionespublic', 'h' => Yii::$app->security->generateRandomString(254), 'docente' => $docente->legajo]);
             }
             
         }

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\modules\horarioespecial\models\Habilitacionce;
 use Yii;
 
 /**
@@ -108,4 +109,9 @@ class Division extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Nombramiento::className(), ['division' => 'id']);
     }
+
+    public function getHabilitacionces() 
+   { 
+       return $this->hasMany(Habilitacionce::className(), ['division' => 'id']); 
+   } 
 }

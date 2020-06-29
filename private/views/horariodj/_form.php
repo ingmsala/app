@@ -16,13 +16,36 @@ use yii\widgets\ActiveForm;
     
     
 
-    <?= $form->field($model, 'inicio')->widget(\yii\widgets\MaskedInput::className(), [
-        'mask' => '99:99',
-    ]) ?>
+    
 
-    <?= $form->field($model, 'fin')->widget(\yii\widgets\MaskedInput::className(), [
+    <?= $form->field($model, 'inicio')->widget(TimePicker::classname(), [
+
+    'pluginOptions' => [
+            
+            'showMeridian' => false,
+            'minuteStep' => 1,
+            'defaultTime' => false,
+
+        ]
+
+    ]); ?>
+    <?= $form->field($model, 'fin')->widget(TimePicker::classname(), [
+
+    'pluginOptions' => [
+            
+            'showMeridian' => false,
+            'minuteStep' => 1,
+            'defaultTime' => false,
+
+        ]
+
+    ]); ?>
+
+<?php /* echo $form->field($model, 'fin')->widget(\yii\widgets\MaskedInput::className(), [
         'mask' => '99:99',
-    ]) ?>
+    ])*/ ?>
+
+   
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
