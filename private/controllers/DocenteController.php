@@ -29,10 +29,10 @@ class DocenteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'editdocumento', 'updatedate'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'editdocumento', 'updatedate', 'actualizarmapuche', 'actualizardomicilio'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update', 'editdocumento'],   
+                        'actions' => ['create', 'update', 'editdocumento', 'actualizarmapuche', 'actualizardomicilio'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
@@ -142,6 +142,7 @@ class DocenteController extends Controller
 
             $model->apellido = strtoupper($model->apellido);
             $model->nombre = strtoupper($model->nombre);
+            $model->mapuche = 2;
             if($model->save()){
                 $user = new User();
                 $user->username = $model->mail;
@@ -271,6 +272,27 @@ class DocenteController extends Controller
             'events' => $events
             
         ]);
+    }
+
+    public function actionActualizardomicilio(){
+
+        
+        $searchModel = new DocenteSearch();
+        $dataProvider = $searchModel->direccionesdesactualizadas(Yii::$app->request->queryParams);
+
+        return $this->render('actualizardomicilio', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+        
+
+    }
+
+    public function actionActualizarmapuche($id){
+        $doc = $this->findModel($id);
+        $doc->mapuche = 1;
+        $doc->save();
+        return $this->redirect(['actualizardomicilio']);
     }
 
     public function actionSendmail($id, $tipomail)

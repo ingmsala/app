@@ -28,7 +28,7 @@ class Nodocente extends \yii\db\ActiveRecord
     public function scenarios()
     {
        $scenarios = parent::scenarios();
-       $scenarios[self::SCENARIO_DECLARACIONJURADA] = ['apellido', 'nombre', 'legajo', 'documento', 'tipodocumento', 'mail', 'telefono', 'fechanac', 'cuil', 'domicilio', 'localidad'];
+       $scenarios[self::SCENARIO_DECLARACIONJURADA] = ['apellido', 'nombre', 'legajo', 'documento', 'tipodocumento', 'mail', 'telefono', 'fechanac', 'cuil', 'domicilio', 'localidad', 'mapuche'];
         
         return $scenarios;
     }
@@ -56,6 +56,7 @@ class Nodocente extends \yii\db\ActiveRecord
             [['area'], 'string', 'max' => 200],
             [['mail'], 'string', 'max' => 150],
             [['fechanac'], 'safe'],
+            [['localidad', 'mapuche'], 'integer'],
             [['cuil'], 'string', 'max' => 13],
             [['cuil'], 'string', 'min' => 13],
             [['domicilio'], 'string', 'max' => 400],

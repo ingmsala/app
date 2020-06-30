@@ -52,7 +52,7 @@ use yii\widgets\DetailView;
                 },
 
             ],
-            'importe',
+            //'importe',
             [
                 'label' => 'Percibe',
                 'value' => function($model){

@@ -9,7 +9,6 @@ use app\models\Declaracionjurada;
 use app\models\DeclaracionjuradaSearch;
 use app\models\Diasemana;
 use app\models\Docente;
-use app\models\Estadodj;
 use app\models\Funciondj;
 use app\models\FunciondjSearch;
 use app\models\Horariodj;
@@ -70,7 +69,7 @@ class DeclaracionjuradaController extends Controller
                     ],
 
                     [
-                        'actions' => ['declaracionesjuradasadmin', 'detalleagente'],   
+                        'actions' => ['declaracionesjuradasadmin', 'detalleagente', 'resumen'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
@@ -323,6 +322,8 @@ class DeclaracionjuradaController extends Controller
         if($persona->localidad == null){
             $persona->localidad = 140077;
         }
+
+        $domicilioanterior = $persona->domicilio;
         
         $persona->scenario = Docente::SCENARIO_DECLARACIONJURADA;
         $tipodocumento = Tipodocumento::find()->all();
@@ -356,13 +357,31 @@ class DeclaracionjuradaController extends Controller
             if($doc && !$nodoc){
                 $persona->load(Yii::$app->request->post()['Docente']);
                 $persona->save();
+                if($persona->domicilio !=$domicilioanterior && $persona->mapuche == 1){
+                    
+                    $persona->mapuche = 2;
+                    $persona->save();
+                }
             }elseif(!$doc && $nodoc){
                 $persona->load(Yii::$app->request->post()['Nodocente']);
                 $persona->save();
+                if($persona->domicilio !=$domicilioanterior && $persona->mapuche == 1){
+                    
+                    $persona->mapuche = 2;
+                    $persona->save();
+                    
+                }
             }
             if($doc && $nodoc){
                 $persona->load(Yii::$app->request->post()['Docente']);
                 $persona->save();
+                if($persona->domicilio !=$domicilioanterior && $persona->mapuche == 1){
+                    
+                    $persona->mapuche = 2;
+                    $persona->save();
+                   
+                    
+                }
                 $nodocente = Nodocente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                 $nodocente->legajo = $persona->legajo;
                 $nodocente->tipodocumento = $persona->tipodocumento;
@@ -375,6 +394,7 @@ class DeclaracionjuradaController extends Controller
                 $nodocente->telefono = $persona->telefono;
                 $nodocente->localidad = $persona->localidad;
                 $nodocente->mail = $persona->mail;
+                $nodocente->mapuche = $persona->mapuche;
                 $nodocente->save();
             }
             
@@ -440,7 +460,9 @@ class DeclaracionjuradaController extends Controller
 
                 $model2 = new Funciondj();
                 $model2->declaracionjurada = $declaracionjurada->id;
-                $model2->reparticion = 'UNC - Colegio Nacional de Monserrat';
+                $model2->dependencia = 'UNC';
+                $model2->reparticion = 'Colegio Nacional de Monserrat';
+                $model2->publico = 1;
                 $model2->save();
             }
             if(Yii::$app->request->post()['btn_submit'] == 'ant')
@@ -455,7 +477,9 @@ class DeclaracionjuradaController extends Controller
         if(count($models)==0){
                 $model2 = new Funciondj();
                 $model2->declaracionjurada = $declaracionjurada->id;
-                $model2->reparticion = 'UNC - Colegio Nacional de Monserrat';
+                $model2->dependencia = 'UNC';
+                $model2->reparticion = 'Colegio Nacional de Monserrat';
+                $model2->publico = 1;
                 $model2->save();
 
                 $searchModel = new FunciondjSearch();
@@ -465,7 +489,7 @@ class DeclaracionjuradaController extends Controller
 
         
             if (Funciondj::loadMultiple($models, Yii::$app->request->post()) && Funciondj::validateMultiple($models)) {
-                
+                //return var_dump($models);
                 $guardook = $this->GuardarModelos($models);
                 
                 if($guardook){
@@ -490,10 +514,16 @@ class DeclaracionjuradaController extends Controller
             
         }
 
+        $publicos = [1 => 'Pública', 2 => 'Privada'];
+        $licencia = [1 => 'No', 2 => 'Sí'];
+
         return $this->render('cargos', [
             //'model' => $model,
             'listadofunciones' => $listadofunciones,
             'dataProvider' => $dataProvider,
+            'publicos' => $publicos,
+            'licencia' => $licencia,
+
                         
         ]);
     }
@@ -505,6 +535,14 @@ class DeclaracionjuradaController extends Controller
             foreach ($models as $index => $model0) {
                 // populate and save records for each model
                 $vacio = 0;
+                if($model0->publico == 2){
+                   
+                    $model0->dependencia = null;
+                }
+                if(($model0->dependencia == null || $model0->dependencia == '') && $model0->publico == 1){
+                    
+                    $vacio++;
+                }
                 if($model0->reparticion == null || $model0->reparticion == ''){
                     
                     $vacio++;
@@ -517,7 +555,9 @@ class DeclaracionjuradaController extends Controller
                    
                     $vacio++;
                 }
-                if($vacio == 3){
+                
+
+                if($vacio == 4){
                     //$model0->delete();
                     $validacion++;
                 }elseif($vacio == 0){
@@ -575,13 +615,22 @@ class DeclaracionjuradaController extends Controller
         //return var_dump($dias);
         $array = [];
         $salida = '';
+        $lic = 0;
         foreach ($dias as $dia) {
             $ch = 0;
             foreach ($funciones as $funcion) {
                 # code...
                 if($cd == 0)
-                    $array[$funcion->id][$cd] = $funcion->cargo.'<br /><em>'.$funcion->reparticion.'</em>'; 
+                if($funcion->licencia == 1)
+                    $array[$funcion->id][0] = $funcion->cargo.'<br /><em>'.$funcion->reparticion.'</em>';
+                else
+                    $array[$funcion->id][0] = $funcion->cargo.'<br /><em>'.$funcion->reparticion.' - Licencia <span style="color:red">*</span></em>'; 
+                if($funcion->licencia == 1){
+                    
                     $array[$funcion->id][$dia->id] = Html::button('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>', ['value' => Url::to('index.php?r=horariodj/create&dj='.$declaracionjurada->id.'&funcion='.$funcion->id.'&diasemana='.$dia->id), 'class' => 'btn btn-success amodalhorariojs']);
+                }else{
+                    $lic = 1;
+                }
                
                 $ch = $ch + 1;
             }
@@ -590,8 +639,10 @@ class DeclaracionjuradaController extends Controller
 
         $salida = '';
         foreach ($horarios as $horariox) {
-            date_default_timezone_set('America/Argentina/Buenos_Aires');
-           $array[$horariox->funciondj][$horariox->diasemana] .= '<br /><div class="label label-info" style="border-style: solid;border-width: 1px;border-radius: 5px; font-size: 14px;">'.Yii::$app->formatter->asDate($horariox->inicio, 'HH:mm').' a '.Yii::$app->formatter->asDate($horariox->fin, 'HH:mm').' '.
+
+            if($horariox->funciondj0->licencia == 1){
+                 date_default_timezone_set('America/Argentina/Buenos_Aires');
+                $array[$horariox->funciondj][$horariox->diasemana] .= '<br /><br /><div class="label label-info" style="border-style: solid;border-width: 1px;border-radius: 5px; font-size: 14px;">'.Yii::$app->formatter->asDate($horariox->inicio, 'HH:mm').' a '.Yii::$app->formatter->asDate($horariox->fin, 'HH:mm').' '.
             Html::a('<span class="glyphicon glyphicon-remove"></span>', '?r=horariodj/delete&id='.$horariox->id, 
            ['class' => 'deletebuttonhorario',
                'data' => [
@@ -599,6 +650,8 @@ class DeclaracionjuradaController extends Controller
            'method' => 'post',
             ]
            ]).'</div>';
+            }
+           
         }
         
         $provider = new ArrayDataProvider([
@@ -610,11 +663,14 @@ class DeclaracionjuradaController extends Controller
             
             if(count($funciones)>0){
                 foreach ($funciones as $funcion) {
-                    $canthorarios = Horariodj::find()->where(['funciondj' => $funcion->id])->count();
-                    if($canthorarios==0){
-                        Yii::$app->session->setFlash('danger', "Para continuar debe completar al menos un horario en todos los cargos");
-                        return $this->redirect(['horarios']);
+                    if($funcion->licencia == 1){
+                        $canthorarios = Horariodj::find()->where(['funciondj' => $funcion->id])->count();
+                        if($canthorarios==0){
+                            Yii::$app->session->setFlash('danger', "Para continuar debe completar al menos un horario en todos los cargos que declaró sin licencia");
+                            return $this->redirect(['horarios']);
+                        }
                     }
+                    
                 }
             }else{
                 Yii::$app->session->setFlash('danger', "Para continuar debe completar al menos un cargo");
@@ -624,7 +680,8 @@ class DeclaracionjuradaController extends Controller
         }
 
         return $this->render('horarios',[
-            'provider' => $provider
+            'provider' => $provider,
+            'lic' => $lic,
         ]);
 
     }
@@ -831,7 +888,7 @@ class DeclaracionjuradaController extends Controller
         //return var_dump($dias);
         $array = [];
         $salida = '';
-        $columnas = [0,1,2,3,4];
+        $columnas = [0,1,2,3,4,5,6,7];
         foreach ($funciones as $funcion) {
             $ch = 0;
             foreach ($columnas as $dia) {
@@ -842,6 +899,18 @@ class DeclaracionjuradaController extends Controller
                     $array[$cd][1] = $funcion->reparticion;
                     $array[$cd][2] = $funcion->cargo;
                     $array[$cd][3] = $funcion->horas;
+                    if($funcion->publico == 1){
+                        $array[$cd][5] = 'Pública';
+                    }else{
+                        $array[$cd][5] = 'Privada';
+                    }
+                    
+                    $array[$cd][6] = $funcion->dependencia;
+                    if($funcion->licencia == 1){
+                        $array[$cd][7] = 'No';
+                    }else{
+                        $array[$cd][7] = 'Sí';
+                    }
                 
                 $ch = $ch + 1;
             }
@@ -886,15 +955,16 @@ class DeclaracionjuradaController extends Controller
                 
                 if($cd2 == 0){
                     $array[$funcion->id][-1] = $ch2+4;
-                    $array[$funcion->id][0] = $funcion->cargo.'<br /><em>'.$funcion->reparticion.'</em>'; 
+                    if($funcion->licencia == 1)
+                        $array[$funcion->id][0] = $funcion->cargo.'<br /><em>'.$funcion->reparticion.'</em>';
+                    else
+                        $array[$funcion->id][0] = $funcion->cargo.'<br /><em>'.$funcion->reparticion.' - Licencia</em>';
                 }
                     
-                if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+                if ($funcion->licencia == 1){
                     $array[$funcion->id][$dia->id] = '-';
-                }
-                
-                else
-                    $array[$funcion->id][$dia->id] = "-";
+                }else
+                    $array[$funcion->id][$dia->id] = "- ";
                 
                 $ch2 = $ch2 + 1;
             }
@@ -909,6 +979,8 @@ class DeclaracionjuradaController extends Controller
             if($array[$horariox->funciondj][$horariox->diasemana] == '-'){
                 $array[$horariox->funciondj][$horariox->diasemana] = '<div class="label label-default">'.Yii::$app->formatter->asDate($horariox->inicio, 'HH:mm').' a '.Yii::$app->formatter->asDate($horariox->fin, 'HH:mm').' '.
                 '</div><br />';
+            }elseif($array[$horariox->funciondj][$horariox->diasemana] == '- '){
+                $array[$horariox->funciondj][$horariox->diasemana] = '-';
             }else{
                 $array[$horariox->funciondj][$horariox->diasemana] .= '<div class="label label-default">'.Yii::$app->formatter->asDate($horariox->inicio, 'HH:mm').' a '.Yii::$app->formatter->asDate($horariox->fin, 'HH:mm').' '.
             '</div><br />';

@@ -27,7 +27,9 @@ $this->title = 'Declaración jurada';
         echo "<div id='modalContent'></div>";
 
         Modal::end();
-    ?>
+	?>
+	
+	 
 
 <?= GridView::widget([
 		        'dataProvider' => $provider,
@@ -46,7 +48,7 @@ $this->title = 'Declaración jurada';
 		        'columns' => [
 		            ['class' => 'yii\grid\SerialColumn'],
 		            [
-		                'label' => 'Cargo',
+		                'label' => 'Cargo o actividad',
 		                'vAlign' => 'middle',
 		                'hAlign' => 'center',
 		                'format' => 'raw',
@@ -136,6 +138,12 @@ $this->title = 'Declaración jurada';
 		            
 		        ],
 			]); ?>
+		<?php
+			if($lic==1){
+				echo '<em><span style="color:red">*</span> En los cargos o actividad declarados en Licencia no se deben especificar horarios</em>';
+			}
+		?>
+		
 		<?php $form = ActiveForm::begin(); ?>	
 		<div class="form-group">
 			<div class="pull-right"><?= Html::submitButton('Siguiente >', ['class' => 'btn btn-primary']) ?></div>

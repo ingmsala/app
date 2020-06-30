@@ -18,7 +18,7 @@ class NodocenteSearch extends Nodocente
     public function rules()
     {
         return [
-            [['id', 'genero', 'condicionnodocente', 'categorianodoc', 'tipodocumento', 'localidad'], 'integer'],
+            [['id', 'genero', 'condicionnodocente', 'categorianodoc', 'tipodocumento', 'localidad', 'mapuche'], 'integer'],
             [['legajo', 'apellido', 'nombre', 'documento', 'mail', 'area', 'fechanac', 'telefono', 'cuil', 'domicilio'], 'safe'],
         ];
     }

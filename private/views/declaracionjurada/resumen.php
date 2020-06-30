@@ -108,7 +108,25 @@ $this->title = 'Declaración Jurada';
 		                'format' => 'raw',
 		                'attribute' => '0',
 		                
-                    ],
+					],
+					[
+		                'label' => 'Entidad',
+		                'vAlign' => 'middle',
+		                'hAlign' => 'center',
+		                'format' => 'raw',
+		                'attribute' => '5',
+		                
+					],
+					[
+		                'header' =>  'Dependencia',
+		                'vAlign' => 'middle',
+		                'hAlign' => 'center',
+		                'format' => 'raw',
+		                'attribute' => '6'
+		                /*'value' => function($model){
+		                	return var_dump($model);
+		                }*/
+		            ],
                     [
 		                'header' =>  'Repartición, Establecimiento, <br />Institución u Oficina',
 		                'vAlign' => 'middle',
@@ -136,6 +154,17 @@ $this->title = 'Declaración Jurada';
 		                'hAlign' => 'center',
 		                'format' => 'raw',
 		                'attribute' => '3'
+		                /*'value' => function($model){
+		                	return var_dump($model);
+		                }*/
+					],
+					
+					[
+		                'header' => 'Licencia',
+		                'vAlign' => 'middle',
+		                'hAlign' => 'center',
+		                'format' => 'raw',
+		                'attribute' => '7'
 		                /*'value' => function($model){
 		                	return var_dump($model);
 		                }*/
@@ -205,16 +234,16 @@ $this->title = 'Declaración Jurada';
         </tr>
 
         <tr>
-            <td colspan="2"><b>Desde que fecha: </b><?php
+            <td colspan="3"><b>Desde que fecha: </b><?php
                 if($pasividaddj != null){
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
                     echo Yii::$app->formatter->asDate($pasividaddj->fecha, 'dd/MM/yyyy');
                 }else
                         echo '-'; ?></td>
-            <td colspan="2"><b>Importe: </b><?= ($pasividaddj != null) ? '$ '.$pasividaddj->importe : '-' ?></td>
+            
         </tr> 
         <tr>
-			<td colspan="4"><b>Determinar si percibe el beneficio o si ha sido suspendido a pedido del titular: </b><?php
+			<td colspan="3"><b>Determinar si percibe el beneficio o si ha sido suspendido a pedido del titular: </b><?php
 			if($pasividaddj != null){
 				if($pasividaddj->percibe == 1)
 					echo 'Percibo';

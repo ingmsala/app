@@ -32,7 +32,7 @@ class Pasividaddj extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_DECLARACIONJURADA] = ['regimen', 'causa', 'caja', 'fecha', 'importe', 'percibe', 'declaracionjurada'];
+        $scenarios[self::SCENARIO_DECLARACIONJURADA] = ['regimen', 'causa', 'caja', 'fecha', 'percibe', 'declaracionjurada'];
         
         return $scenarios;
     }
@@ -43,7 +43,7 @@ class Pasividaddj extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['regimen', 'causa', 'caja', 'fecha', 'importe', 'percibe', 'declaracionjurada'], 'required'],
+            [['regimen', 'causa', 'caja', 'fecha', 'percibe', 'declaracionjurada'], 'required'],
             [['fecha'], 'safe'],
             [['importe'], 'number'],
             [['percibe', 'declaracionjurada'], 'integer'],

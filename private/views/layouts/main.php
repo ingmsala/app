@@ -226,7 +226,20 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Gestionar Exámenes', 'url' => ['/anioxtrimestral']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Declaraciones Juradas', 'url' => ['/declaracionjurada/declaracionesjuradasadmin']],
+                                
+                                  ['label' => 'Declaraciones Juradas',
+                                        'items' => [
+
+                                            ['label' => 'Verificar domicilios (Mapuche)', 'url' => ['/docente/actualizardomicilio']],
+                                            '<div class="dropdown-divider"></div>',
+                                            ['label' => 'Lista de Declaraciones', 'url' => ['/declaracionjurada/declaracionesjuradasadmin']],
+                                            '<div class="dropdown-divider"></div>',
+                                            
+                                            
+                                        ],
+
+
+                                ],
                                 '<div class="dropdown-divider"></div>',
                                   ['label' => 'Mantenimiento',
                             'items' => [
@@ -483,7 +496,19 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Espacios Optativos', 'url' => ['/optativas']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Declaraciones Juradas', 'url' => ['/declaracionjurada/declaracionesjuradasadmin']],
+                                ['label' => 'Declaraciones Juradas',
+                                        'items' => [
+
+                                            ['label' => 'Verificar domicilios (Mapuche)', 'url' => ['/docente/actualizardomicilio']],
+                                            '<div class="dropdown-divider"></div>',
+                                            ['label' => 'Lista de Declaraciones', 'url' => ['/declaracionjurada/declaracionesjuradasadmin']],
+                                            '<div class="dropdown-divider"></div>',
+                                            
+                                            
+                                        ],
+
+
+                                ],
                                 '<div class="dropdown-divider"></div>',
                                                                 
                             ],

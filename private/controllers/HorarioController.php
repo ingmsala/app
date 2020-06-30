@@ -819,8 +819,8 @@ class HorarioController extends Controller
     public function actionPrintxcurso($division, $vista, $all = 0)
     {
         
-
-        $this->layout = 'mainpersonal';
+        if(in_array(Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR]))
+            $this->layout = 'mainpersonal';
         if (YII_ENV_DEV) {
             Yii::$app->getModule('debug')->instance->allowedIPs = [];
         }
@@ -1121,7 +1121,8 @@ class HorarioController extends Controller
     {
         
         date_default_timezone_set('America/Argentina/Buenos_Aires');
-        $this->layout = 'mainpersonal';
+        if(in_array(Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR]))
+            $this->layout = 'mainpersonal';
         if (YII_ENV_DEV) {
             Yii::$app->getModule('debug')->instance->allowedIPs = [];
         }

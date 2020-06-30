@@ -51,7 +51,7 @@ use yii\helpers\Html;
                                 ],
                             ]
                     ],
-                    'importe'=>['type'=>Form::INPUT_TEXT],
+                    //'importe'=>['type'=>Form::INPUT_TEXT],
                     'percibe'=>[
                         'type'=>Form::INPUT_WIDGET, 
                         

@@ -114,6 +114,7 @@ class NodocenteController extends Controller
 
             $model->apellido = strtoupper($model->apellido);
             $model->nombre = strtoupper($model->nombre);
+            $model->mapuche = 2;
             if($model->save()){
                 $user = new User();
                 $user->username = $model->mail;

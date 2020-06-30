@@ -26,70 +26,7 @@ $this->title = 'Declaración Jurada';
 <div class="declaracionjurada-form">
     
  
-    <div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">
-        <?php
-        echo '<label class="control-label has-star" >En tareas o actividades no oficiales</label>';
-        echo SwitchInput::widget([
-            'name' => 'actnoof',
-            'value'=>$model->actividadnooficial,
-            'pluginOptions' => [
-                'size' => 'medium',
-                'onText' => 'Sí',
-                'offText' => 'No',
-                'offColor' => 'danger',
-                'onColor' => 'success',
-            ],
-            'pluginEvents' => [
-                'switchChange.bootstrapSwitch' => 'function() { 
-                    var conf = this.checked;
-                    var estado = 0;
-                    if(conf){
-                        $("#divnooficial").show();
-                        var estado = 1;
-
-                        $("#modalnooficial").modal("show")
-                            .find("#modalContent")
-                            .load("'.Url::to("index.php?r=actividadnooficial/create&dj=".$model->id).'");
-                            document.getElementById("modalHeader").innerHTML ="En tareas o actividades no oficiales";
-
-                    }else{
-                        $("#divnooficial").hide();
-                    }
-
-                    $.ajax({
-                        url:   "index.php?r=declaracionjurada/actualizarnooficial",
-                        type:  "post",
-                        data: {id: '.$model->id.', estado: estado},
-                        
-                        error: function (xhr, status, error) {
-                        alert(error);
-                        }
-                    }).done(function (data) {
-                        
-                    });
-                    
-                 }',
-            ],
-        ]);
-
-        ?>
-    </div>
-
-    <div id="divnooficial" class="panel-body" <?php if($model->actividadnooficial==0) echo 'style="display: none;"'; else echo 'style="display: block;"'; ?> >
-    <?php
-            
-            echo $this->render('/actividadnooficial/view', [
-                    'dj' => $model->id,
-                    'model' => $actividadnooficial,
-                ]);
-
-        ?>
-    </div>
-    </div>
-
-    
+        
     
     <div class="panel panel-default">
         <div class="panel-heading">
