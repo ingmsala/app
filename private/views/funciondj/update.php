@@ -12,11 +12,14 @@ $this->params['breadcrumbs'][] = 'Modificar';
 ?>
 <div class="funciondj-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,
         'reparticiones' => $reparticiones,
+        'update' => 1,
     ]) ?>
+
+
+
 
 </div>

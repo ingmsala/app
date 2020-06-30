@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use app\models\Genero;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use app\models\NodocenteSearch;
 use app\models\Tipodocumento;
 use app\models\User;
 use kartik\grid\EditableColumnAction;
@@ -280,9 +281,14 @@ class DocenteController extends Controller
         $searchModel = new DocenteSearch();
         $dataProvider = $searchModel->direccionesdesactualizadas(Yii::$app->request->queryParams);
 
+        $searchModelNo = new NodocenteSearch();
+        $dataProviderNo = $searchModelNo->direccionesdesactualizadas(Yii::$app->request->queryParams);
+
         return $this->render('actualizardomicilio', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'searchModelNo' => $searchModelNo,
+            'dataProviderNo' => $dataProviderNo,
         ]);
         
 

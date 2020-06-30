@@ -448,7 +448,7 @@ class DeclaracionjuradaController extends Controller
         
 
         if (Yii::$app->request->post()) {
-
+            
             if(Yii::$app->request->post()['btn_submit'] == 'add'){
 
                 $searchModel2 = new FunciondjSearch();
@@ -475,12 +475,14 @@ class DeclaracionjuradaController extends Controller
         $models = $dataProvider->getModels();
        
         if(count($models)==0){
+            if(!Yii::$app->params['devicedetect']['isMobile']){
                 $model2 = new Funciondj();
                 $model2->declaracionjurada = $declaracionjurada->id;
                 $model2->dependencia = 'UNC';
                 $model2->reparticion = 'Colegio Nacional de Monserrat';
                 $model2->publico = 1;
                 $model2->save();
+            }
 
                 $searchModel = new FunciondjSearch();
                 $dataProvider = $searchModel->search($declaracionjurada->id);
@@ -523,6 +525,7 @@ class DeclaracionjuradaController extends Controller
             'dataProvider' => $dataProvider,
             'publicos' => $publicos,
             'licencia' => $licencia,
+            'declaracionjurada' => $declaracionjurada->id,
 
                         
         ]);
@@ -608,6 +611,7 @@ class DeclaracionjuradaController extends Controller
 
         $funciones = Funciondj::find()
             ->where(['declaracionjurada' => $declaracionjurada->id])
+            ->andWhere(['is not','cargo',null])
             ->all();
         $dias = Diasemana::find()->all();
 
@@ -877,6 +881,7 @@ class DeclaracionjuradaController extends Controller
         
         $funciones = Funciondj::find()
         ->where(['declaracionjurada' => $declaracionjurada->id])
+        ->andWhere(['is not','cargo',null])
         ->all();
 
         
@@ -923,6 +928,9 @@ class DeclaracionjuradaController extends Controller
             $array[$i][2] = '-';
             $array[$i][3] = '-';
             $array[$i][4] = '-';
+            $array[$i][5] = '-';
+            $array[$i][6] = '-';
+            $array[$i][7] = '-';
         }
 
         

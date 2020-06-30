@@ -9,8 +9,10 @@ use app\models\Genero;
 use app\models\Nodocente;
 use app\models\NodocenteSearch;
 use app\models\User;
+use kartik\grid\EditableColumnAction;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -63,6 +65,24 @@ class NodocenteController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actions()
+    {
+        return ArrayHelper::merge(parent::actions(), [
+            'editdocumento' => [                                       
+                'class' => EditableColumnAction::className(),     
+                'modelClass' => Nodocente::className(),                
+                'outputValue' => function ($model, $attribute, $key, $index) {
+                     //$fmt = Yii::$app->formatter;
+                     return $model->$attribute;                 
+                },
+                'outputMessage' => function($model, $attribute, $key, $index) {
+                      return '';                                  
+                },
+                
+            ]
+        ]);
     }
 
     /**
@@ -176,6 +196,13 @@ class NodocenteController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionActualizarmapuche($id){
+        $doc = $this->findModel($id);
+        $doc->mapuche = 1;
+        $doc->save();
+        return $this->redirect(['/docente/actualizardomicilio']);
     }
 
     /**

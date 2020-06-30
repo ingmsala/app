@@ -20,13 +20,26 @@ use Yii;
  * @property Horariodj[] $horariodjs
  */
 class Funciondj extends \yii\db\ActiveRecord
+
 {
+
+    const SCENARIO_MOBILE = 'detalleparteesc';
+    const SCENARIO_MOBILE2 = 'detalleparteesc2';
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
         return 'funciondj';
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+       
+        $scenarios[self::SCENARIO_MOBILE] = ['publico', 'licencia','dependencia', 'reparticion', 'cargo','horas'];
+        $scenarios[self::SCENARIO_MOBILE2] = ['publico', 'licencia','dependencia', 'reparticion', 'cargo','horas'];
+        return $scenarios;
     }
 
     /**
@@ -37,6 +50,8 @@ class Funciondj extends \yii\db\ActiveRecord
         return [
             [['horas'], 'number'],
             [['declaracionjurada'], 'required'],
+            [['publico', 'licencia','dependencia', 'reparticion', 'cargo', 'horas'], 'required', 'on'=>self::SCENARIO_MOBILE],
+            [['publico', 'licencia', 'reparticion', 'cargo', 'horas'], 'required', 'on'=>self::SCENARIO_MOBILE2],
             [['declaracionjurada', 'publico', 'licencia'], 'integer'],
             [['dependencia', 'reparticion', 'cargo'], 'string', 'max' => 250],
             [['declaracionjurada'], 'exist', 'skipOnError' => true, 'targetClass' => Declaracionjurada::className(), 'targetAttribute' => ['declaracionjurada' => 'id']],

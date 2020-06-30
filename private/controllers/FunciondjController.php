@@ -96,17 +96,28 @@ class FunciondjController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($dj)
     {
         $model = new Funciondj();
+        $model->scenario = Funciondj::SCENARIO_MOBILE;
+        $model->declaracionjurada = $dj;
+        $model->dependencia = 'UNC';
+        $model->reparticion = 'Colegio Nacional de Monserrat';
+        $model->publico = 1;
+        $model->licencia = 1;
         
         $reparticiones = Funciondj::find()->all();
         
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->publico == 2){
+                $model->scenario = Funciondj::SCENARIO_MOBILE2;
+                $model->dependencia = null;
+            }
+            $model->save();
+            return $this->redirect(['declaracionjurada/cargos']);
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('create', [
             'model' => $model,
             'reparticiones' => $reparticiones,
         ]);
@@ -122,13 +133,27 @@ class FunciondjController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->scenario = Funciondj::SCENARIO_MOBILE;
         $reparticiones = Funciondj::find()->all();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if($model->publico == 2){
+            $model->dependencia = 'privada';
         }
 
-        return $this->render('update', [
+        if ($model->load(Yii::$app->request->post())) {
+            
+            
+            if($model->publico == 2){
+                $model->scenario = Funciondj::SCENARIO_MOBILE2;
+                $model->dependencia = null;
+            }
+            
+            $model->save();
+            
+            
+            return $this->redirect(['declaracionjurada/cargos']);
+        }
+
+        return $this->renderAjax('update', [
             'model' => $model,
             'reparticiones' => $reparticiones,
         ]);

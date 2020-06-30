@@ -71,4 +71,36 @@ class NodocenteSearch extends Nodocente
 
         return $dataProvider;
     }
+
+    public function direccionesdesactualizadas($params)
+    {
+        $query = Nodocente::find()
+            ->where(['mapuche' => 2])
+            ->orderBy('apellido', 'nombre', 'legajo')->indexBy('id');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere(['like', 'legajo', $this->legajo])
+            ->andFilterWhere(['or', 
+                ['like', 'apellido', $this->apellido], 
+                ['like', 'docente.nombre', $this->apellido]
+            ])
+            ->andFilterWhere(['like', 'apellido', $this->nombre])
+            ->andFilterWhere(['like', 'documento', $this->documento]);
+
+        return $dataProvider;
+    }
 }
