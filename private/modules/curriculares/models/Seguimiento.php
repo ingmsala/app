@@ -30,7 +30,7 @@ class Seguimiento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['matricula', 'fecha', 'descripcion', 'tiposeguimiento', 'trimestre'], 'required'],
+            [['matricula', 'fecha', 'tiposeguimiento', 'trimestre'], 'required'],
             [['matricula', 'trimestre'], 'integer'],
             [['matricula', 'tiposeguimiento', 'estadoseguimiento'], 'integer'],
             [['descripcion'], 'safe'],

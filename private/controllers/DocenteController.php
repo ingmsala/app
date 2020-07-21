@@ -143,6 +143,8 @@ class DocenteController extends Controller
 
             $model->apellido = strtoupper($model->apellido);
             $model->nombre = strtoupper($model->nombre);
+            $model->mail = strtolower($model->mail);
+            
             $model->mapuche = 2;
             if($model->save()){
                 $user = new User();
@@ -182,6 +184,7 @@ class DocenteController extends Controller
 
             $model->apellido = strtoupper($model->apellido);
             $model->nombre = strtoupper($model->nombre);
+            $model->mail = strtolower($model->mail);
             if($model->save())
                 return $this->redirect(['view', 'id' => $model->id]);
         }

@@ -17,6 +17,7 @@ $this->title = 'Modificar Seguimiento: ' . $model->matricula0->alumno0->apellido
         'estados' => $estados,
         'tipos' => $tipos,
         'trimestre' => $trimestre,
+       
     ]) ?>
 
 </div>

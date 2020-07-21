@@ -153,7 +153,7 @@ class MatriculaSearch extends Matricula
 
     public function alumnosxcomisionmails($comsion)
     {
-         $sql="SELECT DISTINCT alumno.apellido, alumno.nombre, contactoalumno.mail FROM matricula LEFT JOIN alumno ON matricula.alumno = alumno.id LEFT JOIN comision ON matricula.comision = comision.id LEFT JOIN espaciocurricular ON comision.espaciocurricular = espaciocurricular.id LEFT JOIN actividad ON espaciocurricular.actividad = actividad.id LEFT JOIN contactoalumno ON alumno.id = contactoalumno.alumno WHERE comision.id=".$comsion." ORDER BY actividad.nombre, comision.nombre, alumno.apellido, alumno.nombre";
+         $sql="SELECT DISTINCT alumno.apellido, alumno.nombre, tutor.mail FROM matricula LEFT JOIN alumno ON matricula.alumno = alumno.id LEFT JOIN comision ON matricula.comision = comision.id LEFT JOIN espaciocurricular ON comision.espaciocurricular = espaciocurricular.id LEFT JOIN actividad ON espaciocurricular.actividad = actividad.id LEFT JOIN tutor ON alumno.id = tutor.alumno WHERE comision.id=".$comsion." ORDER BY actividad.nombre, comision.nombre, alumno.apellido, alumno.nombre";
         /*$query = Matricula::find()
                 ->select(['alumno.apellido', 'alumno.nombre', 'contactoalumno.mail'])->distinct()
                 ->joinWith(['alumno0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0', 'alumno0.contactoalumnos'])

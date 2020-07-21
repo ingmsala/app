@@ -37,7 +37,7 @@ class InasistenciasController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1,3,6,9,12,13,14]);
+                                return in_array (Yii::$app->user->identity->role, [1,3,6,9,12,13,14,20]);
                             }catch(\Exception $exception){
                                 return false;
                             }

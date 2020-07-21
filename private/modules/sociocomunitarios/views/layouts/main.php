@@ -205,10 +205,7 @@ AppAsset::register($this);
                         ['label' => '<span class="glyphicon glyphicon-user"></span><br>'.Yii::$app->user->identity->username.'',
                         
                             'items' => [
-                                                           [
-                                    'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass','i'=>2],
-                                ],
+                                                        
                                 
                                 [
                                     'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
@@ -310,10 +307,7 @@ AppAsset::register($this);
                         ['label' => '<span class="glyphicon glyphicon-user"></span><br>'.Yii::$app->user->identity->username.'',
                         
                             'items' => [
-                                                           [
-                                    'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass','i'=>2],
-                                ],
+                                                           
                                 
                                 [
                                     'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
@@ -328,7 +322,7 @@ AppAsset::register($this);
                         ]
                     
                 ];
-            }else if( in_array (Yii::$app->user->identity->role, [Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA])){
+            }else if( in_array (Yii::$app->user->identity->role, [Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_PSC])){
                 $items = [
                     
                         ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/personal/menuprincipal']],

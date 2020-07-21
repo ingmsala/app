@@ -104,9 +104,13 @@ class MenuopcionesController extends Controller
             ->count(); 
         }
 
+        if(Yii::$app->user->identity->role==Globales::US_PSC){
+            return $this->redirect(['/sociocomunitarios']);
+        }
            
         if($comisionessociocom>0 && $comisionesoptativas>0){
-            $this->layout = 'mainpersonal';
+            if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI, Globales::US_CONSULTA, Globales::US_SECRETARIA]))
+                $this->layout = 'mainpersonal';
             return $this->render('index', [
                 'comisionesoptativas' => $comisionesoptativas,
                 'comisionessociocom' => $comisionessociocom,

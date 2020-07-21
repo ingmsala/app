@@ -78,6 +78,8 @@ class SiteController extends Controller
             return $this->redirect(['/personal/menuprincipal']);
         }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
             return $this->redirect(['/reporte/preceptores/preceptores']);
+        }elseif(Yii::$app->user->identity->role == Globales::US_PSC){
+            return $this->redirect(['/sociocomunitarios']);
        }
         elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
@@ -85,6 +87,9 @@ class SiteController extends Controller
             }
         elseif(Yii::$app->user->identity->role == Globales::US_MANTENIMIENTO){
             return $this->redirect(['/tareamantenimiento']);
+        }elseif(Yii::$app->user->identity->role == Globales::US_CAE_ADMIN){
+            $this->layout = '/edh/layouts/main';
+            return $this->redirect(['/edh/menuopciones']);
         }
         return $this->render('index');
     }
@@ -116,7 +121,13 @@ class SiteController extends Controller
             }elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
                 return $this->redirect(['/horario/menuopciones']);
+            }elseif(Yii::$app->user->identity->role == Globales::US_PSC){
+                return $this->redirect(['/sociocomunitarios']);
+            }elseif(Yii::$app->user->identity->role == Globales::US_CAE_ADMIN){
+                $this->layout = '/edh/layouts/main';
+                return $this->redirect(['/edh/menuopciones']);
             }
+            
             
             return $this->goHome();
         }
@@ -132,9 +143,15 @@ class SiteController extends Controller
                 return $this->redirect(['/personal/menuprincipal']);
             }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
                     return $this->redirect(['//reporte/preceptores/preceptores']);
+            }elseif(Yii::$app->user->identity->role == Globales::US_PSC){
+                return $this->redirect(['/sociocomunitarios']);
+                
             }elseif(Yii::$app->user->identity->role == Globales::US_HORARIO){
                 $this->layout = 'mainvacio';
                 return $this->redirect(['/horario/menuopciones']);
+            }elseif(Yii::$app->user->identity->role == Globales::US_CAE_ADMIN){
+                $this->layout = '/edh/layouts/main';
+                return $this->redirect(['/edh/menuopciones']);
             }
             return $this->goBack();
         }

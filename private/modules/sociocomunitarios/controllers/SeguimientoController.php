@@ -5,6 +5,7 @@ namespace app\modules\sociocomunitarios\controllers;
 use Yii;
 use app\models\Docente;
 use app\modules\curriculares\models\Acta;
+use app\modules\curriculares\models\Comision;
 use app\modules\curriculares\models\Docentexcomision;
 use app\modules\curriculares\models\Estadoseguimiento;
 use app\modules\curriculares\models\Matricula;
@@ -12,11 +13,16 @@ use app\modules\curriculares\models\MatriculaSearch;
 use app\modules\curriculares\models\Seguimiento;
 use app\modules\curriculares\models\SeguimientoSearch;
 use app\modules\curriculares\models\Tiposeguimiento;
+use app\modules\sociocomunitarios\models\Calificacionrubrica;
+use app\modules\sociocomunitarios\models\Detallerubrica;
+use app\modules\sociocomunitarios\models\Rubrica;
+use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 
 /**
  * SeguimientoController implements the CRUD actions for Seguimiento model.
@@ -31,7 +37,7 @@ class SeguimientoController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'rubrica'],
                 'rules' => [
                     [
                         'actions' => ['create', 'update', 'delete'],   
@@ -43,7 +49,7 @@ class SeguimientoController extends Controller
                                      if(in_array (Yii::$app->user->identity->role, [1])){
                                          return true;
                                     }
-                                    if($_GET['r'] == 'optativas/seguimiento/create')
+                                    if($_GET['r'] == 'sociocomunitarios/seguimiento/create')
                                         $matricula = Matricula::findOne(Yii::$app->request->queryParams['id']);
                                     else
                                         $matricula = Seguimiento::findOne(Yii::$app->request->queryParams['id'])->matricula0;
@@ -76,11 +82,11 @@ class SeguimientoController extends Controller
 
                     ],
                     [
-                        'actions' => ['index'],   
+                        'actions' => ['index','rubrica'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1,3,6,8,9,12,13]);
+                                return in_array (Yii::$app->user->identity->role, [1,3,6,8,9,12,13,20]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -92,7 +98,7 @@ class SeguimientoController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                if(in_array (Yii::$app->user->identity->role, [1,3,6,12,13]))
+                                if(in_array (Yii::$app->user->identity->role, [1,3,6,12,13, 20]))
                                     return true;
                                 elseif(in_array (Yii::$app->user->identity->role, [8,9])){
                                     $matricula = Matricula::findOne(Yii::$app->request->queryParams['id']);
@@ -208,8 +214,18 @@ class SeguimientoController extends Controller
             $model->matricula = $id;
             //$trimestre = ArrayHelper::map($trimestre,0,1);
 
+            $array = [];
+
+            $provider = new ArrayDataProvider([
+                'allModels' => $array,
+                    
+            ]);
+
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->matricula]);
+                if($model->tiposeguimiento == 3)
+                    return $this->redirect(['view', 'id' => $model->matricula]);
+                else
+                    return $this->redirect(['rubrica', 'id' => $model->id]);
             }
 
             return $this->render('create', [
@@ -217,12 +233,122 @@ class SeguimientoController extends Controller
                 'estados' => $estados,
                 'trimestre' => $trimestre,
                 'tipos' => $tipos,
+                'provider' => $provider,
+                
                 'matr' => Matricula::findOne($id),
             ]);
         }else{
         Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Proyecto Sociocomunitario</b>');
             return $this->redirect(['/sociocomunitarios']);
         }
+    }
+
+    public function actionRubrica($id){
+        $this->layout = 'main';
+        $com = isset($_SESSION['comisiontsx']) ? $_SESSION['comisiontsx'] : 0;
+        if($com != 0){
+            $model = $this->findModel($id);
+            $comision = Comision::findOne($com);
+            $curso = $comision->espaciocurricular0->curso;
+            $rubricas = Rubrica::find()->where(['curso' => $curso])->all();
+            
+            $array = [];
+            
+            $cantdefilas = count($rubricas);
+            $cantactivas = 0;
+                
+            foreach ($rubricas as $rubrica) {
+                
+                    
+                    
+
+                    $calificacionrub = Calificacionrubrica::find()->where(['rubrica' => $rubrica->id])->all();
+
+                    $sal = '<div class="list-group">';
+                    $ca = 0;
+                    foreach ($calificacionrub as $calif) {
+
+                        $dr = Detallerubrica::find()->where(['seguimiento' => $model->id])->andWhere(['calificacionrubrica' => $calif->id])->one();
+                        if($dr==null)
+                            $ac = '';
+                        else{
+                            $ac=' active';
+                            $cantactivas++;
+                            $ca++;
+                        }
+                            
+                        $sal.=Html::a('<h4 class="list-group-item-heading">'.$calif->detalleescalanota0->nota.'</h4>'.'<p class="list-group-item-text">'.$calif->descripcion.'</p>',"#",[
+                            'class' => 'list-group-item'.$ac,
+                            'onclick'=>'
+                                event.preventDefault();
+                                $.ajax({
+                                    type     :"post",
+                                    cache    : false,
+                                    url  : "index.php?r=sociocomunitarios/detallerubrica/new",
+                                    
+                                    data: {seguimiento: '.$model->id.', calificacion: '.$calif->id.', id: '.$model->id.'},
+                                    
+                                    error: function (xhr, status, error) {
+                                        if(error != "Forbidden")
+                                            alert(error);
+                                    }
+                                    }).done(function (data) {
+                                        //$(this).addClass("list-group-item active");
+                                    //alert($(this));
+                                        $.pjax.reload({container: "#test", async: false});
+                                    });',
+                                        ]);
+                    }
+
+                    $sal .='</div>';
+                    if($ca == 0)
+                        $array[$rubrica->id][0] = $rubrica->descripcion.'<span style="color:red"> *</span>';
+                    else
+                        $array[$rubrica->id][0] = $rubrica->descripcion;
+                    $array[$rubrica->id][1] = $sal;
+                
+                
+                
+            }
+
+            /*$drs = Detallerubrica::find()->where(['seguimiento' => $model->id])->all();
+
+            foreach ($drs as $dr) {
+                
+                
+                        $array[$dr->calificacionrubrica0->rubrica][1] = 'ok';
+                    
+                
+
+            }*/
+               
+            $provider = new ArrayDataProvider([
+                'allModels' => $array,
+                    
+            ]);
+
+            if (Yii::$app->request->post()) {
+                if($cantactivas<$cantdefilas){
+                    Yii::$app->session->setFlash('danger', "* Falta/n completar ".($cantdefilas-$cantactivas).' Aspecto/s a evaluar');
+                }
+                else{
+                    Yii::$app->session->setFlash('info', "Se guardó correctamente la rúbrica");
+                    return $this->redirect(['index']);
+                }
+            }
+
+            return $this->render('rubrica', [
+                'model' => $model,
+                'provider' => $provider,
+                'cantdefilas' => $cantdefilas,
+                'cantactivas' => $cantactivas,
+                
+            ]);
+
+        }else{
+            Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Proyecto Sociocomunitario</b>');
+                return $this->redirect(['/sociocomunitarios']);
+            }
     }
 
     /**
@@ -242,8 +368,14 @@ class SeguimientoController extends Controller
             $estados = Estadoseguimiento::find()->all();
             $tipos = Tiposeguimiento::find()->all();
 
+            
+
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->matricula]);
+                if($model->tiposeguimiento == 3)
+                    return $this->redirect(['view', 'id' => $model->matricula]);
+                else
+                    return $this->redirect(['rubrica', 'id' => $model->id]);
+                
             }
 
             return $this->render('update', [
@@ -251,6 +383,7 @@ class SeguimientoController extends Controller
                 'estados' => $estados,
                 'tipos' => $tipos,
                 'trimestre' => $trimestre,
+                
             ]);
         }else{
         Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Proyecto Sociocomunitario</b>');

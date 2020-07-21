@@ -95,9 +95,9 @@ Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
                     $itemsc = [];
                     return var_dump($model);
         
-                    foreach($model->alumno0->contactoalumnos as $contacto){
+                    foreach($model->alumno0->tutors as $contacto){
                         
-                        $itemsc[] = [$contacto->apellido, $contacto->nombre, $contacto->parentezco, $contacto->mail];
+                        $itemsc[] = [$contacto->apellido, $contacto->nombre, $contacto->parentesco, $contacto->mail];
                         
                     }
                     
