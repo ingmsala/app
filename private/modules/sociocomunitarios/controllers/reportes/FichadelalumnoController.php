@@ -429,8 +429,10 @@ class FichadelalumnoController extends \yii\web\Controller
                 
                 $i=$i+1;
             }
-
-            $porcentajeausencia = round($ca*100/($i+$ca));
+            if(($i+$ca)!=0)
+                $porcentajeausencia = round($ca*100/($i+$ca));
+            else
+                $porcentajeausencia = 0;
 
             $searchModelSeguimientos  = new SeguimientoSearch();
             $dataProviderSeguimientos = $searchModelSeguimientos->seguimientosdelalumno($id);

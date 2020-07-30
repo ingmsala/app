@@ -4,6 +4,7 @@ namespace app\modules\curriculares\controllers;
 
 use app\config\Globales;
 use app\models\Docente;
+use app\models\Nombramiento;
 use Yii;
 use app\modules\curriculares\models\Alumno;
 use app\modules\curriculares\models\AlumnoSearch;
@@ -87,13 +88,35 @@ class MenuopcionesController extends Controller
             ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
             ->count();
         }else{
+
+            $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $nom = Nombramiento::find()
+                        ->where(['docente' => $docente->id])
+                        ->andWhere(['or',
+                            ['=', 'cargo', 227],
+                            ['=', 'cargo', 229],
+                            
+                            ])->count();
+
             $comisionesoptativas = Docentexcomision::find()
             ->joinWith(['docente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
             ->where(['docente.mail' => Yii::$app->user->identity->username])
             ->andWhere(['espaciocurricular.aniolectivo' => $aniolectivo->id])
             ->andWhere(['espaciocurricular.tipoespacio' => 1])
             ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
-            ->count(); 
+            ->count();
+            
+            if($comisionesoptativas==0 && $nom>0){
+                $comisionesoptativas = Docentexcomision::find()
+                ->distinct()
+                ->select(['comision', 'espaciocurricular.aniolectivo'])
+                
+                ->joinWith(['comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
+                ->where(['espaciocurricular.aniolectivo' => $aniolectivo->id])
+                ->andWhere(['espaciocurricular.tipoespacio' => 1])
+                ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
+                ->count();
+            }
 
             $comisionessociocom = Docentexcomision::find()
             ->joinWith(['docente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
@@ -101,7 +124,19 @@ class MenuopcionesController extends Controller
             ->andWhere(['espaciocurricular.aniolectivo' => $aniolectivo->id])
             ->andWhere(['espaciocurricular.tipoespacio' => 2])
             ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
-            ->count(); 
+            ->count();
+
+            if($comisionessociocom==0 && $nom>0){
+                $comisionessociocom = Docentexcomision::find()
+                    ->distinct()
+                    ->select(['comision', 'espaciocurricular.aniolectivo'])
+                    
+                    ->joinWith(['comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
+                    ->where(['espaciocurricular.aniolectivo' => $aniolectivo->id])
+                    ->andWhere(['espaciocurricular.tipoespacio' => 2])
+                    ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
+                    ->count();
+            }
         }
 
         if(Yii::$app->user->identity->role==Globales::US_PSC){

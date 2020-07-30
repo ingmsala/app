@@ -14,6 +14,8 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use app\config\Globales;
+use app\models\Docente;
+use app\models\Nombramiento;
 
 /**
  * ComisionController implements the CRUD actions for Comision model.
@@ -215,6 +217,16 @@ class ComisionController extends Controller
                     ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
                     ->all();
                 }else{
+
+                    $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                    $nom = Nombramiento::find()
+                                ->where(['docente' => $docente->id])
+                                ->andWhere(['or',
+                                    ['=', 'cargo', 227],
+                                    ['=', 'cargo', 229],
+                                    
+                                    ])->count();
+
                     $comisiones = Docentexcomision::find()
                     ->joinWith(['docente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
                     ->where(['docente.mail' => Yii::$app->user->identity->username])
@@ -222,6 +234,17 @@ class ComisionController extends Controller
                     ->andWhere(['espaciocurricular.tipoespacio' => 2])
                     ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
                     ->all(); 
+
+                    if(count($comisiones)==0 && $nom>0){
+                        $comisiones = Docentexcomision::find()
+                    ->distinct()
+                    ->select(['comision', 'espaciocurricular.aniolectivo'])
+                    ->joinWith(['comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
+                    ->where(['espaciocurricular.aniolectivo' => $anio_id])
+                    ->andWhere(['espaciocurricular.tipoespacio' => 2])
+                    ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
+                    ->all();
+                    }
                 }
        
 

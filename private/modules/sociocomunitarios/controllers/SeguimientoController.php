@@ -4,6 +4,7 @@ namespace app\modules\sociocomunitarios\controllers;
 
 use Yii;
 use app\models\Docente;
+use app\models\Nombramiento;
 use app\modules\curriculares\models\Acta;
 use app\modules\curriculares\models\Comision;
 use app\modules\curriculares\models\Docentexcomision;
@@ -107,7 +108,15 @@ class SeguimientoController extends Controller
                                                     ->where(['comision' => $matricula->comision])
                                                     ->andWhere(['docente' => $docente->id])
                                                     ->all());
-                                    if($cant>0){
+
+                                    $nom = Nombramiento::find()
+                                        ->where(['docente' => $docente->id])
+                                        ->andWhere(['or',
+                                            ['=', 'cargo', 227],
+                                            ['=', 'cargo', 229],
+                                            
+                                            ])->count();
+                                    if($cant>0 || $nom>0){
                                         return true;
                                     }
                                 }

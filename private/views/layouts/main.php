@@ -496,6 +496,8 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Espacios Optativos', 'url' => ['/optativas']],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'Fonid', 'url' => ['/fonid/fonidadmin']],
+                                '<div class="dropdown-divider"></div>',
                                 ['label' => 'Declaraciones Juradas',
                                         'items' => [
 

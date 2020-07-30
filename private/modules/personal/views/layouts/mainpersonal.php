@@ -44,6 +44,12 @@ if(!Yii::$app->user->isGuest){
                     'url' => ['/declaracionjurada'],
                     '<div class="dropdown-divider"></div>',
             ],
+
+            ['label' => '<center><span class="glyphicon glyphicon-open-file"></span><br />'.'Fonid</center>',
+                            
+                    'url' => ['/fonid'],
+                    '<div class="dropdown-divider"></div>',
+            ],
             
             ['label' => '<center><span class="glyphicon glyphicon-education"></span><br />'.'E. Curriculares</center>',
                             
@@ -81,6 +87,12 @@ if(!Yii::$app->user->isGuest){
             ['label' => '<center><span class="glyphicon glyphicon-modal-window"></span><br />'.'D. Juradas</center>',
                             
                     'url' => ['/declaracionjurada'],
+                    '<div class="dropdown-divider"></div>',
+            ],
+
+            ['label' => '<center><span class="glyphicon glyphicon-open-file"></span><br />'.'Fonid</center>',
+                            
+                    'url' => ['/fonid'],
                     '<div class="dropdown-divider"></div>',
             ],
             
@@ -121,6 +133,12 @@ if(!Yii::$app->user->isGuest){
             ['label' => '<center><span class="glyphicon glyphicon-modal-window"></span><br />'.'D. Juradas</center>',
                             
                     'url' => ['/declaracionjurada'],
+                    '<div class="dropdown-divider"></div>',
+            ],
+            
+            ['label' => '<center><span class="glyphicon glyphicon-open-file"></span><br />'.'Fonid</center>',
+                            
+                    'url' => ['/fonid'],
                     '<div class="dropdown-divider"></div>',
             ],
             

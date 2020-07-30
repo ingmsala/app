@@ -28,6 +28,7 @@ class Docente extends \yii\db\ActiveRecord
     const SCENARIO_FINDHORARIOLOGIN = 'logindoc';
     const SCENARIO_ABM = 'abmdoc';
     const SCENARIO_DECLARACIONJURADA = 'declaracionjurada';
+    const SCENARIO_FONID = 'fonid';
    
 
     
@@ -38,6 +39,7 @@ class Docente extends \yii\db\ActiveRecord
         $scenarios[self::SCENARIO_FINDHORARIOLOGIN] = ['legajo'];
         $scenarios[self::SCENARIO_ABM] = ['apellido', 'nombre', 'legajo', 'genero', 'documento', 'tipodocumento', 'mail', 'fechanac', 'mapuche'];
         $scenarios[self::SCENARIO_DECLARACIONJURADA] = ['apellido', 'nombre', 'legajo', 'documento', 'tipodocumento', 'mail', 'telefono', 'fechanac', 'cuil', 'domicilio', 'localidad', 'mapuche'];
+        $scenarios[self::SCENARIO_FONID] = ['apellido', 'nombre', 'legajo', 'cuil'];
         
         return $scenarios;
     }
@@ -54,6 +56,7 @@ class Docente extends \yii\db\ActiveRecord
     {
         return [
             [['apellido', 'nombre', 'genero','documento','tipodocumento', 'mail'], 'required', 'on' => self::SCENARIO_ABM],
+            [['apellido', 'nombre', 'legajo', 'cuil'], 'required', 'on' => self::SCENARIO_FONID],
             [['apellido', 'nombre', 'legajo', 'documento', 'tipodocumento', 'mail', 'telefono', 'fechanac', 'cuil', 'domicilio', 'localidad'], 'required', 'on' => self::SCENARIO_DECLARACIONJURADA],
             [['legajo'], 'required',  'on' => self::SCENARIO_FINDHORARIOLOGIN],
             [['genero'], 'integer'],

@@ -113,5 +113,29 @@ else{
           ?>
 
       </div>
+
+      <?php
+          if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+        ?>
+        <div class="col-md-3">           
+          <?= 
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-open-file"></span><h2>Formularios</h2><span class="label label-success">FONID</span>',
+
+           ['/fonid'],
+
+           [
+
+               //'id' => 'modalButtonIngreso',
+               'class' => $classclient,
+               // modalCall
+
+           ]);
+
+          ?>
+      
+        </div>
+      <?php
+          }
+      ?>
      
       </div>

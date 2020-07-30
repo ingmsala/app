@@ -69,6 +69,31 @@ $(function(){
 });
 
 $(function(){
+	
+	$('.amodaldetallefonid').click(function(){
+		
+	var inputValue = $("#docente-cuil").val();
+	$.ajax({
+		type: "POST",
+		url: "index.php?r=fonid/savedoc",
+		data: {
+			cuil: inputValue
+			}, 
+		success: function(result) {
+			
+			}, 
+		error: function(result) {
+			
+		}
+	});
+		$('#modaldetallefonid').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+		document.getElementById('modalHeader').innerHTML ='Otros establecimientos';
+	})
+});
+
+$(function(){
 	$('#amodalnooficial').click(function(){
 		$('#modalnooficial').modal('show')
 			.find('#modalContent')
