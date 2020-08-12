@@ -1,5 +1,6 @@
 <?php
 
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
@@ -16,6 +17,7 @@ use yii\helpers\ArrayHelper;
     <?php $listPropuestas=ArrayHelper::map($propuestas,'id','nombre'); ?>
     <?php $listActividadtipos=ArrayHelper::map($actividadtipos,'id','nombre'); ?>
     <?php $listPlanes=ArrayHelper::map($planes,'id','nombre'); ?>
+    <?php $listdepartamentos=ArrayHelper::map($departamentos,'id','nombre'); ?>
 
     <?= $form->field($model, 'propuesta')->dropDownList($listPropuestas, ['prompt'=>'Seleccionar...']); ?>
 
@@ -27,6 +29,17 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'plan')->dropDownList($listPlanes, ['prompt'=>'Seleccionar...']); ?>
 
+    <?= 
+
+        $form->field($model, 'departamento')->widget(Select2::classname(), [
+            'data' => $listdepartamentos,
+            'options' => ['placeholder' => 'Seleccionar...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);
+
+    ?>
     
 
     <div class="form-group">

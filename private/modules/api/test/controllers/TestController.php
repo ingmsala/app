@@ -72,12 +72,13 @@ public function behaviors()
 	    public function actionMatricula($dni)
 	    {
 	        return new SqlDataProvider([
-	            'sql' => "SELECT aniolectivo.nombre as year, alumno.apellido as student_lastName, alumno.nombre as student_name, matricula.id as enrollment_id, areaoptativa.nombre as field, actividad.nombre as subject, espaciocurricular.duracion as subject_duration, comision.id as commission_id, comision.nombre as commission_name, estadomatricula.nombre as state, matricula.fecha as date_state 
+	            'sql' => "SELECT aniolectivo.nombre as year, alumno.apellido as student_lastName, alumno.nombre as student_name, matricula.id as enrollment_id, areaoptativa.nombre as field, actividad.nombre as subject, espaciocurricular.duracion as subject_duration, comision.id as commission_id, comision.nombre as commission_name, estadomatricula.nombre as state, matricula.fecha as date_state, tipoespacio.nombre as subject_type 
 	            			FROM matricula 
 	            			LEFT JOIN comision ON matricula.comision = comision.id 
 	            			LEFT JOIN estadomatricula ON matricula.estadomatricula = estadomatricula.id 
 	            			LEFT JOIN espaciocurricular ON comision.espaciocurricular = espaciocurricular.id
 	            			LEFT JOIN areaoptativa ON espaciocurricular.areaoptativa = areaoptativa.id  
+	            			LEFT JOIN tipoespacio ON espaciocurricular.tipoespacio = tipoespacio.id  
 	            			LEFT JOIN aniolectivo ON espaciocurricular.aniolectivo = aniolectivo.id 
 	            			LEFT JOIN alumno ON matricula.alumno = alumno.id 
 	            			LEFT JOIN actividad ON espaciocurricular.actividad = actividad.id

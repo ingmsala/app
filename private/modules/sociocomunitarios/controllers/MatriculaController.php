@@ -127,9 +127,26 @@ class MatriculaController extends Controller
         $estadosmatricula = Estadomatricula::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->fecha = date('Y-m-d');
+
+            $param = Yii::$app->request->post();
+
+            $alumnos2 = $param['Matricula']['alumno'];
+            $divi = $param['Matricula']['division'];
+            $comi = $param['Matricula']['comision'];
+
+            foreach ($alumnos2 as $alumno) {
+                $model2 = new Matricula();
+                $model2->alumno = $alumno;
+                $model2->fecha = date('Y-m-d');
+                $model2->estadomatricula = 1;
+                $model2->division = $divi;
+                $model2->comision = $comi;
+                $model2->save();
+            }
+
+            /*$model->fecha = date('Y-m-d');
             $model->estadomatricula = 1;
-            $model->save();
+            $model->save();*/
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

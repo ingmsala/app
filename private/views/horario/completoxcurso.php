@@ -126,7 +126,7 @@ JS;
 		            ],
 
 		            [
-		                'label' => 'Miercoles',
+		                'label' => 'Miércoles',
 		                'vAlign' => 'middle',
 		                'hAlign' => 'center',
 		                'format' => 'raw',

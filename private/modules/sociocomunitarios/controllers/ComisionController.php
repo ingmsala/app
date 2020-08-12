@@ -214,7 +214,7 @@ class ComisionController extends Controller
                     ->joinWith(['comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
                     ->where(['espaciocurricular.aniolectivo' => $anio_id])
                     ->andWhere(['espaciocurricular.tipoespacio' => 2])
-                    ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
+                    ->orderBy('actividad.nombre, comision.nombre')
                     ->all();
                 }else{
 
@@ -232,7 +232,7 @@ class ComisionController extends Controller
                     ->where(['docente.mail' => Yii::$app->user->identity->username])
                     ->andWhere(['espaciocurricular.aniolectivo' => $anio_id])
                     ->andWhere(['espaciocurricular.tipoespacio' => 2])
-                    ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
+                    ->orderBy('actividad.nombre, comision.nombre')
                     ->all(); 
 
                     if(count($comisiones)==0 && $nom>0){
@@ -242,7 +242,7 @@ class ComisionController extends Controller
                     ->joinWith(['comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
                     ->where(['espaciocurricular.aniolectivo' => $anio_id])
                     ->andWhere(['espaciocurricular.tipoespacio' => 2])
-                    ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
+                    ->orderBy('actividad.nombre, comision.nombre')
                     ->all();
                     }
                 }

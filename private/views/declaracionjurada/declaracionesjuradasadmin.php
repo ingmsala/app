@@ -1,5 +1,6 @@
 <?php
 
+use app\config\Globales;
 use app\models\Declaracionjurada;
 use kartik\form\ActiveForm;
 use yii\helpers\Html;
@@ -14,6 +15,12 @@ use yii\helpers\Url;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Declaraciones Juradas';
+
+if(Yii::$app->user->identity->role == Globales::US_REGENCIA){
+    $template = '{imprimir}';
+}else{
+    $template = '{detalle} {ver} {imprimir} {rechazar} {aceptar}';
+}
 
 ?>
 <?php 
@@ -173,7 +180,7 @@ $this->title = 'Declaraciones Juradas';
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{detalle} {ver} {imprimir} {rechazar} {aceptar}',
+                'template' => $template,
                 
                 'buttons' => [
                     

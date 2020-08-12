@@ -93,6 +93,28 @@ $(function(){
 	})
 });
 
+
+	
+	$('body').on('click', '.bajarprioridad',function(){
+		
+	var url = $(this).attr('value');
+
+	$.ajax({
+		type: "POST",
+		url: url,
+		
+		success: function(result) {
+			$.pjax.reload({container: "#test", async: false});
+			
+			document.getElementById("collapse"+result).collapse('show');
+			}, 
+		error: function(result) {
+			alert("no se");
+		}
+	});
+		
+	});
+
 $(function(){
 	$('#amodalnooficial').click(function(){
 		$('#modalnooficial').modal('show')
@@ -101,6 +123,21 @@ $(function(){
 		document.getElementById('modalHeader').innerHTML ='En tareas o actividades no oficiales';
 	})
 });
+
+$('body').on('click', '.amodalnuevodetalleunidad',function(){
+		$('#modalviewprograma').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+		document.getElementById('modalHeader').innerHTML ='Nueva unidad';
+	});
+	
+
+	$('body').on('click', '.amodalagregartema',function(){
+		$('#modalviewprograma').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+		document.getElementById('modalHeader').innerHTML ='Nuevo tema';
+	});
 
 
 $(function(){

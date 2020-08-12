@@ -10,7 +10,14 @@ use yii\helpers\Url;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'FONID';
-
+if($fonidfecha>0){
+   $addnew =  Html::a('Nuevo FONID', ['create'], ['class' => 'btn btn-success', 'data' => [
+    'confirm' => 'Ya tiene un FONID enviado con fecha de HOY, está seguro de querer crear uno nuevo?',
+    'method' => 'post',
+     ]]);
+}else{
+    $addnew =  Html::a('Nuevo FONID', ['create'], ['class' => 'btn btn-success']);
+}
 ?>
 <div class="fonid-index">
 
@@ -83,7 +90,7 @@ $this->title = 'FONID';
                                 if($modelok->estadofonid == 1 || $modelok->estadofonid == 4)
                                     return Html::a(
                                     '<span class="btn btn-primary">Modificar</span>',
-                                    '?r=fonid/update');
+                                    '?r=fonid/update&id='.$modelok->id);
                             },
             
                             
@@ -118,8 +125,8 @@ $this->title = 'FONID';
         ],
         'summary' =>false,
         'toolbar'=>[
-            ['content' => 
-                Html::a('Nuevo FONID', ['create'], ['class' => 'btn btn-success'])
+            ['content' => $addnew
+               
 
             ],
                         
@@ -188,7 +195,7 @@ $this->title = 'FONID';
                     'imprimir' => function($url, $model, $key){
                         try {
                             if($model->estadofonid == 2 || $model->estadofonid == 3)
-                                return Html::a('<span class="glyphicon glyphicon-print"></span>', Url::to('index.php?r=fonid/print&fn='.$model['id']));;
+                                return Html::a('<span class="glyphicon glyphicon-print"></span>', Url::to('index.php?r=fonid/print&fn='.$model['id']));
                             
                         } catch (\Throwable $th) {
                             return '';

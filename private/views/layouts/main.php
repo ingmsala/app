@@ -226,6 +226,8 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Gestionar Exámenes', 'url' => ['/anioxtrimestral']],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'Fonid', 'url' => ['/fonid/fonidadmin']],
+                                '<div class="dropdown-divider"></div>',
                                 
                                   ['label' => 'Declaraciones Juradas',
                                         'items' => [
@@ -590,6 +592,10 @@ try {
                                 ],
                                 ['label' => 'Tutores', 'url' => ['/estudiantes']],
                                         '<div class="dropdown-divider"></div>',
+                                ['label' => 'Preceptores', 'url' => ['/reporte/preceptores']],
+                                '<div class="dropdown-divider"></div>',
+                                ['label' => 'Declaraciones juradas', 'url' => ['/declaracionjurada/declaracionesjuradasadmin']],
+                                '<div class="dropdown-divider"></div>',
                             ],
                     ],
                     

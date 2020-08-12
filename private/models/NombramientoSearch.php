@@ -211,12 +211,21 @@ class NombramientoSearch extends Nombramiento
         return $dataProvider;
     }
 
-    public function getPreceptores()
+    public function getPreceptores($todos = 1)
     {
-        $query = Nombramiento::find()
+        if($todos == 1){
+            $query = Nombramiento::find()
                 ->where(['cargo' => Globales::CARGO_PREC])
                 ->orderBy('revista, division');
 
+        }else{
+            $query = Nombramiento::find()
+                ->joinWith(['division0'])
+                ->where(['cargo' => Globales::CARGO_PREC])
+                ->andWhere(['revista' => 1])
+                ->orderBy('division.nombre');
+        }
+        
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

@@ -13,6 +13,7 @@ use app\models\Actividadtipo;
 use app\models\Propuesta;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use app\models\Departamento;
 use yii\helpers\ArrayHelper;
 /**
  * ActividadController implements the CRUD actions for Actividad model.
@@ -104,7 +105,7 @@ class ActividadController extends Controller
         $planes=Plan::find()->all();
         $actividadtipos=Actividadtipo::find()->all();
         $propuestas=Propuesta::find()->all();
-
+        $departamentos = Departamento::find()->orderBy('nombre')->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -115,6 +116,7 @@ class ActividadController extends Controller
             'planes' => $planes,
             'actividadtipos' => $actividadtipos,
             'propuestas' => $propuestas,
+            'departamentos' => $departamentos,
 
         ]);
     }
@@ -133,6 +135,7 @@ class ActividadController extends Controller
         $planes=Plan::find()->all();
         $actividadtipos=Actividadtipo::find()->all();
         $propuestas=Propuesta::find()->all();
+        $departamentos = Departamento::find()->orderBy('nombre')->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -143,6 +146,7 @@ class ActividadController extends Controller
             'planes' => $planes,
             'actividadtipos' => $actividadtipos,
             'propuestas' => $propuestas,
+            'departamentos' => $departamentos,
         ]);
     }
 

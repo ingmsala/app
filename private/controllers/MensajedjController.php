@@ -121,7 +121,7 @@ class MensajedjController extends Controller
                         ->setTo($persona->mail)
                         ->setSubject('Declaración jurada rechazada')
                         ->setHtmlBody('Se ha rechazado la carga de su declaración jurada. Ingrese nuevamente y modifique los cambios solicitados: <br />'.
-                            $model->detalle)
+                            $model->detalle.'. <br /> Por favor no responda este correo ya que el mismo no será receptado por ningún destinatario, si tiene una consulta deberá comunicarse con la Oficina de Personal. Muchas gracias.')
                         ->send();
 
             return $this->redirect(Yii::$app->request->referrer);

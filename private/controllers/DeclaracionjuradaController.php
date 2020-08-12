@@ -69,7 +69,7 @@ class DeclaracionjuradaController extends Controller
                     ],
 
                     [
-                        'actions' => ['declaracionesjuradasadmin', 'detalleagente', 'resumen'],   
+                        'actions' => ['declaracionesjuradasadmin', 'detalleagente', 'resumen', 'print'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
@@ -711,8 +711,11 @@ class DeclaracionjuradaController extends Controller
     }
 
     public function actionPrint($dj, $mail = 0)
-    {
-        $this->layout = 'mainpersonal';
+    {   
+        if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA]))
+            $this->layout = 'main';
+        else
+            $this->layout = 'mainpersonal';
         if (YII_ENV_DEV) {
             Yii::$app->getModule('debug')->instance->allowedIPs = [];
         }
@@ -824,12 +827,12 @@ class DeclaracionjuradaController extends Controller
                         ->setFrom([Globales::MAIL => 'Sistemas Monserrat'])
                         ->setTo($persona->mail)
                         ->setSubject('Declaración jurada')
-                        ->setHtmlBody('Se ha cargado correctamente su declaración jurada. Guarde este mail como constancia.')
+                        ->setHtmlBody('Se ha cargado correctamente su declaración jurada. Guarde este mail como constancia. Por favor no responda este correo ya que el mismo no será receptado por ningún destinatario, si tiene una consulta deberá comunicarse con la Oficina de Personal. Muchas gracias.')
                         ->send();
         if($sendemail)
         {
             //unlink(Yii::getAlias('@app').'/runtime/logs/'.$filename.'.pdf');
-            Yii::$app->session->setFlash('success', "Se ha completado y enviado correctamente la Declaración Jurada. Se deja constancia de su presentación   en su casilla de correo.");
+            Yii::$app->session->setFlash('success', "Se ha completado y enviado correctamente la Declaración Jurada. Se deja constancia de su presentación en su casilla de correo.");
             return $this->redirect(['index']);
         }
 
@@ -860,8 +863,8 @@ class DeclaracionjuradaController extends Controller
             }
             $declaracionjurada = Declaracionjurada::find()->where(['persona' => $persona->documento])->andWhere(['id' => $dj])->one();
         }
-        if($pr == 1)
-            $this->layout = 'mainpersonal';
+        /*if($pr == 1)
+            $this->layout = 'mainpersonal';*/
         
 
         if($declaracionjurada == null){
@@ -1017,15 +1020,27 @@ class DeclaracionjuradaController extends Controller
             'allModels' => $array,
             
         ]);
-
-        return $this->render('resumen', [
-            'persona' => $persona,
-            'declaracionjurada' => $declaracionjurada,
-            'provider' => $provider,
-            'provider2' => $provider2,
-            'actividadnooficial' => $actividadnooficial,
-            'pasividaddj' => $pasividaddj,
-        ]);
+        
+        if($pr == 1){
+            return $this->renderAjax('resumen', [
+                'persona' => $persona,
+                'declaracionjurada' => $declaracionjurada,
+                'provider' => $provider,
+                'provider2' => $provider2,
+                'actividadnooficial' => $actividadnooficial,
+                'pasividaddj' => $pasividaddj,
+            ]);
+        }else{
+            return $this->render('resumen', [
+                'persona' => $persona,
+                'declaracionjurada' => $declaracionjurada,
+                'provider' => $provider,
+                'provider2' => $provider2,
+                'actividadnooficial' => $actividadnooficial,
+                'pasividaddj' => $pasividaddj,
+            ]);
+        }
+            
     }
     
     /**

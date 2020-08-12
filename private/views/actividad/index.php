@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ActividadSearch */
@@ -14,8 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="actividad-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    
+      
 
     <p>
         <?= Html::a('Nueva Actividad', ['create'], ['class' => 'btn btn-success']) ?>
@@ -24,6 +23,23 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'panel' => [
+            'type' => GridView::TYPE_DEFAULT,
+            'heading' => Html::encode($this->title),
+            //'beforeOptions' => ['class'=>'kv-panel-before'],
+        ],
+        'summary' => false,
+
+        'exportConfig' => [
+            GridView::EXCEL => [
+                'label' => 'Excel',
+                'filename' =>Html::encode($this->title),
+                
+                //'alertMsg' => false,
+            ],
+            
+
+        ],
         'columns' => [
             
 
@@ -44,6 +60,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Propuesta Formativa',
                 'attribute' => 'propuesta',
                 'value' => 'propuesta0.nombre'
+            ],
+            [
+                'label' => 'Departamento',
+                'attribute' => 'departamento',
+                'value' => 'departamento0.nombre'
             ],
 
             ['class' => 'yii\grid\ActionColumn'],

@@ -37,7 +37,7 @@ class PreceptoresController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_CONSULTA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -71,8 +71,13 @@ class PreceptoresController extends \yii\web\Controller
 
  	public function actionIndex()
 	    {
-	        $searchModel = new NombramientoSearch();
-	        $dataProvider = $searchModel->getPreceptores();
+            $searchModel = new NombramientoSearch();
+            if(Yii::$app->user->identity->role == Globales::US_REGENCIA){
+                $dataProvider = $searchModel->getPreceptores(0);
+            }else{
+                $dataProvider = $searchModel->getPreceptores();
+            }
+	        
             $model = new Nombramiento();
 
 	        

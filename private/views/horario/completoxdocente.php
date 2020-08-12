@@ -91,7 +91,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		            ],
 
 		            [
-		                'label' => 'Miercoles',
+		                'label' => 'Miércoles',
 		                'vAlign' => 'middle',
 						'hAlign' => 'center',
 						'format' => 'raw',

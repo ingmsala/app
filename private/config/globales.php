@@ -23,6 +23,8 @@ class Globales
 	const US_HORARIO = 16;
 	const US_MANTENIMIENTO = 17;
 	const US_NODOCENTE = 18;
+	const US_CAE_ADMIN = 19;
+	const US_PSC = 20;
 	
 	
 	const COND_SUPL = 5;
@@ -58,6 +60,8 @@ class Globales
 
 	const TIPO_NOV_X_USS = [[1,2,3,4,5,6,7],[1,4,5],[6],[2,3],[],[7],[7] ];//super, secret admin, secdoc(certificados), vicegestion, vacio, regentes
 
+	
+	const authttemas = ['msala@unc.edu.ar', 'msala'];
 	const MAIL = 'monserratsistema@gmail.com';
 	const PASS_MAIL = 'Monserrat294';
 

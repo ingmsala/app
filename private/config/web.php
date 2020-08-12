@@ -170,6 +170,9 @@ $config = [
         'horarioespecial' => [
             'class' => 'app\modules\horarioespecial\Horarioespecial',
         ],
+        'libroclase' => [
+            'class' => 'app\modules\libroclase\Libroclase',
+        ],
 
         'cas' => [
             'class' => 'silecs\yii2auth\cas\CasModule',

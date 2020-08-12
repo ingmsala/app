@@ -94,10 +94,13 @@ class FonidController extends Controller
         $this->layout = 'mainpersonal';
         $searchModel = new FonidSearch();
         $dataProvider = $searchModel->poragente(Yii::$app->request->queryParams);
-
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        $fonidfecha = Fonid::find()->where(['docente' => $doc->id])->andWhere(['fecha' => date('Y-m-d')])->count();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'fonidfecha' => $fonidfecha,
         ]);
     }
 
@@ -388,7 +391,7 @@ class FonidController extends Controller
         if($sendemail)
         {
             //unlink(Yii::getAlias('@app').'/runtime/logs/'.$filename.'.pdf');
-            Yii::$app->session->setFlash('success', "Se ha completado y enviado correctamente el FONID. Se deja constancia de su presentación en su casilla de correo.");
+            Yii::$app->session->setFlash('success', "Se ha completado y enviado correctamente el FONID. Se deja constancia de su presentación en su casilla de correo. Por favor no responda este correo ya que el mismo no será receptado por ningún destinatario, si tiene una consulta deberá comunicarse con la Oficina de Personal. Muchas gracias.");
             return $this->redirect(['index']);
         }
 

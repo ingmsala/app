@@ -563,8 +563,12 @@ class NombramientoController extends Controller
         $model = $this->findModel($id);
         $model->scenario = $model::SCENARIO_ABMDIVISION;
 
-        
-        $divisiones = Division::find()->all();
+        if(Yii::$app->user->identity->role == Globales::US_REGENCIA){
+            $divisiones = Division::find()->where(['<=', 'id', 53])->all();
+        }
+        else{
+            $divisiones = Division::find()->all();
+        }
         
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

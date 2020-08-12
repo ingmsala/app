@@ -43,6 +43,7 @@ class Actividad extends \yii\db\ActiveRecord
             [['plan'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan' => 'id']],
             [['actividadtipo'], 'exist', 'skipOnError' => true, 'targetClass' => Actividadtipo::className(), 'targetAttribute' => ['actividadtipo' => 'id']],
             [['propuesta'], 'exist', 'skipOnError' => true, 'targetClass' => Propuesta::className(), 'targetAttribute' => ['propuesta' => 'id']],
+            [['departamento'], 'exist', 'skipOnError' => true, 'targetClass' => Departamento::className(), 'targetAttribute' => ['departamento' => 'id']],
             [['propuesta', 'nombre', 'plan'], 'unique', 'targetClass' => '\app\models\Actividad', 'targetAttribute' => ['propuesta', 'nombre', 'plan'], 'message' => 'Ya existe la actividad en esa Propuesta y en ese Plan de Estudios.'],
         ];
     }
@@ -54,11 +55,12 @@ class Actividad extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'nombre' => 'Nombre',
+            'nombre' => 'Actividad',
             'cantHoras' => 'Cantidad de Horas',
             'actividadtipo' => 'Tipo de Actividad',
             'plan' => 'Plan de Estudio',
             'propuesta' => 'Propuesta Formativa',
+            'departamento' => 'Departamento',
         ];
     }
 
@@ -84,6 +86,10 @@ class Actividad extends \yii\db\ActiveRecord
     public function getPropuesta0()
     {
         return $this->hasOne(Propuesta::className(), ['id' => 'propuesta']);
+    }
+    public function getDepartamento0()
+    {
+        return $this->hasOne(Departamento::className(), ['id' => 'departamento']);
     }
 
     /**

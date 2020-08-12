@@ -12,7 +12,7 @@ use kartik\select2\Select2;
 ?>
 
 <?php $listAlumnos=ArrayHelper::map($alumnos,'id', function($alumno) {
-            return $alumno['apellido'].', '.$alumno['nombre'];}
+            return $alumno['apellido'].', '.$alumno['nombre'].'('.$alumno['curso'].')';}
         ); ?>
 
 <?php $listDivisiones=ArrayHelper::map($divisiones,'id','nombre'); ?>
@@ -34,7 +34,8 @@ use kartik\select2\Select2;
             'data' => $listAlumnos,
             'options' => ['placeholder' => 'Seleccionar...'],
             'pluginOptions' => [
-                'allowClear' => true
+                'allowClear' => true,
+                'multiple' => true,
             ],
         ]);
 
