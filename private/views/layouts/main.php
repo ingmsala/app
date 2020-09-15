@@ -137,6 +137,8 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Horarios de Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
                                         '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Horarios Previos', 'url' => ['/horario/pdfprevios']],
+                                        '<div class="dropdown-divider"></div>',
                                         ['label' => 'Administrar Clases Virtuales', 'url' => ['/clasevirtual/panelprincipal']],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Cronograma de Clases Virtuales', 'url' => ['/horario/clasesvirtuales']],
@@ -441,6 +443,8 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
                                         '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Previas', 'url' => ['/horario/pdfprevios']],
+                                        '<div class="dropdown-divider"></div>',
                                         
                                         
                                     ],
@@ -610,6 +614,8 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                 ['label' => 'Febrero/Marzo', 'url' => ['horario/marzo',  'col' => 1]],
                                         '<div class="dropdown-divider"></div>',
+                                ['label' => 'Previas', 'url' => ['/horario/pdfprevios']],
+                                        '<div class="dropdown-divider"></div>',
                                 [
                                     'label' => 'Reportes',
                                     'itemsOptions'=>['class'=>'dropdown-submenu'],
@@ -770,6 +776,8 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
                                         '<div class="dropdown-divider"></div>',
+                                ['label' => 'Previas', 'url' => ['/horario/pdfprevios']],
+                                        '<div class="dropdown-divider"></div>', 
                                 
                                 
                             ],
@@ -846,6 +854,8 @@ try {
                                         ['label' => 'Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Previas', 'url' => ['/horario/pdfprevios']],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Diferencia de horas', 'url' => ['/reporte/diferenciahorarioyhoras']],
                                         '<div class="dropdown-divider"></div>',

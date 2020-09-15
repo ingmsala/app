@@ -118,7 +118,9 @@ class FonidSearch extends Fonid
                         ->groupBy('person')
                         ->orderBy('declaracionjurada.id desc');*/
             if($pers == null){
-                $sql = 'SELECT id, documento, apellido, nombre, mail from docente
+                $sql = 'SELECT distinct docente.id, docente.documento, docente.apellido, docente.nombre, docente.mail from docente
+                    WHERE docente.id in (select dc.docente from detallecatedra dc where dc.docente=docente.id and dc.activo=1) or 
+                    docente.id in (select nom.docente from nombramiento nom where nom.docente=docente.id)
                     ORDER BY apellido, nombre';
             }else{
                 $sql = 'SELECT id, documento, apellido, nombre, mail from docente

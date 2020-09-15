@@ -1,6 +1,8 @@
 <?php
 
 use app\config\Globales;
+use app\models\Docente;
+use app\models\Docentexdepartamento;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
@@ -122,6 +124,40 @@ else{
             Html::a('<span class="'.$classlogo.' glyphicon glyphicon-open-file"></span><h2>Formularios</h2><span class="label label-success">FONID</span>',
 
            ['/fonid'],
+
+           [
+
+               //'id' => 'modalButtonIngreso',
+               'class' => $classclient,
+               // modalCall
+
+           ]);
+
+          ?>
+      
+        </div>
+      <?php
+          }
+      ?>
+
+<?php
+
+      $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+      try {
+        $depto = Docentexdepartamento::find()->where(['docente' => $persona->id])->count();
+      } catch (\Throwable $th) {
+        //throw $th;
+      }
+      
+      $depto = 0;
+      
+          if(in_array(Yii::$app->user->identity->username, Globales::authttemas) || $depto>0){
+        ?>
+        <div class="col-md-3">           
+          <?= 
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-book"></span><h2>Libro</h2><span class="label label-danger">AULA</span>',
+
+           ['/libroclase/programa/actividades'],
 
            [
 

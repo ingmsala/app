@@ -284,11 +284,7 @@ class HorarioController extends Controller
         
         
        
-        return $this->render('pdfprevios', [
-            
-            
-
-        ]);
+        return $this->redirect(['/mesaexamen', 'turno' => 1]);
     }
 
         public function actionMarzo()

@@ -89,7 +89,7 @@ if($fonidfecha>0){
 
                                 if($modelok->estadofonid == 1 || $modelok->estadofonid == 4)
                                     return Html::a(
-                                    '<span class="btn btn-primary">Modificar</span>',
+                                    '<span class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Continuar completando...</span>',
                                     '?r=fonid/update&id='.$modelok->id);
                             },
             
@@ -205,7 +205,7 @@ if($fonidfecha>0){
                     'modificar' => function($url, $model, $key){
                         if($model->estadofonid == 1 || $model->estadofonid == 4)
                             return Html::a(
-                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            '<span class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Continuar completando...</span>',
                             '?r=fonid/update&id='.$model->id);
                     },
 

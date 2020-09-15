@@ -117,6 +117,10 @@ AppAsset::register($this);
 
                                 ['label' => 'Inasistencias por División', 'url' => ['/sociocomunitarios/reportes/inasistencias']],
                                 '<div class="dropdown-divider"></div>',
+                                [
+                                    'label' => 'Seguimiento por división del secundario',
+                                    'url' => ['/sociocomunitarios/reportes/seguimientos'],
+                                ],
 
                                 
                             
@@ -189,6 +193,10 @@ AppAsset::register($this);
                                 [
                                     'label' => 'Planilla de Asistencia',
                                     'url' => ['/sociocomunitarios/reportes/planillasistencia'],
+                                ],
+                                [
+                                    'label' => 'Seguimiento por división del secundario',
+                                    'url' => ['/sociocomunitarios/reportes/seguimientos'],
                                 ],
                             
                                 '<div class="dropdown-divider"></div>',

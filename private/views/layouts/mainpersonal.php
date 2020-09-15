@@ -9,6 +9,8 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use app\assets\AppAsset;
 use app\config\Globales;
+use app\models\Docente;
+use app\models\Docentexdepartamento;
 
 AppAsset::register($this);
 ?>
@@ -26,6 +28,17 @@ AppAsset::register($this);
 </head>
 
     <?php $this->beginBody() ?>
+
+    <?php
+        $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        try {
+            $depto = Docentexdepartamento::find()->where(['docente' => $persona->id])->count();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        
+        $depto = 0;
+    ?>
 
 <?php 
 
@@ -77,6 +90,17 @@ if(!Yii::$app->user->isGuest){
 
         ];
     }elseif(Yii::$app->user->identity->role == Globales::US_DOCENTE){
+
+        if(in_array(Yii::$app->user->identity->username, Globales::authttemas) || $depto>0){
+            $ar = ['label' => '<center><span class="glyphicon glyphicon-book"></span><br />'.'Programas</center>',
+                            
+            'url' => ['/libroclase/programa/actividades'],
+            '<div class="dropdown-divider"></div>',
+        ]       ;
+        }else{
+            $ar = '';
+        }
+
         $items = [
                             
             ['label' => '<center><span class="glyphicon glyphicon-time"></span><br />'.'Horarios</center>',
@@ -102,6 +126,9 @@ if(!Yii::$app->user->isGuest){
                     'url' => ['/curriculares/menuopciones'],
                     '<div class="dropdown-divider"></div>',
             ],
+            $ar,
+
+            
 
             ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.'Usuario'.'',
             

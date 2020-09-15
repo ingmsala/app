@@ -87,7 +87,7 @@ $this->title = 'Declaraciones Juradas';
 
                                 if($modelok->estadodeclaracion == 1 || $modelok->estadodeclaracion == 4)
                                     return Html::a(
-                                    '<span class="btn btn-primary">Modificar</span>',
+                                    '<span class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Continuar completando...</span>',
                                     '?r=declaracionjurada/datospersonales');
                             },
             
@@ -208,7 +208,7 @@ $this->title = 'Declaraciones Juradas';
                     'modificar' => function($url, $model, $key){
                         if($model->estadodeclaracion == 1 || $model->estadodeclaracion == 4)
                             return Html::a(
-                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            '<span class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Continuar completando...</span>',
                             '?r=declaracionjurada/datospersonales');
                     },
 

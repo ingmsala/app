@@ -135,11 +135,11 @@ $array = array(
                     return ($model->vigencia == 1) ? 'Vigente' : 'Inactivo';
                 }
             ],
-            [
+            /*[
                 'label' => 'Programa oficial',
                 'format' => 'raw',
                 'value' => Html::a('Ver programa', $array[$model->actividad0->id][0], ['target'=>'_blank'])
-            ],
+            ],*/
             
         ],
     ]) ?>

@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 
@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="docente-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+   
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     
@@ -35,6 +35,29 @@ $this->params['breadcrumbs'][] = $this->title;
     <?=  GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'panel' => [
+            'type' => GridView::TYPE_DEFAULT,
+            'heading' => Html::encode($this->title),
+            //'beforeOptions' => ['class'=>'kv-panel-before'],
+        ],
+        'summary' => false,
+
+        'exportConfig' => [
+            GridView::EXCEL => [
+                'label' => 'Excel',
+                'filename' =>Html::encode($this->title),
+                
+                //'alertMsg' => false,
+            ],
+            
+
+        ],
+
+        'toolbar'=>[
+            
+            '{export}',
+            
+        ],
         'columns' => [
             
             

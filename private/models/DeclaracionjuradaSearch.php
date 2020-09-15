@@ -125,6 +125,8 @@ class DeclaracionjuradaSearch extends Declaracionjurada
                         ->orderBy('declaracionjurada.id desc');*/
             if($pers == null){
                 $sql = 'SELECT * FROM (SELECT documento, apellido, nombre, mail from docente
+                WHERE docente.id in (select dc.docente from detallecatedra dc where dc.docente=docente.id and dc.activo=1) or 
+                    docente.id in (select nom.docente from nombramiento nom where nom.docente=docente.id)
                 UNION DISTINCT
                 SELECT documento, apellido, nombre, mail from nodocente) aa
                 group by (documento)

@@ -5,8 +5,12 @@
 	use yii\data\SqlDataProvider;
 	use app\modules\curriculares\models\Matricula;
 	use app\models\User;
-	use yii\filters\AccessControl;
+use app\modules\curriculares\models\Seguimiento;
+use app\modules\sociocomunitarios\models\Detallerubrica;
+use Yii;
+use yii\filters\AccessControl;
 	use yii\base\UserException;
+use yii\data\ArrayDataProvider;
 use yii\filters\auth\HttpBasicAuth;
 	
 	class TestController extends Controller
@@ -113,20 +117,93 @@ public function behaviors()
 
 	    public function actionSeguimiento($enrollment_id)
 	    {
-	        return new SqlDataProvider([
-	            'sql' => 'SELECT
-						    seg.id AS tracking_id,
-						    fecha AS tracking_date,
-						    CONCAT(UPPER(ts.nombre), " - ", descripcion, " - ", COALESCE(UPPER(es.nombre), "")) AS tracking_detail
-						    FROM
-						        seguimiento seg
-						    LEFT JOIN 
-						        tiposeguimiento ts ON seg.tiposeguimiento = ts.id
-						    LEFT JOIN 
-						        estadoseguimiento es ON seg.estadoseguimiento = es.id
-						    WHERE seg.matricula='.$enrollment_id,
-	            'pagination' => false,
-	        ]);
+
+			$mat = Matricula::findOne($enrollment_id);
+			if($mat->comision0->espaciocurricular0->tipoespacio == 2){
+
+				$array = [];
+				
+				$seg = Seguimiento::find()->where(['matricula' => $enrollment_id])->all();
+
+				
+
+				foreach ($seg as $s) {
+					$detallerubrica = Detallerubrica::find()->where(['seguimiento' => $s->id])->all();
+					$detru = '';
+
+					foreach ($detallerubrica as $dr) {
+						$detru.= $dr->calificacionrubrica0->rubrica0->descripcion.': '.$dr->calificacionrubrica0->detalleescalanota0->nota.'. ';
+					}
+					date_default_timezone_set('America/Argentina/Buenos_Aires');
+
+					$array['item']['tracking_id'] = $s->id;
+					$array['item']['tracking_date'] = Yii::$app->formatter->asDate($s->fecha, 'dd/MM/yyyy');
+
+					try {
+						$array['item']['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion.': '.$detru.' - '.$s->estadoseguimiento0->nombre;
+					} catch (\Throwable $th) {
+						$array['item']['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion.': '.$detru;
+					}
+
+					
+				}
+
+
+		
+				//return var_dump($array);
+				
+				return new ArrayDataProvider([
+					'allModels' => $array,
+					
+				]);
+
+				
+				
+			}else{
+
+				$array = [];
+				
+				$seg = Seguimiento::find()->where(['matricula' => $enrollment_id])->all();
+
+				date_default_timezone_set('America/Argentina/Buenos_Aires');
+
+				foreach ($seg as $s) {
+					$array['item']['tracking_id'] = $s->id;
+					$array['item']['tracking_date'] = Yii::$app->formatter->asDate($s->fecha, 'dd/MM/yyyy');
+
+					try {
+						$array['item']['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion.' - '.$s->estadoseguimiento0->nombre;
+					} catch (\Throwable $th) {
+						$array['item']['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion;
+					}
+					
+				}
+
+
+		
+				//return var_dump($array);
+				
+				return new ArrayDataProvider([
+					'allModels' => $array,
+					
+				]);
+
+				/*return new SqlDataProvider([
+					'sql' => 'SELECT
+								seg.id AS tracking_id,
+								fecha AS tracking_date,
+								CONCAT(UPPER(ts.nombre), " - ", descripcion, " - ", COALESCE(UPPER(es.nombre), "")) AS tracking_detail
+								FROM
+									seguimiento seg
+								LEFT JOIN 
+									tiposeguimiento ts ON seg.tiposeguimiento = ts.id
+								LEFT JOIN 
+									estadoseguimiento es ON seg.estadoseguimiento = es.id
+								WHERE seg.matricula='.$enrollment_id,
+					'pagination' => false,
+				]);*/
+			}
+
 	    }
 
 

@@ -57,7 +57,7 @@ class MenuprincipalController extends Controller
      */
     public function actionIndex()
     {
-        $this->layout = 'mainpersonal';
+        $this->layout = '@app/views/layouts/mainpersonal';
         return $this->render('index');
 
         

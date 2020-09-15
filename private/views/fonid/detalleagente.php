@@ -1,5 +1,6 @@
 <?php
 
+use app\config\Globales;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 
@@ -82,7 +83,7 @@ $this->title = 'Historial de Fonid por Agente';
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{ver}',
+                'template' => '{ver} {borrar}',
                 
                 'buttons' => [
                     
@@ -98,17 +99,20 @@ $this->title = 'Historial de Fonid por Agente';
                             return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>',
                             '?r=fonid/datospersonales');
-                    },
+                    },*/
 
                     'borrar' => function($url, $model, $key){
-                        if($model->estadofonid == 1 || $model->estadofonid == 4)
-                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=fonid/delete&id='.$model['id'], 
+                        if(Yii::$app->user->identity->role == Globales::US_SUPER){
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=fonid/delete&id='.$model['id'], 
                             ['data' => [
                             'confirm' => 'Está seguro de querer eliminar este elemento?',
                             'method' => 'post',
                              ]
                             ]);
-                    },*/
+                        }
+                        
+                        
+                    },
                 ]
 
             ],
