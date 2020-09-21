@@ -9,10 +9,10 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Horario */
 /* @var $form yii\widgets\ActiveForm */
-$listcatedras=ArrayHelper::map($catedras,'id',function($cat){
+$listcatedras=ArrayHelper::map($catedras,'id',function($cat) use ($al){
     $doc = 'VACANTE';
     foreach ($cat->detallecatedras as $dc) {
-        if($dc->revista == 6){
+        if($dc->revista == 6 && $dc->aniolectivo == $al){
             $doc = $dc->docente0->apellido.', '.$dc->docente0->nombre;
             break;
         }
@@ -34,11 +34,25 @@ JS;
 
 <?php 
 
-echo Html::a('< Volver', Url::to(['horario/completoxcurso', 'division' => $division->id, 'vista' => 'docentes']), [
+echo Html::a('< Volver', Url::to(['horario/completoxcurso', 'division' => $division->id, 'vista' => 'docentes', 'al' => $model->aniolectivo]), [
             'class' => 'btn btn-default pull-right',
-        ]); ?>
-<div class="panel panel-default">
-    <div class="panel-heading"><?= 'Modificar docente de '.Html::encode($division->nombre); ?></div>
+        ]); 
+
+if($model->aniolectivo0->nombre <> date('Y')){
+    $anio = '<span style="background-color: #c9302c; color:#FFFFFF; font-size:15pt;">'.$model->aniolectivo0->nombre.'</span>';
+    $lab = 'danger';
+}else{
+    $anio = $model->aniolectivo0->nombre;
+    $lab = 'default';
+}
+
+?>
+
+
+<?php
+    echo '<div class="panel panel-'.$lab.'">';
+?>
+    <div class="panel-heading"><?= $anio.' - '.'Modificar docente de '.Html::encode($division->nombre); ?></div>
     <div class="panel-body">
 <div class="horario-form">
     

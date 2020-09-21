@@ -7,13 +7,16 @@ use app\config\Globales;
 use app\models\Actividad;
 use app\models\Catedra;
 use app\models\Clasevirtual;
+use app\models\Declaracionjurada;
 use app\models\Detallecatedra;
 use app\models\DetallecatedraSearch;
 use app\models\Diasemana;
 use app\models\Division;
 use app\models\Docente;
+use app\models\Funciondj;
 use app\models\Hora;
 use app\models\Horario;
+use app\models\Horariodj;
 use app\models\Horarioexamen;
 use app\models\HorarioSearch;
 use app\models\Nodocente;
@@ -22,6 +25,7 @@ use app\models\Parametros;
 use app\models\Preceptoria;
 use app\models\Tipomovilidad;
 use app\models\Tipoparte;
+use app\modules\curriculares\models\Aniolectivo;
 use kartik\mpdf\Pdf;
 use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
@@ -48,7 +52,7 @@ class HorarioController extends Controller
                                     'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 
                                     'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 
                                     'horariocompleto', 'menuopciones','migrarhorarioprueba', 'printxcurso', 
-                                    'printxdocente', 'deshabilitados', 'cambiarmovilidad', 'completodetallado', 'prueba'],
+                                    'printxdocente', 'deshabilitados', 'cambiarmovilidad', 'completodetallado', 'prueba', 'migrarhorariosiguienteanio', 'declaracionhorario'],
                 'rules' => [
                     [
                         'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'filtropormateria', 'horariocompleto', 'menuopciones'],   
@@ -158,7 +162,7 @@ class HorarioController extends Controller
                    
 
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'readlog', 'migrarhorarioprueba','prueba'],   
+                        'actions' => ['index', 'view', 'create', 'update', 'readlog', 'migrarhorarioprueba','prueba', 'migrarhorariosiguienteanio'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -170,7 +174,7 @@ class HorarioController extends Controller
 
                     ],
                     [
-                        'actions' => ['createdesdehorario','updatedesdehorario', 'delete', 'printxdocente', 'deshabilitados', 'cambiarmovilidad', 'completodetallado'],   
+                        'actions' => ['createdesdehorario','updatedesdehorario', 'delete', 'printxdocente', 'deshabilitados', 'cambiarmovilidad', 'completodetallado', 'declaracionhorario'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -373,8 +377,11 @@ class HorarioController extends Controller
                 $echodiv .= '</div></center>';
                 $echodiv .= '</div>';
         }
+        $almodel = Aniolectivo::find()->where(['activo' => 1])->one();
+        $anio = $almodel->id;
         return $this->render('menuxdivision', [
-        	'echodiv' => $echodiv,
+            'echodiv' => $echodiv,
+            'anio' => $anio,
         ]);
     }
 
@@ -469,13 +476,14 @@ class HorarioController extends Controller
         ]);
     }
 
-    public function actionCreatedesdehorario($division, $hora, $diasemana, $tipo)
+    public function actionCreatedesdehorario($division, $hora, $diasemana, $tipo, $al)
     {
         $model = new Horario();
         $model->scenario = $model::SCENARIO_CREATEHORARIO;
         $model->hora = $hora;
-            $model->diasemana = $diasemana;
-            $model->tipo = $tipo;
+        $model->diasemana = $diasemana;
+        $model->tipo = $tipo;
+        $model->aniolectivo = $al;
 
         if ($model->load(Yii::$app->request->post())) {
             //$model->catedra = $catedra;
@@ -496,6 +504,7 @@ class HorarioController extends Controller
                 $model2->diasemana = $model->diasemana;
                 $model2->hora = $horas[$i];
                 $model2->tipomovilidad = 1;
+                $model2->aniolectivo = $al;
                 //return var_dump($model2);
                 $valid = $model2->validate();
                 if($valid){
@@ -518,12 +527,13 @@ class HorarioController extends Controller
             }
 
             if($tr)
-               return $this->redirect(['/horario/completoxcurso', 'division' => $division, 'vista' => 'docentes']);
+               return $this->redirect(['/horario/completoxcurso', 'division' => $division, 'vista' => 'docentes', 'al' => $al]);
         }
 
         
 
-        $catedras = Catedra::find()->where(['division' => $division])->all();
+        $catedras = Catedra::find()->joinWith(['detallecatedras'])->where(['division' => $division])->andWhere(['detallecatedra.aniolectivo' => $al])->all();
+        //return var_dump($division);
         $horas = Hora::find()->all();
         $dias = Diasemana::find()->all();
         $tipos = Tipoparte::find()->all();
@@ -535,10 +545,11 @@ class HorarioController extends Controller
             'tipos' => $tipos,
             'division' => $division,
             'catedras' => $catedras,
+            'al' => $al,
         ]);
     }
 
-    public function actionUpdatedesdehorario($division, $hora, $diasemana, $tipo)
+    public function actionUpdatedesdehorario($division, $hora, $diasemana, $tipo, $al)
     {
         $model = Horario::find()
                     ->joinWith(['catedra0'])
@@ -546,6 +557,7 @@ class HorarioController extends Controller
                     ->andWhere(['hora' => $hora])
                     ->andWhere(['diasemana' => $diasemana])
                     ->andWhere(['tipo' => $tipo])
+                    ->andWhere(['aniolectivo' => $al])
                     ->one();
         
 
@@ -564,10 +576,10 @@ class HorarioController extends Controller
 
                 $model->save();
 
-                return $this->redirect(['/horario/completoxcurso', 'division' => $division, 'vista' => 'docentes']);
+                return $this->redirect(['/horario/completoxcurso', 'division' => $division, 'vista' => 'docentes', 'al' => $al]);
             }else{
                 Yii::$app->session->setFlash('danger', "No se puede cambiar un horario que no sea 'Móvil'.");
-                return $this->redirect(['/horario/completoxcurso', 'division' => $division, 'vista' => 'docentes']);
+                return $this->redirect(['/horario/completoxcurso', 'division' => $division, 'vista' => 'docentes', 'al' => $al]);
             }
            
 
@@ -576,10 +588,8 @@ class HorarioController extends Controller
 
         $division = Division::findOne($division);
         $tipomovilidad = Tipomovilidad::find()->all();
-        $catedras = Catedra::find()->joinWith('detallecatedras')
-                        ->where(['division' => $division->id])
-                        //->andWhere(['detallecatedra.revista' => 6])
-                        ->all();
+        $catedras = Catedra::find()->joinWith(['detallecatedras'])->where(['catedra.division' => $division->id])->andWhere(['detallecatedra.aniolectivo' => $al])->all();
+        //return var_dump($catedras[9]->detallecatedras);
         $horas = Hora::find()->all();
         $dias = Diasemana::find()->all();
         $tipos = Tipoparte::find()->all();
@@ -591,6 +601,7 @@ class HorarioController extends Controller
             'tipos' => $tipos,
             'catedras' => $catedras,
             'tipomovilidad' => $tipomovilidad,
+            'al' => $al,
         ]);
     }
     /**
@@ -663,7 +674,7 @@ class HorarioController extends Controller
         
     }
 
-    public function generarHorarioxCurso($division, $vista, $pr){
+    public function generarHorarioxCurso($division, $vista, $pr, $al){
         $estadopublicacion = Parametros::findOne(1)->estado;
 
         if ($estadopublicacion == 0){
@@ -716,6 +727,7 @@ class HorarioController extends Controller
             //->where(['diasemana' => 2])
             ->andWhere(['catedra.division' => $division])
             ->andWhere(['tipo' => 1])
+            ->andWhere(['aniolectivo' => $al])
             ->orderBy('diasemana, hora')
             ->all();
 
@@ -732,7 +744,7 @@ class HorarioController extends Controller
                 if($cd == 0)
                     $array[$hora->id][$cd] = $h[$ch+1]; 
                 if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]))
-                  $array[$hora->id][$dia->id] = '<a class="btn btn-info btn-sm" href="?r=horario/createdesdehorario&division='.$division.'&hora='.$hora->id.'&diasemana='.$dia->id.'&tipo=1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>';
+                  $array[$hora->id][$dia->id] = '<a class="btn btn-info btn-sm" href="?r=horario/createdesdehorario&division='.$division.'&hora='.$hora->id.'&diasemana='.$dia->id.'&tipo=1&al='.$al.'"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>';
                 else
                     $array[$hora->id][$dia->id] = "-";
                 //$key = array_search($hora->id, array_column($horarios, 'hora'));
@@ -751,12 +763,32 @@ class HorarioController extends Controller
                             foreach ($horariox->catedra0->detallecatedras as $dc) {
 
                                 $salida = '';
-                                if ($dc->revista == 6){
+                                if ($dc->revista == 6 && $dc->aniolectivo == $al){
                                     //return var_dump($dc['revista']==1);
-                                    $superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->diasemana);
-                                    if ($superpuesto[0]){
+                                    $superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->diasemana, $dc->aniolectivo);
+                                    $superpuestodj = $this->horaSuperpuestaDeclaracionJurada($dc, $horariox->hora, $horariox->diasemana, $dc->aniolectivo, $h);
+                                    
+                                    
+                                    #INICIO Bloquear dj
+                                    
+                                    $superpuestodj[0] = false;
+
+                                    #FIN Bloquear dj
+                                   
+
+                                    if ($superpuesto[0] && $superpuestodj[0]){
                                         ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
-                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),1,0).'</span>'.'</span>';
+                                        $salida = '<span style="color:#f39c12">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].$superpuestodj[1].'">'.$dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1).'</span>'.'</span>';
+                                    }
+                                    elseif ($superpuesto[0]){
+                                        ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
+                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1).'</span>'.'</span>';
+                                    }
+
+                                    elseif($superpuestodj[0]){
+                                        ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
+                                        $salida = '<span style="color:#10D300">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuestodj[1].'">'.$dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1).'</span>'.'</span>';
+
                                     }
                                     else
                                         $salida = $dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1);
@@ -770,9 +802,9 @@ class HorarioController extends Controller
                 if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]))
                     if($pr == 0){
                         if($horariox->tipomovilidad==1)
-                            $array[$horariox->hora][$horariox->diasemana] = '<a class="btn btn-link btn-sm" href="?r=horario/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&diasemana='.$horariox->diasemana.'&tipo=1">'.$salida.'</a>';
+                            $array[$horariox->hora][$horariox->diasemana] = '<a class="btn btn-link btn-sm" href="?r=horario/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&diasemana='.$horariox->diasemana.'&tipo=1&al='.$al.'">'.$salida.'</a>';
                         else
-                            $array[$horariox->hora][$horariox->diasemana] = '<span class="bordermov"><a class="btn btn-link btn-sm" href="?r=horario/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&diasemana='.$horariox->diasemana.'&tipo=1">'.$salida.'</a></span>';
+                            $array[$horariox->hora][$horariox->diasemana] = '<span class="bordermov"><a class="btn btn-link btn-sm" href="?r=horario/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&diasemana='.$horariox->diasemana.'&tipo=1&al='.$al.'">'.$salida.'</a></span>';
                     }
                     else
                         $array[$horariox->hora][$horariox->diasemana] = $salida;
@@ -789,30 +821,192 @@ class HorarioController extends Controller
         //return var_dump($array);
 
         $docente_materia_search = new DetallecatedraSearch();
-        $dataProvider = $docente_materia_search->horario_doce_divi($division);
+        $dataProvider = $docente_materia_search->horario_doce_divi($division, $al);
 
-        return $this->render('completoxcurso', [
-            //'model' => $model,
-            //'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            //'dataProviderMartes' => $dataProviderMartes,
-            'provider' => $provider,
-            'paramdivision' => $paramdivision,
-            'vista' => $vista,
-            'pr' => $pr,
-            'preceptor' => $preceptor,
+        
+        $model = new Horario();
+        $model->aniolectivo = $al;
+        $alx = Aniolectivo::findOne($al);
+        $alx2 = Aniolectivo::find()->where(['activo' => 1])->one();
+        //$anioslectivos = Aniolectivo::find()->limit(2)->orderBy('id DESC')->all();
+        $anioslectivos = Aniolectivo::find()->where(['>=', 'id', $alx2->id])->all();
+        if(($alx->nombre <> $alx2->nombre) && $pr<>1){
+            $colorheader = ['style' => 'background-color:#f2dede'];
+            $otro = 1;
+        }else{
+            $colorheader = [];
+            $otro = 0;
+        }
 
+        if ($model->load(Yii::$app->request->post())) {
+            //return var_dump($model->aniolectivo);
+            $session = Yii::$app->session;
+		    $session->set('aniolectivosession', $model->aniolectivo);
+            return $this->redirect(['completoxcurso', 'division' => $division, 'vista' => $vista, 'al' => $model->aniolectivo]);
+            
+        }
+
+        
+
+        if($pr<>1){
+            return $this->render('completoxcurso', [
+                //'model' => $model,
+                //'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                //'dataProviderMartes' => $dataProviderMartes,
+                'provider' => $provider,
+                'paramdivision' => $paramdivision,
+                'vista' => $vista,
+                'pr' => $pr,
+                'preceptor' => $preceptor,
+                'anioslectivos' => $anioslectivos,
+                'aniolec' => $al,
+                'model' => $model,
+                'alx' => $alx,
+                'colorheader' => $colorheader,
+                'otro' => $otro,
+    
+            ]);
+        }else{
+            return $this->renderAjax('completoxcurso', [
+                //'model' => $model,
+                //'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                //'dataProviderMartes' => $dataProviderMartes,
+                'provider' => $provider,
+                'paramdivision' => $paramdivision,
+                'vista' => $vista,
+                'pr' => $pr,
+                'preceptor' => $preceptor,
+                'anioslectivos' => $anioslectivos,
+                'aniolec' => $al,
+                'model' => $model,
+                'alx' => $alx,
+                'colorheader' => $colorheader,
+                'otro' => $otro,
+    
+            ]);
+        }
+
+        
+    }
+
+
+    public function actionDeclaracionhorario($dni){
+
+        
+        
+        $dj = Declaracionjurada::find()
+                ->where(['persona' => $dni])
+                ->andWhere(['in', 'estadodeclaracion', [2,3]])
+                ->max('id');
+
+        $decla = Declaracionjurada::findOne($dj);
+
+        
+        $funciones = Funciondj::find()
+            ->where(['declaracionjurada' => $dj])
+            ->andWhere(['is not','cargo',null])
+            ->all();
+
+        
+        $horarios = Horariodj::find()
+            ->joinWith(['funciondj0', 'funciondj0.declaracionjurada0'])
+            //->where(['diasemana' => 2])
+            ->andWhere(['funciondj.declaracionjurada' => $dj])
+            ->andWhere(['is', 'horariodj.actividadnooficial', null])
+            ->orderBy('diasemana, inicio')
+            ->all();
+        //return var_dump($horarios);
+
+        $dias = Diasemana::find()->all();
+        
+
+        $cd2 = 0;
+        //return var_dump($dias);
+        $array = [];
+        $salida = '';
+        foreach ($dias as $dia) {
+            $ch2 = 0;
+            foreach ($funciones as $funcion) {
+                # code...
+                
+                if($cd2 == 0){
+                    $array[$funcion->id][-1] = $ch2+4;
+                    if($funcion->licencia == 1)
+                        $array[$funcion->id][0] = $funcion->cargo.'<br /><em>'.$funcion->reparticion.'</em>';
+                    else
+                        $array[$funcion->id][0] = $funcion->cargo.'<br /><em>'.$funcion->reparticion.' - Licencia</em>';
+                }
+                    
+                if ($funcion->licencia == 1){
+                    $array[$funcion->id][$dia->id] = '-';
+                }else
+                    $array[$funcion->id][$dia->id] = "- ";
+                
+                $ch2 = $ch2 + 1;
+            }
+            $cd2 = $cd2 + 1;
+        }
+
+        
+
+        $salida = '';
+        foreach ($horarios as $horariox) {
+            date_default_timezone_set('America/Argentina/Buenos_Aires');
+            if($array[$horariox->funciondj][$horariox->diasemana] == '-'){
+                $array[$horariox->funciondj][$horariox->diasemana] = '<div class="label label-default">'.Yii::$app->formatter->asDate($horariox->inicio, 'HH:mm').' a '.Yii::$app->formatter->asDate($horariox->fin, 'HH:mm').' '.
+                '</div><br />';
+            }elseif($array[$horariox->funciondj][$horariox->diasemana] == '- '){
+                $array[$horariox->funciondj][$horariox->diasemana] = '-';
+            }else{
+                $array[$horariox->funciondj][$horariox->diasemana] .= '<div class="label label-default">'.Yii::$app->formatter->asDate($horariox->inicio, 'HH:mm').' a '.Yii::$app->formatter->asDate($horariox->fin, 'HH:mm').' '.
+            '</div><br />';
+            }
+           
+        }
+        
+        //$ch2 = count($funciones);
+
+
+        
+
+        //return var_dump($array);
+        
+        $provider2 = new ArrayDataProvider([
+            'allModels' => $array,
+            
         ]);
+
+        return $this->renderAjax('declaracionhorario', [
+            
+            'provider2' => $provider2,
+            
+            'decla' => $decla,
+            
+        ]);
+
+
     }
 
-    public function actionCompletoxcurso($division, $vista)
+   
+    public function actionCompletoxcurso($division, $vista, $al=0)
     {
+        $almodel = Aniolectivo::find()->where(['activo' => 1])->one();
+        $anio = $almodel->id;
         
-    	return $this->generarHorarioxCurso($division, $vista, 0);
+        if($al==0){
+            $al = isset($_SESSION['aniolectivosession']) ? $_SESSION['aniolectivosession'] : $anio;
+            
+        }
+        if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+            $anio = $al;
+        }
+    	return $this->generarHorarioxCurso($division, $vista, 0, $anio);
         
     }
 
-    public function actionPrintxcurso($division, $vista, $all = 0)
+    public function actionPrintxcurso($division, $vista, $all = 0, $al)
     {
         
         if(in_array(Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR]))
@@ -840,14 +1034,14 @@ class HorarioController extends Controller
 
             
             foreach ($divisiones as $divi) {
-                $salidaimpar .=  $this->generarHorarioxCurso($divi->id, $vista, 1);
+                $salidaimpar .=  $this->generarHorarioxCurso($divi->id, $vista, 1, $al);
             
             }
             $filenamesext = "Horario Completo de Clases";
             $filename = $filenamesext.".pdf";
         }else{
             $di = Division::findOne($division);
-            $salidaimpar = $this->generarHorarioxCurso($division, $vista, 1);
+            $salidaimpar = $this->generarHorarioxCurso($division, $vista, 1, $al);
             $filenamesext = "Horario de Clases - {$di->nombre}";
             $filename =$filenamesext.".pdf";
         }
@@ -922,7 +1116,7 @@ class HorarioController extends Controller
         
     }
 
-    public function horaSuperpuesta($dc, $hora, $diasemana){
+    public function horaSuperpuesta($dc, $hora, $diasemana, $al){
         $docente = $dc->docente;
         $horarios = Horario::find()
             ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
@@ -932,12 +1126,14 @@ class HorarioController extends Controller
             ->andWhere(['horario.hora' => $hora])
             ->andWhere(['horario.diasemana' => $diasemana])
             ->andWhere(['horario.tipo' => 1])
+            ->andWhere(['detallecatedra.aniolectivo' => $al])
+            ->andWhere(['horario.aniolectivo' => $al])  
             ->andWhere(['division.turno' => $dc->catedra0->division0->turno])
             ->all();
         if (count($horarios)>0){
             $salida = '<ul>';
             foreach ($horarios as $sup) {
-                $salida .= '<li>'.$sup->catedra0->division0->nombre.'</li>';
+                $salida .= '<li>Horario: '.$sup->catedra0->division0->nombre.'</li>';
             }
             $salida .= '</ul>';
             return [true, $salida];
@@ -945,6 +1141,72 @@ class HorarioController extends Controller
             
         else
             return [false, ''];
+    }
+
+    private function horaSuperpuestaDeclaracionJurada($dc, $hora, $diasemana, $al, $h){
+        $docente = $dc->docente0;
+        
+        $dj = Declaracionjurada::find()
+                ->where(['persona' => $docente->documento])
+                ->andWhere(['in', 'estadodeclaracion', [2,3]])
+                ->max('id');
+
+        foreach ($h as $key => $hx ) {
+            $ff[] = explode(' a ',$hx);
+        }
+
+        $horariosdj = null;
+
+        if($dj!=null){
+        
+            $horariosdj = Horariodj::find()->joinWith(['funciondj0'])
+                            ->where(['funciondj.declaracionjurada' => $dj])
+                            ->andWhere(['funciondj.licencia' => 1])
+                            ->andWhere(['not like', 'funciondj.reparticion', '%monse%', false])
+                            ->andWhere(['or',['and',
+                                        
+                                        ['=', 'horariodj.diasemana', $diasemana],
+                                        ['<=', 'horariodj.inicio', $ff[$hora-2][0]],
+                                        ['>', 'horariodj.fin', $ff[$hora-2][0]],
+                                
+                                     ], 
+                                     ['and',
+
+                                        ['=', 'horariodj.diasemana', $diasemana],
+                                        ['<=', 'horariodj.inicio', $ff[$hora-2][1]],
+                                        ['>', 'horariodj.fin', $ff[$hora-2][1]],
+                                
+                                     ],     
+                            
+                            ])
+                            
+                            ->all();
+            
+        }
+        
+        
+        //return $horariosdj;
+
+        
+        if ($horariosdj!=null){
+            $salida = '<ul>';
+            foreach ($horariosdj as $horariodjx) {
+                $salida .= '<li>Dec. Jurada: '.$horariodjx->funciondj0->reparticion .' - '.$horariodjx->funciondj0->cargo.'</li>';
+            }
+            $salida .= '</ul>';
+            return [true, $salida, $dj];
+        }
+            
+        else
+            return [false, '', $dj];
+
+        
+        
+
+
+
+
+
     }
 
 
@@ -1088,10 +1350,11 @@ class HorarioController extends Controller
                     ->where(['mail' => Yii::$app->user->identity->username])
                     ->andWhere(['=', 'detallecatedra.revista', 6])
                     ->one();
-        return $this->getCompletoxdocentepage($docente->id, 0, 0, 1);
+        $alx2 = Aniolectivo::find()->where(['activo' => 1])->one();
+        return $this->getCompletoxdocentepage($docente->id, 0, 0, 1, $alx2->id);
     }
 
-    public function actionCompletoxdocente($docente)
+    public function actionCompletoxdocente($docente, $al=0)
     {
         $estadopublicacion = Parametros::findOne(1)->estado;
 
@@ -1110,10 +1373,24 @@ class HorarioController extends Controller
             }
             
         }//1 ok
-        return $this->getCompletoxdocentepage($docente, 0, 0, 0);
+
+
+        $almodel = Aniolectivo::find()->where(['activo' => 1])->one();
+        $anio = $almodel->id;
+        
+        if($al==0){
+            $al = isset($_SESSION['aniolectivosession']) ? $_SESSION['aniolectivosession'] : $anio;
+            
+        }
+        if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+            $anio = $al;
+        }
+    	
+
+        return $this->getCompletoxdocentepage($docente, 0, 0, 0, $anio);
     }
 
-    public function actionPrintxdocente($docente, $all=0)
+    public function actionPrintxdocente($docente, $all=0, $al)
     {
         
         date_default_timezone_set('America/Argentina/Buenos_Aires');
@@ -1136,14 +1413,14 @@ class HorarioController extends Controller
 
             
             foreach ($docentes as $doce) {
-                $salidaimpar .=  $this->getCompletoxdocentepage($doce->id, 1, 1, 0);
+                $salidaimpar .=  $this->getCompletoxdocentepage($doce->id, 1, 1, 0, $al);
             
             }
             $filenamesext = "Horario de Clases por Docente Completo ";
             $filename = $filenamesext.".pdf";
         }else{
             $docente = Docente::findOne($docente);
-            $salidaimpar = $this->getCompletoxdocentepage($docente->id, 1, 0, 0);
+            $salidaimpar = $this->getCompletoxdocentepage($docente->id, 1, 0, 0, $al);
             $filenamesext = "Horario de Clases - {$docente->apellido}, {$docente->nombre}";
             $filename =$filenamesext.".pdf";
         }
@@ -1216,7 +1493,7 @@ class HorarioController extends Controller
         
     }
 
-    public function getCompletoxdocentepage($docente, $pr = 0, $all = 0, $horario = 0)
+    public function getCompletoxdocentepage($docente, $pr = 0, $all = 0, $horario = 0, $al)
     {
     	//$division = 1;
     	//$dia = 3;
@@ -1261,6 +1538,8 @@ class HorarioController extends Controller
         	->andWhere(['division.turno' => 1])
         	->andWhere(['detallecatedra.revista' => 6])
         	->andWhere(['tipo' => 1])
+        	->andWhere(['detallecatedra.aniolectivo' => $al])
+        	->andWhere(['horario.aniolectivo' => $al])
         	->orderBy('diasemana, hora')
         	->all();
 
@@ -1270,7 +1549,9 @@ class HorarioController extends Controller
         	->where(['detallecatedra.docente' => $docente])
         	->andWhere(['division.turno' => 2])
         	->andWhere(['detallecatedra.revista' => 6])
-        	->andWhere(['tipo' => 1])
+            ->andWhere(['tipo' => 1])
+            ->andWhere(['detallecatedra.aniolectivo' => $al])
+        	->andWhere(['horario.aniolectivo' => $al])
         	->orderBy('diasemana, hora')
         	->all();
 
@@ -1352,16 +1633,44 @@ class HorarioController extends Controller
         $providerTt = new ArrayDataProvider([
 	        'allModels' => $arrayTt,
 	        
-	    ]);
-
-        return $this->render('completoxdocente', [
-            'userhorario' => $userhorario,
-            'providerTm' => $providerTm,
-            'providerTt' => $providerTt,
-            'docenteparam' => $docenteparam,
-            'pr' => $pr,
-            
         ]);
+        
+        $alx = Aniolectivo::findOne($al);
+        $alx2 = Aniolectivo::find()->where(['activo' => 1])->one();
+        if($alx->nombre <> $alx2->nombre){
+            $colorheader = ['style' => 'background-color:#f2dede'];
+            $otro = 1;
+        }else{
+            $colorheader = [];
+            $otro = 0;
+        }
+
+        if($pr<>1){
+
+            return $this->render('completoxdocente', [
+                'userhorario' => $userhorario,
+                'providerTm' => $providerTm,
+                'providerTt' => $providerTt,
+                'docenteparam' => $docenteparam,
+                'pr' => $pr,
+                'alx' => $alx,
+                'colorheader' => $colorheader,
+                'otro' => $otro,
+                
+            ]);
+        }else{
+            return $this->renderAjax('completoxdocente', [
+                'userhorario' => $userhorario,
+                'providerTm' => $providerTm,
+                'providerTt' => $providerTt,
+                'docenteparam' => $docenteparam,
+                'pr' => $pr,
+                'alx' => $alx,
+                'colorheader' => $colorheader,
+                'otro' => $otro,
+                
+            ]);
+        }
     }
 
     public function actionMenuxdocente()
@@ -1461,6 +1770,7 @@ class HorarioController extends Controller
     public function actionHoraxdivisionxdocente($diasemana)
     {
         
+        $aniolectivo = Aniolectivo::find()->where(['activo' => 1])->one();
         
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $out = [];
@@ -1483,6 +1793,8 @@ class HorarioController extends Controller
                                 ->andWhere(['detallecatedra.revista' => 6])
                                 ->andWhere(['detallecatedra.docente' => $docente_id])
                                 ->andWhere(['horario.diasemana' => $diasemana])
+                                ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
+                                ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
                                 ->orderBy('horario.hora')
                                 ->all();
                 }else{
@@ -1492,6 +1804,8 @@ class HorarioController extends Controller
                                 ->andWhere(['detallecatedra.revista' => 6])
                                 //->andWhere(['detallecatedra.docente' => $docente_id])
                                 ->andWhere(['horario.diasemana' => $diasemana])
+                                ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
+                                ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
                                 ->orderBy('horario.hora')
                                 ->all();
                 }
@@ -1528,6 +1842,8 @@ class HorarioController extends Controller
     {
         //$division = 1;
         //$dia = 3;
+
+        $aniolectivo = Aniolectivo::find()->where(['activo' => 1])->one();
         
         $param = Yii::$app->request->queryParams;
         $model = new Actividad();
@@ -1605,6 +1921,7 @@ class HorarioController extends Controller
             ->where(['in', 'catedra.actividad', $materiasfiltro])
             ->andWhere(['<>', 'catedra.division', 77])
             ->andWhere(['tipo' => 1])
+            ->andWhere(['aniolectivo' => $aniolectivo->id])
             ->orderBy('diasemana, hora')
             ->all();
 
@@ -1674,7 +1991,7 @@ class HorarioController extends Controller
                             foreach ($horariox->catedra0->detallecatedras as $dc) {
 
                                 $salida = '';
-                                if ($dc->revista == 6){
+                                if ($dc->revista == 6 && $dc->aniolectivo == $aniolectivo->id){
                                     //return var_dump($dc['revista']==1);
                                     //$superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->diasemana);
                                     //if ($superpuesto[0]){
@@ -1757,8 +2074,19 @@ class HorarioController extends Controller
         ]);
     }
 
-    public function actionHorariocompleto()
+    public function actionHorariocompleto($al=0)
     {
+
+        $almodel = Aniolectivo::find()->where(['activo' => 1])->one();
+        $anio = $almodel->id;
+        
+        if($al==0){
+            $al = isset($_SESSION['aniolectivosession']) ? $_SESSION['aniolectivosession'] : $anio;
+            
+        }
+        if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+            $anio = $al;
+        }
         
         $model = new Actividad();
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
@@ -1771,6 +2099,7 @@ class HorarioController extends Controller
             ->joinWith(['catedra0'])
             ->andWhere(['<>', 'catedra.division', 77])
             ->andWhere(['tipo' => 1])
+            ->andWhere(['aniolectivo' => $anio])
             ->orderBy('diasemana, hora')
             ->all();
 
@@ -1802,6 +2131,7 @@ class HorarioController extends Controller
                         ->joinWith(['catedra0', 'catedra0.actividad0'])
                         ->where(['catedra.division' => $division->id])
                         ->andWhere(['revista' => 6])
+                        ->andWhere(['aniolectivo' => $anio])
                         ->orderBy('actividad.nombre')->all();
                     $docymat = '';
                     $c2 = 0;
@@ -1894,6 +2224,20 @@ class HorarioController extends Controller
                         ->orderBy('actividad.nombre')
                         ->all();
 
+        
+
+        $anioslectivos = Aniolectivo::find()->limit(2)->orderBy('id DESC')->all();
+        $model2 = new Horario();
+        $model2->aniolectivo = $anio;
+        $aniolec = Aniolectivo::findOne($anio);
+        if ($model2->load(Yii::$app->request->post())) {
+            //return var_dump($model->aniolectivo);
+            $session = Yii::$app->session;
+		    $session->set('aniolectivosession', $model2->aniolectivo);
+            return $this->redirect(['horariocompleto', 'al' => $model2->aniolectivo]);
+            
+        }
+
         return $this->render('horariocompleto', [
             'model' => $model,
             'actividades' => $actividades,
@@ -1902,7 +2246,9 @@ class HorarioController extends Controller
             //'dataProvider' => $dataProvider,
             //'dataProviderMartes' => $dataProviderMartes,
             'provider' => $provider,
-            //'matexp' => $matexp,
+            'anioslectivos' => $anioslectivos,
+            'model2' => $model2,
+            'aniolec' => $aniolec,
             
         ]);
     }
@@ -2070,12 +2416,21 @@ class HorarioController extends Controller
         ]);
     }
 
-    public function actionPrueba($url)
+    public function actionMigrarhorariosiguienteanio($actual,$siguiente)
     {
-        return $this->render('prueba', [
-            'url' => $url,
-            //'legajo' => $legajo
-        ]);
+        $horarios = Horario::find()->where(['aniolectivo' => $actual])->all();
+        ini_set("pcre.backtrack_limit", "5000000");
+        foreach ($horarios as $horario) {
+            $newHorario = new Horario();
+            $newHorario->catedra = $horario->catedra;
+            $newHorario->hora = $horario->hora;
+            $newHorario->diasemana = $horario->diasemana;
+            $newHorario->tipo = $horario->tipo;
+            $newHorario->tipomovilidad = $horario->tipomovilidad;
+            $newHorario->aniolectivo = $siguiente;
+            $newHorario->save();
+        }
+        return $this->redirect(['/horario/panelprincipal']);
     }
 
       

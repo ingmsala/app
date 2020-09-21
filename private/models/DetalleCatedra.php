@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\modules\curriculares\models\Aniolectivo;
 use Yii;
 
 /**
@@ -42,13 +43,14 @@ class Detallecatedra extends \yii\db\ActiveRecord
       
         return [
             [['docente', 'catedra', 'condicion', 'revista', 'hora'], 'required'],
-            [['docente', 'catedra', 'condicion', 'revista', 'hora'], 'integer'],
+            [['docente', 'catedra', 'condicion', 'revista', 'hora', 'aniolectivo'], 'integer'],
             [['fechaInicio', 'fechaFin', 'resolucion'], 'safe'],
             /*['hora', 'compare', 'compareValue' => Catedra::findOne($_REQUEST['catedra'])->actividad0->cantHoras, 'operator' => '<=', 'type' => 'number'],*/
             [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
             [['catedra'], 'exist', 'skipOnError' => true, 'targetClass' => Catedra::className(), 'targetAttribute' => ['catedra' => 'id']],
             [['condicion'], 'exist', 'skipOnError' => true, 'targetClass' => Condicion::className(), 'targetAttribute' => ['condicion' => 'id']],
             [['revista'], 'exist', 'skipOnError' => true, 'targetClass' => Revista::className(), 'targetAttribute' => ['revista' => 'id']],
+            [['aniolectivo'], 'exist', 'skipOnError' => true, 'targetClass' => Aniolectivo::className(), 'targetAttribute' => ['aniolectivo' => 'id']],
         ];
     }
 
@@ -67,6 +69,7 @@ class Detallecatedra extends \yii\db\ActiveRecord
             'resolucion' => 'Resolucion',
             'fechaInicio' => 'Fecha Inicio',
             'fechaFin' => 'Fecha Fin',
+            'aniolectivo' => 'Año lectivo',
         ];
     }
 
@@ -100,6 +103,11 @@ class Detallecatedra extends \yii\db\ActiveRecord
     public function getRevista0()
     {
         return $this->hasOne(Revista::className(), ['id' => 'revista']);
+    }
+
+    public function getAniolectivo0()
+    {
+        return $this->hasOne(Aniolectivo::className(), ['id' => 'aniolectivo']);
     }
 
     /**

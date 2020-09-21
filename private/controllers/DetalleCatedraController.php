@@ -16,6 +16,7 @@ use app\models\Condicion;
 use app\models\Catedra;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use app\modules\curriculares\models\Aniolectivo;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm; // Ajaxvalidation
 
@@ -36,7 +37,7 @@ class DetallecatedraController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'inactive', 'fechafin', 'migrate', 'updatehorario'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'inactive', 'fechafin', 'migrate', 'updatehorario', 'migrarhorariosiguienteanio'],
                 'rules' => [
                     [
                         'actions' => ['create', 'update', 'delete', 'inactive', 'fechafin'],   
@@ -57,6 +58,18 @@ class DetallecatedraController extends Controller
                         'matchCallback' => function ($rule, $action) {
                             try{
                                 return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['migrarhorariosiguienteanio'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -192,6 +205,7 @@ class DetallecatedraController extends Controller
 
         
         $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+        $anioslectivos = Aniolectivo::find()->limit(2)->orderBy('id DESC')->all();
 
         if(Yii::$app->user->identity->role == Globales::US_SUPER){
             $condiciones=Condicion::find()->all();
@@ -210,7 +224,13 @@ class DetallecatedraController extends Controller
 
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+
+            if(Yii::$app->user->identity->role == Globales::US_SECRETARIA){
+                $model->aniolectivo = null;
+            }
+
+            $model->save();
             return $this->redirect(['catedra/view', 'id' => $catedra]);
         }
 
@@ -222,6 +242,7 @@ class DetallecatedraController extends Controller
             'docentes' => $docentes,
             'condiciones' => $condiciones,
             'revistas' => $revistas,
+            'anioslectivos' => $anioslectivos,
 
         ]);
     }
@@ -249,6 +270,7 @@ class DetallecatedraController extends Controller
 
         
         $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+        $anioslectivos = Aniolectivo::find()->limit(2)->orderBy('id DESC')->all();
         if(Yii::$app->user->identity->role == Globales::US_SUPER){
             $condiciones=Condicion::find()->all();
             $revistas=Revista::find()->all();
@@ -265,8 +287,12 @@ class DetallecatedraController extends Controller
 
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
 
+            if(Yii::$app->user->identity->role == Globales::US_SECRETARIA){
+                $model->aniolectivo = null;
+            }
+            $model->save();
             return $this->redirect(['catedra/view', 'id' => $catedra]);
         }
 
@@ -278,6 +304,8 @@ class DetallecatedraController extends Controller
             'docentes' => $docentes,
             'condiciones' => $condiciones,
             'revistas' => $revistas,
+            'anioslectivos' => $anioslectivos,
+            
         ]);
     }
 
@@ -309,7 +337,7 @@ class DetallecatedraController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->catedra = $catedra;
             if($model->save())
-                return $this->redirect([$ur.'/completoxcurso', 'col' => $col, 'division' => $catedrax->division, 'vista' => 'docentes']);
+                return $this->redirect([$ur.'/completoxcurso', 'col' => $col, 'division' => $catedrax->division, 'vista' => 'docentes', 'al' => $model->aniolectivo]);
         }
 
         return $this->render('updatehorario', [
@@ -402,6 +430,7 @@ class DetallecatedraController extends Controller
     public function actionDocxhorario($diasemana, $tipoparte)
     {
         
+        $aniolectivo = Aniolectivo::find()->where(['activo' => 1])->one();
         
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $out = [];
@@ -419,7 +448,9 @@ class DetallecatedraController extends Controller
                     ->joinWith(['docente0', 'catedra0', 'catedra0.horarios'])
                     ->where(['catedra.division' => $division_id])
                     ->andWhere(['revista' => 6])
+                    ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
                     ->andWhere(['horario.diasemana' => $diasemana])
+                    ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
                     ->orderBy('docente.apellido, docente.nombre')
                     ->all();
                 }else{
@@ -427,6 +458,8 @@ class DetallecatedraController extends Controller
                     ->joinWith(['docente0', 'catedra0', 'catedra0.horarios'])
                     ->where(['catedra.division' => $division_id])
                     ->andWhere(['revista' => 6])
+                    ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
+                    ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
                     //->andWhere(['horario.diasemana' => $diasemana])
                     ->orderBy('docente.apellido, docente.nombre')
                     ->all();
@@ -459,6 +492,24 @@ class DetallecatedraController extends Controller
         
         
         
+    }
+
+    public function actionMigrarhorariosiguienteanio($actual,$siguiente)
+    {
+        $detalles = Detallecatedra::find()->where(['aniolectivo' => $actual])->all();
+        ini_set("pcre.backtrack_limit", "5000000");
+        foreach ($detalles as $detalle) {
+            $newDetalle = new Detallecatedra();
+            $newDetalle->docente = $detalle->docente;
+            $newDetalle->catedra = $detalle->catedra;
+            $newDetalle->condicion = $detalle->condicion;
+            $newDetalle->revista = $detalle->revista;
+            $newDetalle->hora = $detalle->hora;
+            $newDetalle->activo = $detalle->activo;
+            $newDetalle->aniolectivo = $siguiente;
+            $newDetalle->save();
+        }
+        return $this->redirect(['/horario/panelprincipal']);
     }
 
     

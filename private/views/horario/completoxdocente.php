@@ -13,9 +13,15 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 
 
 ?>
-<div class="horario-view">
+<?php
+	if($otro == 1 && $pr==0){
+		echo '<div class="horario-view" style="background-color:#FFEEFF;">';
+	}else{
+		echo '<div class="horario-view">';
+	}
+?>
 
-    <h1><?= (!$userhorario) ? Html::encode('Horario de Clases: '.$this->title) : '' ?>
+    <h1><?= (!$userhorario) ? Html::encode($alx->nombre.' - Horario de Clases: '.$this->title) : '' ?>
     <div class="row" style="padding-bottom: 10px;">
 <?php $dipl = ($userhorario) ? "none" : "block" ?>
 	 <div style="display: <?=  $dipl  ?>;">
@@ -31,7 +37,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 	    </div>
 	    <div  class="pull-right">
 	        <?php 
-	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/printxdocente&docente='.$docenteparam->id.'"><center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center></a>';;
+	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/printxdocente&docente='.$docenteparam->id.'&al='.$alx->id.'"><center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center></a>';;
 	        ?>
 	    </div>
 	</div>
@@ -49,7 +55,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		        //'filterModel' => $searchModel,
 		        'responsiveWrap' => false,
 		        'summary' => false,
-		        //'condensed' => ($pr==0) ? false : true,
+		        'condensed' => ($pr==0) ? false : true,
 		        'columns' => [
 		            ['class' => 'yii\grid\SerialColumn'],
 		            [
@@ -137,7 +143,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		        //'filterModel' => $searchModel,
 		        'responsiveWrap' => false,
 		        'summary' => false,
-		        //'condensed' => ($pr==0) ? false : true,
+		        'condensed' => ($pr==0) ? false : true,
 		        'columns' => [
 		            ['class' => 'yii\grid\SerialColumn'],
 		            [

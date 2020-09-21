@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use app\models\Horario;
+use app\modules\curriculares\models\Aniolectivo;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\data\SqlDataProvider;
@@ -19,7 +20,7 @@ class HorarioSearch extends Horario
     public function rules()
     {
         return [
-            [['id', 'catedra', 'hora', 'diasemana', 'tipo', 'tipomovilidad'], 'integer'],
+            [['id', 'catedra', 'hora', 'diasemana', 'tipo', 'tipomovilidad', 'aniolectivo'], 'integer'],
         ];
     }
 
@@ -106,6 +107,7 @@ class HorarioSearch extends Horario
 
     public function horassuperpuestas()
     {
+        $aniolectivo = Aniolectivo::find()->where(['activo' => 1])->one();
        $sql='
             SELECT
                 `docente`.`id`,
@@ -121,7 +123,9 @@ class HorarioSearch extends Horario
             LEFT JOIN `docente` ON `detallecatedra`.`docente` = `docente`.`id`
             LEFT JOIN `division` ON `catedra`.`division` = `division`.`id`
             WHERE
-                `detallecatedra`.`revista` = 6
+                `detallecatedra`.`revista` = 6 AND
+                `detallecatedra`.`aniolectivo` = '.$aniolectivo->id.' AND
+                `horario`.`aniolectivo` = '.$aniolectivo->id.' 
             GROUP BY
                 `docente`.`id`,
                 `docente`.`nombre`,
@@ -158,11 +162,14 @@ class HorarioSearch extends Horario
 
     public function getDeshabilitados()
     {
+        $aniolectivo = Aniolectivo::find()->where(['activo' => 1])->one();
         $query = Horario::find()
                     ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.actividad0', 'catedra0.division0'])
                     ->where(['tipomovilidad' => 2])
                     ->andWhere(['tipo' => 1])
                     ->andWhere(['detallecatedra.revista' => 6])
+                    ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
+                    ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
                     ->orderBy('actividad.nombre, division.nombre, horario.diasemana, horario.hora');
 
         // add conditions that should always apply here
@@ -198,10 +205,13 @@ class HorarioSearch extends Horario
                     ->andWhere(['detallecatedra.revista' => 6])
                     ->orderBy('docente.apellido, docente.nombre, division.id')->distinct();*/
 
+        $aniolectivo = Aniolectivo::find()->where(['activo' => 1])->one();
         $query = Catedra::find()
         ->joinWith(['detallecatedras', 'actividad0', 'division0','detallecatedras.docente0', 'horarios'])
         ->andWhere(['horario.tipo' => 1])
+        ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
         ->andWhere(['detallecatedra.revista' => 6])
+        ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
         ->orderBy('docente.apellido, docente.nombre, division.id')->distinct();
 
         // add conditions that should always apply here

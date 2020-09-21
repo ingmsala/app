@@ -113,6 +113,12 @@ if(Yii::$app->user->identity->role == Globales::US_SUPER){
 	            [   
 	                'label' => 'Revista',
 	                'attribute' => 'revista0.nombre'
+				],
+				
+	            [   
+					'label' => 'Año lectivo',
+					'visible' => (Yii::$app->user->identity->role == Globales::US_SECRETARIA) ? false : true,
+	                'attribute' => 'aniolectivo0.nombre'
 	            ],
 
 	            [
@@ -226,6 +232,12 @@ if(Yii::$app->user->identity->role == Globales::US_SUPER){
 	            [   
 	                'label' => 'Revista',
 	                'attribute' => 'revista0.nombre'
+				],
+				
+				[   
+					'label' => 'Año lectivo',
+					'visible' => (Yii::$app->user->identity->role == Globales::US_SECRETARIA) ? false : true,
+	                'attribute' => 'aniolectivo0.nombre'
 	            ],
 
 	            
@@ -279,7 +291,13 @@ if(Yii::$app->user->identity->role == Globales::US_SUPER){
 	</div>	
 </div>
 
-<div>
+<?php
+	if(Yii::$app->user->identity->role == Globales::US_SECRETARIA){
+		echo '<div style="display:none">';
+	}else{
+		echo '<div>';
+	}
+?>
 	<h3>Horarios</h3>
 	    <?=
 	    Html::a('Nuevo Horario', ['horario/create', 'catedra' => $model->id], ['class' => 'btn btn-success']);
@@ -303,6 +321,11 @@ if(Yii::$app->user->identity->role == Globales::US_SUPER){
 	            [   
 	                'label' => 'Hora',
 	                'attribute' => 'hora0.nombre'
+				],
+				
+				[   
+					'label' => 'Año lectivo',
+					'attribute' => 'aniolectivo0.nombre'
 	            ],
 
 	            [

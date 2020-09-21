@@ -9,7 +9,7 @@ use app\models\Catedra;
 use yii\data\SqlDataProvider;
 use yii\db\Query;
 use app\config\Globales;
-
+use app\modules\curriculares\models\Aniolectivo;
 
 /**
  * CatedraSearch represents the model behind the search form of app\models\Catedra.
@@ -240,6 +240,8 @@ class CatedraSearch extends Catedra
 
     public function diferenciacatedras()
     {
+
+        $al = Aniolectivo::find()->where(['activo' => 1])->one()->id;
         
         $sql='SELECT c0.id, di.nombre as division, act.nombre as actividad, (
     SELECT 
@@ -253,7 +255,7 @@ class CatedraSearch extends Catedra
     WHERE
         dc.revista = 1 AND dc.activo = 1 AND c.id = c0.id
     AND
-        (select count(dc20.id) from detallecatedra dc20 where dc20.catedra = c0.id AND dc20.activo = 1) > 0
+        (select count(dc20.id) from detallecatedra dc20 where dc20.catedra = c0.id AND dc20.activo = 1 AND dc20.aniolectivo = '.$al.') > 0
 ) as vigente, 
 
 (
@@ -267,7 +269,7 @@ class CatedraSearch extends Catedra
     LEFT JOIN docente doc2 ON
         dc2.docente = doc2.id
     WHERE
-        dc2.revista = 6 AND dc2.activo = 1 AND c2.id = c0.id
+        dc2.revista = 6 AND dc2.activo = 1 AND c2.id = c0.id AND dc2.aniolectivo = '.$al.' 
 ) as horario
     
 FROM
@@ -284,7 +286,7 @@ where (
     LEFT JOIN docente doc ON
         dc.docente = doc.id
     WHERE
-        dc.revista = 1 AND dc.activo = 1 AND c.id = c0.id AND (select count(dc20.id) from detallecatedra dc20 where dc20.catedra = c0.id and dc20.revista = 6 AND dc20.activo = 1) > 0
+        dc.revista = 1 AND dc.activo = 1 AND c.id = c0.id AND (select count(dc20.id) from detallecatedra dc20 where dc20.catedra = c0.id and dc20.revista = 6 AND dc20.activo = 1 AND dc20.aniolectivo = '.$al.' ) > 0
 ) not in
 (
     SELECT 
@@ -297,7 +299,7 @@ where (
     LEFT JOIN docente doc2 ON
         dc2.docente = doc2.id
     WHERE
-        dc2.revista = 6 AND dc2.activo = 1 AND c2.id = c0.id
+        dc2.revista = 6 AND dc2.activo = 1 AND c2.id = c0.id AND dc2.aniolectivo = '.$al.' 
 ) 
 and (di.turno = 1 or di.turno = 2) and (act.id <> 23) and (di.id <> 47)
 ORDER BY

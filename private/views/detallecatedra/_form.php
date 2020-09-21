@@ -25,13 +25,15 @@ use kartik\date\DatePicker;
     
     <?php $listcondiciones=ArrayHelper::map($condiciones,'id','nombre'); ?>
     <?php $listrevistas=ArrayHelper::map($revistas,'id','nombre'); ?>
+    <?php $listanioslectivos=ArrayHelper::map($anioslectivos,'id','nombre'); ?>
     
     <?= $form->field($model, 'catedra')->hiddenInput(['value'=> $catedras->id])->label(false) ?>
 
     
     <?= Html::tag('h3', 'Cátedra: '.$catedras->actividad0->nombre.' ('.$catedras->division0->nombre.')') ?>
 
- 
+    <?= $form->field($model, 'aniolectivo')->dropDownList($listanioslectivos, ['prompt'=>'Seleccionar...']); ?>
+        
     <?= 
 
         $form->field($model, 'docente')->widget(Select2::classname(), [
@@ -43,10 +45,13 @@ use kartik\date\DatePicker;
         ]);
 
     ?>
+    
 
     <?= $form->field($model, 'condicion')->dropDownList($listcondiciones, ['prompt'=>'Seleccionar...']); ?>
 
     <?= $form->field($model, 'revista')->dropDownList($listrevistas, ['prompt'=>'Seleccionar...']); ?>
+
+    
 
     <?= $form->field($model, 'hora')->textInput(['value'=>($model->hora != null) ? $model->hora : $catedras->actividad0->cantHoras]) ?>
 

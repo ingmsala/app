@@ -13,7 +13,7 @@ use kartik\form\ActiveForm;
 /* @var $model app\models\Horario */
 
 
-$this->title = 'Horario completo';
+$this->title = 'Horario completo '.$aniolec->nombre;
 
 $listActividades=ArrayHelper::map($actividades,'id','nombre');
 
@@ -41,7 +41,18 @@ JS;
         echo "<div id='modalContent'></div>";
 
         Modal::end();
-    ?>
+	?>
+	
+	<?php
+		if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+			$form = ActiveForm::begin();
+			$listaniolectivo=ArrayHelper::map($anioslectivos,'id','nombre'); 
+			echo $form->field($model2, 'aniolectivo')->dropDownList($listaniolectivo, ['prompt'=>'Seleccionar...', 'onchange'=>'this.form.submit()']);
+			
+
+			ActiveForm::end();
+		}
+	?>
 
 
 <?php //echo var_dump($provider) ?>
@@ -71,6 +82,7 @@ JS;
 				     GridView::EXCEL => [
 		                'label' => 'Excel',
 		                'filename' =>Html::encode($this->title),
+		                'worksheet' =>Html::encode($aniolec->nombre),
 		                
 		                //'alertMsg' => false,
 		            ],

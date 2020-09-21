@@ -24,8 +24,9 @@ $this->title = 'Seleccione una división';
 	        ?>
 	    </div>
 	    <div  class="pull-right">
-	        <?php 
-	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/printxcurso&division=0&vista=materias&all=1"><center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center></a>';;
+			<?php
+				$al = isset($_SESSION['aniolectivosession']) ? $_SESSION['aniolectivosession'] : $anio; 
+	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/printxcurso&division=0&vista=materias&all=1&al='.$al.'"><center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center></a>';;
 	        ?>
 	    </div>
 	</div>

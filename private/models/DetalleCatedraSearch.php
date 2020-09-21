@@ -21,7 +21,7 @@ class DetallecatedraSearch extends Detallecatedra
     public function rules()
     {
         return [
-            [['id', 'docente', 'catedra', 'condicion', 'revista', 'hora'], 'integer'],
+            [['id', 'docente', 'catedra', 'condicion', 'revista', 'hora', 'aniolectivo'], 'integer'],
             [['fechaInicio', 'fechaFin', 'resolucion'], 'safe'],
         ];
     }
@@ -298,7 +298,7 @@ class DetallecatedraSearch extends Detallecatedra
 
     }
 
-    public function horario_doce_divi($division)
+    public function horario_doce_divi($division, $al)
     {
         
         $query = Detallecatedra::find()
@@ -307,6 +307,7 @@ class DetallecatedraSearch extends Detallecatedra
             ->andWhere(['<>', 'actividad.id', 31])
             ->andWhere(['<>', 'actividad.id', 33])
             ->andWhere(['revista' => 6])
+            ->andWhere(['aniolectivo' => $al])
             ->orderBy('actividad.nombre');
         
         

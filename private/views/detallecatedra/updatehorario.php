@@ -10,8 +10,21 @@ use kartik\select2\Select2;
 /* @var $model app\models\DetalleCatedra */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<div class="panel panel-default">
-    <div class="panel-heading"><?= 'Cátedra: '.$catedras->actividad0->nombre.' ('.$catedras->division0->nombre.')'; ?></div>
+
+<?php
+    if($model->aniolectivo0->nombre <> date('Y')){
+        $anio = '<span style="background-color: #c9302c; color:#FFFFFF; font-size:15pt;">'.$model->aniolectivo0->nombre.'</span>';
+        $lab = 'danger';
+    }else{
+        $anio = $model->aniolectivo0->nombre;
+        $lab = 'default';
+    }
+?>
+
+<?php
+    echo '<div class="panel panel-'.$lab.'">';
+?>
+    <div class="panel-heading"><?= $anio.' - Cátedra: '.$catedras->actividad0->nombre.' ('.$catedras->division0->nombre.')'; ?></div>
     <div class="panel-body">
     <div class="detalle-catedra-form">
 

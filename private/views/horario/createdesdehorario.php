@@ -8,11 +8,11 @@ use kartik\select2\Select2;
 /* @var $this yii\web\View */
 /* @var $model app\models\Horario */
 /* @var $form yii\widgets\ActiveForm */
-$listcatedras=ArrayHelper::map($catedras,'id',function($cat){
+$listcatedras=ArrayHelper::map($catedras,'id',function($cat) use ($al) {
     $doc = '';
     foreach ($cat->detallecatedras as $dc) {
-        if($dc->revista == 6){
-            $doc = $dc->docente0->apellido.''.$dc->docente0->nombre;
+        if($dc->revista == 6 && $dc->aniolectivo == $al){
+            $doc = $dc->docente0->apellido.', '.$dc->docente0->nombre;
             break;
         }
     }
@@ -29,8 +29,21 @@ $listtipos=ArrayHelper::map($tipos,'id','nombre');
 JS;
 
 ?>
-<div class="panel panel-default">
-    <div class="panel-heading"><?= 'Asignar horario a docente de '.Html::encode($division->nombre); ?></div>
+
+<?php
+    if($model->aniolectivo0->nombre <> date('Y')){
+        $anio = '<span style="background-color: #c9302c; color:#FFFFFF; font-size:15pt;">'.$model->aniolectivo0->nombre.'</span>';
+        $lab = 'danger';
+    }else{
+        $anio = $model->aniolectivo0->nombre;
+        $lab = 'default';
+    }
+?>
+
+<?php
+    echo '<div class="panel panel-'.$lab.'">';
+?>
+    <div class="panel-heading"><?= $anio.' - '.'Asignar horario a docente de '.Html::encode($division->nombre); ?></div>
     <div class="panel-body">
 <div class="horario-form">
 
@@ -62,7 +75,8 @@ JS;
                 'multiple' => true,
             ],
             'pluginOptions' => [
-                'allowClear' => true
+                'allowClear' => true,
+                //'disabled' => 'disabled',
             ],
         ]); ?>
 

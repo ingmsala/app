@@ -5,6 +5,8 @@ use kartik\grid\GridView;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use app\config\Globales;
+use kartik\form\ActiveForm;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Horario */
@@ -14,7 +16,7 @@ if($vista == 'docentes')
 else
 	$txt = 'Materias';
 
-$this->title = 'Horario de Clases: '.$paramdivision->nombre;
+$this->title = $alx->nombre.' - Horario de Clases: '.$paramdivision->nombre;
 $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="index.php?r=horario/menuxdivision" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>'];
 
 if($vista == 'docentes')
@@ -22,7 +24,15 @@ if($vista == 'docentes')
 	        else
 	        	$this->params['itemnav2'] = ['label' =>   '<a class="menuHorarios" href="index.php?r=horario/completoxcurso&division='.$paramdivision->id.'&vista=docentes" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-education" aria-hidden="true"></span><br />Docentes</center></a>'];
 ?>
-<div class="horario-view">
+
+<?php
+	if($otro == 1){
+		echo '<div class="horario-view" style="background-color:#FFEEFF;">';
+	}else{
+		echo '<div class="horario-view">';
+	}
+?>
+
 
 	<?php  
  $js=<<< JS
@@ -57,9 +67,9 @@ JS;
 	    <div class="pull-right">
 	        <?php 
 	        if($vista == 'docentes')
-	        	echo  '<a class = "btn btn-default" href="index.php?r=horario/completoxcurso&division='.$paramdivision->id.'&vista=materias"><center><span class="glyphicon glyphicon-book" aria-hidden="true"></span><br />Materias</center></a>';
+	        	echo  '<a class = "btn btn-default" href="index.php?r=horario/completoxcurso&division='.$paramdivision->id.'&vista=materias&al='.$aniolec.'"><center><span class="glyphicon glyphicon-book" aria-hidden="true"></span><br />Materias</center></a>';
 	        else
-	        	echo  '<a class = "btn btn-default" href="index.php?r=horario/completoxcurso&division='.$paramdivision->id.'&vista=docentes"><center><span class="glyphicon glyphicon-education" aria-hidden="true"></span><br />Docentes</center></a>';
+	        	echo  '<a class = "btn btn-default" href="index.php?r=horario/completoxcurso&division='.$paramdivision->id.'&vista=docentes&al='.$aniolec.'"><center><span class="glyphicon glyphicon-education" aria-hidden="true"></span><br />Docentes</center></a>';
 	        ?>
 	    </div>
 	    <div  class="pull-right">
@@ -69,7 +79,7 @@ JS;
 	    </div>
 	    <div  class="pull-right">
 	        <?php 
-	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/printxcurso&division='.$paramdivision->id.'&vista='.$vista.'"><center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center></a>';;
+	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/printxcurso&division='.$paramdivision->id.'&vista='.$vista.'&al='.$aniolec.'"><center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center></a>';;
 	        ?>
 	    </div>
     </div>
@@ -80,6 +90,16 @@ JS;
 	<?php
 		if($preceptor != null){
 			echo '<h4><i>Preceptor: '.$preceptor->docente0->apellido.', '.$preceptor->docente0->nombre.'</i></h4>';
+		}
+	?>
+	<?php
+		if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]) && $pr<>1){
+			$form = ActiveForm::begin();
+			$listaniolectivo=ArrayHelper::map($anioslectivos,'id','nombre'); 
+			echo $form->field($model, 'aniolectivo')->dropDownList($listaniolectivo, ['prompt'=>'Seleccionar...', 'onchange'=>'this.form.submit()']);
+			
+
+			ActiveForm::end();
 		}
 	?>
     <div class="clearfix" style="padding-bottom: 10px;"></div>	
@@ -95,7 +115,8 @@ JS;
 		                'label' => 'Horario',
 		                'vAlign' => 'middle',
 		                'hAlign' => 'center',
-		                'format' => 'raw',
+						'format' => 'raw',
+						'headerOptions' => $colorheader,
 		                'attribute' => '0',
 		                'value' => function($model) use ($pr){
 		                	if ($pr == 0)
@@ -108,7 +129,8 @@ JS;
 		                'vAlign' => 'middle',
 		                'hAlign' => 'center',
 		                'format' => 'raw',
-		                'attribute' => '2'
+						'attribute' => '2',
+						'headerOptions' => $colorheader,
 		                /*'value' => function($model){
 		                	return var_dump($model);
 		                }*/
@@ -119,7 +141,8 @@ JS;
 		                'vAlign' => 'middle',
 		                'hAlign' => 'center',
 		                'format' => 'raw',
-		                'attribute' => '3'
+						'attribute' => '3',
+						'headerOptions' => $colorheader,
 		                /*'value' => function($model){
 		                	return var_dump($model);
 		                }*/
@@ -130,7 +153,8 @@ JS;
 		                'vAlign' => 'middle',
 		                'hAlign' => 'center',
 		                'format' => 'raw',
-		                'attribute' => '4'
+						'attribute' => '4',
+						'headerOptions' => $colorheader,
 		                /*'value' => function($model){
 		                	return var_dump($model);
 		                }*/
@@ -141,7 +165,8 @@ JS;
 		                'vAlign' => 'middle',
 		                'hAlign' => 'center',
 		                'format' => 'raw',
-		                'attribute' => '5'
+						'attribute' => '5',
+						'headerOptions' => $colorheader,
 		                /*'value' => function($model){
 		                	return var_dump($model);
 		                }*/
@@ -152,7 +177,8 @@ JS;
 		                'vAlign' => 'middle',
 		                'hAlign' => 'center',
 		                'format' => 'raw',
-		                'attribute' => '6'
+						'attribute' => '6',
+						'headerOptions' => $colorheader,
 		                /*'value' => function($model){
 		                	return var_dump($model);
 		                }*/
@@ -161,7 +187,11 @@ JS;
 
 		            
 		        ],
-	    	]); ?>
+			]); ?>
+			
+	<?php
+		$template = (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])) ? '{viewdetcat} {dj}' : '{viewdetcat}';
+	?>
 
 	  <?= GridView::widget([
 		        'dataProvider' => $dataProvider,
@@ -195,7 +225,7 @@ JS;
 		            [
 	                'class' => 'kartik\grid\ActionColumn',
 
-	                'template' => '{viewdetcat}',
+	                'template' => $template,
 	                'visible' => (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTORIA]) && ($pr==0)) ? true : false,
 	                
 	                'buttons' => [
@@ -203,6 +233,13 @@ JS;
 	                        return Html::a(
 	                            '<span class="glyphicon glyphicon-eye-open"></span>',
 	                            '?r=detallecatedra/updatehorario&or=hc&id='.$model['id']);
+						},
+						
+						'dj2' => function($url, $model, $key){
+	                        return Html::button('<span class="glyphicon glyphicon-modal-window"></span>',
+                            ['value' => Url::to('index.php?r=horario/declaracionhorario&dni='.$model->docente0->documento),
+                                'class' => 'modala btn btn-link', 'id'=>'modala']);
+	                            
 	                    },
 
 	                    'updatedetcat' => function($url, $model, $key){

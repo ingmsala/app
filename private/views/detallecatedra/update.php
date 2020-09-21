@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = 'Update';
         'docentes' => $docentes,
         'condiciones' => $condiciones,
         'revistas' => $revistas,
+        'anioslectivos' => $anioslectivos,
       
     ]) ?>
 

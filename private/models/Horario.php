@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\modules\curriculares\models\Aniolectivo;
 use Yii;
 
 /**
@@ -31,7 +32,7 @@ class Horario extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_CREATEHORARIO] = ['catedra', 'hora', 'diasemana', 'tipo'];
+        $scenarios[self::SCENARIO_CREATEHORARIO] = ['catedra', 'hora', 'diasemana', 'tipo', 'aniolectivo'];
         return $scenarios;
     }
 
@@ -47,7 +48,7 @@ class Horario extends \yii\db\ActiveRecord
     {
         return [
             [['catedra', 'hora', 'diasemana', 'tipo', 'tipomovilidad'], 'required'],
-            [['catedra', 'hora', 'diasemana', 'tipo', 'tipomovilidad'], 'integer'],
+            [['catedra', 'hora', 'diasemana', 'tipo', 'tipomovilidad', 'aniolectivo'], 'integer'],
             
             
             [['diasemana'], 'exist', 'skipOnError' => true, 'targetClass' => Diasemana::className(), 'targetAttribute' => ['diasemana' => 'id']],
@@ -55,6 +56,7 @@ class Horario extends \yii\db\ActiveRecord
             [['tipo'], 'exist', 'skipOnError' => true, 'targetClass' => Tipoparte::className(), 'targetAttribute' => ['tipo' => 'id']],
             [['catedra'], 'exist', 'skipOnError' => true, 'targetClass' => Catedra::className(), 'targetAttribute' => ['catedra' => 'id']],
             [['tipomovilidad'], 'exist', 'skipOnError' => true, 'targetClass' => Tipomovilidad::className(), 'targetAttribute' => ['tipomovilidad' => 'id']],
+            [['aniolectivo'], 'exist', 'skipOnError' => true, 'targetClass' => Aniolectivo::className(), 'targetAttribute' => ['aniolectivo' => 'id']],
             ['tipo', 'yaExiste', 'on' => self::SCENARIO_CREATEHORARIO],
         ];
     }
@@ -67,6 +69,7 @@ class Horario extends \yii\db\ActiveRecord
             ->andWhere(['catedra.division' => $this->catedra0->division])
             ->andWhere(['tipo' => $this->tipo])
             ->andWhere(['hora' => $this->hora])
+            ->andWhere(['aniolectivo' => $this->aniolectivo])
             ->all();
         //return var_dump(count($horarios)); 
 
@@ -88,6 +91,7 @@ class Horario extends \yii\db\ActiveRecord
             'diasemana' => 'Diasemana',
             'tipo' => 'Tipo',
             'tipomovilidad' => 'Movilidad',
+            'aniolectivo' => 'Año lectivo',
         ];
     }
 
@@ -129,5 +133,10 @@ class Horario extends \yii\db\ActiveRecord
     public function getTipomovilidad0()
     {
         return $this->hasOne(Tipomovilidad::className(), ['id' => 'tipomovilidad']);
+    }
+
+    public function getAniolectivo0()
+    {
+        return $this->hasOne(Aniolectivo::className(), ['id' => 'aniolectivo']);
     }
 }
