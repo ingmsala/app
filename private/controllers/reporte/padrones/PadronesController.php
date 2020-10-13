@@ -59,36 +59,37 @@ class PadronesController extends \yii\web\Controller
         try{
             $searchModel = new NombramientoSearch();
             $searchModel2 = new DetallecatedraSearch();
-            $cantidadjefessecundario = $searchModel->getCantidadJefes(1);
+            /*$cantidadjefessecundario = $searchModel->getCantidadJefes(1);
             $cantidadjefespregrado = $searchModel->getCantidadJefes(2);
             $cantidadpreceptoressecundario = $searchModel->getCantidadPreceptores(1);
             $cantidadpreceptorespregrado = $searchModel->getCantidadPreceptores(2);
             $cantidadotrosdocentessec = $searchModel->getCantidadOtrosDocentes(1, Globales::PADRON_OTROSDOC);
             $cantidadotrosdocentespre = $searchModel->getCantidadOtrosDocentes(2, Globales::PADRON_OTROSDOC);
             $cantidaddocentessecundario = $searchModel2->getCantidadDocentes(1);
-            $cantidaddocentespregrado = $searchModel2->getCantidadDocentes(2);
+            $cantidaddocentespregrado = $searchModel2->getCantidadDocentes(2);*/
 
-            $searchModelDoc = new DocenteSearch();
+            /*$searchModelDoc = new DocenteSearch();
             $dataProviderDoc = $searchModelDoc->getPadronsumarizado();
-            $cantidadtotal = $dataProviderDoc->getTotalCount();
+            $cantidadtotal = $dataProviderDoc->getTotalCount();*/
 
                       
             return $this->render('index',[
-                'cantidadjefessecundario' => $cantidadjefessecundario,
-                'cantidadjefespregrado' => $cantidadjefespregrado,
-                'cantidadpreceptoressecundario' => $cantidadpreceptoressecundario,
-                'cantidadpreceptorespregrado' => $cantidadpreceptorespregrado,
-                'cantidadotrosdocentessec' => $cantidadotrosdocentessec,
-                'cantidadotrosdocentespre' => $cantidadotrosdocentespre,
-                'cantidaddocentessecundario' => $cantidaddocentessecundario,
-                'cantidaddocentespregrado' => $cantidaddocentespregrado,
-                'cantidadtotal' => $cantidadtotal,
+                'cantidadjefessecundario' => "",
+                'cantidadjefespregrado' => "",
+                'cantidadpreceptoressecundario' => "",
+                'cantidadpreceptorespregrado' => "",
+                'cantidadotrosdocentessec' => "",
+                'cantidadotrosdocentespre' => "",
+                'cantidaddocentessecundario' => "",
+                'cantidaddocentespregrado' => "",
+                'cantidadtotal' => "",
             ]);
         }catch(\Exception $exception){
-            Yii::$app->session->setFlash('error', $exception);
-            return $this->render('/index',[
-            'model' => $model,
-        ]);
+            //Yii::$app->session->setFlash('error', $exception);
+            //return $this->render('index',[
+            //'model' => $model,
+            return var_dump($exception);
+        //]);
             
 	    }
         }

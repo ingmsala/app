@@ -43,6 +43,8 @@ class Nombramiento extends \yii\db\ActiveRecord
         return 'nombramiento';
     }
 
+    var $cantidad;
+
  const SCENARIO_ABMDIVISION = 'abmdivision';
  const SCENARIO_ABMNOMBRAMIENTO = 'abm';
 
