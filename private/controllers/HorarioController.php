@@ -771,7 +771,7 @@ class HorarioController extends Controller
                                     
                                     #INICIO Bloquear dj
                                     
-                                    $superpuestodj[0] = false;
+                                    //$superpuestodj[0] = false;
 
                                     #FIN Bloquear dj
                                    
@@ -1186,12 +1186,12 @@ class HorarioController extends Controller
         
         
         //return $horariosdj;
-
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
         
         if ($horariosdj!=null){
             $salida = '<ul>';
             foreach ($horariosdj as $horariodjx) {
-                $salida .= '<li>Dec. Jurada: '.$horariodjx->funciondj0->reparticion .' - '.$horariodjx->funciondj0->cargo.'</li>';
+                $salida .= '<li>Dec. Jurada: '.$horariodjx->funciondj0->reparticion .' - '.$horariodjx->funciondj0->cargo.' ('.Yii::$app->formatter->asDate($horariodjx->inicio, 'HH:mm').' a '.Yii::$app->formatter->asDate($horariodjx->fin, 'HH:mm').')</li>';
             }
             $salida .= '</ul>';
             return [true, $salida, $dj];

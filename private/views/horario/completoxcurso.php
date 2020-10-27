@@ -235,7 +235,7 @@ JS;
 	                            '?r=detallecatedra/updatehorario&or=hc&id='.$model['id']);
 						},
 						
-						'dj2' => function($url, $model, $key){
+						'dj' => function($url, $model, $key){
 	                        return Html::button('<span class="glyphicon glyphicon-modal-window"></span>',
                             ['value' => Url::to('index.php?r=horario/declaracionhorario&dni='.$model->docente0->documento),
                                 'class' => 'modala btn btn-link', 'id'=>'modala']);
