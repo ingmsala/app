@@ -147,9 +147,10 @@ else{
         $depto = Docentexdepartamento::find()->where(['docente' => $persona->id])->count();
       } catch (\Throwable $th) {
         //throw $th;
+        $depto = 0;
       }
       
-      $depto = 0;
+      //$depto = 0;
       
           if(in_array(Yii::$app->user->identity->username, Globales::authttemas) || $depto>0){
         ?>

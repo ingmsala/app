@@ -381,8 +381,7 @@ class NombramientoSearch extends Nombramiento
                                         ['division.propuesta' => $prop],
                                         ['nombramiento.division' => null]
                                     ])
-                                    ->orderBy('docente
-                                      +.apellido, docente.nombre');
+                                    ->orderBy('docente.apellido, docente.nombre');
                 }else{
                     $query = Docente::find()
                                     ->distinct()

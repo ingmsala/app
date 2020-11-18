@@ -116,6 +116,8 @@ try {
                         */
                             ['label' => 'Preceptores', 'url' => ['/reporte/preceptores']],
                             '<div class="dropdown-divider"></div>',
+                            ['label' => 'Docentes teléfonos', 'url' => ['/reporte/telefonos/docentes']],
+                            '<div class="dropdown-divider"></div>',
                             ['label' => 'Listado de Horas por Docente', 'url' => ['/reporte/horasdocentes']],
                             '<div class="dropdown-divider"></div>',
                             ['label' => 'Horas de actividades por Cátedra', 'url' => ['/reporte/horasmateriaxcatedra']],
@@ -600,6 +602,8 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Declaraciones juradas', 'url' => ['/declaracionjurada/declaracionesjuradasadmin']],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'Contacto Docentes', 'url' => ['/reporte/telefonos/docentes']],
+                                '<div class="dropdown-divider"></div>',
                             ],
                     ],
                     
@@ -835,6 +839,8 @@ try {
                         
                             ['label' => 'Preceptores', 'url' => ['/reporte/preceptores']],
                             '<div class="dropdown-divider"></div>',
+                            ['label' => 'Contacto Docentes', 'url' => ['/reporte/telefonos/docentes']],
+                                '<div class="dropdown-divider"></div>',
                             ['label' => 'Listado de Horas por Docente', 'url' => ['/reporte/horasdocentes']],
                             '<div class="dropdown-divider"></div>',
                             ['label' => 'Horas de actividades por Cátedra', 'url' => ['/reporte/horasmateriaxcatedra']],
@@ -843,6 +849,7 @@ try {
                             '<div class="dropdown-divider"></div>',
                             ['label' => 'Diferencia Planta Doc. y Horario', 'url' => ['/reporte/diferenciahorario']],
                             '<div class="dropdown-divider"></div>',
+                            
 
                             [
                                     'label' => 'Horarios',
@@ -911,8 +918,6 @@ try {
                             'items' => [
 
                                 ['label' => 'Cátedras', 'url' => ['/catedra']],
-                                '<div class="dropdown-divider"></div>',
-                                ['label' => 'Docentes', 'url' => ['/docente']],
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Nombramientos de cargo', 'url' => ['/nombramiento']],
                                 '<div class="dropdown-divider"></div>',

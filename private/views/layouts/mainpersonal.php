@@ -35,9 +35,10 @@ AppAsset::register($this);
             $depto = Docentexdepartamento::find()->where(['docente' => $persona->id])->count();
         } catch (\Throwable $th) {
             //throw $th;
+            $depto = 0;
         }
         
-        $depto = 0;
+        //$depto = 0;
     ?>
 
 <?php 
