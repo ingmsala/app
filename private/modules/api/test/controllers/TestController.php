@@ -135,22 +135,20 @@ public function behaviors()
 						$detru.= $dr->calificacionrubrica0->rubrica0->descripcion.': '.$dr->calificacionrubrica0->detalleescalanota0->nota.'. ';
 					}
 					date_default_timezone_set('America/Argentina/Buenos_Aires');
+					$arraux = [];
 
-					$array['item']['tracking_id'] = $s->id;
-					$array['item']['tracking_date'] = Yii::$app->formatter->asDate($s->fecha, 'dd/MM/yyyy');
+					$arraux['tracking_id'] = $s->id;
+					$arraux['tracking_date'] = Yii::$app->formatter->asDate($s->fecha, 'dd/MM/yyyy');
 
 					try {
-						$array['item']['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion.': '.$detru.' - '.$s->estadoseguimiento0->nombre;
+						$arraux['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion.': '.$detru.' - '.$s->estadoseguimiento0->nombre;
 					} catch (\Throwable $th) {
-						$array['item']['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion.': '.$detru;
+						$arraux['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion.': '.$detru;
 					}
-
+					array_push($array, $arraux);
 					
 				}
-
-
-		
-				//return var_dump($array);
+				
 				
 				return new ArrayDataProvider([
 					'allModels' => $array,
@@ -168,15 +166,16 @@ public function behaviors()
 				date_default_timezone_set('America/Argentina/Buenos_Aires');
 
 				foreach ($seg as $s) {
-					$array['item']['tracking_id'] = $s->id;
-					$array['item']['tracking_date'] = Yii::$app->formatter->asDate($s->fecha, 'dd/MM/yyyy');
+					$arraux = [];
+					$arraux['item']['tracking_id'] = $s->id;
+					$arraux['item']['tracking_date'] = Yii::$app->formatter->asDate($s->fecha, 'dd/MM/yyyy');
 
 					try {
-						$array['item']['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion.' - '.$s->estadoseguimiento0->nombre;
+						$arraux['item']['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion.' - '.$s->estadoseguimiento0->nombre;
 					} catch (\Throwable $th) {
-						$array['item']['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion;
+						$arraux['item']['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion;
 					}
-					
+					array_push($array, $arraux);
 				}
 
 
@@ -204,10 +203,27 @@ public function behaviors()
 				]);*/
 			}
 
-	    }
+		}
+		
+		public function array_to_xml( $data, &$xml_data ) {
+			foreach( $data as $key => $value ) {
+				if( is_array($value) ) {
+					if( is_numeric($key) ){
+						$key = 'item'.$key; //dealing with <0/>..<n/> issues
+					}
+					$subnode = $xml_data->addChild($key);
+					$this->array_to_xml($value, $subnode);
+				} else {
+					$xml_data->addChild("$key",htmlspecialchars("$value"));
+				}
+			 }
+		}
 
 
 	    
 	}
+
+	
+	
 
 ?>
