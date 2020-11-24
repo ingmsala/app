@@ -28,6 +28,9 @@ in_array (Yii::$app->user->identity->role, [1,8,20]) ? $template = '{update} {de
             [
                 'label' => 'Trimestre',
                 'value' => function($model){
+                    if($model->trimestre == 4){
+                        return 'Tutorías';
+                    }
                     return $model->trimestre.'°trimestre';
                 },
                 

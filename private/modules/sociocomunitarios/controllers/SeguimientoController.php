@@ -211,7 +211,7 @@ class SeguimientoController extends Controller
      */
     public function actionCreate($id)
     {
-        $trimestre = [1=>'1° trimestre',2=>'2° trimestre',3=>'3° trimestre'];
+        $trimestre = [1=>'1° trimestre',2=>'2° trimestre',3=>'3° trimestre', 4=>'Tutorías'];
         $this->layout = 'main';
         $com = isset($_SESSION['comisiontsx']) ? $_SESSION['comisiontsx'] : 0;
         if($com != 0){
@@ -369,7 +369,7 @@ class SeguimientoController extends Controller
      */
     public function actionUpdate($id)
     {
-        $trimestre = [1=>'1° trimestre',2=>'2° trimestre',3=>'3° trimestre'];
+        $trimestre = [1=>'1° trimestre',2=>'2° trimestre',3=>'3° trimestre', 4=>'Tutorías'];
         $this->layout = 'main';
         $com = isset($_SESSION['comisiontsx']) ? $_SESSION['comisiontsx'] : 0;
         if($com != 0){
