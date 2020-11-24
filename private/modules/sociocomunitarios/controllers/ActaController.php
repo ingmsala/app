@@ -8,6 +8,7 @@ use app\models\Docente;
 use app\modules\curriculares\models\Acta;
 use app\modules\curriculares\models\ActaSearch;
 use app\modules\curriculares\models\Admisionoptativa;
+use app\modules\curriculares\models\Admisionsociocom;
 use app\modules\curriculares\models\Aniolectivo;
 use app\modules\curriculares\models\Comision;
 use app\modules\curriculares\models\Detalleacta;
@@ -421,7 +422,7 @@ class ActaController extends Controller
             $matricula->save();
             $c++;
             for ($i=1; $i >= $rep; $i--) { 
-                $admision = new Admisionoptativa();
+                $admision = new Admisionsociocom();
                 $admision->alumno = $matricula->alumno;
                 $admision->curso = $matricula->comision0->espaciocurricular0->curso+$i;
                 $admision->aniolectivo = $aniolectivo;

@@ -136,7 +136,7 @@ if(Yii::$app->request->get('cl')==1){
                     'buttons' => [
 
                         'cargar' => function($url, $model, $key){
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', '?r=optativas/acta/view&id='.$model->id);
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', '?r=sociocomunitarios/acta/view&id='.$model->id);
                         },
 
                         'cerrar' => function($url, $model, $key){
@@ -144,7 +144,7 @@ if(Yii::$app->request->get('cl')==1){
                                 $gly = 'lock';
                             else
                                 $gly = 'eye-open';
-                        return Html::a('<span class="glyphicon glyphicon-'.$gly.'"></span>', '?r=optativas/detalleacta/cerraracta&acta_id='.$model->id);
+                        return Html::a('<span class="glyphicon glyphicon-'.$gly.'"></span>', '?r=sociocomunitarios/detalleacta/cerraracta&acta_id='.$model->id);
                         },
                         
                         

@@ -103,18 +103,7 @@ foreach ($docentes as $docente) {
                 }
             ],
 
-            [
-                'label' => 'Trabajo Final',
-                'vAlign' => 'middle',
-                'value' => function($model) use($listseguimientos, $listestadoseguimiento){
-                    try {
-                        return $listestadoseguimiento[$listseguimientos[$model->matricula]];
-                    } catch (Exception $e) {
-                        return 'Sin calificar';
-                    }
-                    
-                }
-            ],
+            
 
             [
                 'label' => 'Nota',
