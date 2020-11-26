@@ -291,14 +291,14 @@ class DetalleactaController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionPrintacta($acta){
+    public function actionPrintacta($acta_id){
         //$this->layout = null;
         $this->layout = 'vacio';
-        $actaX = Acta::findOne($acta);
+        $actaX = Acta::findOne($acta_id);
         
         if($actaX->estadoacta == 1){
             Yii::$app->session->setFlash('danger', "No se puede imprimir un acta abierta");
-            return $this->redirect(['detalleacta/cerraracta', 'acta_id' => $acta]);
+            return $this->redirect(['detalleacta/cerraracta', 'acta_id' => $acta_id]);
         }
 
         $docentes = $actaX->comision0->docentexcomisions;
@@ -316,7 +316,7 @@ class DetalleactaController extends Controller
         }
         $salida = '';
         
-        $salida .= $this->generarActa($acta,1);
+        $salida .= $this->generarActa($acta_id,1);
         $content = $this->renderAjax('print', [
                 'salida' => $salida,
                 

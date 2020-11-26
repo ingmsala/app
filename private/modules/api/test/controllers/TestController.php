@@ -167,13 +167,13 @@ public function behaviors()
 
 				foreach ($seg as $s) {
 					$arraux = [];
-					$arraux['item']['tracking_id'] = $s->id;
-					$arraux['item']['tracking_date'] = Yii::$app->formatter->asDate($s->fecha, 'dd/MM/yyyy');
+					$arraux['tracking_id'] = $s->id;
+					$arraux['tracking_date'] = Yii::$app->formatter->asDate($s->fecha, 'dd/MM/yyyy');
 
 					try {
-						$arraux['item']['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion.' - '.$s->estadoseguimiento0->nombre;
+						$arraux['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion.' - '.$s->estadoseguimiento0->nombre;
 					} catch (\Throwable $th) {
-						$arraux['item']['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion;
+						$arraux['tracking_detail'] = $s->tiposeguimiento0->nombre.' - '.$s->descripcion;
 					}
 					array_push($array, $arraux);
 				}

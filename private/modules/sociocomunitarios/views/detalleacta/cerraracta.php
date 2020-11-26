@@ -34,7 +34,7 @@ foreach ($docentes as $docente) {
     <div  class="pull-right">
             <?php 
                 
-                echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center>', Url::to(['printacta', 'acta' => $acta->id]), ['class' => 'btn btn-default']);
+                echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center>', Url::to(['printacta', 'acta_id' => $acta->id]), ['class' => 'btn btn-default']);
             ?>
     </div>
 
