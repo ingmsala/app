@@ -45,12 +45,16 @@ class DetalleactaController extends Controller
                                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_PSC]))
                                     return true;
                                 elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+                                    
                                     $acta = Acta::findOne(Yii::$app->request->queryParams['acta_id']);
+                                    return true;
                                     $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                    
                                     $cant = count(Docentexcomision::find()
                                                     ->where(['comision' => $acta->comision])
                                                     ->andWhere(['docente' => $docente->id])
                                                     ->all());
+                                    
                                     if($cant>0){
                                         return true;
                                     }
