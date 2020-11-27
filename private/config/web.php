@@ -153,6 +153,10 @@ $config = [
                 'class' => 'app\modules\edh\Edh',
          ],
 
+         'mones' => [
+                'class' => 'app\modules\mones\Mones',
+         ],
+
          'api' => [
                 'class' => 'app\modules\api\test\Test',
                                 

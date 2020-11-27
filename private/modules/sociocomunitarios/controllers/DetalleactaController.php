@@ -403,7 +403,7 @@ class DetalleactaController extends Controller
                                     </div>
                                     <div class="col-xs-3">
                                         <ul style="padding-left: 0px;list-style:none;">
-                                            <li><span class="bold">MÓDULO:</span> Espacios Optativos</li>
+                                            <li><span class="bold">MÓDULO:</span> Proyectos Sociocomunitarios</li>
                                             <li><span class="bold">ACTIVIDAD:</span> '.$actaX->comision0->espaciocurricular0->actividad0->nombre.'</li>
                                             <li><span class="bold">AÑO LECTIVO:</span> '.$actaX->libro0->aniolectivo0->nombre.'</li>
                                         </ul>

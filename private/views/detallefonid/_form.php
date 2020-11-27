@@ -10,6 +10,10 @@ use yii\widgets\ActiveForm;
 
 <div class="detallefonid-form">
 
+<div class="alert alert-danger" role="alert">
+     <b>Importante</b> Sólo debe llenar esta ventana si son cargos EXTERNOS al Colegio Nacional de Monserrat.
+</div>
+
     <?php $listtipo=[1=>'Secundarias', 2=>'Terciarias']; ?>
 
     <?php $form = ActiveForm::begin(['id' => 'registration-detallefonid']); ?>

@@ -262,6 +262,15 @@ if(!Yii::$app->user->isGuest){
     }else{
         $items = [];
     }
+
+    if(in_array (Yii::$app->user->identity->username, Globales::mones)){
+        $it = [['label' => '<center><span class="glyphicon glyphicon-time"></span><br />'.'Mones 2.0</center>',
+                            
+        'url' => ['/mones/monalumno'],
+        '<div class="dropdown-divider"></div>',
+        ]];
+        array_splice($items,-1,0,$it);
+    }
 NavBar::begin([
     'brandLabel' => '<img src="assets/images/escudo.png" style="display:inline; vertical-align: middle; height:35px;"><span id="brandspan-optativas">'.$this->title.'</span>',
     //'brandUrl' => Yii::$app->homeUrl,

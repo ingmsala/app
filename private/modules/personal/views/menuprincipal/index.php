@@ -174,5 +174,29 @@ else{
       <?php
           }
       ?>
+
+      <?php
+      if(in_array(Yii::$app->user->identity->username, Globales::mones)){
+        ?>
+        <div class="col-md-3">           
+          <?= 
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-time"></span><h2>H. Académico</h2><span class="label label-default">MONES 2.0</span>',
+
+           ['/mones/monalumno'],
+
+           [
+
+               //'id' => 'modalButtonIngreso',
+               'class' => $classclient,
+               // modalCall
+
+           ]);
+
+          ?>
+      
+        </div>
+      <?php
+          }
+      ?>
      
       </div>
