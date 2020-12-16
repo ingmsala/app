@@ -16,6 +16,7 @@ use app\config\Globales;
 use app\models\Division;
 use app\models\DivisionSearch;
 use app\models\Preceptoria;
+use app\models\Rolexuser;
 use yii\data\ArrayDataProvider;
 
 class PreceptoresController extends \yii\web\Controller
@@ -98,9 +99,16 @@ class PreceptoresController extends \yii\web\Controller
 	        
             $preceptores = Nombramiento::find()
                 ->where(['cargo' => Globales::CARGO_PREC])
-                ->orderBy('revista, division')->all();
+                ->orderBy('division, revista')->all();
 
-            $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+            //$pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+
+            $role = Rolexuser::find()
+                        ->where(['user' => Yii::$app->user->identity->id])
+                        ->andWhere(['role' => Globales::US_PRECEPTORIA])
+                        ->one();
+
+            $pre = Preceptoria::find()->where(['nombre' => $role->subrole])->one();
             $divisiones = Division::find()
                         ->where(['preceptoria' => $pre->id])
                         ->orderBy('id')

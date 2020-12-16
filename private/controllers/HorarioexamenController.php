@@ -19,6 +19,7 @@ use app\config\Globales;
 use yii\data\ArrayDataProvider;
 use app\models\DetallecatedraSearch;
 use app\models\Nombramiento;
+use app\models\Rolexuser;
 use yii\filters\AccessControl;
 use kartik\mpdf\Pdf;
 use kartik\date\DatePicker;
@@ -117,7 +118,12 @@ class HorarioexamenController extends Controller
                                     }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
                                         
                                         $division = Yii::$app->request->queryParams['division'];
-                                        $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+                                        $role = Rolexuser::find()
+                                                    ->where(['user' => Yii::$app->user->identity->id])
+                                                    ->andWhere(['role' => Globales::US_PRECEPTORIA])
+                                                    ->one();
+
+                                        $pre = Preceptoria::find()->where(['nombre' => $role->subrole])->one();
                                         $aut = Division::find()
                                             ->where(['preceptoria' => $pre->id])
                                             ->andWhere(['id' => $division])
@@ -365,15 +371,7 @@ class HorarioexamenController extends Controller
         $searchModel = new HorarioexamenSearch();
         $paramdivision = Division::findOne($division);
         $h= [];
-        if($paramdivision->turno == 1){
-            $h[1] = '8:00 a 9:00';
-            $h[2] = '9:15 a 10:15';
-            
-        }elseif ($paramdivision->turno == 2) {
-            $h[1] = '13:30 a 14:30';
-            $h[2] = '14:45 a 15:45';
-            
-        }
+        
         if ($col == 0){
             $anioxtrim = Anioxtrimestral::find()
                             ->where(['activo' => 1])
@@ -387,6 +385,16 @@ class HorarioexamenController extends Controller
                             ->andWhere(['trimestral' => 4])
                             ->one();
             $tipo = 3;
+        }
+
+        if($paramdivision->turno == 1){
+            $h[1] = $anioxtrim->h1m;
+            $h[2] = $anioxtrim->h2m;
+            
+        }elseif ($paramdivision->turno == 2) {
+            $h[1] = $anioxtrim->h1t;
+            $h[2] = $anioxtrim->h2t;
+            
         }
 
         if($anioxtrim == null){
@@ -499,7 +507,7 @@ class HorarioexamenController extends Controller
                                     //return var_dump($dc['revista']==1);
                                     $listdc[] = $dc->id;
                                     $cant = array_count_values($listdc)[$dc->id];
-                                    $superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->fecha, $tipo);
+                                    $superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->fecha, $tipo, $anioxtrim->id);
                                     
                                     if ($superpuesto[0]){
                                         if($cant>1){
@@ -542,9 +550,9 @@ class HorarioexamenController extends Controller
             
         ]);
         //return var_dump($array);
-
+        
         $docente_materia_search = new DetallecatedraSearch();
-        $dataProvider = $docente_materia_search->horario_doce_divi($division);
+        $dataProvider = $docente_materia_search->horario_doce_divi($division, $anioxtrim->aniolectivo);
 
         if($prt == 1)
                 return $this->renderAjax('completoxcurso', [
@@ -623,16 +631,17 @@ class HorarioexamenController extends Controller
         ]);
     }
 
-    public function horaSuperpuesta($dc, $hora, $fecha, $tipo){
+    public function horaSuperpuesta($dc, $hora, $fecha, $tipo, $al){
         $docente = $dc->docente;
         $horarios = Horarioexamen::find()
-            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
+            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0', 'anioxtrimestral0'])
             ->where(['detallecatedra.docente' => $docente])
             ->andWhere(['detallecatedra.revista' => 6])
-            ->andWhere(['<>', 'detallecatedra.id', $dc->id])
+            ->andWhere(['<>', 'catedra.division', $dc->catedra0->division])
             ->andWhere(['horarioexamen.hora' => $hora])
             ->andWhere(['horarioexamen.fecha' => $fecha])
-            ->andWhere(['horarioexamen.tipo' => $tipo])
+            //->andWhere(['horarioexamen.id' => $anioxtrim->id])
+            ->andWhere(['anioxtrimestral.id' => $al])
             ->andWhere(['division.turno' => $dc->catedra0->division0->turno])
             ->all();
         if (count($horarios)>0){
@@ -728,7 +737,12 @@ class HorarioexamenController extends Controller
         }
 
         if(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
-            $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+            $role = Rolexuser::find()
+                        ->where(['user' => Yii::$app->user->identity->id])
+                        ->andWhere(['role' => Globales::US_PRECEPTORIA])
+                        ->one();
+
+            $pre = Preceptoria::find()->where(['nombre' => $role->subrole])->one();
             $divisiones = Division::find()
                         ->where(['preceptoria' => $pre->id])
                         ->orderBy('id')
@@ -745,7 +759,7 @@ class HorarioexamenController extends Controller
             foreach ($nom as $n) {
                 $array [] = $n->division;
             }
-            $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+            //$pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
             $divisiones = Division::find()
                         ->where(['in', 'id', $array])
                         ->orderBy('id')
@@ -786,7 +800,7 @@ class HorarioexamenController extends Controller
         if($col == 0)
             $infoexamen = "TRIMESTRALES";
         else{
-            $infoexamen = "COLOQUIOS";
+            $infoexamen = "Febrero/Marzo 2021";
         }
         return $this->render('panelprincipal', [
             'infoexamen' => $infoexamen,
@@ -915,12 +929,7 @@ class HorarioexamenController extends Controller
         $h= [];
         $j= [];
         
-            $h[1] = '8:00 a 9:00';
-            $h[2] = '9:15 a 10:15';
             
-        
-            $j[1] = '13:30 a 14:30';
-            $j[2] = '14:45 a 15:45';
 
         if ($col == 0){
             $anioxtrim = Anioxtrimestral::find()
@@ -943,25 +952,32 @@ class HorarioexamenController extends Controller
             $infocabecera = '';
         }
             
+        $h[1] = $anioxtrim->h1m;
+        $h[2] = $anioxtrim->h2m;
         
+    
+        $j[1] = $anioxtrim->h1t;
+        $j[2] = $anioxtrim->h2t;
                 
         $horariosTm = Horarioexamen::find()
-            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
+            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0', 'anioxtrimestral0'])
             //->where(['diasemana' => 2])
             ->where(['detallecatedra.docente' => $docente])
+            ->andWhere(['horarioexamen.anioxtrimestral' => $anioxtrim->id])
             ->andWhere(['division.turno' => 1])
             ->andWhere(['detallecatedra.revista' => 6])
-            ->andWhere(['horarioexamen.tipo' => $tipo])
+            ->andWhere(['anioxtrimestral.id' => $anioxtrim->id])
             ->orderBy('horarioexamen.fecha, horarioexamen.hora')
             ->all();
 
         $horariosTt = Horarioexamen::find()
-            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
+            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0', 'anioxtrimestral0'])
             //->where(['diasemana' => 2])
             ->where(['detallecatedra.docente' => $docente])
+            ->andWhere(['horarioexamen.anioxtrimestral' => $anioxtrim->id])
             ->andWhere(['division.turno' => 2])
             ->andWhere(['detallecatedra.revista' => 6])
-            ->andWhere(['horarioexamen.tipo' => $tipo])
+            ->andWhere(['anioxtrimestral.id' => $anioxtrim->id])
             ->orderBy('horarioexamen.fecha, horarioexamen.hora')
             ->all();
 
@@ -1215,12 +1231,7 @@ class HorarioexamenController extends Controller
         $h= [];
         $j= [];
         
-            $h[1] = '8:00 a 9:00';
-            $h[2] = '9:15 a 10:15';
             
-        
-            $j[1] = '13:30 a 14:30';
-            $j[2] = '14:45 a 15:45';
           
         if ($col == 0){
             $anioxtrim = Anioxtrimestral::find()
@@ -1242,25 +1253,34 @@ class HorarioexamenController extends Controller
             $tipo = 3;
             $infocabecera = '';
         }  
+
+        $h[1] = $anioxtrim->h1m;
+        $h[2] = $anioxtrim->h2m;
+        
+    
+        $j[1] = $anioxtrim->h1t;
+        $j[2] = $anioxtrim->h2t;
         
                 
         $horariosTm = Horarioexamen::find()
-            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
+            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0', 'anioxtrimestral0'])
             //->where(['diasemana' => 2])
             ->where(['detallecatedra.docente' => $docente])
             ->andWhere(['division.turno' => 1])
             ->andWhere(['detallecatedra.revista' => 6])
-            ->andWhere(['horarioexamen.tipo' => $tipo])
+            ->andWhere(['detallecatedra.aniolectivo' => $anioxtrim->aniolectivo])
+            ->andWhere(['anioxtrimestral.id' => $anioxtrim->id])
             ->orderBy('horarioexamen.fecha, horarioexamen.hora')
             ->all();
 
         $horariosTt = Horarioexamen::find()
-            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
+            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0', 'anioxtrimestral0'])
             //->where(['diasemana' => 2])
             ->where(['detallecatedra.docente' => $docente])
             ->andWhere(['division.turno' => 2])
             ->andWhere(['detallecatedra.revista' => 6])
-            ->andWhere(['horarioexamen.tipo' => $tipo])
+            ->andWhere(['detallecatedra.aniolectivo' => $anioxtrim->aniolectivo])
+            ->andWhere(['anioxtrimestral.id' => $anioxtrim->id])
             ->orderBy('horarioexamen.fecha, horarioexamen.hora')
             ->all();
 
@@ -1462,12 +1482,7 @@ class HorarioexamenController extends Controller
         $h= [];
         $j= [];
         
-            $h[1] = '8:00 a 9:00';
-            $h[2] = '9:15 a 10:15';
-            
         
-            $j[1] = '13:30 a 14:30';
-            $j[2] = '14:45 a 15:45';
           
         if ($col == 0){
             $anioxtrim = Anioxtrimestral::find()
@@ -1489,25 +1504,34 @@ class HorarioexamenController extends Controller
             $tipo = 3;
             $infocabecera = '';
         }  
+
+        $h[1] = $anioxtrim->h1m;
+        $h[2] = $anioxtrim->h2m;
+        
+    
+        $j[1] = $anioxtrim->h1t;
+        $j[2] = $anioxtrim->h2t;
         
                 
         $horariosTm = Horarioexamen::find()
-            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
+            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0', 'anioxtrimestral0'])
             //->where(['diasemana' => 2])
             ->where(['detallecatedra.docente' => $docente])
+            ->andWhere(['horarioexamen.anioxtrimestral' => $anioxtrim->id])
             ->andWhere(['division.turno' => 1])
             ->andWhere(['detallecatedra.revista' => 6])
-            ->andWhere(['horarioexamen.tipo' => $tipo])
+            ->andWhere(['anioxtrimestral.id' => $anioxtrim->id])
             ->orderBy('horarioexamen.fecha, horarioexamen.hora')
             ->all();
 
         $horariosTt = Horarioexamen::find()
-            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
+            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0', 'anioxtrimestral0'])
             //->where(['diasemana' => 2])
             ->where(['detallecatedra.docente' => $docente])
+            ->andWhere(['horarioexamen.anioxtrimestral' => $anioxtrim->id])
             ->andWhere(['division.turno' => 2])
             ->andWhere(['detallecatedra.revista' => 6])
-            ->andWhere(['horarioexamen.tipo' => $tipo])
+            ->andWhere(['anioxtrimestral.id' => $anioxtrim->id])
             ->orderBy('horarioexamen.fecha, horarioexamen.hora')
             ->all();
 
@@ -1809,7 +1833,7 @@ class HorarioexamenController extends Controller
         'methods' => [ 
             //'defaultheaderline' => 0,
             'SetHeader'=>['<span><img src="assets/images/logo-encabezado.png" /></span>'], 
-            'SetFooter'=>['<span class"pull-left" style="font-size: 8px;">Puede consultar su horario online ingresando su legajo o DNI en la web <a href="http://admin.cnm.unc.edu.ar/horario">admin.cnm.unc.edu.ar/horario</a></span>    -    '.date('d/m/Y').' - '.$filnamesinext ],
+            'SetFooter'=>['<span class"pull-left" style="font-size: 8px;">Puede consultar su horario online ingresando con su Usuario UNC en la web <a href="http://admin.cnm.unc.edu.ar">admin.cnm.unc.edu.ar</a></span>    -    '.date('d/m/Y').' - '.$filnamesinext ],
         ]
     ]);
     
@@ -1854,7 +1878,12 @@ class HorarioexamenController extends Controller
             ini_set("pcre.backtrack_limit", "5000000");
             
             if(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
-                $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+                $role = Rolexuser::find()
+                            ->where(['user' => Yii::$app->user->identity->id])
+                            ->andWhere(['role' => Globales::US_PRECEPTORIA])
+                            ->one();
+
+                $pre = Preceptoria::find()->where(['nombre' => $role->subrole])->one();
                 $divisiones = Division::find()
                         ->where(['preceptoria' => $pre->id])
                         ->orderBy('id')
@@ -1944,9 +1973,13 @@ class HorarioexamenController extends Controller
     return $pdf->render(); 
     }
 
-    public function actionMigracionfechas($anioxtrimestral){
+    public function actionMigracionfechas($anioxtrimestral, $origenduplicado){
         $axt = Anioxtrimestral::findOne($anioxtrimestral);
+        $axtorigen = Anioxtrimestral::findOne($origenduplicado);
         
+        if($axtorigen==null){
+            return $this->redirect(['/anioxtrimestral']);
+        }
         
         $dias2 = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado","Domingo"];
 
@@ -1958,33 +1991,29 @@ class HorarioexamenController extends Controller
             $col = 1;
         }
 
-        $ht = Horarioexamen::find()
+        $htrimprueba = Horarioexamen::find()
                 ->select('fecha')
                 ->distinct()
-                ->where(['tipo' => 2])
+                //->where(['tipo' => 2])
+                ->andWhere(['anioxtrimestral' => $axtorigen->id])
                 ->orderBy('fecha')
                 ->all();
 
 
-        $htexamen = Horarioexamen::find()
-                ->select('fecha')
-                ->distinct()
-                ->where(['tipo' => 3])
-                ->orderBy('fecha')
-                ->all();
+        
 
-        if(count($htexamen)==0 && $tipo == 3){
+        /*if(count($htexamen)==0 && $tipo == 3){
             $nuevoexamen = true;
         }else{
             $nuevoexamen = false;
-        }
+        }*/
 
         $salida = '';
         $salida .='<div class="content">';
         $c = 0;
         $form = ActiveForm::begin([
         'id' => 'create-update-detalle-catedra-form','method' => 'post',]);
-        foreach ($ht as $htx) {
+        foreach ($htrimprueba as $htx) {
             # code...
             $model = $htx;
             $salida .='<div class="row">';
@@ -2031,177 +2060,73 @@ class HorarioexamenController extends Controller
         $salida .='</div>';
         $echodiv = $salida;
 
-        $horariostr = Horarioexamen::find()
-                ->where(['tipo' => 2])
-                ->orderBy('fecha')
-                ->all();
-
-        if(count($horariostr)==0){
-            return $this->redirect(['/anioxtrimestral']);
-        }
-
-        foreach ($horariostr as $htr) {
-           $axtant = $htr->anioxtrimestral0;
-           break;
-        }
-
-              
+                      
         if (Yii::$app->request->post()) {
             $params = Yii::$app->request->post();
             $keys = array_keys($params);
-            //return var_dump(Yii::$app->request->post());
+           
+            $ch = 0;
+            
+            $nsm = 0;//no se migra
+            $detalle = '<ul>';
 
             $horarios = Horarioexamen::find()
-                ->where(['tipo' => 2])
+                ->andWhere(['anioxtrimestral' => $axtorigen->id])
                 ->orderBy('fecha')
                 ->all();
-
             
-            
-            $ch = 0;
-            /*$transaction = Horarioexamen::getDb()->beginTransaction();
-            try {
-                foreach ($horarios as $horario) {
+            foreach ($horarios as $horario) {
 
-                    if($nuevoexamen){
-                        $nuevohorarioexamen = new Horarioexamen();
-                        $nuevohorarioexamen->scenario = $nuevohorarioexamen::SCENARIO_MIGRACIONHORARIO;
-                        $nuevohorarioexamen->catedra = $horario->catedra;
-                        $nuevohorarioexamen->hora = $horario->hora;
-                        $nuevohorarioexamen->tipo = 3;
-                        $nuevohorarioexamen->anioxtrimestral =$axt->id;
-                        $nuevohorarioexamen->fecha = $params[$horario->fecha];
-                        $nuevohorarioexamen->cambiada = 2;
+                    if($horario->catedra0->actividad != 195){ //no migra hora disponible
                         
-                        $nuevohorarioexamen->save();
+                        $anioxtrimdesdemigrar = $horario->anioxtrimestral;
+                        
+                        try {
+                            $horarionuevo = New Horarioexamen();
+                            //$horarionuevo->scenario = $horario::SCENARIO_MIGRACIONHORARIO;
+                            $horarionuevo->fecha = $params[$horario->fecha];
+                            $horarionuevo->cambiada = 1;
+                            $horarionuevo->tipo = $tipo;
+                            $horarionuevo->anioxtrimestral = $axt->id;
+                            $horarionuevo->catedra = $horario->catedra;
+                            $horarionuevo->hora = $horario->hora;
+                            $horarionuevo->catedra = $horario->catedra;
+                            $horarionuevo->save();
+                            $ch++;
+                        } catch (ErrorException $e) {
+                            $nsm ++;
+                            $detalle .= "<li>{$horario->catedra0->division0->nombre} - {$horario->catedra0->actividad0->nombre}</li>";
+                        }
 
-                    }else{
-                        if($tipo == 2){
-                            $horario->scenario = $horario::SCENARIO_MIGRACIONHORARIO;
-                            $horario->fecha = $params[$horario->fecha];
-                            $horario->cambiada = 2;
-                            $horario->anioxtrimestral =$axt->id;
-                            $horario->save();
-                        }elseif($tipo == 3){
-                            $horarioexamenanterior = Horarioexamen::find()
-                                        ->where(['catedra'=>$horario->catedra])
-                                        ->andWhere(['tipo' => 3])
-                                        ->one();
+                    }    
+                        
+                    /*elseif($tipo == 3){
+                        $horarioexamenanterior = Horarioexamen::find()
+                                    ->where(['catedra'=>$horario->catedra])
+                                    ->andWhere(['tipo' => 3])
+                                    ->one();
+                        try {
                             $horarioexamenanterior->scenario = $horarioexamenanterior::SCENARIO_MIGRACIONHORARIO;             
                             $horarioexamenanterior->hora = $horarioexamenanterior->hora;
                             $horarioexamenanterior->anioxtrimestral =$axt->id;
                             $horarioexamenanterior->fecha = $params[$horario->fecha];
                             $horarioexamenanterior->cambiada = 2;
                             $horarioexamenanterior->save();
-                            
-                        }
-                        
-                    }
-
-                    
-                     $ch++;
-                     //return var_dump($horario);
-                }
-                $transaction->commit();
-            } catch (Exception $e) {
-                $transaction->rollBack();
-                throw $e;
-            }
-
-            foreach ($horarios as $horario) {
-                $horario->scenario = $horario::SCENARIO_MIGRACIONHORARIO2;
-                $horario->cambiada = 1;
-                $horario->save();
-
-            }*/
-
-                $nsm = 0;
-                $detalle = '<ul>';
-            
-                foreach ($horarios as $horario) {
-
-                    if($ch == 0)
-                        $anioxtrimdesdemigrar = $horario->anioxtrimestral;
-
-                    if($nuevoexamen){
-                        $nuevohorarioexamen = new Horarioexamen();
-                        try {
-                            $nuevohorarioexamen->scenario = $nuevohorarioexamen::SCENARIO_MIGRACIONHORARIO;
-                            $nuevohorarioexamen->catedra = $horario->catedra;
-                            $nuevohorarioexamen->hora = $horario->hora;
-                            $nuevohorarioexamen->tipo = 3;
-                            $nuevohorarioexamen->anioxtrimestral =$axt->id;
-                            $nuevohorarioexamen->fecha = $params[$horario->fecha];
-                            $nuevohorarioexamen->cambiada = 2;
-                            $nuevohorarioexamen->save();
                             $ch++;
                         } catch (ErrorException $e) {
                             $nsm ++;
                             $detalle .= "<li>{$horario->catedra0->division0->nombre} - {$horario->catedra0->actividad0->nombre}</li>";
                         }
-                            
                         
                         
-
-                    }else{
-                        if($tipo == 2){
-                            try {
-                                $horario->scenario = $horario::SCENARIO_MIGRACIONHORARIO;
-                                $horario->fecha = $params[$horario->fecha];
-                                $horario->cambiada = 2;
-                                $horario->anioxtrimestral =$axt->id;
-                                $horario->save();
-                                $ch++;
-                            } catch (ErrorException $e) {
-                               $nsm ++;
-                               $detalle .= "<li>{$horario->catedra0->division0->nombre} - {$horario->catedra0->actividad0->nombre}</li>";
-                            }
-
-                            
-                            
-                        }elseif($tipo == 3){
-                            $horarioexamenanterior = Horarioexamen::find()
-                                        ->where(['catedra'=>$horario->catedra])
-                                        ->andWhere(['tipo' => 3])
-                                        ->one();
-                            try {
-                                $horarioexamenanterior->scenario = $horarioexamenanterior::SCENARIO_MIGRACIONHORARIO;             
-                                $horarioexamenanterior->hora = $horarioexamenanterior->hora;
-                                $horarioexamenanterior->anioxtrimestral =$axt->id;
-                                $horarioexamenanterior->fecha = $params[$horario->fecha];
-                                $horarioexamenanterior->cambiada = 2;
-                                $horarioexamenanterior->save();
-                                $ch++;
-                            } catch (ErrorException $e) {
-                                $nsm ++;
-                                $detalle .= "<li>{$horario->catedra0->division0->nombre} - {$horario->catedra0->actividad0->nombre}</li>";
-                            }
-                            
-                            
-                        }
-                        
-                    }
-
+                    }*/
                     
-                    
-                     //return var_dump($horario);
-                }
+                
+            }
                 
                 $detalle .= '</ul>';
             
-            $horarios = Horarioexamen::find()
-                ->where(['tipo' => $tipo])
-                ->andWhere(['cambiada' => 2])
-                ->orderBy('fecha')
-                ->all();
-
-            foreach ($horarios as $horario) {
-                $horario->scenario = $horario::SCENARIO_MIGRACIONHORARIO2;
-                $horario->cambiada = 1;
-                $horario->save();
-
-            }
-            
+                        
             if($nsm>0){
                 Yii::$app->session->setFlash('danger', "Se realizó la actualización de {$ch} horarios. Por superposiciones quedaron sin migrar {$nsm} horarios.<br />{$detalle}");
                     return $this->redirect(['/horarioexamen/index', 'id' => $anioxtrimdesdemigrar]);
@@ -2219,9 +2144,8 @@ class HorarioexamenController extends Controller
             
             'form' => $form,
             
-            
             'echodiv' => $echodiv,
-            'axt' => $axtant,
+            'axt' => $axtorigen,
             'anioxtrimestral' => $anioxtrimestral,
             
         ]);
@@ -2234,13 +2158,13 @@ class HorarioexamenController extends Controller
         $col =  ($tipo==2) ? 0 : 1;
 
         $searchModel = new HorarioexamenSearch();
-        $providercursos = $searchModel->getSuperposicionCursos($tipo);
+        $providercursos = $searchModel->getSuperposicionCursos($id);
 
         $searchModel2 = new HorarioexamenSearch();
-        $providerdocentes = $searchModel2->getSuperposicionDocentes($tipo);
+        $providerdocentes = $searchModel2->getSuperposicionDocentes($id);
 
         $searchModel3 = new HorarioexamenSearch();
-        $providermaterias = $searchModel3->getMateriasNocargadas($tipo);
+        $providermaterias = $searchModel3->getMateriasNocargadas($id);
 
         return $this->render('revisarhorarios', [
             'providercursos' => $providercursos,

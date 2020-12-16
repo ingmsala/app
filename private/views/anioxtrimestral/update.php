@@ -18,6 +18,8 @@ $this->params['breadcrumbs'][] = 'Modificar';
         'model' => $model,
         'anio' => $anio,
         'trimestral' => $trimestral,
+        'duplicar' => $duplicar,
+        'nuevo' => 0,
     ]) ?>
 
     

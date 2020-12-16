@@ -13,6 +13,7 @@ use kartik\select2\Select2;
 $listestados=ArrayHelper::map($estados,'id','nombre');
 $listtrimestrales=ArrayHelper::map($trimestrales,'id','nombre');
 $listanioslectivos=ArrayHelper::map($aniolectivo,'id','nombre');
+$listpreceptoria=ArrayHelper::map($preceptorias,'id','nombre');
 ?>
 
   
@@ -31,6 +32,13 @@ $listanioslectivos=ArrayHelper::map($aniolectivo,'id','nombre');
                                 if($param['Estadoxnovedad']['aniolectivo']!=''){
                                     $filtro = true;
                                     echo '<b> - Año lectivo: </b>'.$listanioslectivos[$param['Estadoxnovedad']['aniolectivo']];
+                                }
+                            }
+
+                            if(isset($param['Estadoxnovedad']['preceptoria'])){
+                                if($param['Estadoxnovedad']['preceptoria']!=''){
+                                    $filtro = true;
+                                    echo '<b> - Preceptoría: </b>'.$listpreceptoria[$param['Estadoxnovedad']['preceptoria']];
                                 }
                             }
 
@@ -91,6 +99,18 @@ $listanioslectivos=ArrayHelper::map($aniolectivo,'id','nombre');
                                         'allowClear' => true
                                     ],
                                 ])->label("Año lectivo");
+
+                            ?>
+
+                            <?= 
+                                
+                                $form->field($model, 'preceptoria')->widget(Select2::classname(), [
+                                    'data' => $listpreceptoria,
+                                    'options' => ['placeholder' => 'Seleccionar...'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ]);
 
                             ?>
 

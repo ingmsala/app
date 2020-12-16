@@ -19,7 +19,7 @@ class AnioxtrimestralSearch extends Anioxtrimestral
     {
         return [
             [['id', 'aniolectivo', 'trimestral', 'activo', 'publicado'], 'integer'],
-            [['inicio', 'fin'], 'safe'],
+            [['inicio', 'fin', 'h1m', 'h2m', 'h1t', 'h2t'], 'safe'],
         ];
     }
 

@@ -44,7 +44,8 @@ class MonacademicaSearch extends Monacademica
         $query = Monacademica::find()
                         ->joinWith(['materia0'])
                         ->where(['alumno'=>$doc])
-                        ->andWhere(['monmateria.carrera' => $car]);
+                        ->andWhere(['monmateria.carrera' => $car])
+                        ->andWhere(['<>','monacademica.nota', "0"]);
 
         // add conditions that should always apply here
 

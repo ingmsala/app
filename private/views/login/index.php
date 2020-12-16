@@ -18,9 +18,15 @@ $this->title = 'Ingresar';
 
     <?= Alert::widget() ?>
 
+    <?= Yii::$app->session->setFlash('info', 'Si ud. ingresaba al sistema con un usuario administrativo, ahora deberá iniciar sesión con su cuenta UNC y operar desde allí, segun su rol asignado.'); ?>
+
     <div class="row" style="margin-top: 1%;">
   
-         <div class="pull-right"><?= Html::a('Ingreso administrativo', Url::to('index.php?r=site/login'))?></div>           
+         <div class="pull-right"><?php
+         if (YII_ENV_DEV) {
+            echo Html::a('Ingreso administrativo', Url::to('index.php?r=site/loginadmin'));
+         }
+        ?></div>           
                        
 
     </div>

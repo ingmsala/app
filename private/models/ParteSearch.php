@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\config\Globales;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -95,10 +96,37 @@ class ParteSearch extends Parte
         if (isset($params['Parte']['mes']) && $params['Parte']['mes'] != ''){
             $sql .= ' and month(p.fecha) = '.$params["Parte"]["mes"];
         }
-        if ( in_array (Yii::$app->user->identity->role, [5])) {
-            $sql .= ' and pr.nombre="'.Yii::$app->user->identity->username.'"';
+        if ( in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTORIA])) {
+
+            $role = Rolexuser::find()
+                ->where(['user' => Yii::$app->user->identity->id])
+                ->andWhere(['role' => Globales::US_PRECEPTORIA])
+                ->one();
+
+
+            $sql .= ' and pr.nombre="'.$role->subrole.'"';
             $sql .= ' and year(p.fecha)="'.date('Y').'"';
         }
+
+        if ( in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTOR])) {
+
+            $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $nom = Nombramiento::find()
+                        ->where(['docente' => $doc->id])
+                        ->andWhere(['<=', 'division', 53])
+                        //->andWhere(['is not', 'division', 53])
+                        ->all();
+            $array = [];
+
+            foreach ($nom as $n) {
+                $array [] = $n->division0->preceptoria0->nombre;
+            }
+
+            
+            $sql .= " and pr.nombre IN('".implode("','",$array)."')";
+            $sql .= ' and year(p.fecha)="'.date('Y').'"';
+        }
+
         if (isset($params['Parte']['preceptoria']) && $params['Parte']['preceptoria'] != ''){
             $sql .= ' and p.preceptoria = '.$params["Parte"]["preceptoria"];
         }

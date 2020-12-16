@@ -17,7 +17,7 @@ use app\models\Falta;
 use app\models\EstadoinasistenciaxparteSearch;
 use app\models\Estadoinasistenciaxparte;
 use app\config\Globales;
-
+use app\models\Nombramiento;
 
 /**
  * DetalleparteController implements the CRUD actions for Detalleparte model.
@@ -39,7 +39,7 @@ class DetalleparteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_PRECEPTORIA]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -115,12 +115,32 @@ class DetalleparteController extends Controller
         $model = new Detalleparte();
         $model->scenario = $model::SCENARIO_ABM;
         if (isset ($_REQUEST['parte'])) {
-            $parte = $_REQUEST['parte'] ;
-            
+            $parte = $_REQUEST['parte'];
             $partex= Parte::findOne($parte);
-            $divisiones=Division::find()
-                ->where(['preceptoria' => $partex->preceptoria])
-                ->orderBy('nombre')->all();
+            
+            if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+                $partex= Parte::findOne($parte);
+                $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                $nom = Nombramiento::find()
+                            ->where(['docente' => $doc->id])
+                            ->andWhere(['<=', 'division', 53])
+                            ->all();
+                $array = [];
+                foreach ($nom as $n) {
+                    $array [] = $n->division;
+                }
+                    $divisiones=Division::find()
+                    ->where(['preceptoria' => $partex->preceptoria])
+                    ->andWhere(['in', 'id', $array])
+                    ->orderBy('nombre')->all();
+                    
+            }else{
+                
+                $divisiones=Division::find()
+                    ->where(['preceptoria' => $partex->preceptoria])
+                    ->orderBy('nombre')->all();
+            }
+            
              
 
         }else{
@@ -235,16 +255,20 @@ class DetalleparteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['parte/view', 'id' => $parte]);
         }
+
+        $depdr = ($partex->preceptoria == 7) ? false : true;
         if(Yii::$app->request->isAjax)
-        return $this->renderAjax('update', [
-            'model' => $model,
-            'docentes' => $docentes,
-            'divisiones' => $divisiones,
-            'partes' => $partex,
-            'parte' => $parte,
-            'horas' => $horas,
-            'faltas' => $faltas,
-        ]);
+            return $this->renderAjax('update', [
+                'model' => $model,
+                'docentes' => $docentes,
+                'divisiones' => $divisiones,
+                'partes' => $partex,
+                'parte' => $parte,
+                'horas' => $horas,
+                'faltas' => $faltas,
+                'depdr' => $depdr,
+            ]);
+            
     }
 
     /**

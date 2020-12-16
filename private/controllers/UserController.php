@@ -28,7 +28,7 @@ class UserController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'cambiarpass', 'importar'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'cambiarpass', 'importar', 'changerole'],
                 'rules' => [
                     [
                         'actions' => ['index', 'view', 'create', 'update', 'delete', 'importar'],   
@@ -45,7 +45,7 @@ class UserController extends Controller
 
                     [
                         'allow' => true,
-                        'actions' => ['cambiarpass'],
+                        'actions' => ['cambiarpass', 'changerole'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -56,6 +56,7 @@ class UserController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'changerole' => ['POST'],
                 ],
             ],
         ];
@@ -347,4 +348,16 @@ class UserController extends Controller
 
         ]); 
  }
+
+ public function actionChangerole($id, $role)
+ {
+     $model = $this->findModel($id);
+     $model->role = $role;
+     $model->save();
+     
+     return $this->goHome();
+
+    
+ }
+
 }

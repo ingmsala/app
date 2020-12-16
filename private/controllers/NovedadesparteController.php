@@ -10,14 +10,18 @@ use app\models\Docente;
 use app\models\Estadonovedad;
 use app\models\Estadoxnovedad;
 use app\models\EstadoxnovedadSearch;
+use app\models\Nombramiento;
 use app\models\NotificacionSearch;
 use app\models\Novedadesparte;
 use app\models\NovedadesparteSearch;
 use app\models\Parte;
+use app\models\Preceptoria;
+use app\models\Rolexuser;
 use app\models\Tiponovedad;
 use app\models\Trimestral;
 use app\modules\curriculares\models\Alumno;
 use app\modules\curriculares\models\Aniolectivo;
+use Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -56,7 +60,7 @@ class NovedadesparteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_PRECEPTORIA]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -149,7 +153,28 @@ class NovedadesparteController extends Controller
                         ->orderBy('apellido, nombre')
                         ->all();
 
-        $cursos = Division::find()->where(['preceptoria' => $model->parte0->preceptoria])->all();
+        if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+            
+            $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $nom = Nombramiento::find()
+                        ->where(['docente' => $doc->id])
+                        ->andWhere(['<=', 'division', 53])
+                        //->andWhere(['is not', 'division', 53])
+                        ->all();
+            $array = [];
+            foreach ($nom as $n) {
+                $array [] = $n->division;
+            }
+            $cursos=Division::find()
+                        ->where(['preceptoria' => $model->parte0->preceptoria])
+                        ->andWhere(['in', 'id', $array])
+                        ->all();
+                                    
+        }else{
+            $cursos = Division::find()->where(['preceptoria' => $model->parte0->preceptoria])->all();
+        }
+        
+        
         $alumnos = Alumno::find()->orderBy('apellido, nombre')->all();
 
 
@@ -248,7 +273,26 @@ class NovedadesparteController extends Controller
         $preceptores = Docente::find()
                         ->orderBy('apellido, nombre')
                         ->all();
-        $cursos = Division::find()->where(['preceptoria' => $model->parte0->preceptoria])->all();
+        if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+
+            $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $nom = Nombramiento::find()
+                        ->where(['docente' => $doc->id])
+                        ->andWhere(['<=', 'division', 53])
+                        //->andWhere(['is not', 'division', 53])
+                        ->all();
+            $array = [];
+            foreach ($nom as $n) {
+                $array [] = $n->division;
+            }
+            $cursos=Division::find()
+                        ->where(['preceptoria' => $model->parte0->preceptoria])
+                        ->andWhere(['in', 'id', $array])
+                        ->all();
+                                    
+        }else{
+            $cursos = Division::find()->where(['preceptoria' => $model->parte0->preceptoria])->all();
+        }
         $alumnos = Alumno::find()->orderBy('apellido, nombre')->all();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -316,6 +360,8 @@ class NovedadesparteController extends Controller
             return 5;
         elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA)
             return 6;
+        elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR)
+            return 6;
         else
             return 4;
     }
@@ -332,10 +378,10 @@ class NovedadesparteController extends Controller
                     ->where(['<>', 'id', 1])
                     ->all();*/
         
-        $novs = new NotificacionSearch(); 
+        /*$novs = new NotificacionSearch(); 
         $nov = $novs::providerXuser();
         $nov->cantidad = 0;
-        $nov->save();
+        $nov->save();*/
         return $this->render('panelnovedades', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -374,6 +420,32 @@ class NovedadesparteController extends Controller
 
      public function actionPanelnovedadesprec()
     {
+        if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+            $this->layout = 'mainpersonal';
+            $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $nom = Nombramiento::find()
+                        ->where(['docente' => $doc->id])
+                        ->andWhere(['<=', 'division', 53])
+                        //->andWhere(['is not', 'division', 53])
+                        ->all();
+            $array = [];
+            foreach ($nom as $n) {
+                $array[] = $n->division0->preceptoria0->nombre;
+                
+            }
+                                            
+
+            $preceptorias = Preceptoria::find()->where(['in', 'nombre', $array])->all();
+
+        }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
+            $role = Rolexuser::find()
+                ->where(['user' => Yii::$app->user->identity->id])
+                ->andWhere(['role' => Globales::US_PRECEPTORIA])
+                ->one();
+            $preceptorias = Preceptoria::find()->where(['nombre' => $role->subrole])->all();
+        }else{
+            $preceptorias = Preceptoria::find()->where(['<=', 'id', 6])->all();
+        }
         $model = new Estadoxnovedad();
         $searchModel = new EstadoxnovedadSearch();
         $model->scenario = $model::FIND_NOVEDAD;
@@ -381,7 +453,7 @@ class NovedadesparteController extends Controller
 
         $tiponovedad = $this->tiponovedad();
         $dataProvider = $searchModel->novedadesall(Globales::TIPO_NOV_X_USS[$tiponovedad], Yii::$app->request->post());
-
+        //return var_dump($dataProvider);
         if($model->load(Yii::$app->request->post())){
             $collapse = '';
         }else{
@@ -392,6 +464,11 @@ class NovedadesparteController extends Controller
         $trimestrales = Trimestral::find()
             ->where(['<', 'id', 4])
             ->all();
+
+        
+
+
+        
         $aniolectivo = Aniolectivo::find()
             ->orderBy('id desc')
             ->all();
@@ -405,6 +482,7 @@ class NovedadesparteController extends Controller
             'aniolectivo' => $aniolectivo,
             'model' => $model,
             'collapse' => $collapse,
+            'preceptorias' => $preceptorias,
             'param' => Yii::$app->request->post(),
             
         ]);

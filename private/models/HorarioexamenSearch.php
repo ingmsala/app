@@ -73,7 +73,7 @@ class HorarioexamenSearch extends Horarioexamen
         return $dataProvider;
     }
 
-    public function getSuperposicionCursos($tipo)
+    public function getSuperposicionCursos($id)
     {
         
         $sql='SELECT di.id as id, di.nombre as division, ac.nombre as materia, count(he.catedra) as cantidad
@@ -84,7 +84,7 @@ class HorarioexamenSearch extends Horarioexamen
                 LEFT JOIN division di ON c.division = di.id
                 LEFT JOIN actividad ac ON c.actividad = ac.id
                 LEFT JOIN anioxtrimestral axt ON he.anioxtrimestral = axt.id
-                WHERE dc.revista = 6 and he.tipo = '.$tipo.' and axt.activo = 1
+                WHERE dc.revista = 6 and he.anioxtrimestral = '.$id.' and axt.activo = 1 and dc.activo = 1 and dc.aniolectivo = axt.aniolectivo
                 group by di.nombre, ac.nombre
                 HAVING  count(he.catedra)>1';
 
@@ -110,7 +110,7 @@ class HorarioexamenSearch extends Horarioexamen
 
     }
 
-    public function getSuperposicionDocentes($tipo)
+    public function getSuperposicionDocentes($id)
     {
         
         $sql='SELECT doc.id as id, doc.apellido as apellido, doc.nombre as nombre, he.fecha as fecha, he.hora as hora, di.turno as turno, count(concat(doc.id, doc.apellido, doc.nombre, he.fecha, he.hora, di.turno)) as cantidad
@@ -121,7 +121,7 @@ class HorarioexamenSearch extends Horarioexamen
             LEFT JOIN division di ON c.division = di.id
             LEFT JOIN actividad ac ON c.actividad = ac.id
             LEFT JOIN anioxtrimestral axt ON he.anioxtrimestral = axt.id
-            WHERE dc.revista = 6 and he.tipo = '.$tipo.' and axt.activo = 1
+            WHERE dc.revista = 6 and he.anioxtrimestral = '.$id.' and axt.activo = 1 and dc.activo = 1 and dc.aniolectivo = axt.aniolectivo
             group by  doc.id, doc.apellido, doc.nombre, he.fecha, he.hora, di.turno
             having count(concat(doc.id, doc.apellido, doc.nombre, he.fecha, he.hora, di.turno))>1
             order by he.fecha, he.hora, doc.apellido';
@@ -148,8 +148,10 @@ class HorarioexamenSearch extends Horarioexamen
 
     }
 
-    public function getMateriasNocargadas($tipo)
+    public function getMateriasNocargadas($id)
     {
+
+        $al = Anioxtrimestral::findOne($id);
         
         $sql='SELECT di2.id, di2.nombre as division, count(dc2.id not in(
                 SELECT dc.id
@@ -160,13 +162,13 @@ class HorarioexamenSearch extends Horarioexamen
                 LEFT JOIN division di ON c.division = di.id
                 LEFT JOIN actividad ac ON c.actividad = ac.id
                 LEFT JOIN anioxtrimestral axt ON he.anioxtrimestral = axt.id
-                WHERE dc.revista = 6 and he.tipo = '.$tipo.' and axt.activo = 1)) as cantidad
+                WHERE dc.revista = 6 and he.anioxtrimestral = '.$id.' and axt.activo = 1 and dc.activo = 1 and dc.aniolectivo = axt.aniolectivo)) as cantidad
                 FROM detallecatedra dc2
                 LEFT JOIN catedra c2 ON dc2.catedra = c2.id
                 LEFT JOIN docente doc2 ON dc2.docente = doc2.id
                 LEFT JOIN division di2 ON c2.division = di2.id
                 LEFT JOIN actividad ac2 ON c2.actividad = ac2.id
-                WHERE ac2.id not in (7,20,32,44) and dc2.revista = 6 and (di2.turno = 1  or di2.turno = 2) and dc2.id not in (
+                WHERE ac2.id not in (7,20,32,44, 195) and dc2.revista = 6 and dc2.aniolectivo =  '.$al->aniolectivo.' and (di2.turno = 1  or di2.turno = 2) and dc2.id not in (
                 SELECT dc.id
                 FROM `horarioexamen` he
                 LEFT JOIN catedra c ON he.catedra = c.id
@@ -175,7 +177,7 @@ class HorarioexamenSearch extends Horarioexamen
                 LEFT JOIN division di ON c.division = di.id
                 LEFT JOIN actividad ac ON c.actividad = ac.id
                 LEFT JOIN anioxtrimestral axt ON he.anioxtrimestral = axt.id
-                WHERE dc.revista = 6 and he.tipo = '.$tipo.' and axt.activo = 1)
+                WHERE dc.revista = 6 and he.anioxtrimestral = '.$id.' and axt.activo = 1)
                 group by di2.id, di2.nombre
                 order by di2.id, ac2.nombre';
 

@@ -306,6 +306,7 @@ class DetallecatedraSearch extends Detallecatedra
             ->where(['catedra.division' => $division])
             ->andWhere(['<>', 'actividad.id', 31])
             ->andWhere(['<>', 'actividad.id', 33])
+            ->andWhere(['<>', 'actividad.id', 195])
             ->andWhere(['revista' => 6])
             ->andWhere(['aniolectivo' => $al])
             ->orderBy('actividad.nombre');

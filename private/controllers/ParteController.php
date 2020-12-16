@@ -20,6 +20,8 @@ use app\models\Avisoinasistencia;
 use app\models\AvisoinasistenciaSearch;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use app\models\Nombramiento;
+use app\models\Rolexuser;
 use app\modules\curriculares\models\Aniolectivo;
 
 
@@ -50,9 +52,36 @@ class ParteController extends Controller
 
                                     if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTORIA])){
                                         $parte = $this->findModel(Yii::$app->request->queryParams['id']);
+
+                                        $role = Rolexuser::find()
+                                                    ->where(['user' => Yii::$app->user->identity->id])
+                                                    ->andWhere(['role' => Globales::US_PRECEPTORIA])
+                                                    ->one();
                                         
-                                        if ($parte->preceptoria0->nombre == Yii::$app->user->identity->username)
+                                        
+                                        if ($parte->preceptoria0->nombre == $role->subrole)
                                              return true;
+                                    }
+
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTOR])){
+                                        $parte = $this->findModel(Yii::$app->request->queryParams['id']);
+
+                                        $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                        $nom = Nombramiento::find()
+                                                    ->where(['docente' => $doc->id])
+                                                    ->andWhere(['<=', 'division', 53])
+                                                    //->andWhere(['is not', 'division', 53])
+                                                    ->all();
+                                        
+                                        foreach ($nom as $n) {
+                                            if($n->division0->preceptoria0->nombre == $parte->preceptoria0->nombre){
+                                                return true;
+                                            }
+                                        }
+                                            return false;
+                                        
+                                        
+                                        
                                     }
 
                                     return false;
@@ -71,7 +100,7 @@ class ParteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_PRECEPTORIA, Globales::US_CONSULTA, Globales::US_SACADEMICA]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_PRECEPTORIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_PRECEPTOR]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -84,7 +113,7 @@ class ParteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_PRECEPTORIA]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -172,6 +201,9 @@ class ParteController extends Controller
      */
     public function actionIndex($nav = false)
     {
+        if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+            $this->layout = 'mainpersonal';
+        }
         $param = Yii::$app->request->queryParams;
         $searchModel = new ParteSearch();
         $dataProvider = $searchModel->search($param);
@@ -207,6 +239,9 @@ class ParteController extends Controller
      */
     public function actionView($id)
     {
+        if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+            $this->layout = 'mainpersonal';
+        }
         $model = $this->findModel($id);
         $searchModel = new DetalleparteSearch();
         $dataProvider = $searchModel->providerxparte($id);
@@ -270,10 +305,31 @@ class ParteController extends Controller
             if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA])){
                 $precepx=Preceptoria::find()
                     ->orderBy('nombre')->all();
-            }else{
+            }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
+                $role = Rolexuser::find()
+                            ->where(['user' => Yii::$app->user->identity->id])
+                            ->andWhere(['role' => Globales::US_PRECEPTORIA])
+                            ->one();
+                                        
                 $precepx=Preceptoria::find()
-                    ->where(['nombre' => Yii::$app->user->identity->username])
+                    ->where(['nombre' => $role->subrole])
                     ->orderBy('nombre')->all();
+            }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+                $this->layout = 'mainpersonal';
+                $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                $nom = Nombramiento::find()
+                            ->where(['docente' => $doc->id])
+                            ->andWhere(['<=', 'division', 53])
+                            //->andWhere(['is not', 'division', 53])
+                            ->all();
+                $array = [];
+                foreach ($nom as $n) {
+                    $array [] = $n->division0->preceptoria0->nombre;
+                }
+                $precepx=Preceptoria::find()
+                            ->where(['in', 'nombre', $array])
+                            ->all();
+                                        
             }
             
 

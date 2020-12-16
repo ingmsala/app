@@ -16,6 +16,7 @@ use app\models\Condicion;
 use app\models\Catedra;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use app\models\Rolexuser;
 use app\modules\curriculares\models\Aniolectivo;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm; // Ajaxvalidation
@@ -90,7 +91,12 @@ class DetallecatedraController extends Controller
                                         
 
                                         $division = $dc->catedra0->division;
-                                        $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+                                        $role = Rolexuser::find()
+                                                    ->where(['user' => Yii::$app->user->identity->id])
+                                                    ->andWhere(['role' => Globales::US_PRECEPTORIA])
+                                                    ->one();
+
+                                        $pre = Preceptoria::find()->where(['nombre' => $role->subrole])->one();
                                         $aut = Division::find()
                                             ->where(['preceptoria' => $pre->id])
                                             ->andWhere(['id' => $division])

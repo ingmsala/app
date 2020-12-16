@@ -8,6 +8,7 @@ use app\models\Division;
 use app\models\Docente;
 use app\models\Nombramiento;
 use app\models\Preceptoria;
+use app\models\Rolexuser;
 use Yii;
 use app\modules\libroclase\models\Clasediaria;
 use app\modules\libroclase\models\ClasediariaSearch;
@@ -60,7 +61,12 @@ class ClasediariaController extends Controller
     {
         $this->layout = '@app/views/layouts/mainpersonal';
         if(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
-            $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+            $role = Rolexuser::find()
+                        ->where(['user' => Yii::$app->user->identity->id])
+                        ->andWhere(['role' => Globales::US_PRECEPTORIA])
+                        ->one();
+
+            $pre = Preceptoria::find()->where(['nombre' => $role->subrole])->one();
             $divisiones = Division::find()
                         ->where(['preceptoria' => $pre->id])
                         ->orderBy('id')
@@ -88,7 +94,7 @@ class ClasediariaController extends Controller
                 $array [] = $dc->catedra0->division;
             }
 
-            $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+            //$pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
             $divisiones = Division::find()
                         ->where(['in', 'id', $array])
                         ->orderBy('id')

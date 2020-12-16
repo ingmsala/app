@@ -13,6 +13,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use app\models\Docente;
+use app\models\Nombramiento;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -224,11 +226,31 @@ class DivisionController extends Controller
             $parents = $_POST['depdrop_parents'];
             if ($parents != null) {
 
-                $propuesta_id = $parents[0];
-                $divisiones = Division::find()
-                ->where(['preceptoria' => $preceptoria])
-                ->orderBy('nombre ASC')
-                ->all();
+                if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+                    
+                    $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                    $nom = Nombramiento::find()
+                                ->where(['docente' => $doc->id])
+                                ->andWhere(['<=', 'division', 53])
+                                ->all();
+                    $array = [];
+                    foreach ($nom as $n) {
+                        $array [] = $n->division;
+                    }
+                        $divisiones=Division::find()
+                        ->where(['preceptoria' => $preceptoria])
+                        ->andWhere(['in', 'id', $array])
+                        ->orderBy('nombre')->all();
+                        
+                }else{
+                    $propuesta_id = $parents[0];
+                    $divisiones = Division::find()
+                        ->where(['preceptoria' => $preceptoria])
+                        ->orderBy('nombre ASC')
+                        ->all();
+                }
+
+                
                 
 
                 $listDivisiones=ArrayHelper::toArray($divisiones, [

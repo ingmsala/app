@@ -62,7 +62,7 @@ else{
       </div>
       <div class="col-md-3"> 
           <?= 
-            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-copyright-mark"></span><h2>Horarios</h2><span class="label label-success">COLOQUIOS</span>',
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-copyright-mark"></span><h2>COLOQUIOS</h2><span class="label label-success">Marzo 2021</span>',
 
            
 
@@ -100,8 +100,8 @@ else{
 
       </div>
         <div class="col-md-3">
-          <?= 
-            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-ruble"></span><h2>Exámenes</h2><span class="label label-warning">FEBRERO / MARZO</span>',
+          <?= '';
+            /*Html::a('<span class="'.$classlogo.' glyphicon glyphicon-ruble"></span><h2>Exámenes</h2><span class="label label-warning">FEBRERO / MARZO</span>',
 
            
 
@@ -113,7 +113,7 @@ else{
                'class' => $classclient,
                // modalCall
 
-           ]);
+           ]);*/
           ?>
         </div>
       </div>

@@ -95,7 +95,7 @@ else
                             ]);
                     },
                     'validar' => function($url, $model, $key){
-                        if ($model->activo==1 && $model->trimestral < 4)
+                        if ($model->activo==1)
                             return Html::a('<span class="glyphicon glyphicon-check"></span>', '?r=horarioexamen/revisarhorarios&id='.$model->id);
                             
                     },

@@ -46,6 +46,7 @@ AppAsset::register($this);
         echo "<div id='modalContent'></div>";
 
         Modal::end();
+        $items = [];
     ?>
     
     <?php 
@@ -137,7 +138,7 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Horarios de Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
                                         '<div class="dropdown-divider"></div>',
-                                        ['label' => 'Horarios de Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
+                                        ['label' => 'Coloquios Marzo 2021', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Horarios Previos', 'url' => ['/horario/pdfprevios']],
                                         '<div class="dropdown-divider"></div>',
@@ -382,10 +383,24 @@ try {
                     ],
                     
                     ['label' => '<span id="button_cont"><i id="glibell" class="glyphicon glyphicon-bell" aria-hidden="true"></i><div style="display:'.$visi.'" class="button__badge">'.$cantnot.'</div></span>', 'url' => ['novedadesparte/panelnovedades']],
-                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
+                    ['label' => Yii::$app->user->identity->role0->nombre,
                             
                             'items' => [
+                                [
+                                    'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).' Cambiar rol de usuario',
+                                    'url' => ['/rolexuser/cambiar', 'i' => 1],
+                                                       
+                        
+                                ],
+                                '<div class="dropdown-divider"></div>',
+                                [
+                                    'label' => 'Cambiar contraseña',
+                                    'url' => ['/user/cambiarpass'],
+                                ],
+                                '<div class="dropdown-divider"></div>',
                                             ['label' => 'Usuarios', 'url' => ['/user']],
+                                            '<div class="dropdown-divider"></div>',
+                                            ['label' => 'Asignar roles', 'url' => ['/rolexuser']],
                                             '<div class="dropdown-divider"></div>',
                                             ['label' => 'Roles', 'url' => ['/role']],
                                             '<div class="dropdown-divider"></div>',
@@ -395,10 +410,7 @@ try {
                                             '<div class="dropdown-divider"></div>',
                                             ['label' => 'Logs', 'url' => ['/logs']],
                                             '<div class="dropdown-divider"></div>',
-                                            [
-                                                'label' => 'Cambiar contraseña',
-                                                'url' => ['/user/cambiarpass'],
-                                            ],
+                                            
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
@@ -443,7 +455,7 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
                                         '<div class="dropdown-divider"></div>',
-                                        ['label' => 'Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
+                                        ['label' => 'Febrero/Marzo 2021', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Previas', 'url' => ['/horario/pdfprevios']],
                                         '<div class="dropdown-divider"></div>',
@@ -540,14 +552,17 @@ try {
                     ],
                     
                     ['label' => '<span id="button_cont"><i id="glibell" class="glyphicon glyphicon-bell" aria-hidden="true"></i><div style="display:'.$visi.'" class="button__badge">'.$cantnot.'</div></span>', 'url' => ['novedadesparte/panelnovedades']],
-                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
+                    ['label' => Yii::$app->user->identity->role0->nombre,
                             
                             'items' => [
                                             
                                             [
-                                                'label' => 'Cambiar contraseña',
-                                                'url' => ['/user/cambiarpass'],
-                                            ],
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).' Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
@@ -614,7 +629,7 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
+                                ['label' => 'Coloquios Marzo 2021', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
                                         '<div class="dropdown-divider"></div>',
                                 ['label' => 'Febrero/Marzo', 'url' => ['horario/marzo',  'col' => 1]],
                                         '<div class="dropdown-divider"></div>',
@@ -658,7 +673,7 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Avisos de Inasistencias', 'url' => ['/avisoinasistencia']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Panel de Novedades', 'url' => ['novedadesparte/panelnovedades']],
+                                ['label' => 'Ausencia alumnos a trimestrales', 'url' => ['novedadesparte/panelnovedades']],
                                 '<div class="dropdown-divider"></div>',
                                 [
                                     'label' => 'Reportes',
@@ -676,14 +691,17 @@ try {
                     ],
                     
                     ['label' => '<span id="button_cont"><i id="glibell" class="glyphicon glyphicon-bell" aria-hidden="true"></i><div style="display:'.$visi.'" class="button__badge">'.$cantnot.'</div></span>', 'url' => ['novedadesparte/panelnovedades']],
-                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
+                    ['label' => Yii::$app->user->identity->role0->nombre,
                             
                             'items' => [
                                             
                                             [
-                                                'label' => 'Cambiar contraseña',
-                                                'url' => ['/user/cambiarpass'],
-                                            ],
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).' Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
@@ -727,14 +745,17 @@ try {
                     
                     ['label' => '<span id="button_cont"><i id="glibell" class="glyphicon glyphicon-bell" aria-hidden="true"></i><div style="display:'.$visi.'" class="button__badge">'.$cantnot.'</div></span>', 'url' => ['novedadesparte/panelnovedades']],
                     
-                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
+                    ['label' => Yii::$app->user->identity->role0->nombre,
                             
                             'items' => [
                                             
                                             [
-                                                'label' => 'Cambiar contraseña',
-                                                'url' => ['/user/cambiarpass'],
-                                            ],
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).' Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
@@ -778,7 +799,7 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
+                                ['label' => 'Febrero/Marzo 2021', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
                                         '<div class="dropdown-divider"></div>',
                                 ['label' => 'Previas', 'url' => ['/horario/pdfprevios']],
                                         '<div class="dropdown-divider"></div>', 
@@ -802,14 +823,17 @@ try {
                     'options' => ['id' => 'modalButton22'],
                     ],                   
                     
-                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
+                    ['label' => Yii::$app->user->identity->role0->nombre,
                             
                             'items' => [
                                             
                                             [
-                                                'label' => 'Cambiar contraseña',
-                                                'url' => ['/user/cambiarpass'],
-                                            ],
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).' Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
@@ -860,7 +884,7 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
                                         '<div class="dropdown-divider"></div>',
-                                        ['label' => 'Coloquios', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
+                                        ['label' => 'Febrero/Marzo 2021', 'url' => ['/horarioexamen/panelprincipal',  'col' => 1]],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Previas', 'url' => ['/horario/pdfprevios']],
                                         '<div class="dropdown-divider"></div>',
@@ -959,14 +983,17 @@ try {
                     
                     ['label' => '<span id="button_cont"><i id="glibell" class="glyphicon glyphicon-bell" aria-hidden="true"></i><div style="display:'.$visi.'" class="button__badge">'.$cantnot.'</div></span>', 'url' => ['novedadesparte/panelnovedades']],
 
-                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
+                    ['label' => Yii::$app->user->identity->role0->nombre,
                             
                             'items' => [
                                             
                                             [
-                                                'label' => 'Cambiar contraseña',
-                                                'url' => ['/user/cambiarpass'],
-                                            ],
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).' Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
@@ -1004,14 +1031,17 @@ try {
 
                     ],
                     
-                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
+                    ['label' => Yii::$app->user->identity->role0->nombre,
                             
                             'items' => [
                                             
                                             [
-                                                'label' => 'Cambiar contraseña',
-                                                'url' => ['/user/cambiarpass'],
-                                            ],
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).' Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
@@ -1040,14 +1070,17 @@ try {
                     ],
                     
                     
-                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
+                    ['label' => Yii::$app->user->identity->role0->nombre,
                             
                             'items' => [
                                             
                                             [
-                                                'label' => 'Cambiar contraseña',
-                                                'url' => ['/user/cambiarpass'],
-                                            ],
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).' Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
@@ -1078,7 +1111,7 @@ try {
                     ],
                     
                     
-                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
+                    ['label' => Yii::$app->user->identity->role0->nombre,
                             
                             'items' => [
                                             
@@ -1126,14 +1159,17 @@ try {
                           ['label' => '<span id="button_cont"><i id="glibell" class="glyphicon glyphicon-bell" aria-hidden="true"></i><div style="display:'.$visi.'" class="button__badge">'.$cantnot.'</div></span>', 'url' => ['novedadesparte/panelnovedades']],      
                     
                     
-                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
+                    ['label' => Yii::$app->user->identity->role0->nombre,
                             
                             'items' => [
                                             
                                             [
-                                                'label' => 'Cambiar contraseña',
-                                                'url' => ['/user/cambiarpass'],
-                                            ],
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).' Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
@@ -1173,14 +1209,17 @@ try {
                         
                                        
                     
-                    ['label' => 'Usuario: '.Yii::$app->user->identity->username,
+                    ['label' => Yii::$app->user->identity->role0->nombre,
                             
                             'items' => [
                                             
                                             [
-                                                'label' => 'Cambiar contraseña',
-                                                'url' => ['/user/cambiarpass'],
-                                            ],
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).' Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
                                 
                                             [
                                                 'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',

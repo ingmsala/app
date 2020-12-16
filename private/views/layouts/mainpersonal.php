@@ -71,9 +71,17 @@ if(!Yii::$app->user->isGuest){
                     '<div class="dropdown-divider"></div>',
             ],
 
-            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.'Usuario'.'',
+            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.Yii::$app->user->identity->role0->nombre.'',
             
                 'items' => [
+
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).'Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 3],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
                     
                                             
                     
@@ -131,10 +139,16 @@ if(!Yii::$app->user->isGuest){
 
             
 
-            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.'Usuario'.'',
+            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.Yii::$app->user->identity->role0->nombre.'',
             
                 'items' => [
-                                            
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).'Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 3],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',                       
                     
                     [
                         'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
@@ -159,6 +173,28 @@ if(!Yii::$app->user->isGuest){
                     '<div class="dropdown-divider"></div>',
             ],
 
+            ['label' => '<span class="glyphicon glyphicon-file"></span><br />'.'Parte',
+            
+                'items' => [
+
+                    [
+                        'label' => 'Parte docente',
+                        'url' => ['/parte'],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
+                                            
+                    
+                    [
+                        'label' => 'Reporte - Ausencia a trimestrales', 
+                        'url' => ['novedadesparte/panelnovedadesprec']
+                    ],
+                    '<div class="dropdown-divider"></div>',
+                    
+                ],
+            ],
+
             ['label' => '<center><span class="glyphicon glyphicon-modal-window"></span><br />'.'D. Juradas</center>',
                             
                     'url' => ['/declaracionjurada'],
@@ -177,9 +213,17 @@ if(!Yii::$app->user->isGuest){
                     '<div class="dropdown-divider"></div>',
             ],
 
-            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.'Usuario'.'',
+            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.Yii::$app->user->identity->role0->nombre.'',
             
                 'items' => [
+
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).'Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 3],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
                                             
                     
                     [
@@ -206,9 +250,17 @@ if(!Yii::$app->user->isGuest){
             ],
             
             
-            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.'Usuario'.'',
+            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.Yii::$app->user->identity->role0->nombre.'',
             
                 'items' => [
+
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).'Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 3],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
                                             
                     
                     [
@@ -240,9 +292,17 @@ if(!Yii::$app->user->isGuest){
             ],
             
             
-            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.'Usuario'.'',
+            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.Yii::$app->user->identity->role0->nombre.'',
             
                 'items' => [
+
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).'Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 3],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
                                             
                     
                     [

@@ -13,6 +13,18 @@ use yii\helpers\Url;
 ?>
 <?php $listAnio=ArrayHelper::map($anio,'id','nombre'); ?>
 <?php $listTrimestral=ArrayHelper::map($trimestral,'id','nombre'); ?>
+<?php $listduplicar=ArrayHelper::map($duplicar,'id',function($model){
+        return $model->aniolectivo0->nombre.' - '.$model->trimestral0->nombre;
+}); ?>
+
+<?php 
+
+    if($nuevo == 1)
+        $arrayactivo = [1=>'Activo'];
+    else
+        $arrayactivo = [1=>'Activo', 2=>'Inactivo']
+
+?>
 
 <div class="anioxtrimestral-form">
 
@@ -22,7 +34,29 @@ use yii\helpers\Url;
 
     <?= $form->field($model, 'trimestral')->dropDownList($listTrimestral, ['prompt'=>'Seleccionar...']); ?>
 
+    <?= $form->field($model, 'origenduplicado')->dropDownList($listduplicar, ['prompt'=>'Seleccionar...']); ?>
 
+    <?= $form->field($model, 'h1m')->widget(\yii\widgets\MaskedInput::className(), [
+        'mask' => '99:99 - 99:99'
+    ]);
+
+    ?>
+    <?= $form->field($model, 'h2m')->widget(\yii\widgets\MaskedInput::className(), [
+        'mask' => '99:99 - 99:99'
+    ]);
+
+    ?>
+    <?= $form->field($model, 'h1t')->widget(\yii\widgets\MaskedInput::className(), [
+        'mask' => '99:99 - 99:99'
+    ]);
+
+    ?>
+    <?= $form->field($model, 'h2t')->widget(\yii\widgets\MaskedInput::className(), [
+        'mask' => '99:99 - 99:99'
+    ]);
+
+    ?>
+    
     <?php 
 
     	echo $form->field($model, 'inicio', [
@@ -46,7 +80,7 @@ use yii\helpers\Url;
 
      ?>
 
-      <?= $form->field($model, 'activo')->dropDownList([1=>'Activo', 2=>'Inactivo'], ['prompt'=>'Seleccionar...', 'id' => 'activo-id']); ?>
+      <?= $form->field($model, 'activo')->dropDownList($arrayactivo, ['prompt'=>'Seleccionar...', 'id' => 'activo-id']); ?>
       <?= 
 
       $form->field($model, 'publicado')->widget(DepDrop::classname(), [
@@ -56,6 +90,7 @@ use yii\helpers\Url;
           'pluginOptions'=>[
               'depends'=>['activo-id'],
               'loading' => false,
+              'initialize' => ($model->activo==2) ? false : true,
               //'inicializate' => isset($_SESSION['comisionx']) ? $_SESSION['comisionx'] : 0,
               'placeholder'=>'Seleccionar...',
               'url'=>Url::to(['/anioxtrimestral/publicadotruefalse'])

@@ -23,6 +23,7 @@ use app\models\Nodocente;
 use app\models\Nombramiento;
 use app\models\Parametros;
 use app\models\Preceptoria;
+use app\models\Rolexuser;
 use app\models\Tipomovilidad;
 use app\models\Tipoparte;
 use app\modules\curriculares\models\Aniolectivo;
@@ -98,7 +99,13 @@ class HorarioController extends Controller
                                     }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
 
                                         $division = Yii::$app->request->queryParams['division'];
-                                        $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+                                        //$pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+                                        $role = Rolexuser::find()
+                                                    ->where(['user' => Yii::$app->user->identity->id])
+                                                    ->andWhere(['role' => Globales::US_PRECEPTORIA])
+                                                    ->one();
+
+                                        $pre = Preceptoria::find()->where(['nombre' => $role->subrole])->one();
                                         $aut = Division::find()
                                             ->where(['preceptoria' => $pre->id])
                                             ->andWhere(['id' => $division])
@@ -339,7 +346,13 @@ class HorarioController extends Controller
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
         if(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
-            $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+            //$pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+            $role = Rolexuser::find()
+                        ->where(['user' => Yii::$app->user->identity->id])
+                        ->andWhere(['role' => Globales::US_PRECEPTORIA])
+                        ->one();
+
+            $pre = Preceptoria::find()->where(['nombre' => $role->subrole])->one();
             $divisiones = Division::find()
                         ->where(['preceptoria' => $pre->id])
                         ->orderBy('id')
@@ -356,7 +369,7 @@ class HorarioController extends Controller
             foreach ($nom as $n) {
                 $array [] = $n->division;
             }
-            $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+            //$pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
             $divisiones = Division::find()
                         ->where(['in', 'id', $array])
                         ->orderBy('id')
@@ -765,8 +778,7 @@ class HorarioController extends Controller
                                 $salida = '';
                                 if ($dc->revista == 6 && $dc->aniolectivo == $al){
                                     //return var_dump($dc['revista']==1);
-                                    $superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->diasemana, $dc->aniolectivo);
-                                    $superpuestodj = $this->horaSuperpuestaDeclaracionJurada($dc, $horariox->hora, $horariox->diasemana, $dc->aniolectivo, $h);
+                                    
                                     
                                     
                                     #INICIO Bloquear dj
@@ -775,24 +787,30 @@ class HorarioController extends Controller
 
                                     #FIN Bloquear dj
                                    
+                                    if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+                                        $superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->diasemana, $dc->aniolectivo);
+                                        $superpuestodj = $this->horaSuperpuestaDeclaracionJurada($dc, $horariox->hora, $horariox->diasemana, $dc->aniolectivo, $h);
+                                        if ($superpuesto[0] && $superpuestodj[0]){
+                                            ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
+                                            $salida = '<span style="color:#f39c12">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].$superpuestodj[1].'">'.$dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1).'</span>'.'</span>';
+                                        }
+                                        elseif ($superpuesto[0]){
+                                            ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
+                                            $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1).'</span>'.'</span>';
+                                        }
 
-                                    if ($superpuesto[0] && $superpuestodj[0]){
-                                        ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
-                                        $salida = '<span style="color:#f39c12">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].$superpuestodj[1].'">'.$dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1).'</span>'.'</span>';
-                                    }
-                                    elseif ($superpuesto[0]){
-                                        ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
-                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1).'</span>'.'</span>';
-                                    }
+                                        elseif($superpuestodj[0]){
+                                            ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
+                                            $salida = '<span style="color:#10D300">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuestodj[1].'">'.$dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1).'</span>'.'</span>';
 
-                                    elseif($superpuestodj[0]){
-                                        ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
-                                        $salida = '<span style="color:#10D300">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuestodj[1].'">'.$dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1).'</span>'.'</span>';
-
-                                    }
-                                    else
+                                        }
+                                        else
+                                            $salida = $dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1);
+                                        break 1;
+                                    }else{
                                         $salida = $dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1);
-                                    break 1;
+                                        break 1;
+                                    }
                                 }else{
                                     $salida = 'ss';
                                 }
@@ -1020,7 +1038,12 @@ class HorarioController extends Controller
             ini_set("pcre.backtrack_limit", "5000000");
             
             if(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
-                $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
+                $role = Rolexuser::find()
+                            ->where(['user' => Yii::$app->user->identity->id])
+                            ->andWhere(['role' => Globales::US_PRECEPTORIA])
+                            ->one();
+
+                $pre = Preceptoria::find()->where(['nombre' => $role->subrole])->one();
                 $divisiones = Division::find()
                         ->where(['preceptoria' => $pre->id])
                         ->orderBy('id')

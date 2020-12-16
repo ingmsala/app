@@ -23,6 +23,7 @@ class Estadoxnovedad extends \yii\db\ActiveRecord
     public $trimestral;
     public $aniolectivo;
     public $finddescrip;
+    public $preceptoria;
     
     public static function tableName()
     {
@@ -34,7 +35,7 @@ class Estadoxnovedad extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::FIND_NOVEDAD] = ['trimestral', 'aniolectivo', 'estadonovedad', 'finddescrip'];
+        $scenarios[self::FIND_NOVEDAD] = ['trimestral', 'aniolectivo', 'estadonovedad', 'finddescrip', 'preceptoria'];
         return $scenarios;
     }
 
@@ -45,8 +46,8 @@ class Estadoxnovedad extends \yii\db\ActiveRecord
     {
         return [
             [['novedadesparte', 'fecha'], 'required'],
-            [['trimestral', 'aniolectivo'], 'required', 'message' => "Campo obligatorio", 'on'=>self::FIND_NOVEDAD],
-            [['novedadesparte', 'estadonovedad'], 'integer'],
+            [['trimestral', 'aniolectivo', 'preceptoria'], 'required', 'message' => "Campo obligatorio", 'on'=>self::FIND_NOVEDAD],
+            [['novedadesparte', 'estadonovedad', 'preceptoria'], 'integer'],
             [['fecha'], 'safe'],
             [['novedadesparte'], 'exist', 'skipOnError' => true, 'targetClass' => Novedadesparte::className(), 'targetAttribute' => ['novedadesparte' => 'id']],
             [['estadonovedad'], 'exist', 'skipOnError' => true, 'targetClass' => Estadonovedad::className(), 'targetAttribute' => ['estadonovedad' => 'id']],
@@ -63,6 +64,7 @@ class Estadoxnovedad extends \yii\db\ActiveRecord
             'novedadesparte' => 'Novedadesparte',
             'estadonovedad' => 'Estadonovedad',
             'fecha' => 'Fecha',
+            'preceptoria' => 'Preceptoría',
         ];
     }
 

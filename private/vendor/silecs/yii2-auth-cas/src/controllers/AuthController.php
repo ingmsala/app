@@ -23,9 +23,11 @@ class AuthController extends \yii\web\Controller
 {
     public function actionLogin()
     {
-        
+        $_SERVER['HTTPS']='off';//deshablitar para produccion
         $this->module->casService->forceAuthentication();
+        
         $username = $this->module->casService->getUsername();
+        $_SERVER['HTTPS']='on';//deshablitar para produccion
         $user = null;
         if ($username) {
             $user = User::find()->where(['username' => $username])->one();
@@ -44,11 +46,14 @@ class AuthController extends \yii\web\Controller
 
     public function actionLogout()
     {
+        $_SERVER['HTTPS']='off';//deshablitar para produccion
         $this->module->casService->logout(Url::home(true));
+        $_SERVER['HTTPS']='on';//deshablitar para produccion
         if (!Yii::$app->getUser()->isGuest) {
             Yii::$app->getUser()->logout(true);
             //Yii::$app->user->logout();
         }
+        
         // In case the logout fails (not authenticated)
         return $this->redirect(Url::home(true));
     }

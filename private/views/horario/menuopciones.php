@@ -61,7 +61,7 @@ else{
       </div>
       <div class="col-md-3"> 
           <?= 
-            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-copyright-mark"></span><h2>Horarios</h2><span class="label label-success">COLOQUIOS</span>',
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-copyright-mark"></span><h2>Horarios</h2><span class="label label-success">Febrero/Marzo 2021</span>',
 
            
 

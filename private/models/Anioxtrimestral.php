@@ -21,6 +21,7 @@ use Yii;
  */
 class Anioxtrimestral extends \yii\db\ActiveRecord
 {
+    public $origenduplicado;
     /**
      * {@inheritdoc}
      */
@@ -35,9 +36,9 @@ class Anioxtrimestral extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['aniolectivo', 'trimestral', 'inicio', 'fin', 'activo', 'publicado'], 'required'],
-            [['aniolectivo', 'trimestral', 'activo', 'publicado'], 'integer'],
-            [['inicio', 'fin'], 'safe'],
+            [['aniolectivo', 'trimestral', 'inicio', 'fin', 'activo', 'publicado', 'h1m', 'h2m', 'h1t', 'h2t'], 'required'],
+            [['aniolectivo', 'trimestral', 'activo', 'publicado', 'origenduplicado'], 'integer'],
+            [['inicio', 'fin', 'h1m', 'h2m', 'h1t', 'h2t'], 'safe'],
             [['aniolectivo'], 'exist', 'skipOnError' => true, 'targetClass' => Aniolectivo::className(), 'targetAttribute' => ['aniolectivo' => 'id']],
             [['trimestral'], 'exist', 'skipOnError' => true, 'targetClass' => Trimestral::className(), 'targetAttribute' => ['trimestral' => 'id']],
         ];
@@ -56,6 +57,11 @@ class Anioxtrimestral extends \yii\db\ActiveRecord
             'fin' => 'Fin',
             'activo' => 'Activo',
             'publicado' => 'Publicado',
+            'origenduplicado' => 'Duplicar desde',
+            'h1m' => 'Primera hora turno mañana',
+            'h2m' => 'Segunda hora turno mañana',
+            'h1t' => 'Primera hora turno tarde',
+            'h2t' => 'Segunda hora turno tarde',
         ];
     }
 

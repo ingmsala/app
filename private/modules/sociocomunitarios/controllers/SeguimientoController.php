@@ -7,6 +7,7 @@ use app\models\Docente;
 use app\models\Nombramiento;
 use app\modules\curriculares\models\Acta;
 use app\modules\curriculares\models\Comision;
+use app\modules\curriculares\models\Detalleacta;
 use app\modules\curriculares\models\Docentexcomision;
 use app\modules\curriculares\models\Estadoseguimiento;
 use app\modules\curriculares\models\Matricula;
@@ -68,7 +69,10 @@ class SeguimientoController extends Controller
                                     
 
                                     if(
-                                        count(Acta::find()->where(['comision' => $matricula->comision])->andWhere(['estadoacta' => 2])->all()) > 0){
+                                        count(Detalleacta::find()->joinWith(['acta0'])->where(['acta.comision' => $matricula->comision])->andWhere(['acta.estadoacta' => 2])
+                                                                        ->andWhere(['detalleacta.matricula' => $matricula->id])                    
+                                                                        ->all()) > 0){
+                                        //count(Acta::find()->where(['comision' => $matricula->comision])->andWhere(['estadoacta' => 2])->all()) > 0){
                                         Yii::$app->session->setFlash('info', "No se puede realizar la acción ya que la comisión tiene un acta en estado cerrado");
                                         $autoriza = false;
                                     }
@@ -211,6 +215,7 @@ class SeguimientoController extends Controller
      */
     public function actionCreate($id)
     {
+        
         $trimestre = [1=>'1° trimestre',2=>'2° trimestre',3=>'3° trimestre', 4=>'Tutorías'];
         $this->layout = 'main';
         $com = isset($_SESSION['comisiontsx']) ? $_SESSION['comisiontsx'] : 0;

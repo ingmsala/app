@@ -6,6 +6,7 @@ use Yii;
 use app\config\Globales;
 use app\models\Anioxtrimestral;
 use app\models\AnioxtrimestralSearch;
+use app\models\Horarioexamen;
 use app\models\HorarioexamenSearch;
 use app\models\Trimestral;
 use app\modules\curriculares\models\Aniolectivo;
@@ -130,6 +131,10 @@ class AnioxtrimestralController extends Controller
         $anio = Aniolectivo::find()->orderBy('id desc')->all();
         $trimestral = Trimestral::find()->all();
 
+        $horarioexamen = Horarioexamen::find()->select('anioxtrimestral')->distinct()->all();
+        $horarioexamen = array_column($horarioexamen, 'anioxtrimestral');
+        $duplicar = Anioxtrimestral::find()->where(['in', 'id',  $horarioexamen])->all();
+
         if ($model->load(Yii::$app->request->post())) {
             $model->validate();
             $inicioexplode = explode("/",$model->inicio);
@@ -166,7 +171,7 @@ class AnioxtrimestralController extends Controller
                         Yii::$app->session->setFlash('info', "{$cant} examen cambió a estado <b>inactivo</b>");
                 }
                 
-                return $this->redirect(['horarioexamen/migracionfechas', 'anioxtrimestral' => $model->id]);
+                return $this->redirect(['horarioexamen/migracionfechas', 'anioxtrimestral' => $model->id, 'origenduplicado' => $model->origenduplicado]);
             }
 
 
@@ -177,6 +182,7 @@ class AnioxtrimestralController extends Controller
             'model' => $model,
             'anio' => $anio,
             'trimestral' => $trimestral,
+            'duplicar' => $duplicar,
         ]);
     }
 
@@ -224,6 +230,9 @@ class AnioxtrimestralController extends Controller
         $model = $this->findModel($id);
         $anio = Aniolectivo::find()->orderBy('id desc')->all();
         $trimestral = Trimestral::find()->all();
+        $horarioexamen = Horarioexamen::find()->select('anioxtrimestral')->distinct()->all();
+        $horarioexamen = array_column($horarioexamen, 'anioxtrimestral');
+        $duplicar = Anioxtrimestral::find()->where(['in', 'id',  $horarioexamen])->all();
 
         $inicioexplode1 = explode("-",$model->inicio);
             //return var_dump($inicioexplode1);
@@ -276,9 +285,9 @@ class AnioxtrimestralController extends Controller
         }
         $tipo = ($model->trimestral < 4) ? 2 : 3;
         $searchModel = new HorarioexamenSearch();
-        $inconvcursos = $searchModel->getSuperposicionCursos($tipo)->totalCount;
-        $inconvdocentes = $searchModel->getSuperposicionDocentes($tipo)->totalCount;
-        $inconvmaterias = $searchModel->getMateriasNocargadas($tipo)->totalCount;
+        $inconvcursos = $searchModel->getSuperposicionCursos($model->id)->totalCount;
+        $inconvdocentes = $searchModel->getSuperposicionDocentes($model->id)->totalCount;
+        $inconvmaterias = $searchModel->getMateriasNocargadas($model->id)->totalCount;
         $totalinconv = $inconvcursos + $inconvdocentes + $inconvmaterias;
 
         if($totalinconv>0){
@@ -289,7 +298,7 @@ class AnioxtrimestralController extends Controller
             'model' => $model,
             'anio' => $anio,
             'trimestral' => $trimestral,
-            
+            'duplicar' => $duplicar,
            
         ]);
     }

@@ -68,6 +68,8 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
+        
+        Yii::$app->session->setFlash('danger', 'Dentro de la opción del menú <b>'.Yii::$app->user->identity->role0->nombre.'</b> podrá "Cambiar el rol de usuario" para acceder a las funcionalidades administrativas o a las del cargo Docente o No docente para trámites personales.');
         if(Yii::$app->user->identity->activate == 0){
             return $this->redirect(['/user/cambiarpass', 'i'=>4]);
         }
@@ -108,7 +110,7 @@ class SiteController extends Controller
      *
      * @return Response|string
      */
-    public function actionLogin()
+    public function actionLoginadmin()
     {
         $this->layout = 'mainlogin';
         if (!Yii::$app->user->isGuest) {

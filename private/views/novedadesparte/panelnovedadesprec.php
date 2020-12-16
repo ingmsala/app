@@ -30,6 +30,7 @@ $listestados=ArrayHelper::map($estados,'id','nombre');
         'estados' => $estados,
         'param' => $param,
         'collapse' => $collapse,
+        'preceptorias' => $preceptorias,
         
     ]) ?>
 

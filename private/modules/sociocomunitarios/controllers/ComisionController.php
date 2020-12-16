@@ -221,6 +221,7 @@ class ComisionController extends Controller
                     $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                     $nom = Nombramiento::find()
                                 ->where(['docente' => $docente->id])
+                                ->andWhere(['<=', 'division', 53])
                                 ->andWhere(['or',
                                     ['=', 'cargo', 227],
                                     ['=', 'cargo', 229],
