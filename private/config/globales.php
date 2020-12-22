@@ -25,6 +25,7 @@ class Globales
 	const US_NODOCENTE = 18;
 	const US_CAE_ADMIN = 19;
 	const US_PSC = 20;
+	const US_CRON_ANIV = 21;
 	
 	
 	const COND_SUPL = 5;
@@ -63,8 +64,10 @@ class Globales
 	
 	const authttemas = ['msala@unc.edu.ar', 'msala', 'mariano.ferrero@unc.edu.ar', 'carlos.cima@unc.edu.ar', 'fbarros@unc.edu.ar', 'manuarias1@unc.edu.ar', 'ornellabiazzutti@unc.edu.ar', 'cesar.romero@unc.edu.ar', 'sebastian.angilello@unc.edu.ar', 'cecilia.rivero@unc.edu.ar', 'ruben.vargas@unc.edu.ar', 'carlospatoco@unc.edu.ar', 'ernesto.morales@unc.edu.ar', 'miguel.torti@unc.edu.ar', 'mfragueiro@unc.edu.ar', 'sebastian.suarez@unc.edu.ar', 'mariaf.diaz.gavier@unc.edu.ar'];
 	const mones = ['msala@unc.edu.ar', 'gabriela.helale@unc.edu.ar', 'hernan.moya@unc.edu.ar', 'gustavo.carranza@unc.edu.ar', 'nicolas.esparza@unc.edu.ar'];
+	const MAIL2 = 'msala@unc.edu.ar';
 	const MAIL = 'monserratsistema@gmail.com';
 	const PASS_MAIL = 'Monserrat294';
+	const PASS_MAIL2 = 'lpevdrdqmcosrpgk';
 
 
 }

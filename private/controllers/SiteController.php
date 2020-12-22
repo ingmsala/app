@@ -105,6 +105,11 @@ class SiteController extends Controller
         return $this->render('mantenimiento');
     }
 
+    public function actionLogin()
+    {
+        return $this->goHome();
+    }
+
     /**
      * Login action.
      *

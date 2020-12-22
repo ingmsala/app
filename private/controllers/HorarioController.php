@@ -1373,6 +1373,11 @@ class HorarioController extends Controller
                     ->where(['mail' => Yii::$app->user->identity->username])
                     ->andWhere(['=', 'detallecatedra.revista', 6])
                     ->one();
+        if($docente == null){
+            Yii::$app->session->setFlash('info', "No tiene horarios de clases asignados en su perfil de ".Yii::$app->user->identity->role0->nombre.'. Si desea acceder a los horarios como Preceptor/a o Jefe/a de Preceptor/a deberá cambiar su perfil de usuarios desde el menú.');
+            return $this->redirect(['menuopcionespublic']);
+        }
+        
         $alx2 = Aniolectivo::find()->where(['activo' => 1])->one();
         return $this->getCompletoxdocentepage($docente->id, 0, 0, 1, $alx2->id);
     }

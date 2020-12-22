@@ -157,6 +157,10 @@ $config = [
                 'class' => 'app\modules\mones\Mones',
          ],
 
+         'aniversary' => [
+                'class' => 'app\modules\aniversary\Aniversary',
+         ],
+
          'api' => [
                 'class' => 'app\modules\api\test\Test',
                                 
