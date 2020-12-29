@@ -11,7 +11,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\config\Globales;
 use app\models\Detallecatedra;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Nodocente;
 use app\models\Nombramiento;
 
@@ -116,13 +116,13 @@ class VisitanteController extends Controller
 
         $array = [];
         foreach ($nombramientos as $nom) {
-            $array [$nom->docente0->documento] = $nom->docente0->apellido;
+            $array [$nom->agente0->documento] = $nom->agente0->apellido;
         }
 
         $detallecatedras = Detallecatedra::find()->where(['activo' => 1])->all();
 
         foreach ($detallecatedras as $dc) {
-            $array [$dc->docente0->documento] = $dc->docente0->documento;
+            $array [$dc->agente0->documento] = $dc->agente0->documento;
         }
 
         $nodocentes = Nodocente::find()->all();
@@ -131,7 +131,7 @@ class VisitanteController extends Controller
             $array [$nodocente->documento] = $nodocente->documento;
         }
 
-        $docentes = Docente::find()
+        $docentes = Agente::find()
             //->where(['apellido' => 'GUERRA'])
             ->where(['=','day(fechanac)', date('d')])
             ->andWhere(['=','month(fechanac)', date('m')])

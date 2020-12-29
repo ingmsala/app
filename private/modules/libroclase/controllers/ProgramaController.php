@@ -5,7 +5,7 @@ namespace app\modules\libroclase\controllers;
 use app\config\Globales;
 use app\models\Actividad;
 use app\models\ActividadSearch;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Docentexdepartamento;
 use app\models\Plan;
 use app\modules\libroclase\models\Detalleunidad;
@@ -42,8 +42,8 @@ class ProgramaController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-                                $depto = Docentexdepartamento::find()->where(['docente' => $persona->id])->count();
+                                $persona = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                $depto = Docentexdepartamento::find()->where(['agente' => $persona->id])->count();
                                 return (in_array (Yii::$app->user->identity->username, Globales::authttemas) || $depto>0 );
                             }catch(\Exception $exception){
                                 return false;

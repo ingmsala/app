@@ -6,7 +6,7 @@ use Yii;
 use app\config\Globales;
 use app\models\Actividad;
 use app\models\Division;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Estadonovedad;
 use app\models\Estadoxnovedad;
 use app\models\EstadoxnovedadSearch;
@@ -149,15 +149,15 @@ class NovedadesparteController extends Controller
             $tiponovedades = Tiponovedad::find()->all();
         else
             $tiponovedades = Tiponovedad::find()->where(['in', 'id', [2,3]])->all();
-        $preceptores = Docente::find()
+        $preceptores = Agente::find()
                         ->orderBy('apellido, nombre')
                         ->all();
 
         if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
             
-            $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
             $nom = Nombramiento::find()
-                        ->where(['docente' => $doc->id])
+                        ->where(['agente' => $doc->id])
                         ->andWhere(['<=', 'division', 53])
                         //->andWhere(['is not', 'division', 53])
                         ->all();
@@ -182,7 +182,7 @@ class NovedadesparteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 
             if ($model->tiponovedad != 1 && $model->tiponovedad != 5 && $model->tiponovedad != 6){
-                $model->docente = null;
+                $model->agente = null;
                 if ($model->tiponovedad == 2 || $model->tiponovedad == 3){
                     $text = ' - N° de Aula o espacio: '.Yii::$app->request->post()["aulaoespacio"];
                     $text .= ' - Banco: '.Yii::$app->request->post()["banco"];
@@ -270,14 +270,14 @@ class NovedadesparteController extends Controller
             $tiponovedades = Tiponovedad::find()->all();
         else
             $tiponovedades = Tiponovedad::find()->where(['in', 'id', [2,3]])->all();
-        $preceptores = Docente::find()
+        $preceptores = Agente::find()
                         ->orderBy('apellido, nombre')
                         ->all();
         if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
 
-            $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
             $nom = Nombramiento::find()
-                        ->where(['docente' => $doc->id])
+                        ->where(['agente' => $doc->id])
                         ->andWhere(['<=', 'division', 53])
                         //->andWhere(['is not', 'division', 53])
                         ->all();
@@ -297,7 +297,7 @@ class NovedadesparteController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->tiponovedad != 1 && $model->tiponovedad != 5 && $model->tiponovedad != 6){
-                $model->docente = null;
+                $model->agente = null;
             }
 
             if($model->save()){
@@ -422,9 +422,9 @@ class NovedadesparteController extends Controller
     {
         if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
             $this->layout = 'mainpersonal';
-            $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
             $nom = Nombramiento::find()
-                        ->where(['docente' => $doc->id])
+                        ->where(['agente' => $doc->id])
                         ->andWhere(['<=', 'division', 53])
                         //->andWhere(['is not', 'division', 53])
                         ->all();

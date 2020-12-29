@@ -75,9 +75,9 @@ public function behaviors()
 	    public function actionHorarioclase($legajo)
 	    {
 	    	/*$detallecat = Horarioexamen::find()
-                    ->joinWith(['catedra0', 'hora0', 'catedra0.detallecatedras', 'catedra0.detallecatedras.docente0', 'catedra0.actividad0', 'catedra0.division0', 'catedra0.division0.turno0'])
+                    ->joinWith(['catedra0', 'hora0', 'catedra0.detallecatedras', 'catedra0.detallecatedras.agente0', 'catedra0.actividad0', 'catedra0.division0', 'catedra0.division0.turno0'])
                     ->andWhere(['detallecatedra.revista' => 6])
-                    ->andWhere(['docente.legajo' => $legajo])
+                    ->andWhere(['agente.legajo' => $legajo])
                     ->orderBy('horarioexamen.fecha, division.turno, hora.id')
                     ->all();*/
             //Yii::$app->response->format = Response::FORMAT_JSON;
@@ -90,7 +90,7 @@ public function behaviors()
 						LEFT JOIN hora hor ON h.hora = hor.id
 						LEFT JOIN diasemana ds ON h.diasemana = ds.id
 						LEFT JOIN detallecatedra dc ON dc.catedra = c.id
-						LEFT JOIN docente doc ON dc.docente = doc.id
+						LEFT JOIN docente doc ON dc.agente = doc.id
 						LEFT JOIN actividad ac ON c.actividad = ac.id
 						LEFT JOIN division di ON c.division = di.id
 						LEFT JOIN turno tur ON di.turno = tur.id
@@ -105,9 +105,9 @@ public function behaviors()
 	        $listDocentes=ArrayHelper::toArray($detallecat, [
                     'app\models\Detallecatedra' => [
                         'id' => function($detallecatedra) {
-                            return $detallecatedra['docente0']['id'];},
+                            return $detallecatedra['agente0']['id'];},
                         'name' => function($detallecatedra) {
-                            return $detallecatedra['docente0']['apellido'].', '.$detallecatedra['docente0']['nombre'].' ('.$detallecatedra['catedra0']['actividad0']['nombre'].')';},
+                            return $detallecatedra['agente0']['apellido'].', '.$detallecatedra['agente0']['nombre'].' ('.$detallecatedra['catedra0']['actividad0']['nombre'].')';},
                     ],
                 ]);
 
@@ -117,9 +117,9 @@ public function behaviors()
 	    public function actionHorarioclasejson($legajo)
 	    {
 	    	/*$detallecat = Horarioexamen::find()
-                    ->joinWith(['catedra0', 'hora0', 'catedra0.detallecatedras', 'catedra0.detallecatedras.docente0', 'catedra0.actividad0', 'catedra0.division0', 'catedra0.division0.turno0'])
+                    ->joinWith(['catedra0', 'hora0', 'catedra0.detallecatedras', 'catedra0.detallecatedras.agente0', 'catedra0.actividad0', 'catedra0.division0', 'catedra0.division0.turno0'])
                     ->andWhere(['detallecatedra.revista' => 6])
-                    ->andWhere(['docente.legajo' => $legajo])
+                    ->andWhere(['agente.legajo' => $legajo])
                     ->orderBy('horarioexamen.fecha, division.turno, hora.id')
                     ->all();*/
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -132,7 +132,7 @@ public function behaviors()
 						LEFT JOIN hora hor ON h.hora = hor.id
 						LEFT JOIN diasemana ds ON h.diasemana = ds.id
 						LEFT JOIN detallecatedra dc ON dc.catedra = c.id
-						LEFT JOIN docente doc ON dc.docente = doc.id
+						LEFT JOIN docente doc ON dc.agente = doc.id
 						LEFT JOIN actividad ac ON c.actividad = ac.id
 						LEFT JOIN division di ON c.division = di.id
 						LEFT JOIN turno tur ON di.turno = tur.id
@@ -147,9 +147,9 @@ public function behaviors()
 	        $listDocentes=ArrayHelper::toArray($detallecat, [
                     'app\models\Detallecatedra' => [
                         'id' => function($detallecatedra) {
-                            return $detallecatedra['docente0']['id'];},
+                            return $detallecatedra['agente0']['id'];},
                         'name' => function($detallecatedra) {
-                            return $detallecatedra['docente0']['apellido'].', '.$detallecatedra['docente0']['nombre'].' ('.$detallecatedra['catedra0']['actividad0']['nombre'].')';},
+                            return $detallecatedra['agente0']['apellido'].', '.$detallecatedra['agente0']['nombre'].' ('.$detallecatedra['catedra0']['actividad0']['nombre'].')';},
                     ],
                 ]);
 
@@ -159,9 +159,9 @@ public function behaviors()
 	    	    public function actionHorarioexamenjson($legajo)
 	    {
 	    	/*$detallecat = Horarioexamen::find()
-                    ->joinWith(['catedra0', 'hora0', 'catedra0.detallecatedras', 'catedra0.detallecatedras.docente0', 'catedra0.actividad0', 'catedra0.division0', 'catedra0.division0.turno0'])
+                    ->joinWith(['catedra0', 'hora0', 'catedra0.detallecatedras', 'catedra0.detallecatedras.agente0', 'catedra0.actividad0', 'catedra0.division0', 'catedra0.division0.turno0'])
                     ->andWhere(['detallecatedra.revista' => 6])
-                    ->andWhere(['docente.legajo' => $legajo])
+                    ->andWhere(['agente.legajo' => $legajo])
                     ->orderBy('horarioexamen.fecha, division.turno, hora.id')
                     ->all();*/
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -175,7 +175,7 @@ public function behaviors()
 						LEFT JOIN aniolectivo al ON axt.aniolectivo = al.id
 						LEFT JOIN hora hor ON h.hora = hor.id
 						lEFT JOIN detallecatedra dc ON dc.catedra = c.id
-						LEFT JOIN docente doc ON dc.docente = doc.id
+						LEFT JOIN docente doc ON dc.agente = doc.id
 						LEFT JOIN actividad ac ON c.actividad = ac.id
 						LEFT JOIN division di ON c.division = di.id
 						LEFT JOIN turno tur ON di.turno = tur.id
@@ -193,9 +193,9 @@ public function behaviors()
 	        $listDocentes=ArrayHelper::toArray($detallecat, [
                     'app\models\Detallecatedra' => [
                         'id' => function($detallecatedra) {
-                            return $detallecatedra['docente0']['id'];},
+                            return $detallecatedra['agente0']['id'];},
                         'name' => function($detallecatedra) {
-                            return $detallecatedra['docente0']['apellido'].', '.$detallecatedra['docente0']['nombre'].' ('.$detallecatedra['catedra0']['actividad0']['nombre'].')';},
+                            return $detallecatedra['agente0']['apellido'].', '.$detallecatedra['agente0']['nombre'].' ('.$detallecatedra['catedra0']['actividad0']['nombre'].')';},
                     ],
                 ]);
 

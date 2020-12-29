@@ -61,8 +61,8 @@ class Condicion extends \yii\db\ActiveRecord
         return $this->hasMany(Nombramiento::className(), ['condicion' => 'id']);
     }
 
-    public function getDocentes()
+    public function getAgentes()
     {
-        return $this->hasMany(Docente::className(), ['id' => 'condicion'])->via('detallecatedras');
+        return $this->hasMany(Agente::className(), ['id' => 'condicion'])->via('detallecatedras');
     }
 }

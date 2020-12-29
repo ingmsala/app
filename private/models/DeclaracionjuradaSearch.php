@@ -19,7 +19,7 @@ class DeclaracionjuradaSearch extends Declaracionjurada
     public function rules()
     {
         return [
-            [['id', 'persona', 'estadodeclaracion', 'actividadnooficial', 'pasividad'], 'integer'],
+            [['id', 'agente', 'estadodeclaracion', 'actividadnooficial', 'pasividad'], 'integer'],
             [['fecha'], 'safe'],
         ];
     }
@@ -42,15 +42,9 @@ class DeclaracionjuradaSearch extends Declaracionjurada
      */
     public function porAgente($params)
     {
-        $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-        if($persona == null){
-            $persona = Nodocente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-            if($persona == null){
-                Yii::$app->session->setFlash('danger', 'Error de autentificación. Contacte al administrador del sistema');
-                return $this->redirect(['index']); 
-            }
-        }
-        $query = Declaracionjurada::find()->where(['persona' => $persona->documento])->orderBy('id desc');
+        $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        
+        $query = Declaracionjurada::find()->where(['agente' => $agente->documento])->orderBy('id desc');
 
         // add conditions that should always apply here
 
@@ -70,7 +64,7 @@ class DeclaracionjuradaSearch extends Declaracionjurada
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'persona' => $this->persona,
+            'agente' => $this->agente,
             'estadodeclaracion' => $this->estadodeclaracion,
             'fecha' => $this->fecha,
             'actividadnooficial' => $this->actividadnooficial,
@@ -83,7 +77,7 @@ class DeclaracionjuradaSearch extends Declaracionjurada
     public function porAgenteadmin($dni)
     {
         
-        $query = Declaracionjurada::find()->where(['persona' => $dni])->orderBy('id desc');
+        $query = Declaracionjurada::find()->where(['agente' => $dni])->orderBy('id desc');
 
         // add conditions that should always apply here
 
@@ -103,7 +97,7 @@ class DeclaracionjuradaSearch extends Declaracionjurada
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'persona' => $this->persona,
+            'agente' => $this->agente,
             'estadodeclaracion' => $this->estadodeclaracion,
             'fecha' => $this->fecha,
             'actividadnooficial' => $this->actividadnooficial,
@@ -116,25 +110,23 @@ class DeclaracionjuradaSearch extends Declaracionjurada
     public function porAnio($pers)
     {
         
-           /* $subquery = (new \yii\db\Query)->select('max(id)')->from('declaracionjurada')->groupby('persona');
+           /* $subquery = (new \yii\db\Query)->select('max(id)')->from('declaracionjurada')->groupby('agente');
             $query = Declaracionjurada::find()
                         //->distinct()
-                        ->joinWith('docente0', 'RIGHT JOI')
+                        ->joinWith('agente0', 'RIGHT JOI')
                         ->where(['in', 'declaracionjurada.id', $subquery])
                         ->groupBy('person')
                         ->orderBy('declaracionjurada.id desc');*/
             if($pers == null){
-                $sql = 'SELECT * FROM (SELECT documento, apellido, nombre, mail from docente
-                WHERE docente.id in (select dc.docente from detallecatedra dc where dc.docente=docente.id and dc.activo=1) or 
-                    docente.id in (select nom.docente from nombramiento nom where nom.docente=docente.id)
-                UNION DISTINCT
-                SELECT documento, apellido, nombre, mail from nodocente) aa
+                $sql = 'SELECT documento, apellido, nombre, mail from agente
+                INNER JOIN agentextipo ON agentextipo.agente = agente.id
+                WHERE agente.id in (select dc.agente from detallecatedra dc where dc.agente=agente.id and dc.activo=1) or 
+                    agente.id in (select nom.agente from nombramiento nom where nom.agente=agente.id)
+                    OR (agentextipo.tipocargo = 2)
                 group by (documento)
                 ORDER BY apellido, nombre';
             }else{
-                $sql = 'SELECT * FROM (SELECT documento, apellido, nombre, mail from docente
-                UNION DISTINCT
-                SELECT documento, apellido, nombre, mail from nodocente) aa
+                $sql = 'SELECT documento, apellido, nombre, mail from agente
                 where documento = '.$pers.'
                 group by (documento)
                 ORDER BY apellido, nombre';

@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 /* @var $searchModel app\models\RevistaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Padrón Docente - Por Agente';
+$this->title = 'Padrón Agente - Por Agente';
 
 ?>
 

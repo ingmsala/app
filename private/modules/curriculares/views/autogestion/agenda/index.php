@@ -51,9 +51,9 @@ $this->title = 'Agenda de Clases';
                     $items = [];
                     $docentes = $matricula->comision0->docentexcomisions;
 
-                    foreach ($docentes as $docente) {
-                        if($docente->role == 8)
-                            $item[] = [$docente->docente0->apellido, $docente->docente0->nombre];
+                    foreach ($docentes as $agente) {
+                        if($agente->role == 8)
+                            $item[] = [$agente->agente0->apellido, $agente->agente0->nombre];
                     }
                     return Html::ul($item, ['item' => function($item) {
                              return 

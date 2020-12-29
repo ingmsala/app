@@ -5,13 +5,13 @@ use kartik\grid\GridView;
 use app\config\Globales;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\DocenteSearch */
+/* @var $searchModel app\models\AgenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Docentes';
+$this->title = 'Agentes';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="docente-index">
+<div class="agente-index">
 
     <?php
         if(in_array (Yii::$app->user->identity->role, [1]))
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         'toolbar'=>[
             ['content' => 
-                Html::a('Nuevo Docente', ['create'], ['class' => 'btn btn-success'])
+                Html::a('Nuevo Agente', ['create'], ['class' => 'btn btn-success'])
 
             ],
             '{export}',
@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'editableOptions' => [
                     'header' => 'Documento', 
                     'inputType' => \kartik\editable\Editable::INPUT_TEXT,
-                    'formOptions' => ['action' => ['/docente/editdocumento']],
+                    'formOptions' => ['action' => ['/agente/editdocumento']],
                 ],
                 'hAlign' => 'left', 
                 'vAlign' => 'middle',
@@ -90,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 
             ],
             [
-                'label' => 'Docente',
+                'label' => 'Agente',
                 'attribute' => 'apellido',
                 'hAlign' => 'left', 
                 'vAlign' => 'middle',
@@ -115,7 +115,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'editableOptions' => [
                     'header' => 'Mail', 
                     'inputType' => \kartik\editable\Editable::INPUT_TEXT,
-                    'formOptions' => ['action' => ['/docente/editdocumento']],
+                    'formOptions' => ['action' => ['/agente/editdocumento']],
                 ],
                 'hAlign' => 'left', 
                 'vAlign' => 'middle',

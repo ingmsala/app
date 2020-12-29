@@ -19,7 +19,7 @@ class FonidSearch extends Fonid
     public function rules()
     {
         return [
-            [['id', 'docente', 'estadofonid'], 'integer'],
+            [['id', 'agente', 'estadofonid'], 'integer'],
             [['fecha'], 'safe'],
         ];
     }
@@ -61,7 +61,7 @@ class FonidSearch extends Fonid
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'docente' => $this->docente,
+            'agente' => $this->agente,
             'fecha' => $this->fecha,
             'estadofonid' => $this->estadofonid,
         ]);
@@ -72,14 +72,14 @@ class FonidSearch extends Fonid
 
     public function porAgente($params)
     {
-        $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        $persona = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
         if($persona == null){
             
                 Yii::$app->session->setFlash('danger', 'Error de autentificación. Contacte al administrador del sistema');
                 return $this->redirect(['index']); 
             
         }
-        $query = Fonid::find()->where(['docente' => $persona->id])->orderBy('id desc');
+        $query = Fonid::find()->where(['agente' => $persona->id])->orderBy('id desc');
 
         // add conditions that should always apply here
 
@@ -99,7 +99,7 @@ class FonidSearch extends Fonid
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'docente' => $this->docente,
+            'agente' => $this->agente,
             'fecha' => $this->fecha,
             'estadofonid' => $this->estadofonid,
         ]);
@@ -113,17 +113,17 @@ class FonidSearch extends Fonid
            /* $subquery = (new \yii\db\Query)->select('max(id)')->from('declaracionjurada')->groupby('persona');
             $query = Declaracionjurada::find()
                         //->distinct()
-                        ->joinWith('docente0', 'RIGHT JOI')
+                        ->joinWith('agente0', 'RIGHT JOI')
                         ->where(['in', 'declaracionjurada.id', $subquery])
                         ->groupBy('person')
                         ->orderBy('declaracionjurada.id desc');*/
             if($pers == null){
-                $sql = 'SELECT distinct docente.id, docente.documento, docente.apellido, docente.nombre, docente.mail from docente
-                    WHERE docente.id in (select dc.docente from detallecatedra dc where dc.docente=docente.id and dc.activo=1) or 
-                    docente.id in (select nom.docente from nombramiento nom where nom.docente=docente.id)
+                $sql = 'SELECT distinct agente.id, agente.documento, agente.apellido, agente.nombre, agente.mail from agente
+                    WHERE agente.id in (select dc.agente from detallecatedra dc where dc.agente=agente.id and dc.activo=1) or 
+                    agente.id in (select nom.agente from nombramiento nom where nom.agente=agente.id)
                     ORDER BY apellido, nombre';
             }else{
-                $sql = 'SELECT id, documento, apellido, nombre, mail from docente
+                $sql = 'SELECT id, documento, apellido, nombre, mail from agente
                     where id = '.$pers.'
                     ORDER BY apellido, nombre';
             }
@@ -158,7 +158,7 @@ class FonidSearch extends Fonid
     public function porAgenteadmin($id)
     {
         
-        $query = Fonid::find()->where(['docente' => $id])->orderBy('id desc');
+        $query = Fonid::find()->where(['agente' => $id])->orderBy('id desc');
 
         // add conditions that should always apply here
 

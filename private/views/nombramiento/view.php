@@ -52,11 +52,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             [
-                'label' => 'Docente',
-                'attribute' => 'docente',
+                'label' => 'Agente',
+                'attribute' => 'agente',
                 'value' => function($model){
 
-                   return $model->docente0->apellido.', '.$model->docente0->nombre;
+                   return $model->agente0->apellido.', '.$model->agente0->nombre;
                 }
             ],
             [
@@ -176,11 +176,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             
             [
-                'label' => 'Docente',
-                'attribute' => 'docente',
+                'label' => 'Agente',
+                'attribute' => 'agente',
                 'value' => function($model){
 
-                   return $model->docente0->apellido.', '.$model->docente0->nombre;
+                   return $model->agente0->apellido.', '.$model->agente0->nombre;
                 }
             ],
             

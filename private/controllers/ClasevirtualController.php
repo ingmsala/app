@@ -9,7 +9,7 @@ use app\models\Clasevirtual;
 use app\models\ClasevirtualSearch;
 use app\models\DetallecatedraSearch;
 use app\models\Division;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Hora;
 use app\models\Preceptoria;
 use app\models\Semana;
@@ -336,14 +336,14 @@ class ClasevirtualController extends Controller
                                             $superpuesto[1] = str_replace('</ul>', $horariox->catedra0->division0->nombre."</ul>", $superpuesto[1]);
                                         }
                                         ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
-                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1).'</span>'.'</span>';
+                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1).'</span>'.'</span>';
                                     }
                                     else{
                                         if($cant>1){
                                             ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
-                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.'<ul>'.$horariox->catedra0->division0->nombre.'</ul>'.'">'.$dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1).'</span>'.'</span>';
+                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.'<ul>'.$horariox->catedra0->division0->nombre.'</ul>'.'">'.$dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1).'</span>'.'</span>';
                                         }else{
-                                            $salida = $dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1);
+                                            $salida = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1);
 
                                         }
                                     }
@@ -414,10 +414,10 @@ class ClasevirtualController extends Controller
     }
 
     public function horaSuperpuesta($dc, $hora, $fecha){
-        $docente = $dc->docente;
+        $docente = $dc->agente;
         $horarios = Clasevirtual::find()
             ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
-            ->where(['detallecatedra.docente' => $docente])
+            ->where(['detallecatedra.agente' => $docente])
             ->andWhere(['detallecatedra.revista' => 6])
             ->andWhere(['<>', 'detallecatedra.id', $dc->id])
             ->andWhere(['clasevirtual.hora' => $hora])
@@ -700,9 +700,9 @@ class ClasevirtualController extends Controller
             $this->layout = 'mainvacio';
 
         
-        $model = new Docente();
+        $model = new Agente();
         $abecedario = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','Ñ','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-        //$docentes = Docente::find()->select('id, LEFT(apellido, 1) AS inicial, apellido, nombre')->orderBy('apellido, nombre')->all();
+        //$docentes = Agente::find()->select('id, LEFT(apellido, 1) AS inicial, apellido, nombre')->orderBy('apellido, nombre')->all();
         $echodiv = '';
         $echodiv .= '<div class="row">';
         foreach ($abecedario as $letra) {
@@ -715,8 +715,8 @@ class ClasevirtualController extends Controller
         $echodiv .= '</div>';
 
         /*if ($model->load(Yii::$app->request->post())) {
-            $id = Yii::$app->request->post()['Docente']['apellido'];
-            return $this->redirect(['completoxdocente', 'docente' =>  $id]);
+            $id = Yii::$app->request->post()['Agente']['apellido'];
+            return $this->redirect(['completoxdocente', 'agente' =>  $id]);
         }*/
 
         return $this->render('menuxletra', [
@@ -733,8 +733,8 @@ class ClasevirtualController extends Controller
             $this->layout = 'mainvacio';
 
         
-        $model = new Docente();
-        $docentes = Docente::find()
+        $model = new Agente();
+        $docentes = Agente::find()
             ->joinWith('detallecatedras')
             ->where(['like', 'apellido', $letra.'%', false])
             ->andWhere(['=', 'detallecatedra.revista', 6])
@@ -764,7 +764,7 @@ class ClasevirtualController extends Controller
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
        
-        $docenteparam = Docente::findOne($docente);
+        $docenteparam = Agente::findOne($docente);
 
         $h= [];
         $j= [];
@@ -798,7 +798,7 @@ class ClasevirtualController extends Controller
         $horariosTm = Clasevirtual::find()
             ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
             //->where(['diasemana' => 2])
-            ->where(['detallecatedra.docente' => $docente])
+            ->where(['detallecatedra.agente' => $docente])
             ->andWhere(['division.turno' => 1])
             ->andWhere(['detallecatedra.revista' => 6])
             ->andWhere(['clasevirtual.semana' => $sem])
@@ -808,7 +808,7 @@ class ClasevirtualController extends Controller
         $horariosTt = Clasevirtual::find()
             ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
             //->where(['diasemana' => 2])
-            ->where(['detallecatedra.docente' => $docente])
+            ->where(['detallecatedra.agente' => $docente])
             ->andWhere(['division.turno' => 2])
             ->andWhere(['detallecatedra.revista' => 6])
             ->andWhere(['clasevirtual.semana' => $sem])

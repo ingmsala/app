@@ -10,7 +10,7 @@ use app\models\Actividad;
 use app\models\Division;
 use app\models\Condicion;
 use app\models\Propuesta;
-use app\models\Docente;
+use app\models\Agente;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -117,13 +117,13 @@ class CatedraController extends Controller
         $resoluciones = Detallecatedra::find()
                     ->select('resolucion')->distinct()->all();
 
-        $docentes = Docente::find()
+        $docentes = Agente::find()
                         ->orderBy('apellido')
                         ->all();
         if(isset($param['Catedra']['propuesta']))
             $model->propuesta = $param['Catedra']['propuesta'];
-        if(isset($param['Catedra']['docente']))
-            $model->docente = $param['Catedra']['docente'];
+        if(isset($param['Catedra']['agente']))
+            $model->agente = $param['Catedra']['agente'];
         if(isset($param['Catedra']['actividadnom']))
             $model->actividadnom = $param['Catedra']['actividadnom'];
         if(isset($param['Catedra']['divisionnom']))

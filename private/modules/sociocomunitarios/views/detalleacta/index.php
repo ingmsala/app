@@ -27,9 +27,9 @@ if($acta->estadoacta==221){
 
 /*$docentes = $acta->comision0->docentexcomisions;
 
-foreach ($docentes as $docente) {
-    if($docente->role == 8)
-        $item[] = [$docente->docente0->apellido, $docente->docente0->nombre];
+foreach ($docentes as $agente) {
+    if($agente->role == 8)
+        $item[] = [$agente->agente0->apellido, $agente->agente0->nombre];
 }*/
 ?>
 <div class="detalleacta-index">
@@ -118,7 +118,7 @@ foreach ($docentes as $docente) {
                 }, 
 
                 'readonly' => function($model, $key, $index, $widget) {
-                    return (!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_PRECEPTOR]) || $model->acta0->estadoacta!=1); // do not allow editing of inactive records
+                    return (!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_PRECEPTOR]) || $model->acta0->estadoacta!=1); // do not allow editing of inactive records
                 },
 
                 'refreshGrid' => true,
@@ -160,7 +160,7 @@ foreach ($docentes as $docente) {
                 
 
                 'readonly' => function($model, $key, $index, $widget) {
-                    return (!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_PRECEPTOR]) || $model->acta0->estadoacta!=1); // do not allow editing of inactive records
+                    return (!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_PRECEPTOR]) || $model->acta0->estadoacta!=1); // do not allow editing of inactive records
                 },
 
                 'editableOptions' => [

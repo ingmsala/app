@@ -6,19 +6,19 @@ use yii\helpers\Url;
 
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\DocenteSearch */
+/* @var $searchModel app\models\AgenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Cátedras con Inconsistencias';
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="docente-index">
+<div class="agente-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     
-    <div class="alert alert-danger" role="alert">Error. Debe corregir las siguientes cátedras que tienen más de un docente en estado VIGENTE</div>
+    <div class="alert alert-danger" role="alert">Error. Debe corregir las siguientes cátedras que tienen más de un agente en estado VIGENTE</div>
 
     
 

@@ -48,13 +48,13 @@ $this->title = 'FONID';
     //var_dump($listdoc);
     $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_VERTICAL, 'method' => 'GET']);
     
-    echo $form->field($model, 'docente')->widget(Select2::classname(), [
+    echo $form->field($model, 'agente')->widget(Select2::classname(), [
         'data' => $listpersona,
         'options' => ['placeholder' => 'Todos'],
         'pluginOptions' => [
             'allowClear' => true
         ],
-    ])->label("Docente");
+    ])->label("Agente");
 
     
     echo $form->field($model, 'fecha', [

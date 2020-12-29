@@ -3,8 +3,8 @@
 namespace app\controllers\reporte;
 
 use Yii;
-use app\models\Docente;
-use app\models\DocenteSearch;
+use app\models\Agente;
+use app\models\AgenteSearch;
 use app\models\DetallecatedraSearch;
 use app\models\NombramientoSearch;
 use yii\web\Controller;
@@ -55,7 +55,7 @@ class HorasdocentesController extends \yii\web\Controller
 
  	public function actionIndex()
 	    {
-	        $searchModel = new DocenteSearch();
+	        $searchModel = new AgenteSearch();
 	        $dataProvider = $searchModel->search2(Yii::$app->request->queryParams);
 
 	        
@@ -102,7 +102,7 @@ class HorasdocentesController extends \yii\web\Controller
 
 	protected function findModel($id)
     {
-        if (($model = Docente::findOne($id)) !== null) {
+        if (($model = Agente::findOne($id)) !== null) {
             return $model;
         }
 

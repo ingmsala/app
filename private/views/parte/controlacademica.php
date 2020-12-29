@@ -266,7 +266,7 @@ GridView::widget([
                         if ($model['estadoinasistenciax'] != 2){
                          return Html::a('<span class="glyphicon glyphicon-ok"></span>', '?r=estadoinasistenciaxparte/nuevoestado&detalleparte='.$model['id'].'&estadoinasistencia=6', ['class' => 'btn btn-success btn-sm',
                             'data' => [
-                            'confirm' => '¿Está seguro de querer cerrar la inasistencia del docente?',
+                            'confirm' => '¿Está seguro de querer cerrar la inasistencia del agente?',
                             'method' => 'post',
                              ]
                             
@@ -349,12 +349,12 @@ echo Html::a(
             
             [   
                 'label' => 'Apellido',
-                'attribute' => 'docente0.apellido'
+                'attribute' => 'agente0.apellido'
             ],
 
             [   
                 'label' => 'Nombre',
-                'attribute' => 'docente0.nombre'
+                'attribute' => 'agente0.nombre'
             ],
 
             'llego', 
@@ -449,7 +449,7 @@ echo Html::a(
 
                          return Html::a('<span class="glyphicon glyphicon-ok"></span>', '?r=estadoinasistenciaxparte/nuevoestado&detalleparte='.$model->id.'&estadoinasistencia=2', ['class' => 'btn btn-success',
                             'data' => [
-                            'confirm' => 'Está seguro de querer cerrar la inasistencia del docente?',
+                            'confirm' => 'Está seguro de querer cerrar la inasistencia del agente?',
                             'method' => 'post',
                              ]
                             

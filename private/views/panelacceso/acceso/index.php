@@ -78,7 +78,7 @@ $this->title = 'Visitas en curso';
             ],
 
             ['label' => 'Visitante',
-                'attribute' => 'docente',
+                'attribute' => 'agente',
                 'value' => function($model){
                     return $model->visitante0->apellidos.', '.$model->visitante0->nombres;
                 }

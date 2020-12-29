@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = 'Modificar';
         'model' => $model,
         'dataProvider' => $dataProvider,
         'fonid' => $model->id,
-        'docente' => $docente,
+        'agente' => $agente,
     ]) ?>
 
 </div>

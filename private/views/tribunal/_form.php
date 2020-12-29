@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'docente')->textInput() ?>
+    <?= $form->field($model, 'agente')->textInput() ?>
 
     <?= $form->field($model, 'mesaexamen')->textInput() ?>
 

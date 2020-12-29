@@ -13,7 +13,7 @@ use yii\bootstrap\Progress;
 /* @var $this yii\web\View */
 /* @var $model app\models\Catedra */
 
-$this->title = "Catedra";
+$this->title = "Cátedra";
 $this->params['breadcrumbs'][] = ['label' => 'Catedras', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -102,12 +102,12 @@ if(Yii::$app->user->identity->role == Globales::US_SUPER){
 	            
 	            [   
 	                'label' => 'Apellido',
-	                'attribute' => 'docente0.apellido'
+	                'attribute' => 'agente0.apellido'
 	            ],
 
 	            [   
 	                'label' => 'Nombre',
-	                'attribute' => 'docente0.nombre'
+	                'attribute' => 'agente0.nombre'
 	            ],
 	            
 	            [   
@@ -173,7 +173,7 @@ if(Yii::$app->user->identity->role == Globales::US_SUPER){
 
 	                    },
 	                    'deletedetcat' => function($url, $model, $key){
-							if($model->docente != 370)
+							if($model->agente != 370)
 	                        	return Html::button('<span class="glyphicon glyphicon-inbox"></span>', 
 	                            ['value' => Url::to('index.php?r=detallecatedra/fechafin&id='.$model->id.'&catedra=' .$model->catedra), 
 							   'class' => 'modalafinfe btn btn-link', 'id'=>'modalafinfe']);
@@ -221,12 +221,12 @@ if(Yii::$app->user->identity->role == Globales::US_SUPER){
 	            
 	            [   
 	                'label' => 'Apellido',
-	                'attribute' => 'docente0.apellido'
+	                'attribute' => 'agente0.apellido'
 	            ],
 
 	            [   
 	                'label' => 'Nombre',
-	                'attribute' => 'docente0.nombre'
+	                'attribute' => 'agente0.nombre'
 	            ],
 	            
 	            [   

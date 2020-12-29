@@ -7,7 +7,7 @@ use app\config\Globales;
 /* @var $this yii\web\View */
 /* @var $model app\models\Hora */
 /* @var $form yii\widgets\ActiveForm */
-$this->title = 'Seleccione un docente';
+$this->title = 'Seleccione un agente';
 $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="index.php?r=horarioexamen/menuxletra&col='.$col.'" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>'];
 ?>
 <div class="row" style="padding-bottom: 10px;">

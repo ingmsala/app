@@ -31,7 +31,7 @@ class DetallefonidController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_PRECEPTOR]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_PRECEPTOR]);
                                 }catch(\Exception $exception){
                                     return false;
                             }

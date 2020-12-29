@@ -96,7 +96,7 @@ class NodocenteSearch extends Nodocente
         $query->andFilterWhere(['like', 'legajo', $this->legajo])
             ->andFilterWhere(['or', 
                 ['like', 'apellido', $this->apellido], 
-                ['like', 'docente.nombre', $this->apellido]
+                ['like', 'agente.nombre', $this->apellido]
             ])
             ->andFilterWhere(['like', 'apellido', $this->nombre])
             ->andFilterWhere(['like', 'documento', $this->documento]);

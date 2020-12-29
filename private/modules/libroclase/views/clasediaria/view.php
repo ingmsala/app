@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'tipodesarrollo',
             'fecha',
             'fechacarga',
-            'docente',
+            'agente',
             'observaciones:ntext',
             'modalidadclase',
         ],

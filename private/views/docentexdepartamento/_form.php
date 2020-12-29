@@ -34,7 +34,7 @@ use yii\widgets\ActiveForm;
     <?= 
     
 
-        $form->field($model, 'docente')->widget(Select2::classname(), [
+        $form->field($model, 'agente')->widget(Select2::classname(), [
             'data' => $listDocentes,
             'options' => ['placeholder' => 'Seleccionar...'],
             'pluginOptions' => [

@@ -53,13 +53,13 @@ $this->title = 'Horarios con movilidad deshabilitada';
                 'attribute' => 'catedra0.actividad0.nombre',
             ],
             [
-                'label' =>'Docente',
+                'label' =>'Agente',
                 'group' => true,
                 'value' => function($model){
                     $cat = $model->catedra0;
                     foreach ($cat->detallecatedras as $dc) {
                         if ($dc->revista == 6){
-                            $doc = $dc->docente0->apellido.', '.$dc->docente0->nombre;
+                            $doc = $dc->agente0->apellido.', '.$dc->agente0->nombre;
                             break;
                         }
                     }

@@ -89,7 +89,7 @@ JS;
 </h1>
 	<?php
 		if($preceptor != null){
-			echo '<h4><i>Preceptor: '.$preceptor->docente0->apellido.', '.$preceptor->docente0->nombre.'</i></h4>';
+			echo '<h4><i>Preceptor: '.$preceptor->agente0->apellido.', '.$preceptor->agente0->nombre.'</i></h4>';
 		}
 	?>
 	<?php
@@ -211,13 +211,13 @@ JS;
 		            ],
 
 		            [
-		            	'label' => 'Docente',
+		            	'label' => 'Agente',
 		            	'format' => 'raw',
 		            	'value' => function($model) use($pr){
 		            			if($pr==0)
-		            				return Html::a($model->docente0->apellido.', '.$model->docente0->nombre, Url::to(['horario/completoxdocente', 'docente' => $model->docente]));
+		            				return Html::a($model->agente0->apellido.', '.$model->agente0->nombre, Url::to(['horario/completoxdocente', 'agente' => $model->agente]));
 		            		 	else
-		            		 		return $model->docente0->apellido.', '.$model->docente0->nombre;
+		            		 		return $model->agente0->apellido.', '.$model->agente0->nombre;
 		            	}
 
 		            ],
@@ -237,7 +237,7 @@ JS;
 						
 						'dj' => function($url, $model, $key){
 	                        return Html::button('<span class="glyphicon glyphicon-modal-window"></span>',
-                            ['value' => Url::to('index.php?r=horario/declaracionhorario&dni='.$model->docente0->documento),
+                            ['value' => Url::to('index.php?r=horario/declaracionhorario&dni='.$model->agente0->documento),
                                 'class' => 'modala btn btn-link', 'id'=>'modala']);
 	                            
 	                    },

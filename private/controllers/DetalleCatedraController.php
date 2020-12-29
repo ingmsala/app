@@ -8,7 +8,7 @@ use app\models\DetallecatedraSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Preceptoria;
 use app\models\Division;
 use app\models\Revista;
@@ -160,7 +160,7 @@ class DetallecatedraController extends Controller
     public function actionMigrate()
     {
         $dc = DetalleCatedra::find()
-            ->select(['docente', 'catedra'])
+            ->select(['agente', 'catedra'])
             ->distinct()
             ->joinWith(['catedra0', 'catedra0.division0'])
             ->where(['revista' => 1])
@@ -172,14 +172,14 @@ class DetallecatedraController extends Controller
         $txt = '';
         foreach ($dc as $dcx) {
             $model = new DetalleCatedra();
-            $model->docente = $dcx->docente;
+            $model->agente = $dcx->agente;
             $model->catedra = $dcx->catedra;
             $model->hora = $dcx->catedra0->actividad0->cantHoras;
             $model->condicion = 6;
             $model->revista = 6;
             $model->save();
             $txt .= var_dump($model);
-            //$txt .= $dcx->catedra0->division0->nombre.' - '.$dcx->catedra0->actividad0->nombre.' - '.$dcx->docente0->apellido.'<br/>';
+            //$txt .= $dcx->catedra0->division0->nombre.' - '.$dcx->catedra0->actividad0->nombre.' - '.$dcx->agente0->apellido.'<br/>';
         }
         return $txt;
 
@@ -210,7 +210,7 @@ class DetallecatedraController extends Controller
             } 
 
         
-        $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+        $docentes=Agente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $anioslectivos = Aniolectivo::find()->limit(2)->orderBy('id DESC')->all();
 
         if(Yii::$app->user->identity->role == Globales::US_SUPER){
@@ -275,7 +275,7 @@ class DetallecatedraController extends Controller
             } 
 
         
-        $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+        $docentes=Agente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $anioslectivos = Aniolectivo::find()->limit(2)->orderBy('id DESC')->all();
         if(Yii::$app->user->identity->role == Globales::US_SUPER){
             $condiciones=Condicion::find()->all();
@@ -328,7 +328,7 @@ class DetallecatedraController extends Controller
         else{
             $ur = 'horarioexamen';
         }
-        $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+        $docentes=Agente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $condiciones=Condicion::find()->where(['=', 'id', 6])->all();
         $revistas=Revista::find()->where(['=', 'id', 6])->all();
 
@@ -397,7 +397,7 @@ class DetallecatedraController extends Controller
             $cant = count($detallecatedras);
             if($cant == 0){
                 $detalleconvocatoria = new Detallecatedra();
-                $detalleconvocatoria->docente = 370;
+                $detalleconvocatoria->agente = 370;
                 $detalleconvocatoria->catedra = $model->catedra;
                 $detalleconvocatoria->hora = $model->hora;
                 $detalleconvocatoria->condicion = 7;
@@ -451,23 +451,23 @@ class DetallecatedraController extends Controller
                                 
                 if(($falta_id == 3 || $falta_id == 1) && $tipoparte == 1){
                     $detallecat = Detallecatedra::find()
-                    ->joinWith(['docente0', 'catedra0', 'catedra0.horarios'])
+                    ->joinWith(['agente0', 'catedra0', 'catedra0.horarios'])
                     ->where(['catedra.division' => $division_id])
                     ->andWhere(['revista' => 6])
                     ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
                     ->andWhere(['horario.diasemana' => $diasemana])
                     ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
-                    ->orderBy('docente.apellido, docente.nombre')
+                    ->orderBy('agente.apellido, agente.nombre')
                     ->all();
                 }else{
                     $detallecat = Detallecatedra::find()
-                    ->joinWith(['docente0', 'catedra0', 'catedra0.horarios'])
+                    ->joinWith(['agente0', 'catedra0', 'catedra0.horarios'])
                     ->where(['catedra.division' => $division_id])
                     ->andWhere(['revista' => 6])
                     ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
                     ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
                     //->andWhere(['horario.diasemana' => $diasemana])
-                    ->orderBy('docente.apellido, docente.nombre')
+                    ->orderBy('agente.apellido, agente.nombre')
                     ->all();
                 }
                 
@@ -481,9 +481,9 @@ class DetallecatedraController extends Controller
                 $listDocentes=ArrayHelper::toArray($detallecat, [
                     'app\models\Detallecatedra' => [
                         'id' => function($detallecatedra) {
-                            return $detallecatedra['docente0']['id'];},
+                            return $detallecatedra['agente0']['id'];},
                         'name' => function($detallecatedra) {
-                            return $detallecatedra['docente0']['apellido'].', '.$detallecatedra['docente0']['nombre'].' ('.$detallecatedra['catedra0']['actividad0']['nombre'].')';},
+                            return $detallecatedra['agente0']['apellido'].', '.$detallecatedra['agente0']['nombre'].' ('.$detallecatedra['catedra0']['actividad0']['nombre'].')';},
                     ],
                 ]);
                 $out = $listDocentes;
@@ -506,7 +506,7 @@ class DetallecatedraController extends Controller
         ini_set("pcre.backtrack_limit", "5000000");
         foreach ($detalles as $detalle) {
             $newDetalle = new Detallecatedra();
-            $newDetalle->docente = $detalle->docente;
+            $newDetalle->agente = $detalle->agente;
             $newDetalle->catedra = $detalle->catedra;
             $newDetalle->condicion = $detalle->condicion;
             $newDetalle->revista = $detalle->revista;

@@ -8,11 +8,11 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Cargo;
 use app\models\Nombramiento;
 use app\models\NombramientoSearch;
-use app\models\DocenteSearch;
+use app\models\AgenteSearch;
 use app\models\DetallecatedraSearch;
 use app\config\Globales;
 
@@ -68,7 +68,7 @@ class PadronesController extends \yii\web\Controller
             $cantidaddocentessecundario = $searchModel2->getCantidadDocentes(1);
             $cantidaddocentespregrado = $searchModel2->getCantidadDocentes(2);*/
 
-            /*$searchModelDoc = new DocenteSearch();
+            /*$searchModelDoc = new AgenteSearch();
             $dataProviderDoc = $searchModelDoc->getPadronsumarizado();
             $cantidadtotal = $dataProviderDoc->getTotalCount();*/
 
@@ -96,7 +96,7 @@ class PadronesController extends \yii\web\Controller
 
     private function getPreceptores($prop){
         if($prop ==1){
-            return Docente::find()
+            return Agente::find()
                 ->distinct()
                 ->joinWith(['nombramientos', 'nombramientos.division0'])
                 ->where(['nombramiento.cargo' => Globales::CARGO_PREC])
@@ -105,9 +105,9 @@ class PadronesController extends \yii\web\Controller
                     ['nombramiento.division' => null]
                 ])
                 
-                ->orderBy('docente.apellido, docente.nombre')->all();
+                ->orderBy('agente.apellido, agente.nombre')->all();
             }else{
-                return Docente::find()
+                return Agente::find()
                 ->distinct()
                 ->joinWith(['nombramientos', 'nombramientos.division0'])
                 ->where(['nombramiento.cargo' => Globales::CARGO_PREC])
@@ -116,12 +116,12 @@ class PadronesController extends \yii\web\Controller
                     
                 ])
                 
-                ->orderBy('docente.apellido, docente.nombre')->all();
+                ->orderBy('agente.apellido, agente.nombre')->all();
             }
     }
 
     private function getJefes($prop){
-        return Docente::find()
+        return Agente::find()
                 ->distinct()
                 ->joinWith(['nombramientos', 'nombramientos.division0'])
                 ->where(['nombramiento.cargo' => Globales::CARGO_JEFE])
@@ -129,11 +129,11 @@ class PadronesController extends \yii\web\Controller
                     ['division.propuesta' => $prop],
                     ['nombramiento.division' => null]
                 ])
-                ->orderBy('docente.apellido, docente.nombre')->all();
+                ->orderBy('agente.apellido, agente.nombre')->all();
     }
 
     private function getJefesPre($prop){
-        return Docente::find()
+        return Agente::find()
                 ->distinct()
                 ->joinWith(['nombramientos', 'nombramientos.division0'])
                 ->where(['nombramiento.cargo' => Globales::CARGO_JEFE])
@@ -142,22 +142,22 @@ class PadronesController extends \yii\web\Controller
                     
                 ])
                 
-                ->orderBy('docente.apellido, docente.nombre')->all();
+                ->orderBy('agente.apellido, agente.nombre')->all();
     }
 
-    private function getDocentes($prop){
-        return Docente::find()
+    private function getAgentes($prop){
+        return Agente::find()
                 ->distinct()
                 ->joinWith(['detallecatedras', 'detallecatedras.catedra0', 'detallecatedras.catedra0.division0'])
                 ->where(['detallecatedra.activo' => 1])
                 ->andWhere(['division.propuesta' => $prop])
                 
-                ->orderBy('docente.apellido, docente.nombre')->all();
+                ->orderBy('agente.apellido, agente.nombre')->all();
     }
 
     private function getOtrosDocentes($prop){
         if($prop ==1){
-             return Docente::find()
+             return Agente::find()
                 ->distinct()
                 ->joinWith(['nombramientos', 'nombramientos.division0'])
                 ->where(true)
@@ -168,9 +168,9 @@ class PadronesController extends \yii\web\Controller
                     ['division.propuesta' => $prop],
                     ['nombramiento.division' => null]
                 ])
-                ->orderBy('docente.apellido, docente.nombre')->all();
+                ->orderBy('agente.apellido, agente.nombre')->all();
         }else{
-             return Docente::find()
+             return Agente::find()
                 ->distinct()
                 ->joinWith(['nombramientos', 'nombramientos.division0'])
                 ->where(true)
@@ -179,7 +179,7 @@ class PadronesController extends \yii\web\Controller
                 ])
                 ->andWhere( 
                     ['division.propuesta' => $prop])
-                ->orderBy('docente.apellido, docente.nombre')->all();
+                ->orderBy('agente.apellido, agente.nombre')->all();
         }
        
     }
@@ -195,8 +195,8 @@ class PadronesController extends \yii\web\Controller
 
             $jefessec = $this->getJefes(1);
             $jefespre = $this->getJefespre(2);
-            $docsec = $this->getDocentes(1);
-            $docpre = $this->getDocentes(2);
+            $docsec = $this->getAgentes(1);
+            $docpre = $this->getAgentes(2);
             $precsec = $this->getPreceptores(1);
             $precpre = $this->getPreceptores(2);
             $otrosdoc = $this->getOtrosDocentes(1);
@@ -231,8 +231,8 @@ class PadronesController extends \yii\web\Controller
 
             $jefessec = $this->getJefes(1);
             $jefespre = $this->getJefespre(2);
-            $docsec = $this->getDocentes(1);
-            $docpre = $this->getDocentes(2);
+            $docsec = $this->getAgentes(1);
+            $docpre = $this->getAgentes(2);
             $precsec = $this->getPreceptores(1);
             $precpre = $this->getPreceptores(2);
             $otrosdoc = $this->getOtrosDocentes(1);
@@ -265,8 +265,8 @@ class PadronesController extends \yii\web\Controller
 
             $jefessec = $this->getJefes(1);
             $jefespre = $this->getJefespre(2);
-            $docsec = $this->getDocentes(1);
-            $docpre = $this->getDocentes(2);
+            $docsec = $this->getAgentes(1);
+            $docpre = $this->getAgentes(2);
             $precsec = $this->getPreceptores(1);
             $precpre = $this->getPreceptores(2);
             $otrosdoc = $this->getOtrosDocentes(1);
@@ -322,8 +322,8 @@ class PadronesController extends \yii\web\Controller
 
             $jefessec = $this->getJefes(1);
             $jefespre = $this->getJefespre(2);
-            $docsec = $this->getDocentes(1);
-            $docpre = $this->getDocentes(2);
+            $docsec = $this->getAgentes(1);
+            $docpre = $this->getAgentes(2);
             $precsec = $this->getPreceptores(1);
             $precpre = $this->getPreceptores(2);
             $otrosdoc = $this->getOtrosDocentes(1);
@@ -349,7 +349,7 @@ class PadronesController extends \yii\web\Controller
 
     public function actionGetall(){  
                       
-            $searchModel = new DocenteSearch();
+            $searchModel = new AgenteSearch();
             $dataProvider = $searchModel->getPadronsumarizado();
             
             return $this->render('getall',[

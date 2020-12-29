@@ -45,9 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             [
-                'label' => 'Docente',
+                'label' => 'Agente',
                 'value' => function($model){
-                    return $model->docente0->apellido.', '.$model->docente0->nombre;
+                    return $model->agente0->apellido.', '.$model->agente0->nombre;
                 }
             ],
             [

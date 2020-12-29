@@ -139,7 +139,7 @@ class NodocenteController extends Controller
             if($model->save()){
                 $user = new User();
                 $user->username = $model->mail;
-                $user->role = Globales::US_DOCENTE;
+                $user->role = Globales::US_AGENTE;
                 $user->activate = 1;
                 $user->setPassword($model->documento);
                 $user->generateAuthKey();

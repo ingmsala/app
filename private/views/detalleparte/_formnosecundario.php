@@ -9,7 +9,7 @@ use kartik\select2\Select2;
 ?>
 
 <div class="alert alert-info" role="alert">
-     <b>Nuevo</b> Se pueden marcar horas vacantes dejando el campo de "Docente" vacío y en "Tipo de Falta" marcar la opción "Hora vacante"
+     <b>Nuevo</b> Se pueden marcar horas vacantes dejando el campo de "Agente" vacío y en "Tipo de Falta" marcar la opción "Hora vacante"
     </div>
 
 <div class="detalleparte-form">
@@ -32,7 +32,7 @@ use kartik\select2\Select2;
 
     
     <?= 
-        $form->field($model, 'docente')->widget(Select2::classname(), [
+        $form->field($model, 'agente')->widget(Select2::classname(), [
             'data' => $listDocentes,
             'options' => ['placeholder' => 'Seleccionar...'],
             'pluginOptions' => [

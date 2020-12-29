@@ -20,7 +20,7 @@ $this->title = 'Seleccione una letra';
 	    <div  class="pull-right">
 	        <?php 
 	          	
-	          	//echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir Citaciones</center>', Url::to(['print', 'docente' => '', 'all' => true, 'col' => $col]), ['class' => 'btn btn-default'])
+	          	//echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir Citaciones</center>', Url::to(['print', 'agente' => '', 'all' => true, 'col' => $col]), ['class' => 'btn btn-default'])
 	        ?>
 	    </div>
 	</div>

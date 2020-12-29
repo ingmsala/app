@@ -19,8 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'docente0.apellido',
-            'docente0.nombre',
+            'agente0.apellido',
+            'agente0.nombre',
             [
                 'label' => "Espaciocurricular",
                 'attribute' => 'comision0.espaciocurricular0.actividad0.nombre',

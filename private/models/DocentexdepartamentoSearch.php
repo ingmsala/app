@@ -18,7 +18,7 @@ class DocentexdepartamentoSearch extends Docentexdepartamento
     public function rules()
     {
         return [
-            [['id', 'docente', 'funciondepto', 'activo'], 'integer'],
+            [['id', 'agente', 'funciondepto', 'activo'], 'integer'],
         ];
     }
 
@@ -59,7 +59,7 @@ class DocentexdepartamentoSearch extends Docentexdepartamento
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'docente' => $this->docente,
+            'agente' => $this->agente,
             'funciondepto' => $this->funciondepto,
             'activo' => $this->activo,
         ]);
@@ -87,7 +87,7 @@ class DocentexdepartamentoSearch extends Docentexdepartamento
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'docente' => $this->docente,
+            'agente' => $this->agente,
             'funciondepto' => $this->funciondepto,
             'activo' => $this->activo,
         ]);

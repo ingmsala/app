@@ -18,7 +18,7 @@ $this->title = $model->espaciocurricular0->actividad0->nombre.' - Comisión: '.$
 
 
     
-    <?= Html::a('<span class="glyphicon glyphicon-plus"></span> Agregar Docente', ['/optativas/docentexcomision/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+    <?= Html::a('<span class="glyphicon glyphicon-plus"></span> Agregar Agente', ['/optativas/docentexcomision/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
 
 <h3>Profesores de la Comisión</h3>
 <?= GridView::widget([
@@ -30,17 +30,17 @@ $this->title = $model->espaciocurricular0->actividad0->nombre.' - Comisión: '.$
             
             [   
                 'label' => 'Legajo',
-                'attribute' => 'docente0.legajo'
+                'attribute' => 'agente0.legajo'
             ],      
 
             [   
                 'label' => 'Apellido',
-                'attribute' => 'docente0.apellido'
+                'attribute' => 'agente0.apellido'
             ],
 
             [   
                 'label' => 'Nombre',
-                'attribute' => 'docente0.nombre'
+                'attribute' => 'agente0.nombre'
             ],
 
             [   
@@ -98,17 +98,17 @@ $this->title = $model->espaciocurricular0->actividad0->nombre.' - Comisión: '.$
             
             [   
                 'label' => 'Legajo',
-                'attribute' => 'docente0.legajo'
+                'attribute' => 'agente0.legajo'
             ],      
 
             [   
                 'label' => 'Apellido',
-                'attribute' => 'docente0.apellido'
+                'attribute' => 'agente0.apellido'
             ],
 
             [   
                 'label' => 'Nombre',
-                'attribute' => 'docente0.nombre'
+                'attribute' => 'agente0.nombre'
             ],
 
             [   

@@ -9,7 +9,7 @@ use kartik\select2\Select2;
 
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\DocenteSearch */
+/* @var $searchModel app\models\AgenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Reporte - Horas sin dictar por Docentes';
@@ -18,7 +18,7 @@ $listDocentes=ArrayHelper::map($docentes,'id', function($doc) {
             return $doc['apellido'].', '.$doc['nombre'];}
         );
 ?>
-<div class="docente-index">
+<div class="agente-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -55,7 +55,7 @@ $listDocentes=ArrayHelper::map($docentes,'id', function($doc) {
                     var mesjs = document.getElementById("cmbmes").value;
                     var docjs = document.getElementById("cmbdoc").value;
         
-                    var url = "index.php?r=reporte/parte/faltasdocentes&mes=" + mesjs + "&anio=" + aniojs + "&docente=" + docjs;
+                    var url = "index.php?r=reporte/parte/faltasdocentes&mes=" + mesjs + "&anio=" + aniojs + "&agente=" + docjs;
                     document.getElementById("btnfiltrar").href = url;
 
         ',
@@ -74,7 +74,7 @@ $listDocentes=ArrayHelper::map($docentes,'id', function($doc) {
                     var mesjs = document.getElementById("cmbmes").value;
                     var docjs = document.getElementById("cmbdoc").value;
                     
-                    var url = "index.php?r=reporte/parte/faltasdocentes&mes=" + mesjs + "&anio=" + aniojs + "&docente=" + docjs;
+                    var url = "index.php?r=reporte/parte/faltasdocentes&mes=" + mesjs + "&anio=" + aniojs + "&agente=" + docjs;
                     document.getElementById("btnfiltrar").href = url;
 
         ',
@@ -86,9 +86,9 @@ $listDocentes=ArrayHelper::map($docentes,'id', function($doc) {
     <?= 
 
         Select2::widget([
-        'name' => 'docente',
+        'name' => 'agente',
         'data' => $listDocentes,
-        'value' => $docente,
+        'value' => $agente,
         'options' => ['placeholder' => '(Todos)', 'id' => 'cmbdoc'],
         'pluginOptions' => [
             'allowClear' => true
@@ -99,7 +99,7 @@ $listDocentes=ArrayHelper::map($docentes,'id', function($doc) {
                     var mesjs = document.getElementById("cmbmes").value;
                     var docjs = document.getElementById("cmbdoc").value;
                     
-                    var url = "index.php?r=reporte/parte/faltasdocentes&mes=" + mesjs + "&anio=" + aniojs + "&docente=" + docjs;
+                    var url = "index.php?r=reporte/parte/faltasdocentes&mes=" + mesjs + "&anio=" + aniojs + "&agente=" + docjs;
                     document.getElementById("btnfiltrar").href = url;
                        
                 }',
@@ -178,7 +178,7 @@ $listDocentes=ArrayHelper::map($docentes,'id', function($doc) {
                     var mesjs = document.getElementById("cmbmes").value;
                     var docjs = document.getElementById("cmbdoc").value;
                     
-                    var url = "index.php?r=reporte/parte/faltasdocentes&mes=" + mesjs + "&anio=" + aniojs + "&docente=" + docjs;
+                    var url = "index.php?r=reporte/parte/faltasdocentes&mes=" + mesjs + "&anio=" + aniojs + "&agente=" + docjs;
             document.getElementById("btnfiltrar").href = url;
     });'
 

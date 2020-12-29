@@ -216,8 +216,8 @@ class ComisionController extends Controller
                     ->all();
                 }else{
                     $comisiones = Docentexcomision::find()
-                    ->joinWith(['docente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
-                    ->where(['docente.mail' => Yii::$app->user->identity->username])
+                    ->joinWith(['agente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
+                    ->where(['agente.mail' => Yii::$app->user->identity->username])
                     ->andWhere(['espaciocurricular.aniolectivo' => $anio_id])
                     ->andWhere(['espaciocurricular.tipoespacio' => 1])
                     ->orderBy('actividad.nombre', 'espaciocurricular.nombre')

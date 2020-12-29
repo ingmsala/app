@@ -7,7 +7,7 @@ use kartik\grid\GridView;
 /* @var $searchModel app\models\NodocenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Personal No docente';
+$this->title = 'Personal No agente';
 
 ?>
 <div class="nodocente-index">
@@ -59,7 +59,7 @@ $this->title = 'Personal No docente';
 
         'toolbar'=>[
             ['content' => 
-                Html::a('Agregar No docente', ['create'], ['class' => 'btn btn-success'])
+                Html::a('Agregar No agente', ['create'], ['class' => 'btn btn-success'])
 
             ],
             '{export}',

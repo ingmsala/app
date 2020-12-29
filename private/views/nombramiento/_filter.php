@@ -43,10 +43,10 @@ use kartik\date\DatePicker;
                                 }
                             }
 
-                            if(isset($param['Nombramiento']['docente'])){
-                                if($param['Nombramiento']['docente']!=''){
+                            if(isset($param['Nombramiento']['agente'])){
+                                if($param['Nombramiento']['agente']!=''){
                                     $filtro = true;
-                                    echo '<b> - Docente: </b>'.$listdocentes[$param['Nombramiento']['docente']];
+                                    echo '<b> - Agente: </b>'.$listdocentes[$param['Nombramiento']['agente']];
                                     
                                 }
                             }
@@ -125,13 +125,13 @@ use kartik\date\DatePicker;
 
                             <?= 
                                 
-                                $form->field($model, 'docente')->widget(Select2::classname(), [
+                                $form->field($model, 'agente')->widget(Select2::classname(), [
                                     'data' => $listdocentes,
                                     'options' => ['placeholder' => 'Seleccionar...'],
                                     'pluginOptions' => [
                                         'allowClear' => true
                                     ],
-                                ])->label("Docente");
+                                ])->label("Agente");
 
                             ?>
 

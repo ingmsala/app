@@ -11,13 +11,13 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\DetalleCatedra */
 
-$docente = $model->apellido.', '.$model->nombre;
-$this->title = $docente;
+$agente = $model->apellido.', '.$model->nombre;
+$this->title = $agente;
 ?>
 <div class="detalle-catedra-view">
 
     <?php $this->registerJs("document.getElementById('modalHeader').innerHTML ='".
-    'Docente: '.$model->apellido.', '.$model->nombre."';", View::POS_END, 'my-options'); ?>
+    'Agente: '.$model->apellido.', '.$model->nombre."';", View::POS_END, 'my-options'); ?>
 
 
     <?= GridView::widget([
@@ -32,13 +32,13 @@ $this->title = $docente;
         },
         'panel' => [
             'type' => GridView::TYPE_DEFAULT,
-            'heading' => Html::encode('Detalle Ausencias: '). $docente,
+            'heading' => Html::encode('Detalle Ausencias: '). $agente,
             //'beforeOptions' => ['class'=>'kv-panel-before'],
         ],
         
         'toolbar'=>[
             ['content' => 
-                Html::a('<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Imprimir', Url::to(['all', 'docente' => $model->id]), ['class' => 'btn btn-default'])
+                Html::a('<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Imprimir', Url::to(['all', 'agente' => $model->id]), ['class' => 'btn btn-default'])
 
             ],
            

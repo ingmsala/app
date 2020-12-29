@@ -19,7 +19,7 @@ use Yii;
  * @property string $fechaFin
  * @property int $activo
  *
- * @property Docente $docente0
+ * @property Agente $agente0
  * @property Catedra $catedra0
  * @property Condicion $condicion0
  * @property Revista $revista0
@@ -42,11 +42,11 @@ class Detallecatedra extends \yii\db\ActiveRecord
     {
       
         return [
-            [['docente', 'catedra', 'condicion', 'revista', 'hora'], 'required'],
-            [['docente', 'catedra', 'condicion', 'revista', 'hora', 'aniolectivo'], 'integer'],
+            [['agente', 'catedra', 'condicion', 'revista', 'hora'], 'required'],
+            [['agente', 'catedra', 'condicion', 'revista', 'hora', 'aniolectivo'], 'integer'],
             [['fechaInicio', 'fechaFin', 'resolucion'], 'safe'],
             /*['hora', 'compare', 'compareValue' => Catedra::findOne($_REQUEST['catedra'])->actividad0->cantHoras, 'operator' => '<=', 'type' => 'number'],*/
-            [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
+            [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
             [['catedra'], 'exist', 'skipOnError' => true, 'targetClass' => Catedra::className(), 'targetAttribute' => ['catedra' => 'id']],
             [['condicion'], 'exist', 'skipOnError' => true, 'targetClass' => Condicion::className(), 'targetAttribute' => ['condicion' => 'id']],
             [['revista'], 'exist', 'skipOnError' => true, 'targetClass' => Revista::className(), 'targetAttribute' => ['revista' => 'id']],
@@ -61,7 +61,7 @@ class Detallecatedra extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'docente' => 'Docente',
+            'agente' => 'Agente',
             'catedra' => 'Catedra',
             'condicion' => 'Condicion',
             'revista' => 'Revista',
@@ -76,9 +76,9 @@ class Detallecatedra extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocente0()
+    public function getAgente0()
     {
-        return $this->hasOne(Docente::className(), ['id' => 'docente']);
+        return $this->hasOne(Agente::className(), ['id' => 'agente']);
     }
 
     /**

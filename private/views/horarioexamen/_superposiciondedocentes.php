@@ -39,7 +39,7 @@ $this->title = 'Docentes con horas superpuestas';
                      
             
             [
-                'label' => 'Docente',
+                'label' => 'Agente',
                 'value' => function($model){
                     return $model['apellido'].', '.$model['nombre'];
                 }
@@ -58,7 +58,7 @@ $this->title = 'Docentes con horas superpuestas';
                     'viewdetcat' => function($url, $model, $key) use ($col){
                         return Html::a(
                             '<span class="glyphicon glyphicon-eye-open"></span>',
-                            '?r=horarioexamen/completoxdocente&docente='.$model['id'].'&col='.$col);
+                            '?r=horarioexamen/completoxdocente&agente='.$model['id'].'&col='.$col);
                     },
 
                     

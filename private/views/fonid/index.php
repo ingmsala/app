@@ -49,16 +49,16 @@ if($fonidfecha>0){
                         [
                             'label' => 'Apellido',
                             'value' => function() use($modelok) {
-                                if($modelok->docente0 != null){
-                                    return $modelok->docente0->apellido;
+                                if($modelok->agente0 != null){
+                                    return $modelok->agente0->apellido;
                                 }
                             }
                         ],
                         [
                             'label' => 'Nombre',
                             'value' => function() use($modelok) {
-                                if($modelok->docente0 != null){
-                                    return $modelok->docente0->nombre;
+                                if($modelok->agente0 != null){
+                                    return $modelok->agente0->nombre;
                                 }
                             }
                         ],
@@ -138,16 +138,16 @@ if($fonidfecha>0){
             [
                 'label' => 'Apellido',
                 'value' => function($modelok) {
-                    if($modelok->docente0 != null){
-                        return $modelok->docente0->apellido;
+                    if($modelok->agente0 != null){
+                        return $modelok->agente0->apellido;
                     }
                 }
             ],
             [
                 'label' => 'Nombre',
                 'value' => function($modelok) {
-                    if($modelok->docente0 != null){
-                        return $modelok->docente0->nombre;
+                    if($modelok->agente0 != null){
+                        return $modelok->agente0->nombre;
                     }
                 }
             ],

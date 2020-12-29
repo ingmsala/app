@@ -18,7 +18,7 @@ class ClasediariaSearch extends Clasediaria
     public function rules()
     {
         return [
-            [['id', 'catedra', 'temaunidad', 'tipodesarrollo', 'docente', 'modalidadclase'], 'integer'],
+            [['id', 'catedra', 'temaunidad', 'tipodesarrollo', 'agente', 'modalidadclase'], 'integer'],
             [['fecha', 'fechacarga', 'observaciones'], 'safe'],
         ];
     }
@@ -68,7 +68,7 @@ class ClasediariaSearch extends Clasediaria
             'tipodesarrollo' => $this->tipodesarrollo,
             'fecha' => $this->fecha,
             'fechacarga' => $this->fechacarga,
-            'docente' => $this->docente,
+            'agente' => $this->agente,
             'modalidadclase' => $this->modalidadclase,
         ]);
 

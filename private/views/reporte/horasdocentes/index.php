@@ -7,13 +7,13 @@ use yii\helpers\Url;
 
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\DocenteSearch */
+/* @var $searchModel app\models\AgenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Reporte - Horas por Docentes';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="docente-index">
+<div class="agente-index">
 
    
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

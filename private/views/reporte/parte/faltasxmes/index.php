@@ -11,13 +11,13 @@ use yii\widgets\Pjax;
 
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\DocenteSearch */
+/* @var $searchModel app\models\AgenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Reporte - Faltas por Mes y año';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="docente-index">
+<div class="agente-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

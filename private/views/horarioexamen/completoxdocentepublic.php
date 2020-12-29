@@ -32,7 +32,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 	    <div  class="pull-right">
 	        <?php 
 	          	
-	          	echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center>', Url::to(['print', 'docente' => $docenteparam->id, 'all' => false, 'col' => $col]), ['class' => 'btn btn-default'])
+	          	echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center>', Url::to(['print', 'agente' => $docenteparam->id, 'all' => false, 'col' => $col]), ['class' => 'btn btn-default'])
 	        ?>
 	    </div>
 	</div>
@@ -46,7 +46,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
     <div class='row' style="padding-bottom: 20px;">
     	
     	<div class="col-md-12"><center><h4>
-    		<?= (true) ? Html::encode('Docente: '.$docenteparam->apellido.', '.$docenteparam->nombre) : '' ?>
+    		<?= (true) ? Html::encode('Agente: '.$docenteparam->apellido.', '.$docenteparam->nombre) : '' ?>
     	</h4></center></div>
 
     </div>

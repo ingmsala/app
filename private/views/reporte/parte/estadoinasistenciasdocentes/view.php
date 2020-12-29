@@ -10,13 +10,13 @@ use miloschuman\highcharts\Highcharts;
 /* @var $this yii\web\View */
 /* @var $model app\models\DetalleCatedra */
 
-$docente = $model->apellido.', '.$model->nombre;
+$agente = $model->apellido.', '.$model->nombre;
 
 ?>
 <div class="detalle-catedra-view">
 
     <?php $this->registerJs("document.getElementById('modalHeader').innerHTML ='".
-    'Docente: '.$model->apellido.', '.$model->nombre."';", View::POS_END, 'my-options'); ?>
+    'Agente: '.$model->apellido.', '.$model->nombre."';", View::POS_END, 'my-options'); ?>
 
 
     <?= GridView::widget([

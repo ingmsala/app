@@ -5,7 +5,7 @@ namespace app\controllers;
 use app\config\Globales;
 use app\models\Actividad;
 use app\models\Actividadxmesa;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Espacio;
 use Yii;
 use app\models\Mesaexamen;
@@ -38,7 +38,7 @@ class MesaexamenController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_PRECEPTOR, Globales::US_REGENCIA, Globales::US_SECRETARIA, Globales::US_HORARIO, Globales::US_CONSULTA, Globales::US_PRECEPTORIA]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_PRECEPTOR, Globales::US_REGENCIA, Globales::US_SECRETARIA, Globales::US_HORARIO, Globales::US_CONSULTA, Globales::US_PRECEPTORIA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -47,7 +47,7 @@ class MesaexamenController extends Controller
                     ],
 
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'actions' => ['view', 'create', 'update', 'delete'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -75,9 +75,9 @@ class MesaexamenController extends Controller
      */
     public function actionIndex($turno, $all = 0)
     {
-        if(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+        if(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_PRECEPTOR])){
             $this->layout = 'mainpersonal';
-            $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
         }
         else{
             $this->layout = 'main';
@@ -122,7 +122,7 @@ class MesaexamenController extends Controller
 
         $turnosexamen = Turnoexamen::find()->all();
         $espacios = Espacio::find()->all();
-        $docentes = Docente::find()->all();
+        $docentes = Agente::find()->all();
         $actividades = Actividad::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -139,7 +139,7 @@ class MesaexamenController extends Controller
             foreach ($doc as $d) {
                 $tribunal = new Tribunal();
                 $tribunal->mesaexamen = $model->id;
-                $tribunal->docente = $d;
+                $tribunal->agente = $d;
                 $tribunal->save();
             }
 
@@ -177,7 +177,7 @@ class MesaexamenController extends Controller
 
         $turnosexamen = Turnoexamen::find()->all();
         $espacios = Espacio::find()->all();
-        $docentes = Docente::find()->all();
+        $docentes = Agente::find()->all();
         $actividades = Actividad::find()->all();
 
         $actividadesxmesa = Actividadxmesa::find()->where(['mesaexamen' => $id])->all();
@@ -204,7 +204,7 @@ class MesaexamenController extends Controller
             foreach ($doc as $d) {
                 $tribunal = new Tribunal();
                 $tribunal->mesaexamen = $model->id;
-                $tribunal->docente = $d;
+                $tribunal->agente = $d;
                 $tribunal->save();
             }
 
@@ -245,6 +245,29 @@ class MesaexamenController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionEnviarrecordatorio(){
+
+        $ahora = time();
+        $unDiaEnSegundos = 24 * 60 * 60;
+        $manana = $ahora + $unDiaEnSegundos;
+        $mananaLegible = date("Y-m-d", $manana);
+
+        $mesatomorrow = Mesaexamen::find()->where(['fecha' => $mananaLegible]);
+
+        foreach ($agentes as $agente) {
+            
+            $sendemail=Yii::$app->mailer->compose()
+                        
+                        ->setFrom([Globales::MAIL => 'Colegio Monserrat DOC3'])
+                        ->setTo('msala@unc.edu.ar')
+                        ->setSubject('Feliz cumple')
+                        ->setHtmlBody('<img style="border: 0;display: block;height: auto;width: 100%;max-width: 480px;" alt="<Feliz cumpleaños" width="480" src="https://admin.cnm.unc.edu.ar/front/assets/images/fc.jpg" />')
+                        ->send();
+        
+        
+        }
     }
 
     /**

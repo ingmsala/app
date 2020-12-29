@@ -107,10 +107,10 @@ use yii\helpers\Url;
                             
                             
                                 $detalles1 = Detallemodulo::find()
-                                        ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                                        ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                                         ->where(['habilitacionce' => $model->grupodivision0->habilitacionce])
                                         ->andWhere(['moduloclase' => $model->moduloclase])
-                                        ->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                                        ->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                                         //->andWhere(['is', 'detallecatedra', null])
                                         ->all();
                                 //return var_dump($detallesotromod);
@@ -119,22 +119,22 @@ use yii\helpers\Url;
                                     return 'Inscripto';
                                 
                                 $detalles1 = Detallemodulo::find()
-                                        ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                                        ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                                         ->where(['habilitacionce.fecha' => $model->grupodivision0->habilitacionce0->fecha])
                                         ->andWhere(['<>', 'habilitacionce.division', $model->grupodivision0->habilitacionce0->division])
                                         ->andWhere(['moduloclase' => $model->moduloclase])
-                                        ->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                                        ->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                                         //->andWhere(['is', 'detallecatedra', null])
                                         ->all();
                                 if(count($detalles1)>0)  
                                     return 'No puede anotarse, ya está en otra división en este módulo';   
                                 
                                 $detalles1 = Detallemodulo::find()
-                                        ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                                        ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                                         ->where(['habilitacionce' => $model->grupodivision0->habilitacionce])
                                         //->andWhere(['<>', 'habilitacionce.division', $model->grupodivision0->habilitacionce0->division])
                                         ->andWhere(['<>', 'moduloclase', $model->moduloclase])
-                                        ->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                                        ->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                                         //->andWhere(['is', 'detallecatedra', null])
                                         ->all();
                                 
@@ -142,11 +142,11 @@ use yii\helpers\Url;
                                     return 'No puede anotarse en más de un módulo en esta división';
         
                                 $detalles1 = Detallemodulo::find()
-                                        ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                                        ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                                         ->where(['habilitacionce' => $model->grupodivision0->habilitacionce])
                                         //->andWhere(['<>', 'habilitacionce.division', $model->grupodivision0->habilitacionce0->division])
                                         ->andWhere(['moduloclase' => $model->moduloclase])
-                                        //->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                                        //->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                                         ->andWhere(['is', 'detallecatedra', null])
                                         ->all();
         
@@ -167,10 +167,10 @@ use yii\helpers\Url;
         
         
                             $detalles1 = Detallemodulo::find()
-                                        ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                                        ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                                         ->where(['habilitacionce' => $model->grupodivision0->habilitacionce])
                                         ->andWhere(['moduloclase' => $model->moduloclase])
-                                        ->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                                        ->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                                         //->andWhere(['is', 'detallecatedra', null])
                                         ->all();
                                 //return var_dump($detallesotromod);
@@ -180,22 +180,22 @@ use yii\helpers\Url;
         
                             
                             $detalles1 = Detallemodulo::find()
-                                    ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                                    ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                                     ->where(['habilitacionce.fecha' => $model->grupodivision0->habilitacionce0->fecha])
                                     ->andWhere(['<>', 'habilitacionce.division', $model->grupodivision0->habilitacionce0->division])
                                     ->andWhere(['moduloclase' => $model->moduloclase])
-                                    ->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                                    ->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                                     //->andWhere(['is', 'detallecatedra', null])
                                     ->all();
                             if(count($detalles1)>0)  
                                 return '';   
                             
                             $detalles1 = Detallemodulo::find()
-                                    ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                                    ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                                     ->where(['habilitacionce' => $model->grupodivision0->habilitacionce])
                                     //->andWhere(['<>', 'habilitacionce.division', $model->grupodivision0->habilitacionce0->division])
                                     ->andWhere(['<>', 'moduloclase', $model->moduloclase])
-                                    ->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                                    ->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                                     //->andWhere(['is', 'detallecatedra', null])
                                     ->all();
                             
@@ -203,11 +203,11 @@ use yii\helpers\Url;
                                 return '';
         
                             $detalles1 = Detallemodulo::find()
-                                    ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                                    ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                                     ->where(['habilitacionce' => $model->grupodivision0->habilitacionce])
                                     //->andWhere(['<>', 'habilitacionce.division', $model->grupodivision0->habilitacionce0->division])
                                     ->andWhere(['moduloclase' => $model->moduloclase])
-                                    //->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                                    //->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                                     ->andWhere(['is', 'detallecatedra', null])
                                     ->all();
         
@@ -293,10 +293,10 @@ use yii\helpers\Url;
                     
                     
                         $detalles1 = Detallemodulo::find()
-                                ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                                ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                                 ->where(['habilitacionce' => $model->grupodivision0->habilitacionce])
                                 ->andWhere(['moduloclase' => $model->moduloclase])
-                                ->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                                ->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                                 //->andWhere(['is', 'detallecatedra', null])
                                 ->all();
                         //return var_dump($detallesotromod);
@@ -305,22 +305,22 @@ use yii\helpers\Url;
                             return 'Inscripto';
                         
                         $detalles1 = Detallemodulo::find()
-                                ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                                ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                                 ->where(['habilitacionce.fecha' => $model->grupodivision0->habilitacionce0->fecha])
                                 ->andWhere(['<>', 'habilitacionce.division', $model->grupodivision0->habilitacionce0->division])
                                 ->andWhere(['moduloclase' => $model->moduloclase])
-                                ->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                                ->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                                 //->andWhere(['is', 'detallecatedra', null])
                                 ->all();
                         if(count($detalles1)>0)  
                             return 'No puede anotarse, ya está en otra división en este módulo';   
                         
                         $detalles1 = Detallemodulo::find()
-                                ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                                ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                                 ->where(['habilitacionce' => $model->grupodivision0->habilitacionce])
                                 //->andWhere(['<>', 'habilitacionce.division', $model->grupodivision0->habilitacionce0->division])
                                 ->andWhere(['<>', 'moduloclase', $model->moduloclase])
-                                ->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                                ->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                                 //->andWhere(['is', 'detallecatedra', null])
                                 ->all();
                         
@@ -328,11 +328,11 @@ use yii\helpers\Url;
                             return 'No puede anotarse en más de un módulo en esta división';
 
                         $detalles1 = Detallemodulo::find()
-                                ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                                ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                                 ->where(['habilitacionce' => $model->grupodivision0->habilitacionce])
                                 //->andWhere(['<>', 'habilitacionce.division', $model->grupodivision0->habilitacionce0->division])
                                 ->andWhere(['moduloclase' => $model->moduloclase])
-                                //->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                                //->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                                 ->andWhere(['is', 'detallecatedra', null])
                                 ->all();
 
@@ -353,10 +353,10 @@ use yii\helpers\Url;
 
 
                     $detalles1 = Detallemodulo::find()
-                                ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                                ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                                 ->where(['habilitacionce' => $model->grupodivision0->habilitacionce])
                                 ->andWhere(['moduloclase' => $model->moduloclase])
-                                ->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                                ->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                                 //->andWhere(['is', 'detallecatedra', null])
                                 ->all();
                         //return var_dump($detallesotromod);
@@ -366,22 +366,22 @@ use yii\helpers\Url;
 
                     
                     $detalles1 = Detallemodulo::find()
-                            ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                            ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                             ->where(['habilitacionce.fecha' => $model->grupodivision0->habilitacionce0->fecha])
                             ->andWhere(['<>', 'habilitacionce.division', $model->grupodivision0->habilitacionce0->division])
                             ->andWhere(['moduloclase' => $model->moduloclase])
-                            ->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                            ->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                             //->andWhere(['is', 'detallecatedra', null])
                             ->all();
                     if(count($detalles1)>0)  
                         return '';   
                     
                     $detalles1 = Detallemodulo::find()
-                            ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                            ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                             ->where(['habilitacionce' => $model->grupodivision0->habilitacionce])
                             //->andWhere(['<>', 'habilitacionce.division', $model->grupodivision0->habilitacionce0->division])
                             ->andWhere(['<>', 'moduloclase', $model->moduloclase])
-                            ->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                            ->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                             //->andWhere(['is', 'detallecatedra', null])
                             ->all();
                     
@@ -389,11 +389,11 @@ use yii\helpers\Url;
                         return '';
 
                     $detalles1 = Detallemodulo::find()
-                            ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.docente0'])
+                            ->joinWith(['grupodivision0.habilitacionce0', 'grupodivision0.habilitacionce0.division0', 'detallecatedra0.agente0'])
                             ->where(['habilitacionce' => $model->grupodivision0->habilitacionce])
                             //->andWhere(['<>', 'habilitacionce.division', $model->grupodivision0->habilitacionce0->division])
                             ->andWhere(['moduloclase' => $model->moduloclase])
-                            //->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
+                            //->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])
                             ->andWhere(['is', 'detallecatedra', null])
                             ->all();
 

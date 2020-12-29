@@ -19,7 +19,7 @@ $listhorarioclaseespaciales=ArrayHelper::map($horarioclaseespaciales,'id',functi
 
 $listcatedras=ArrayHelper::map($detallecatedras,'id',function($dc){
     
-    $doc = $dc->docente0->apellido.', '.$dc->docente0->nombre;
+    $doc = $dc->agente0->apellido.', '.$dc->agente0->nombre;
     
     return $dc->catedra0->actividad0->nombre.' - '.$doc;
 });
@@ -71,7 +71,7 @@ $form->field($model, 'detallecatedra')->widget(Select2::classname(), [
     'pluginOptions' => [
         'allowClear' => true
     ],
-])->label("Materia - Docente");
+])->label("Materia - Agente");
 
 ?>
 

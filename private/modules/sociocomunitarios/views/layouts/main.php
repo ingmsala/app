@@ -151,7 +151,7 @@ AppAsset::register($this);
                         ]
                     
                 ];
-            }else if(in_array(Yii::$app->user->identity->role, [Globales::US_DOCENTE])){
+            }else if(in_array(Yii::$app->user->identity->role, [Globales::US_AGENTE])){
                 $items = [
                     
                         ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/personal/menuprincipal']],

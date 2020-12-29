@@ -63,10 +63,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             }
 
-                            if(isset($param['Catedra']['docente'])){
-                                if($param['Catedra']['docente']!=''){
+                            if(isset($param['Catedra']['agente'])){
+                                if($param['Catedra']['agente']!=''){
                                     $filter = true;
-                                    echo '<b> - Docente: </b>'.$listDocentes[$param['Catedra']['docente']];
+                                    echo '<b> - Agente: </b>'.$listDocentes[$param['Catedra']['agente']];
                                     
                                 }
                             }
@@ -187,12 +187,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'label' => 'Apellido',
-                'attribute' => 'docente0.apellido',
+                'attribute' => 'agente0.apellido',
             ],
 
             [
                 'label' => 'Nombre',
-                'attribute' => 'docente0.nombre',
+                'attribute' => 'agente0.nombre',
             ],
 
             [
@@ -212,7 +212,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'label' => 'Suplente',
-                'attribute' => 'suplente0.docente0.apellido',
+                'attribute' => 'suplente0.agente0.apellido',
             ],
 
              [

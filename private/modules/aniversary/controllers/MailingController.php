@@ -4,8 +4,8 @@ namespace app\modules\aniversary\controllers;
 
 use app\config\Globales;
 use app\models\Detallecatedra;
-use app\models\Docente;
-use app\models\Nodocente;
+use app\models\Agente;
+use app\models\Agentextipo;
 use app\models\Nombramiento;
 use app\models\User;
 use Yii;
@@ -93,62 +93,44 @@ class MailingController extends Controller
 
         $array = [];
         foreach ($nombramientos as $nom) {
-            $array [$nom->docente0->documento] = $nom->docente0->documento;
+            $array [$nom->agente0->documento] = $nom->agente0->documento;
         }
 
         $detallecatedras = Detallecatedra::find()->where(['activo' => 1])->all();
 
         foreach ($detallecatedras as $dc) {
-            $array [$dc->docente0->documento] = $dc->docente0->documento;
+            $array [$dc->agente0->documento] = $dc->agente0->documento;
         }
 
-        $nodocentes = Nodocente::find()->all();
+        $nodocentes = Agentextipo::find()->where(['tipocargo' => 2])->all();
 
-        foreach ($nodocentes as $nodocente) {
-            $arraynodoc [$nodocente->documento] = $nodocente->documento;
+        foreach ($nodocentes as $nodoc) {
+            $array [$nodoc->agente0->documento] = $nodoc->agente0->documento;
         }
 
-        $docentes = Docente::find()
+        $agentes = Agente::find()
             ->where(['apellido' => 'GUERRA'])
             //->where(['=','day(fechanac)', date('d')])
             //->andWhere(['=','month(fechanac)', date('m')])
             ->andWhere(['in', 'documento', $array])
             ->all();
 
-        $nodocentes = Nodocente::find()
-            ->where(['apellido' => 'GUERRA'])
-            //->where(['=','day(fechanac)', date('d')])
-            //->andWhere(['=','month(fechanac)', date('m')])
-            ->andWhere(['in', 'documento', $array])
-            ->all();
-        //return var_dump($docentes);
-        //$array2 = [];
-        foreach ($docentes as $doc) {
-            if(!in_array($doc->documento, $arraynodoc)){
+        
+
+        foreach ($agentes as $agente) {
+            
                 $sendemail=Yii::$app->mailer->compose()
                             
-                            ->setFrom([Globales::MAIL2 => 'Colegio Monserrat DOC3'])
+                            ->setFrom([Globales::MAIL => 'Colegio Monserrat DOC3'])
                             ->setTo('msala@unc.edu.ar')
                             ->setSubject('Feliz cumple')
                             ->setHtmlBody('<img style="border: 0;display: block;height: auto;width: 100%;max-width: 480px;" alt="<Feliz cumpleaños" width="480" src="https://admin.cnm.unc.edu.ar/front/assets/images/fc.jpg" />')
                             ->send();
-            }
-                //$array2[$doc->documento] = $doc->documento;
+            
             
         }
 
-        foreach ($nodocentes as $nodoc) {
-                    
-            $sendemail=Yii::$app->mailer->compose()
-                            
-                            ->setFrom([Globales::MAIL2 => 'Colegio Monserrat NO3'])
-                            ->setTo('msala@unc.edu.ar')
-                            ->setSubject('Feliz cumple')
-                            ->setHtmlBody('<img style="border: 0;display: block;height: auto;width: 100%;max-width: 480px;" alt="<Feliz cumpleaños" width="480" src="https://admin.cnm.unc.edu.ar/front/assets/images/fc.jpg" />')
-                            ->send();
-        }
-
-        //return var_dump($array2);
+        
 
 
     }

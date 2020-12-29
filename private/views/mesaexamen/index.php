@@ -12,16 +12,16 @@ use yii\helpers\Url;
 /* @var $searchModel app\models\MesaexamenSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = $turnoex->nombre;
+$this->title = 'Horario de previas';
 
 ?>
 <div class="mesaexamen-index">
 
     <?php
         if($all == 1){
-            $a = Html::a('Filtrar mis mesas', Url::to('index.php?r=mesaexamen&turno=1&all=0'), ['class' => 'btn btn-success']);
+            $a = Html::a('Filtrar mis mesas', Url::to('index.php?r=mesaexamen&turno='.$turnoex->id.'&all=0'), ['class' => 'btn btn-success']);
         }else{
-            $a = Html::a('Ver todo el turno', Url::to('index.php?r=mesaexamen&turno=1&all=1'), ['class' => 'btn btn-success']);
+            $a = Html::a('Ver todo el turno', Url::to('index.php?r=mesaexamen&turno='.$turnoex->id.'&all=1'), ['class' => 'btn btn-success']);
         }
     ?>
 
@@ -84,13 +84,13 @@ $this->title = $turnoex->nombre;
             
                                 foreach ($trib as $tribunal) {
                                     try {
-                                        if($doc->documento == $tribunal->docente0->documento){
-                                            $salida .= '<li><span style="background-color: #FFaaFF;">'.$tribunal->docente0->apellido.', '.substr(ltrim($tribunal->docente0->nombre),0,1).'</span></li>';
+                                        if($doc->documento == $tribunal->agente0->documento){
+                                            $salida .= '<li><span style="background-color: #FFaaFF;">'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</span></li>';
                                         }else{
-                                            $salida .= '<li>'.$tribunal->docente0->apellido.', '.substr(ltrim($tribunal->docente0->nombre),0,1).'</li>';
+                                            $salida .= '<li>'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</li>';
                                         }
                                     } catch (\Throwable $th) {
-                                        $salida .= '<li>'.$tribunal->docente0->apellido.', '.substr(ltrim($tribunal->docente0->nombre),0,1).'</li>';
+                                        $salida .= '<li>'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</li>';
                                     }
                                     
             
@@ -145,7 +145,7 @@ $this->title = $turnoex->nombre;
         //'filterModel' => $searchModel,
         'panel' => [
             'type' => GridView::TYPE_DEFAULT,
-            'heading' => Html::encode($this->title),
+            'heading' => Html::encode($turnoex->nombre),
             //'beforeOptions' => ['class'=>'kv-panel-before'],
         ],
         'summary' => false,
@@ -153,7 +153,7 @@ $this->title = $turnoex->nombre;
         'exportConfig' => [
             GridView::PDF => [
                 'label' => 'PDF',
-                'filename' =>Html::encode($this->title),
+                'filename' =>Html::encode($turnoex->nombre),
                 'config' => [
                     'methods' => [
                         'SetHeader' => [
@@ -226,13 +226,13 @@ $this->title = $turnoex->nombre;
 
                     foreach ($trib as $tribunal) {
                         try {
-                            if($doc->documento == $tribunal->docente0->documento){
-                                $salida .= '<li><span style="background-color: #FFaaFF;">'.$tribunal->docente0->apellido.', '.substr(ltrim($tribunal->docente0->nombre),0,1).'</span></li>';
+                            if($doc->documento == $tribunal->agente0->documento){
+                                $salida .= '<li><span style="background-color: #FFaaFF;">'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</span></li>';
                             }else{
-                                $salida .= '<li>'.$tribunal->docente0->apellido.', '.substr(ltrim($tribunal->docente0->nombre),0,1).'</li>';
+                                $salida .= '<li>'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</li>';
                             }
                         } catch (\Throwable $th) {
-                            $salida .= '<li>'.$tribunal->docente0->apellido.', '.substr(ltrim($tribunal->docente0->nombre),0,1).'</li>';
+                            $salida .= '<li>'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</li>';
                         }
                         
 
@@ -248,7 +248,7 @@ $this->title = $turnoex->nombre;
             [
                 'class' => 'kartik\grid\ActionColumn',
 
-                'template' => '{view} {update} {delete}',
+                'template' => '{update} {delete}',
 
                 'visible' => in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]),
                 'buttons' => [

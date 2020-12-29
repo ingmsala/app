@@ -11,7 +11,7 @@ use Yii;
  * @property int $docente
  * @property int $mesaexamen
  *
- * @property Docente $docente0
+ * @property Agente $agente0
  * @property Mesaexamen $mesaexamen0
  */
 class Tribunal extends \yii\db\ActiveRecord
@@ -30,9 +30,9 @@ class Tribunal extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['docente', 'mesaexamen'], 'required'],
-            [['docente', 'mesaexamen'], 'integer'],
-            [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
+            [['agente', 'mesaexamen'], 'required'],
+            [['agente', 'mesaexamen'], 'integer'],
+            [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
             [['mesaexamen'], 'exist', 'skipOnError' => true, 'targetClass' => Mesaexamen::className(), 'targetAttribute' => ['mesaexamen' => 'id']],
         ];
     }
@@ -44,7 +44,7 @@ class Tribunal extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'docente' => 'Docente',
+            'agente' => 'Agente',
             'mesaexamen' => 'Mesaexamen',
         ];
     }
@@ -52,9 +52,9 @@ class Tribunal extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocente0()
+    public function getAgente0()
     {
-        return $this->hasOne(Docente::className(), ['id' => 'docente']);
+        return $this->hasOne(Agente::className(), ['id' => 'agente']);
     }
 
     /**

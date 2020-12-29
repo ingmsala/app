@@ -52,7 +52,7 @@ $listdivisiones=ArrayHelper::map($divisiones,'id','nombre');
         echo '<label class="control-label">Tipo</label>';
         echo Select2::widget([
             'name' => 'tipo',
-            'data' => [1 => "COVID-19", 2 => "Paro docente", 3 => "Otro"],
+            'data' => [1 => "COVID-19", 2 => "Paro agente", 3 => "Otro"],
             'options' => [
                 'placeholder' => 'Seleccionar...',
                 

@@ -31,7 +31,7 @@ $this->title = 'Docentes con horas superpuestas';
                 'label' => 'Ver',
                 'format' => 'raw',
                 'value' => function($model){
-                    return Html::a('<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>', $url = '?r=horario/completoxdocente&docente='.$model['id']);
+                    return Html::a('<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>', $url = '?r=horario/completoxdocente&agente='.$model['id']);
                 }
             ],
         ],

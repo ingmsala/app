@@ -25,12 +25,38 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
             'nombre',
-            'desde',
-            'hasta',
-            'tipoturno',
-            //'activo',
+            [
+                'label' => 'Desde',
+                'attribute' => 'desde',
+                'format' => 'raw',
+                'value' => function($model){
+                   date_default_timezone_set('America/Argentina/Buenos_Aires');
+                   return Yii::$app->formatter->asDate($model['desde'], 'dd/MM/yyyy');
+                }
+            ],
+            [
+                'label' => 'Hasta',
+                'attribute' => 'hasta',
+                'format' => 'raw',
+                'value' => function($model){
+                   date_default_timezone_set('America/Argentina/Buenos_Aires');
+                   return Yii::$app->formatter->asDate($model['hasta'], 'dd/MM/yyyy');
+                }
+            ],
+                        
+            [
+                'label' => 'Activo',
+                'value' => function($model){
+                    if($model->activo == 0)
+                        return 'Inactivo';
+                    elseif($model->activo == 1)
+                        return 'Publicado';
+                    else
+                        return 'En carga';
+                }
+            ],
 
             [
                 'class' => 'kartik\grid\ActionColumn',
@@ -42,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'view' => function($url, $model, $key){
                         return Html::a(
                             '<span class="glyphicon glyphicon-eye-open"></span>',
-                            '?r=mesaexamen/index&turno='.$model['id']);
+                            '?r=mesaexamen/index&turno='.$model['id'].'&all=1');
                     },
                     'update' => function($url, $model, $key){
                         return Html::a(

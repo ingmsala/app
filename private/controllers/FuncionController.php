@@ -6,7 +6,7 @@ use Yii;
 use app\models\Funcion;
 use app\models\FuncionSearch;
 use app\models\Cargo;
-use app\models\Docente;
+use app\models\Agente;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -83,7 +83,7 @@ class FuncionController extends Controller
         $modelcargo = new Cargo();
 
         $cargos=Cargo::find()->all();
-        $docentes=Docente::find()->all();
+        $docentes=Agente::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -110,7 +110,7 @@ class FuncionController extends Controller
         $modelcargo = new Cargo();
 
         $cargos=Cargo::find()->all();
-        $docentes=Docente::find()->all();
+        $docentes=Agente::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

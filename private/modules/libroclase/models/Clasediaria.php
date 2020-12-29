@@ -3,7 +3,7 @@
 namespace app\modules\libroclase\models;
 
 use app\models\Catedra;
-use app\models\Docente;
+use app\models\Agente;
 use Yii;
 
 /**
@@ -15,13 +15,13 @@ use Yii;
  * @property int $tipodesarrollo
  * @property string $fecha
  * @property string $fechacarga
- * @property int $docente
+ * @property int $agente
  * @property string $observaciones
  * @property int $modalidadclase
  *
  * @property Catedra $catedra0
  * @property Tipodesarrollo $tipodesarrollo0
- * @property Docente $docente0
+ * @property Agente $agente0
  * @property Temaunidad $temaunidad0
  * @property Modalidadclase $modalidadclase0
  * @property Detallehora[] $detallehoras
@@ -43,12 +43,12 @@ class Clasediaria extends \yii\db\ActiveRecord
     {
         return [
             [['catedra', 'temaunidad', 'tipodesarrollo', 'fecha', 'fechacarga'], 'required'],
-            [['catedra', 'temaunidad', 'tipodesarrollo', 'docente', 'modalidadclase'], 'integer'],
+            [['catedra', 'temaunidad', 'tipodesarrollo', 'agente', 'modalidadclase'], 'integer'],
             [['fecha', 'fechacarga'], 'safe'],
             [['observaciones'], 'string'],
             [['catedra'], 'exist', 'skipOnError' => true, 'targetClass' => Catedra::className(), 'targetAttribute' => ['catedra' => 'id']],
             [['tipodesarrollo'], 'exist', 'skipOnError' => true, 'targetClass' => Tipodesarrollo::className(), 'targetAttribute' => ['tipodesarrollo' => 'id']],
-            [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
+            [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
             [['temaunidad'], 'exist', 'skipOnError' => true, 'targetClass' => Temaunidad::className(), 'targetAttribute' => ['temaunidad' => 'id']],
             [['modalidadclase'], 'exist', 'skipOnError' => true, 'targetClass' => Modalidadclase::className(), 'targetAttribute' => ['modalidadclase' => 'id']],
         ];
@@ -66,7 +66,7 @@ class Clasediaria extends \yii\db\ActiveRecord
             'tipodesarrollo' => 'Tipo de desarrollo',
             'fecha' => 'Fecha',
             'fechacarga' => 'Fecha de carga',
-            'docente' => 'Docente',
+            'agente' => 'Agente',
             'observaciones' => 'Observaciones',
             'modalidadclase' => 'Modalidad de clase',
         ];
@@ -91,9 +91,9 @@ class Clasediaria extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocente0()
+    public function getAgente0()
     {
-        return $this->hasOne(Docente::className(), ['id' => 'docente']);
+        return $this->hasOne(Agente::className(), ['id' => 'agente']);
     }
 
     /**

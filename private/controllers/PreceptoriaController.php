@@ -122,7 +122,7 @@ class PreceptoriaController extends Controller
                     ->where(['cargo' => Globales::CARGO_PREC])
                     ->where(['division' => $division->id])
                     ->one();
-                    $docente = $nombramiento->docente0->apellido.', '.$nombramiento->docente0->nombre;
+                    $docente = $nombramiento->agente0->apellido.', '.$nombramiento->agente0->nombre;
                     $array[$division->id][999] = $nombramiento->id;
                 } catch (\Throwable $th) {
                     $docente = '';

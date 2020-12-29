@@ -163,10 +163,10 @@ $this->params['breadcrumbs'][] = $this->title;
             
             
             [
-                'attribute' => 'docente',
+                'attribute' => 'agente',
                 'value' => function ($model){
                     if($model['activo'] != 2){
-                        return $model['docente'];
+                        return $model['agente'];
                     }
                 }
                 /*'format' => 'raw',
@@ -178,7 +178,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     foreach($model->detallecatedras as $detallecatedra){
 
                         
-                        $itemsc[] = [$detallecatedra->condicion0->id, $detallecatedra->condicion0->nombre, $detallecatedra->docente0->apellido.', '.$detallecatedra->docente0->nombre, $detallecatedra->revista0->nombre, $detallecatedra->hora, $detallecatedra->activo];
+                        $itemsc[] = [$detallecatedra->condicion0->id, $detallecatedra->condicion0->nombre, $detallecatedra->agente0->apellido.', '.$detallecatedra->agente0->nombre, $detallecatedra->revista0->nombre, $detallecatedra->hora, $detallecatedra->activo];
                         
                     }
 

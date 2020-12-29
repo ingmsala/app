@@ -100,7 +100,7 @@ $form->field($model, 'fechaFinext')->widget(DatePicker::classname(), [
 
     <?= 
 
-        $form->field($model, 'docente')->widget(Select2::classname(), [
+        $form->field($model, 'agente')->widget(Select2::classname(), [
             'data' => $listdocentes,
             'options' => ['placeholder' => 'Seleccionar...'],
             'pluginOptions' => [

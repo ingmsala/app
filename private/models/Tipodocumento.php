@@ -10,7 +10,7 @@ use Yii;
  * @property int $id
  * @property string $nombre
  *
- * @property Docente[] $docentes
+ * @property Agente[] $docentes
  */
 class Tipodocumento extends \yii\db\ActiveRecord
 {
@@ -47,8 +47,8 @@ class Tipodocumento extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocentes()
+    public function getAgentes()
     {
-        return $this->hasMany(Docente::className(), ['tipodocumento' => 'id']);
+        return $this->hasMany(Agente::className(), ['tipodocumento' => 'id']);
     }
 }

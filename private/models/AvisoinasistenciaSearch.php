@@ -18,7 +18,7 @@ class AvisoinasistenciaSearch extends Avisoinasistencia
     public function rules()
     {
         return [
-            [['id', 'docente'], 'integer'],
+            [['id', 'agente'], 'integer'],
             [['descripcion', 'desde', 'hasta'], 'safe'],
         ];
     }
@@ -61,7 +61,7 @@ class AvisoinasistenciaSearch extends Avisoinasistencia
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'docente' => $this->docente,
+            'agente' => $this->agente,
             'desde' => $this->desde,
             'hasta' => $this->hasta,
         ]);
@@ -75,11 +75,11 @@ class AvisoinasistenciaSearch extends Avisoinasistencia
     {
 
         $query = Avisoinasistencia::find()
-                    ->joinWith(['docente0'])
+                    ->joinWith(['agente0'])
                     //->where(['BETWEEN','desde', 'hasta', $fechaparte, 'hasta'])
                     //->where(['<=','desde',$fechaparte])
                     ->andWhere(['>=','hasta',$fechaparte])
-                    ->orderBy('docente.apellido ASC');
+                    ->orderBy('agente.apellido ASC');
 
         // add conditions that should always apply here
 
@@ -98,7 +98,7 @@ class AvisoinasistenciaSearch extends Avisoinasistencia
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'docente' => $this->docente,
+            'agente' => $this->agente,
             'desde' => $this->desde,
             'hasta' => $this->hasta,
         ]);

@@ -66,7 +66,7 @@ else{
 
            
 
-            ['/horarioexamen/horariostrimestrales', 'h' => $h, 'docente' => $docente, 'col' => 1],
+            ['/horarioexamen/horariostrimestrales', 'h' => $h, 'agente' => $agente, 'col' => 1],
 
            [
 

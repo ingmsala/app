@@ -1,7 +1,7 @@
 <?php
 
 namespace app\modules\curriculares\models;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Role;
 
 use Yii;
@@ -14,7 +14,7 @@ use Yii;
  * @property int $comision
  *
  * @property Comision $comision0
- * @property Docente $docente0
+ * @property Agente $agente0
  */
 class Docentexcomision extends \yii\db\ActiveRecord
 {
@@ -32,10 +32,10 @@ class Docentexcomision extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['docente', 'comision', 'role'], 'required'],
-            [['docente', 'comision', 'role'], 'integer'],
+            [['agente', 'comision', 'role'], 'required'],
+            [['agente', 'comision', 'role'], 'integer'],
             [['comision'], 'exist', 'skipOnError' => true, 'targetClass' => Comision::className(), 'targetAttribute' => ['comision' => 'id']],
-            [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
+            [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
             [['role'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['role' => 'id']],
         ];
     }
@@ -47,7 +47,7 @@ class Docentexcomision extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'docente' => 'Docente',
+            'agente' => 'Agente',
             'comision' => 'Comision',
             'role' => 'Rol',
         ];
@@ -64,9 +64,9 @@ class Docentexcomision extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocente0()
+    public function getAgente0()
     {
-        return $this->hasOne(Docente::className(), ['id' => 'docente']);
+        return $this->hasOne(Agente::className(), ['id' => 'agente']);
     }
 
     public function getRole0()

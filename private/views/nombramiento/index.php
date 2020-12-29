@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
 use app\models\Nombramiento;
-use app\models\Docente;
+use app\models\Agente;
 
 
 /* @var $this yii\web\View */
@@ -69,15 +69,15 @@ $this->title = 'Nombramientos';
             ],
            
             [
-                'label' => 'Docente',
-                'attribute' => 'docente',
+                'label' => 'Agente',
+                'attribute' => 'agente',
                 'vAlign' => 'middle',
                 'hAlign' => 'center',
                 
                 'value' => function($model){
 
-                    return $model->docente0->apellido.', '.$model->docente0->nombre;
-                   //return $model->docente0->apellido.', '.$model->docente0->nombre;
+                    return $model->agente0->apellido.', '.$model->agente0->nombre;
+                   //return $model->agente0->apellido.', '.$model->agente0->nombre;
                 }
 
             ],
@@ -112,19 +112,19 @@ $this->title = 'Nombramientos';
                 'hAlign' => 'center',
                 'format' => 'raw',
                 'value' =>  function($model){
-                     //var_dump($model->suplente0->docente0);
+                     //var_dump($model->suplente0->agente0);
                         if (isset($model->suplente0)){
-                            //$suplentes = ArrayHelper::map($model, 'id', 'docente');
+                            //$suplentes = ArrayHelper::map($model, 'id', 'agente');
                             //var_dump($model->suplente0->suplente);
                             
-                            return Html::tag('li', Html::tag('div',Html::tag('span', $model->suplente0->condicion0->nombre, ['class' => "badge pull-left"]).Html::tag('span', $model->suplente0->revista0->nombre, ['class' => "badge pull-right"])."&nbsp;".$model->suplente0->docente0->apellido.', '.$model->suplente0->docente0->nombre, ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-info']);
+                            return Html::tag('li', Html::tag('div',Html::tag('span', $model->suplente0->condicion0->nombre, ['class' => "badge pull-left"]).Html::tag('span', $model->suplente0->revista0->nombre, ['class' => "badge pull-right"])."&nbsp;".$model->suplente0->agente0->apellido.', '.$model->suplente0->agente0->nombre, ['data-toggle' => "pill"]), ['class' => 'list-group-item list-group-item-info']);
                         }
 
                         return '';
                     }
                      
                 
-                //'suplente0.docente0.apellido',
+                //'suplente0.agente0.apellido',
             ],
 
             [
@@ -134,13 +134,13 @@ $this->title = 'Nombramientos';
                 'hAlign' => 'center',
                 'format' => 'raw',
                 'value' =>  function($model){
-                     //var_dump($model->suplente0->docente0);
+                     //var_dump($model->suplente0->agente0);
                         if ($model->suplente0 != null){
 
                             if ($model->suplente0->suplente != null){
                                 $supl = new Nombramiento();
                                 $supl = $supl->getsuplente($model->suplente0->suplente);
-                                $supl = Docente::findOne($supl['docente']);
+                                $supl = Agente::findOne($supl['agente']);
                                 //return $supl['apellido'].', '.$supl['nombre'];
                             
                             
@@ -154,7 +154,7 @@ $this->title = 'Nombramientos';
                     }
                      
                 
-                //'suplente0.docente0.apellido',
+                //'suplente0.agente0.apellido',
             ],
 
             ['class' => 'kartik\grid\ActionColumn'],

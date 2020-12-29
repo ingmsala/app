@@ -20,24 +20,26 @@ use Yii;
  * @property Genero $genero0
  * @property Nombramiento[] $nombramientos
  */
-class Docente extends \yii\db\ActiveRecord
+class Agente extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     const SCENARIO_FINDHORARIOLOGIN = 'logindoc';
-    const SCENARIO_ABM = 'abmdoc';
+    const SCENARIO_AB = 'abdoc';
+    const SCENARIO_AM = 'amdoc';
     const SCENARIO_DECLARACIONJURADA = 'declaracionjurada';
     const SCENARIO_FONID = 'fonid';
    
-
+    public $tiposcargo;
     
 
     public function scenarios()
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_FINDHORARIOLOGIN] = ['legajo'];
-        $scenarios[self::SCENARIO_ABM] = ['apellido', 'nombre', 'legajo', 'genero', 'documento', 'tipodocumento', 'mail', 'fechanac', 'mapuche'];
+        $scenarios[self::SCENARIO_AB] = ['apellido', 'nombre', 'legajo', 'genero', 'documento', 'tipodocumento', 'mail', 'fechanac', 'mapuche', 'tiposcargo'];
+        $scenarios[self::SCENARIO_AM] = ['apellido', 'nombre', 'legajo', 'genero', 'documento', 'tipodocumento', 'mail', 'fechanac', 'mapuche'];
         $scenarios[self::SCENARIO_DECLARACIONJURADA] = ['apellido', 'nombre', 'legajo', 'documento', 'tipodocumento', 'mail', 'telefono', 'fechanac', 'cuil', 'domicilio', 'localidad', 'mapuche'];
         $scenarios[self::SCENARIO_FONID] = ['apellido', 'nombre', 'legajo', 'cuil'];
         
@@ -46,7 +48,7 @@ class Docente extends \yii\db\ActiveRecord
 
     public static function tableName()
     {
-        return 'docente';
+        return 'agente';
     }
 
     /**
@@ -55,7 +57,8 @@ class Docente extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apellido', 'nombre', 'genero','documento','tipodocumento', 'mail'], 'required', 'on' => self::SCENARIO_ABM],
+            [['apellido', 'nombre', 'genero','documento','tipodocumento', 'mail', 'tiposcargo'], 'required', 'on' => self::SCENARIO_AB],
+            [['apellido', 'nombre', 'genero','documento','tipodocumento', 'mail'], 'required', 'on' => self::SCENARIO_AM],
             [['apellido', 'nombre', 'legajo', 'cuil'], 'required', 'on' => self::SCENARIO_FONID],
             [['apellido', 'nombre', 'legajo', 'documento', 'tipodocumento', 'mail', 'telefono', 'fechanac', 'cuil', 'domicilio', 'localidad'], 'required', 'on' => self::SCENARIO_DECLARACIONJURADA],
             [['legajo'], 'required',  'on' => self::SCENARIO_FINDHORARIOLOGIN],
@@ -71,7 +74,8 @@ class Docente extends \yii\db\ActiveRecord
             [['cuil'], 'string', 'min' => 13],
             [['domicilio'], 'string', 'max' => 400],
             [['telefono'], 'string', 'max' => 100],
-            [['legajo'], 'unique', 'on' => self::SCENARIO_ABM],
+            [['legajo'], 'unique', 'on' => self::SCENARIO_AM],
+            [['legajo'], 'unique', 'on' => self::SCENARIO_AB],
             [['documento'], 'unique'],
             [['mail'], 'unique'],
             ['mail', 'email'],
@@ -84,7 +88,7 @@ class Docente extends \yii\db\ActiveRecord
 
     public function findDoc($attribute, $params, $validator)
     {
-        $doc = Docente::find()
+        $doc = Agente::find()
             ->joinWith('detallecatedras')
             ->where(['=', 'detallecatedra.revista', 6])
             ->andWhere(['legajo' => $this->legajo])->all();
@@ -111,6 +115,7 @@ class Docente extends \yii\db\ActiveRecord
             'cuil' => 'CUIL', 
             'domicilio' => 'Domicilio', 
             'telefono' => 'Teléfono',
+            'tiposcargo' => 'Tipo de cargo',
         ];
     }
 
@@ -119,7 +124,7 @@ class Docente extends \yii\db\ActiveRecord
      */
     public function getDetallecatedras()
     {
-        return $this->hasMany(Detallecatedra::className(), ['docente' => 'id']);
+        return $this->hasMany(Detallecatedra::className(), ['agente' => 'id']);
     }
 
     /**
@@ -142,12 +147,12 @@ class Docente extends \yii\db\ActiveRecord
 
     public function getNombramientos()
     {
-        return $this->hasMany(Nombramiento::className(), ['docente' => 'id']);
+        return $this->hasMany(Nombramiento::className(), ['agente' => 'id']);
     }
 
     public function getDetallepartes()
     {
-        return $this->hasMany(Detalleparte::className(), ['docente' => 'id']);
+        return $this->hasMany(Detalleparte::className(), ['agente' => 'id']);
     }
     public function getDeclaracionjuradas()
     {
@@ -165,6 +170,10 @@ class Docente extends \yii\db\ActiveRecord
        return $this->hasOne(Localidad::className(), ['id' => 'localidad']);
    }
 
+   public function getTipocargos()
+   {
+       return $this->hasMany(Tipocargo::className(), ['id' => 'agente'])->via('agentextipo');
+   }
 
    
 }

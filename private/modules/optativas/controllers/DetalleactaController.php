@@ -4,7 +4,7 @@ namespace app\modules\optativas\controllers;
 
 use Yii;
 use app\config\Globales;
-use app\models\Docente;
+use app\models\Agente;
 use app\modules\curriculares\models\Acta;
 use app\modules\curriculares\models\Detalleacta;
 use app\modules\curriculares\models\DetalleactaSearch;
@@ -44,12 +44,12 @@ class DetalleactaController extends Controller
                             try{
                                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_COORDINACION]))
                                     return true;
-                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_PRECEPTOR])){
                                     $acta = Acta::findOne(Yii::$app->request->queryParams['acta_id']);
-                                    $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                    $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                     ->where(['comision' => $acta->comision])
-                                                    ->andWhere(['docente' => $docente->id])
+                                                    ->andWhere(['agente' => $agente->id])
                                                     ->all());
                                     if($cant>0){
                                         return true;
@@ -71,12 +71,12 @@ class DetalleactaController extends Controller
                            try{
                                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]))
                                     return true;
-                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_PRECEPTOR])){
                                     /*$acta = Acta::findOne(Yii::$app->request->queryParams['acta_id']);
-                                    $docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    $agente = Agente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                     //->where(['comision' => $acta->comision])
-                                                    ->Where(['docente' => $docente->id])
+                                                    ->Where(['agente' => $agente->id])
                                                     ->all());
                                     if($cant>0){
                                         return true;
@@ -99,12 +99,12 @@ class DetalleactaController extends Controller
                             try{
                                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]))
                                     return true;
-                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_PRECEPTOR])){
                                     $acta = Acta::findOne(Yii::$app->request->queryParams['id']);
-                                    $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                    $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                     ->where(['comision' => $acta->comision])
-                                                    ->andWhere(['docente' => $docente->id])
+                                                    ->andWhere(['agente' => $agente->id])
                                                     ->all());
                                     if($cant>0){
                                         return true;
@@ -303,9 +303,9 @@ class DetalleactaController extends Controller
 
         $docentes = $actaX->comision0->docentexcomisions;
         $item = [];
-        foreach ($docentes as $docente) {
-            if($docente->role == 8)
-                $item[] = [$docente->docente0->apellido, $docente->docente0->nombre];
+        foreach ($docentes as $agente) {
+            if($agente->role == 8)
+                $item[] = [$agente->agente0->apellido, $agente->agente0->nombre];
         }
 
         $filenamesext = "{$actaX->libro0->aniolectivo0->nombre} - Acta de {$actaX->comision0->espaciocurricular0->actividad0->nombre}";

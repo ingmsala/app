@@ -35,8 +35,8 @@ $this->title = 'Historial de Fonid por Agente';
             [
                 'label' => 'Apellido',
                 'value' => function($modelok) {
-                    if($modelok->docente0 != null){
-                        return $modelok->docente0->apellido;
+                    if($modelok->agente0 != null){
+                        return $modelok->agente0->apellido;
                     }else{
                         return $modelok->nodocente0->apellido;
                     }
@@ -45,8 +45,8 @@ $this->title = 'Historial de Fonid por Agente';
             [
                 'label' => 'Nombre',
                 'value' => function($modelok) {
-                    if($modelok->docente0 != null){
-                        return $modelok->docente0->nombre;
+                    if($modelok->agente0 != null){
+                        return $modelok->agente0->nombre;
                     }else{
                         return $modelok->nodocente0->nombre;
                     }

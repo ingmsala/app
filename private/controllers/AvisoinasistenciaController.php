@@ -5,7 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Avisoinasistencia;
 use app\models\AvisoinasistenciaSearch;
-use app\models\Docente;
+use app\models\Agente;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -101,7 +101,7 @@ class AvisoinasistenciaController extends Controller
     public function actionCreate()
     {
         $model = new Avisoinasistencia();
-        $docentes = Docente::find()->orderBy('apellido, nombre')->all();
+        $docentes = Agente::find()->orderBy('apellido, nombre')->all();
 
         if ($model->load(Yii::$app->request->post())) {
             
@@ -148,7 +148,7 @@ class AvisoinasistenciaController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $docentes = Docente::find()->all();
+        $docentes = Agente::find()->all();
 
             $desdeexplode1 = explode("-",$model->desde);
             

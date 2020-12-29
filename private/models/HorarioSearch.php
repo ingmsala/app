@@ -110,9 +110,9 @@ class HorarioSearch extends Horario
         $aniolectivo = Aniolectivo::find()->where(['activo' => 1])->one();
        $sql='
             SELECT
-                `docente`.`id`,
-                `docente`.`apellido`,
-                `docente`.`nombre`,
+                `agente`.`id`,
+                `agente`.`apellido`,
+                `agente`.`nombre`,
                 `horario`.`diasemana`,
                 `horario`.`hora`,
                 `division`.`turno`
@@ -120,23 +120,23 @@ class HorarioSearch extends Horario
                 `horario`
             LEFT JOIN `catedra` ON `horario`.`catedra` = `catedra`.`id`
             LEFT JOIN `detallecatedra` ON `catedra`.`id` = `detallecatedra`.`catedra`
-            LEFT JOIN `docente` ON `detallecatedra`.`docente` = `docente`.`id`
+            LEFT JOIN `agente` ON `detallecatedra`.`agente` = `agente`.`id`
             LEFT JOIN `division` ON `catedra`.`division` = `division`.`id`
             WHERE
                 `detallecatedra`.`revista` = 6 AND
                 `detallecatedra`.`aniolectivo` = '.$aniolectivo->id.' AND
                 `horario`.`aniolectivo` = '.$aniolectivo->id.' 
             GROUP BY
-                `docente`.`id`,
-                `docente`.`nombre`,
+                `agente`.`id`,
+                `agente`.`nombre`,
                 `horario`.`diasemana`,
                 `horario`.`hora`,
                 `division`.`turno`
             HAVING
                 COUNT(horario.id) > 1
             ORDER BY
-                `docente`.`apellido`,
-                `docente`.`nombre`';
+                `agente`.`apellido`,
+                `agente`.`nombre`';
 
 
         $dataProvider = new SqlDataProvider([
@@ -200,19 +200,19 @@ class HorarioSearch extends Horario
     public function getCompletoDetallado()
     {
         /*$query = Horario::find()
-                    ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.actividad0', 'catedra0.division0','catedra0.detallecatedras.docente0'])
+                    ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.actividad0', 'catedra0.division0','catedra0.detallecatedras.agente0'])
                     ->andWhere(['tipo' => 1])
                     ->andWhere(['detallecatedra.revista' => 6])
-                    ->orderBy('docente.apellido, docente.nombre, division.id')->distinct();*/
+                    ->orderBy('agente.apellido, agente.nombre, division.id')->distinct();*/
 
         $aniolectivo = Aniolectivo::find()->where(['activo' => 1])->one();
         $query = Catedra::find()
-        ->joinWith(['detallecatedras', 'actividad0', 'division0','detallecatedras.docente0', 'horarios'])
+        ->joinWith(['detallecatedras', 'actividad0', 'division0','detallecatedras.agente0', 'horarios'])
         ->andWhere(['horario.tipo' => 1])
         ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
         ->andWhere(['detallecatedra.revista' => 6])
         ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
-        ->orderBy('docente.apellido, docente.nombre, division.id')->distinct();
+        ->orderBy('agente.apellido, agente.nombre, division.id')->distinct();
 
         // add conditions that should always apply here
 

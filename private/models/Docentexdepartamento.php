@@ -13,7 +13,7 @@ use Yii;
  * @property int $activo
  * @property int $departamento
  *
- * @property Docente $docente0
+ * @property Agente $agente0
  * @property Funciondpto $funciondepto0
  */
 class Docentexdepartamento extends \yii\db\ActiveRecord
@@ -32,9 +32,9 @@ class Docentexdepartamento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['docente', 'funciondepto', 'activo', 'departamento'], 'required'],
-            [['docente', 'funciondepto', 'activo', 'departamento'], 'integer'],
-            [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
+            [['agente', 'funciondepto', 'activo', 'departamento'], 'required'],
+            [['agente', 'funciondepto', 'activo', 'departamento'], 'integer'],
+            [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
             [['funciondepto'], 'exist', 'skipOnError' => true, 'targetClass' => Funciondpto::className(), 'targetAttribute' => ['funciondepto' => 'id']],
         ];
     }
@@ -46,7 +46,7 @@ class Docentexdepartamento extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'docente' => 'Docente',
+            'agente' => 'Agente',
             'funciondepto' => 'Funciondepto',
             'activo' => 'Activo',
             'departamento' => 'Departamento',
@@ -56,9 +56,9 @@ class Docentexdepartamento extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocente0()
+    public function getAgente0()
     {
-        return $this->hasOne(Docente::className(), ['id' => 'docente']);
+        return $this->hasOne(Agente::className(), ['id' => 'agente']);
     }
 
     /**

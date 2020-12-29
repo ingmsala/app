@@ -16,7 +16,7 @@ class NombramientoSearch extends Nombramiento
 {
     
     public $revista;
-    public $docente;
+    public $agente;
     /**
      * {@inheritdoc}
      */
@@ -24,7 +24,7 @@ class NombramientoSearch extends Nombramiento
     {
         return [
             [['id', 'cargo','horas', 'activo'], 'integer'],
-            [['nombre', 'revista', 'docente', 'division', 'suplente', 'extension', 'resolucion', 'fechaInicio', 'fechaFin', 'resolucionext', 'fechaInicioext', 'fechaFinext'], 'safe'],
+            [['nombre', 'revista', 'agente', 'division', 'suplente', 'extension', 'resolucion', 'fechaInicio', 'fechaFin', 'resolucionext', 'fechaInicioext', 'fechaFinext'], 'safe'],
         ];
     }
 
@@ -46,7 +46,7 @@ class NombramientoSearch extends Nombramiento
      */
     public function search($params)
     {
-        $query = Nombramiento::find()->joinWith(['docente0', 'revista0', 'division0', 'condicion0', 'suplente0 n', 'extension0'])
+        $query = Nombramiento::find()->joinWith(['agente0', 'revista0', 'division0', 'condicion0', 'suplente0 n', 'extension0'])
                         //->where(['!=','condicion.nombre', 'SUPL'] )
                         ->where(true)
                         ->andWhere(
@@ -54,11 +54,11 @@ class NombramientoSearch extends Nombramiento
                             (isset($params['Nombramiento']['cargo']) && $params['Nombramiento']['cargo'] != '') ? ['nombramiento.cargo' => $params['Nombramiento']['cargo']] : true)
                         ->andWhere(
 
-                            (isset($params['Nombramiento']['docente']) && $params['Nombramiento']['docente'] != '') ? 
+                            (isset($params['Nombramiento']['agente']) && $params['Nombramiento']['agente'] != '') ? 
                             [   
                                 'or', 
-                                ['nombramiento.docente' => $params['Nombramiento']['docente']],
-                                ['n.docente' => $params['Nombramiento']['docente']]
+                                ['nombramiento.agente' => $params['Nombramiento']['agente']],
+                                ['n.agente' => $params['Nombramiento']['agente']]
                             ] : true)
                         ->andWhere(
 
@@ -72,7 +72,7 @@ class NombramientoSearch extends Nombramiento
                         ->andWhere(
 
                             (isset($params['Nombramiento']['resolucionext']) && $params['Nombramiento']['resolucionext'] != '') ? ['nombramiento.resolucionext' => $params['Nombramiento']['resolucionext']] : true)
-                        ->orderBy('nombramiento.cargo, docente.apellido, docente.nombre');
+                        ->orderBy('nombramiento.cargo, agente.apellido, agente.nombre');
 
         // add conditions that should always apply here
 
@@ -95,9 +95,9 @@ class NombramientoSearch extends Nombramiento
         'desc' => ['revista.nombre' => SORT_DESC],
         ];
 
-        $dataProvider->sort->attributes['docente0'] = [
-        'asc' => ['docente.apellido' => SORT_ASC],
-        'desc' => ['docente.apellido' => SORT_DESC],
+        $dataProvider->sort->attributes['agente0'] = [
+        'asc' => ['agente.apellido' => SORT_ASC],
+        'desc' => ['agente.apellido' => SORT_DESC],
         ];
 
         $dataProvider->sort->attributes['division0'] = [
@@ -119,9 +119,9 @@ class NombramientoSearch extends Nombramiento
         ]);
 
         $query->andFilterWhere(['like', 'revista.nombre', $this->revista])
-        ->andFilterWhere(['like', 'docente.apellido', $this->docente])
+        ->andFilterWhere(['like', 'agente.apellido', $this->agente])
         ->andFilterWhere(['like', 'division.nombre', $this->division])
-        ->andFilterWhere(['like', 'docente.apellido', $this->suplente]);
+        ->andFilterWhere(['like', 'agente.apellido', $this->suplente]);
         
 
 
@@ -154,7 +154,7 @@ class NombramientoSearch extends Nombramiento
 
         $query = Nombramiento::find()
                 ->select('sum(horas) as horas')
-                ->where(['docente' => $id])
+                ->where(['agente' => $id])
                 ->andWhere(['<>', 'revista', Globales::LIC_SINGOCE])->one();//no licencia sin goce
 
 
@@ -166,7 +166,7 @@ class NombramientoSearch extends Nombramiento
 
         $query = Nombramiento::find()
                 ->select('sum(horas) as horas')
-                ->where(['docente' => $id])
+                ->where(['agente' => $id])
                 ->andWhere(['revista' => Globales::LIC_SINGOCE])->one();// lic s/goce
 
 
@@ -178,7 +178,7 @@ class NombramientoSearch extends Nombramiento
     public function searchByDocente($id)
     {
         $query = Nombramiento::find()
-                ->where(['docente' => $id]);
+                ->where(['agente' => $id]);
 
         // add conditions that should always apply here
 
@@ -204,7 +204,7 @@ class NombramientoSearch extends Nombramiento
         ]);
 
         $query->andFilterWhere(['like', 'revista.nombre', $this->revista])
-        ->andFilterWhere(['like', 'docente.apellido', $this->docente]);
+        ->andFilterWhere(['like', 'agente.apellido', $this->agente]);
         
 
 
@@ -250,7 +250,7 @@ class NombramientoSearch extends Nombramiento
         ]);
 
         $query->andFilterWhere(['like', 'revista.nombre', $this->revista])
-        ->andFilterWhere(['like', 'docente.apellido', $this->docente]);
+        ->andFilterWhere(['like', 'agente.apellido', $this->agente]);
         
 
 
@@ -260,7 +260,7 @@ class NombramientoSearch extends Nombramiento
     public function getPadronPreceptores($prop)
     {
         if($prop ==1){
-            $query = Docente::find()
+            $query = Agente::find()
                 ->distinct()
                 ->joinWith(['nombramientos', 'nombramientos.division0'])
                 ->where(['nombramiento.cargo' => Globales::CARGO_PREC])
@@ -269,9 +269,9 @@ class NombramientoSearch extends Nombramiento
                     ['nombramiento.division' => null]
                 ])
                 
-                ->orderBy('docente.apellido, docente.nombre');
+                ->orderBy('agente.apellido, agente.nombre');
             }else{
-                 $query = Docente::find()
+                 $query = Agente::find()
                 ->distinct()
                 ->joinWith(['nombramientos', 'nombramientos.division0'])
                 ->where(['nombramiento.cargo' => Globales::CARGO_PREC])
@@ -280,7 +280,7 @@ class NombramientoSearch extends Nombramiento
                     
                 ])
                 
-                ->orderBy('docente.apellido, docente.nombre');
+                ->orderBy('agente.apellido, agente.nombre');
             }
         
 
@@ -304,7 +304,7 @@ class NombramientoSearch extends Nombramiento
     public function getPadronJefes($prop)
     {
         if($prop ==1){
-            $query = Docente::find()
+            $query = Agente::find()
                 ->distinct()
                 ->joinWith(['nombramientos', 'nombramientos.division0'])
                 ->where(['nombramiento.cargo' => Globales::CARGO_JEFE])
@@ -313,9 +313,9 @@ class NombramientoSearch extends Nombramiento
                     ['nombramiento.division' => null]
                 ])
                 
-                ->orderBy('docente.apellido, docente.nombre');
+                ->orderBy('agente.apellido, agente.nombre');
             }else{
-                 $query = Docente::find()
+                 $query = Agente::find()
                 ->distinct()
                 ->joinWith(['nombramientos', 'nombramientos.division0'])
                 ->where(['nombramiento.cargo' => Globales::CARGO_JEFE])
@@ -324,7 +324,7 @@ class NombramientoSearch extends Nombramiento
                     
                 ])
                 
-                ->orderBy('docente.apellido, docente.nombre');
+                ->orderBy('agente.apellido, agente.nombre');
             }
         
 
@@ -356,7 +356,7 @@ class NombramientoSearch extends Nombramiento
 
             if($largo < 1){
 
-                $query = Docente::find()
+                $query = Agente::find()
                 ->distinct()
                 ->joinWith(['nombramientos', 'nombramientos.division0'])
                 ->where(['nombramiento.cargo' => Globales::CARGO_JEFE])
@@ -365,12 +365,12 @@ class NombramientoSearch extends Nombramiento
                     ['nombramiento.division' => null]
                 ])
                 
-                ->orderBy('docente.apellido, docente.nombre');
+                ->orderBy('agente.apellido, agente.nombre');
             }else{
 
                 
                 if($prop ==1){
-                    $query = Docente::find()
+                    $query = Agente::find()
                                     ->distinct()
                                     ->joinWith(['nombramientos', 'nombramientos.division0'])
                                     ->where(true)
@@ -381,9 +381,9 @@ class NombramientoSearch extends Nombramiento
                                         ['division.propuesta' => $prop],
                                         ['nombramiento.division' => null]
                                     ])
-                                    ->orderBy('docente.apellido, docente.nombre');
+                                    ->orderBy('agente.apellido, agente.nombre');
                 }else{
-                    $query = Docente::find()
+                    $query = Agente::find()
                                     ->distinct()
                                     ->joinWith(['nombramientos', 'nombramientos.division0'])
                                     ->where(true)
@@ -391,7 +391,7 @@ class NombramientoSearch extends Nombramiento
                                         'cargo', $param
                                     ])
                                     ->andWhere(['division.propuesta' => $prop])
-                                    ->orderBy('docente.apellido, docente.nombre');
+                                    ->orderBy('agente.apellido, agente.nombre');
                 }
                 
 
@@ -420,11 +420,11 @@ class NombramientoSearch extends Nombramiento
     public function getCantidadPreceptores($prop){
         $query = new Query();
         if($prop ==1){
-            $query->from('docente')
+            $query->from('agente')
                         ->distinct()
-                    ->select('docente.id')
+                    ->select('agente.id')
                         //->join(['nombramientos', 'nombramientos.division0'])
-                    ->leftJoin('nombramiento', 'docente.id = nombramiento.docente')
+                    ->leftJoin('nombramiento', 'agente.id = nombramiento.agente')
                     ->leftJoin('division', 'division.id = nombramiento.division')
                     ->where(['nombramiento.cargo' => Globales::CARGO_PREC])
                     ->andWhere(['or', 
@@ -434,11 +434,11 @@ class NombramientoSearch extends Nombramiento
             return $query->count('id');
 
         }else{
-            $query->from('docente')
+            $query->from('agente')
                         ->distinct()
-                    ->select('docente.id')
+                    ->select('agente.id')
                         //->join(['nombramientos', 'nombramientos.division0'])
-                    ->leftJoin('nombramiento', 'docente.id = nombramiento.docente')
+                    ->leftJoin('nombramiento', 'agente.id = nombramiento.agente')
                     ->leftJoin('division', 'division.id = nombramiento.division')
                     ->where(['nombramiento.cargo' => Globales::CARGO_PREC])
                     ->andWhere(['or', 
@@ -453,11 +453,11 @@ class NombramientoSearch extends Nombramiento
     public function getCantidadJefes($prop){
         $query = new Query();
         if($prop ==1){
-            $query->from('docente')
+            $query->from('agente')
                         ->distinct()
-                    ->select('docente.id')
+                    ->select('agente.id')
                         //->join(['nombramientos', 'nombramientos.division0'])
-                    ->leftJoin('nombramiento', 'docente.id = nombramiento.docente')
+                    ->leftJoin('nombramiento', 'agente.id = nombramiento.agente')
                     ->leftJoin('division', 'division.id = nombramiento.division')
                     ->where(['nombramiento.cargo' => Globales::CARGO_JEFE])
                     ->andWhere(['or', 
@@ -467,11 +467,11 @@ class NombramientoSearch extends Nombramiento
             return $query->count('id');
 
         }else{
-            $query->from('docente')
+            $query->from('agente')
                         ->distinct()
-                    ->select('docente.id')
+                    ->select('agente.id')
                         //->join(['nombramientos', 'nombramientos.division0'])
-                    ->leftJoin('nombramiento', 'docente.id = nombramiento.docente')
+                    ->leftJoin('nombramiento', 'agente.id = nombramiento.agente')
                     ->leftJoin('division', 'division.id = nombramiento.division')
                     ->where(['nombramiento.cargo' => Globales::CARGO_JEFE])
                     ->andWhere(['or', 
@@ -491,10 +491,10 @@ class NombramientoSearch extends Nombramiento
                 $largo = 0;
             }
                 if($prop ==1){
-                    $query->from('docente')
+                    $query->from('agente')
                     ->distinct()
-                    ->select('docente.id')
-                    ->leftJoin('nombramiento', 'docente.id = nombramiento.docente')
+                    ->select('agente.id')
+                    ->leftJoin('nombramiento', 'agente.id = nombramiento.agente')
                     ->leftJoin('division', 'division.id = nombramiento.division')
                     
                     ->where(['in', 
@@ -505,10 +505,10 @@ class NombramientoSearch extends Nombramiento
                         ['nombramiento.division' => null]
                     ]);
                 }else{
-                     $query->from('docente')
+                     $query->from('agente')
                     ->distinct()
-                    ->select('docente.id')
-                    ->leftJoin('nombramiento', 'docente.id = nombramiento.docente')
+                    ->select('agente.id')
+                    ->leftJoin('nombramiento', 'agente.id = nombramiento.agente')
                     ->leftJoin('division', 'division.id = nombramiento.division')
                     
                     ->where(['in', 

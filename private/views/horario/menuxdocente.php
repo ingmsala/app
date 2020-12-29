@@ -13,7 +13,7 @@ $listdocentes=ArrayHelper::map($docentes,'id', function($doc) {
             return $doc['apellido'].', '.$doc['nombre'];}
         );
 
-$this->title = 'Seleccione un docente';
+$this->title = 'Seleccione un agente';
 
 ?>
 <?php  
@@ -44,7 +44,7 @@ JS;
             'pluginOptions' => [
                 'allowClear' => true
             ],
-        ])->label('Docente');
+        ])->label('Agente');
 
     ?>
     <div class="form-group">

@@ -11,8 +11,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\models\Role;
 use app\config\Globales;
-use app\models\Docente;
-use app\models\Nodocente;
+use app\models\Agente;
 use yii\helpers\Html;
 
 /**
@@ -118,8 +117,8 @@ class UserController extends Controller
     }
 
     public function actionImportar(){
-        $docente = Docente::find()->all();
-        $nodocente = Nodocente::find()->all();
+        $docente = Agente::find()->all();
+        //$nodocente = Nodocente::find()->all();
         ini_set("pcre.backtrack_limit", "5000000");
         foreach ($docente as $doc) {
             $us = User::find()->where(['username'=>$doc->mail])->one();
@@ -127,7 +126,7 @@ class UserController extends Controller
                 if($doc->mail != null && $doc->documento != null){
                     $user = new User();
                     $user->username = $doc->mail;
-                    $user->role = Globales::US_DOCENTE;
+                    $user->role = Globales::US_AGENTE;
                     $user->activate = 1;
                     $user->setPassword($doc->documento.'3223');
                     $user->generateAuthKey();
@@ -136,7 +135,7 @@ class UserController extends Controller
                 
             }
         }
-        foreach ($nodocente as $nodoc) {
+        /*foreach ($nodocente as $nodoc) {
             $us2 = User::find()->where(['username'=>$nodoc->mail])->one();
             if($us2 == null){
                 if($nodoc->mail != null && $nodoc->documento != null){
@@ -149,7 +148,7 @@ class UserController extends Controller
                     $user->save();
                 }
             }
-        }
+        }*/
         return $this->redirect(['index']);
 
     }
@@ -326,7 +325,7 @@ class UserController extends Controller
 
     
     
-    //if(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
+    //if(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_PRECEPTOR, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
         $mensaje = '';
         if($i == 1)
             $this->layout = '@app/modules/optativas/views/layouts/main';

@@ -27,7 +27,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'fechacarga') ?>
 
-    <?php // echo $form->field($model, 'docente') ?>
+    <?php // echo $form->field($model, 'agente') ?>
 
     <?php // echo $form->field($model, 'observaciones') ?>
 

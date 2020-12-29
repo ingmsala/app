@@ -78,12 +78,12 @@ $this->title = 'Horarios a exámenes';
             ],
 
             [
-                'label' => 'Docente',
+                'label' => 'Agente',
                 'value' => function ($model){
                     $dcs = $model->catedra0->detallecatedras;
                     foreach ($dcs as $dc) {
                         if ($dc->revista == 6){
-                            return $dc->docente0->apellido.', '.$dc->docente0->nombre;
+                            return $dc->agente0->apellido.', '.$dc->agente0->nombre;
                         }
                     }
                     return '';

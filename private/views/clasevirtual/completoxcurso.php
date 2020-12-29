@@ -178,13 +178,13 @@ JS;
 		            ],
 
 		            [
-		            	'label' => 'Docente',
+		            	'label' => 'Agente',
 		            	'format' => 'raw',
 		            	'value' => function($model) use ($sem, $prt) {
 		            		if($prt == 0)
-		            			return Html::a($model->docente0->apellido.', '.$model->docente0->nombre, Url::to(['horarioexamen/completoxdocente', 'docente' => $model->docente, 'col' => 0]));
+		            			return Html::a($model->agente0->apellido.', '.$model->agente0->nombre, Url::to(['horarioexamen/completoxdocente', 'agente' => $model->agente, 'col' => 0]));
 		            		else
-		            			return $model->docente0->apellido.', '.$model->docente0->nombre;
+		            			return $model->agente0->apellido.', '.$model->agente0->nombre;
 		            	}
 
 		            ],

@@ -48,7 +48,7 @@ use kartik\select2\Select2;
            
         <?= 
 
-            $form->field($model, 'docente')->widget(Select2::classname(), [
+            $form->field($model, 'agente')->widget(Select2::classname(), [
                 'data' => $listDocentes,
                 'options' => ['placeholder' => 'Seleccionar...'],
                 'pluginOptions' => [

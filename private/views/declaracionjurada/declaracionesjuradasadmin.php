@@ -53,7 +53,7 @@ if(Yii::$app->user->identity->role == Globales::US_REGENCIA){
     //var_dump($listdoc);
     $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_VERTICAL, 'method' => 'GET']);
     
-    echo $form->field($model, 'persona')->widget(Select2::classname(), [
+    echo $form->field($model, 'agente')->widget(Select2::classname(), [
         'data' => $listpersona,
         'options' => ['placeholder' => 'Todos'],
         'pluginOptions' => [

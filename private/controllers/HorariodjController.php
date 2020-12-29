@@ -43,7 +43,7 @@ class HorariodjController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_NODOCENTE, Globales::US_PRECEPTOR, Globales::US_MANTENIMIENTO]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_NODOCENTE, Globales::US_PRECEPTOR, Globales::US_MANTENIMIENTO]);
                                 }catch(\Exception $exception){
                                     return false;
                             }

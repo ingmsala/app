@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'parte',
             'division',
-            'docente',
+            'agente',
             'hora',
             //'llego',
             //'retiro',

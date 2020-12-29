@@ -28,11 +28,23 @@ class TurnoexamenController extends Controller
                 'rules' => [
                     
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'actions' => ['create', 'update', 'delete'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['index', 'view'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_PRECEPTORIA]);
                             }catch(\Exception $exception){
                                 return false;
                             }

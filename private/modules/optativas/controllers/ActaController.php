@@ -4,7 +4,7 @@ namespace app\modules\optativas\controllers;
 
 use Yii;
 use app\config\Globales;
-use app\models\Docente;
+use app\models\Agente;
 use app\modules\curriculares\models\Acta;
 use app\modules\curriculares\models\ActaSearch;
 use app\modules\curriculares\models\Admisionoptativa;
@@ -44,15 +44,15 @@ class ActaController extends Controller
                             try{
                                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_COORDINACION]))
                                     return true;
-                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_PRECEPTOR])){
                                     //$acta = $this->findModel(Yii::$app->request->queryParams['id']);
                                     /*if($acta == null){
                                         return true;
                                     }*/
-                                    /*$docente = Docente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
+                                    /*$agente = Agente::find()->where(['legajo' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                     ->where(['comision' => $acta->comision])
-                                                    ->andWhere(['docente' => $docente->id])
+                                                    ->andWhere(['agente' => $agente->id])
                                                     ->all());
                                     if($cant>0){
                                         return true;
@@ -76,12 +76,12 @@ class ActaController extends Controller
                                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_COORDINACION])){
                                     return true;
                                 }
-                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_PRECEPTOR])){
                                     $acta = $this->findModel(Yii::$app->request->queryParams['id']);
-                                    $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                    $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                     ->where(['comision' => $acta->comision])
-                                                    ->andWhere(['docente' => $docente->id])
+                                                    ->andWhere(['agente' => $agente->id])
                                                     ->all());
                                     if($cant>0){
                                         return true;
@@ -105,12 +105,12 @@ class ActaController extends Controller
                             try{
                                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]))
                                     return true;
-                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_PRECEPTOR])){
                                     $acta = $this->findModel(Yii::$app->request->queryParams['acta']);
-                                    $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                    $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                     ->where(['comision' => $acta->comision])
-                                                    ->andWhere(['docente' => $docente->id])
+                                                    ->andWhere(['agente' => $agente->id])
                                                     ->all());
                                     if($cant>0){
                                         return true;
@@ -132,12 +132,12 @@ class ActaController extends Controller
                             try{
                                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]))
                                     return true;
-                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+                                elseif(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_PRECEPTOR])){
                                     $com = Comision::findOne(Yii::$app->request->queryParams['Matricula']['comision']);
-                                    $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                    $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                     ->where(['comision' => $com])
-                                                    ->andWhere(['docente' => $docente->id])
+                                                    ->andWhere(['agente' => $agente->id])
                                                     ->all());
                                     if($cant>0){
                                         return true;

@@ -62,7 +62,7 @@ $this->title = 'Listado de docentes en horario';
                     $cat = $model;
                     foreach ($cat->detallecatedras as $dc) {
                         if ($dc->revista == 6){
-                            $doc = $dc->docente0->documento;
+                            $doc = $dc->agente0->documento;
                             break;
                         }
                     }
@@ -76,7 +76,7 @@ $this->title = 'Listado de docentes en horario';
                     $cat = $model;
                     foreach ($cat->detallecatedras as $dc) {
                         if ($dc->revista == 6){
-                            $doc = $dc->docente0->apellido.', '.$dc->docente0->nombre;
+                            $doc = $dc->agente0->apellido.', '.$dc->agente0->nombre;
                             break;
                         }
                     }
@@ -103,13 +103,13 @@ $this->title = 'Listado de docentes en horario';
             ],
 
             [
-                'label' =>'Docente',
+                'label' =>'Mail',
                 //'group' => true,
                 'value' => function($model){
                     $cat = $model;
                     foreach ($cat->detallecatedras as $dc) {
                         if ($dc->revista == 6){
-                            $doc = $dc->docente0->mail;
+                            $doc = $dc->agente0->mail;
                             break;
                         }
                     }

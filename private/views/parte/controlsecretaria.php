@@ -282,7 +282,7 @@ GridView::widget([
                             try {
                                return Html::a('Justificar', '?r=estadoinasistenciaxparte/nuevoestado&detalleparte='.$model['id'].'&estadoinasistencia=4', ['class' => 'btn btn-warning btn-sm',
                             'data' => [
-                            'confirm' => 'Está seguro de querer justificar la inasistencia del docente?',
+                            'confirm' => 'Está seguro de querer justificar la inasistencia del agente?',
                             'method' => 'post',
                              ]
                             

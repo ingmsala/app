@@ -110,9 +110,9 @@ class ParteSearch extends Parte
 
         if ( in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTOR])) {
 
-            $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
             $nom = Nombramiento::find()
-                        ->where(['docente' => $doc->id])
+                        ->where(['agente' => $doc->id])
                         ->andWhere(['<=', 'division', 53])
                         //->andWhere(['is not', 'division', 53])
                         ->all();
@@ -159,9 +159,9 @@ class ParteSearch extends Parte
                         'desc' => ['division' => SORT_DESC, 'division' => SORT_DESC],
                         
                     ],
-                    'docente' => [
-                        'asc' => ['docente' => SORT_ASC, 'docente' => SORT_ASC],
-                        'desc' => ['docente' => SORT_DESC, 'docente' => SORT_DESC],
+                    'agente' => [
+                        'asc' => ['agente' => SORT_ASC, 'agente' => SORT_ASC],
+                        'desc' => ['agente' => SORT_DESC, 'agente' => SORT_DESC],
                         
                     ],
                 ],

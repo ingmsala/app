@@ -106,7 +106,7 @@ $listcargos=ArrayHelper::map($cargos,'id','nombre');
             ],
             
             [
-                'label' => 'Docente',
+                'label' => 'Agente',
                 'value' => function($model){
                     return $model['apellido'].', '.$model['nombre'];
                 }

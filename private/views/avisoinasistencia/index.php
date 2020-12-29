@@ -35,9 +35,11 @@ if(in_array (Yii::$app->user->identity->role, [1,4]))
 
                         
             [
-                'label' => 'Docente',
+                'label' => 'Agente',
                 'value' => function ($model){
-                    return $model->docente0['apellido'].', '.$model->docente0['nombre'];
+                    if($model->agente0['apellido'] != null)
+                        return $model->agente0['apellido'].', '.$model->agente0['nombre'];
+                    return '-';
                 }
             ],
             'descripcion:ntext',

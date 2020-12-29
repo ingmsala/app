@@ -61,18 +61,18 @@ use kartik\depdrop\DepDrop;
         ]);
 
     ?>
-    <div id="divpreceptor" <?php if($model->docente!=null) echo 'style="display: block; "'; else echo 'style="display: none; "'; ?>>
+    <div id="divpreceptor" <?php if($model->agente!=null) echo 'style="display: block; "'; else echo 'style="display: none; "'; ?>>
         
     
     <?= 
                                 
-                                $form->field($model, 'docente')->widget(Select2::classname(), [
+                                $form->field($model, 'agente')->widget(Select2::classname(), [
                                     'data' => $listpreceptores,
                                     'options' => ['placeholder' => 'Seleccionar...'],
                                     'pluginOptions' => [
                                         'allowClear' => true
                                     ],
-                                ])->label('Docente');
+                                ])->label('Agente');
 
                             ?>
     </div>

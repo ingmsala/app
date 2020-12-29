@@ -77,7 +77,7 @@ $this->title = 'Declaración Jurada';
 
             echo FormGrid::widget([
             
-            'model'=>$persona,
+            'model'=>$agente,
             'form'=>$form,
             'autoGenerateColumns'=>true,
             'rows'=>[

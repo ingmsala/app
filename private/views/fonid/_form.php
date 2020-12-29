@@ -28,15 +28,15 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($docente, 'apellido')->textInput(['readOnly' => true]) ?>
+    <?= $form->field($agente, 'apellido')->textInput(['readOnly' => true]) ?>
 
-    <?= $form->field($docente, 'nombre')->textInput(['readOnly' => true]) ?>
+    <?= $form->field($agente, 'nombre')->textInput(['readOnly' => true]) ?>
 
-    <?= $form->field($docente, 'cuil')->widget(\yii\widgets\MaskedInput::className(), [
+    <?= $form->field($agente, 'cuil')->widget(\yii\widgets\MaskedInput::className(), [
     'mask' => '99-99999999-9',
     ]) ?>
 
-    <?= $form->field($docente, 'legajo')->textInput(['readOnly' => true]) ?>
+    <?= $form->field($agente, 'legajo')->textInput(['readOnly' => true]) ?>
 
    
 

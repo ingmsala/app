@@ -29,10 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Usuario',
                 'value' => function($model){
-                    if ($model->docente0 != null)
-                        return $model->docente0['apellido'].', '.$model->docente0['nombre'];
-                    elseif ($model->nodocente0 != null)
-                        return $model->nodocente0['apellido'].', '.$model->nodocente0['nombre'];
+                    if ($model->agente0 != null)
+                        return $model->agente0['apellido'].', '.$model->agente0['nombre'];
                     return '';
                 },
             ],

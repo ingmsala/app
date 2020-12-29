@@ -13,7 +13,7 @@ use yii\helpers\Url;
 ?>
 
 <div class="alert alert-danger" role="alert">
-     <b>Info</b> Si no se corresponde el docente en la hora seleccionada debe actualizar el horario antes de guardar la inasistencia.
+     <b>Info</b> Si no se corresponde el agente en la hora seleccionada debe actualizar el horario antes de guardar la inasistencia.
     </div>
 
 <div class="detalleparte-form">
@@ -101,7 +101,7 @@ use yii\helpers\Url;
 
     <?php 
 /*
-        $form->field($model, 'docente')->widget(Select2::classname(), [
+        $form->field($model, 'agente')->widget(Select2::classname(), [
             'data' => $listDocentes,
             'options' => ['placeholder' => 'Seleccionar...', 'readonly' => true, 'disabled' => 'disabled'],
             'pluginOptions' => [
@@ -127,7 +127,7 @@ use yii\helpers\Url;
 
     <?php /*echo date("w",strtotime($partes->fecha));*/  ?>
     
-                                <?php echo $form->field($model, 'docente')->widget(DepDrop::classname(), [
+                                <?php echo $form->field($model, 'agente')->widget(DepDrop::classname(), [
                                     //'type' => DepDrop::TYPE_SELECT2,
                                     //'name' => 'catedra',
                                     

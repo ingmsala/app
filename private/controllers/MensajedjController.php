@@ -4,11 +4,10 @@ namespace app\controllers;
 
 use app\config\Globales;
 use app\models\Declaracionjurada;
-use app\models\Docente;
+use app\models\Agente;
 use Yii;
 use app\models\Mensajedj;
 use app\models\MensajedjSearch;
-use app\models\Nodocente;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -46,7 +45,7 @@ class MensajedjController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_NODOCENTE, Globales::US_PRECEPTOR, Globales::US_MANTENIMIENTO, Globales::US_REGENCIA, Globales::US_SECRETARIA]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_NODOCENTE, Globales::US_PRECEPTOR, Globales::US_MANTENIMIENTO, Globales::US_REGENCIA, Globales::US_SECRETARIA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -111,14 +110,11 @@ class MensajedjController extends Controller
             $decl->estadodeclaracion = 4;
             $decl->save();
 
-            $persona = Docente::find()->where(['documento' => $decl->persona])->one();
-            if($persona == null){
-                $persona = Nodocente::find()->where(['documento' => $decl->persona])->one();
-            }
-
+            $agente = Agente::find()->where(['documento' => $decl->agente])->one();
+            
             $sendemail=Yii::$app->mailer->compose()
                         ->setFrom([Globales::MAIL => 'Sistemas Monserrat'])
-                        ->setTo($persona->mail)
+                        ->setTo($agente->mail)
                         ->setSubject('Declaración jurada rechazada')
                         ->setHtmlBody('Se ha rechazado la carga de su declaración jurada. Ingrese nuevamente y modifique los cambios solicitados: <br />'.
                             $model->detalle.'. <br /> Por favor no responda este correo ya que el mismo no será receptado por ningún destinatario, si tiene una consulta deberá comunicarse con la Oficina de Personal. Muchas gracias.')

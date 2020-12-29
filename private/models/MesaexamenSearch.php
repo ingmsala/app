@@ -41,10 +41,10 @@ class MesaexamenSearch extends Mesaexamen
      */
     public function search($turno, $all)
     {
-        $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
 
-        if($docente != null){
-            $tribunal = Tribunal::find()->where(['docente' => $docente->id])->all();
+        if($agente != null){
+            $tribunal = Tribunal::find()->where(['agente' => $agente->id])->all();
 
             $arr = array_column($tribunal, 'mesaexamen');
 

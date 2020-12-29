@@ -163,9 +163,9 @@ class EstadoxnovedadSearch extends Estadoxnovedad
                         ->orderBy('parte.fecha');
                 }else{
 
-                    $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                    $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                     $nom = Nombramiento::find()
-                                ->where(['docente' => $doc->id])
+                                ->where(['agente' => $doc->id])
                                 ->andWhere(['<=', 'division', 53])
                                 //->andWhere(['is not', 'division', 53])
                                 ->all();

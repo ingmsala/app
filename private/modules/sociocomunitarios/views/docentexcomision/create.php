@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\optativas\models\Docentexcomision */
 
-$this->title = 'Agregar Docente a Comisión';
+$this->title = 'Agregar Agente a Comisión';
 
 ?>
 <div class="docentexcomision-create">

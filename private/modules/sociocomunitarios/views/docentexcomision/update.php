@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\optativas\models\Docentexcomision */
 
-$this->title = 'Modificar Docente de Comisión: ' . $model->id;
+$this->title = 'Modificar Agente de Comisión: ' . $model->id;
 
 ?>
 <div class="docentexcomision-update">

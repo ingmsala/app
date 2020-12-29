@@ -17,7 +17,7 @@ use Yii;
  *
  * @property Revista $revista0
  * @property Cargo $cargo0
- * @property Docente $docente0
+ * @property Agente $agente0
  * @property Division $division0
  */
 class Funcion extends \yii\db\ActiveRecord
@@ -36,13 +36,13 @@ class Funcion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'cargo', 'horas', 'docente', 'revista'], 'required'],
-            [['id', 'cargo', 'horas', 'docente', 'revista', 'division'], 'integer'],
+            [['id', 'cargo', 'horas', 'agente', 'revista'], 'required'],
+            [['id', 'cargo', 'horas', 'agente', 'revista', 'division'], 'integer'],
             [['nombre'], 'string', 'max' => 150],
             [['id'], 'unique'],
             [['revista'], 'exist', 'skipOnError' => true, 'targetClass' => Revista::className(), 'targetAttribute' => ['revista' => 'id']],
             [['cargo'], 'exist', 'skipOnError' => true, 'targetClass' => Cargo::className(), 'targetAttribute' => ['cargo' => 'id']],
-            [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
+            [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
             [['division'], 'exist', 'skipOnError' => true, 'targetClass' => Division::className(), 'targetAttribute' => ['division' => 'id']],
         ];
     }
@@ -57,7 +57,7 @@ class Funcion extends \yii\db\ActiveRecord
             'nombre' => 'Nombre',
             'cargo' => 'Cargo',
             'horas' => 'Horas',
-            'docente' => 'Docente',
+            'agente' => 'Agente',
             'revista' => 'Revista',
             'division' => 'Division',
         ];
@@ -82,9 +82,9 @@ class Funcion extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocente0()
+    public function getAgente0()
     {
-        return $this->hasOne(Docente::className(), ['id' => 'docente']);
+        return $this->hasOne(Agente::className(), ['id' => 'agente']);
     }
 
     /**

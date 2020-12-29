@@ -54,10 +54,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             }
 
-                            if(isset($param['Catedra']['docente'])){
-                                if($param['Catedra']['docente']!=''){
+                            if(isset($param['Catedra']['agente'])){
+                                if($param['Catedra']['agente']!=''){
                                     $filter = true;
-                                    echo '<b> - Docente: </b>'.$listDocentes[$param['Catedra']['docente']];
+                                    echo '<b> - Agente: </b>'.$listDocentes[$param['Catedra']['agente']];
                                     
                                 }
                             }
@@ -143,13 +143,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             <?= 
                                 
-                                $form->field($model, 'docente')->widget(Select2::classname(), [
+                                $form->field($model, 'agente')->widget(Select2::classname(), [
                                     'data' => $listDocentes,
                                     'options' => ['placeholder' => 'Seleccionar...'],
                                     'pluginOptions' => [
                                         'allowClear' => true
                                     ],
-                                ])->label("Docente");
+                                ])->label("Agente");
 
                             ?>
                         
@@ -343,10 +343,10 @@ $this->params['breadcrumbs'][] = $this->title;
             
             
             [
-                'attribute' => 'docente',
+                'attribute' => 'agente',
                 'value' => function ($model){
                     if($model['activo'] != 2){
-                        return $model['docente'];
+                        return $model['agente'];
                     }
                 }
                 /*'format' => 'raw',
@@ -358,7 +358,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     foreach($model->detallecatedras as $detallecatedra){
 
                         
-                        $itemsc[] = [$detallecatedra->condicion0->id, $detallecatedra->condicion0->nombre, $detallecatedra->docente0->apellido.', '.$detallecatedra->docente0->nombre, $detallecatedra->revista0->nombre, $detallecatedra->hora, $detallecatedra->activo];
+                        $itemsc[] = [$detallecatedra->condicion0->id, $detallecatedra->condicion0->nombre, $detallecatedra->agente0->apellido.', '.$detallecatedra->agente0->nombre, $detallecatedra->revista0->nombre, $detallecatedra->hora, $detallecatedra->activo];
                         
                     }
 

@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'division') ?>
 
-    <?= $form->field($model, 'docente') ?>
+    <?= $form->field($model, 'agente') ?>
 
     <?= $form->field($model, 'hora') ?>
 

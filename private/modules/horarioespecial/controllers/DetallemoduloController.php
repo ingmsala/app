@@ -207,9 +207,9 @@ class DetallemoduloController extends Controller
     public function actionHorarios(){
         /*CAMBIAR DOCENTE*/
         $detallecatedras = Detallecatedra::find()
-                                ->joinWith(['docente0'])
+                                ->joinWith(['agente0'])
                                 ->where(['detallecatedra.revista' => 6])
-                                ->andWhere(['docente.id' => 163])
+                                ->andWhere(['agente.id' => 163])
                                 ->all();
         
         //return var_dump($detallecatedras);
@@ -258,9 +258,9 @@ class DetallemoduloController extends Controller
         $division = $detallemodulo->grupodivision0->habilitacionce0->division;
         /*CAMBIAR DOCENTE*/
         $detallecatedras = Detallecatedra::find()
-                                ->joinWith(['docente0', 'catedra0'])
+                                ->joinWith(['agente0', 'catedra0'])
                                 ->where(['detallecatedra.revista' => 6])
-                                ->andWhere(['docente.id' => 163])
+                                ->andWhere(['agente.id' => 163])
                                 ->andWhere(['catedra.division' => $division])
                                 ->all();
 
@@ -272,9 +272,9 @@ class DetallemoduloController extends Controller
         }elseif(count($detallecatedras)==1){
             /*CAMBIAR DOCENTE*/
             $detallecatedra = Detallecatedra::find()
-                                ->joinWith(['docente0', 'catedra0'])
+                                ->joinWith(['agente0', 'catedra0'])
                                 ->where(['detallecatedra.revista' => 6])
-                                ->andWhere(['docente.id' => 163])
+                                ->andWhere(['agente.id' => 163])
                                 ->andWhere(['catedra.division' => $division])
                                 ->one();
 
@@ -382,7 +382,7 @@ class DetallemoduloController extends Controller
 
 
         if(Yii::$app->params['devicedetect']['isMobile']){
-            $horarios = Detallemodulo::find()->joinWith(['grupodivision0', 'horarioclaseespecial0', 'detallecatedra0.docente0', 'grupodivision0.habilitacionce0'])->where(['habilitacionce.fecha' => $detallemodulo->grupodivision0->habilitacionce0->fecha])->andWhere(['=', 'docente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])->orderBy('horarioclaseespecial.inicio')->all();
+            $horarios = Detallemodulo::find()->joinWith(['grupodivision0', 'horarioclaseespecial0', 'detallecatedra0.agente0', 'grupodivision0.habilitacionce0'])->where(['habilitacionce.fecha' => $detallemodulo->grupodivision0->habilitacionce0->fecha])->andWhere(['=', 'agente.mail', 'ignacio.ortiz.moran@unc.edu.ar'])->orderBy('horarioclaseespecial.inicio')->all();
             $array = [];
             $salida = '<h2>'.Yii::$app->formatter->asDate($detallemodulo->grupodivision0->habilitacionce0->fecha, 'dd/MM/yyyy').'</h2>';
             
@@ -529,8 +529,8 @@ class DetallemoduloController extends Controller
                                             $espacio = ' ';
                                         /*CAMBIAR DOCENTE*/
                                         if($horariox->detallecatedra != null){
-                                            $detallecat = '<br /> '.$horariox->detallecatedra0->catedra0->actividad0->nombre.'<br />('.$horariox->detallecatedra0->docente0->apellido.')';
-                                            if($horariox->detallecatedra0->docente0->mail == 'ignacio.ortiz.moran@unc.edu.ar'){
+                                            $detallecat = '<br /> '.$horariox->detallecatedra0->catedra0->actividad0->nombre.'<br />('.$horariox->detallecatedra0->agente0->apellido.')';
+                                            if($horariox->detallecatedra0->agente0->mail == 'ignacio.ortiz.moran@unc.edu.ar'){
                                                 $color = "#c7f4d3";
                                                 $bold = "bold";
                                             }else{

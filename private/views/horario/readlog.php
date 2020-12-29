@@ -97,7 +97,7 @@ $listdivisiones=ArrayHelper::map($divisiones,'nombre','nombre');
 
                         foreach ($cat->detallecatedras as $dc) {
                             if ($dc->revista == 6){
-                                $doc = $dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1);
+                                $doc = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1);
                                 break;
                             }
                         }
@@ -118,7 +118,7 @@ $listdivisiones=ArrayHelper::map($divisiones,'nombre','nombre');
 
                         foreach ($cat->detallecatedras as $dc) {
                             if ($dc->revista == 6){
-                                $doc = $dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1);
+                                $doc = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1);
                                 break;
                             }
                         }
@@ -137,7 +137,7 @@ $listdivisiones=ArrayHelper::map($divisiones,'nombre','nombre');
                     $cat = Catedra::findOne($model['3']->modelnew->catedra);
                     foreach ($cat->detallecatedras as $dc) {
                         if ($dc->revista == 6){
-                            $doc = $dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1);
+                            $doc = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1);
                             break;
                         }
                     }

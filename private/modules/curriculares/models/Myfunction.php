@@ -18,16 +18,16 @@ class Myfunction {
 
         if(in_array (Yii::$app->user->identity->role, [8,9])){
             $clasesdehoy = Clase::find()
-                ->joinWith(['comision0', 'comision0.docentexcomisions', 'comision0.docentexcomisions.docente0', 'comision0.espaciocurricular0'])
+                ->joinWith(['comision0', 'comision0.docentexcomisions', 'comision0.docentexcomisions.agente0', 'comision0.espaciocurricular0'])
                 ->where(['fecha' => date('Y-m-d')])
-                ->andWhere(['docente.mail' => Yii::$app->user->identity->username])
+                ->andWhere(['agente.mail' => Yii::$app->user->identity->username])
                 ->andWhere(['espaciocurricular.tipoespacio' => $tipoespacio])
                 ->orderBy('hora asc')->all();
         
             $clasesproximas = Clase::find()
-                ->joinWith(['comision0', 'comision0.docentexcomisions', 'comision0.docentexcomisions.docente0', 'comision0.espaciocurricular0'])
+                ->joinWith(['comision0', 'comision0.docentexcomisions', 'comision0.docentexcomisions.agente0', 'comision0.espaciocurricular0'])
                 ->where(['BETWEEN', 'fecha', date('Y-m-d', strtotime("+1 days")), date('Y-m-d', strtotime("+7 days"))])
-                ->andWhere(['docente.mail' => Yii::$app->user->identity->username])
+                ->andWhere(['agente.mail' => Yii::$app->user->identity->username])
                 ->andWhere(['espaciocurricular.tipoespacio' => $tipoespacio])
                 ->orderBy('fecha ASC, hora asc')->all();
         }else{

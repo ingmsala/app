@@ -3,8 +3,8 @@
 namespace app\controllers\reporte\parte;
 
 use Yii;
-use app\models\Docente;
-use app\models\DocenteSearch;
+use app\models\Agente;
+use app\models\AgenteSearch;
 use app\models\DetalleparteSearch;
 use app\models\Detalleparte;
 use app\models\NombramientoSearch;
@@ -57,10 +57,10 @@ class FaltasdocentesController extends \yii\web\Controller
         ];
     }
 
- 	public function actionIndex($mes = 0, $anio = 1, $docente = 0)
+ 	public function actionIndex($mes = 0, $anio = 1, $agente = 0)
 	    {
 	        $searchModel = new DetalleparteSearch();
-	        $dataProvider = $searchModel->providerfaltasdocentes($mes, $anio, $docente);
+	        $dataProvider = $searchModel->providerfaltasdocentes($mes, $anio, $agente);
             $model = new Detalleparte();
             $param = Yii::$app->request->queryParams;
             $years = Aniolectivo::find()->all();
@@ -71,10 +71,10 @@ class FaltasdocentesController extends \yii\web\Controller
 	            'dataProvider' => $dataProvider,
                 'anio' => $anio,
                 'mes' => $mes,
-                'docente' => $docente,
+                'agente' => $agente,
                 'model' => $model,
                 'param' => $param,
-                'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),
+                'docentes' => Agente::find()->orderBy('apellido, nombre')->all(),
                 'years' => $years,
 	        ]);
 	    }
@@ -95,7 +95,7 @@ class FaltasdocentesController extends \yii\web\Controller
 
 	protected function findModel($id)
     {
-        if (($model = Docente::findOne($id)) !== null) {
+        if (($model = Agente::findOne($id)) !== null) {
             return $model;
         }
 
@@ -105,19 +105,19 @@ class FaltasdocentesController extends \yii\web\Controller
 
 
 
-public function actionAll($docente){
+public function actionAll($agente){
         //$this->layout = 'print';
         if (YII_ENV_DEV) {
             Yii::$app->getModule('debug')->instance->allowedIPs = [];
         }
 
-        $doc = $this->findModel($docente);
+        $doc = $this->findModel($agente);
 
         $searchModel = new DetalleparteSearch();
-        $dataProvider = $searchModel->providerfaltasdocentesview(0, 2019, $docente);
+        $dataProvider = $searchModel->providerfaltasdocentesview(0, 2019, $agente);
  
         $salidaimpar = $this->renderAjax('view', [
-            'model' => $this->findModel($docente),
+            'model' => $this->findModel($agente),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'anio' => 2019,

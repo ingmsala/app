@@ -128,7 +128,7 @@ JS;
 		                }
 		            ],
 		            [
-		                'label' => 'Docente',
+		                'label' => 'Agente',
 		                'vAlign' => 'middle',
 		                'hAlign' => 'center',
 		                'format' => 'raw',

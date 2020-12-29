@@ -20,7 +20,7 @@ class DetalleparteSearch extends Detalleparte
     public function rules()
     {
         return [
-            [['id', 'parte', 'division', 'docente', 'hora', 'llego', 'retiro', 'falta', 'estadoinasistencia','detalleadelrecup'], 'integer'],
+            [['id', 'parte', 'division', 'agente', 'hora', 'llego', 'retiro', 'falta', 'estadoinasistencia','detalleadelrecup'], 'integer'],
         ];
     }
 
@@ -80,7 +80,7 @@ class DetalleparteSearch extends Detalleparte
             'id' => $this->id,
             'parte' => $this->parte,
             'division' => $this->division,
-            'docente' => $this->docente,
+            'agente' => $this->agente,
             'hora' => $this->hora,
             'llego' => $this->llego,
             'retiro' => $this->retiro,
@@ -100,10 +100,10 @@ class DetalleparteSearch extends Detalleparte
             $sql= 'select distinct detalleparte.id as id, division.nombre as division, hora.nombre as hora, ' ;
         }
         $sql.='
-        parte.fecha as fecha, docente.apellido as apellido, docente.nombre as nombred, detalleparte.llego, detalleparte.retiro, falta.nombre as falta, estadoinasistenciaxparte.detalle as detalle, detalleparte.estadoinasistencia as estadoinasistenciax, esdp.nombre as estadoinasistenciaxtxt, (select count(*) from estadoinasistenciaxparte eixp where eixp.detalleparte = detalleparte.id) as cont 
+        parte.fecha as fecha, agente.apellido as apellido, agente.nombre as nombred, detalleparte.llego, detalleparte.retiro, falta.nombre as falta, estadoinasistenciaxparte.detalle as detalle, detalleparte.estadoinasistencia as estadoinasistenciax, esdp.nombre as estadoinasistenciaxtxt, (select count(*) from estadoinasistenciaxparte eixp where eixp.detalleparte = detalleparte.id) as cont 
         from detalleparte 
         left join division on detalleparte.division = division.id
-        left join docente on detalleparte.docente = docente.id
+        left join agente on detalleparte.agente = agente.id
         left join estadoinasistencia esdp on detalleparte.estadoinasistencia = esdp.id
         left join hora on detalleparte.hora = hora.id
         left join falta on detalleparte.falta = falta.id
@@ -119,8 +119,8 @@ class DetalleparteSearch extends Detalleparte
         if (isset($params['Detalleparte']['mes']) && $params['Detalleparte']['mes'] != ''){
             $sql .= ' and month(parte.fecha) = '.$params["Detalleparte"]["mes"];
         }
-        if (isset($params['Detalleparte']['docente']) && $params['Detalleparte']['docente'] != ''){
-            $sql .= ' and detalleparte.docente = '.$params["Detalleparte"]["docente"];
+        if (isset($params['Detalleparte']['agente']) && $params['Detalleparte']['agente'] != ''){
+            $sql .= ' and detalleparte.agente = '.$params["Detalleparte"]["agente"];
         }
         if (isset($params['Detalleparte']['estadoinasistencia']) && $params['Detalleparte']['estadoinasistencia'] != ''){
             $sql .= ' and detalleparte.estadoinasistencia = '.$params["Detalleparte"]["estadoinasistencia"];
@@ -155,7 +155,7 @@ class DetalleparteSearch extends Detalleparte
         }
 
         if (isset($params['Detalleparte']['solodia']) && $params['Detalleparte']['solodia'] == 1){
-            $sql.= ' order by parte.fecha desc, docente.apellido, docente.nombre';
+            $sql.= ' order by parte.fecha desc, agente.apellido, agente.nombre';
         }else{
             $sql.= ' order by parte.fecha desc, division.nombre, hora.nombre';
         }
@@ -174,9 +174,9 @@ class DetalleparteSearch extends Detalleparte
                         'desc' => ['division' => SORT_DESC, 'division' => SORT_DESC],
                         
                     ],
-                    'docente' => [
-                        'asc' => ['docente' => SORT_ASC, 'docente' => SORT_ASC],
-                        'desc' => ['docente' => SORT_DESC, 'docente' => SORT_DESC],
+                    'agente' => [
+                        'asc' => ['agente' => SORT_ASC, 'agente' => SORT_ASC],
+                        'desc' => ['agente' => SORT_DESC, 'agente' => SORT_DESC],
                         
                     ],
                 ],
@@ -203,12 +203,12 @@ class DetalleparteSearch extends Detalleparte
         
             $query = Detalleparte::find()
             ->distinct()
-            ->select(['docente'])
-            ->joinWith(['docente0', 'division0', 'parte0', 'division0.turno0'])
+            ->select(['agente'])
+            ->joinWith(['agente0', 'division0', 'parte0', 'division0.turno0'])
             ->where(['parte.fecha' => $fecha])
             ->andWhere(['<>', 'detalleparte.parte', $id])
             ->andWhere(['detalleparte.falta' => 1])
-            ->orderBy('docente.apellido, docente.nombre');
+            ->orderBy('agente.apellido, agente.nombre');
        
         
 
@@ -230,7 +230,7 @@ class DetalleparteSearch extends Detalleparte
             'id' => $this->id,
             'parte' => $this->parte,
             'division' => $this->division,
-            'docente' => $this->docente,
+            'agente' => $this->agente,
             'hora' => $this->hora,
             'llego' => $this->llego,
             'retiro' => $this->retiro,
@@ -266,7 +266,7 @@ class DetalleparteSearch extends Detalleparte
             'id' => $this->id,
             'parte' => $this->parte,
             'division' => $this->division,
-            'docente' => $this->docente,
+            'agente' => $this->agente,
             'hora' => $this->hora,
             'llego' => $this->llego,
             'retiro' => $this->retiro,
@@ -303,7 +303,7 @@ class DetalleparteSearch extends Detalleparte
     public function providerxdocente($id)
     {
         $query = Detalleparte::find()
-            ->where(['docente' => $id,
+            ->where(['agente' => $id,
                 //'condicion' => 5 //suplente
             ]);
 
@@ -571,7 +571,7 @@ class DetalleparteSearch extends Detalleparte
     }
 
 
-    public function providerfaltasdocentes($mes, $anio, $docente)
+    public function providerfaltasdocentes($mes, $anio, $agente)
     {
         
         $sql='
@@ -585,15 +585,15 @@ class DetalleparteSearch extends Detalleparte
               WHEN dp.falta = 7 THEN -40
             END) AS faltas
             FROM detalleparte dp
-            LEFT JOIN docente d  ON dp.docente = d.id
+            LEFT JOIN agente d  ON dp.agente = d.id
             LEFT JOIN parte p ON dp.parte = p.id
             WHERE true ';
         ($anio != 0) ? 
             $sql.= ' AND YEAR( p.fecha ) = '.$anio : '';
         ($mes != 0) ? 
             $sql.= ' AND MONTH( p.fecha ) = '.$mes : '';
-        ($docente != 0) ? 
-            $sql.= ' AND d.id = '.$docente : '';
+        ($agente != 0) ? 
+            $sql.= ' AND d.id = '.$agente : '';
         $sql.=' GROUP BY d.legajo, d.apellido, d.nombre
                ORDER BY faltas DESC, d.apellido, d.nombre, d.legajo';
 
@@ -624,7 +624,7 @@ class DetalleparteSearch extends Detalleparte
             LEFT JOIN falta f ON dp.falta = f.id
             LEFT JOIN estadoinasistencia ei ON dp.estadoinasistencia = ei.id
             WHERE YEAR(p.fecha) = '.$anio.'
-            AND dp.docente = '.$id;
+            AND dp.agente = '.$id;
             
             
 
@@ -679,20 +679,20 @@ class DetalleparteSearch extends Detalleparte
 
     }
 
-    public function estadoinasistenciaXdocente($mes, $anio, $docente)
+    public function estadoinasistenciaXdocente($mes, $anio, $agente)
     {
         $query = 'SELECT
-    `docente`.`id` AS `docente`,
-    `docente`.`apellido`,
-    `docente`.`nombre`,
+    `agente`.`id` AS `agente`,
+    `agente`.`apellido`,
+    `agente`.`nombre`,
     (
     SELECT
         COUNT(dp2.estadoinasistencia)
     FROM
         detalleparte dp2
     WHERE
-        dp2.docente = detalleparte.docente AND dp2.estadoinasistencia = 4 AND(dp2.`falta` IN(1, 2)) AND(
-            `detalleparte`.`docente` IS NOT NULL
+        dp2.agente = detalleparte.agente AND dp2.estadoinasistencia = 4 AND(dp2.`falta` IN(1, 2)) AND(
+            `detalleparte`.`agente` IS NOT NULL
         ) AND(YEAR(parte.fecha) = '.$anio.')
 ) AS estadoinasistencia,
 (
@@ -702,30 +702,30 @@ class DetalleparteSearch extends Detalleparte
     FROM
         detalleparte AS dp
     WHERE
-        dp.docente = detalleparte.docente AND(dp.falta = 1 OR dp.falta = 2) AND(YEAR(parte.fecha) = '.$anio.')
+        dp.agente = detalleparte.agente AND(dp.falta = 1 OR dp.falta = 2) AND(YEAR(parte.fecha) = '.$anio.')
 ) -(
     SELECT
         COUNT(dp.id)
     FROM
         detalleparte AS dp
     WHERE
-        dp.docente = detalleparte.docente AND(
+        dp.agente = detalleparte.agente AND(
             dp.falta = 4 OR dp.falta = 6 OR dp.falta = 7
         ) AND(YEAR(parte.fecha) = '.$anio.')
 )
 ) AS id
 FROM
     `detalleparte`
-LEFT JOIN `docente` ON `detalleparte`.`docente` = `docente`.`id`
+LEFT JOIN `agente` ON `detalleparte`.`agente` = `agente`.`id`
 LEFT JOIN `parte` ON `detalleparte`.`parte` = `parte`.`id`
 WHERE
     (`falta` IN(1, 2)) AND(
-        `detalleparte`.`docente` IS NOT NULL
+        `detalleparte`.`agente` IS NOT NULL
     ) AND(YEAR(parte.fecha) = '.$anio.')
 GROUP BY
-    `docente`.`id`,
-    `docente`.`apellido`,
-    `docente`.`nombre`
+    `agente`.`id`,
+    `agente`.`apellido`,
+    `agente`.`nombre`
 ORDER BY
     (
         (
@@ -734,7 +734,7 @@ ORDER BY
         FROM
             detalleparte AS dp
         WHERE
-            dp.docente = detalleparte.docente AND(
+            dp.agente = detalleparte.agente AND(
                 dp.falta = 1 OR dp.falta = 2 OR dp.falta = 3
             )
     ) -(
@@ -743,7 +743,7 @@ ORDER BY
     FROM
         detalleparte AS dp
     WHERE
-        dp.docente = detalleparte.docente AND(
+        dp.agente = detalleparte.agente AND(
             dp.falta = 4 OR dp.falta = 6 OR dp.falta = 7
         )
 )

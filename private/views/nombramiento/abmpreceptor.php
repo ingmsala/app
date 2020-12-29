@@ -18,10 +18,10 @@ use kartik\select2\Select2;
 
  
     <?php $listpreceptor=ArrayHelper::map($preceptor,'id',function($model){
-            if($model->docente0->id == 77) //jaime
-                return $model->docente0->apellido.', '.$model->docente0->nombre.' '.$model->nombre;
+            if($model->agente0->id == 77) //jaime
+                return $model->agente0->apellido.', '.$model->agente0->nombre.' '.$model->nombre;
             else
-                return $model->docente0->apellido.', '.$model->docente0->nombre;
+                return $model->agente0->apellido.', '.$model->agente0->nombre;
     }); ?>
     
 
@@ -35,7 +35,7 @@ use kartik\select2\Select2;
             'pluginOptions' => [
                 'allowClear' => true
             ],
-        ])->label('Docente');
+        ])->label('Agente');
 
     ?>
 

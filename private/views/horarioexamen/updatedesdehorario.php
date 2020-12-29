@@ -13,7 +13,7 @@ $listcatedras=ArrayHelper::map($catedras,'id',function($cat){
     $doc = '';
     foreach ($cat->detallecatedras as $dc) {
         if($dc->revista == 6){
-            $doc = $dc->docente0->apellido.''.$dc->docente0->nombre;
+            $doc = $dc->agente0->apellido.''.$dc->agente0->nombre;
             break;
         }
     }
@@ -31,7 +31,7 @@ JS;
 
 ?>
 <div class="panel panel-default">
-    <div class="panel-heading"><?= 'Modificar docente de '.Html::encode($division->nombre); ?></div>
+    <div class="panel-heading"><?= 'Modificar agente de '.Html::encode($division->nombre); ?></div>
     <div class="panel-body">
 <div class="horario-form">
 

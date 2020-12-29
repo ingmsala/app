@@ -9,7 +9,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use app\assets\AppAsset;
 use app\config\Globales;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Docentexdepartamento;
 
 AppAsset::register($this);
@@ -30,9 +30,9 @@ AppAsset::register($this);
     <?php $this->beginBody() ?>
 
     <?php
-        $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        $persona = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
         try {
-            $depto = Docentexdepartamento::find()->where(['docente' => $persona->id])->count();
+            $depto = Docentexdepartamento::find()->where(['agente' => $persona->id])->count();
         } catch (\Throwable $th) {
             //throw $th;
             $depto = 0;
@@ -98,7 +98,7 @@ if(!Yii::$app->user->isGuest){
             ]
 
         ];
-    }elseif(Yii::$app->user->identity->role == Globales::US_DOCENTE){
+    }elseif(Yii::$app->user->identity->role == Globales::US_AGENTE){
 
         if(in_array(Yii::$app->user->identity->username, Globales::authttemas) || $depto>0){
             $ar = ['label' => '<center><span class="glyphicon glyphicon-book"></span><br />'.'Programas</center>',

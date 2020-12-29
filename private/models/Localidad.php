@@ -11,7 +11,7 @@ use Yii;
  * @property string $nombre
  * @property int $provincia
  *
- * @property Docente[] $docentes
+ * @property Agente[] $docentes
  */
 class Localidad extends \yii\db\ActiveRecord
 {
@@ -50,8 +50,8 @@ class Localidad extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocentes()
+    public function getAgentes()
     {
-        return $this->hasMany(Docente::className(), ['localidad' => 'id']);
+        return $this->hasMany(Agente::className(), ['localidad' => 'id']);
     }
 }

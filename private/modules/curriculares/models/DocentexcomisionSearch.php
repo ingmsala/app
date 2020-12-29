@@ -19,7 +19,7 @@ class DocentexcomisionSearch extends Docentexcomision
     public function rules()
     {
         return [
-            [['id', 'docente', 'comision', 'role'], 'integer'],
+            [['id', 'agente', 'comision', 'role'], 'integer'],
         ];
     }
 
@@ -60,7 +60,7 @@ class DocentexcomisionSearch extends Docentexcomision
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'docente' => $this->docente,
+            'agente' => $this->agente,
             'comision' => $this->comision,
         ]);
 
@@ -70,10 +70,10 @@ class DocentexcomisionSearch extends Docentexcomision
     public function providerdocentes($id)
     {
         $query = Docentexcomision::find()
-            ->joinWith(['docente0'])
+            ->joinWith(['agente0'])
             ->where(['comision' => $id])
             ->andWhere(['role' => 8])
-            ->orderBy('docente.apellido', 'docente.nombre');
+            ->orderBy('agente.apellido', 'agente.nombre');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -92,10 +92,10 @@ class DocentexcomisionSearch extends Docentexcomision
     public function providerpreceptores($id)
     {
         $query = Docentexcomision::find()
-            ->joinWith(['docente0'])
+            ->joinWith(['agente0'])
             ->where(['comision' => $id])
             ->andWhere(['role' => 9])
-            ->orderBy('docente.apellido', 'docente.nombre');
+            ->orderBy('agente.apellido', 'agente.nombre');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -114,8 +114,8 @@ class DocentexcomisionSearch extends Docentexcomision
     public function providerxdocente($id, $tipoespacio)
     {
         $query = Docentexcomision::find()
-            ->joinWith(['docente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
-            ->where(['docente.legajo' => $id,
+            ->joinWith(['agente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
+            ->where(['agente.legajo' => $id,
             ])
             ->andWhere(['espaciocurricular.tipoespacio' => $tipoespacio])
             ->orderBy('actividad.nombre', 'espaciocurricular.nombre');
@@ -138,14 +138,14 @@ class DocentexcomisionSearch extends Docentexcomision
     {
         if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_PSC])){
             return Docentexcomision::find()
-            ->joinWith(['docente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
+            ->joinWith(['agente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
             ->where(['espaciocurricular.tipoespacio' => $tipoespacio])
             ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
             ->all();
         }
        return Docentexcomision::find()
-            ->joinWith(['docente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
-            ->where(['docente.legajo' => $id,
+            ->joinWith(['agente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
+            ->where(['agente.legajo' => $id,
             ])
             ->andWhere(['espaciocurricular.tipoespacio' => $tipoespacio])
             ->orderBy('actividad.nombre', 'espaciocurricular.nombre')

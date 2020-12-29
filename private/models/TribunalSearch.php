@@ -18,7 +18,7 @@ class TribunalSearch extends Tribunal
     public function rules()
     {
         return [
-            [['id', 'docente', 'mesaexamen'], 'integer'],
+            [['id', 'agente', 'mesaexamen'], 'integer'],
         ];
     }
 
@@ -59,7 +59,7 @@ class TribunalSearch extends Tribunal
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'docente' => $this->docente,
+            'agente' => $this->agente,
             'mesaexamen' => $this->mesaexamen,
         ]);
 

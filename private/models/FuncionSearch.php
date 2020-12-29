@@ -18,7 +18,7 @@ class FuncionSearch extends Funcion
     public function rules()
     {
         return [
-            [['id', 'cargo', 'horas', 'docente'], 'integer'],
+            [['id', 'cargo', 'horas', 'agente'], 'integer'],
             [['nombre'], 'safe'],
         ];
     }
@@ -62,7 +62,7 @@ class FuncionSearch extends Funcion
             'id' => $this->id,
             'cargo' => $this->cargo,
             'horas' => $this->horas,
-            'docente' => $this->docente,
+            'agente' => $this->agente,
         ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre]);

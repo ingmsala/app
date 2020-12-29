@@ -2,7 +2,7 @@
 
 namespace app\modules\sociocomunitarios\controllers;
 
-use app\models\Docente;
+use app\models\Agente;
 use app\modules\curriculares\models\Acta;
 use app\modules\curriculares\models\Docentexcomision;
 use app\modules\curriculares\models\Matricula;
@@ -48,10 +48,10 @@ class DetallerubricaController extends Controller
                                         $matricula = Seguimiento::findOne(Yii::$app->request->post()['id'])->matricula0;
                                     else
                                         $matricula = Seguimiento::findOne(Yii::$app->request->queryParams['id'])->matricula0;
-                                    $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                    $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                         ->where(['comision' => $matricula->comision])
-                                                        ->andWhere(['docente' => $docente->id])
+                                                        ->andWhere(['agente' => $agente->id])
                                                         ->all());
                                         if($cant>0){
                                             $autoriza = true;
@@ -96,10 +96,10 @@ class DetallerubricaController extends Controller
                                     return true;
                                 elseif(in_array (Yii::$app->user->identity->role, [8,9])){
                                     $matricula = Matricula::findOne(Yii::$app->request->queryParams['id']);
-                                    $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                    $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                                     $cant = count(Docentexcomision::find()
                                                     ->where(['comision' => $matricula->comision])
-                                                    ->andWhere(['docente' => $docente->id])
+                                                    ->andWhere(['agente' => $agente->id])
                                                     ->all());
                                     if($cant>0){
                                         return true;

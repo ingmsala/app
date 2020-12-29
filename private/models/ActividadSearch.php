@@ -96,10 +96,10 @@ class ActividadSearch extends Actividad
     public function porprograma($params)
     {
 
-        $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        $persona = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
 
         if($persona != null){
-            $depto = Docentexdepartamento::find()->where(['docente' => $persona->id])->all();
+            $depto = Docentexdepartamento::find()->where(['agente' => $persona->id])->all();
             if($depto != null){
                 $query = Actividad::find()->where(['propuesta' => 1])
                         ->joinWith(['actividadtipo0', 'plan0', 'propuesta0'])

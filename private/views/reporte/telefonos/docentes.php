@@ -5,13 +5,13 @@ use kartik\grid\GridView;
 use app\config\Globales;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\DocenteSearch */
+/* @var $searchModel app\models\AgenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Docentes';
 
 ?>
-<div class="docente-index">
+<div class="agente-index">
 
     <?php
         if(in_array (Yii::$app->user->identity->role, [1]))
@@ -71,7 +71,7 @@ $this->title = 'Docentes';
                 
             ],
             [
-                'label' => 'Docente',
+                'label' => 'Agente',
                 'attribute' => 'apellido',
                 'hAlign' => 'left', 
                 'vAlign' => 'middle',

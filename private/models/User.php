@@ -210,15 +210,12 @@ public function removePasswordResetToken() {
         return $this->hasOne(Role::className(), ['id' => 'role']);
     }
 
-     public function getDocente0()
+     public function getAgente0()
     {
-        return $this->hasOne(Docente::className(), ['mail' => 'username']);
+        return $this->hasOne(Agente::className(), ['mail' => 'username']);
     }
 
-     public function getNodocente0()
-    {
-        return $this->hasOne(Nodocente::className(), ['mail' => 'username']);
-    }
+    
 
 
 }

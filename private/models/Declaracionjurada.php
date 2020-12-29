@@ -8,15 +8,14 @@ use Yii;
  * This is the model class for table "declaracionjurada".
  *
  * @property int $id
- * @property int $persona
+ * @property int $agente
  * @property int $estadodeclaracion
  * @property string $fecha
  * @property int $actividadnooficial
  * @property int $pasividad
  *
  * @property Actividadnooficial[] $actividadnooficials
- * @property Docente $persona0
- * @property Nodocente $persona1
+ * @property Agente $agente0
  * @property Estadodj $estadodeclaracion0
  * @property Funciondj[] $funciondjs
  * @property Pasividaddj[] $pasividaddjs
@@ -37,9 +36,9 @@ class Declaracionjurada extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            //[['persona', 'estadodeclaracion', 'fecha', 'actividadnooficial', 'pasividad'], 'required'],
+            //[['agente', 'estadodeclaracion', 'fecha', 'actividadnooficial', 'pasividad'], 'required'],
             [['fecha'], 'required'],
-            [['persona', 'estadodeclaracion', 'actividadnooficial', 'pasividad'], 'integer'],
+            [['agente', 'estadodeclaracion', 'actividadnooficial', 'pasividad'], 'integer'],
             [['fecha'], 'safe'],
             [['estadodeclaracion'], 'exist', 'skipOnError' => true, 'targetClass' => Estadodj::className(), 'targetAttribute' => ['estadodeclaracion' => 'id']],
         ];
@@ -52,7 +51,7 @@ class Declaracionjurada extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'persona' => 'Persona',
+            'agente' => 'Agente',
             'estadodeclaracion' => 'Estadodeclaracion',
             'fecha' => 'Fecha',
             'actividadnooficial' => 'Actividadnooficial',
@@ -71,17 +70,9 @@ class Declaracionjurada extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocente0()
+    public function getAgente0()
     {
-        return $this->hasOne(Docente::className(), ['documento' => 'persona']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getNodocente0()
-    {
-        return $this->hasOne(Nodocente::className(), ['documento' => 'persona']);
+        return $this->hasOne(Agente::className(), ['documento' => 'agente']);
     }
 
     /**

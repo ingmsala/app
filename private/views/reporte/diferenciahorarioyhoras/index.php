@@ -6,13 +6,13 @@ use yii\helpers\Url;
 
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\DocenteSearch */
+/* @var $searchModel app\models\AgenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Diferencia de Horas de la materia vs Horario';
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="docente-index">
+<div class="agente-index">
 
       
 

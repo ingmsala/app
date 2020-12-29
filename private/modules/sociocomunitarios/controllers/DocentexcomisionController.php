@@ -7,7 +7,7 @@ use app\modules\curriculares\models\Docentexcomision;
 use app\modules\curriculares\models\Comision;
 use app\models\Actividad;
 use app\models\Role;
-use app\models\Docente;
+use app\models\Agente;
 use app\modules\curriculares\models\DocentexcomisionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -95,7 +95,7 @@ class DocentexcomisionController extends Controller
 
         $comisionx = Yii::$app->request->queryParams['id'];
         $model = new Docentexcomision();
-        $docentes = Docente::find()
+        $docentes = Agente::find()
                     ->orderBy('apellido, nombre')
                     ->all();
 
@@ -143,7 +143,7 @@ class DocentexcomisionController extends Controller
         $model = $this->findModel($id);
         $comisionx = Yii::$app->request->queryParams['id'];
         
-        $docentes = Docente::find()
+        $docentes = Agente::find()
                     ->orderBy('apellido, nombre')
                     ->all();
 

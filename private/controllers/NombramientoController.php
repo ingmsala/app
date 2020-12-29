@@ -9,7 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Cargo;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Revista;
 use app\models\Division;
 use app\models\Condicion;
@@ -85,7 +85,7 @@ class NombramientoController extends Controller
                         ->all();
 
         $cargos = Cargo::find()->all();
-        $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+        $docentes = Agente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $revistas = Revista::find()->all();
         $divisiones = Division::find()->all();
         $condiciones = Condicion::find()->where(['<>', 'id', 6])->all();
@@ -100,8 +100,8 @@ class NombramientoController extends Controller
 
         if(isset($param['Nombramiento']['cargo']) && $param['Nombramiento']['cargo']!='')
             $model->cargo = $param['Nombramiento']['cargo'];
-        if(isset($param['Nombramiento']['docente']) && $param['Nombramiento']['docente']!='')
-            $model->docente = $param['Nombramiento']['docente'];
+        if(isset($param['Nombramiento']['agente']) && $param['Nombramiento']['agente']!='')
+            $model->agente = $param['Nombramiento']['agente'];
         if(isset($param['Nombramiento']['revista']) && $param['Nombramiento']['revista']!='')
             $model->revista = $param['Nombramiento']['revista'];
         if(isset($param['Nombramiento']['condicion']) && $param['Nombramiento']['condicion']!='')
@@ -166,7 +166,7 @@ class NombramientoController extends Controller
         $model->scenario = $model::SCENARIO_ABMNOMBRAMIENTO;
 
         $cargos = Cargo::find()->all();
-        $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+        $docentes = Agente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $revistas = Revista::find()->where(['<>', 'id', 6])->all();
         $divisiones = Division::find()->all();
         $condiciones = Condicion::find()
@@ -248,7 +248,7 @@ class NombramientoController extends Controller
         $model->scenario = $model::SCENARIO_ABMNOMBRAMIENTO;
 
         $cargos = Cargo::find()->all();
-        $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+        $docentes = Agente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $revistas = Revista::find()->where(['<>', 'id', 6])->all();
         $divisiones = Division::find()->all();
         $condiciones = Condicion::find()->andWhere(['<>', 'id', 6])->all();
@@ -418,7 +418,7 @@ class NombramientoController extends Controller
 
         $model = Nombramiento::findOne($idx);
         $cargos = Cargo::find()->all();
-        $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+        $docentes = Agente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $revistas = Revista::find()->where(['<>', 'id', 6])->all();
         $divisiones = Division::find()->all();
         $condiciones = Condicion::find()->where(['<>', 'id', 6])->all();
@@ -476,7 +476,7 @@ class NombramientoController extends Controller
 
             $cargos = Cargo::find()->all();
             
-            $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+            $docentes = Agente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
             $revistas = Revista::find()->where(['<>', 'id', 6])->all();
             $divisiones = Division::find()->all();
             $extensiones = Extension::find()->all();
@@ -518,7 +518,7 @@ class NombramientoController extends Controller
         $nombramientoParent = Nombramiento::findOne($idx);
 
         $cargos = Cargo::find()->all();
-        $docentes = Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+        $docentes = Agente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $revistas = Revista::find()->where(['<>', 'id', 6])->all();
         $divisiones = Division::find()->all();
         $condiciones = Condicion::find()->where(['<>', 'id', 6])->all();
@@ -601,9 +601,9 @@ class NombramientoController extends Controller
         $model->scenario = $model::SCENARIO_ABMDIVISION;
         
         $preceptores = Nombramiento::find()
-                ->joinWith(['docente0'])
+                ->joinWith(['agente0'])
                 ->where(['cargo' => Globales::CARGO_PREC])
-                ->orderBy('docente.apellido, docente.nombre')->all();
+                ->orderBy('agente.apellido, agente.nombre')->all();
 
         if ($model->load(Yii::$app->request->post())) {
             //return var_dump(Yii::$app->request->post());

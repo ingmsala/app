@@ -69,14 +69,14 @@ class SiteController extends Controller
     public function actionIndex()
     {
         
-        Yii::$app->session->setFlash('danger', 'Dentro de la opción del menú <b>'.Yii::$app->user->identity->role0->nombre.'</b> podrá "Cambiar el rol de usuario" para acceder a las funcionalidades administrativas o a las del cargo Docente o No docente para trámites personales.');
+        Yii::$app->session->setFlash('danger', 'Dentro de la opción del menú <b>'.Yii::$app->user->identity->role0->nombre.'</b> podrá "Cambiar el rol de usuario" para acceder a las funcionalidades administrativas o a las del cargo Agente o No docente para trámites personales.');
         if(Yii::$app->user->identity->activate == 0){
             return $this->redirect(['/user/cambiarpass', 'i'=>4]);
         }
         if (in_array (Yii::$app->user->identity->role, [Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
                 return $this->redirect(['/curriculares/menuopciones']);
                 
-        }elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_NODOCENTE, Globales::US_MANTENIMIENTO, Globales::US_PRECEPTOR])){
+        }elseif(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_NODOCENTE, Globales::US_MANTENIMIENTO, Globales::US_PRECEPTOR])){
             return $this->redirect(['/personal/menuprincipal']);
         }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
             return $this->redirect(['/reporte/preceptores/preceptores']);
@@ -121,7 +121,7 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) {
             if (in_array (Yii::$app->user->identity->role, [Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
                 return $this->redirect(['/curriculares/menuopciones']);
-            }elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_NODOCENTE, Globales::US_MANTENIMIENTO, Globales::US_PRECEPTOR])){
+            }elseif(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_NODOCENTE, Globales::US_MANTENIMIENTO, Globales::US_PRECEPTOR])){
                  return $this->redirect(['/personal/menuprincipal']);
             }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
                 return $this->redirect(['//reporte/preceptores/preceptores']);
@@ -146,7 +146,7 @@ class SiteController extends Controller
             }
             if (in_array (Yii::$app->user->identity->role, [Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI])){
                 return $this->redirect(['/curriculares/menuopciones']);
-            }elseif(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_NODOCENTE, Globales::US_MANTENIMIENTO, Globales::US_PRECEPTOR])){
+            }elseif(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_NODOCENTE, Globales::US_MANTENIMIENTO, Globales::US_PRECEPTOR])){
                 return $this->redirect(['/personal/menuprincipal']);
             }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
                     return $this->redirect(['//reporte/preceptores/preceptores']);

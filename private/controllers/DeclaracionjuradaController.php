@@ -8,13 +8,12 @@ use Yii;
 use app\models\Declaracionjurada;
 use app\models\DeclaracionjuradaSearch;
 use app\models\Diasemana;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Funciondj;
 use app\models\FunciondjSearch;
 use app\models\Horariodj;
 use app\models\Localidad;
 use app\models\MensajedjSearch;
-use app\models\Nodocente;
 use app\models\Pasividaddj;
 use app\models\Provincia;
 use app\models\Tipodocumento;
@@ -60,7 +59,7 @@ class DeclaracionjuradaController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_NODOCENTE, Globales::US_PRECEPTOR, Globales::US_MANTENIMIENTO]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_NODOCENTE, Globales::US_PRECEPTOR, Globales::US_MANTENIMIENTO]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -114,8 +113,9 @@ class DeclaracionjuradaController extends Controller
     {
         $this->layout = 'mainpersonal';
         $searchModel = new DeclaracionjuradaSearch();
+        //return Yii::$app->user->identity->username;
         $dataProvider = $searchModel->porAgente(Yii::$app->request->queryParams);
-
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -155,25 +155,24 @@ class DeclaracionjuradaController extends Controller
     public function actionCreate()
     {
         $this->layout = 'mainpersonal';
-        $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-        if($persona == null){
-            $persona = Nodocente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-            if($persona == null){
-                Yii::$app->session->setFlash('danger', 'Error de autentificación. Contacte al administrador del sistema');
-                return $this->redirect(['index']); 
-            }
+        $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        if($agente == null){
+           
+            Yii::$app->session->setFlash('danger', 'Error de autentificación. Contacte al administrador del sistema');
+            return $this->redirect(['index']); 
+            
         }
 
-        $persona->scenario = Docente::SCENARIO_DECLARACIONJURADA;
+        $agente->scenario = Agente::SCENARIO_DECLARACIONJURADA;
         $cantidadabiertos = Declaracionjurada::find()
-                                ->where(['persona' => $persona->documento])
+                                ->where(['agente' => $agente->documento])
                                 ->andWhere(['or', 
                                     ['=', 'estadodeclaracion', 1],
                                     ['=', 'estadodeclaracion', 4],
                                 ])
                                 ->count();
         $cantidadenviados = Declaracionjurada::find()
-                                ->where(['persona' => $persona->documento])
+                                ->where(['agente' => $agente->documento])
                                 ->andWhere(['=', 'estadodeclaracion', 2])
                                 ->count();
         
@@ -185,7 +184,7 @@ class DeclaracionjuradaController extends Controller
             return $this->redirect(['index']);
         }else{
             $model = new Declaracionjurada();
-            $model->persona = $persona->documento;
+            $model->agente = $agente->documento;
             date_default_timezone_set('America/Argentina/Buenos_Aires');
             $model->fecha = date("Y-m-d H:i:s");
             $model->estadodeclaracion = 1;
@@ -200,22 +199,21 @@ class DeclaracionjuradaController extends Controller
 
     public function actionPercepciones(){
         $this->layout = 'mainpersonal';
-        $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-        if($persona == null){
-            $persona = Nodocente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-            if($persona == null){
+        $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        if($agente == null){
+            
                 Yii::$app->session->setFlash('danger', 'Error de autentificación. Contacte al administrador del sistema');
                 return $this->redirect(['index']); 
-            }
+            
         }
-        $model = Declaracionjurada::find()->where(['persona' => $persona->documento])->andWhere(['or', 
+        $model = Declaracionjurada::find()->where(['agente' => $agente->documento])->andWhere(['or', 
                                             ['=', 'estadodeclaracion', 1],
                                             ['=', 'estadodeclaracion', 4],])->one();
         if($model == null){
             Yii::$app->session->setFlash('danger', "No tiene acceso a la Declaración Jurada");
             return $this->redirect(['index']);
         }
-        //$model = Declaracionjurada::find()->where(['persona' => $persona->documento])->andWhere(['=', 'estadodeclaracion', 1])->one();
+        //$model = Declaracionjurada::find()->where(['agente' => $agente->documento])->andWhere(['=', 'estadodeclaracion', 1])->one();
             date_default_timezone_set('America/Argentina/Buenos_Aires');
 
         $actividadnooficial = Actividadnooficial::find()->where(['declaracionjurada' => $model->id])->one();
@@ -284,7 +282,7 @@ class DeclaracionjuradaController extends Controller
         
         return $this->render('percepciones', [
             'model' => $model,
-            'persona' => $persona,
+            'agente' => $agente,
             'actividadnooficial' => $actividadnooficial,
             'pasividaddj' => $pasividaddj,
         ]);
@@ -292,46 +290,35 @@ class DeclaracionjuradaController extends Controller
 
     public function actionDatospersonales(){
         $this->layout = 'mainpersonal';
-        $nodoc = false;
-        $doc = false;
-        $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-        if($persona == null){
-            $doc = false;
-            $persona = Nodocente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-            if($persona == null){
-                Yii::$app->session->setFlash('danger', 'Error de autentificación. Contacte al administrador del sistema');
-                return $this->redirect(['index']); 
-            }
-            $nodoc = true;
-        }else{
-            $doc = true;
-            $persona2 = Nodocente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-            if($persona2 != null){
-                $nodoc = true;
-            }
+        
+        $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        if($agente == null){
+            Yii::$app->session->setFlash('danger', 'Error de autentificación. Contacte al administrador del sistema');
+                return $this->redirect(['index']);
+        
         }
 
         try {
-            $desdeexplode = explode("-",$persona->fechanac);
+            $desdeexplode = explode("-",$agente->fechanac);
             $newdatedesde = date("d/m/Y", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[2], $desdeexplode[0]));
-            $persona->fechanac = $newdatedesde;
+            $agente->fechanac = $newdatedesde;
         } catch (\Throwable $th) {
             
         }
 
-        if($persona->localidad == null){
-            $persona->localidad = 140077;
+        if($agente->localidad == null){
+            $agente->localidad = 140077;
         }
 
-        $domicilioanterior = $persona->domicilio;
+        $domicilioanterior = $agente->domicilio;
         
-        $persona->scenario = Docente::SCENARIO_DECLARACIONJURADA;
+        $agente->scenario = Agente::SCENARIO_DECLARACIONJURADA;
         $tipodocumento = Tipodocumento::find()->all();
         $localidad = Localidad::find()->orderBy('nombre')->all();
         $provincia = Provincia::find()->all();
 
         $model = Declaracionjurada::find()
-                                ->where(['persona' => $persona->documento])
+                                ->where(['agente' => $agente->documento])
                                 ->andWhere(['or', 
                                     ['=', 'estadodeclaracion', 1],
                                     ['=', 'estadodeclaracion', 4],
@@ -348,56 +335,22 @@ class DeclaracionjuradaController extends Controller
         $model->save();
         
 
-        if ($persona->load(Yii::$app->request->post())) {
+        if ($agente->load(Yii::$app->request->post())) {
             //return var_dump(Yii::$app->request->post());
 
-            $desdeexplode = explode("/",$persona->fechanac);
+            $desdeexplode = explode("/",$agente->fechanac);
             $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
-            $persona->fechanac = $newdatedesde;
-            if($doc && !$nodoc){
-                $persona->load(Yii::$app->request->post()['Docente']);
-                $persona->save();
-                if($persona->domicilio !=$domicilioanterior && $persona->mapuche == 1){
+            $agente->fechanac = $newdatedesde;
+            $agente->apellido = strtoupper($agente->apellido);
+            $agente->nombre = strtoupper($agente->nombre);
+
+            $agente->load(Yii::$app->request->post()['Agente']);
+                $agente->save();
+                if($agente->domicilio !=$domicilioanterior && $agente->mapuche == 1){
                     
-                    $persona->mapuche = 2;
-                    $persona->save();
+                    $agente->mapuche = 2;
+                    $agente->save();
                 }
-            }elseif(!$doc && $nodoc){
-                $persona->load(Yii::$app->request->post()['Nodocente']);
-                $persona->save();
-                if($persona->domicilio !=$domicilioanterior && $persona->mapuche == 1){
-                    
-                    $persona->mapuche = 2;
-                    $persona->save();
-                    
-                }
-            }
-            if($doc && $nodoc){
-                $persona->load(Yii::$app->request->post()['Docente']);
-                $persona->save();
-                if($persona->domicilio !=$domicilioanterior && $persona->mapuche == 1){
-                    
-                    $persona->mapuche = 2;
-                    $persona->save();
-                   
-                    
-                }
-                $nodocente = Nodocente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-                $nodocente->legajo = $persona->legajo;
-                $nodocente->tipodocumento = $persona->tipodocumento;
-                $nodocente->documento = $persona->documento;
-                $nodocente->cuil = $persona->cuil;
-                $nodocente->fechanac = $persona->fechanac;
-                $nodocente->apellido = $persona->apellido;
-                $nodocente->nombre = $persona->nombre;
-                $nodocente->domicilio = $persona->domicilio;
-                $nodocente->telefono = $persona->telefono;
-                $nodocente->localidad = $persona->localidad;
-                $nodocente->mail = $persona->mail;
-                $nodocente->mapuche = $persona->mapuche;
-                $nodocente->save();
-            }
-            
             
             //return var_dump(Yii::$app->request->post());
             return $this->redirect(['cargos']);
@@ -408,7 +361,7 @@ class DeclaracionjuradaController extends Controller
 
         return $this->render('datospersonales', [
             'model' => $model,
-            'persona' => $persona,
+            'agente' => $agente,
             'tipodocumento' => $tipodocumento,
             'localidad' => $localidad,
             'provincia' => $provincia,
@@ -421,16 +374,15 @@ class DeclaracionjuradaController extends Controller
     }
     protected function guardarCargos(){
         $this->layout = 'mainpersonal';
-        $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-        if($persona == null){
-            $persona = Nodocente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-            if($persona == null){
+        $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        if($agente == null){
+            
                 Yii::$app->session->setFlash('danger', 'Error de autentificación. Contacte al administrador del sistema');
                 return $this->redirect(['index']); 
-            }
+            
         }
         $listadofunciones = Funciondj::find()->all();
-        $declaracionjurada = Declaracionjurada::find()->where(['persona' => $persona->documento])->andWhere(['or', 
+        $declaracionjurada = Declaracionjurada::find()->where(['agente' => $agente->documento])->andWhere(['or', 
             ['=', 'estadodeclaracion', 1],
             ['=', 'estadodeclaracion', 4],
         ])->one();
@@ -579,17 +531,16 @@ class DeclaracionjuradaController extends Controller
 
     public function actionHorarios(){
         $this->layout = 'mainpersonal';
-        $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-        if($persona == null){
-            $persona = Nodocente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-            if($persona == null){
+        $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        if($agente == null){
+            
                 Yii::$app->session->setFlash('danger', 'Error de autentificación. Contacte al administrador del sistema');
                 return $this->redirect(['index']); 
-            }
+            
         }
         
         $declaracionjurada = Declaracionjurada::find()
-                                ->where(['persona' => $persona->documento])
+                                ->where(['agente' => $agente->documento])
                                 ->andWhere(['or', 
                                                 ['=', 'estadodeclaracion', 1],
                                                 ['=', 'estadodeclaracion', 4],
@@ -723,14 +674,10 @@ class DeclaracionjuradaController extends Controller
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $declaracionjurada = Declaracionjurada::findOne($dj);
 
-        $persona = Docente::find()->where(['documento' => $declaracionjurada->persona])->one();
-        if($persona == null){
-            $persona = Nodocente::find()->where(['documento' => $declaracionjurada->persona])->one();
-        }
-        
+        $agente = Agente::find()->where(['documento' => $declaracionjurada->agente])->one();
         
         $salida = $this->generarResumen($dj, 1);
-        $filenamesext = "Declaración Jurada - ".$persona->apellido.', '.$persona->nombre;
+        $filenamesext = "Declaración Jurada - ".$agente->apellido.', '.$agente->nombre;
         $filename =$filenamesext.".pdf";
         
         $content = $this->renderAjax('print', [
@@ -825,7 +772,7 @@ class DeclaracionjuradaController extends Controller
         $sendemail=Yii::$app->mailer->compose()
                         ->attach(Yii::getAlias('@app').'/runtime/logs/'.$filename.'.pdf')
                         ->setFrom([Globales::MAIL => 'Sistemas Monserrat'])
-                        ->setTo($persona->mail)
+                        ->setTo($agente->mail)
                         ->setSubject('Declaración jurada')
                         ->setHtmlBody('Se ha cargado correctamente su declaración jurada. Guarde este mail como constancia. Por favor no responda este correo ya que el mismo no será receptado por ningún destinatario, si tiene una consulta deberá comunicarse con la Oficina de Personal. Muchas gracias.')
                         ->send();
@@ -847,21 +794,18 @@ class DeclaracionjuradaController extends Controller
         if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA])){
             $this->layout = 'main';
             $declaracionjurada = Declaracionjurada::find()->where(['id' => $dj])->one();
-            $persona = Docente::find()->where(['documento' => $declaracionjurada->persona])->one();
-            if($persona == null){
-                $persona = Nodocente::find()->where(['documento' => $declaracionjurada->persona])->one();
-            }
+            $agente = Agente::find()->where(['documento' => $declaracionjurada->agente])->one();
+            
         }else{
             $this->layout = 'mainpersonal';
-            $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-            if($persona == null){
-                $persona = Nodocente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-                if($persona == null){
+            $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            if($agente == null){
+               
                     Yii::$app->session->setFlash('danger', 'Error de autentificación. Contacte al administrador del sistema');
                     return $this->redirect(['index']); 
-                }
+                
             }
-            $declaracionjurada = Declaracionjurada::find()->where(['persona' => $persona->documento])->andWhere(['id' => $dj])->one();
+            $declaracionjurada = Declaracionjurada::find()->where(['agente' => $agente->documento])->andWhere(['id' => $dj])->one();
         }
         /*if($pr == 1)
             $this->layout = 'mainpersonal';*/
@@ -1023,7 +967,7 @@ class DeclaracionjuradaController extends Controller
         
         if($pr == 1){
             return $this->renderAjax('resumen', [
-                'persona' => $persona,
+                'agente' => $agente,
                 'declaracionjurada' => $declaracionjurada,
                 'provider' => $provider,
                 'provider2' => $provider2,
@@ -1032,7 +976,7 @@ class DeclaracionjuradaController extends Controller
             ]);
         }else{
             return $this->render('resumen', [
-                'persona' => $persona,
+                'agente' => $agente,
                 'declaracionjurada' => $declaracionjurada,
                 'provider' => $provider,
                 'provider2' => $provider2,
@@ -1081,10 +1025,10 @@ class DeclaracionjuradaController extends Controller
         $this->layout = 'main';
         
         $anio = isset(Yii::$app->request->get()['Declaracionjurada']['fecha']) ? Yii::$app->request->get()['Declaracionjurada']['fecha'] : null;
-        $pers = isset(Yii::$app->request->get()['Declaracionjurada']['persona']) ? Yii::$app->request->get()['Declaracionjurada']['persona'] : null;
+        $pers = isset(Yii::$app->request->get()['Declaracionjurada']['agente']) ? Yii::$app->request->get()['Declaracionjurada']['agente'] : null;
         
         $ciclolectivo = Aniolectivo::find()->all();
-        $persona = Docente::find()->all();
+        $agente = Agente::find()->all();
         
 
         if (Yii::$app->request->post()) {
@@ -1114,13 +1058,13 @@ class DeclaracionjuradaController extends Controller
                 
                 if($anio == null){
                     
-                        $djs = Declaracionjurada::find()->where(['persona' => $value['documento']])->all();
+                        $djs = Declaracionjurada::find()->where(['agente' => $value['documento']])->all();
                 }else{
                     $cl = Aniolectivo::findOne($anio);
                    
                     
                         $djs = Declaracionjurada::find()
-                                    ->where(['persona' => $value['documento']])
+                                    ->where(['agente' => $value['documento']])
                                     ->andWhere(['=', 'year(fecha)', $cl->nombre])
                                     ->all();
                     
@@ -1162,8 +1106,8 @@ class DeclaracionjuradaController extends Controller
 
         $model = new Declaracionjurada();
         $param = Yii::$app->request->queryParams;
-        if(isset($param['Declaracionjurada']['persona']))
-            $model->persona = $param['Declaracionjurada']['persona'];
+        if(isset($param['Declaracionjurada']['agente']))
+            $model->agente = $param['Declaracionjurada']['agente'];
         if(isset($param['Declaracionjurada']['fecha']))
             $model->fecha = $param['Declaracionjurada']['fecha'];
         if(isset($param['Declaracionjurada']['estadodeclaracion']))
@@ -1176,7 +1120,7 @@ class DeclaracionjuradaController extends Controller
             'provider' => $dataProvider,
             'ciclolectivo' => $ciclolectivo,
             
-            //'persona' => $array,
+            //'agente' => $array,
         ]);
     }
 

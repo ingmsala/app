@@ -3,8 +3,8 @@
 namespace app\controllers\reporte\parte;
 
 use Yii;
-use app\models\Docente;
-use app\models\DocenteSearch;
+use app\models\Agente;
+use app\models\AgenteSearch;
 use app\models\DetalleparteSearch;
 use app\models\Detalleparte;
 use app\models\NombramientoSearch;
@@ -69,10 +69,10 @@ class EstadoinasistenciasdocentesController extends \yii\web\Controller
 	            'dataProvider' => $dataProvider,
                 'anio' => $anio,
                 'mes' => $mes,
-                'docente' => $docente,
+                'agente' => $docente,
                 'model' => $model,
                 'param' => $param,
-                'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),
+                'docentes' => Agente::find()->orderBy('apellido, nombre')->all(),
                 'years' => $years,
 	        ]);
 	    }
@@ -93,7 +93,7 @@ class EstadoinasistenciasdocentesController extends \yii\web\Controller
 
 	protected function findModel($id)
     {
-        if (($model = Docente::findOne($id)) !== null) {
+        if (($model = Agente::findOne($id)) !== null) {
             return $model;
         }
 

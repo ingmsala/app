@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'fechacarga')->textInput() ?>
 
-    <?= $form->field($model, 'docente')->textInput() ?>
+    <?= $form->field($model, 'agente')->textInput() ?>
 
     <?= $form->field($model, 'observaciones')->textarea(['rows' => 6]) ?>
 

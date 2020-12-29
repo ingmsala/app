@@ -9,14 +9,14 @@ use kartik\select2\Select2;
 
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\DocenteSearch */
+/* @var $searchModel app\models\AgenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Reporte - Estado de Justificación de Inasistencias';
 
 
 ?>
-<div class="docente-index">
+<div class="agente-index">
 
     
 
@@ -100,8 +100,8 @@ $this->title = 'Reporte - Estado de Justificación de Inasistencias';
             ['class' => 'yii\grid\SerialColumn'],
             
             [
-                'label' => 'Docente',
-                //'attribute' => 'docente.faltas',
+                'label' => 'Agente',
+                //'attribute' => 'agente
                 'value' => function($model){
                     //return var_dump($model);
                      return $model['apellido'].', '.$model['nombre'];
@@ -113,7 +113,7 @@ $this->title = 'Reporte - Estado de Justificación de Inasistencias';
 
             [
                 'label' => 'Justificadas',
-                //'attribute' => 'docente.faltas',
+                //'attribute' => 'agente',
                 'value' => function($model){
                     //return var_dump($model);
                      return $model['estadoinasistencia'];
@@ -125,7 +125,7 @@ $this->title = 'Reporte - Estado de Justificación de Inasistencias';
 
             [
                 'label' => 'Total',
-                //'attribute' => 'docente.faltas',
+                //'attribute' => 'agentefaltas',
                 'value' => function($model){
                     //return var_dump($model);
                      return $model['id'];
@@ -135,12 +135,12 @@ $this->title = 'Reporte - Estado de Justificación de Inasistencias';
                             
             ],
 
-            //'docente.apellido',
-            //'docente.nombre',
+            //'agente.apellido',
+            //'agente.nombre',
 /*
             [
             	'label' => 'Horas sin dictar',
-            	//'attribute' => 'docente.faltas',
+            	//'attribute' => 'agente.faltas',
                 'value' => function($model){
                     return var_dump($model);
                     $horas = $model['faltas']/40;

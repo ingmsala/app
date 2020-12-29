@@ -21,7 +21,7 @@ class DetallecatedraSearch extends Detallecatedra
     public function rules()
     {
         return [
-            [['id', 'docente', 'catedra', 'condicion', 'revista', 'hora', 'aniolectivo'], 'integer'],
+            [['id', 'agente', 'catedra', 'condicion', 'revista', 'hora', 'aniolectivo'], 'integer'],
             [['fechaInicio', 'fechaFin', 'resolucion'], 'safe'],
         ];
     }
@@ -63,7 +63,7 @@ class DetallecatedraSearch extends Detallecatedra
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'docente' => $this->docente,
+            'agente' => $this->agente,
             'catedra' => $this->catedra,
             'condicion' => $this->condicion,
             'revista' => $this->revista,
@@ -111,7 +111,7 @@ class DetallecatedraSearch extends Detallecatedra
      public function providerxdocente($id, $activo)
     {
         $query = Detallecatedra::find()
-            ->where(['docente' => $id,
+            ->where(['agente' => $id,
                 'activo' => $activo //suplente
             ])
             ->andWhere(['<>', 'condicion', 6])
@@ -137,7 +137,7 @@ class DetallecatedraSearch extends Detallecatedra
         $query = Detallecatedra::find()
                 ->select('sum(hora) as id')
                 ->where([
-                        'docente' => $id,
+                        'agente' => $id,
                         'activo' => Globales::DETCAT_ACTIVO,
                 ])
                 ->andWhere(['<>', 'condicion', 6])
@@ -153,7 +153,7 @@ class DetallecatedraSearch extends Detallecatedra
         $query = Detallecatedra::find()
                 ->select('sum(hora) as id')
                 ->where([
-                        'docente' => $id,
+                        'agente' => $id,
                         'activo' => Globales::DETCAT_ACTIVO,
                 ])
                 ->andWhere(['revista' => Globales::LIC_SINGOCE])->one();// lic s/goce
@@ -166,22 +166,26 @@ class DetallecatedraSearch extends Detallecatedra
     public function horasXMateriaXCatedra($params)
         {
         
-        $sql='
+            $sql='
             select a.id as id, a.nombre as actividad, count(c.actividad) as cantidad_catedras, count(c.actividad)*a.cantHoras as horas_semanales, (
                 SELECT sum(dc2.hora)
                 from detallecatedra dc2
                 inner join catedra c2 on dc2.catedra = c2.id
                 inner join actividad a2 on c2.actividad = a2.id
-                where a2.id = a.id and dc2.revista = '.Globales::LIC_VIGENTE.'  and dc2.activo = '.Globales::DETCAT_ACTIVO.'
+                inner join division di2 on c2.division = di2.id
+                where a2.id = a.id and di2.turno is not null and dc2.revista = '.Globales::LIC_VIGENTE.'  and dc2.activo = '.Globales::DETCAT_ACTIVO.'
             ) as cantidad_vigente,(
                 SELECT sum(dc3.hora)
                 from detallecatedra dc3
                 inner join catedra c3 on dc3.catedra = c3.id
                 inner join actividad a3 on c3.actividad = a3.id
-                where a3.id = a.id and dc3.revista <> '.Globales::LIC_SINGOCE.' and dc3.activo = '.Globales::DETCAT_ACTIVO.'
+                inner join division di3 on c3.division = di3.id
+                where a3.id = a.id and di3.turno is not null and dc3.revista <> '.Globales::LIC_SINGOCE.' and dc3.activo = '.Globales::DETCAT_ACTIVO.'
             ) as horas_cobradas
             from catedra c
-            inner join actividad a on c.actividad = a.id';
+            inner join actividad a on c.actividad = a.id
+            inner join division di on c.division = di.id
+            where di.turno is not null';
             if (isset($params['Actividad']['id']) && $params['Actividad']['id'] != ''){
                 $sql .= ' where a.id = '.$params['Actividad']["id"];
             }
@@ -223,7 +227,7 @@ class DetallecatedraSearch extends Detallecatedra
             inner join actividad a on c.actividad = a.id
             inner join detallecatedra dc on dc.catedra = c.id
             inner join division di on c.division = di.id
-            inner join docente d on dc.docente = d.id
+            inner join agente d on dc.agente = d.id
             where a.id = '.$actividad.' 
             and dc.revista = '.Globales::LIC_VIGENTE.'
             and dc.activo = '.Globales::DETCAT_ACTIVO.'
@@ -255,13 +259,13 @@ class DetallecatedraSearch extends Detallecatedra
 
     public function getPadronDocente($prop){
         
-            $query = Docente::find()
+            $query = Agente::find()
                 ->distinct()
                 ->joinWith(['detallecatedras', 'detallecatedras.catedra0', 'detallecatedras.catedra0.division0'])
                 ->where(['detallecatedra.activo' => 1])
                 ->andWhere(['division.propuesta' => $prop])
                 
-                ->orderBy('docente.apellido, docente.nombre');
+                ->orderBy('agente.apellido, agente.nombre');
                     
 
         // add conditions that should always apply here
@@ -283,10 +287,10 @@ class DetallecatedraSearch extends Detallecatedra
 
     public function getCantidadDocentes($prop){
             $query = new Query();
-            $query->from('docente')
+            $query->from('agente')
             ->distinct()
-            ->select('docente.id')
-            ->leftJoin('detallecatedra', 'docente.id = detallecatedra.docente')
+            ->select('agente.id')
+            ->leftJoin('detallecatedra', 'agente.id = detallecatedra.agente')
             ->leftJoin('catedra', 'catedra.id = detallecatedra.catedra')
             ->leftJoin('division', 'division.id = catedra.division')
             ->where(['detallecatedra.activo' => 1])

@@ -11,7 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Detalleparte;
 use app\models\Preceptoria;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Estadoinasistencia;
 use app\models\Estadoinasistenciaxparte;
 use app\models\DetalleparteSearch;
@@ -66,9 +66,9 @@ class ParteController extends Controller
                                     if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTOR])){
                                         $parte = $this->findModel(Yii::$app->request->queryParams['id']);
 
-                                        $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                        $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                                         $nom = Nombramiento::find()
-                                                    ->where(['docente' => $doc->id])
+                                                    ->where(['agente' => $doc->id])
                                                     ->andWhere(['<=', 'division', 53])
                                                     //->andWhere(['is not', 'division', 53])
                                                     ->all();
@@ -316,9 +316,9 @@ class ParteController extends Controller
                     ->orderBy('nombre')->all();
             }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
                 $this->layout = 'mainpersonal';
-                $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                 $nom = Nombramiento::find()
-                            ->where(['docente' => $doc->id])
+                            ->where(['agente' => $doc->id])
                             ->andWhere(['<=', 'division', 53])
                             //->andWhere(['is not', 'division', 53])
                             ->all();
@@ -437,8 +437,8 @@ class ParteController extends Controller
             $model->anio = $param['Detalleparte']['anio'];
         if(isset($param['Detalleparte']['mes']))
             $model->mes = $param['Detalleparte']['mes'];
-        if(isset($param['Detalleparte']['docente']))
-            $model->docente = $param['Detalleparte']['docente'];
+        if(isset($param['Detalleparte']['agente']))
+            $model->agente = $param['Detalleparte']['agente'];
         if(isset($param['Detalleparte']['estadoinasistencia']))
             $model->estadoinasistencia = $param['Detalleparte']['estadoinasistencia'];
 
@@ -449,7 +449,7 @@ class ParteController extends Controller
             'years' => $years,
             'dataProvider' => $dataProvider,
             'param' => Yii::$app->request->queryParams,
-            'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),
+            'docentes' => Agente::find()->orderBy('apellido, nombre')->all(),
             'estadoinasistencia' => Estadoinasistencia::find()->where(['<=','id',Globales::ESTADOINASIST_REGREC])->all(),
         ]);
     }
@@ -469,8 +469,8 @@ class ParteController extends Controller
             $model->anio = $param['Detalleparte']['anio'];
         if(isset($param['Detalleparte']['mes']))
             $model->mes = $param['Detalleparte']['mes'];
-        if(isset($param['Detalleparte']['docente']))
-            $model->docente = $param['Detalleparte']['docente'];
+        if(isset($param['Detalleparte']['agente']))
+            $model->agente = $param['Detalleparte']['agente'];
         if(isset($param['Detalleparte']['estadoinasistencia']))
             $model->estadoinasistencia = $param['Detalleparte']['estadoinasistencia'];
 
@@ -481,7 +481,7 @@ class ParteController extends Controller
             'dataProvider' => $dataProvider,
             'years' => $years,
             'param' => Yii::$app->request->queryParams,
-            'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),
+            'docentes' => Agente::find()->orderBy('apellido, nombre')->all(),
             'estadoinasistencia' => Estadoinasistencia::find()->where(['<=','id',Globales::ESTADOINASIST_REGREC])->all(),
         ]);
     }
@@ -502,8 +502,8 @@ class ParteController extends Controller
             $model->anio = $param['Detalleparte']['anio'];
         if(isset($param['Detalleparte']['mes']))
             $model->mes = $param['Detalleparte']['mes'];
-        if(isset($param['Detalleparte']['docente']))
-            $model->docente = $param['Detalleparte']['docente'];
+        if(isset($param['Detalleparte']['agente']))
+            $model->agente = $param['Detalleparte']['agente'];
         if(isset($param['Detalleparte']['estadoinasistencia']))
             $model->estadoinasistencia = $param['Detalleparte']['estadoinasistencia'];
 
@@ -515,7 +515,7 @@ class ParteController extends Controller
             'years' => $years,
             
             'param' => Yii::$app->request->queryParams,
-            'docentes' => Docente::find()->orderBy('apellido, nombre')->all(),
+            'docentes' => Agente::find()->orderBy('apellido, nombre')->all(),
             'estadoinasistencia' => Estadoinasistencia::find()->where(['<=','id',Globales::ESTADOINASIST_SECJUS])->all(),
         ]);
     }

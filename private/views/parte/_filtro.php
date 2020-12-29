@@ -50,10 +50,10 @@ use yii\widgets\ActiveForm;
                                 }
                             }
 
-                            if(isset($param['Detalleparte']['docente'])){
-                                if($param['Detalleparte']['docente']!=''){
+                            if(isset($param['Detalleparte']['agente'])){
+                                if($param['Detalleparte']['agente']!=''){
                                     $filter = true;
-                                    echo '<b> - Docente: </b>'.$listDocentes[$param['Detalleparte']['docente']];
+                                    echo '<b> - Agente: </b>'.$listDocentes[$param['Detalleparte']['agente']];
                                     
                                 }
                             }
@@ -123,14 +123,14 @@ use yii\widgets\ActiveForm;
 
                             ?>
 
-                            <?= $form->field($model, 'docente')->widget(Select2::classname(), [
+                            <?= $form->field($model, 'agente')->widget(Select2::classname(), [
                                     'data' => $listDocentes,
                                     'options' => ['placeholder' => 'Seleccionar...'],
                                     'value' => 1,
                                     'pluginOptions' => [
                                         'allowClear' => true
                                     ],
-                                ])->label("Docente");
+                                ])->label("Agente");
 
                             ?>
 

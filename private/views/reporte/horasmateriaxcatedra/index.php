@@ -10,7 +10,7 @@ use kartik\select2\Select2;
 
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\DocenteSearch */
+/* @var $searchModel app\models\AgenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Reporte - Horas de Actividades por Cátedra';
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $listActividades=ArrayHelper::map($actividades,'id', 'nombre');
 ?>
-<div class="docente-index">
+<div class="agente-index">
 
     
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

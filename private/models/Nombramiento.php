@@ -11,7 +11,7 @@ use Yii;
  * @property string $nombre
  * @property int $cargo
  * @property int $horas
- * @property int $docente
+ * @property int $agente
  * @property int $revista
  * @property int $condicion
  * @property int $division
@@ -26,7 +26,7 @@ use Yii;
  * @property Condicion $condicion0
  * @property Extension $extension0 
  * @property Cargo $cargo0
- * @property Docente $docente0
+ * @property Agente $agente0
  * @property Division $division0
  * @property Revista $revista0
  * @property Nombramiento $suplente0
@@ -53,7 +53,7 @@ class Nombramiento extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_ABMNOMBRAMIENTO] = ['nombre', 'cargo', 'horas', 'docente', 'revista', 'condicion', 'extension', 'suplente', 'fechaInicio', 'docente', 'division',  'fechaFin', 'resolucion', 'fechaInicioext', 'fechaFinext', 'resolucionext', 'activo'];
+        $scenarios[self::SCENARIO_ABMNOMBRAMIENTO] = ['nombre', 'cargo', 'horas', 'agente', 'revista', 'condicion', 'extension', 'suplente', 'fechaInicio', 'agente', 'division',  'fechaFin', 'resolucion', 'fechaInicioext', 'fechaFinext', 'resolucionext', 'activo'];
         $scenarios[self::SCENARIO_ABMDIVISION] = ['division'];
         return $scenarios;
     }
@@ -63,15 +63,15 @@ class Nombramiento extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cargo', 'horas', 'docente', 'revista', 'condicion'], 'required', 'on'=>self::SCENARIO_ABMNOMBRAMIENTO],
-            [['cargo', 'horas', 'docente', 'revista', 'condicion', 'division', 'suplente', 'extension', 'activo'], 'integer'],
+            [['cargo', 'horas', 'agente', 'revista', 'condicion'], 'required', 'on'=>self::SCENARIO_ABMNOMBRAMIENTO],
+            [['cargo', 'horas', 'agente', 'revista', 'condicion', 'division', 'suplente', 'extension', 'activo'], 'integer'],
             [['fechaInicio', 'fechaFin', 'resolucion', 'fechaInicioext', 'fechaFinext', 'resolucionext'], 'safe'],
             [['fechaInicio', 'fechaFin', 'fechaInicioext', 'fechaFinext'], 'default', 'value' => null],
             [['nombre'], 'string', 'max' => 150],
             [['extension'], 'exist', 'skipOnError' => true, 'targetClass' => Extension::className(), 'targetAttribute' => ['extension' => 'id']], 
             [['condicion'], 'exist', 'skipOnError' => true, 'targetClass' => Condicion::className(), 'targetAttribute' => ['condicion' => 'id']],
             [['cargo'], 'exist', 'skipOnError' => true, 'targetClass' => Cargo::className(), 'targetAttribute' => ['cargo' => 'id']],
-            [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
+            [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
             [['division'], 'exist', 'skipOnError' => true, 'targetClass' => Division::className(), 'targetAttribute' => ['division' => 'id']],
             [['revista'], 'exist', 'skipOnError' => true, 'targetClass' => Revista::className(), 'targetAttribute' => ['revista' => 'id']],
             [['suplente'], 'exist', 'skipOnError' => true, 'targetClass' => Nombramiento::className(), 'targetAttribute' => ['suplente' => 'id']],
@@ -88,7 +88,7 @@ class Nombramiento extends \yii\db\ActiveRecord
             'nombre' => 'Función',
             'cargo' => 'Cargo',
             'horas' => 'Horas',
-            'docente' => 'Docente',
+            'agente' => 'Agente',
             'revista' => 'Revista',
             'condicion' => 'Condicion',
             'division' => 'Division',
@@ -131,9 +131,9 @@ class Nombramiento extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocente0()
+    public function getAgente0()
     {
-        return $this->hasOne(Docente::className(), ['id' => 'docente']);
+        return $this->hasOne(Agente::className(), ['id' => 'agente']);
     }
 
     /**
@@ -170,7 +170,7 @@ class Nombramiento extends \yii\db\ActiveRecord
 
     public function getLabel()
     {
-        return '('.$this->cargo.') '.$this->docente0->apellido.', '.$this->docente0->nombre;
+        return '('.$this->cargo.') '.$this->agente0->apellido.', '.$this->agente0->nombre;
     }
 
     public function getsuplente($id){

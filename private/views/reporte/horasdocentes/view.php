@@ -15,7 +15,7 @@ $this->title = $model->id;
 <div class="detalle-catedra-view">
 
 <?php $this->registerJs("document.getElementById('modalHeader').innerHTML ='".
-    "Docente: ".$model->apellido.', '.$model->nombre.'- Total horas: <span class="label label-info">'.
+    "Agente: ".$model->apellido.', '.$model->nombre.'- Total horas: <span class="label label-info">'.
 
     ($horasCatedraSinCobrarNom->horas + $horasCatedraSinCobrar->id + $horasCatedraACobrarNom->horas + $horasCatedraACobrar->id)
 

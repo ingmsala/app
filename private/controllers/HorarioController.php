@@ -12,20 +12,20 @@ use app\models\Detallecatedra;
 use app\models\DetallecatedraSearch;
 use app\models\Diasemana;
 use app\models\Division;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Funciondj;
 use app\models\Hora;
 use app\models\Horario;
 use app\models\Horariodj;
 use app\models\Horarioexamen;
 use app\models\HorarioSearch;
-use app\models\Nodocente;
 use app\models\Nombramiento;
 use app\models\Parametros;
 use app\models\Preceptoria;
 use app\models\Rolexuser;
 use app\models\Tipomovilidad;
 use app\models\Tipoparte;
+use app\models\Turnoexamen;
 use app\modules\curriculares\models\Aniolectivo;
 use kartik\mpdf\Pdf;
 use yii\data\ArrayDataProvider;
@@ -116,9 +116,9 @@ class HorarioController extends Controller
                                             return false;
                                         }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
                                             $division = Yii::$app->request->queryParams['division'];
-                                            $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                            $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                                             $nom = Nombramiento::find()
-                                                        ->where(['docente' => $doc->id])
+                                                        ->where(['agente' => $doc->id])
                                                         ->andWhere(['<=', 'division', 53])
                                                         //->andWhere(['is not', 'division', 53])
                                                         ->all();
@@ -229,19 +229,19 @@ class HorarioController extends Controller
      */
     
     public function actionLogin(){
-        $model = new Docente();
-        $model->scenario = Docente::SCENARIO_FINDHORARIOLOGIN;
+        $model = new Agente();
+        $model->scenario = Agente::SCENARIO_FINDHORARIOLOGIN;
 
         if($model->load(Yii::$app->request->post())){
             if($model->validate()){
                 
-                $docente = Docente::find()
+                $agente = Agente::find()
                 ->joinWith('detallecatedras')
                 ->where(['=', 'detallecatedra.revista', 6])
-                ->andWhere(['=', 'docente.legajo', $model->legajo])
+                ->andWhere(['=', 'agente.legajo', $model->legajo])
                 ->one();
             Yii::$app->session->setFlash('danger', "Próximamente se habilitará la consuta de los horarios por medio del usuario UNC");
-            //return $this->redirect(['/horario/menuopcionespublic', 'h' => Yii::$app->security->generateRandomString(254), 'docente' => $docente->legajo]);
+            //return $this->redirect(['/horario/menuopcionespublic', 'h' => Yii::$app->security->generateRandomString(254), 'agente' => $agente->legajo]);
             }
             
         }
@@ -256,13 +256,11 @@ class HorarioController extends Controller
         $this->layout = 'mainpersonal';
         //return $this->redirect(['horario/panelprincipal']);
         
-        $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-        if($persona == null){
-            $persona = Nodocente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-        }
+        $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        
         return $this->render('menuopcionespublic', [
             'h' => Yii::$app->security->generateRandomString(254),
-            'docente' => $persona->legajo,
+            'agente' => $agente->legajo,
             
 
         ]);
@@ -288,14 +286,17 @@ class HorarioController extends Controller
             
         }//1 ok
         
-         if(isset(Yii::$app->user->identity->role))
-                $this->layout = 'mainpersonal';
-            else
-                $this->layout = 'mainpersonal';
+        $this->layout = 'mainpersonal';
+            
         
-        
-       
-        return $this->redirect(['/mesaexamen', 'turno' => 1]);
+        $te = Turnoexamen::find()->where(['tipoturno' => 3])->andWhere(['activo' => 1])->one();
+
+        if($te == null){
+            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes previos");
+                return $this->redirect(Yii::$app->request->referrer);
+        }
+
+            return $this->redirect(['/mesaexamen', 'turno' => $te->id]);
     }
 
         public function actionMarzo()
@@ -359,9 +360,9 @@ class HorarioController extends Controller
                         ->all();
         }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
             $this->layout = 'mainpersonal';
-            $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
             $nom = Nombramiento::find()
-                        ->where(['docente' => $doc->id])
+                        ->where(['agente' => $doc->id])
                         ->andWhere(['<=', 'division', 53])
                         //->andWhere(['is not', 'division', 53])
                         ->all();
@@ -792,23 +793,23 @@ class HorarioController extends Controller
                                         $superpuestodj = $this->horaSuperpuestaDeclaracionJurada($dc, $horariox->hora, $horariox->diasemana, $dc->aniolectivo, $h);
                                         if ($superpuesto[0] && $superpuestodj[0]){
                                             ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
-                                            $salida = '<span style="color:#f39c12">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].$superpuestodj[1].'">'.$dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1).'</span>'.'</span>';
+                                            $salida = '<span style="color:#f39c12">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].$superpuestodj[1].'">'.$dc->agente0->apellido.', '.substr(ltrim($dc->agente0->nombre),0,1).'</span>'.'</span>';
                                         }
                                         elseif ($superpuesto[0]){
                                             ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
-                                            $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1).'</span>'.'</span>';
+                                            $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->agente0->apellido.', '.substr(ltrim($dc->agente0->nombre),0,1).'</span>'.'</span>';
                                         }
 
                                         elseif($superpuestodj[0]){
                                             ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
-                                            $salida = '<span style="color:#10D300">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuestodj[1].'">'.$dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1).'</span>'.'</span>';
+                                            $salida = '<span style="color:#10D300">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuestodj[1].'">'.$dc->agente0->apellido.', '.substr(ltrim($dc->agente0->nombre),0,1).'</span>'.'</span>';
 
                                         }
                                         else
-                                            $salida = $dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1);
+                                            $salida = $dc->agente0->apellido.', '.substr(ltrim($dc->agente0->nombre),0,1);
                                         break 1;
                                     }else{
-                                        $salida = $dc->docente0->apellido.', '.substr(ltrim($dc->docente0->nombre),0,1);
+                                        $salida = $dc->agente0->apellido.', '.substr(ltrim($dc->agente0->nombre),0,1);
                                         break 1;
                                     }
                                 }else{
@@ -915,7 +916,7 @@ class HorarioController extends Controller
         
         
         $dj = Declaracionjurada::find()
-                ->where(['persona' => $dni])
+                ->where(['agente' => $dni])
                 ->andWhere(['in', 'estadodeclaracion', [2,3]])
                 ->max('id');
 
@@ -1027,7 +1028,7 @@ class HorarioController extends Controller
     public function actionPrintxcurso($division, $vista, $all = 0, $al)
     {
         
-        if(in_array(Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR]))
+        if(in_array(Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_PRECEPTOR]))
             $this->layout = 'mainpersonal';
         if (YII_ENV_DEV) {
             Yii::$app->getModule('debug')->instance->allowedIPs = [];
@@ -1140,10 +1141,10 @@ class HorarioController extends Controller
     }
 
     public function horaSuperpuesta($dc, $hora, $diasemana, $al){
-        $docente = $dc->docente;
+        $agente = $dc->agente;
         $horarios = Horario::find()
             ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
-            ->where(['detallecatedra.docente' => $docente])
+            ->where(['detallecatedra.agente' => $agente])
             ->andWhere(['detallecatedra.revista' => 6])
             ->andWhere(['<>', 'detallecatedra.id', $dc->id])
             ->andWhere(['horario.hora' => $hora])
@@ -1167,10 +1168,10 @@ class HorarioController extends Controller
     }
 
     private function horaSuperpuestaDeclaracionJurada($dc, $hora, $diasemana, $al, $h){
-        $docente = $dc->docente0;
+        $agente = $dc->agente0;
         
         $dj = Declaracionjurada::find()
-                ->where(['persona' => $docente->documento])
+                ->where(['agente' => $agente->documento])
                 ->andWhere(['in', 'estadodeclaracion', [2,3]])
                 ->max('id');
 
@@ -1304,10 +1305,10 @@ class HorarioController extends Controller
                                     $superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->diasemana);
                                     if ($superpuesto[0]){
                                         ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
-                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1).'</span>'.'</span>';
+                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1).'</span>'.'</span>';
                                     }
                                     else
-                                        $salida = $dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1);
+                                        $salida = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1);
                                     break 1;
                                 }else{
                                     $salida = '';
@@ -1361,28 +1362,28 @@ class HorarioController extends Controller
             
         }//1 ok
         $this->layout = 'mainpersonal';
-        /*$docente = Docente::find()
+        /*$agente = Agente::find()
                 ->joinWith('detallecatedras')
                 ->where(['=', 'detallecatedra.revista', 6])
-                ->andWhere(['=', 'docente.legajo', $docente])
+                ->andWhere(['=', 'agente.legajo', $agente])
                 ->one();*/
         if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
             return $this->redirect(['menuxdivision']);
         }
-        $docente = Docente::find()->joinWith('detallecatedras')
+        $agente = Agente::find()->joinWith('detallecatedras')
                     ->where(['mail' => Yii::$app->user->identity->username])
                     ->andWhere(['=', 'detallecatedra.revista', 6])
                     ->one();
-        if($docente == null){
+        if($agente == null){
             Yii::$app->session->setFlash('info', "No tiene horarios de clases asignados en su perfil de ".Yii::$app->user->identity->role0->nombre.'. Si desea acceder a los horarios como Preceptor/a o Jefe/a de Preceptor/a deberá cambiar su perfil de usuarios desde el menú.');
             return $this->redirect(['menuopcionespublic']);
         }
         
         $alx2 = Aniolectivo::find()->where(['activo' => 1])->one();
-        return $this->getCompletoxdocentepage($docente->id, 0, 0, 1, $alx2->id);
+        return $this->getCompletoxdocentepage($agente->id, 0, 0, 1, $alx2->id);
     }
 
-    public function actionCompletoxdocente($docente, $al=0)
+    public function actionCompletoxdocente($agente, $al=0)
     {
         $estadopublicacion = Parametros::findOne(1)->estado;
 
@@ -1415,14 +1416,14 @@ class HorarioController extends Controller
         }
     	
 
-        return $this->getCompletoxdocentepage($docente, 0, 0, 0, $anio);
+        return $this->getCompletoxdocentepage($agente, 0, 0, 0, $anio);
     }
 
-    public function actionPrintxdocente($docente, $all=0, $al)
+    public function actionPrintxdocente($agente, $all=0, $al)
     {
         
         date_default_timezone_set('America/Argentina/Buenos_Aires');
-        if(in_array(Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR]))
+        if(in_array(Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_PRECEPTOR]))
             $this->layout = 'mainpersonal';
         if (YII_ENV_DEV) {
             Yii::$app->getModule('debug')->instance->allowedIPs = [];
@@ -1432,10 +1433,10 @@ class HorarioController extends Controller
         if($all){
             ini_set("pcre.backtrack_limit", "5000000");
             
-             $docentes = Docente::find()
+             $docentes = Agente::find()
                             ->joinWith(['detallecatedras'])
                             ->where(['=', 'detallecatedra.revista', 6])
-                            ->orderBy('docente.apellido, docente.nombre')
+                            ->orderBy('agente.apellido, agente.nombre')
                             ->all();
             
 
@@ -1444,12 +1445,12 @@ class HorarioController extends Controller
                 $salidaimpar .=  $this->getCompletoxdocentepage($doce->id, 1, 1, 0, $al);
             
             }
-            $filenamesext = "Horario de Clases por Docente Completo ";
+            $filenamesext = "Horario de Clases por Agente Completo ";
             $filename = $filenamesext.".pdf";
         }else{
-            $docente = Docente::findOne($docente);
-            $salidaimpar = $this->getCompletoxdocentepage($docente->id, 1, 0, 0, $al);
-            $filenamesext = "Horario de Clases - {$docente->apellido}, {$docente->nombre}";
+            $agente = Agente::findOne($agente);
+            $salidaimpar = $this->getCompletoxdocentepage($agente->id, 1, 0, 0, $al);
+            $filenamesext = "Horario de Clases - {$agente->apellido}, {$agente->nombre}";
             $filename =$filenamesext.".pdf";
         }
         
@@ -1521,7 +1522,7 @@ class HorarioController extends Controller
         
     }
 
-    public function getCompletoxdocentepage($docente, $pr = 0, $all = 0, $horario = 0, $al)
+    public function getCompletoxdocentepage($agente, $pr = 0, $all = 0, $horario = 0, $al)
     {
     	//$division = 1;
     	//$dia = 3;
@@ -1535,7 +1536,7 @@ class HorarioController extends Controller
             $userhorario = true;
         }
     	$searchModel = new HorarioSearch();
-        $docenteparam = Docente::findOne($docente);
+        $docenteparam = Agente::findOne($agente);
 
         $h= [];
         $j= [];
@@ -1562,7 +1563,7 @@ class HorarioController extends Controller
         $horariosTm = Horario::find()
         	->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
         	//->where(['diasemana' => 2])
-        	->where(['detallecatedra.docente' => $docente])
+        	->where(['detallecatedra.agente' => $agente])
         	->andWhere(['division.turno' => 1])
         	->andWhere(['detallecatedra.revista' => 6])
         	->andWhere(['tipo' => 1])
@@ -1574,7 +1575,7 @@ class HorarioController extends Controller
         $horariosTt = Horario::find()
         	->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0'])
         	//->where(['diasemana' => 2])
-        	->where(['detallecatedra.docente' => $docente])
+        	->where(['detallecatedra.agente' => $agente])
         	->andWhere(['division.turno' => 2])
         	->andWhere(['detallecatedra.revista' => 6])
             ->andWhere(['tipo' => 1])
@@ -1705,13 +1706,13 @@ class HorarioController extends Controller
     {
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
-        $model = new Docente();
-        $docentes = Docente::find()->orderBy('apellido, nombre')->all();
+        $model = new Agente();
+        $docentes = Agente::find()->orderBy('apellido, nombre')->all();
         
 
         if ($model->load(Yii::$app->request->post())) {
-            $id = Yii::$app->request->post()['Docente']['apellido'];
-            return $this->redirect(['completoxdocente', 'docente' =>  $id]);
+            $id = Yii::$app->request->post()['Agente']['apellido'];
+            return $this->redirect(['completoxdocente', 'agente' =>  $id]);
         }
 
         return $this->render('menuxdocente', [
@@ -1725,9 +1726,9 @@ class HorarioController extends Controller
     {
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
-        $model = new Docente();
+        $model = new Agente();
         $abecedario = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','Ñ','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-        //$docentes = Docente::find()->select('id, LEFT(apellido, 1) AS inicial, apellido, nombre')->orderBy('apellido, nombre')->all();
+        //$docentes = Agente::find()->select('id, LEFT(apellido, 1) AS inicial, apellido, nombre')->orderBy('apellido, nombre')->all();
         $echodiv = '';
         $echodiv .= '<div class="row">';
         foreach ($abecedario as $letra) {
@@ -1740,8 +1741,8 @@ class HorarioController extends Controller
         $echodiv .= '</div>';
 
         /*if ($model->load(Yii::$app->request->post())) {
-            $id = Yii::$app->request->post()['Docente']['apellido'];
-            return $this->redirect(['completoxdocente', 'docente' =>  $id]);
+            $id = Yii::$app->request->post()['Agente']['apellido'];
+            return $this->redirect(['completoxdocente', 'agente' =>  $id]);
         }*/
 
         return $this->render('menuxletra', [
@@ -1755,8 +1756,8 @@ class HorarioController extends Controller
     {
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
-        $model = new Docente();
-        $docentes = Docente::find()
+        $model = new Agente();
+        $docentes = Agente::find()
             ->joinWith('detallecatedras')
             ->where(['like', 'apellido', $letra.'%', false])
             ->andWhere(['=', 'detallecatedra.revista', 6])
@@ -1767,7 +1768,7 @@ class HorarioController extends Controller
         foreach ($docentes as $doc) {
                 $echodiv .= '<div class="pull-left" style="height: 21vh; width:29vh; vertical-align: middle;">';
                 $echodiv .= '<div>';
-                $echodiv .= '<center><a class="menuHorarios" href="index.php?r=horario/completoxdocente&docente='.$doc->id.'" role="button" style="font-size:2.5vh; width:28vh; height: 20vh;">'.$doc->apellido.', '.$doc->nombre.'</a>';
+                $echodiv .= '<center><a class="menuHorarios" href="index.php?r=horario/completoxdocente&agente='.$doc->id.'" role="button" style="font-size:2.5vh; width:28vh; height: 20vh;">'.$doc->apellido.', '.$doc->nombre.'</a>';
                 $echodiv .= '</div><center>';
                 $echodiv .= '</div>';
         }
@@ -1819,7 +1820,7 @@ class HorarioController extends Controller
                                 ->joinWith(['catedra0', 'catedra0.detallecatedras', ])
                                 ->where(['catedra.division' => $division_id])
                                 ->andWhere(['detallecatedra.revista' => 6])
-                                ->andWhere(['detallecatedra.docente' => $docente_id])
+                                ->andWhere(['detallecatedra.agente' => $docente_id])
                                 ->andWhere(['horario.diasemana' => $diasemana])
                                 ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
                                 ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
@@ -1830,7 +1831,7 @@ class HorarioController extends Controller
                                 ->joinWith(['catedra0', 'catedra0.detallecatedras', ])
                                 ->where(['catedra.division' => $division_id])
                                 ->andWhere(['detallecatedra.revista' => 6])
-                                //->andWhere(['detallecatedra.docente' => $docente_id])
+                                //->andWhere(['detallecatedra.agente' => $docente_id])
                                 ->andWhere(['horario.diasemana' => $diasemana])
                                 ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
                                 ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
@@ -2023,7 +2024,7 @@ class HorarioController extends Controller
                                     //return var_dump($dc['revista']==1);
                                     //$superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->diasemana);
                                     //if ($superpuesto[0]){
-                                        $doc = $dc->docente0->apellido.', '.$dc->docente0->nombre;
+                                        $doc = $dc->agente0->apellido.', '.$dc->agente0->nombre;
                                         $turno = $dc->catedra0->division0->turno0->nombre;
                                         $salida = $horariox->hora0->nombre;
                                     break 1;
@@ -2165,9 +2166,9 @@ class HorarioController extends Controller
                     $c2 = 0;
                     foreach ($dc as $d) {
                         if($c2 == 0)
-                            $arrayaux[$division->id][999] = '<ol><li><span class="label label-info">'.$d->catedra0->actividad0->nombre.': </span><span class="label" style="color:black;">'.$d->docente0->apellido.', '.$d->docente0->nombre.'</li></ol>';
+                            $arrayaux[$division->id][999] = '<ol><li><span class="label label-info">'.$d->catedra0->actividad0->nombre.': </span><span class="label" style="color:black;">'.$d->agente0->apellido.', '.$d->agente0->nombre.'</li></ol>';
                         else{
-                            $arrayaux[$division->id][999] = str_replace('</ol>', '<li><span class="label label-info">'.$d->catedra0->actividad0->nombre.': </span><span class="label" style="color:black;">'.$d->docente0->apellido.', '.$d->docente0->nombre.'</li></ol>', $arrayaux[$division->id][999]);
+                            $arrayaux[$division->id][999] = str_replace('</ol>', '<li><span class="label label-info">'.$d->catedra0->actividad0->nombre.': </span><span class="label" style="color:black;">'.$d->agente0->apellido.', '.$d->agente0->nombre.'</li></ol>', $arrayaux[$division->id][999]);
                         }
                         $c2++;
                     }
@@ -2198,7 +2199,7 @@ class HorarioController extends Controller
                                     //return var_dump($dc['revista']==1);
                                     //$superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->diasemana);
                                     //if ($superpuesto[0]){
-                                        $doc = $dc->docente0->apellido.', '.$dc->docente0->nombre;
+                                        $doc = $dc->agente0->apellido.', '.$dc->agente0->nombre;
                                         $turno = $dc->catedra0->division0->turno0->nombre;
                                         $salida = $horariox->hora0->nombre.' - '.$doc;
                                     break 1;
@@ -2343,7 +2344,7 @@ class HorarioController extends Controller
 
                 foreach ($cat->detallecatedras as $dc) {
                     if ($dc->revista == 6){
-                        $doc = $dc->docente0->apellido.', '.$dc->docente0->nombre;
+                        $doc = $dc->agente0->apellido.', '.$dc->agente0->nombre;
                         break;
                     }
                 }
@@ -2470,15 +2471,15 @@ class HorarioController extends Controller
         $horarioexamen = Clasevirtual::find()->all();
         $events = [];
 
-        $docs = Docente::find()->all();
+        $docs = Agente::find()->all();
         foreach ($docs as $doc) {
          /*foreach ($horarioexamen as $horario) {
-            $docente = '';
+            $agente = '';
             
            foreach ($horario->catedra0->detallecatedras as $dc) {
                 
                 if ($dc->revista == 6){
-                    $docente = $dc->docente0->apellido.', '.substr($dc->docente0->nombre,1,1);
+                    $agente = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1);
                     break 1;
                 }
                 
@@ -2513,7 +2514,7 @@ class HorarioController extends Controller
             
             $events[] = new \edofre\fullcalendar\models\Event([
                 'id'               => $horario->id,
-                'title'            => $horario->hora0->nombre.' - '.$horario->catedra0->division0->nombre.' - '.$docente,
+                'title'            => $horario->hora0->nombre.' - '.$horario->catedra0->division0->nombre.' - '.$agente,
                 'start'            => $horario->fecha,
                 'end'              => $horario->fecha,
                 'startEditable'    => true,

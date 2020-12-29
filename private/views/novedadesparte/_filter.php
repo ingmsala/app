@@ -59,7 +59,7 @@ $listpreceptoria=ArrayHelper::map($preceptorias,'id','nombre');
                             if(isset($param['Estadoxnovedad']['estadonovedad'])){
                                 if($param['Estadoxnovedad']['estadonovedad']!=''){
                                     $filtro = true;
-                                    echo '<b> - Docente: </b>'.$listestados[$param['Estadoxnovedad']['estadonovedad']];
+                                    echo '<b> - Agente: </b>'.$listestados[$param['Estadoxnovedad']['estadonovedad']];
                                     
                                 }
                             }

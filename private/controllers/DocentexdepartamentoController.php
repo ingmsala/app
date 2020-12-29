@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use app\models\Departamento;
-use app\models\Docente;
+use app\models\Agente;
 use Yii;
 use app\models\Docentexdepartamento;
 use app\models\DocentexdepartamentoSearch;
@@ -70,7 +70,7 @@ class DocentexdepartamentoController extends Controller
         $model = new Docentexdepartamento();
         $model->departamento = $dpto;
         $departamentos = Departamento::find()->where(['id' => $dpto])->all();
-        $docentes = Docente::find()->orderBy('apellido, nombre')->all();
+        $docentes = Agente::find()->orderBy('apellido, nombre')->all();
         $funciones = Funciondpto::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -96,7 +96,7 @@ class DocentexdepartamentoController extends Controller
     {
         $model = $this->findModel($id);
         $departamentos = Departamento::find()->where(['id' => $model->departamento])->all();
-        $docentes = Docente::find()->orderBy('apellido, nombre')->all();
+        $docentes = Agente::find()->orderBy('apellido, nombre')->all();
         $funciones = Funciondpto::find()->all();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

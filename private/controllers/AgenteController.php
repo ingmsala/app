@@ -3,24 +3,27 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Docente;
-use app\models\DocenteSearch;
+use app\models\Agente;
+use app\models\AgenteSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Genero;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use app\models\Agentextipo;
 use app\models\NodocenteSearch;
+use app\models\Tipocargo;
 use app\models\Tipodocumento;
 use app\models\User;
 use kartik\grid\EditableColumnAction;
+use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 
 /**
- * DocenteController implements the CRUD actions for Docente model.
+ * DocenteController implements the CRUD actions for Agente model.
  */
-class DocenteController extends Controller
+class AgenteController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -86,7 +89,7 @@ class DocenteController extends Controller
        return ArrayHelper::merge(parent::actions(), [
            'editdocumento' => [                                       
                'class' => EditableColumnAction::className(),     
-               'modelClass' => Docente::className(),                
+               'modelClass' => Agente::className(),                
                'outputValue' => function ($model, $attribute, $key, $index) {
                     //$fmt = Yii::$app->formatter;
                     return $model->$attribute;                 
@@ -100,12 +103,12 @@ class DocenteController extends Controller
    }
 
     /**
-     * Lists all Docente models.
+     * Lists all Agente models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new DocenteSearch();
+        $searchModel = new AgenteSearch();
         $dataProvider = $searchModel->search2(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -115,7 +118,7 @@ class DocenteController extends Controller
     }
 
     /**
-     * Displays a single Docente model.
+     * Displays a single Agente model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -128,32 +131,43 @@ class DocenteController extends Controller
     }
 
     /**
-     * Creates a new Docente model.
+     * Creates a new Agente model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Docente();
-        $model->scenario = Docente::SCENARIO_ABM;
+        $model = new Agente();
+        $model->scenario = Agente::SCENARIO_AB;
         $generos = Genero::find()->all();
         $tipodocumento = Tipodocumento::find()->all();
+        $tipocargo = Tipocargo::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
 
             $model->apellido = strtoupper($model->apellido);
             $model->nombre = strtoupper($model->nombre);
             $model->mail = strtolower($model->mail);
+
+            $tiposcargos = Yii::$app->request->post()['Agente']['tiposcargo'];
             
             $model->mapuche = 2;
             if($model->save()){
                 $user = new User();
                 $user->username = $model->mail;
-                $user->role = Globales::US_DOCENTE;
+                $user->role = Globales::US_AGENTE;
                 $user->activate = 1;
                 $user->setPassword($model->documento);
                 $user->generateAuthKey();
                 $user->save();
+
+                foreach ($tiposcargos as $tc) {
+                    $tcx = new Agentextipo();
+                    $tcx->agente = $model->id;
+                    $tcx->tipocargo = $tc;
+                    $tcx->save();
+                }
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
                 
@@ -163,11 +177,12 @@ class DocenteController extends Controller
             'model' => $model,
             'generos' => $generos,
             'tipodocumento' => $tipodocumento,
+            'tipocargo' => $tipocargo,
         ]);
     }
 
     /**
-     * Updates an existing Docente model.
+     * Updates an existing Agente model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -176,9 +191,20 @@ class DocenteController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model->scenario = Docente::SCENARIO_ABM;
+        $model->scenario = Agente::SCENARIO_AM;
         $generos = Genero::find()->all();
         $tipodocumento = Tipodocumento::find()->all();
+        $tipocargo = Tipocargo::find()->all();
+
+        $query = Agentextipo::find()->where(['agente' => $model->id]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+                
+
+        //return var_dump($model);
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -193,12 +219,15 @@ class DocenteController extends Controller
             'model' => $model,
             'generos' => $generos,
             'tipodocumento' => $tipodocumento,
+            'tipocargo' => $tipocargo,
+            'dataProvider' => $dataProvider,
+            //'tiposcargo' => $tiposcargo,
         ]);
     }
     public function actionUpdatedate($id, $fecha)
     {
-        $model = Docente::find()->where(['legajo'=>$id])->one();
-        //$model->scenario = Docente::SCENARIO_ABM;
+        $model = Agente::find()->where(['legajo'=>$id])->one();
+        //$model->scenario = Agente::SCENARIO_ABM;
         $model->apellido = $model->apellido;
         $model->nombre = $model->nombre;
         $model->mail = $model->mail;
@@ -213,7 +242,7 @@ class DocenteController extends Controller
     }
 
     /**
-     * Deletes an existing Docente model.
+     * Deletes an existing Agente model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -227,15 +256,15 @@ class DocenteController extends Controller
     }
 
     /**
-     * Finds the Docente model based on its primary key value.
+     * Finds the Agente model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Docente the loaded model
+     * @return Agente the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Docente::findOne($id)) !== null) {
+        if (($model = Agente::findOne($id)) !== null) {
             return $model;
         }
 
@@ -247,7 +276,7 @@ class DocenteController extends Controller
         
         $events = [];
 
-        $docs = Docente::find()->all();
+        $docs = Agente::find()->all();
         foreach ($docs as $doc) {
          
             if($doc->fechanac !=null){
@@ -281,7 +310,7 @@ class DocenteController extends Controller
     public function actionActualizardomicilio(){
 
         
-        $searchModel = new DocenteSearch();
+        $searchModel = new AgenteSearch();
         $dataProvider = $searchModel->direccionesdesactualizadas(Yii::$app->request->queryParams);
 
         $searchModelNo = new NodocenteSearch();

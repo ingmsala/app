@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use app\config\Globales;
 use app\models\DetallefonidSearch;
-use app\models\Docente;
+use app\models\Agente;
 use Yii;
 use app\models\Fonid;
 use app\models\FonidSearch;
@@ -48,7 +48,7 @@ class FonidController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_PRECEPTOR]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_PRECEPTOR]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -95,8 +95,8 @@ class FonidController extends Controller
         $searchModel = new FonidSearch();
         $dataProvider = $searchModel->poragente(Yii::$app->request->queryParams);
         date_default_timezone_set('America/Argentina/Buenos_Aires');
-        $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-        $fonidfecha = Fonid::find()->where(['docente' => $doc->id])->andWhere(['fecha' => date('Y-m-d')])->count();
+        $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        $fonidfecha = Fonid::find()->where(['agente' => $doc->id])->andWhere(['fecha' => date('Y-m-d')])->count();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -125,11 +125,11 @@ class FonidController extends Controller
      */
     public function actionCreate()
     {
-        $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        $persona = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
         $this->layout = 'mainpersonal';
 
         $cantidadabiertos = Fonid::find()
-                                ->where(['docente' => $persona->id])
+                                ->where(['agente' => $persona->id])
                                 ->andWhere(['=', 'estadofonid', 1])
                                 ->count();
                 
@@ -140,7 +140,7 @@ class FonidController extends Controller
 
         $model = new Fonid();
         $model->fecha = date('Y-m-d');
-        $model->docente = $persona->id;
+        $model->agente = $persona->id;
         $model->estadofonid = 1;
         $model->save();
         
@@ -173,24 +173,24 @@ class FonidController extends Controller
         $searchModel = new DetallefonidSearch();
         $dataProvider = $searchModel->search($model->id);
 
-        $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        $docente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
 
-        if($model->docente != $docente->id){
+        if($model->agente != $docente->id){
             Yii::$app->session->setFlash('danger', 'No tiene autorización para realizar esta acción');
             return $this->redirect(['index']); 
         }
 
-        $docente->scenario = Docente::SCENARIO_FONID;
+        $docente->scenario = Agente::SCENARIO_FONID;
 
         if (Yii::$app->request->post()) {
             
             $req = Yii::$app->request->post();
             
             if($req['btn_submit']=='ok'){
-                $docente->apellido = $req['Docente']['apellido'];
-                $docente->nombre = $req['Docente']['nombre'];
-                $docente->cuil = $req['Docente']['cuil'];
-                $docente->legajo = $req['Docente']['legajo'];
+                $docente->apellido = $req['Agente']['apellido'];
+                $docente->nombre = $req['Agente']['nombre'];
+                $docente->cuil = $req['Agente']['cuil'];
+                $docente->legajo = $req['Agente']['legajo'];
                 $docente->save();
                 //return var_dump($req);
             }
@@ -207,14 +207,14 @@ class FonidController extends Controller
         return $this->render('update', [
             'model' => $model,
             'dataProvider' => $dataProvider,
-            'docente' => $docente,
+            'agente' => $docente,
             'fonid' => $model->id,
         ]);
     }
 
     public function actionSavedoc(){
-        $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-        //$docente->scenario = Docente::SCENARIO_FONID;
+        $docente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        //$docente->scenario = Agente::SCENARIO_FONID;
         //$req = Yii::$app->request->post();
         $req = $_POST['cuil']; 
         //return $req;
@@ -254,11 +254,11 @@ class FonidController extends Controller
             Yii::$app->session->setFlash('danger', 'No tiene puede imprimir un formulario en estado <Pendiente>');
             return $this->redirect(['index']); 
         }
-        $persona = Docente::find()->where(['id' => $fonid->docente])->one();
+        $persona = Agente::find()->where(['id' => $fonid->agente])->one();
 
-        $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        $docente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
 
-        if(in_array (Yii::$app->user->identity->role, [Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+        if(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_PRECEPTOR])){
             if($persona->id != $docente->id){
                 Yii::$app->session->setFlash('danger', 'No tiene autorización para realizar esta acción');
                 return $this->redirect(['index']); 
@@ -409,12 +409,12 @@ class FonidController extends Controller
         if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA])){
             $this->layout = 'main';
             $fonid = Fonid::find()->where(['id' => $fn])->one();
-            $persona = Docente::find()->where(['id' => $fonid->docente])->one();
+            $persona = Agente::find()->where(['id' => $fonid->agente])->one();
             
         }else{
             $this->layout = 'mainpersonal';
-            $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
-            $fonid = Fonid::find()->where(['docente' => $persona->id])->andWhere(['id' => $fn])->one();
+            $persona = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $fonid = Fonid::find()->where(['agente' => $persona->id])->andWhere(['id' => $fn])->one();
         }
         if($pr == 1)
             $this->layout = 'mainpersonal';
@@ -437,12 +437,12 @@ class FonidController extends Controller
         
         $desde = isset(Yii::$app->request->get()['Fonid']['fecha']) ? substr(Yii::$app->request->get()['Fonid']['fecha'],0,10) : null;
         $hasta = isset(Yii::$app->request->get()['Fonid']['hasta']) ? Yii::$app->request->get()['Fonid']['hasta'] : null;
-        $pers = isset(Yii::$app->request->get()['Fonid']['docente']) ? Yii::$app->request->get()['Fonid']['docente'] : null;
+        $pers = isset(Yii::$app->request->get()['Fonid']['agente']) ? Yii::$app->request->get()['Fonid']['agente'] : null;
         
         
 
         $ciclolectivo = Aniolectivo::find()->all();
-        $persona = Docente::find()->all();
+        $persona = Agente::find()->all();
         
 
         if (Yii::$app->request->post()) {
@@ -473,7 +473,7 @@ class FonidController extends Controller
                 
                 if($desde == null){
                     
-                        $djs = Fonid::find()->where(['docente' => $value['id']])->all();
+                        $djs = Fonid::find()->where(['agente' => $value['id']])->all();
                 }else{
                     //$cl = Aniolectivo::findOne($anio);
                         
@@ -486,7 +486,7 @@ class FonidController extends Controller
                         
 
                         $djs = Fonid::find()
-                                    ->where(['docente' => $value['id']])
+                                    ->where(['agente' => $value['id']])
                                     ->andWhere(['and', 
                                         ['>=', 'fecha', $newdatedesde],
                                         ['<=', 'fecha', $newdatehasta],
@@ -532,8 +532,8 @@ class FonidController extends Controller
 
         $model = new Fonid();
         $param = Yii::$app->request->queryParams;
-        if(isset($param['Fonid']['docente']))
-            $model->docente = $param['Fonid']['docente'];
+        if(isset($param['Fonid']['agente']))
+            $model->agente = $param['Fonid']['agente'];
         if(isset($param['Fonid']['fecha']))
             $model->fecha = $param['Fonid']['fecha'];
         if(isset($param['Fonid']['hasta']))

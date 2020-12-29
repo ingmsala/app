@@ -80,7 +80,7 @@ class HorarioexamenSearch extends Horarioexamen
                 FROM `horarioexamen` he
                 LEFT JOIN catedra c ON he.catedra = c.id
                 LEFT JOIN detallecatedra dc ON dc.catedra = c.id
-                LEFT JOIN docente doc ON dc.docente = doc.id
+                LEFT JOIN agente doc ON dc.agente = doc.id
                 LEFT JOIN division di ON c.division = di.id
                 LEFT JOIN actividad ac ON c.actividad = ac.id
                 LEFT JOIN anioxtrimestral axt ON he.anioxtrimestral = axt.id
@@ -117,7 +117,7 @@ class HorarioexamenSearch extends Horarioexamen
             FROM horarioexamen he
             LEFT JOIN catedra c ON he.catedra = c.id
             LEFT JOIN detallecatedra dc ON dc.catedra = c.id
-            LEFT JOIN docente doc ON dc.docente = doc.id
+            LEFT JOIN agente doc ON dc.agente = doc.id
             LEFT JOIN division di ON c.division = di.id
             LEFT JOIN actividad ac ON c.actividad = ac.id
             LEFT JOIN anioxtrimestral axt ON he.anioxtrimestral = axt.id
@@ -158,14 +158,14 @@ class HorarioexamenSearch extends Horarioexamen
                 FROM `horarioexamen` he
                 LEFT JOIN catedra c ON he.catedra = c.id
                 LEFT JOIN detallecatedra dc ON dc.catedra = c.id
-                LEFT JOIN docente doc ON dc.docente = doc.id
+                LEFT JOIN agente doc ON dc.agente = doc.id
                 LEFT JOIN division di ON c.division = di.id
                 LEFT JOIN actividad ac ON c.actividad = ac.id
                 LEFT JOIN anioxtrimestral axt ON he.anioxtrimestral = axt.id
                 WHERE dc.revista = 6 and he.anioxtrimestral = '.$id.' and axt.activo = 1 and dc.activo = 1 and dc.aniolectivo = axt.aniolectivo)) as cantidad
                 FROM detallecatedra dc2
                 LEFT JOIN catedra c2 ON dc2.catedra = c2.id
-                LEFT JOIN docente doc2 ON dc2.docente = doc2.id
+                LEFT JOIN agente doc2 ON dc2.agente = doc2.id
                 LEFT JOIN division di2 ON c2.division = di2.id
                 LEFT JOIN actividad ac2 ON c2.actividad = ac2.id
                 WHERE ac2.id not in (7,20,32,44, 195) and dc2.revista = 6 and dc2.aniolectivo =  '.$al->aniolectivo.' and (di2.turno = 1  or di2.turno = 2) and dc2.id not in (
@@ -173,7 +173,7 @@ class HorarioexamenSearch extends Horarioexamen
                 FROM `horarioexamen` he
                 LEFT JOIN catedra c ON he.catedra = c.id
                 LEFT JOIN detallecatedra dc ON dc.catedra = c.id
-                LEFT JOIN docente doc ON dc.docente = doc.id
+                LEFT JOIN agente doc ON dc.agente = doc.id
                 LEFT JOIN division di ON c.division = di.id
                 LEFT JOIN actividad ac ON c.actividad = ac.id
                 LEFT JOIN anioxtrimestral axt ON he.anioxtrimestral = axt.id

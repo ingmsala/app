@@ -38,7 +38,7 @@ $this->title = 'Otros establecimientos';
             if(Yii::$app->params['devicedetect']['isMobile']){
                 date_default_timezone_set('America/Argentina/Buenos_Aires');
 
-                echo '<em class="text-muted">En donde se desempeña con carácter de docente</em> <br/><br/>';
+                echo '<em class="text-muted">En donde se desempeña con carácter de agente</em> <br/><br/>';
                 echo Html::button('<span class="glyphicon glyphicon-plus"></span> Agregar establecimiento', ['value' => Url::to('index.php?r=detallefonid/create&fn='.$fonid), 'class' => 'btn btn-main btn-success amodaldetallefonid']).'<br /><br />';
                 $models = $dataProvider->getModels();
                 $i = 0;
@@ -80,7 +80,7 @@ $this->title = 'Otros establecimientos';
 
             }
                 else{
-            echo '<h4 class="text-muted">En donde se desempeña con carácter de docente</h4>';
+            echo '<h4 class="text-muted">En donde se desempeña con carácter de agente</h4>';
             echo GridView::widget([
                 'dataProvider' => $dataProvider,
                 'emptyText' => '',

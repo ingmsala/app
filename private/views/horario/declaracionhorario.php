@@ -18,7 +18,7 @@ $this->title = 'Declaración Jurada';
 
 <h2><?= ($decla == null) ? 'Sin declaración jurada' :
 
-$decla->docente0->apellido.', '.$decla->docente0->nombre?></h2>
+$decla->agente0->apellido.', '.$decla->agente0->nombre?></h2>
 <h5><?php
 
 date_default_timezone_set('America/Argentina/Buenos_Aires');

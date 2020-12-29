@@ -37,7 +37,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 	    </div>
 	    <div  class="pull-right">
 	        <?php 
-	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/printxdocente&docente='.$docenteparam->id.'&al='.$alx->id.'"><center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center></a>';;
+	          	echo  '<a class = "btn btn-default" href="index.php?r=horario/printxdocente&agente='.$docenteparam->id.'&al='.$alx->id.'"><center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center></a>';;
 	        ?>
 	    </div>
 	</div>

@@ -27,11 +27,11 @@ $this->title = $model->id;
 
             [
                 'label'=>"Apellido",
-                'attribute' => 'docente0.apellido'
+                'attribute' => 'agente0.apellido'
             ],
             [
                 'label'=>"Nombre",
-                'attribute' => 'docente0.nombre'
+                'attribute' => 'agente0.nombre'
             ],
             [   
                 'label'=>"Actividad",

@@ -20,7 +20,7 @@ class NovedadesparteSearch extends Novedadesparte
     public function rules()
     {
         return [
-            [['id', 'tiponovedad', 'parte', 'docente', 'activo'], 'integer'],
+            [['id', 'tiponovedad', 'parte', 'agente', 'activo'], 'integer'],
             [['descripcion'], 'safe'],
         ];
     }

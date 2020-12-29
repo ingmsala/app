@@ -12,7 +12,7 @@ $listcatedras=ArrayHelper::map($catedras,'id',function($cat) use ($al) {
     $doc = '';
     foreach ($cat->detallecatedras as $dc) {
         if($dc->revista == 6 && $dc->aniolectivo == $al){
-            $doc = $dc->docente0->apellido.', '.$dc->docente0->nombre;
+            $doc = $dc->agente0->apellido.', '.$dc->agente0->nombre;
             break;
         }
     }
@@ -43,7 +43,7 @@ JS;
 <?php
     echo '<div class="panel panel-'.$lab.'">';
 ?>
-    <div class="panel-heading"><?= $anio.' - '.'Asignar horario a docente de '.Html::encode($division->nombre); ?></div>
+    <div class="panel-heading"><?= $anio.' - '.'Asignar horario a agente de '.Html::encode($division->nombre); ?></div>
     <div class="panel-body">
 <div class="horario-form">
 

@@ -1,7 +1,7 @@
 <?php
 
 use app\config\Globales;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Docentexdepartamento;
 use yii\helpers\Html;
 
@@ -27,7 +27,7 @@ else{
         
 
         <?php
-          if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+          if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_PRECEPTOR])){
         ?>
         <div class="col-md-3">           
           <?= 
@@ -50,7 +50,7 @@ else{
           }
       ?>
       <?php
-          if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+          if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_PRECEPTOR])){
         ?>
       <div class="col-md-3"> 
           <?= 
@@ -117,7 +117,7 @@ else{
       </div>
 
       <?php
-          if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DOCENTE, Globales::US_PRECEPTOR])){
+          if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_PRECEPTOR])){
         ?>
         <div class="col-md-3">           
           <?= 
@@ -142,9 +142,9 @@ else{
 
 <?php
 
-      $persona = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+      $persona = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
       try {
-        $depto = Docentexdepartamento::find()->where(['docente' => $persona->id])->count();
+        $depto = Docentexdepartamento::find()->where(['agente' => $persona->id])->count();
       } catch (\Throwable $th) {
         //throw $th;
         $depto = 0;

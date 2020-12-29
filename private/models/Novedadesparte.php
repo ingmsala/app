@@ -34,7 +34,7 @@ class Novedadesparte extends \yii\db\ActiveRecord
     {
         return [
             [['tiponovedad', 'parte'], 'required'],
-            [['tiponovedad', 'parte', 'docente', 'activo'], 'integer'],
+            [['tiponovedad', 'parte', 'agente', 'activo'], 'integer'],
             [['descripcion'], 'string'],
             [['tiponovedad'], 'exist', 'skipOnError' => true, 'targetClass' => Tiponovedad::className(), 'targetAttribute' => ['tiponovedad' => 'id']],
             [['parte'], 'exist', 'skipOnError' => true, 'targetClass' => Parte::className(), 'targetAttribute' => ['parte' => 'id']],
@@ -51,7 +51,7 @@ class Novedadesparte extends \yii\db\ActiveRecord
             'tiponovedad' => 'Tipo de novedad',
             'parte' => 'Parte',
             'descripcion' => 'Descripción',
-            'docente' => 'Docente',
+            'agente' => 'Agente',
             'activo' => 'activo',
         ];
     }
@@ -80,8 +80,8 @@ class Novedadesparte extends \yii\db\ActiveRecord
         return $this->hasOne(Parte::className(), ['id' => 'parte']);
     }
 
-    public function getDocente0()
+    public function getAgente0()
     {
-        return $this->hasOne(Docente::className(), ['id' => 'docente']);
+        return $this->hasOne(Agente::className(), ['id' => 'agente']);
     }
 }

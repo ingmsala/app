@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
 <?php $espacioslist=ArrayHelper::map($espacios,'id','nombre'); ?>
 <?php $turnosexamenlist=ArrayHelper::map($turnosexamen,'id','nombre'); ?>
 <?php $listactividades=ArrayHelper::map($actividades,'id','nombre'); ?>
-<?php $tribunal=ArrayHelper::map($tribunal,'docente','docente'); ?>
+<?php $tribunal=ArrayHelper::map($tribunal,'agente','agente'); ?>
 <?php $actividadesxmesa=ArrayHelper::map($actividadesxmesa,'actividad','actividad'); ?>
 <?php $listdocentes=ArrayHelper::map($docentes,'id', function($doc) {
             return $doc->apellido.', '.$doc->nombre;}

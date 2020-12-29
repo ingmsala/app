@@ -13,7 +13,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\config\Globales;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Nombramiento;
 use yii\helpers\ArrayHelper;
 
@@ -228,9 +228,9 @@ class DivisionController extends Controller
 
                 if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
                     
-                    $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                    $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                     $nom = Nombramiento::find()
-                                ->where(['docente' => $doc->id])
+                                ->where(['agente' => $doc->id])
                                 ->andWhere(['<=', 'division', 53])
                                 ->all();
                     $array = [];

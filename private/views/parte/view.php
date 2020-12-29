@@ -88,12 +88,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                     
                                     [   
-                                        'label' => 'Docente',
-                                        //'attribute' => 'docente0.apellido',
+                                        'label' => 'Agente',
+                                        //'attribute' => 'agente0.apellido',
                                         'value' => function($model){
                                             
                                             try {
-                                                return $model->docente0->apellido.', '.$model->docente0->nombre;
+                                                return $model->agente0->apellido.', '.$model->agente0->nombre;
                                             } catch (Exception $e) {
                                                 return '';
                                             }

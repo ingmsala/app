@@ -5,7 +5,7 @@ namespace app\modules\libroclase\controllers;
 use app\config\Globales;
 use app\models\Detallecatedra;
 use app\models\Division;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Nombramiento;
 use app\models\Preceptoria;
 use app\models\Rolexuser;
@@ -71,11 +71,11 @@ class ClasediariaController extends Controller
                         ->where(['preceptoria' => $pre->id])
                         ->orderBy('id')
                         ->all();
-        }elseif(Yii::$app->user->identity->role == Globales::US_DOCENTE){
+        }elseif(Yii::$app->user->identity->role == Globales::US_AGENTE){
             //$this->layout = 'mainpersonal';
-            $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
             $nom = Nombramiento::find()
-                        ->where(['docente' => $doc->id])
+                        ->where(['agente' => $doc->id])
                         ->andWhere(['<=', 'division', 53])
                         //->andWhere(['is not', 'division', 53])
                         ->all();
@@ -86,7 +86,7 @@ class ClasediariaController extends Controller
 
             $dcs = Detallecatedra::find()
                 ->joinWith(['catedra0', 'catedra0.division0'])
-                ->where(['detallecatedra.docente' => $doc->id])
+                ->where(['detallecatedra.agente' => $doc->id])
                 ->andWhere(['detallecatedra.revista' => 6])
                 ->all();
             

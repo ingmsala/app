@@ -3,7 +3,7 @@
 namespace app\modules\edh\controllers;
 
 use app\config\Globales;
-use app\models\Docente;
+use app\models\Agente;
 use Yii;
 use app\modules\curriculares\models\Alumno;
 use app\modules\curriculares\models\AlumnoSearch;

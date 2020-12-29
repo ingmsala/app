@@ -29,7 +29,7 @@ class Catedra extends \yii\db\ActiveRecord
     const SCENARIO_SEARCHINDEX = 'index';
 
     public $propuesta;
-    public $docente;
+    public $agente;
     public $condicion;
     public $actividadnom;
     public $divisionnom;
@@ -40,7 +40,7 @@ class Catedra extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_SEARCHINDEX] = ['propuesta', 'condicion', 'docente', 'actividadnom', 'division', 'resolucion', 'activo'];
+        $scenarios[self::SCENARIO_SEARCHINDEX] = ['propuesta', 'condicion', 'agente', 'actividadnom', 'division', 'resolucion', 'activo'];
         return $scenarios;
     }
 
@@ -121,9 +121,9 @@ class Catedra extends \yii\db\ActiveRecord
         return $this->hasMany(Horario::className(), ['catedra' => 'id']);
     }
 
-    public function getDocentes()
+    public function getAgentes()
     {
-        return $this->hasMany(Docente::className(), ['id' => 'docente'])->via('detallecatedras');
+        return $this->hasMany(Agente::className(), ['id' => 'agente'])->via('detallecatedras');
     }
 
     public function getNameActividad($id)
@@ -133,15 +133,6 @@ class Catedra extends \yii\db\ActiveRecord
         return $actividad;
        }
     }
-/*
-    public function getDocentes($id){
-        $detallecatedras = DetalleCatedra::find()
-            ->select('docente')
-            ->where(['catedra' => $id])->all();
-        $docentes = Docente::find()
-            ->select('concat(apellido, ", ", nombre)')
-            ->where('in', 'id', $detallecatedras);
-        return $docentes;
-    }*/
+
 
 }

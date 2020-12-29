@@ -36,10 +36,10 @@ $this->title = 'Declaración Jurada';
         <tr>
             <td rowspan="3" style="background-color:#eaeaea;width:1em;">1</td>
             <td><b><?=
-                $persona->tipodocumento0->nombre.': '
-            ?></b><?= $persona->documento?></td>
-            <td><b>CUIL N°: </b><?= $persona->cuil?></td>
-            <td><b>LEGAJO N°: </b><?= $persona->legajo?></td>
+                $agente->tipodocumento0->nombre.': '
+            ?></b><?= $agente->documento?></td>
+            <td><b>CUIL N°: </b><?= $agente->cuil?></td>
+            <td><b>LEGAJO N°: </b><?= $agente->legajo?></td>
         </tr>
 
         <tr>
@@ -52,7 +52,7 @@ $this->title = 'Declaración Jurada';
             <td>En caso de no poseer estos documentos especifique su documentación </td>
             <td colspan ="2"><b>Fecha de nacimiento: </b><?php 
             date_default_timezone_set('America/Argentina/Buenos_Aires');
-            echo Yii::$app->formatter->asDate($persona->fechanac, 'dd/MM/yyyy');
+            echo Yii::$app->formatter->asDate($agente->fechanac, 'dd/MM/yyyy');
             ?></td>
             
         </tr>
@@ -64,8 +64,8 @@ $this->title = 'Declaración Jurada';
         <tr>
             <td rowspan="1" style="background-color:#eaeaea;width:1em;">2</td>
             
-            <td><b>APELLIDOS: </b><?= $persona->apellido?></td>
-            <td><b>NOMBRES: </b><?= $persona->nombre?></td>
+            <td><b>APELLIDOS: </b><?= $agente->apellido?></td>
+            <td><b>NOMBRES: </b><?= $agente->nombre?></td>
         </tr>
 
         
@@ -77,14 +77,14 @@ $this->title = 'Declaración Jurada';
         <tr>
             <td rowspan="2" style="background-color:#eaeaea;width:1em;">3</td>
             
-            <td colspan="2"><b>DOMICILIO: </b><?= $persona->domicilio?></td>
-            <td colspan="2"><b>LOCALIDAD: </b><?= $persona->localidad0->nombre?></td>
+            <td colspan="2"><b>DOMICILIO: </b><?= $agente->domicilio?></td>
+            <td colspan="2"><b>LOCALIDAD: </b><?= $agente->localidad0->nombre?></td>
             <td><b>PCIA: </b><?= 'Córdoba' ?></td>
         </tr>
 
         <tr>
-            <td colspan="2"><b>TELÉFONO: </b><?= $persona->telefono?></td>
-            <td colspan="3"><b>CORREO ELECTRÓNICO: </b><?= $persona->mail ?></td>
+            <td colspan="2"><b>TELÉFONO: </b><?= $agente->telefono?></td>
+            <td colspan="3"><b>CORREO ELECTRÓNICO: </b><?= $agente->mail ?></td>
             
         </tr>   
 

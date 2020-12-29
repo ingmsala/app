@@ -13,7 +13,7 @@ use Yii;
  * @property string $desde
  * @property string $hasta
  *
- * @property Docente $docente0
+ * @property Agente $agente0
  */
 class Avisoinasistencia extends \yii\db\ActiveRecord
 {
@@ -33,9 +33,9 @@ class Avisoinasistencia extends \yii\db\ActiveRecord
         return [
             [['descripcion'], 'string'],
             [['hasta'], 'required', 'message' => 'Fecha de fin de la inasistencia o finalización de la visualización del aviso en el parte'],
-            [['docente'], 'integer'],
+            [['agente'], 'integer'],
             [['desde', 'hasta'], 'safe'],
-            [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
+            [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
         ];
     }
 
@@ -47,7 +47,7 @@ class Avisoinasistencia extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'descripcion' => 'Observaciones',
-            'docente' => 'Docente',
+            'agente' => 'Agente',
             'desde' => 'Desde',
             'hasta' => 'Hasta',
         ];
@@ -56,8 +56,8 @@ class Avisoinasistencia extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocente0()
+    public function getAgente0()
     {
-        return $this->hasOne(Docente::className(), ['id' => 'docente']);
+        return $this->hasOne(Agente::className(), ['id' => 'agente']);
     }
 }

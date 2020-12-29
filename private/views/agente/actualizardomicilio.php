@@ -5,13 +5,13 @@ use kartik\grid\GridView;
 use app\config\Globales;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\DocenteSearch */
+/* @var $searchModel app\models\AgenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Agentes que no tienen actualizado el domicilio en Mapuche';
 
 ?>
-<div class="docente-index">
+<div class="agente-index">
 
     
     
@@ -22,7 +22,7 @@ $this->title = 'Agentes que no tienen actualizado el domicilio en Mapuche';
         'pjax' => true,
         'panel' => [
             'type' => GridView::TYPE_DEFAULT,
-            'heading' => Html::encode('Docentes que no tienen actualizado el domicilio en Mapuche'),
+            'heading' => Html::encode('Agentes que no tienen actualizado el domicilio en Mapuche'),
             //'beforeOptions' => ['class'=>'kv-panel-before'],
         ],
         'summary' => false,
@@ -31,7 +31,7 @@ $this->title = 'Agentes que no tienen actualizado el domicilio en Mapuche';
         'exportConfig' => [
             GridView::EXCEL => [
                 'label' => 'Excel',
-                'filename' =>Html::encode('Docentes que no tienen actualizado el domicilio en Mapuche'),
+                'filename' =>Html::encode('Agentes que no tienen actualizado el domicilio en Mapuche'),
                 
                 //'alertMsg' => false,
             ],
@@ -74,7 +74,7 @@ $this->title = 'Agentes que no tienen actualizado el domicilio en Mapuche';
                 'editableOptions' => [
                     'header' => 'Documento', 
                     'inputType' => \kartik\editable\Editable::INPUT_TEXT,
-                    'formOptions' => ['action' => ['/docente/editdocumento']],
+                    'formOptions' => ['action' => ['/agente/editdocumento']],
                 ],
                 'hAlign' => 'left', 
                 'vAlign' => 'middle',
@@ -82,7 +82,7 @@ $this->title = 'Agentes que no tienen actualizado el domicilio en Mapuche';
                 
             ],
             [
-                'label' => 'Docente',
+                'label' => 'Agente',
                 //'attribute' => 'apellido',
                 'hAlign' => 'left', 
                 'vAlign' => 'middle',
@@ -107,7 +107,7 @@ $this->title = 'Agentes que no tienen actualizado el domicilio en Mapuche';
                 'editableOptions' => [
                     'header' => 'Mail', 
                     'inputType' => \kartik\editable\Editable::INPUT_TEXT,
-                    'formOptions' => ['action' => ['/docente/editdocumento']],
+                    'formOptions' => ['action' => ['/agente/editdocumento']],
                 ],
                 'hAlign' => 'left', 
                 'vAlign' => 'middle',
@@ -126,7 +126,7 @@ $this->title = 'Agentes que no tienen actualizado el domicilio en Mapuche';
                     'actualizar' => function($url, $model, $key){
                         return Html::a(
                             '<span class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Marcar como "Actualizado" con Mapuche</span>',
-                            '?r=docente/actualizarmapuche&id='.$model['id']);
+                            '?r=agente/actualizarmapuche&id='.$model['id']);
                     },
                     
                 ]
@@ -196,7 +196,7 @@ $this->title = 'Agentes que no tienen actualizado el domicilio en Mapuche';
                 'editableOptions' => [
                     'header' => 'Documento', 
                     'inputType' => \kartik\editable\Editable::INPUT_TEXT,
-                    'formOptions' => ['action' => ['/docente/editdocumento']],
+                    'formOptions' => ['action' => ['/agente/editdocumento']],
                 ],
                 'hAlign' => 'left', 
                 'vAlign' => 'middle',
@@ -204,7 +204,7 @@ $this->title = 'Agentes que no tienen actualizado el domicilio en Mapuche';
                 
             ],
             [
-                'label' => 'Docente',
+                'label' => 'Agente',
                 //'attribute' => 'apellido',
                 'hAlign' => 'left', 
                 'vAlign' => 'middle',

@@ -61,4 +61,8 @@ class Turnoexamen extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Mesaexamen::className(), ['turnoexamen' => 'id']);
     }
+    public function getTipoturno0()
+    {
+        return $this->hasOne(Tipoparte::className(), ['id' => 'tipoturno']);
+    }
 }

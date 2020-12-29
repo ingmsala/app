@@ -3,9 +3,9 @@
 namespace app\controllers\reporte;
 
 use Yii;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Actividad;
-use app\models\DocenteSearch;
+use app\models\AgenteSearch;
 use app\models\DetallecatedraSearch;
 use app\models\NombramientoSearch;
 use yii\web\Controller;

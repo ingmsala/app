@@ -4,7 +4,7 @@ namespace app\controllers\reporte;
 
 use Yii;
 
-use app\models\DocenteSearch;
+use app\models\AgenteSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -53,7 +53,7 @@ class TelefonosController extends \yii\web\Controller
 
  	public function actionDocentes()
 	    {
-        $searchModel = new DocenteSearch();
+        $searchModel = new AgenteSearch();
         $dataProvider = $searchModel->search2(Yii::$app->request->queryParams);
 
         return $this->render('docentes', [

@@ -18,7 +18,7 @@ class CatedraSearch extends Catedra
 {
     public $actividad;
     public $division;
-    public $docentes;
+    public $agentes;
     /**
      * {@inheritdoc}
      */
@@ -26,7 +26,7 @@ class CatedraSearch extends Catedra
     {
         return [
             [['id', ], 'integer'],
-            [['division', 'actividad', 'docentes'], 'safe'],
+            [['division', 'actividad', 'agentes'], 'safe'],
         ];
     }
 
@@ -49,7 +49,7 @@ class CatedraSearch extends Catedra
    public function search($params)
     {
         $query = Catedra::find()
-            ->joinWith(['actividad0', 'division0', 'detallecatedras', 'detallecatedras.docente0', 'actividad0.propuesta0'])
+            ->joinWith(['actividad0', 'division0', 'detallecatedras', 'detallecatedras.agente0', 'actividad0.propuesta0'])
             ->orderBy('division.nombre, actividad.nombre');
 
         // add conditions that should always apply here
@@ -79,9 +79,9 @@ class CatedraSearch extends Catedra
         'desc' => ['division.nombre' => SORT_DESC],
         ];
 
-        $dataProvider->sort->attributes['docentes'] = [
-        'asc' => ['docente.apellido' => SORT_ASC],
-        'desc' => ['docente.apellido' => SORT_DESC],
+        $dataProvider->sort->attributes['agentes'] = [
+        'asc' => ['agente.apellido' => SORT_ASC],
+        'desc' => ['agente.apellido' => SORT_DESC],
         ];
 
         $dataProvider->sort->attributes['actividad0.propuesta0'] = [
@@ -97,7 +97,7 @@ class CatedraSearch extends Catedra
 
         $query->andFilterWhere(['like', 'actividad.nombre', $this->actividad])
         ->andFilterWhere(['like', 'division.nombre', $this->division])
-        ->andFilterWhere(['like', 'docente.apellido', $this->docentes]);
+        ->andFilterWhere(['like', 'agente.apellido', $this->agentes]);
         return $dataProvider;
     }
 
@@ -105,12 +105,12 @@ class CatedraSearch extends Catedra
     {
         
         $sql='
-        select c.id as id, a.nombre as actividad, a.cantHoras as horaact, dc.hora as hora, d.nombre as division, concat(doc.apellido,", ",doc.nombre) as docente, con.nombre as condicion, rev.nombre as revista, pro.nombre as propuesta, dc.activo
+        select c.id as id, a.nombre as actividad, a.cantHoras as horaact, dc.hora as hora, d.nombre as division, concat(doc.apellido,", ",doc.nombre) as agente, con.nombre as condicion, rev.nombre as revista, pro.nombre as propuesta, dc.activo
         from catedra c
         left join detallecatedra dc ON c.id = dc.catedra
         left join actividad a ON a.id = c.actividad
         left join division d ON d.id = c.division
-        left join docente doc ON dc.docente = doc.id
+        left join agente doc ON dc.agente = doc.id
         left join condicion con ON dc.condicion = con.id
         left join revista rev ON dc.revista = rev.id
         left join propuesta pro ON a.propuesta = pro.id
@@ -130,8 +130,8 @@ class CatedraSearch extends Catedra
         if (isset($params['Catedra']['actividadnom']) && $params['Catedra']['actividadnom'] != ''){
             $sql .= ' AND a.nombre like "%'.$params["Catedra"]['actividadnom'].'%"';
         }
-        if (isset($params['Catedra']['docente']) && $params['Catedra']['docente'] != ''){
-            $sql .= ' AND doc.id = '.$params['Catedra']['docente'];
+        if (isset($params['Catedra']['agente']) && $params['Catedra']['agente'] != ''){
+            $sql .= ' AND doc.id = '.$params['Catedra']['agente'];
         }
         if (isset($params['Catedra']['condicion']) && $params['Catedra']['condicion'] != ''){
             $sql .= ' AND dc.condicion = '.$params['Catedra']['condicion'];
@@ -153,9 +153,9 @@ class CatedraSearch extends Catedra
                         'desc' => ['division' => SORT_DESC, 'division' => SORT_DESC],
                         
                     ],
-                    'docente' => [
-                        'asc' => ['docente' => SORT_ASC, 'docente' => SORT_ASC],
-                        'desc' => ['docente' => SORT_DESC, 'docente' => SORT_DESC],
+                    'agente' => [
+                        'asc' => ['agente' => SORT_ASC, 'agente' => SORT_ASC],
+                        'desc' => ['agente' => SORT_DESC, 'agente' => SORT_DESC],
                         
                     ],
                 ],
@@ -182,9 +182,9 @@ class CatedraSearch extends Catedra
         'desc' => ['division' => SORT_DESC],
         ];
 
-        $dataProvider->sort->attributes['docente'] = [
-        'asc' => ['docente' => SORT_ASC],
-        'desc' => ['docente' => SORT_DESC],
+        $dataProvider->sort->attributes['agente'] = [
+        'asc' => ['agente' => SORT_ASC],
+        'desc' => ['agente' => SORT_DESC],
         ];
 
         // grid filtering conditions
@@ -203,8 +203,8 @@ class CatedraSearch extends Catedra
         dc.catedra = c.id
         LEFT JOIN actividad acti ON
         c.actividad = acti.id
-        LEFT JOIN docente doc ON
-        dc.docente = doc.id
+        LEFT JOIN agente doc ON
+        dc.agente = doc.id
         LEFT JOIN division divi ON
         c.division = divi.id
         WHERE
@@ -250,8 +250,8 @@ class CatedraSearch extends Catedra
         catedra c
     LEFT JOIN detallecatedra dc ON
         dc.catedra = c.id
-    LEFT JOIN docente doc ON
-        dc.docente = doc.id
+    LEFT JOIN agente doc ON
+        dc.agente = doc.id
     WHERE
         dc.revista = 1 AND dc.activo = 1 AND c.id = c0.id
     AND
@@ -266,8 +266,8 @@ class CatedraSearch extends Catedra
         catedra c2
     LEFT JOIN detallecatedra dc2 ON
         dc2.catedra = c2.id
-    LEFT JOIN docente doc2 ON
-        dc2.docente = doc2.id
+    LEFT JOIN agente doc2 ON
+        dc2.agente = doc2.id
     WHERE
         dc2.revista = 6 AND dc2.activo = 1 AND c2.id = c0.id AND dc2.aniolectivo = '.$al.' 
 ) as horario
@@ -283,8 +283,8 @@ where (
         catedra c
     LEFT JOIN detallecatedra dc ON
         dc.catedra = c.id
-    LEFT JOIN docente doc ON
-        dc.docente = doc.id
+    LEFT JOIN agente doc ON
+        dc.agente = doc.id
     WHERE
         dc.revista = 1 AND dc.activo = 1 AND c.id = c0.id AND (select count(dc20.id) from detallecatedra dc20 where dc20.catedra = c0.id and dc20.revista = 6 AND dc20.activo = 1 AND dc20.aniolectivo = '.$al.' ) > 0
 ) not in
@@ -296,8 +296,8 @@ where (
         catedra c2
     LEFT JOIN detallecatedra dc2 ON
         dc2.catedra = c2.id
-    LEFT JOIN docente doc2 ON
-        dc2.docente = doc2.id
+    LEFT JOIN agente doc2 ON
+        dc2.agente = doc2.id
     WHERE
         dc2.revista = 6 AND dc2.activo = 1 AND c2.id = c0.id AND dc2.aniolectivo = '.$al.' 
 ) 
@@ -336,7 +336,8 @@ ORDER BY
         left join horario h ON h.catedra = c.id
         left join actividad ac ON c.actividad = ac.id
         left join division di ON c.division = di.id
-        where (di.turno = 1 or di.turno = 2) and (ac.id <> 23) and (ac.id <> 31) and (ac.id <> 33)
+        left join aniolectivo al ON al.id = h.aniolectivo
+        where (di.turno = 1 or di.turno = 2) and (ac.id <> 23) and (ac.id <> 31) and (ac.id <> 33) and (al.activo = 1)
         group by ac.id, ac.nombre, di.id, di.nombre, ac.cantHoras 
         having ac.cantHoras <> count(h.id)
         ORDER BY `c`.`id` ASC';

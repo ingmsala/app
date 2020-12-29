@@ -14,7 +14,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use app\config\Globales;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Nombramiento;
 
 /**
@@ -218,9 +218,9 @@ class ComisionController extends Controller
                     ->all();
                 }else{
 
-                    $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                    $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                     $nom = Nombramiento::find()
-                                ->where(['docente' => $docente->id])
+                                ->where(['agente' => $agente->id])
                                 ->andWhere(['<=', 'division', 53])
                                 ->andWhere(['or',
                                     ['=', 'cargo', 227],
@@ -229,8 +229,8 @@ class ComisionController extends Controller
                                     ])->count();
 
                     $comisiones = Docentexcomision::find()
-                    ->joinWith(['docente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
-                    ->where(['docente.mail' => Yii::$app->user->identity->username])
+                    ->joinWith(['agente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
+                    ->where(['agente.mail' => Yii::$app->user->identity->username])
                     ->andWhere(['espaciocurricular.aniolectivo' => $anio_id])
                     ->andWhere(['espaciocurricular.tipoespacio' => 2])
                     ->orderBy('actividad.nombre, comision.nombre')

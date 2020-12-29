@@ -100,7 +100,7 @@ class RolexuserController extends Controller
         //return var_dump($usuarios);
         foreach ($nomb as $preceptor) {
 
-            $user = User::find()->where(['username' => $preceptor->docente0->mail])->one();
+            $user = User::find()->where(['username' => $preceptor->agente0->mail])->one();
             $roluser = new Rolexuser();
             $roluser->user = $user->id;
             $roluser->role = 9;

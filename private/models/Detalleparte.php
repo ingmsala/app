@@ -20,7 +20,7 @@ use Yii;
  *
  * @property Parte $parte0
  * @property Falta $falta0
- * @property Docente $docente0
+ * @property Agente $agente0
  * @property Division $division0
  * @property Estadoinasistencia $estadoinasistencia0
  */
@@ -37,8 +37,8 @@ class Detalleparte extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_ABM] = ['parte', 'division', 'docente', 'hora', 'falta', 'llego','retiro', 'detalleadelrecup'];
-        $scenarios[self::SCENARIO_CONTROLREGENCIA] = ['anio', 'mes', 'docente', 'estadoinasistencia', 'solodia'];
+        $scenarios[self::SCENARIO_ABM] = ['parte', 'division', 'agente', 'hora', 'falta', 'llego','retiro', 'detalleadelrecup'];
+        $scenarios[self::SCENARIO_CONTROLREGENCIA] = ['anio', 'mes', 'agente', 'estadoinasistencia', 'solodia'];
         return $scenarios;
     }
 
@@ -59,21 +59,21 @@ class Detalleparte extends \yii\db\ActiveRecord
             
             [['parte', 'division', 'hora', 'falta'], 'required', 'on'=>self::SCENARIO_ABM],
             [['anio'], 'required', 'message' => 'Debe seleccionar un año lectivo', 'on'=>self::SCENARIO_CONTROLREGENCIA],
-            [['parte', 'division', 'docente', 'llego', 'retiro', 'falta', 'estadoinasistencia'], 'integer'],
+            [['parte', 'division', 'agente', 'llego', 'retiro', 'falta', 'estadoinasistencia'], 'integer'],
             
             [['parte'], 'exist', 'skipOnError' => true, 'targetClass' => Parte::className(), 'targetAttribute' => ['parte' => 'id']],
             [['falta'], 'exist', 'skipOnError' => true, 'targetClass' => Falta::className(), 'targetAttribute' => ['falta' => 'id']],
-            [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
+            [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
             [['division'], 'exist', 'skipOnError' => true, 'targetClass' => Division::className(), 'targetAttribute' => ['division' => 'id']],
             [['estadoinasistencia'], 'exist', 'skipOnError' => true, 'targetClass' => Estadoinasistencia::className(), 'targetAttribute' => ['estadoinasistencia' => 'id']],
-            ['docente', 'isVacante', 'on' => self::SCENARIO_ABM],
+            ['agente', 'isVacante', 'on' => self::SCENARIO_ABM],
         ];
     }
 
     public function isVacante($attribute, $params, $validator)
     {
         
-            if($this->docente == null && $this->falta != 5)
+            if($this->agente == null && $this->falta != 5)
                 $this->addError($attribute, 'Debe seleccionar un docente o marcar la opción hora vacante');
     }
 
@@ -86,7 +86,7 @@ class Detalleparte extends \yii\db\ActiveRecord
             'id' => 'ID',
             'parte' => 'Parte',
             'division' => 'Division',
-            'docente' => 'Docente',
+            'agente' => 'Agente',
             'hora' => 'Hora',
             'llego' => 'Llego',
             'retiro' => 'Retiro',
@@ -121,9 +121,9 @@ class Detalleparte extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocente0()
+    public function getAgente0()
     {
-        return $this->hasOne(Docente::className(), ['id' => 'docente']);
+        return $this->hasOne(Agente::className(), ['id' => 'agente']);
     }
 
     /**

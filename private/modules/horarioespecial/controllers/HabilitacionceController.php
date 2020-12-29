@@ -340,7 +340,7 @@ class HabilitacionceController extends Controller
                                         $espacio = ' ';
                                     
                                     if($horariox->detallecatedra != null){
-                                        $detallecat = '<br /> '.$horariox->detallecatedra0->catedra0->actividad0->nombre.'<br />('.$horariox->detallecatedra0->docente0->apellido.')';
+                                        $detallecat = '<br /> '.$horariox->detallecatedra0->catedra0->actividad0->nombre.'<br />('.$horariox->detallecatedra0->agente0->apellido.')';
                                     }else{
                                         $detallecat = ' ';
                                     }

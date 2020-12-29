@@ -66,10 +66,10 @@ $this->title = 'Novedades del parte';
                     ],
                     
                      [
-                        'label' => 'Docente',
+                        'label' => 'Agente',
                         'value' => function($model){
-                            if($model->docente0 != null)
-                                return $model->docente0['apellido'].', '.$model->docente0['nombre'];
+                            if($model->agente0 != null)
+                                return $model->agente0['apellido'].', '.$model->agente0['nombre'];
                             else
                                 return '';
                         }

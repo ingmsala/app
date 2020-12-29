@@ -10,7 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Division;
 use app\models\Hora;
 use app\models\Falta;
@@ -120,9 +120,9 @@ class DetalleparteController extends Controller
             
             if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
                 $partex= Parte::findOne($parte);
-                $doc = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                 $nom = Nombramiento::find()
-                            ->where(['docente' => $doc->id])
+                            ->where(['agente' => $doc->id])
                             ->andWhere(['<=', 'division', 53])
                             ->all();
                 $array = [];
@@ -149,7 +149,7 @@ class DetalleparteController extends Controller
                 $divisiones=Division::find()->all();
         } 
 
-        $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+        $docentes=Agente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $faltas = Falta::find()
                     ->where(['not in', 'id', [Globales::FALTA_COMISION, 4]])
                     ->all();
@@ -163,7 +163,7 @@ class DetalleparteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $parte =$model->parte;
             $division = $model->division;
-            $docente = $model->docente;
+            $docente = $model->agente;
             $llego = $model->llego;
             $detalleadelrecup = $model->detalleadelrecup;
             $retiro = $model->retiro;
@@ -186,7 +186,7 @@ class DetalleparteController extends Controller
                     $model2->scenario = $model::SCENARIO_ABM;
                     $model2->parte = $parte;
                     $model2->division = $division;
-                    $model2->docente = $docente;
+                    $model2->agente = $docente;
                     $model2->llego = $llego;
                     $model2->detalleadelrecup = $detalleadelrecup;
                     $model2->retiro = $retiro;
@@ -246,7 +246,7 @@ class DetalleparteController extends Controller
                 $divisiones=Division::find()->all();
         } 
 
-        $docentes=Docente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
+        $docentes=Agente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
         $faltas = Falta::find()
                     ->where(['not in', 'id', [Globales::FALTA_COMISION, 4]])
                     ->all();

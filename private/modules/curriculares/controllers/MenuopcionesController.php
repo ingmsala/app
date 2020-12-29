@@ -3,7 +3,7 @@
 namespace app\modules\curriculares\controllers;
 
 use app\config\Globales;
-use app\models\Docente;
+use app\models\Agente;
 use app\models\Nombramiento;
 use Yii;
 use app\modules\curriculares\models\Alumno;
@@ -89,9 +89,9 @@ class MenuopcionesController extends Controller
             ->count();
         }else{
 
-            $docente = Docente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
             $nom = Nombramiento::find()
-                        ->where(['docente' => $docente->id])
+                        ->where(['agente' => $agente->id])
                         ->andWhere(['or',
                             ['=', 'cargo', 227],
                             ['=', 'cargo', 229],
@@ -99,8 +99,8 @@ class MenuopcionesController extends Controller
                             ])->count();
 
             $comisionesoptativas = Docentexcomision::find()
-            ->joinWith(['docente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
-            ->where(['docente.mail' => Yii::$app->user->identity->username])
+            ->joinWith(['agente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
+            ->where(['agente.mail' => Yii::$app->user->identity->username])
             ->andWhere(['espaciocurricular.aniolectivo' => $aniolectivo->id])
             ->andWhere(['espaciocurricular.tipoespacio' => 1])
             ->orderBy('actividad.nombre', 'espaciocurricular.nombre')
@@ -119,8 +119,8 @@ class MenuopcionesController extends Controller
             }
 
             $comisionessociocom = Docentexcomision::find()
-            ->joinWith(['docente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
-            ->where(['docente.mail' => Yii::$app->user->identity->username])
+            ->joinWith(['agente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
+            ->where(['agente.mail' => Yii::$app->user->identity->username])
             ->andWhere(['espaciocurricular.aniolectivo' => $aniolectivo->id])
             ->andWhere(['espaciocurricular.tipoespacio' => 2])
             ->orderBy('actividad.nombre', 'espaciocurricular.nombre')

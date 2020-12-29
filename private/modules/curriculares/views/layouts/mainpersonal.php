@@ -69,7 +69,7 @@ if(!Yii::$app->user->isGuest){
             ]
 
         ];
-    }elseif(Yii::$app->user->identity->role == Globales::US_DOCENTE){
+    }elseif(Yii::$app->user->identity->role == Globales::US_AGENTE){
         $items = [
                             
             ['label' => '<center><span class="glyphicon glyphicon-time"></span><br />'.'Horarios</center>',

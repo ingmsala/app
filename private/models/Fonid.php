@@ -12,7 +12,7 @@ use Yii;
  * @property string $fecha
  * @property int $estadofonid
  *
- * @property Docente $docente0
+ * @property Agente $agente0
  * @property Estadodj $estadofon
  */
 class Fonid extends \yii\db\ActiveRecord
@@ -28,7 +28,7 @@ class Fonid extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_SEARCHINDEX] = ['hasta', 'docente'];
+        $scenarios[self::SCENARIO_SEARCHINDEX] = ['hasta', 'agente'];
         return $scenarios;
     }
 
@@ -45,9 +45,9 @@ class Fonid extends \yii\db\ActiveRecord
     {
         return [
             [['fecha', 'estadofonid'], 'required'],
-            [['docente', 'estadofonid'], 'integer'],
+            [['agente', 'estadofonid'], 'integer'],
             [['fecha'], 'safe'],
-            [['docente'], 'exist', 'skipOnError' => true, 'targetClass' => Docente::className(), 'targetAttribute' => ['docente' => 'id']],
+            [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
             [['estadofonid'], 'exist', 'skipOnError' => true, 'targetClass' => Estadodj::className(), 'targetAttribute' => ['estadofonid' => 'id']],
         ];
     }
@@ -59,7 +59,7 @@ class Fonid extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'docente' => 'Docente',
+            'agente' => 'Agente',
             'fecha' => 'Fecha',
             'estadofonid' => 'Estadofonid',
         ];
@@ -68,9 +68,9 @@ class Fonid extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocente0()
+    public function getAgente0()
     {
-        return $this->hasOne(Docente::className(), ['id' => 'docente']);
+        return $this->hasOne(Agente::className(), ['id' => 'agente']);
     }
 
     /**
