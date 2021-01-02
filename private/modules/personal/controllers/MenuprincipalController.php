@@ -57,7 +57,7 @@ class MenuprincipalController extends Controller
      */
     public function actionIndex()
     {
-        Yii::$app->session->setFlash('danger', 'Dentro de la opción del menú <b>'.Yii::$app->user->identity->role0->nombre.'</b> podrá "Cambiar el rol de usuario" para acceder a las funcionalidades administrativas o a las del cargo Agente o No agente para trámites personales.');
+        Yii::$app->session->setFlash('danger', 'Dentro de la opción del menú <b>'.Yii::$app->user->identity->role0->nombre.'</b> podrá "Cambiar el rol de usuario" para acceder a las funcionalidades administrativas o a las del cargo Docente o No agente para trámites personales.');
 
         $this->layout = '@app/views/layouts/mainpersonal';
         return $this->render('index');

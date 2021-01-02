@@ -280,7 +280,7 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Reporte - Ausencia a trimestrales', 'url' => ['novedadesparte/panelnovedadeshist']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q/edit?usp=sharing'],
+                                ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q/edit?usp=sharing'],
                                 '<div class="dropdown-divider"></div>',
                                 
                             ],
@@ -587,7 +587,7 @@ try {
                 
                 $items = [
 
-                    ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
+                    ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
 
                     ['label' => 'Administración',
                             'items' => [
@@ -726,7 +726,7 @@ try {
                 
                 $items = [
 
-                    ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
+                    ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
                         
                     ['label' => 'Administración', 
                             'items' => [
@@ -780,7 +780,7 @@ try {
                 
                 $items = [
 
-                    ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
+                    ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
 
                     ['label' => 'Reportes', 
                             'items' => [
@@ -966,7 +966,7 @@ try {
 
                     ],
 
-                    ['label' => 'Cronograma de Actividades', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
+                    ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
                     
                     ['label' => 'Parte Docente', 
                             'items' => [

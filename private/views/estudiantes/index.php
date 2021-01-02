@@ -1,6 +1,7 @@
 <?php
 
 use app\components\CardWidget;
+use app\widgets\Listado;
 use kartik\form\ActiveForm;
 use kartik\select2\Select2;
 use yii\helpers\Html;
@@ -42,6 +43,22 @@ $alumnoslist=ArrayHelper::map($alumnos,'id',function($model){
     </div>
 
     <?php ActiveForm::end(); ?>
+
+    <?php
+/*if($dataProvider != null){
+        echo Listado::widget([
+                'dataProvider' => $dataProvider,
+                'titulo' => [
+                    'apellido',
+                    ', ',
+                    'nombre'
+                ],
+                'fecha' => 'parentesco',
+                'contenido' => 'alumno0.dni',
+                ]);
+        }
+    */
+    ?>
     
    
     <?php 
@@ -97,7 +114,7 @@ $alumnoslist=ArrayHelper::map($alumnos,'id',function($model){
                         'mail' => 'Mail',
                         
                     ]
-                ]);/*
+                ]);
                 echo GridView::widget([
                     'dataProvider' => $dataProvider,
                     //'filterModel' => $searchModel,

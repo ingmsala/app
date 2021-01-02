@@ -1271,4 +1271,183 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
   }
 
 
+  .vista-listado{
+    margin:0;
+    padding:0;
+    list-style-type:none
+}
+.vista-listado .item-aviso{
+    background:#fff;
+    box-shadow:0 1px 1px rgba(0,0,0,0.3);
+    float:left;
+    display:block;
+    margin:10px 0 0 0;
+    padding:0;
+    position:relative;
+    width:100%
+}
+.vista-listado .|{
+    width:100%!important
+}
+.vista-listado .header-aviso-resultados{
+    background:#fff;
+    display:block;
+    margin:0;
+    width:100%
+}
+.vista-listado .header-aviso-resultados h3{
+    color:#444;
+    float:left;
+    font-family:"Roboto",serif;
+    font-size:1.3em;
+    font-weight:bold;
+    margin:0;
+    max-width:70%;
+    padding:5px 0 0 10px
+}
+.vista-listado .header-aviso-resultados h4{
+    color:#444;
+    clear:left;
+    float:left;
+    font-family:"Roboto",serif;
+    font-size:1em;
+    font-weight:normal;
+    margin:0;
+    padding:5px 0 0 10px
+}
+
+.vista-listado .header-aviso-resultados.Empleos h3{
+    border-left:7px solid #3374b5
+}
+.vista-listado .header-aviso-resultados.Empleos h4{
+    border-left:7px solid #88a4df
+}
+
+.vista-listado .header-aviso-resultados .fecha-publicado-resultados{
+    float:left;
+    clear:left;
+    margin:10px 5px 0 17px
+}
+.vista-listado .content-aviso-resultados{
+    display:block;
+    float:left;
+    margin-top:10px;
+    position:relative;
+    /*text-align:center;*/
+    width:100%
+}
+.vista-listado .content-aviso-resultados img{
+    border-top:2px solid #111;
+    border-bottom:2px solid #111;
+    cursor:pointer;
+    margin:0;
+    padding:0 0 10px 0;
+    width:100%
+}
+.vista-listado .footer-aviso-resultados{
+    float:left;
+    display:block;
+    position:relative;
+    padding:10px 0;
+    width:100%
+}
+.vista-listado .footer-aviso-resultados .box-rs{
+    float:left;
+    display:block;
+    position:relative;
+    width:100%
+}
+.vista-listado .footer-aviso-resultados .box-rs li{
+    background-image:url("../img/sprite-clasificados.png");
+    border-radius:360px;
+    float:left;
+    display:block;
+    height:32px;
+    margin:0 5px;
+    position:relative;
+    width:32px
+}
+
+.vista-listado .footer-aviso-resultados .box-btn-ver-mas{
+    float:right;
+    display:block;
+    margin-top:10px;
+    position:relative;
+    text-align:center;
+    width:100%
+}
+.vista-listado .footer-aviso-resultados .btn-ver-mas{
+    background:#d80026;
+    border-radius:3px;
+    color:#fff;
+    font-family:"Roboto Condensed",serif;
+    font-size:.9em;
+    font-weight:500;
+    padding:3px 28px;
+    margin:0 10px 0 0;
+    text-transform:uppercase
+}
+.vista-listado .box-btn-ver-mas .btn-ver-mas:hover{
+    background:#c90000;
+    box-shadow:1px 1px 10px rgba(0,0,0,0.5);
+    -webkit-transition:all .3s ease-in-out;
+    -moz-transition:all .3s ease-in-out;
+    -o-transition:all .3s ease-in-out;
+    transition:all .3s ease-in-out
+}
+
+.flowGridItem{
+    margin-bottom:10px
+}
+
+
+
+@media(min-width:768px){
+    
+    .vista-listado .header-aviso-resultados .fecha-publicado-resultados{
+        float:right;
+        clear:none;
+        margin:-21px 5px 0 0
+    }
+    .vista-listado .content-aviso-resultados img,.vista-galeria .content-aviso-resultados img{
+        width:250px
+    }
+    .vista-listado .content-aviso-resultados{
+        margin-top:20px;
+    }
+    
+    .vista-listado .footer-aviso-resultados .box-btn-ver-mas{
+        text-align:right;
+        width:50%
+    }
+    
+    
+    .content-aviso-resultados[data-tipo-aviso="Administrativo"] img{
+        padding-top:10px
+    }
+    
+}
+
+
+@media(min-width:1200px){
+    
+    .vista-listado .content-aviso-resultados img,.vista-galeria .content-aviso-resultados img{
+        width:250px
+    }
+    .vista-listado .content-aviso-resultados img,.vista-galeria .content-aviso-resultados img{
+        width:250px
+    }
+    
+}
+
+/*.panel-purple{
+    border-color: #85bbcc;
+}
+
+.panel-purple > .panel-heading {
+    color: #fff;
+    background-color: #85bbcc;
+    border-color: #85bbcc;
+}*/
+
 

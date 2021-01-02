@@ -12,10 +12,13 @@ use app\models\Mesaexamen;
 use app\models\MesaexamenSearch;
 use app\models\Tribunal;
 use app\models\Turnoexamen;
+use kartik\grid\GridView;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * MesaexamenController implements the CRUD actions for Mesaexamen model.
@@ -254,20 +257,138 @@ class MesaexamenController extends Controller
         $manana = $ahora + $unDiaEnSegundos;
         $mananaLegible = date("Y-m-d", $manana);
 
-        $mesatomorrow = Mesaexamen::find()->where(['fecha' => $mananaLegible]);
+        $mesasTomorrow = Mesaexamen::find()->all();//->where(['fecha' => $mananaLegible])->all();
 
+        $tribunalesTomorrow = Tribunal::find()->where(['agente' => 38])->all();//->where(['in', 'mesaexamen', array_column($mesasTomorrow,'id')])->all();
+
+        $agentes=ArrayHelper::map($tribunalesTomorrow,'agente','agente');
+
+        
+        $echogrid = '';
         foreach ($agentes as $agente) {
             
-            $sendemail=Yii::$app->mailer->compose()
+
+            $mesasTomorrowDocenteX = Mesaexamen::find()
+                                        ->joinWith(['tribunals'])
+                                        ->where(['in', 'mesaexamen', array_column($mesasTomorrow,'id')])
+                                        ->andWhere(['tribunal.agente' => $agente]);
+            //$arrayprueba[] = $mesasTomorrowDocenteX;
+
+            $dataProvider = new ActiveDataProvider([
+                'query' => $mesasTomorrowDocenteX,
+            ]);
+
+            $echogrid = GridView::widget([
+                'dataProvider' => $dataProvider,
+                //'filterModel' => $searchModel,
+                'panel' => [
+                    'type' => GridView::TYPE_DEFAULT,
+                    //'heading' => Html::encode($turnoex->nombre),
+                    //'beforeOptions' => ['class'=>'kv-panel-before'],
+                ],
+                'summary' => false,
+        
+                
+        
+                'toolbar'=>[
+                    ['content' =>''
+                    ],
+                   
+                    
+                ],
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
+        
+                    //'nombre',
+                    [
+                        'label' => 'Fecha',
+                        'attribute' => 'fecha',
+                        'format' => 'raw',
+                        'value' => function($model){
+                            date_default_timezone_set('America/Argentina/Buenos_Aires');
+                           if ($model['fecha'] == date('Y-m-d')){
+                                return Yii::$app->formatter->asDate($model['fecha'], 'dd/MM/yyyy').' (HOY)';
+                           } 
+                           return Yii::$app->formatter->asDate($model['fecha'], 'dd/MM/yyyy');
+                        }
+                    ],
+                    
+                    [
+                        'label' => 'Hora',
+                        'value' => function($model){
+                            $hora = explode(':', $model->hora);
+                            return $hora[0].':'.$hora[1].' hs.';
+                        }
+                    ],
+        
+                    [
+                        'label' => 'Asignaturas',
+                        'format' => 'raw',
+                        'value' => function($model){
+                            $salida = '<ul>';
+                            $activxmesa = Actividadxmesa::find()->where(['mesaexamen' => $model->id])->all();
+        
+                            foreach ($activxmesa as $actividadxmesa) {
+                                $salida .= '<li>'.$actividadxmesa->actividad0->nombre.'</li>';
+                            }
+        
+                            $salida .= '</ul>';
+                            return $salida;
+                        }
+                    ],
+                    [
+                        'label' => 'Tribunal',
+                        'format' => 'raw',
+                        'value' => function($model) use ($agente){
+                            $salida = '<ul>';
+                            $trib = Tribunal::find()->where(['mesaexamen' => $model->id])->all();
+        
+                            foreach ($trib as $tribunal) {
+                                try {
+                                    if($agente == $tribunal->agente){
+                                        $salida .= '<li><span style="background-color: #FFaaFF;">'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</span></li>';
+                                    }else{
+                                        $salida .= '<li>'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</li>';
+                                    }
+                                } catch (\Throwable $th) {
+                                    $salida .= '<li>'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</li>';
+                                }
+                                
+        
+                                
+                            }
+        
+                            $salida .= '</ul>';
+                            return $salida;
+                        }
+                    ],
+                    //'espacio',
+        
+                    
+                ],
+            ]);
+            
+            /*$sendemail=Yii::$app->mailer->compose()
                         
-                        ->setFrom([Globales::MAIL => 'Colegio Monserrat DOC3'])
+                        ->setFrom([Globales::MAIL => 'Recordatorio'])
                         ->setTo('msala@unc.edu.ar')
                         ->setSubject('Feliz cumple')
                         ->setHtmlBody('<img style="border: 0;display: block;height: auto;width: 100%;max-width: 480px;" alt="<Feliz cumpleaños" width="480" src="https://admin.cnm.unc.edu.ar/front/assets/images/fc.jpg" />')
                         ->send();
-        
+        */
         
         }
+
+        $sendemail=Yii::$app->mailer->compose()
+                        
+                        ->setFrom([Globales::MAIL => 'Información - Previas'])
+                        ->setTo('msala@unc.edu.ar')
+                        ->setSubject('Recordatorio mesa de examen')
+                        ->setHtmlBody($echogrid)
+                        ->send();
+
+        return var_dump($echogrid);
+
     }
 
     /**
