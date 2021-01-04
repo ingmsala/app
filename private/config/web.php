@@ -161,6 +161,10 @@ $config = [
                 'class' => 'app\modules\aniversary\Aniversary',
          ],
 
+         'ticket' => [
+                'class' => 'app\modules\ticket\Ticket',
+         ],
+
          'api' => [
                 'class' => 'app\modules\api\test\Test',
                                 
