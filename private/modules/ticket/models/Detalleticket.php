@@ -62,8 +62,8 @@ class Detalleticket extends \yii\db\ActiveRecord
             'descripcion' => 'Descripcion',
             'ticket' => 'Ticket',
             'agente' => 'Agente',
-            'estadoticket' => 'Estadoticket',
-            'asignacionticket' => 'Asignacionticket',
+            'estadoticket' => 'Estado',
+            'asignacionticket' => 'Asignacion',
         ];
     }
 

@@ -1,12 +1,13 @@
 /*
-  Highcharts JS v6.2.0 (2018-10-17)
+ Highstock JS v8.2.2 (2020-10-22)
 
  Indicator series type for Highstock
 
- (c) 2010-2017 Sebastian Bochan
+ (c) 2010-2019 Sebastian Bochan
 
  License: www.highcharts.com/license
 */
-(function(a){"object"===typeof module&&module.exports?module.exports=a:"function"===typeof define&&define.amd?define(function(){return a}):a(Highcharts)})(function(a){(function(a){function r(b,a,c,f,k,h,e,l){b=0>e?c[f-1]:c[f-1][e];return[a[f-1],void 0===h?l:b*k+h*(1-k)]}var t=a.isArray;a=a.seriesType;a("ema","sma",{params:{index:0,period:14}},{getValues:function(b,a){var c=a.period,f=b.xData,k=(b=b.yData)?b.length:0,h=2/(c+1),e=0,l=0,n=[],p=[],q=[],g=-1,m=[],d;if(f.length<c)return!1;for(t(b[0])&&
-(g=a.index?a.index:0);e<c;)m.push([f[e],0>g?b[e]:b[e][g]]),l+=0>g?b[e]:b[e][g],e++;a=l/c;for(c=e;c<k;c++)d=r(m,f,b,c,h,d,g,a),n.push(d),p.push(d[0]),q.push(d[1]),d=d[1],m.push([f[c],0>g?b[c]:b[c][g]]);d=r(m,f,b,c,h,d,g);n.push(d);p.push(d[0]);q.push(d[1]);return{values:n,xData:p,yData:q}}})})(a)});
+(function(a){"object"===typeof module&&module.exports?(a["default"]=a,module.exports=a):"function"===typeof define&&define.amd?define("highcharts/indicators/ema",["highcharts","highcharts/modules/stock"],function(b){a(b);a.Highcharts=b;return a}):a("undefined"!==typeof Highcharts?Highcharts:void 0)})(function(a){function b(a,b,f,m){a.hasOwnProperty(b)||(a[b]=m.apply(null,f))}a=a?a._modules:{};b(a,"Stock/Indicators/EMAIndicator.js",[a["Core/Series/Series.js"],a["Core/Utilities.js"]],function(a,b){var f=
+b.correctFloat,m=b.isArray;a.seriesType("ema","sma",{params:{index:3,period:9}},{accumulatePeriodPoints:function(a,k,c){for(var b=0,d=0,e;d<a;)e=0>k?c[d]:c[d][k],b+=e,d++;return b},calculateEma:function(a,b,c,g,l,e,p){a=a[c-1];b=0>e?b[c-1]:b[c-1][e];g="undefined"===typeof l?p:f(b*g+l*(1-g));return[a,g]},getValues:function(a,b){var c=b.period,g=a.xData,l=(a=a.yData)?a.length:0,e=2/(c+1),d=[],f=[],k=[],n=-1;if(!(l<c)){m(a[0])&&(n=b.index?b.index:0);b=this.accumulatePeriodPoints(c,n,a);for(b/=c;c<l+
+1;c++){var h=this.calculateEma(g,a,c,e,h,n,b);d.push(h);f.push(h[0]);k.push(h[1]);h=h[1]}return{values:d,xData:f,yData:k}}}});""});b(a,"masters/indicators/ema.src.js",[],function(){})});
 //# sourceMappingURL=ema.js.map

@@ -35,7 +35,8 @@ class Adjuntoticket extends \yii\db\ActiveRecord
             [['url', 'nombre'], 'required'],
             [['ticket', 'detalleticket'], 'integer'],
             [['image'], 'safe'],
-            [['url', 'nombre'], 'string', 'max' => 100],
+            [['url', 'nombre'], 'string', 'max' => 300],
+            [['url'], 'unique'],
             [['detalleticket'], 'exist', 'skipOnError' => true, 'targetClass' => Detalleticket::className(), 'targetAttribute' => ['detalleticket' => 'id']],
             [['ticket'], 'exist', 'skipOnError' => true, 'targetClass' => Ticket::className(), 'targetAttribute' => ['ticket' => 'id']],
         ];
@@ -65,7 +66,7 @@ class Adjuntoticket extends \yii\db\ActiveRecord
 
     /**
      * @return \yii\db\ActiveQuery
-     */
+     */ 
     public function getTicket0()
     {
         return $this->hasOne(Ticket::className(), ['id' => 'ticket']);

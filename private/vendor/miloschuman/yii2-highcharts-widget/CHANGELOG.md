@@ -1,8 +1,20 @@
 Yii2 Highcharts Changelog
 =========================
 
+### [v8.0](https://github.com/miloschuman/yii2-highcharts/releases/tag/v7.1.2) (2020-04-21) ###
+* Upgraded Highcharts JS library to the latest release (8.0). See the Highcharts [changelog](https://www.highcharts.com/blog/changelog/) for more information about what's new in this version.
+* Updated docs for #77 HighchartsAsset::register($this)->withScripts(['highstock']); results with error 16
+
+### [v7.1.2](https://github.com/miloschuman/yii2-highcharts/releases/tag/v7.1.2) (2019-08-07) ###
+* Upgraded Highcharts JS library to the latest release (7.1.2).
+* Added support for Gantt chart type (issue #74). See included [Gantt Chart Example](https://github.com/miloschuman/yii2-highcharts/tree/master/doc/examples/highcharts.md#gantt-chart) for usage.
+
+### [v7.0](https://github.com/miloschuman/yii2-highcharts/releases/tag/v7.0) (2019-01-21) ###
+* Upgraded Highcharts JS library to the latest release (7.0.2).
+* Fixed issue #54.
+
 ### [v6.0](https://github.com/miloschuman/yii2-highcharts/releases/tag/v6.0) (2017-10-27) ###
-* Upgraded Highcharts JS library to the latest release (6.0.2). See the Highcharts [changelog](http://highcharts.com/documentation/changelog) for more information about what's new in this version.
+* Upgraded Highcharts JS library to the latest release (6.0.2).
 
 ### [v5.0.2](https://github.com/miloschuman/yii2-highcharts/releases/tag/v5.0.2) (2016-11-16) ###
 * Upgraded Highcharts JS library to the latest release (5.0.2).

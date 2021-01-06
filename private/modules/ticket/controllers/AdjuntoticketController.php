@@ -95,6 +95,22 @@ class AdjuntoticketController extends Controller
         ]);
     }
 
+    public function actionDescargar($file)
+    {
+        
+        $model = Adjuntoticket::find()->where(['url' => $file])->one();
+
+        $path = Yii::getAlias('@webroot') . '/assets/images/tickets/'.$file;
+
+        $file = $path;
+
+        if (file_exists($file)) {
+
+            Yii::$app->response->sendFile($file, $model->nombre);
+        }
+
+    }
+
     /**
      * Deletes an existing Adjuntoticket model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

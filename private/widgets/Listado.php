@@ -58,17 +58,23 @@ class Listado extends Widget
         $pie = isset($dato[$this->pie]) ? $dato[$this->pie] : '';
         $format = isset($dato[$this->format]) ? $dato[$this->format] : null;
 
-        if($this->validateDate($fecha, $this->format)){
+        /*if($this->validateDate($fecha, $this->format)){
             date_default_timezone_set('America/Argentina/Buenos_Aires');
             $fecha = Yii::$app->formatter->asDate($fecha, 'dd/MM/yyyy - hh:ii');
-        }
+        }*/
         
         $contenido =    ArrayHelper::getValue($dato, $this->contenido);
+        $estado =    ArrayHelper::getValue($dato, $this->estado);
+        $fecha =    ArrayHelper::getValue($dato, $this->fecha);
         
 
         if(is_array($this->titulo)){
                 //return var_dump($this->titulo);
                 $titulo = $dato[$this->titulo[0]].$this->titulo[1].$dato[$this->titulo[2]];
+        }
+        if(is_array($this->fecha)){
+                //return var_dump($this->fecha);
+                $fecha = $dato[$this->fecha[0]].$this->fecha[1].$dato[$this->fecha[2]];
         }
 
                 

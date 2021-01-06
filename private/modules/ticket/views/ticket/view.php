@@ -1,8 +1,14 @@
 <?php
 
+use kartik\base\Config;
 use yii\helpers\Html;
 use kartik\detail\DetailView;
+use kartik\markdown\Markdown;
+use kartik\markdown\Module;
+use yii\bootstrap\Modal;
 use yii\helpers\ArrayHelper;
+use yii\helpers\HtmlPurifier;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\ticket\models\Ticket */
@@ -10,12 +16,27 @@ use yii\helpers\ArrayHelper;
 $this->title = 'Ticket #'.$model->id;
 
 ?>
+
+<?php 
+        Modal::begin([
+            'header' => "<h2 id='modalHeader'></h2>",
+            'id' => 'modaldetallefonid',
+            'size' => 'modal-lg',
+            'options' => [
+                'tabindex' => false,
+            ],
+        ]);
+
+        echo "<div id='modalContent'></div>";
+
+        Modal::end();
+	?>
 <div class="ticket-view">
 
     <h2><?= Html::encode($this->title)?></h2>
     <p>
-        <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
+        <?php Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php Html::a('Eliminar', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Está seguro que desea eliminar el elemento?',
@@ -23,8 +44,32 @@ $this->title = 'Ticket #'.$model->id;
             ],
         ]) ?>
     </p>
+    <?php
+        $arr = ArrayHelper::map($adjuntos,'url', 'nombre');
+
+        $module = Config::getModule(Module::MODULE);
+        $output = Markdown::convert($model->descripcion, ['custom' => $module->customConversion]);
+        
+        $echofooter = HtmlPurifier::process($output);
+
+        //$echofooter = $model->descripcion;
+        if($arr != null){
+            $echofooter .= '<hr style="margin-bottom:0px;" />';
+            $echofooter .= '<div class="push-left text-muted">Adjuntos</div><div class="row">';
+                foreach ($arr as $key => $img) {
+                    $echofooter .= '<span style="margin-left:0.5%" class="push-left">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntoticket/descargar', 'file' => $key]), ['target'=>'_blank']).'</span>';
+                }
+            $echofooter .= '</div>';
+        }
+        
+
+    ?>
+    
 
     <?php
+
+        $fecha = Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy');
+        $hora = explode(':', $model->hora);
 
         echo '<div class="col-md-12">';
         //echo use 
@@ -32,6 +77,7 @@ $this->title = 'Ticket #'.$model->id;
             'model'=>$model,
             'condensed'=>true,
             'hover'=>true,
+            'responsive' => true,
             'mode'=>DetailView::MODE_VIEW,
             'enableEditMode' => false,
             'panel'=>[
@@ -40,7 +86,7 @@ $this->title = 'Ticket #'.$model->id;
                     'template' => '',
                 ],
                 'type'=>DetailView::TYPE_PRIMARY ,
-                'footer' => $model->descripcion,
+                'footer' => $echofooter,
                 'footerOptions' => ['style' => 'background-color:#fff']
             ],
             'attributes'=>[
@@ -58,7 +104,7 @@ $this->title = 'Ticket #'.$model->id;
                             [
                                 'label' => 'Abierto',
                                 //'attribute'=>'fecha',
-                                'value' => $model->fecha." - ".$model->hora 
+                                'value' => $fecha.' - '.$hora[0].':'.$hora[1].'hs.'
                             ],
                             
                             [
@@ -81,12 +127,12 @@ $this->title = 'Ticket #'.$model->id;
                         [
                             [
                                 'label' => 'Creado por',
-                                'value' => $model->agente0->apellido.", ".$model->agente0->apellido, 
+                                'value' => $model->agente0->apellido.", ".$model->agente0->nombre, 
                             ],
                             
                             [
                                 'label' => 'Asignado a',
-                                'value' => $model->asignacionticket0->agente ? $model->asignacionticket0->agente0->apellido.', '.$model->asignacionticket0->agente0->nombre : $model->asignacionticket0->areaticket0->nombre
+                                'value' => $primeraAsignacion->agente ? $primeraAsignacion->agente0->apellido.', '.$primeraAsignacion->agente0->nombre : $primeraAsignacion->areaticket0->nombre
                             ]
                         
                         ],
@@ -103,12 +149,29 @@ $this->title = 'Ticket #'.$model->id;
             ]
         ]);
         echo '</div>';
-                
-                $arr = ArrayHelper::map($adjuntos,'url', 'nombre');
-                
-                foreach ($arr as $key => $img) {
-                    echo Html::a($img, 'assets/images/tickets/'.$key, ['target'=>'_blank']);
-                }
+
+        
+        echo $this->render('/detalleticket/porticket', [
+            'dataProvider' => $dataProvider,
+            'modelDetalles' => $modelDetalles,
+            
+        ]);   
+        
+        echo '<div class="contenedorlistado">';
+
+        if($model->estadoticket == 2){
+            $textButton = 'Reabrir ticket';
+            $btnClass = 'danger';
+            $gly = 'open';
+        }else{
+            $textButton = 'Responder';
+            $btnClass = 'primary';
+            $gly = 'plus';
+        }
+        
+        echo Html::button('<span class="glyphicon glyphicon-'.$gly.'"></span> '.$textButton, ['value' => Url::to('index.php?r=ticket/detalleticket/create&ticket='.$model->id), 'class' => 'btn btn-main btn-'.$btnClass.' amodaldetallefonid pull-right contenedorlistado']);
+        
+        echo '</div>';
         
 
     ?>

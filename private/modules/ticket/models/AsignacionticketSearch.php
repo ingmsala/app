@@ -18,7 +18,7 @@ class AsignacionticketSearch extends Asignacionticket
     public function rules()
     {
         return [
-            [['id', 'agente', 'areaticket'], 'integer'],
+            [['id', 'agente', 'areaticket', 'ticket', 'detalleticket', 'anteriorasignacion'], 'integer'],
         ];
     }
 

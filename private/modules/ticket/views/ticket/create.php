@@ -22,6 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'asignaciones' => $asignaciones,
         'modelajuntos' => $modelajuntos,
         'origen' => 'create',
+        'searchModelAdjuntos' => null,
+        'dataProviderAdjuntos' => null,
     ]) ?>
 
 </div>

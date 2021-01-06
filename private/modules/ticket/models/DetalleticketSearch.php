@@ -72,4 +72,38 @@ class DetalleticketSearch extends Detalleticket
 
         return $dataProvider;
     }
+
+    public function porTicket($ticket)
+    {
+        $query = Detalleticket::find()->where(['ticket' => $ticket]);
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($ticket);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'fecha' => $this->fecha,
+            'hora' => $this->hora,
+            'ticket' => $this->ticket,
+            'agente' => $this->agente,
+            'estadoticket' => $this->estadoticket,
+            'asignacionticket' => $this->asignacionticket,
+        ]);
+
+        $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);
+
+        return $dataProvider;
+    }
 }

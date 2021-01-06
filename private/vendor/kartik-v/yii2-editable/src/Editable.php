@@ -2,8 +2,8 @@
 /**
  * @package   yii2-editable
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2018
- * @version   1.7.8
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2020
+ * @version   1.7.9
  */
 
 namespace kartik\editable;
@@ -786,7 +786,7 @@ HTML;
         }
         $this->_inputOptions = $this->options;
         $this->containerOptions['id'] = $this->options['id'] . '-cont';
-        $value = $this->hasModel() ? Html::getAttributeValue($this->model, $this->attribute) : $this->value;
+        $value = ($this->hasModel() && !isset($this->value)) ? Html::getAttributeValue($this->model, $this->attribute) : $this->value;
         if ($value === null && !empty($this->valueIfNull)) {
             $value = $this->valueIfNull;
         }

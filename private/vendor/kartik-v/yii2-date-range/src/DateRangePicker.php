@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2019
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2020
  * @package yii2-date-range
- * @version 1.7.1
+ * @version 1.7.3
  */
 
 namespace kartik\daterange;
@@ -64,6 +64,34 @@ class DateRangePicker extends InputWidget
      * for selection. Setting this to true will also automatically set `initRangeExpr` to true.
      */
     public $presetDropdown = false;
+
+    /**
+     * @var boolean whether to add additional preset filter options for days (applicable only when
+     * [[presetDropdown]] is `true`). If this is set to `true` following additional preset filter option(s) will
+     * be available
+     * - **Last {n} Days**
+     * where n will be picked up from the list of filter days set via [presetFilterDays]
+     */
+    public $includeDaysFilter = true;
+
+    /**
+     * @var boolean whether to add additional preset filter options for months (applicable only when
+     * [[presetDropdown]] is `true`). If this is set to `true` following additional preset filter options will
+     * be available:
+     * - **Last {n} Months**
+     * where n will be picked up from the list of filter months set via [presetFilterMonths]
+     */
+    public $includeMonthsFilter = false;
+
+    /**
+     * @var array list of preset filter days (which will be shown as Last {n} days)
+     */
+    public $presetFilterDays = [7, 30];
+
+    /**
+     * @var array list of preset filter months (which will be shown as Last {n} months)
+     */
+    public $presetFilterMonths = [3, 6, 12];
 
     /**
      * @var string the markup for the calendar picker icon. If not set this will default to:
@@ -128,6 +156,7 @@ class DateRangePicker extends InputWidget
         <div class="kv-drp-dropdown">
             <span class="left-ind">{pickerIcon}</span>
             <input type="text" readonly class="form-control range-value" value="{value}">
+            <span class="right-ind kv-clear" style="" title="Clear">&times;</span>
             <span class="right-ind"><b class="caret"></b></span>
         </div>
         {input}
@@ -300,7 +329,7 @@ HTML;
         $nowTo = "moment().format('{$this->_format}')";
         // parse input change correctly when range input value is cleared
         $js = <<< JS
-{$input}.off('change.kvdrp').on('change.kvdrp', function() {
+{$input}.off('change.kvdrp').on('change.kvdrp', function(e) {
     var drp = {$id}.data('{$this->pluginName}'), fm, to;
     if ($(this).val() || !drp) {
         return;
@@ -312,11 +341,23 @@ HTML;
     {$rangeJs}
 });
 JS;
-        if ($this->presetDropdown && empty($this->value)) {
+        if ($this->presetDropdown) {
             $js .= <<< JS
-    var val = {$nowFrom} + '{$this->_separator}' + {$nowTo};
-    {$id}.find('.range-value').val(val);
-    {$input}.val(val);
+    {$id}.on('apply.daterangepicker', function() {
+        var drp = {$id}.data('{$this->pluginName}'), newValue = drp.startDate.format(drp.locale.format);
+        if (!drp.singleDatePicker) {
+            newValue += drp.locale.separator + drp.endDate.format(drp.locale.format);
+        }
+        if (newValue !== {$input}.val()) {
+            {$input}.val(newValue).trigger('change');
+        }
+    });            
+    {$id}.find('.range-value').attr('placeholder', {$input}.attr('placeholder'));
+    {$id}.find('.kv-clear').on('click', function(e) {
+        e.stopPropagation();
+        {$id}.find('.range-value').val('');
+        {$input}.val('').trigger('change').trigger('cancel.daterangepicker');
+    });
 JS;
         }
         $view->registerJs($js);
@@ -366,7 +407,7 @@ JS;
                 $end = $this->getRangeValue('end');
                 $this->value = $start . $this->_separator . $end;
                 if ($this->hasModel()) {
-                    $attr = $this->attribute;
+                    $attr = Html::getAttributeName($this->attribute);
                     $this->model->$attr = $this->value;
                 }
                 $this->pluginOptions['startDate'] = $start;
@@ -440,11 +481,30 @@ JS;
                 $this->pluginOptions['ranges'] = [
                     Yii::t('kvdrp', 'Today') => [$beg, $end],
                     Yii::t('kvdrp', 'Yesterday') => ["{$beg}.subtract(1,'days')", "{$end}.subtract(1,'days')"],
-                    Yii::t('kvdrp', 'Last {n} Days', ['n' => 7]) => ["{$beg}.subtract(6, 'days')", $end],
-                    Yii::t('kvdrp', 'Last {n} Days', ['n' => 30]) => ["{$beg}.subtract(29, 'days')", $end],
+                ];
+
+                if ($this->includeDaysFilter) {
+                    foreach ($this->presetFilterDays as $n) {
+                        $from = $n - 1;
+                        $this->pluginOptions['ranges'] += [
+                            Yii::t('kvdrp', 'Last {n} Days', ['n' => $n]) => ["{$beg}.subtract({$from}, 'days')", $end],
+                        ];
+                    }
+                }
+                $this->pluginOptions['ranges'] += [
                     Yii::t('kvdrp', 'This Month') => ["{$m}.startOf('month')", "{$m}.endOf('month')"],
                     Yii::t('kvdrp', 'Last Month') => ["{$last}.startOf('month')", "{$last}.endOf('month')"],
                 ];
+                if ($this->includeMonthsFilter) {
+                    foreach ($this->presetFilterMonths as $n) {
+                        $from = $n - 1;
+                        $beg = "{$m}.subtract({$from}, 'month').startOf('month')";
+                        $end = "{$m}.endOf('month')";
+                        $this->pluginOptions['ranges'] += [
+                            Yii::t('kvdrp', 'Last {n} Months', ['n' => $n]) => ["{$beg}", "{$end}"],
+                        ];
+                    }
+                }
             }
             if (empty($this->value)) {
                 $this->pluginOptions['startDate'] = new JsExpression("{$m}.startOf('day')");

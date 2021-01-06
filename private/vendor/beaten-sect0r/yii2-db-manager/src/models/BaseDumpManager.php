@@ -17,7 +17,6 @@ abstract class BaseDumpManager implements IDumpManager
      */
     public function makePath($basePath, array $dbInfo, array $dumpOptions)
     {
-        date_default_timezone_set('America/Argentina/Buenos_Aires');
         return sprintf('%s%s_%s_%s_%s.%s',
             $basePath,
             $dbInfo['dbName'],

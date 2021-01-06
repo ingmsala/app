@@ -42,7 +42,9 @@
         "kartik-v/yii2-builder": "dev-master",
         "kartik-v/yii2-widget-typeahead": "dev-master",
         "silecs/yii2-auth-cas": "^1.03",
-        "kartik-v/yii2-widget-rangeinput": "dev-master"
+        "kartik-v/yii2-widget-rangeinput": "dev-master",
+        "kartik-v/yii2-widget-fileinput": "dev-master",
+        "kartik-v/yii2-markdown": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

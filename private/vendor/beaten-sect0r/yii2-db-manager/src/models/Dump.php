@@ -82,7 +82,7 @@ class Dump extends Model
         return [
             'db' => Yii::t('dbManager', 'Database'),
             'isArchive' => Yii::t('dbManager', 'gzip'),
-            'schemaOnly' => Yii::t('dbManager', 'Backup esquema solo'),
+            'schemaOnly' => Yii::t('dbManager', 'Dump only schema'),
             'preset' => Yii::t('dbManager', 'Custom dump preset'),
             'runInBackground' => Yii::t('dbManager', 'Run in background'),
         ];

@@ -19,6 +19,17 @@ use Yii;
  */
 class Asignacionticket extends \yii\db\ActiveRecord
 {
+    const SCENARIO_AGENTE_REQ = 'agte';
+    const SCENARIO_AGENTE_NOREQ = 'agteno';
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_AGENTE_REQ] = ['agente', 'areaticket'];
+        $scenarios[self::SCENARIO_AGENTE_NOREQ] = ['agente', 'areaticket'];
+        return $scenarios;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -33,9 +44,13 @@ class Asignacionticket extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['agente', 'areaticket'], 'integer'],
+            [['agente', 'areaticket', 'ticket', 'detalleticket', 'anteriorasignacion'], 'integer'],
+            [['agente'], 'required', 'message' => 'El ticket debe ser asignado a un área o persona', 'on'=>self::SCENARIO_AGENTE_REQ],
             [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
             [['areaticket'], 'exist', 'skipOnError' => true, 'targetClass' => Areaticket::className(), 'targetAttribute' => ['areaticket' => 'id']],
+            [['ticket'], 'exist', 'skipOnError' => true, 'targetClass' => Ticket::className(), 'targetAttribute' => ['ticket' => 'id']],
+            [['detalleticket'], 'exist', 'skipOnError' => true, 'targetClass' => Detalleticket::className(), 'targetAttribute' => ['detalleticket' => 'id']],
+            [['anteriorasignacion'], 'exist', 'skipOnError' => true, 'targetClass' => Asignacionticket::className(), 'targetAttribute' => ['anteriorasignacion' => 'id']],
         ];
     }
 
@@ -48,6 +63,9 @@ class Asignacionticket extends \yii\db\ActiveRecord
             'id' => 'ID',
             'agente' => 'Asignar a',
             'areaticket' => 'Asignar a',
+            'ticket' => 'Ticket',
+            'detalleticket' => 'Detalle ticket',
+            'anteriorasignacion' => 'Anterior',
         ];
     }
 
@@ -70,16 +88,21 @@ class Asignacionticket extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDetalletickets()
+    public function getDetalleticket0()
     {
-        return $this->hasMany(Detalleticket::className(), ['asignacionticket' => 'id']);
+        return $this->hasMany(Detalleticket::className(), ['id' => 'detalleticket']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTickets()
+    public function getTicket0()
     {
-        return $this->hasMany(Ticket::className(), ['asignacionticket' => 'id']);
+        return $this->hasMany(Ticket::className(), ['id' => 'ticket']);
+    }
+
+    public function getAnteriorasignacion0()
+    {
+        return $this->hasMany(Asignacionticket::className(), ['id' => 'anteriorasignacion']);
     }
 }

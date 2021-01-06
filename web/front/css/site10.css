@@ -1277,16 +1277,17 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     list-style-type:none
 }
 .vista-listado .item-aviso{
-    background:#fff;
+    background:rgb(250, 250, 250);
     box-shadow:0 1px 1px rgba(0,0,0,0.3);
     float:left;
     display:block;
     margin:10px 0 0 0;
     padding:0;
     position:relative;
-    width:100%
+    width:100%;
+    border-left:7px solid #837d80;
 }
-.vista-listado .|{
+.vista-listado {
     width:100%!important
 }
 .vista-listado .header-aviso-resultados{
@@ -1298,9 +1299,9 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
 .vista-listado .header-aviso-resultados h3{
     color:#444;
     float:left;
-    font-family:"Roboto",serif;
-    font-size:1.3em;
-    font-weight:bold;
+    font-size:1em;
+    font-weight: lighter;
+    font-style: italic;
     margin:0;
     max-width:70%;
     padding:5px 0 0 10px
@@ -1316,12 +1317,12 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     padding:5px 0 0 10px
 }
 
-.vista-listado .header-aviso-resultados.Empleos h3{
-    border-left:7px solid #3374b5
-}
+/*.vista-listado .header-aviso-resultados.Empleos h3{
+    border-left:7px solid #d66e9f;
+    }
 .vista-listado .header-aviso-resultados.Empleos h4{
     border-left:7px solid #88a4df
-}
+}*/
 
 .vista-listado .header-aviso-resultados .fecha-publicado-resultados{
     float:left;
@@ -1334,7 +1335,8 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     margin-top:10px;
     position:relative;
     /*text-align:center;*/
-    width:100%
+    width:100%;
+    padding:5px 0 0 10px
 }
 .vista-listado .content-aviso-resultados img{
     border-top:2px solid #111;
@@ -1348,8 +1350,9 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     float:left;
     display:block;
     position:relative;
-    padding:10px 0;
-    width:100%
+    
+    width:100%;
+    padding:5px 10px 10px 10px
 }
 .vista-listado .footer-aviso-resultados .box-rs{
     float:left;
@@ -1358,7 +1361,7 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     width:100%
 }
 .vista-listado .footer-aviso-resultados .box-rs li{
-    background-image:url("../img/sprite-clasificados.png");
+    
     border-radius:360px;
     float:left;
     display:block;
@@ -1398,6 +1401,10 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
 
 .flowGridItem{
     margin-bottom:10px
+}
+
+.contenedorlistado{
+    margin-top:10px
 }
 
 

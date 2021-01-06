@@ -1,12 +1,13 @@
 /*
-  Highcharts JS v6.2.0 (2018-10-17)
+ Highstock JS v8.2.2 (2020-10-22)
 
  Indicator series type for Highstock
 
- (c) 2010-2017 Pawe Dalek
+ (c) 2010-2019 Pawe Dalek
 
  License: www.highcharts.com/license
 */
-(function(b){"object"===typeof module&&module.exports?module.exports=b:"function"===typeof define&&define.amd?define(function(){return b}):b(Highcharts)})(function(b){(function(b){var t=b.isArray,u=b.seriesType;u("vwap","sma",{params:{period:30,volumeSeriesID:"volume"}},{getValues:function(c,f){var g=c.xData,d=c.yData,m=f.period,h=!0;if(!(c=c.chart.get(f.volumeSeriesID)))return b.error("Series "+f.volumeSeriesID+" not found! Check `volumeSeriesID`.",!0);t(d[0])||(h=!1);return this.calculateVWAPValues(h,
-g,d,c,m)},calculateVWAPValues:function(b,f,g,d,m){var h=d.yData,c=d.xData.length,a=f.length;d=[];var p=[],q=[],r=[],l=[],e,n,k,c=a<=c?a:c;for(k=a=0;a<c;a++)e=b?(g[a][1]+g[a][2]+g[a][3])/3:g[a],e*=h[a],e=k?d[a-1]+e:e,n=k?p[a-1]+h[a]:h[a],d.push(e),p.push(n),l.push([f[a],e/n]),q.push(l[a][0]),r.push(l[a][1]),k++,k===m&&(k=0);return{values:l,xData:q,yData:r}}})})(b)});
+(function(a){"object"===typeof module&&module.exports?(a["default"]=a,module.exports=a):"function"===typeof define&&define.amd?define("highcharts/indicators/vwap",["highcharts","highcharts/modules/stock"],function(b){a(b);a.Highcharts=b;return a}):a("undefined"!==typeof Highcharts?Highcharts:void 0)})(function(a){function b(a,b,m,g){a.hasOwnProperty(b)||(a[b]=g.apply(null,m))}a=a?a._modules:{};b(a,"Stock/Indicators/VWAPIndicator.js",[a["Core/Series/Series.js"],a["Core/Utilities.js"]],function(a,b){var m=
+b.error,g=b.isArray;a.seriesType("vwap","sma",{params:{period:30,volumeSeriesID:"volume"}},{getValues:function(a,b){var d=a.chart,e=a.xData;a=a.yData;var t=b.period,h=!0,f;if(f=d.get(b.volumeSeriesID))return g(a[0])||(h=!1),this.calculateVWAPValues(h,e,a,f,t);m("Series "+b.volumeSeriesID+" not found! Check `volumeSeriesID`.",!0,d)},calculateVWAPValues:function(a,b,d,e,m){var h=e.yData,f=e.xData.length,c=b.length;e=[];var g=[],p=[],q=[],n=[],k;f=c<=f?c:f;for(k=c=0;c<f;c++){var l=a?(d[c][1]+d[c][2]+
+d[c][3])/3:d[c];l*=h[c];l=k?e[c-1]+l:l;var r=k?g[c-1]+h[c]:h[c];e.push(l);g.push(r);n.push([b[c],l/r]);p.push(n[c][0]);q.push(n[c][1]);k++;k===m&&(k=0)}return{values:n,xData:p,yData:q}}});""});b(a,"masters/indicators/vwap.src.js",[],function(){})});
 //# sourceMappingURL=vwap.js.map

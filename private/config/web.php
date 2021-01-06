@@ -142,6 +142,9 @@ $config = [
     ],
     'modules' => [
          'gridview' => ['class' => 'kartik\grid\Module'],
+         'markdown' => [
+            'class' => 'kartik\markdown\Module',
+         ],
          'curriculares' => [
             'class' => 'app\modules\curriculares\Curriculares',
         ],

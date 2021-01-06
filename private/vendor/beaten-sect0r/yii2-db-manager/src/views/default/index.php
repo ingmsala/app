@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="well">
         <?php $form = ActiveForm::begin([
-            'action' => ['nuevoajax'],
+            'action' => ['create'],
             'method' => 'post',
             'layout' => 'inline',
         ]) ?>
@@ -37,14 +37,14 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= $form->field($model, 'preset')->dropDownList($model->getCustomOptions(), ['prompt' => '']) ?>
         <?php endif ?>
 
-        <?= Html::submitButton(Yii::t('dbManager', 'Crear backup'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('dbManager', 'Create dump'), ['class' => 'btn btn-success']) ?>
 
         <?php ActiveForm::end() ?>
     </div>
 
     <?php if (!empty($activePids)): ?>
         <div class="well">
-            <h4><?= Yii::t('dbManager', 'Proceso activo:') ?></h4>
+            <h4><?= Yii::t('dbManager', 'Active processes:') ?></h4>
             <?php foreach ($activePids as $pid => $cmd): ?>
                 <b><?= $pid ?></b>: <?= $cmd ?><br>
             <?php endforeach ?>
@@ -52,12 +52,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php endif ?>
 
     <p>
-        <?= Html::a(Yii::t('dbManager', 'Borrar todos'),
+        <?= Html::a(Yii::t('dbManager', 'Delete all'),
             ['delete-all'],
             [
                 'class' => 'btn btn-danger',
                 'data-method' => 'post',
-                'data-confirm' => Yii::t('dbManager', 'Está seguro de querer borrar todos los registros de backup?'),
+                'data-confirm' => Yii::t('dbManager', 'Are you sure?'),
             ]
         ) ?>
     </p>
@@ -69,24 +69,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'type',
-                'label' => Yii::t('dbManager', 'Tipo'),
+                'label' => Yii::t('dbManager', 'Type'),
             ],
             [
                 'attribute' => 'name',
-                'label' => Yii::t('dbManager', 'Nombre'),
+                'label' => Yii::t('dbManager', 'Name'),
             ],
             [
                 'attribute' => 'size',
-                'label' => Yii::t('dbManager', 'Tamaño'),
+                'label' => Yii::t('dbManager', 'Size'),
             ],
             [
                 'attribute' => 'create_at',
-                'label' => Yii::t('dbManager', 'Fecha de Creación'),
-                /*'value' => function($model){
-                    //date_default_timezone_set('America/Argentina/Buenos_Aires');
-                    return Yii::$app->formatter->asDate($model['create_at'], 'dd/MM/yyyy hh:mm:ss');
-
-                }*/
+                'label' => Yii::t('dbManager', 'Create time'),
             ],
 
             [
@@ -100,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'id' => $model['id'],
                             ],
                             [
-                                'title' => Yii::t('dbManager', 'Descargar'),
+                                'title' => Yii::t('dbManager', 'Download'),
                                 'class' => 'btn btn-sm btn-default',
                             ]);
                     },
@@ -111,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'id' => $model['id'],
                             ],
                             [
-                                'title' => Yii::t('dbManager', 'Restaurar'),
+                                'title' => Yii::t('dbManager', 'Restore'),
                                 'class' => 'btn btn-sm btn-default',
                             ]);
                     },
@@ -137,9 +132,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'id' => $model['id'],
                             ],
                             [
-                                'title' => Yii::t('dbManager', 'Eliminar'),
+                                'title' => Yii::t('dbManager', 'Delete'),
                                 'data-method' => 'post',
-                                'data-confirm' => Yii::t('dbManager', 'Está seguro de querer eliminar el backup?'),
+                                'data-confirm' => Yii::t('dbManager', 'Are you sure?'),
                                 'class' => 'btn btn-sm btn-danger',
                             ]);
                     },

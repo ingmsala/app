@@ -7,6 +7,8 @@ use app\modules\ticket\models\Adjuntoticket;
 use app\modules\ticket\models\AdjuntoticketSearch;
 use app\modules\ticket\models\Areaticket;
 use app\modules\ticket\models\Asignacionticket;
+use app\modules\ticket\models\Detalleticket;
+use app\modules\ticket\models\DetalleticketSearch;
 use app\modules\ticket\models\Prioridadticket;
 use Yii;
 use app\modules\ticket\models\Ticket;
@@ -61,9 +63,23 @@ class TicketController extends Controller
     public function actionView($id)
     {
         $adjuntos = Adjuntoticket::find()->where(['ticket' => $id])->all();
+        
+        $primeraAsignacion = Asignacionticket::find()
+                        ->where(['ticket' => $id])
+                        ->min('id');
+        $primeraAsignacion = Asignacionticket::findOne($primeraAsignacion);
+
+        $searchModel = new DetalleticketSearch();
+        $dataProvider = $searchModel->porTicket($id);
+        $modelDetalles = Detalleticket::find()->where(['ticket' => $id])->all();
+
+
         return $this->render('view', [
             'model' => $this->findModel($id),
             'adjuntos' => $adjuntos,
+            'dataProvider' => $dataProvider,
+            'modelDetalles' => $modelDetalles,
+            'primeraAsignacion' => $primeraAsignacion,
         ]);
     }
 
@@ -76,7 +92,9 @@ class TicketController extends Controller
     {
         $model = new Ticket();
         $modelasignacion = new Asignacionticket();
+        $modelasignacion->scenario = $modelasignacion::SCENARIO_AGENTE_REQ;
         $modelajuntos = new Adjuntoticket();
+        
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $model->fecha = date('Y-m-d');
         $model->hora = date('H:i');
@@ -102,11 +120,14 @@ class TicketController extends Controller
 
         
         if ($model->load(Yii::$app->request->post()) && $modelasignacion->load(Yii::$app->request->post()) && $modelajuntos->load(Yii::$app->request->post())) {
-            $image = UploadedFile::getInstance($modelajuntos, 'image');
+            $images = UploadedFile::getInstances($modelajuntos, 'image');
             
-            //return var_dump($image);
+            //return var_dump($images);
+
+            
 
             if($modelasignacion->agente<0){
+                $modelasignacion->scenario = $modelasignacion::SCENARIO_AGENTE_NOREQ;
                 $modelasignacion->areaticket = abs($modelasignacion->agente);
                 $modelasignacion->agente =null;
             }else{
@@ -117,20 +138,29 @@ class TicketController extends Controller
             $modelasignacion->save();
             $model->asignacionticket = $modelasignacion->id;
             $model->save();
+            $modelasignacion->ticket =$model->id;
+            $modelasignacion->save();
 
-            if (!is_null($image)) {
-                $arr = explode(".", $image->name);
-                $ext = end($arr);
-                $modelajuntos->nombre = $image->name;
-                $modelajuntos->url = Yii::$app->security->generateRandomString().".{$ext}";
-                $modelajuntos->ticket = $model->id;
-                Yii::$app->params['uploadPath'] = Yii::getAlias('@webroot') . '/assets/images/tickets/';
-                $path = Yii::$app->params['uploadPath'] . $modelajuntos->url;
-                $image->saveAs($path);
-                $modelajuntos->save();
+            if (!is_null($images)) {
+                foreach ($images as $image) {
+                    $modelajuntosX = new Adjuntoticket();
+                    $arr = [];
+                    $arr = explode(".", $image->name);
+                    $ext = end($arr);
+                    $modelajuntosX->nombre = $image->name;
+                    $modelajuntosX->url = Yii::$app->security->generateRandomString().".{$ext}";
+                    $modelajuntosX->ticket = $model->id;
+                    Yii::$app->params['uploadPath'] = Yii::getAlias('@webroot') . '/assets/images/tickets/';
+                    $path = Yii::$app->params['uploadPath'] . $modelajuntosX->url;
+                    $image->saveAs($path);
+                    $modelajuntosX->save();
+                    
+                }
+                
             }
-
+            
             return $this->redirect(['view', 'id' => $model->id]);
+            
         }
 
         return $this->render('create', [
@@ -154,6 +184,7 @@ class TicketController extends Controller
     {
         $model = $this->findModel($id);
         $modelasignacion = Asignacionticket::findOne($model->asignacionticket);
+        $modelasignacion->scenario = $modelasignacion::SCENARIO_AGENTE_REQ;
         $modelajuntos = new Adjuntoticket();
 
         $searchModelAdjuntos = new AdjuntoticketSearch();
@@ -182,6 +213,7 @@ class TicketController extends Controller
 
             //return var_dump($modelasignacion);
             if($modelasignacion->agente<0){
+                $modelasignacion->scenario = $modelasignacion::SCENARIO_AGENTE_NOREQ;
                 $modelasignacion->areaticket = abs($modelasignacion->agente);
                 $modelasignacion->agente =null;
             }else{
@@ -192,6 +224,8 @@ class TicketController extends Controller
             $modelasignacion->save();
             $model->asignacionticket = $modelasignacion->id;
             $model->save();
+            
+            
 
             $image = UploadedFile::getInstance($modelajuntos, 'image');
             if (!is_null($image)) {

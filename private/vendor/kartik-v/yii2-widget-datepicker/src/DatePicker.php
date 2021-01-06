@@ -447,7 +447,7 @@ class DatePicker extends InputWidget
                         Html::textInput($this->name2, $this->value2, $this->options2);
                 }
                 $css = $isBs4 ? 'input-group-text' : 'input-group-addon';
-                $sep = Html::tag('span', $this->separator, ['class' => $css . ' kv-field-seperator']);
+                $sep = Html::tag('span', $this->separator, ['class' => $css . ' kv-field-separator']);
                 if ($isBs4) {
                     $sep = Html::tag('div', $sep, ['class' => 'input-group-append']);
                 }
@@ -478,7 +478,7 @@ class DatePicker extends InputWidget
         if (!empty($this->_langFile)) {
             DatePickerAsset::registerBundle($view, $this->bsVersion)->js[] = $this->_langFile;
         } else {
-            DatePickerAsset::register($view, $this->bsVersion);
+            DatePickerAsset::registerBundle($view, $this->bsVersion);
         }
         $id = $this->options['id'];
         $el = "jQuery('#" . $this->options['data-datepicker-source'] . "')";

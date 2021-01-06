@@ -2,6 +2,7 @@
 
 use kartik\file\FileInput;
 use kartik\grid\GridView;
+use kartik\markdown\MarkdownEditor;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -16,20 +17,106 @@ use yii\widgets\ActiveForm;
             return $model['apellido'].', '.$model['nombre'];}
         );
 ?>
-<?php $prioridades =ArrayHelper::map($prioridades,'id', 'nombre');?>
+<?php $prioridades =ArrayHelper::map($prioridades,'id', 'nombre');
+
+$customToolbar = [
+    [
+        'buttons' => [
+            MarkdownEditor::BTN_BOLD => ['icon'=>'bold', 'title' => 'Bold'],
+            MarkdownEditor::BTN_ITALIC => ['icon'=>'italic', 'title' => 'Italic'],
+        ]
+    ],
+    [
+        
+
+        'buttons' => [
+            // use a custom icon image
+            MarkdownEditor::BTN_INDENT_L => [
+                'icon' => 'indent-left',
+                'encodeLabel'=>false,
+                'title' => 'URL/Link'
+            ],
+            // use another icon framewrok
+            MarkdownEditor::BTN_INDENT_R => [
+                'icon' => 'indent-right',
+                'label' => '<span class="icon icon-image"></span>',
+                'encodeLabel'=>false,
+                'title' => 'Image'
+            ],
+        ],
+    ],
+
+    [
+
+
+        'buttons' => [
+            // use a custom icon image
+            MarkdownEditor::BTN_UL => [
+                'icon' => 'list',
+                'encodeLabel'=>false,
+                'title' => 'URL/Link'
+            ],
+            // use another icon framewrok
+            MarkdownEditor::BTN_OL => [
+                'icon' => 'list-alt',
+                'label' => '<span class="icon icon-image"></span>',
+                'encodeLabel'=>false,
+                'title' => 'Image'
+            ],
+        ],
+    ],
+];
+
+$customFooterButtons = [
+    [
+        'buttons' => [
+            MarkdownEditor::BTN_PREVIEW => [
+                'icon' => 'search',
+                'label' => 'Previa',
+                'title' => 'Vista previa',
+            ],
+        ]
+    ],
+    
+];
+
+?>
 
 <div class="ticket-form">
 
     <?php $form = ActiveForm::begin([
           'options'=>['enctype'=>'multipart/form-data']]); ?>
 
-    <?= $form->field($model, 'fecha')->textInput() ?>
+    <?= 
 
-    <?= $form->field($model, 'hora')->textInput() ?>
+        $form->field($modelasignacion, 'agente')->widget(Select2::classname(), [
+            'data' => $asignaciones,
+            'options' => ['placeholder' => 'Seleccionar...'],
+            'pluginOptions' => [
+                'allowClear' => true,
+            ],
+        ]);
+
+    ?>
 
     <?= $form->field($model, 'asunto')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'descripcion')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'descripcion')->widget(
+        MarkdownEditor::classname(), 
+        [
+            'height' => 150,
+            'encodeLabels' => false,
+            'showExport' => false,
+            //'showPreview' => false,
+            //'footer' => false,
+            'footerMessage' => '',
+            'toolbar' => $customToolbar,
+            'footerButtons' => $customFooterButtons,
+            'options' => ['class' => 'kv-md-preview'],
+        ]
+    )
+
+    ?>
 
     <?= $form->field($model, 'estadoticket')->textInput() ?>
 
@@ -45,17 +132,7 @@ use yii\widgets\ActiveForm;
 
     ?>
 
-    <?= 
-
-        $form->field($modelasignacion, 'agente')->widget(Select2::classname(), [
-            'data' => $asignaciones,
-            'options' => ['placeholder' => 'Seleccionar...'],
-            'pluginOptions' => [
-                'allowClear' => true,
-            ],
-        ]);
-
-    ?>
+    
 
     
 
@@ -70,17 +147,25 @@ use yii\widgets\ActiveForm;
         ]);
 
     ?>
-
+    
     <?php
 
         echo '<label class="control-label">Adjuntar</label>';
         echo FileInput::widget([
             'model' => $modelajuntos,
-            'attribute' => 'image',
-            //'options' => ['multiple' => true]
+            'attribute' => 'image[]',
+            'options' => ['multiple' => true],
+            'pluginOptions' => [
+                'overwriteInitial'=>false,
+                'showPreview' => false,
+                'showCaption' => true,
+                'showRemove' => true,
+                'showUpload' => false
+            ],
         ]);
 
     ?>
+    <br />    
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
@@ -92,7 +177,7 @@ use yii\widgets\ActiveForm;
 
         if($origen == 'update'){
             echo '<label class="control-label">Archivos adjuntados</label>';
-            echo $this->renderAjax('/adjuntoticket/index', [
+            echo $this->render('/adjuntoticket/index', [
                 'searchModel' => $searchModelAdjuntos,
                 'dataProvider' => $dataProviderAdjuntos,
                
