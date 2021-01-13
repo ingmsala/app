@@ -69,7 +69,21 @@ class Globales
 	const PASS_MAIL = 'Monserrat294';
 	const PASS_MAIL2 = 'lpevdrdqmcosrpgk';
 
+	const LAYOUT_MAIN = 1;
+	const LAYOUT_SOCIOCOMUNITARIOS = 2;
+	const LAYOUT_PERSONAL = 3;
+	const LAYOUT_ACTIVAR = 4;
 
+	
+	public function getLayout($role){
+        if(in_array($role, [$this::US_SUPER, $this::US_SECRETARIA, $this::US_REGENCIA, $this::US_PRECEPTORIA, $this::US_CONSULTA]))
+            return '@app/views/layouts/main';
+        elseif(in_array($role, [$this::US_AGENTE, $this::US_PRECEPTOR]))
+            return '@app/views/layouts/mainpersonal';
+        else{
+            return '@app/views/layouts/mainactivar';
+        }
+    }
 }
 
 

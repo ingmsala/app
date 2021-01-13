@@ -26,7 +26,18 @@ if($dataProvider != null){
         foreach ($dataProvider->getModels() as $model) {
 
         $adjuntos = Adjuntoticket::find()->where(['detalleticket' => $model->id])->all();
-        $arr = ArrayHelper::map($adjuntos,'url', 'nombre');
+        $arr = ArrayHelper::map($adjuntos,'url', function($model){
+            $len = (Yii::$app->params['devicedetect']['isMobile']) ? 20 : 40;
+            if(strlen($model->nombre)>$len){
+                $arr = [];
+                $arr = explode(".", $model->nombre);
+                $ext = end($arr);
+                return substr(ltrim($model->nombre),0,$len).'...'.$ext;
+
+
+            }else
+                return $model->nombre;
+        });
 
         $estado = ($model->estadoticket == 1) ? '<span class="label label-success">'.$model->estadoticket0->nombre.'</span>' : '<span class="label label-danger">'.$model->estadoticket0->nombre.'</span>';
         $asignacion = ($model->asignacionticket0->agente == null) ? $model->asignacionticket0->areaticket0->nombre : $model->asignacionticket0->agente0->apellido.', '.substr(ltrim($model->asignacionticket0->agente0->nombre),0,1);
@@ -48,7 +59,7 @@ if($dataProvider != null){
             $pie .= '<hr style="margin-bottom:0px;" />';
             $pie .= '<div class="push-left text-muted">Adjuntos</div><div class="row" style="margin-left:2%">';
                 foreach ($arr as $key => $img) {
-                    $pie .= '<span style="margin-left:2%" class="push-left">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntoticket/descargar', 'file' => $key]), ['target'=>'_blank']).'</span>';
+                    $pie .= '<div style="margin-left:5%" class="col-md-3">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntoticket/descargar', 'file' => $key]), ['target'=>'_blank']).'</div>';
                 }
             $pie .= '</div>';
         }

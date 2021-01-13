@@ -8,27 +8,57 @@ use yii\helpers\Url;
 /* @var $searchModel app\modules\ticket\models\TicketSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tickets';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = $title;
+
 ?>
 <div class="ticket-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
-        <?= Html::a('Nuevo Ticket', ['create'], ['class' => 'btn btn-success']) ?>
+        <h3>Sistema de Tickets</h3>
+    Para unificar los canales de comunicación, agilizar los procesos y brindar un mejor seguimiento y gestión de las solicitudes de las diferentes áreas, se implementa un sistema de tickets. 
+    A cada solicitud se le asigna un número de ticket único que puede usar para rastrear el progreso y las respuestas en línea.
+    Además, podrá consultar los ticket abiertos y cerrados a manera de historial de todas sus solicitudes, para poder consultar de referencia.
     </p>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'condensed' => true,
+        'hover' => true,
+        
+
+        /*'rowOptions' => function($model){
+            if ($model['estadoticket'] == 1){
+                return ['class' => 'default'];
+            }
+            return ['class' => 'danger'];
+        },*/
+        'panel' => [
+            'type' => GridView::TYPE_DEFAULT,
+            'heading' => Html::encode($this->title),
+            //'beforeOptions' => ['class'=>'kv-panel-before'],
+        ],
+        'summary' => false,
+
+        'toolbar'=>[
+            ['content' => 
+                
+                Html::tag('div', Html::a('<center>Mis tickets<br />Abiertos</center>', ['index', 'rpt' => 1], ['class' => $class1.' role="group"']).
+                Html::a('<center>Mis tickets<br />Cerrados</center>', ['index', 'rpt' => 2], ['class' => $class2.' role="group"']).
+                Html::a('<center>Mis tickets<br />Abiertos y cerrados</center>', ['index', 'rpt' => 3], ['class' => $class3.' role="group"']).
+                Html::a('<center><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><br />Nuevo ticket</center>', ['create'], ['class' => 'btn btn-success'])),
+                'options' => [ 'class' => 'btn-group btn-group-xs ' ]   
+            ],
+            
+            
+            
+        ],
+
         'columns' => [
             
             [
                 'label' => 'Ticket',
                 'format' => 'raw',
+                'width' => '1%',
                 'value' => function($model){
                     return Html::a('#'.$model->id, Url::to(['view', 'id' => $model->id]));
                 }
@@ -39,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Asunto',
                 'attribute' => 'asunto',
-                'width' => '50%',
+                'width' => '40%',
                 'format' => 'raw',
                 'value' => function($model){
                     return Html::a($model->asunto, Url::to(['view', 'id' => $model->id]));
@@ -48,7 +78,9 @@ $this->params['breadcrumbs'][] = $this->title;
             
             [
                 'label' => 'Estado',
+                'format' => 'raw',
                 'value' => function($model){
+                    return ($model->estadoticket == 1) ? '<span class="label label-success">'.$model->estadoticket0->nombre.'</span>' : '<span class="label label-danger">'.$model->estadoticket0->nombre.'</span>';
                     return $model->estadoticket0->nombre;
                 }
             ],

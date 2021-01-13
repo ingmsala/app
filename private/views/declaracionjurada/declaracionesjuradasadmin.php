@@ -76,6 +76,11 @@ if(Yii::$app->user->identity->role == Globales::US_REGENCIA){
     ActiveForm::end();
     
     echo '<br />';
+
+    echo '<div class="alert alert-info" role="alert">';
+     echo '<b>Nueva funcionalidad</b> - Se informa si el agente tiene superposiciones en su declaración jurada. Se indica en la columna correspondiente y se marca con amarillo el registro';
+    echo '</div>';
+
     echo GridView::widget([
         'dataProvider' => $provider,
         //'filterModel' => $searchModel,
@@ -108,8 +113,34 @@ if(Yii::$app->user->identity->role == Globales::US_REGENCIA){
             '{export}',
             
         ],
+
+        'rowOptions' => function($model){
+            if(isset($model['incongruencias'])){
+                if($model['incongruencias']>0){
+                    return ['class' => 'warning'];
+                }
+            }
+            
+        },
+
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+
+            [
+                'header' => 'Superposición',
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                'format' => 'raw',
+                //'attribute' => 'apellido',
+                'value' => function($model){
+                    if(isset($model['incongruencias'])){
+                        if($model['incongruencias']>0){
+                            return 'Sí';
+                        }
+                    }
+                    return '';
+                }
+            ],
             
             [
                 'label' => 'Agente',

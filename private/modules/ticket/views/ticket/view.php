@@ -19,8 +19,8 @@ $this->title = 'Ticket #'.$model->id;
 
 <?php 
         Modal::begin([
-            'header' => "<h2 id='modalHeader'></h2>",
-            'id' => 'modaldetallefonid',
+            'header' => "<h2 id='modalHeader'>".'Respuesta Ticket #'.$model->id.': '.$model->asunto."</h2>",
+            'id' => 'modaldetalleticket',
             'size' => 'modal-lg',
             'options' => [
                 'tabindex' => false,
@@ -45,7 +45,19 @@ $this->title = 'Ticket #'.$model->id;
         ]) ?>
     </p>
     <?php
-        $arr = ArrayHelper::map($adjuntos,'url', 'nombre');
+        //$arr = ArrayHelper::map($adjuntos,'url', 'nombre');
+        $arr = ArrayHelper::map($adjuntos,'url', function($model){
+            $len = (Yii::$app->params['devicedetect']['isMobile']) ? 20 : 40;
+            if(strlen($model->nombre)>$len){
+                $arr = [];
+                $arr = explode(".", $model->nombre);
+                $ext = end($arr);
+                return substr(ltrim($model->nombre),0,$len).'...'.$ext;
+
+
+            }else
+                return $model->nombre;
+        });
 
         $module = Config::getModule(Module::MODULE);
         $output = Markdown::convert($model->descripcion, ['custom' => $module->customConversion]);
@@ -57,7 +69,7 @@ $this->title = 'Ticket #'.$model->id;
             $echofooter .= '<hr style="margin-bottom:0px;" />';
             $echofooter .= '<div class="push-left text-muted">Adjuntos</div><div class="row">';
                 foreach ($arr as $key => $img) {
-                    $echofooter .= '<span style="margin-left:0.5%" class="push-left">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntoticket/descargar', 'file' => $key]), ['target'=>'_blank']).'</span>';
+                    $echofooter .= '<div style="margin-left:5%" class="col-md-3">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntoticket/descargar', 'file' => $key]), ['target'=>'_blank']).'</div>';
                 }
             $echofooter .= '</div>';
         }
@@ -169,7 +181,7 @@ $this->title = 'Ticket #'.$model->id;
             $gly = 'plus';
         }
         
-        echo Html::button('<span class="glyphicon glyphicon-'.$gly.'"></span> '.$textButton, ['value' => Url::to('index.php?r=ticket/detalleticket/create&ticket='.$model->id), 'class' => 'btn btn-main btn-'.$btnClass.' amodaldetallefonid pull-right contenedorlistado']);
+        echo Html::button('<span class="glyphicon glyphicon-'.$gly.'"></span> '.$textButton, ['value' => Url::to('index.php?r=ticket/detalleticket/create&ticket='.$model->id), 'class' => 'btn btn-main btn-'.$btnClass.' amodaldetalleticket pull-right contenedorlistado']);
         
         echo '</div>';
         

@@ -231,6 +231,8 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Gestionar Exámenes', 'url' => ['/anioxtrimestral']],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'Tickets', 'url' => ['/ticket/ticket']],
+                                '<div class="dropdown-divider"></div>',
                                 ['label' => 'Fonid', 'url' => ['/fonid/fonidadmin']],
                                 '<div class="dropdown-divider"></div>',
                                 

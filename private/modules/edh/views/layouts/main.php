@@ -68,9 +68,14 @@ if(!Yii::$app->user->isGuest){
             
             
             
-            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.'Usuario'.'',
+            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.Yii::$app->user->identity->role0->nombre.'',
             
                 'items' => [
+
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).'Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 5],
+                    ],
                                             
                     
                     [

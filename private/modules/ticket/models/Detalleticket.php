@@ -25,6 +25,16 @@ use Yii;
  */
 class Detalleticket extends \yii\db\ActiveRecord
 {
+    const SCENARIO_ABM = 'abm';
+    public $notificacion;
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_ABM] = ['fecha', 'hora', 'ticket', 'agente', 'estadoticket', 'asignacionticket', 'descripcion', 'notificacion'];
+        return $scenarios;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -39,7 +49,7 @@ class Detalleticket extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fecha', 'hora', 'descripcion', 'ticket', 'agente', 'estadoticket', 'asignacionticket'], 'required'],
+            [['fecha', 'hora', 'ticket', 'agente', 'estadoticket', 'asignacionticket'], 'required'],
             [['fecha', 'hora'], 'safe'],
             [['descripcion'], 'string'],
             [['ticket', 'agente', 'estadoticket', 'asignacionticket'], 'integer'],
@@ -47,7 +57,19 @@ class Detalleticket extends \yii\db\ActiveRecord
             [['asignacionticket'], 'exist', 'skipOnError' => true, 'targetClass' => Asignacionticket::className(), 'targetAttribute' => ['asignacionticket' => 'id']],
             [['estadoticket'], 'exist', 'skipOnError' => true, 'targetClass' => Estadoticket::className(), 'targetAttribute' => ['estadoticket' => 'id']],
             [['ticket'], 'exist', 'skipOnError' => true, 'targetClass' => Ticket::className(), 'targetAttribute' => ['ticket' => 'id']],
+            ['descripcion', 'findPasswords', 'on' => self::SCENARIO_ABM, 'skipOnEmpty' => false],
+            /*['descripcion', 'required',  'message' => 'Ya existe la Cátedra que desea crear.', 'when' => function ($model) {
+                return $model->estadoticket == 1;
+            }, 'whenClient' => "function (attribute, value) {
+                return $('#estadoticket').val() == 1;
+            }"]*/
         ];
+    }
+
+    public function findPasswords($attribute, $params, $validator)
+    {
+        if (($this->descripcion == null || $this->descripcion == '') && $this->estadoticket == 1)
+            $this->addError($attribute, 'El mensaje no puede estar vacío');
     }
 
     /**

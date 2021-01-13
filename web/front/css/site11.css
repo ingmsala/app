@@ -1447,6 +1447,10 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     
 }
 
+.seleccionadoticket {
+    background-color: rgb(221, 221, 221);
+}
+
 /*.panel-purple{
     border-color: #85bbcc;
 }

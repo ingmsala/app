@@ -181,6 +181,9 @@ class RolexuserController extends Controller
         elseif($i == 4){
             $this->layout = '@app/views/layouts/mainactivar';
         }
+        elseif($i == 5){
+            $this->layout = '@app/modules/edh/views/layouts/main';
+        }
                 
         $roles = Rolexuser::find()->where(['user' => Yii::$app->user->identity->id])->all();
         $echodiv = '';

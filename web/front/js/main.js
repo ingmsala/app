@@ -93,6 +93,17 @@ $(function(){
 	})
 });
 
+$(function(){
+	
+	$('.amodaldetalleticket').click(function(){
+		
+		$('#modaldetalleticket').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+		//document.getElementById('modalHeader').innerHTML ='ss';
+	})
+});
+
 
 	
 	$('body').on('click', '.bajarprioridad',function(){

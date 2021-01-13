@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="detalleticket-create">
 
-    <h3><?= Html::encode($this->title) ?></h3>
+    
 
     <?= $this->render('_form', [
         'model' => $model,
@@ -20,6 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'asignaciones' => $asignaciones,
         'modelajuntos' => $modelajuntos,
         'estados' => $estados,
+        'estaEnGrupo' => $estaEnGrupo,
     ]) ?>
 
 </div>

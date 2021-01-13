@@ -87,18 +87,6 @@ $customFooterButtons = [
     <?php $form = ActiveForm::begin([
           'options'=>['enctype'=>'multipart/form-data']]); ?>
 
-    <?= 
-
-        $form->field($modelasignacion, 'agente')->widget(Select2::classname(), [
-            'data' => $asignaciones,
-            'options' => ['placeholder' => 'Seleccionar...'],
-            'pluginOptions' => [
-                'allowClear' => true,
-            ],
-        ]);
-
-    ?>
-
     <?= $form->field($model, 'asunto')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'descripcion')->widget(
@@ -118,23 +106,17 @@ $customFooterButtons = [
 
     ?>
 
-    <?= $form->field($model, 'estadoticket')->textInput() ?>
-
     <?= 
 
-        $form->field($model, 'agente')->widget(Select2::classname(), [
-            'data' => $creadores,
+        $form->field($modelasignacion, 'agente')->widget(Select2::classname(), [
+            'data' => $asignaciones,
             'options' => ['placeholder' => 'Seleccionar...'],
             'pluginOptions' => [
-                'allowClear' => true
+                'allowClear' => true,
             ],
         ]);
 
     ?>
-
-    
-
-    
 
     <?= 
 

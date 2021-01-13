@@ -931,13 +931,46 @@ class DeclaracionjuradaController extends Controller
         $salida = '';
         foreach ($horarios as $horariox) {
             date_default_timezone_set('America/Argentina/Buenos_Aires');
+
+            $cant = 0;
+            $cant = Horariodj::find()->joinWith(['funciondj0'])
+                            ->where(['funciondj.declaracionjurada' => $dj])
+                            ->andWhere(['funciondj.licencia' => 1])
+                            ->andWhere(['<>', 'horariodj.id', $horariox->id])
+                            ->andWhere(['or',
+                                            ['and',
+                                        
+                                                ['=', 'horariodj.diasemana', $horariox->diasemana],
+                                                ['<', 'horariodj.inicio', $horariox->inicio],
+                                                ['>', 'horariodj.fin', $horariox->inicio],
+                                
+                                            ], 
+                                            ['and',
+
+                                                ['=', 'horariodj.diasemana', $horariox->diasemana],
+                                                ['<', 'horariodj.inicio', $horariox->fin],
+                                                ['>', 'horariodj.fin', $horariox->fin],
+                                        
+                                            ],     
+                            
+                            ])
+                            
+                            
+                            ->count();
+                if($cant>0)
+                    $lbl = ($pr == 1) ? 'default' : 'danger';
+                else
+                    $lbl = 'default';
+
             if($array[$horariox->funciondj][$horariox->diasemana] == '-'){
-                $array[$horariox->funciondj][$horariox->diasemana] = '<div class="label label-default">'.Yii::$app->formatter->asDate($horariox->inicio, 'HH:mm').' a '.Yii::$app->formatter->asDate($horariox->fin, 'HH:mm').' '.
+                $array[$horariox->funciondj][$horariox->diasemana] = '<div class="label label-'.$lbl.'">'.Yii::$app->formatter->asDate($horariox->inicio, 'HH:mm').' a '.Yii::$app->formatter->asDate($horariox->fin, 'HH:mm').' '.
                 '</div><br />';
             }elseif($array[$horariox->funciondj][$horariox->diasemana] == '- '){
                 $array[$horariox->funciondj][$horariox->diasemana] = '-';
             }else{
-                $array[$horariox->funciondj][$horariox->diasemana] .= '<div class="label label-default">'.Yii::$app->formatter->asDate($horariox->inicio, 'HH:mm').' a '.Yii::$app->formatter->asDate($horariox->fin, 'HH:mm').' '.
+
+                
+                $array[$horariox->funciondj][$horariox->diasemana] .= '<div class="label label-'.$lbl.'">'.Yii::$app->formatter->asDate($horariox->inicio, 'HH:mm').' a '.Yii::$app->formatter->asDate($horariox->fin, 'HH:mm').' '.
             '</div><br />';
             }
            
@@ -1088,8 +1121,47 @@ class DeclaracionjuradaController extends Controller
                             //$max = $dj->id;
                         }
                     }
+
+                    $djx = $array[$key]['dj'][$key2];
+
+                    $horarios = Horariodj::find()->joinWith(['funciondj0'])
+                                    ->where(['funciondj.declaracionjurada' => $djx])
+                                    ->andWhere(['funciondj.licencia' => 1])
+                                    ->all();
+                    $incongruencias = 0;
+                    foreach ($horarios as $horario) {
+                        $cant = Horariodj::find()->joinWith(['funciondj0'])
+                            ->where(['funciondj.declaracionjurada' => $djx])
+                            ->andWhere(['funciondj.licencia' => 1])
+                            ->andWhere(['<>', 'horariodj.id', $horario->id])
+                            ->andWhere(['or',['and',
+                                        
+                                        ['=', 'horariodj.diasemana', $horario->diasemana],
+                                        ['<', 'horariodj.inicio', $horario->inicio],
+                                        ['>', 'horariodj.fin', $horario->inicio],
+                                
+                                     ], 
+                                     ['and',
+
+                                        ['=', 'horariodj.diasemana', $horario->diasemana],
+                                        ['<', 'horariodj.inicio', $horario->fin],
+                                        ['>', 'horariodj.fin', $horario->fin],
+                                
+                                     ],     
+                            
+                            ])
+                            
+                            ->count();
+                        if($cant>0){
+                            $incongruencias ++;
+                        }
+                    }
+
+                    $array[$key]['incongruencias'] = $incongruencias;
                     
                 }
+
+
                 
             }
             $dataProvider = new ArrayDataProvider([

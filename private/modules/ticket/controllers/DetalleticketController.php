@@ -2,6 +2,7 @@
 
 namespace app\modules\ticket\controllers;
 
+use app\config\Globales;
 use app\models\Agente;
 use app\modules\ticket\models\Adjuntoticket;
 use app\modules\ticket\models\Areaticket;
@@ -10,12 +11,20 @@ use Yii;
 use app\modules\ticket\models\Detalleticket;
 use app\modules\ticket\models\DetalleticketSearch;
 use app\modules\ticket\models\Estadoticket;
+use app\modules\ticket\models\Grupotrabajoticket;
 use app\modules\ticket\models\Ticket;
+use kartik\base\Config;
+use kartik\markdown\Markdown;
+use kartik\markdown\Module;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
+use yii\widgets\ActiveForm; // Ajaxvalidation
+
+use yii\web\Response; // Ajaxvalidation
 
 /**
  * DetalleticketController implements the CRUD actions for Detalleticket model.
@@ -28,6 +37,37 @@ class DetalleticketController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                           try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -76,6 +116,7 @@ class DetalleticketController extends Controller
 
         $ticketModel = Ticket::findOne($ticket);
         $model = new Detalleticket();
+        $model->scenario = Detalleticket::SCENARIO_ABM;
         $modelasignacion = new Asignacionticket();
         $modelasignacion->scenario = $modelasignacion::SCENARIO_AGENTE_REQ;
         $modelajuntos = new Adjuntoticket();
@@ -88,7 +129,7 @@ class DetalleticketController extends Controller
         $model->estadoticket = ($ticketModel->estadoticket == 2) ? 1 : $ticketModel->estadoticket;
 
         $areas = Areaticket::find()->all();
-        $agentes = Agente::find()->all();
+        $agentes = Agente::find()->orderBy('apellido, nombre')->all();
         $asignaciones = [];
 
         $involucados = Asignacionticket::find()
@@ -125,8 +166,28 @@ class DetalleticketController extends Controller
 
         if(count($asignacionesAreas)>0)
             $asignaciones ['Áreas'] = $asignacionesAreas;
+        
+        
         if(count($asignacionesAgentes)>0)
             $asignaciones ['Agentes'] = $asignacionesAgentes;
+
+        $estaEnGrupo = $this->esParteDeGrupo($creador->id);
+
+        if(!$estaEnGrupo){
+            $model->notificacion = false;
+            try {
+                unset($asignaciones ['Agentes'][$creador->id]);
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+            try {
+                unset($asignaciones ['Sugerencias'][$creador->id]);
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+        }else{
+            $model->notificacion = true;
+        }
         
 
         
@@ -137,9 +198,17 @@ class DetalleticketController extends Controller
         
         $estados = Estadoticket::find()->all();
 
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return ActiveForm::validate($model);
+
+        }
+
 
         if ($model->load(Yii::$app->request->post()) && $modelasignacion->load(Yii::$app->request->post()) && $modelajuntos->load(Yii::$app->request->post())) {
-            //return var_dump($model);
+            
             $images = UploadedFile::getInstances($modelajuntos, 'image');
 
             //return var_dump(Yii::$app->request->post());
@@ -167,6 +236,41 @@ class DetalleticketController extends Controller
             $ticketModel->asignacionticket = $model->asignacionticket;
             $ticketModel->save();
 
+            $trello = false;
+            if($modelasignacion->agente != null){
+                if($modelasignacion->agente == 188){
+                    $trello = true;
+                }
+            }else{
+                if(in_array(188, array_column($modelasignacion->areaticket0->grupotrabajotickets,'agente')))
+                    $trello = true;
+            }
+
+            if($trello){
+                $module = Config::getModule(Module::MODULE);
+                $output = Markdown::convert($model->descripcion, ['custom' => $module->customConversion]);
+                $sendemail=Yii::$app->mailer->compose()
+                            
+                            ->setFrom([Globales::MAIL => 'Sistema de ticket'])
+                            ->setTo('marianoezequielsaladiaz+tqd9ealdb08vtj2oadii@boards.trello.com')
+                            ->setSubject($ticketModel->asunto)
+                            ->setHtmlBody($output)
+                            ->send();
+            }
+
+            
+
+            if($model->notificacion == 1){
+                $module = Config::getModule(Module::MODULE);
+                $output = Markdown::convert($model->descripcion, ['custom' => $module->customConversion]);
+                $sendemail=Yii::$app->mailer->compose()
+                            ->setFrom([Globales::MAIL => 'Sistema de ticket'])
+                            ->setTo('msala@unc.edu.ar')
+                            ->setSubject($ticketModel->asunto)
+                            ->setHtmlBody('Se ha respondido a su consulta: <div style="background-color:#DDDDDD;">'.$output.'</div><br />Puede consultar el historial de su respuesta ingresando a <a href="https://admin.cnm.unc.edu.ar/ticket/ticket/view&id='.$ticketModel->id.'">Ticket #'.$ticketModel->id.'</a>')
+                            ->send();
+            }
+
             if (!is_null($images)) {
                 foreach ($images as $image) {
                     $modelajuntosX = new Adjuntoticket();
@@ -184,9 +288,11 @@ class DetalleticketController extends Controller
             }
 
             return $this->redirect(['/ticket/ticket/view', 'id' => $ticketModel->id]);
+            
         }
 
         //return var_dump($model);
+        
 
         return $this->renderAjax('create', [
             'model' => $model,
@@ -195,6 +301,8 @@ class DetalleticketController extends Controller
             'asignaciones' => $asignaciones,
             'modelajuntos' => $modelajuntos,
             'estados' => $estados,
+            'estaEnGrupo' => $estaEnGrupo,
+            
         ]);
     }
 
@@ -247,4 +355,14 @@ class DetalleticketController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    private function esParteDeGrupo($id){
+        $cant = count(Grupotrabajoticket::find()->where(['agente' => $id])->all());
+        if ($cant>0)
+            return true;
+        else
+            return false;
+        
+    }
+
 }

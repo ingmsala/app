@@ -1,11 +1,12 @@
 <?php
 
 use kartik\file\FileInput;
+use kartik\form\ActiveForm;
 use kartik\markdown\MarkdownEditor;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\ticket\models\Detalleticket */
@@ -80,7 +81,9 @@ $customFooterButtons = [
 <div class="detalleticket-form">
 
     <?php $form = ActiveForm::begin([
-          'options'=>['enctype'=>'multipart/form-data']]); ?>
+            'id' => 'create-update-detalle-ticket-form',
+            'enableAjaxValidation' => true,
+            'options'=>['enctype'=>'multipart/form-data']]); ?>
 
     
 
@@ -98,31 +101,34 @@ $customFooterButtons = [
 
 
     <?= $form->field($model, 'descripcion')->widget(
-    MarkdownEditor::classname(), 
-    [
-        'height' => 150,
-        'encodeLabels' => false,
-        'showExport' => false,
-        //'showPreview' => false,
-        //'footer' => false,
-        'footerMessage' => '',
-        'toolbar' => $customToolbar,
-        'footerButtons' => $customFooterButtons,
-        'options' => ['class' => 'kv-md-preview'],
-    ]
-)
+        MarkdownEditor::classname(), 
+        [
+            'height' => 150,
+            'encodeLabels' => false,
+            'showExport' => false,
+            //'showPreview' => false,
+            //'footer' => false,
+            'footerMessage' => '',
+            'toolbar' => $customToolbar,
+            'footerButtons' => $customFooterButtons,
+            'options' => ['class' => 'kv-md-preview'],
+        ]
+    )
 
     ?>
 
-    <?= 
+    <?php 
+        if($estaEnGrupo){
+            echo $form->field($model, 'estadoticket')->widget(Select2::classname(), [
+                    'data' => $estados,
+                    'options' => ['placeholder' => 'Seleccionar...'],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ],
+                ]);
 
-        $form->field($model, 'estadoticket')->widget(Select2::classname(), [
-            'data' => $estados,
-            'options' => ['placeholder' => 'Seleccionar...'],
-            'pluginOptions' => [
-                'allowClear' => true,
-            ],
-        ]);
+                echo $form->field($model, 'notificacion')->checkBox(['label' => 'Enviar notifiación al correo']); 
+        }
 
     ?>
 

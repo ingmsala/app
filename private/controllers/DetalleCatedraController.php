@@ -133,7 +133,7 @@ class DetallecatedraController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new DetalleCatedraSearch();
+        $searchModel = new DetallecatedraSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -159,7 +159,7 @@ class DetallecatedraController extends Controller
 
     public function actionMigrate()
     {
-        $dc = DetalleCatedra::find()
+        $dc = Detallecatedra::find()
             ->select(['agente', 'catedra'])
             ->distinct()
             ->joinWith(['catedra0', 'catedra0.division0'])
@@ -171,7 +171,7 @@ class DetallecatedraController extends Controller
         
         $txt = '';
         foreach ($dc as $dcx) {
-            $model = new DetalleCatedra();
+            $model = new Detallecatedra();
             $model->agente = $dcx->agente;
             $model->catedra = $dcx->catedra;
             $model->hora = $dcx->catedra0->actividad0->cantHoras;
@@ -197,7 +197,7 @@ class DetallecatedraController extends Controller
      */
     public function actionCreate()
     {
-        $model = new DetalleCatedra();
+        $model = new Detallecatedra();
         if (isset ($_REQUEST['catedra'])) {
             $catedra = $_REQUEST['catedra'] ;
             
@@ -421,12 +421,12 @@ class DetallecatedraController extends Controller
      * Finds the DetalleCatedra model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return DetalleCatedra the loaded model
+     * @return Detallecatedra the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = DetalleCatedra::findOne($id)) !== null) {
+        if (($model = Detallecatedra::findOne($id)) !== null) {
             return $model;
         }
 
