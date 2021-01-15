@@ -9,6 +9,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use app\assets\AppAsset;
 use app\config\Globales;
+use yii\helpers\Url;
 
 AppAsset::register($this);
 ?>
@@ -36,9 +37,9 @@ if(!Yii::$app->user->isGuest){
             ['label' => '<span class="glyphicon glyphicon-folder-open"></span><br />'.'Caso'.'',
                                         'items' => [
 
-                                            ['label' => 'Nueva solicitud', 'url' => ['/edh/condicionfinal']],
+                                            ['label' => 'Nueva solicitud', 'url' => ['/edh/caso/create']],
                                             '<div class="dropdown-divider"></div>',
-                                            ['label' => 'Casos', 'url' => ['/edh/estadocaso']],
+                                            ['label' => 'Casos', 'url' => ['/edh/caso']],
                                             '<div class="dropdown-divider"></div>',
                                             ['label' => 'Estado de solicitud', 'url' => ['/edh/estadosolicitud']],
                                             '<div class="dropdown-divider"></div>',
@@ -114,19 +115,97 @@ echo Nav::widget([
 NavBar::end();
 
 ?>
-       
-<div class='wrappersonal'>
-    <div class="container">
-    <?= Alert::widget() ?>
-        <div class="row">
-            
-            <div class="col-md-12">
-                <?= $content ?>
+<?php if(isset($this->params['sidebar'])) {
+    if($this->params['sidebar']['visible']== true){ 
+        
+        $model = $this->params['sidebar']['model'];
+        $origen = $this->params['sidebar']['origen'];
+
+        $view = '';
+        $solicitudes = '';
+        $reuniones = '';
+        $actuaciones = '';
+        $plan = '';
+
+        if($origen == 'view')
+            $view = 'active';
+        elseif($origen == 'solicitudes')
+            $solicitudes = 'active';
+        elseif($origen == 'reuniones')
+            $reuniones = 'active';
+        elseif($origen == 'actuaciones')
+            $actuaciones = 'active';
+        elseif($origen == 'plan')
+            $plan = 'active';
+        
+        ?>
+    <div class="row">
+    <div class="titulocaso">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Caso: <?= $model->matricula0->alumno0->apellido.', '.$model->matricula0->alumno0->nombre ?></div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="sidebar2">
+
+                            <?php 
+                            
+                                echo Html::a('Caso', Url::to(['/edh/caso/view', 'id' => $model->id]), ['class' => $view]);
+                                echo Html::a('Solicitudes', Url::to(['/edh/solicitudedh/index', 'id' => $model->id]), ['class' => $solicitudes]);
+                                echo Html::a('Reuniones', Url::to(['/edh/caso/view', 'id' => $model->id]), ['class' => $reuniones]);
+                                echo Html::a('Actuaciones', Url::to(['/edh/caso/view', 'id' => $model->id]), ['class' => $actuaciones]);
+                                echo Html::a('Plan de cursado', Url::to(['/edh/caso/view', 'id' => $model->id]), ['class' => $plan]);
+                            
+                            ?>
+                            
+                           
+                        </div>
+                    </div>
+
+                    <div class="col-md-10">
+        
+                        <div class='wrapedh'>
+                            <div class="container">
+                            <?= Alert::widget() ?>
+                                <div class="row">
+                                    
+                                    <div class="col-md-12">
+                                        <?= $content ?>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            
         </div>
     </div>
-</div>
+    
+    </div>
+<?php }}
+else{ ?>
+<div class="col-md-2">
+                        
+                    </div>
+
+                    <div class="col-md-8">
+    <div class='wrapedh'>
+        <div class="container2">
+        <?= Alert::widget() ?>
+            <div class="row">
+                
+                <div class="col-md-12">
+                    <?= $content ?>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+                    </div>
+    
+    <?php }?>
 
     <?php $this->endBody() ?>
 

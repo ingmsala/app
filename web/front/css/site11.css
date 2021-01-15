@@ -1461,4 +1461,145 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     border-color: #85bbcc;
 }*/
 
+.wrapedh {
+    min-height: 100%;
+    height: auto;
+    /*margin: 70px auto -60px;*/
+    padding: 0 0 60px;
+}
+
+.wrapedh > .container{
+    margin: 0;
+}
+
+.wrapedh > .container2 {
+    padding: 80px 15px 20px;
+    margin-left: 10px;
+}
+
+
+
+.sidebar {
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+  }
+  
+  .sidebar a {
+    display: block;
+    color: black;
+    padding: 16px;
+    text-decoration: none;
+  }
+   
+  .sidebar a.active {
+    background-color: #a0a0a0;
+    color: white;
+  }
+  
+  .sidebar a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+  }
+  
+  
+  
+  @media screen and (max-width: 1163px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+    
+    
+    
+  }
+  
+  
+
+  @media screen and (max-width: 350px) {
+
+    .sidebar {
+        margin: 100px 0 0 0;
+    }
+      
+    .sidebar a {
+      text-align: center;
+      float: none;
+    }
+    
+
+    
+  }
+
+.titulocaso{
+    margin: 100px auto;
+    width:90%;
+    
+}
+
+.sidebar2 {
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #f1f1f1;
+    /*position: fixed;*/
+    height: 100%;
+    overflow: auto;
+  }
+  
+  .sidebar2 a {
+    display: block;
+    color: black;
+    padding: 16px;
+    text-decoration: none;
+  }
+   
+  .sidebar2 a.active {
+    background-color: #a0a0a0;
+    color: white;
+  }
+  
+  .sidebar2 a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+  }
+  
+  
+  
+  @media screen and (max-width: 1163px) {
+    .sidebar2 {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+    
+    
+    
+  }
+  
+  
+
+  @media screen and (max-width: 350px) {
+
+    .sidebar2 {
+        margin: 100px 0 0 0;
+    }
+      
+    .sidebar2 a {
+      text-align: center;
+      float: none;
+    }
+    
+
+    
+  }
+
+
+  
+
 
