@@ -60,10 +60,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             [
-                'label' =>'Dni',
+                'label' =>'documento',
                 'value' => function($model){
                    // return var_dump($model);
-                    return $model['dni'];
+                    return $model['documento'];
                 }
             ],
             [

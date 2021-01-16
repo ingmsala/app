@@ -15,7 +15,7 @@
 
 	        
 	        
-	        <?= $form->field($model, 'dni')->textInput()->label('Documento del Alumno') ?>
+	        <?= $form->field($model, 'documento')->textInput()->label('Documento del Alumno') ?>
 	       
 	        <div class="form-group">
 	            

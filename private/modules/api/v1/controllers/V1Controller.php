@@ -68,7 +68,7 @@ public function behaviors()
 	            			LEFT JOIN aniolectivo ON optativa.aniolectivo = aniolectivo.id 
 	            			LEFT JOIN alumno ON matricula.alumno = alumno.id 
 	            			LEFT JOIN actividad ON optativa.actividad = actividad.id
-	            			WHERE alumno.dni='".$dni."'",
+	            			WHERE alumno.documento='".$dni."'",
 	        ]);
 	    }
 

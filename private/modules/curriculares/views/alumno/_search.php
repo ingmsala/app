@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nombre') ?>
 
-    <?= $form->field($model, 'dni') ?>
+    <?= $form->field($model, 'documento') ?>
 
     <?= $form->field($model, 'curso') ?>
 

@@ -18,7 +18,7 @@ class AlumnoSearch extends Alumno
     public function rules()
     {
         return [
-            [['id', 'dni', 'curso'], 'integer'],
+            [['id', 'documento', 'curso'], 'integer'],
             [['apellido', 'nombre', 'fechanac'], 'safe'],
         ];
     }
@@ -60,7 +60,7 @@ class AlumnoSearch extends Alumno
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'dni' => $this->dni,
+            'documento' => $this->documento,
             'curso' => $this->curso,
         ]);
 

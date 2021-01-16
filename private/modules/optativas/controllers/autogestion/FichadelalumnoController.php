@@ -42,8 +42,8 @@ class FichadelalumnoController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                $key1 = Yii::$app->session->has('dni');
-                                if (Alumno::find()->where(['dni' => Yii::$app->session->get('dni')])->one() != null)
+                                $key1 = Yii::$app->session->has('documento');
+                                if (Alumno::find()->where(['documento' => Yii::$app->session->get('documento')])->one() != null)
                                     $key2 = true;
                                 else
                                     $key2 = false;
@@ -81,7 +81,7 @@ class FichadelalumnoController extends \yii\web\Controller
         $comision = Matricula::find()
                 ->joinWith(['alumno0'])
                 ->where(['matricula.id' => $id])
-                ->andWhere(['alumno.dni' => $_SESSION['dni']])->one()->comision;
+                ->andWhere(['alumno.documento' => $_SESSION['documento']])->one()->comision;
         $this->layout = 'mainautogestion';
         
         $searchModelInasistencias  = new InasistenciaSearch();

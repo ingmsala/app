@@ -25,8 +25,8 @@ class InicioController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                $key1 = Yii::$app->session->has('dni');
-                                if (Alumno::find()->where(['dni' => Yii::$app->session->get('dni')])->one() != null)
+                                $key1 = Yii::$app->session->has('documento');
+                                if (Alumno::find()->where(['documento' => Yii::$app->session->get('documento')])->one() != null)
                                     $key2 = true;
                                 else
                                     $key2 = false;
@@ -56,15 +56,15 @@ class InicioController extends \yii\web\Controller
         
     	$this->layout = null;
         $model = new Alumno();
-        Yii::$app->session->remove('dni');
+        Yii::$app->session->remove('documento');
         if ($model->load(Yii::$app->request->post())) {
 
             
-            if (Alumno::find()->where(['dni' => $model->dni])->one() != null){
-                Yii::$app->session->set('dni', $model->dni);
+            if (Alumno::find()->where(['documento' => $model->documento])->one() != null){
+                Yii::$app->session->set('documento', $model->documento);
                 return $this->redirect(['/optativas/autogestion/agenda/index']);
             }else{
-                $model->dni = null;
+                $model->documento = null;
                 Yii::$app->session->setFlash('error', "El documento no corresponde a un alumno con optativas cursadas o que esté en condiciones de preinscribirse a un espacio.");
             }
         }
@@ -77,17 +77,17 @@ class InicioController extends \yii\web\Controller
     public function actionView()
     {
         
-         $dni = isset($_SESSION['dni']) ? $_SESSION['dni'] : 0;
-        if($dni == 0){
+         $documento = isset($_SESSION['documento']) ? $_SESSION['documento'] : 0;
+        if($documento == 0){
             return $this->redirect(['index']);
         }
         $this->layout = 'mainautogestion';
-        $dni = isset($_SESSION['dni']) ? $_SESSION['dni'] : 0;
+        $documento = isset($_SESSION['documento']) ? $_SESSION['documento'] : 0;
         $model = Alumno::find()
-                    ->where(['dni' => $dni])->one();
+                    ->where(['documento' => $documento])->one();
 
         $searchModel = new MatriculaSearch();
-        $dataProvider = $searchModel->matriculasxalumno($dni);
+        $dataProvider = $searchModel->matriculasxalumno($documento);
 
         return $this->render('view',[
             'model' => $model,

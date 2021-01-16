@@ -86,7 +86,7 @@ public function behaviors()
 	            			LEFT JOIN aniolectivo ON espaciocurricular.aniolectivo = aniolectivo.id 
 	            			LEFT JOIN alumno ON matricula.alumno = alumno.id 
 	            			LEFT JOIN actividad ON espaciocurricular.actividad = actividad.id
-	            			WHERE alumno.dni='".$dni."'",
+	            			WHERE alumno.documento='".$dni."'",
 	            'pagination' => false,
 	        ]);
 	    }

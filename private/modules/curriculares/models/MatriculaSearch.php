@@ -181,11 +181,11 @@ class MatriculaSearch extends Matricula
         return $dataProvider;
     }
 
-    public function matriculasxalumno($dni)
+    public function matriculasxalumno($documento)
     {
         $query = Matricula::find()
             ->joinWith(['comision0', 'estadomatricula0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.aniolectivo0', 'alumno0'])
-            ->where(['alumno.dni' => $dni])
+            ->where(['alumno.documento' => $documento])
             ->andWhere(['matricula.estadomatricula' => 1])
             ->orderBy('aniolectivo.nombre DESC');
 
@@ -195,7 +195,7 @@ class MatriculaSearch extends Matricula
             'query' => $query,
         ]);
 
-        $this->load($dni);
+        $this->load($documento);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails

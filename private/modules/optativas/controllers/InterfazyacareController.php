@@ -65,14 +65,14 @@ class InterfazyacareController extends Controller
 
             $matriculas = Matricula::find()
                 ->joinWith(['alumno0'])
-                ->where(['alumno.dni' => $model->dni])
+                ->where(['alumno.documento' => $model->documento])
                 ->andWhere(['matricula.estadomatricula' => 3])
                 ->all();
             
             if ($matriculas != null){
-                $model = Alumno::find()->where(['dni' => $model->dni])->one();
+                $model = Alumno::find()->where(['documento' => $model->documento])->one();
                 $searchModel = new MatriculaSearch();
-                $dataProvider = $searchModel->matriculasxalumno($model->dni);
+                $dataProvider = $searchModel->matriculasxalumno($model->documento);
 
                 
                 $matriculas = ArrayHelper::toArray($matriculas, [
@@ -103,7 +103,7 @@ class InterfazyacareController extends Controller
                 ]);
                 
             }else{
-                $model->dni = null;
+                $model->documento = null;
 
                 Yii::$app->session->setFlash('error', "El documento no corresponde a un alumno con optativas cursadas");
                 return $this->redirect(['index']);

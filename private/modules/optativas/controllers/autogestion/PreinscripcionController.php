@@ -40,8 +40,8 @@ class PreinscripcionController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                $key1 = Yii::$app->session->has('dni');
-                                if (Alumno::find()->where(['dni' => Yii::$app->session->get('dni')])->one() != null)
+                                $key1 = Yii::$app->session->has('documento');
+                                if (Alumno::find()->where(['documento' => Yii::$app->session->get('documento')])->one() != null)
                                     $key2 = true;
                                 else
                                     $key2 = false;
@@ -94,15 +94,15 @@ class PreinscripcionController extends Controller
             }
         }
     
-        $dni = Yii::$app->session->get('dni');
+        $documento = Yii::$app->session->get('documento');
         $model = new Matricula();
         $model->scenario = $model::SCENARIO_CREATE;
         $alumnos = Alumno::find()
-                    ->where(['dni' => $dni])
+                    ->where(['documento' => $documento])
                     ->orderBy('apellido, nombre')
                     ->all();
         $alumno = Alumno::find()
-                    ->where(['dni' => $dni])
+                    ->where(['documento' => $documento])
                     ->one();
         $model->alumno = $alumno->id;
         $admision = Admisionoptativa::find()

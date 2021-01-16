@@ -51,7 +51,7 @@ especificidad, sobre un determinado tema teniendo en cuenta los intereses de los
 
                         
                         
-                        <?= $form->field($model, 'dni')->textInput()->label('Documento del Estudiante') ?>
+                        <?= $form->field($model, 'documento')->textInput()->label('Documento del Estudiante') ?>
                        
                         <div class="form-group">
                             

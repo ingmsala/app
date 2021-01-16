@@ -31,13 +31,13 @@ AppAsset::register($this);
 
     <div class="wrap">
         <?php
- (isset($_SESSION["dni"])) ? $uss = $_SESSION["dni"] : $uss="";
+ (isset($_SESSION["documento"])) ? $uss = $_SESSION["documento"] : $uss="";
         NavBar::begin([
             'brandLabel' => '<img src="assets/images/logo-encabezado.png" style="display:inline; vertical-align: middle; height:35px;"><span id="brandspan-autogestion">Autogestión de Espacios Optativos</span>',
             'brandUrl' => Url::to('index.php?r=optativas%2Fautogestion%2Fagenda%2Findex'),
             'options' => [
                 'class' => 'navbar-default-autogestion navbar-fixed-top',
-                'style' => !isset($_SESSION['dni']) ? 'visibility: hidden' : '',
+                'style' => !isset($_SESSION['documento']) ? 'visibility: hidden' : '',
             ],
             'brandOptions' => []
         ]);

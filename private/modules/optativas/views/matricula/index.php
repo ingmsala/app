@@ -192,7 +192,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Yii::$app->formatter->asDate($model['fecha'], 'dd/MM/yyyy');
                 }
             ],
-            'alumno0.dni',
+            'alumno0.documento',
             'alumno0.apellido',
             'alumno0.nombre',
             [

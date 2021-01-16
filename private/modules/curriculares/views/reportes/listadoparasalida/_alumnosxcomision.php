@@ -86,7 +86,7 @@ Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
             [
                 'label' => 'Documento',
                 'value' => function($model){
-                    return $model->alumno0->dni;
+                    return $model->alumno0->documento;
                 }
                 
             ],

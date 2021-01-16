@@ -59,6 +59,20 @@ $this->params['sidebar'] = [
 
         Modal::end();
 	?>
+    <?php 
+        Modal::begin([
+            'header' => "<h2 id='modalHeader4'>".'Cambiar estado'."</h2>",
+            'id' => 'amodalsolicitudstate',
+            'size' => 'modal-lg',
+            'options' => [
+                'tabindex' => false,
+            ],
+        ]);
+
+        echo "<div id='modalContent4'></div>";
+
+        Modal::end();
+	?>
 <div class="solicitudedh-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -98,15 +112,17 @@ $this->params['sidebar'] = [
                 'allowBatchToggle' => false,
                 'detailRowCssClass' => GridView::TYPE_WARNING,
                 'enableCache' => false,
+                'rowClickExcludedTags' => ['a', 'button', 'input', 'span'],
                 
                 // show row expanded for even numbered keys
                 'detailUrl' => Url::to(['/edh/certificacionedh/porsolicitud']),
                 
-                'value' => function ($model, $key, $index, $column) use($sol) {
+                'value' => function ($model, $key, $index, $column) {
                     //return $sol;
-                    if($key == $sol)
-                        return GridView::ROW_EXPANDED;
                     return GridView::ROW_COLLAPSED;
+                    /*if($key == $sol)
+                        return GridView::ROW_EXPANDED;
+                    return GridView::ROW_COLLAPSED;*/
                 },
                 'headerOptions' => ['class' => 'kartik-sheet-style'], 
                 'expandOneOnly' => true
@@ -181,7 +197,7 @@ $this->params['sidebar'] = [
                                        
                     'rechazar' => function($url, $model, $key){
                         
-                            return Html::button('<span class="glyphicon glyphicon-ban-circle"></span>', ['value' => Url::to('index.php?r=edh/create&dj='.$model->id), 'class' => 'btn btn-danger amodalrechazar', 'style' => 'width:auto;']);
+                            return Html::button('<span class="glyphicon glyphicon-refresh"></span>', ['value' => Url::to('index.php?r=edh/solicitudedh/cambiarestado&id='.$model->id), 'class' => 'btn btn-info amodalsolicitudstate', 'style' => 'width:auto;']);
                        
                         
                         },

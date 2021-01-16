@@ -70,11 +70,11 @@ class ComisionSearch extends Comision
         return $dataProvider;
     }
 
-    public function comisionesxalumno($dni)
+    public function comisionesxalumno($documento)
     {
         $query = Comision::find()
             ->joinWith(['matriculas', 'matriculas.estadomatricula0', 'espaciocurricular0', 'espaciocurricular0.aniolectivo0', 'matriculas.alumno0'])
-            ->where(['alumno.dni' => $dni])
+            ->where(['alumno.documento' => $documento])
             ->orderBy('aniolectivo.nombre');
 
         // add conditions that should always apply here
@@ -83,7 +83,7 @@ class ComisionSearch extends Comision
             'query' => $query,
         ]);
 
-        $this->load($dni);
+        $this->load($documento);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails

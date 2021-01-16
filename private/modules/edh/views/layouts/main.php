@@ -58,6 +58,8 @@ if(!Yii::$app->user->isGuest){
                                             '<div class="dropdown-divider"></div>',
                                             ['label' => 'Tipo de profesional', 'url' => ['/edh/tipoprofesional']],
                                             '<div class="dropdown-divider"></div>',
+                                            ['label' => 'Tipo de participante', 'url' => ['/edh/tipoparticipante']],
+                                            '<div class="dropdown-divider"></div>',
                                             
                                             
                                         ],
@@ -152,7 +154,7 @@ NavBar::end();
                             
                                 echo Html::a('Caso', Url::to(['/edh/caso/view', 'id' => $model->id]), ['class' => $view]);
                                 echo Html::a('Solicitudes', Url::to(['/edh/solicitudedh/index', 'id' => $model->id]), ['class' => $solicitudes]);
-                                echo Html::a('Reuniones', Url::to(['/edh/caso/view', 'id' => $model->id]), ['class' => $reuniones]);
+                                echo Html::a('Reuniones', Url::to(['/edh/reunionedh/index', 'caso' => $model->id]), ['class' => $reuniones]);
                                 echo Html::a('Actuaciones', Url::to(['/edh/caso/view', 'id' => $model->id]), ['class' => $actuaciones]);
                                 echo Html::a('Plan de cursado', Url::to(['/edh/caso/view', 'id' => $model->id]), ['class' => $plan]);
                             

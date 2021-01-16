@@ -107,7 +107,7 @@ class AdmisionoptativaSearch extends Admisionoptativa
                             ])
                         ->orderBy('al.apellido, al.nombre', 'admisionoptativa.curso');*/
         
-        $query = 'SELECT al.dni as dni, al.apellido as apellido, al.nombre as nombre, admisionoptativa.curso as curso FROM admisionoptativa LEFT JOIN alumno al ON admisionoptativa.alumno = al.id WHERE (admisionoptativa.aniolectivo=2) AND (al.id NOT IN (SELECT matricula.alumno FROM matricula LEFT JOIN comision ON matricula.comision = comision.id LEFT JOIN espaciocurricular ON comision.espaciocurricular = espaciocurricular.id WHERE (espaciocurricular.aniolectivo=2) AND (espaciocurricular.curso=admisionoptativa.curso))) ORDER BY al.apellido, al.nombre';
+        $query = 'SELECT al.documento as documento, al.apellido as apellido, al.nombre as nombre, admisionoptativa.curso as curso FROM admisionoptativa LEFT JOIN alumno al ON admisionoptativa.alumno = al.id WHERE (admisionoptativa.aniolectivo=2) AND (al.id NOT IN (SELECT matricula.alumno FROM matricula LEFT JOIN comision ON matricula.comision = comision.id LEFT JOIN espaciocurricular ON comision.espaciocurricular = espaciocurricular.id WHERE (espaciocurricular.aniolectivo=2) AND (espaciocurricular.curso=admisionoptativa.curso))) ORDER BY al.apellido, al.nombre';
         
         $dataProvider = new SqlDataProvider([
             'sql' => $query,

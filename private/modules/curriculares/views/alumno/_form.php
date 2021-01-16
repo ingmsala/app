@@ -17,7 +17,7 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'dni')->textInput() ?>
+    <?= $form->field($model, 'documento')->textInput() ?>
 
     <?= $form->field($model, 'curso')->textInput() ?>
 

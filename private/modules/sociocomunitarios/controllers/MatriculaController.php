@@ -222,17 +222,17 @@ class MatriculaController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionInscripcion($dni)
+    public function actionInscripcion($documento)
     {
         $this->layout = 'mainautogestion';
         $model = new Matricula();
         $model->scenario = $model::SCENARIO_CREATE;
         $alumnos = Alumno::find()
-                    ->where(['dni' => $dni])
+                    ->where(['documento' => $documento])
                     ->orderBy('apellido, nombre')
                     ->all();
         $alumno = Alumno::find()
-                    ->where(['dni' => $dni])
+                    ->where(['documento' => $documento])
                     ->one();
         $model->alumno = $alumno->id;
         $admision = Admisionoptativa::find()->where(['alumno' => $alumno->id])->all();

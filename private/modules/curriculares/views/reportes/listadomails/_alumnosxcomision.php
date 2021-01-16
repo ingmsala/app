@@ -111,7 +111,7 @@ Pjax::begin(['id' => 'test', 'timeout' => 5000]); ?>
                     , 'class' => "nav nav-pills nav-stacked"]);                  
                     //var_dump($itemsc);
                     //return implode(' // ', $itemsc);
-                    return $model->alumno0->dni;
+                    return $model->alumno0->documento;
                 }
                 
             ],

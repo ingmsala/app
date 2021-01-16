@@ -101,7 +101,7 @@ foreach ($docentes as $agente) {
                 'label' => 'Documento',
                 'vAlign' => 'middle',
                 'value' => function($model){
-                    return $model->matricula0->alumno0->dni;
+                    return $model->matricula0->alumno0->documento;
                 }
             ],
 

@@ -1599,6 +1599,15 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     
   }
 
+  #infoguardado{
+    position: fixed;
+    bottom: 10%;
+    right: 2%;
+    width: 30%;
+    
+    
+}
+
 
 
 

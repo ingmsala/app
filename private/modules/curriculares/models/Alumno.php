@@ -11,7 +11,7 @@ use Yii;
  * @property int $id
  * @property string $apellido
  * @property string $nombre
- * @property int $dni
+ * @property int $documento
  * @property int $curso
  *
  * @property Matricula[] $matriculas
@@ -33,8 +33,8 @@ class Alumno extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apellido', 'nombre', 'dni', 'curso'], 'required'],
-            [['dni', 'curso'], 'integer'],
+            [['apellido', 'nombre', 'documento', 'curso'], 'required'],
+            [['documento', 'curso'], 'integer'],
             [['fechanac'], 'safe'],
             [['apellido', 'nombre'], 'string', 'max' => 100],
         ];
@@ -49,7 +49,7 @@ class Alumno extends \yii\db\ActiveRecord
             'id' => 'ID',
             'apellido' => 'Apellido',
             'nombre' => 'Nombre',
-            'dni' => 'Dni',
+            'documento' => 'documento',
             'curso' => 'Curso',
             'fechanac' => 'Fecha de Nacimiento',
         ];
@@ -92,7 +92,7 @@ class Alumno extends \yii\db\ActiveRecord
         ];
 
         // quita los campos con información sensible
-        unset($fields['dni']);
+        unset($fields['documento']);
 
         return $fields;
     }

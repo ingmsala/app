@@ -50,7 +50,7 @@ $this->title = 'Autogestión de Espacios Curriculares';
 
                         
                         
-                        <?= $form->field($model, 'dni')->textInput()->label('Documento del Estudiante') ?>
+                        <?= $form->field($model, 'documento')->textInput()->label('Documento del Estudiante') ?>
                        
                         <div class="form-group">
                             

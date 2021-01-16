@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'alumno0.apellido',
             'alumno0.nombre',
-            'alumno0.dni',
+            'alumno0.documento',
             'curso',
             'aniolectivo0.nombre',
 

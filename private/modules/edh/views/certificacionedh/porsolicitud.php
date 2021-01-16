@@ -99,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div <?php echo 'id="informes'.$solicitud.'"'?> class="tab-pane fade">
             <?php 
 
-                echo $this->renderAjax('/informeprofesional/index', [
+                echo $this->render('/informeprofesional/index', [
                     'searchModel' => $searchModelInforme,
                     'dataProvider' => $dataProviderInforme,
                     'solicitud' => $solicitud,

@@ -5,6 +5,7 @@ namespace app\modules\edh\controllers;
 use app\modules\curriculares\models\Tutor;
 use app\modules\edh\models\Areasolicitud;
 use app\modules\edh\models\Caso;
+use app\modules\edh\models\Estadosolicitud;
 use Yii;
 use app\modules\edh\models\Solicitudedh;
 use app\modules\edh\models\SolicitudedhSearch;
@@ -61,6 +62,25 @@ class SolicitudedhController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+        ]);
+    }
+
+    public function actionCambiarestado($id)
+    {
+        
+        $model = $this->findModel($id);
+        $estadosolicitudes = Estadosolicitud::find()->all();
+        
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            return $this->redirect(['index', 'id' => $model->caso]);
+
+        }
+
+        return $this->renderAjax('cambiarestado', [
+            'model' => $model,
+            'estadosolicitudes' => $estadosolicitudes,
+            
         ]);
     }
 

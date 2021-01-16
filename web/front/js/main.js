@@ -120,6 +120,13 @@ $('body').on('click', '.amodalinfoprofesional',function(){
 	
 });
 
+$('body').on('click', '.amodalsolicitudstate',function(){
+	$('#amodalsolicitudstate').modal('show')
+		.find('#modalContent4')
+		.load($(this).attr('value'));
+	
+});
+
 
 	
 	$('body').on('click', '.bajarprioridad',function(){

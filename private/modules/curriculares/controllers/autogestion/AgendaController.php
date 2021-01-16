@@ -29,8 +29,8 @@ class AgendaController extends \yii\web\Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                $key1 = Yii::$app->session->has('dni');
-                                if (Alumno::find()->where(['dni' => Yii::$app->session->get('dni')])->one() != null)
+                                $key1 = Yii::$app->session->has('documento');
+                                if (Alumno::find()->where(['documento' => Yii::$app->session->get('documento')])->one() != null)
                                     $key2 = true;
                                 else
                                     $key2 = false;
@@ -60,12 +60,12 @@ class AgendaController extends \yii\web\Controller
     {
         
         $this->layout = 'mainautogestion';
-        $dni = isset($_SESSION['dni']) ? $_SESSION['dni'] : 0;
+        $documento = isset($_SESSION['documento']) ? $_SESSION['documento'] : 0;
         $model = Alumno::find()
-                    ->where(['dni' => $dni])->one();
+                    ->where(['documento' => $documento])->one();
 
         $searchModel = new MatriculaSearch();
-        $dataProvider = $searchModel->matriculasxalumno($dni);
+        $dataProvider = $searchModel->matriculasxalumno($documento);
 
         return $this->render('index',[
             'model' => $model,
@@ -77,12 +77,12 @@ class AgendaController extends \yii\web\Controller
     {
 
         $this->layout = 'mainautogestion';
-        $dni = isset($_SESSION['dni']) ? $_SESSION['dni'] : 0;
+        $documento = isset($_SESSION['documento']) ? $_SESSION['documento'] : 0;
 
         $comisionesalumno= Comision::find()
                         ->joinWith(['matriculas', 'matriculas.alumno0'])
                         ->select('comision.id')
-                        ->where(['alumno.dni' =>$dni])
+                        ->where(['alumno.documento' =>$documento])
                         ->all();
 
         $comisionesalumno=ArrayHelper::map($comisionesalumno,'id','id');
