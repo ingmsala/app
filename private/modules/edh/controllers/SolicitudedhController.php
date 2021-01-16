@@ -36,7 +36,7 @@ class SolicitudedhController extends Controller
      * Lists all Solicitudedh models.
      * @return mixed
      */
-    public function actionIndex($id)
+    public function actionIndex($id, $sol = 0)
     {
         $this->layout = '@app/modules/edh/views/layouts/main';
         $model = Caso::findOne($id);
@@ -47,6 +47,7 @@ class SolicitudedhController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'model' => $model,
+            'sol' => $sol,
         ]);
     }
 
@@ -63,6 +64,7 @@ class SolicitudedhController extends Controller
         ]);
     }
 
+    
     /**
      * Creates a new Solicitudedh model.
      * If creation is successful, the browser will be redirected to the 'view' page.

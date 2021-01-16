@@ -31,6 +31,34 @@ $this->params['sidebar'] = [
 
         Modal::end();
 	?>
+    <?php 
+        Modal::begin([
+            'header' => "<h2 id='modalHeader2'>".'Agregar certificado'."</h2>",
+            'id' => 'modalcertificado',
+            'size' => 'modal-lg',
+            'options' => [
+                'tabindex' => false,
+            ],
+        ]);
+
+        echo "<div id='modalContent2'></div>";
+
+        Modal::end();
+	?>
+    <?php 
+        Modal::begin([
+            'header' => "<h2 id='modalHeader3'>".'Agregar informe profesional'."</h2>",
+            'id' => 'modalinfoprofesional',
+            'size' => 'modal-lg',
+            'options' => [
+                'tabindex' => false,
+            ],
+        ]);
+
+        echo "<div id='modalContent3'></div>";
+
+        Modal::end();
+	?>
 <div class="solicitudedh-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -46,11 +74,48 @@ $this->params['sidebar'] = [
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'summary' => false,
+        //'pjax' => true,
+        'condensed' => true,
+        'persistResize' => false,
+        'rowOptions' => function($model){
+            
+                return ['style' => 'cursor:pointer'];
+            
+        },
+        
+        //'hover' => true,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'kartik\grid\SerialColumn',
+                'vAlign' => 'middle', 
+                'hAlign' => 'center', 
+            ],
+
+            [
+                'header' => '',
+                'class' => 'kartik\grid\ExpandRowColumn',
+                'width' => '50px',
+                'enableRowClick' => true,
+                'allowBatchToggle' => false,
+                'detailRowCssClass' => GridView::TYPE_WARNING,
+                'enableCache' => false,
+                
+                // show row expanded for even numbered keys
+                'detailUrl' => Url::to(['/edh/certificacionedh/porsolicitud']),
+                
+                'value' => function ($model, $key, $index, $column) use($sol) {
+                    //return $sol;
+                    if($key == $sol)
+                        return GridView::ROW_EXPANDED;
+                    return GridView::ROW_COLLAPSED;
+                },
+                'headerOptions' => ['class' => 'kartik-sheet-style'], 
+                'expandOneOnly' => true
+            ],
 
             [
                 'label' => 'Fecha',
+                'vAlign' => 'middle', 
+                'hAlign' => 'center', 
                 'value' => function($model){
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
                     return Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy');
@@ -59,6 +124,8 @@ $this->params['sidebar'] = [
 
             [
                 'label' => 'Área de Recepción',
+                'vAlign' => 'middle', 
+                'hAlign' => 'center', 
                 'value' => function($model){
                     return $model->areasolicitud0->nombre;
                 }
@@ -66,6 +133,8 @@ $this->params['sidebar'] = [
             
             [
                 'label' => 'Demandante',
+                'vAlign' => 'middle', 
+                
                 'value' => function($model){
                     if($model->demandante !=null)
                         return $model->demandante0->apellido.', '.$model->demandante0->nombre.' ('.$model->demandante0->parentesco.')';
@@ -75,6 +144,8 @@ $this->params['sidebar'] = [
 
             [
                 'label' => 'Estado',
+                'vAlign' => 'middle', 
+                'hAlign' => 'center', 
                 'value' => function($model){
                     return $model->estadosolicitud0->nombre;
                 }
@@ -82,48 +153,39 @@ $this->params['sidebar'] = [
 
             [
                 'label' => 'Tipo',
+                'vAlign' => 'middle', 
+                'hAlign' => 'center', 
                 'value' => function($model){
                     return $model->tiposolicitud0->nombre;
                 }
             ],
 
+            [
+                'label' => '# certificados',
+                'vAlign' => 'middle', 
+                'hAlign' => 'center', 
+                'value' => function($model){
+                    return count($model->certificacionedhs);
+                }
+            ],
+
 
             [
-                'class' => 'yii\grid\ActionColumn',
+                'class' => 'kartik\grid\ActionColumn',
                 'template' => '{ver} {rechazar} {eliminar}',
-                
+                'vAlign' => 'middle', 
+                'hAlign' => 'center', 
                 'buttons' => [
                     
-                    'ver' => function($url, $model, $key){
-                        //if($model->estadodeclaracion == 2 || $model->estadodeclaracion == 3)
-                            return Html::a(
-                                '<span class="glyphicon glyphicon-plus btn btn-primary"></span>',
-                                '?r=edh/solicitudedh/view&id='.$model['id']);
-                            
-                    },
+                    
                                        
                     'rechazar' => function($url, $model, $key){
                         
-                            return Html::button('<span class="glyphicon glyphicon-ban-circle"></span>', ['value' => Url::to('index.php?r=edh/create&dj='.$model->id), 'class' => 'btn btn-danger amodalrechazar']);
+                            return Html::button('<span class="glyphicon glyphicon-ban-circle"></span>', ['value' => Url::to('index.php?r=edh/create&dj='.$model->id), 'class' => 'btn btn-danger amodalrechazar', 'style' => 'width:auto;']);
                        
                         
                         },
-                    'eliminar' => function($url, $model, $key){
-                        
-                                return Html::a('<span class="glyphicon glyphicon-ok-circle btn btn-success"></span>', '?r=edh/cambiarestado', 
-                                ['data' => [
-                                
-                                'confirm' => '¿Desea <b>aceptar</b> la declaración jurada?',
-                                'method' => 'post',
-                                'params' => [
-                                                'es' => 3,
-                                                'dj' => $model->id,
-                                            ],
-                                ]
-                                ]);
-                        
-                        
-                        },
+                    
 
                     
                 ]

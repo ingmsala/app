@@ -5,10 +5,11 @@
 
 use app\widgets\Alert;
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
+//use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use app\assets\AppAsset;
 use app\config\Globales;
+use kartik\nav\NavX;
 use yii\helpers\Url;
 
 AppAsset::register($this);
@@ -33,31 +34,29 @@ AppAsset::register($this);
 if(!Yii::$app->user->isGuest){
     if(Yii::$app->user->identity->role == Globales::US_CAE_ADMIN){
         $items = [
-
-            ['label' => '<span class="glyphicon glyphicon-folder-open"></span><br />'.'Caso'.'',
-                                        'items' => [
-
-                                            ['label' => 'Nueva solicitud', 'url' => ['/edh/caso/create']],
-                                            '<div class="dropdown-divider"></div>',
-                                            ['label' => 'Casos', 'url' => ['/edh/caso']],
-                                            '<div class="dropdown-divider"></div>',
-                                            ['label' => 'Estado de solicitud', 'url' => ['/edh/estadosolicitud']],
-                                            '<div class="dropdown-divider"></div>',
+            ['label' => '<span class="glyphicon glyphicon-plus"></span><br />'.'Nueva solicitud'.'',
+             'url' => ['/edh/caso/create']],
+            ['label' => '<span class="glyphicon glyphicon-folder-open"></span><br />'.'Casos'.'',
+             'url' => ['/edh/caso']],
                                             
-                                            
-                                        ],
-
-
-            ],
-
             ['label' => '<span class="glyphicon glyphicon-cog"></span><br />'.'Administrar'.'',
                                         'items' => [
 
-                                            ['label' => 'Condición final', 'url' => ['/edh/condicionfinal']],
+                                            ['label' => 'Condiciones final de cursado', 'url' => ['/edh/condicionfinal']],
                                             '<div class="dropdown-divider"></div>',
-                                            ['label' => 'Estado de casos', 'url' => ['/edh/estadocaso']],
+                                            ['label' => 'Estados de casos', 'url' => ['/edh/estadocaso']],
+                                            '<div class="dropdown-divider"></div>',
+                                            ['label' => 'Matrículas', 'url' => ['/edh/matriculaedh']],
+                                            '<div class="dropdown-divider"></div>',
+                                            ['label' => 'Área de recepción', 'url' => ['/edh/areasolicitud']],
                                             '<div class="dropdown-divider"></div>',
                                             ['label' => 'Estado de solicitud', 'url' => ['/edh/estadosolicitud']],
+                                            '<div class="dropdown-divider"></div>',
+                                            ['label' => 'Tipo de solicitud', 'url' => ['/edh/tiposolicitud']],
+                                            '<div class="dropdown-divider"></div>',
+                                            ['label' => 'Tipo de certificafión', 'url' => ['/edh/tipocertificacion']],
+                                            '<div class="dropdown-divider"></div>',
+                                            ['label' => 'Tipo de profesional', 'url' => ['/edh/tipoprofesional']],
                                             '<div class="dropdown-divider"></div>',
                                             
                                             
@@ -107,8 +106,9 @@ NavBar::begin([
     ],
     'brandOptions' => []
 ]);
-echo Nav::widget([
+echo NavX::widget([
     'encodeLabels' => false,
+    'activateParents' => true,
     'options' => ['class' => 'navbar-nav navbar-right'],
     'items' => $items
 ]);

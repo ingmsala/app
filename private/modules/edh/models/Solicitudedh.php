@@ -103,4 +103,12 @@ class Solicitudedh extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Estadosolicitud::className(), ['id' => 'estadosolicitud']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCertificacionedhs()
+    {
+        return $this->hasMany(Certificacionedh::className(), ['solicitud' => 'id']);
+    }
 }

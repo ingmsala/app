@@ -105,6 +105,22 @@ $(function(){
 });
 
 
+
+$('body').on('click', '.amodalcertificado',function(){
+	$('#modalcertificado').modal('show')
+		.find('#modalContent2')
+		.load($(this).attr('value'));
+	
+});
+
+$('body').on('click', '.amodalinfoprofesional',function(){
+	$('#modalinfoprofesional').modal('show')
+		.find('#modalContent3')
+		.load($(this).attr('value'));
+	
+});
+
+
 	
 	$('body').on('click', '.bajarprioridad',function(){
 		

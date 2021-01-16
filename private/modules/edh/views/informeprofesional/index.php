@@ -1,38 +1,55 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\edh\models\InformeprofesionalSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Informeprofesionals';
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="informeprofesional-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <p style="margin-top:1em" class="pull-right">
+        <?= Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Agregar informe', ['value' => Url::to('index.php?r=edh/informeprofesional/create&solicitud='.$solicitud), 'class' => 'btn btn-success amodalinfoprofesional']); ?>
+    </p> 
 
-    <p>
-        <?= Html::a('Create Informeprofesional', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <div class="clearfix"></div>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
+        'summary' => false,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'kartik\grid\SerialColumn'],
 
-            'id',
+            [
+                'label' => 'Fecha',
+                'value' => function($model){
+                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+                    return Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy');
+                }
+            ],
+            [
+                'label' => 'Área',
+                'vAlign' => 'middle', 
+                'hAlign' => 'center', 
+                'value' => function($model){
+                    return $model->areasolicitud0->nombre;
+                }
+            ],
+            [
+                'label' => 'Creado por',
+                'value' => function($model){
+                    return $model->agente0->apellido.', '.$model->agente0->nombre;
+                }
+            ],
+            
             'descripcion:ntext',
-            'fecha',
-            'areasolicitud',
-            'agente',
-            //'caso',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'kartik\grid\ActionColumn'],
         ],
     ]); ?>
 </div>

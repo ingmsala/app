@@ -40,7 +40,7 @@ class SolicitudedhSearch extends Solicitudedh
      */
     public function porCaso($id)
     {
-        $query = Solicitudedh::find()->where(['caso' => $id]);
+        $query = Solicitudedh::find()->where(['caso' => $id])->indexBy('id');
 
         // add conditions that should always apply here
 

@@ -14,11 +14,11 @@ use app\models\Agente;
  * @property string $fecha
  * @property int $areasolicitud
  * @property int $agente
- * @property int $caso
+ * @property int $solicitud
  *
  * @property Areasolicitud $areasolicitud0
  * @property Agente $agente0
- * @property Caso $caso0
+ * @property Solicitudedh $solicitud0
  */
 class Informeprofesional extends \yii\db\ActiveRecord
 {
@@ -36,13 +36,13 @@ class Informeprofesional extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['descripcion', 'fecha', 'agente', 'caso'], 'required'],
+            [['descripcion', 'fecha', 'agente', 'solicitud'], 'required'],
             [['descripcion'], 'string'],
             [['fecha'], 'safe'],
-            [['areasolicitud', 'agente', 'caso'], 'integer'],
+            [['areasolicitud', 'agente', 'solicitud'], 'integer'],
             [['areasolicitud'], 'exist', 'skipOnError' => true, 'targetClass' => Areasolicitud::className(), 'targetAttribute' => ['areasolicitud' => 'id']],
             [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
-            [['caso'], 'exist', 'skipOnError' => true, 'targetClass' => Caso::className(), 'targetAttribute' => ['caso' => 'id']],
+            [['solicitud'], 'exist', 'skipOnError' => true, 'targetClass' => Solicitudedh::className(), 'targetAttribute' => ['solicitud' => 'id']],
         ];
     }
 
@@ -53,11 +53,11 @@ class Informeprofesional extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'descripcion' => 'Descripcion',
+            'descripcion' => 'Descripción',
             'fecha' => 'Fecha',
-            'areasolicitud' => 'Areasolicitud',
+            'areasolicitud' => 'Área',
             'agente' => 'Agente',
-            'caso' => 'Caso',
+            'solicitud' => 'Solicitud',
         ];
     }
 
@@ -80,8 +80,8 @@ class Informeprofesional extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCaso0()
+    public function getSolicitud0()
     {
-        return $this->hasOne(Caso::className(), ['id' => 'caso']);
+        return $this->hasOne(Solicitudedh::className(), ['id' => 'solicitud']);
     }
 }

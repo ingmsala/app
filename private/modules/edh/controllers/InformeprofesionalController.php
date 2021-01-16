@@ -2,7 +2,10 @@
 
 namespace app\modules\edh\controllers;
 
+
 use Yii;
+use app\models\Agente;
+use app\modules\edh\models\Areasolicitud;
 use app\modules\edh\models\Informeprofesional;
 use app\modules\edh\models\InformeprofesionalSearch;
 use yii\web\Controller;
@@ -62,16 +65,29 @@ class InformeprofesionalController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($solicitud)
     {
         $model = new Informeprofesional();
+        $model->solicitud = $solicitud;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        $model->agente = $agente->id;
+        $areas = Areasolicitud::find()->where(['in', 'id', [2,3]])->all();
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $desdeexplode = explode("/",$model->fecha);
+            $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
+            $model->fecha = $newdatedesde;
+            
+
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('create', [
             'model' => $model,
+            'areas' => $areas,
         ]);
     }
 

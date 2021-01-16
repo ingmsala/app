@@ -17,7 +17,7 @@ class InformeprofesionalSearch extends Informeprofesional
     public function rules()
     {
         return [
-            [['id', 'areasolicitud', 'agente', 'caso'], 'integer'],
+            [['id', 'areasolicitud', 'agente', 'solicitud'], 'integer'],
             [['descripcion', 'fecha'], 'safe'],
         ];
     }
@@ -38,9 +38,9 @@ class InformeprofesionalSearch extends Informeprofesional
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function porSolicitud($solicitud)
     {
-        $query = Informeprofesional::find();
+        $query = Informeprofesional::find()->where(['solicitud' => $solicitud]);
 
         // add conditions that should always apply here
 
@@ -48,7 +48,7 @@ class InformeprofesionalSearch extends Informeprofesional
             'query' => $query,
         ]);
 
-        $this->load($params);
+        
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -62,7 +62,7 @@ class InformeprofesionalSearch extends Informeprofesional
             'fecha' => $this->fecha,
             'areasolicitud' => $this->areasolicitud,
             'agente' => $this->agente,
-            'caso' => $this->caso,
+            'solicitud' => $this->solicitud,
         ]);
 
         $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);

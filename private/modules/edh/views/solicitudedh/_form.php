@@ -38,7 +38,7 @@ use yii\widgets\ActiveForm;
             ]);
         ?>
 
-</div>
+    </div>
 
     <?= 
 
