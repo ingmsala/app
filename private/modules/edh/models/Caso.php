@@ -59,8 +59,8 @@ class Caso extends \yii\db\ActiveRecord
             'fin' => 'Fin',
             'resolucion' => 'N° Resolución',
             'matricula' => 'Estudiante',
-            'condicionfinal' => 'Condicionfinal',
-            'estadocaso' => 'Estadocaso',
+            'condicionfinal' => 'Condición estudiante',
+            'estadocaso' => 'Estado del caso',
             'aniolectivo' => 'Año lectivo',
         ];
     }

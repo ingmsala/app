@@ -43,13 +43,14 @@ use yii\helpers\Html;
                 'selectedListLabel' => 'Participantes',
                     'nonSelectedListLabel' => 'Personas a invitar',
                     'infoText' => null,
-                    'moveOnSelect' => false,
+                    'moveOnSelect' => true,
+                    //'selection' => ['32238586'],
                     //'nonSelectedFilter' => 'Sala',
-                    //'filterOnValues' => true
+                    //'filterOnValues' => true,
                     //'showFilterInputs' => false,
                     'filterPlaceHolder' => ''
             ],
-        ]);
+        ])->label('');
 
     ?>
 

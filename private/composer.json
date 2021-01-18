@@ -29,7 +29,6 @@
         "kartik-v/yii2-widget-timepicker": "dev-master",
         "beaten-sect0r/yii2-db-manager": "*",
         "kartik-v/yii2-mpdf": "*",
-        "kartik-v/yii2-widget-depdrop": "dev-master",
         "kartik-v/yii2-field-range": "dev-master",
         "kartik-v/yii2-date-range": "dev-master",
         "kartik-v/yii2-editable": "dev-master",
@@ -45,7 +44,9 @@
         "kartik-v/yii2-widget-rangeinput": "dev-master",
         "kartik-v/yii2-widget-fileinput": "dev-master",
         "kartik-v/yii2-markdown": "dev-master",
-        "softark/yii2-dual-listbox": "dev-master"
+        "softark/yii2-dual-listbox": "dev-master",
+        "kartik-v/dependent-dropdown": "@dev",
+        "kartik-v/yii2-widget-depdrop": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

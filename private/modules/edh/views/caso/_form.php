@@ -48,39 +48,58 @@ use yii\helpers\Url;
 
                 $form->field($model, 'aniolectivo')->widget(Select2::classname(), [
                     'data' => $aniolectivos,
-                    'options' => ['placeholder' => 'Seleccionar...', 'id' => 'aniolectivo_id'],
+                    'options' => ['placeholder' => 'Seleccionar...', 'id' => 'aniolectivo_id', 
+                    
+                        'onchange'=>'
+                            $.get("index.php?r=edh/caso/matriculas&id="+$(this).val(), function( data ) {
+                            $( "select#matricula-id" ).html( data );
+                            $( "select#demandante-id" ).html( "<option>Seleccionar...</option>" );
+                            });
+                        '
+                    ],
                     'pluginOptions' => [
                         'allowClear' => true,
+                        
                     ],
                 ]);
 
             ?>
 
-            <?php echo $form->field($model, 'matricula')->widget(DepDrop::classname(), [
-                                            'type' => DepDrop::TYPE_SELECT2,
-                                            //'name' => 'catedra',
-                                            
-                                            'options' => ['id'=>'matricula-id'],
-                                            'pluginOptions' => [
-                                            'depends'  => ['aniolectivo_id'],
-                                            'placeholder' => 'Seleccionar...',
-                                            'url' => Url::to(['/edh/caso/matriculas'])
-                                            ]
-                                        ]);  
+            <?= 
+
+            $form->field($model, 'matricula')->widget(Select2::classname(), [
+                'data' => [],
+                'options' => ['placeholder' => 'Seleccionar...', 'id' => 'matricula-id', 
+                
+                    'onchange'=>'
+                    $.get("index.php?r=edh/caso/demandantes&id="+$(this).val(), function( data ) {
+                        $( "select#demandante-id" ).html( data );
+                        
+                        });
+                    '
+                ],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    
+                ],
+            ]);
+
             ?>
 
-            <?php echo $form->field($modelSolicitud, 'demandante')->widget(DepDrop::classname(), [
-                                            'type' => DepDrop::TYPE_SELECT2,
-                                            //'name' => 'catedra',
-                                            
-                                            'options' => ['id'=>'demandante-id'],
-                                            'pluginOptions' => [
-                                            'depends'  => ['matricula-id', 'aniolectivo_id'],
-                                            'placeholder' => 'Seleccionar...',
-                                            'url' => Url::to(['/edh/caso/demandantes'])
-                                            ]
-                                        ]);  
+            <?= 
+
+            $form->field($modelSolicitud, 'demandante')->widget(Select2::classname(), [
+                'data' => [],
+                'options' => ['placeholder' => 'Seleccionar...', 'id' => 'demandante-id'],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    
+                ],
+            ]);
+
             ?>
+
+            
         </div>
     </div>
 

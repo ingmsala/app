@@ -44,12 +44,14 @@ $this->registerJs("
 ?>
  <?php 
         Modal::begin([
-            'header' => "<h2 id='modalHeader4'>".'Cambiar estado'."</h2>",
+            'header' => "<h2 id='modalHeader4'>".'Agregar participantes'."</h2>",
             'id' => 'amodalsolicitudstate',
-            'size' => 'modal-lg',
+            'size' => 'modal-ancho',
             'options' => [
                 'tabindex' => false,
+                'class' => ''
             ],
+            
         ]);
 
         echo "<div id='modalContent4'></div>";

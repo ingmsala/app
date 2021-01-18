@@ -1608,6 +1608,17 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     
 }
 
+.bootstrap-duallistbox-container.moveonselect .moveall, .bootstrap-duallistbox-container.moveonselect .removeall {
+    width: 50%!important;
+}
+
+@media (min-width: 1200px){
+
+.modal-ancho{
+    width: 1200px;
+}
+}
+
 
 
 

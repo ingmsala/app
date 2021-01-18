@@ -187,10 +187,16 @@ class CasoController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionMatriculas()
+    public function actionMatriculas($id)
     {
+        $aniolectivo_id = $id;
+        $matriculas = Matriculaedh::find()->where(['aniolectivo' => $aniolectivo_id])->all();
+        echo "<option>Seleccionar...</option>";
+        foreach($matriculas as $matricula){
+            echo "<option value='".$matricula->id."'>".$matricula->alumno0->apellido.', '.$matricula->alumno0->nombre.' ('.$matricula->division0->nombre.')'."</option>";
+        }
         
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        /*Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $out = [];
         
         if (isset($_POST['depdrop_parents'])) {
@@ -199,11 +205,11 @@ class CasoController extends Controller
             
             if ($parents != null) {
 
-                $aniolectivo_id = $parents[0];
+                $aniolectivo_id = (int)$parents[0];
 
                 $matriculas = Matriculaedh::find()->where(['aniolectivo' => $aniolectivo_id])->all();
                                 
-                $listMAtriculas=ArrayHelper::toArray($matriculas, [
+                $listMatriculas=ArrayHelper::toArray($matriculas, [
                     'app\modules\edh\models\Matriculaedh' => [
                         'id' => function($model) {
                             return $model['id'];},
@@ -211,24 +217,31 @@ class CasoController extends Controller
                             return $model['alumno0']['apellido'].', '.$model['alumno0']['nombre'].' ('.$model['division0']['nombre'].')';},
                     ],
                 ]);
-                $out = $listMAtriculas;
+                $out = $listMatriculas;
                 
                 return ['output'=>$out, 'selected'=>''];
             }
 
         }
 
-        return ['output'=>'', 'selected'=>''];
+        return ['output'=>'', 'selected'=>''];*/
 
         
         
         
     }
 
-    public function actionDemandantes()
+    public function actionDemandantes($id)
     {
-        
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $matricula_id = $id;
+        $matricula = Matriculaedh::findOne($matricula_id);
+        $tutores = Tutor::find()->where(['alumno' => $matricula->alumno])->all();
+        echo "<option>Seleccionar...</option>";
+        foreach($tutores as $tutor){
+            echo "<option value='".$tutor->id."'>".$tutor->apellido.', '.$tutor->nombre.' ('.$tutor->parentesco.')'."</option>";
+        }
+
+        /*Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $out = [];
         
         if (isset($_POST['depdrop_parents'])) {
@@ -237,7 +250,7 @@ class CasoController extends Controller
             
             $parents = $_POST['depdrop_parents'];
             
-            $matricula_id = empty($parents[0]) ? null : $parents[0];
+            $matricula_id = empty($parents[1]) ? null : (int)$parents[1];
             //$matricula_id = $parents[0];
             
             if ($matricula_id != null) {
@@ -263,7 +276,7 @@ class CasoController extends Controller
 
         }
 
-        return ['output'=>'', 'selected'=>''];
+        return ['output'=>'', 'selected'=>''];*/
 
         
         

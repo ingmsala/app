@@ -256,15 +256,6 @@ return array (
       '@kartik/time' => $vendorDir . '/kartik-v/yii2-widget-timepicker/src',
     ),
   ),
-  'kartik-v/yii2-widget-depdrop' => 
-  array (
-    'name' => 'kartik-v/yii2-widget-depdrop',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@kartik/depdrop' => $vendorDir . '/kartik-v/yii2-widget-depdrop/src',
-    ),
-  ),
   'kartik-v/yii2-field-range' => 
   array (
     'name' => 'kartik-v/yii2-field-range',
@@ -371,6 +362,15 @@ return array (
     'alias' => 
     array (
       '@softark/duallistbox' => $vendorDir . '/softark/yii2-dual-listbox',
+    ),
+  ),
+  'kartik-v/yii2-widget-depdrop' => 
+  array (
+    'name' => 'kartik-v/yii2-widget-depdrop',
+    'version' => 'dev-master',
+    'alias' => 
+    array (
+      '@kartik/depdrop' => $vendorDir . '/kartik-v/yii2-widget-depdrop/src',
     ),
   ),
 );

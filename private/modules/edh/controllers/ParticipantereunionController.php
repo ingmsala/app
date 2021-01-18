@@ -71,10 +71,14 @@ class ParticipantereunionController extends Controller
         $model = new Participantereunion();
         
         $reunion = Reunionedh::findOne($id);
+        $participantes_actuales = array_column($reunion->participantereunions, 'participante');
 
         
         $alumno = Alumno::find()->where(['id' => $reunion->caso0->matricula0->alumno])->one();
-        $tutores = Tutor::find()->where(['alumno' => $reunion->caso0->matricula0->alumno])->all();
+        $tutores = Tutor::find()
+                ->where(['alumno' => $reunion->caso0->matricula0->alumno])
+                ->andWhere(['not in', 'documento', $participantes_actuales])
+                ->all();
 
         $docentes_curso = Detallecatedra::find()
             ->joinWith(['catedra0', 'catedra0.actividad0', 'agente0'])
@@ -84,53 +88,66 @@ class ParticipantereunionController extends Controller
             ->andWhere(['<>', 'actividad.id', 195])
             ->andWhere(['revista' => 6])
             ->andWhere(['aniolectivo' => $reunion->caso0->matricula0->aniolectivo])
-            ->orderBy('actividad.nombre')
+            ->andWhere(['not in', 'agente.documento', $participantes_actuales])
+            ->orderBy('agente.apellido, agente.nombre')
             ->all();
 
         $items = [];
 
         $nombramientos = Nombramiento::find()
-                            ->where(['in', 'cargo', [225,227,242]])
+                            ->joinWith(['agente0'])
+                            ->where(['in', 'cargo', [225,242]])
+                            ->andWhere(['not in', 'agente.documento', $participantes_actuales])
                             ->all();
         
         foreach ($docentes_curso as $detcat) {
-            $items [] = [$detcat->agente0->documento.'-1' => $detcat->agente0->apellido.', '.$detcat->agente0->nombre.' - '.$detcat->catedra0->division0->nombre.' ('.$detcat->catedra0->actividad0->nombre.')'];
+            $items [] = [$detcat->agente0->documento.'-1' => $detcat->catedra0->division0->nombre.' - '.$detcat->agente0->apellido.', '.$detcat->agente0->nombre.' ('.$detcat->catedra0->actividad0->nombre.')'];
         }
 
         foreach ($nombramientos as $nom) {
-            $items [] = [$nom->agente0->documento.'-1' => $nom->agente0->apellido.' ('.$nom->cargo0->nombre.')'];
+            $items [] = [$nom->agente0->documento.'-3' => $nom->agente0->apellido.' ('.$nom->cargo0->nombre.')'];
         }
 
         //return var_dump(array_column(array_column($docentes_curso, 'agente0'), 'documento'));
         $agentes = Agente::find()
                 ->where(['not in', 'documento', array_column(array_column($docentes_curso, 'agente0'), 'documento')])
-                ->orWhere(['not in', 'documento', array_column(array_column($nombramientos, 'agente0'), 'documento')])    
+                ->andWhere(['not in', 'documento', array_column(array_column($nombramientos, 'agente0'), 'documento')])
+                ->andWhere(['not in', 'documento', $participantes_actuales])
             ->orderBy('apellido, nombre')->all();
 
         foreach ($agentes as $agente) {
-            $items [] = [$agente->documento.'-1' => $agente->apellido];
+            $items [] = [$agente->documento.'-1' => $agente->apellido.', '.$agente->nombre];
         }
-        $items [] = [$reunion->caso0->matricula0->alumno0->documento.'-4' => $reunion->caso0->matricula0->alumno0->apellido.', '.$reunion->caso0->matricula0->alumno0->nombre.' (Estudiante)'];
-        foreach ($tutores as $tutor) {
+
+        if(!in_array($reunion->caso0->matricula0->alumno0->documento,$participantes_actuales))
+            $items [] = [$reunion->caso0->matricula0->alumno0->documento.'-4' => $reunion->caso0->matricula0->alumno0->apellido.', '.$reunion->caso0->matricula0->alumno0->nombre.' (Estudiante)'];
+        
+            foreach ($tutores as $tutor) {
             $items [] = [$tutor->documento.'-5' => $tutor->apellido.', '.$tutor->nombre.' ('.$tutor->parentesco.')'];
         }
 
         if (Yii::$app->request->post()) {
             
             $participantes = Yii::$app->request->post()['Participantereunion']['participantes'];
-            
-            foreach ($participantes as $participante) {
-                $modelX = new Participantereunion();
-                $modelX->reunionedh = $id;
-                $modelX->tipoparticipante = 1;
-                $modelX->asistio = 0;
-                $modelX->comunico = 0;
-                $modelX->participante = $participante;
-                $modelX->save();
+            //return var_dump($participantes);
+            if($participantes != null){
+                foreach ($participantes as $participante) {
+                    $parti = explode('-',$participante);
+                    $modelX = new Participantereunion();
+                    $modelX->reunionedh = $id;
+                    $modelX->tipoparticipante = $parti[1];
+                    $modelX->asistio = 0;
+                    $modelX->comunico = 0;
+                    $modelX->participante = $parti[0];
+                    //return var_dump($modelX);
+                    $modelX->save();
+                    
+                }
                 
             }
-
             return $this->redirect(['reunionedh/view', 'id' => $id]);
+
+            
         }
         
         return $this->renderAjax('porreunion', [
