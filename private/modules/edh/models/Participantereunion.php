@@ -22,6 +22,7 @@ use Yii;
  */
 class Participantereunion extends \yii\db\ActiveRecord
 {
+    public $participantes;
     /**
      * {@inheritdoc}
      */

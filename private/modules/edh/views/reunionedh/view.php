@@ -1,15 +1,22 @@
 <?php
 
+use app\models\Agente;
+use app\models\Nombramiento;
 use kartik\builder\Form;
 use kartik\builder\FormGrid;
 use kartik\date\DatePicker;
 use kartik\form\ActiveForm;
+use kartik\grid\GridView;
 use kartik\time\TimePicker;
+use softark\duallistbox\DualListbox;
 use yii\bootstrap\Alert;
+use yii\bootstrap\Modal;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use yii\widgets\DetailView;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Reunionedh */
@@ -32,7 +39,23 @@ $this->registerJs("
                        $('#infoguardado').fadeOut(1000); 
                 }, 3000);");
 
+
+
 ?>
+ <?php 
+        Modal::begin([
+            'header' => "<h2 id='modalHeader4'>".'Cambiar estado'."</h2>",
+            'id' => 'amodalsolicitudstate',
+            'size' => 'modal-lg',
+            'options' => [
+                'tabindex' => false,
+            ],
+        ]);
+
+        echo "<div id='modalContent4'></div>";
+
+        Modal::end();
+	?>
 <div class="reunionedh-view">
 
     <?php 
@@ -115,6 +138,8 @@ $this->registerJs("
         ]);
     ?>
 
+    
+
     <div class="form-group">
         <div class="pull-right" >
             <?php
@@ -134,8 +159,12 @@ $this->registerJs("
     </div>
 
     <?php ActiveForm::end(); ?>
+
+
     
     <div class="clearfix"></div>
+
+    <?= Html::button('<span class="glyphicon glyphicon-refresh"></span>', ['value' => Url::to('index.php?r=edh/participantereunion/porreunion&id='.$model->id), 'class' => 'btn btn-info amodalsolicitudstate', 'style' => 'width:auto;']); ?>
     <hr />
     <h4>Participantes</h4>
     <hr />
@@ -148,6 +177,8 @@ $this->registerJs("
         ]);
         
     ?>
+
+    
 
 
 

@@ -2,6 +2,7 @@
 
 namespace app\modules\edh\models;
 
+use app\models\Agente;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\edh\models\Participantereunion;
@@ -68,4 +69,37 @@ class ParticipantereunionSearch extends Participantereunion
 
         return $dataProvider;
     }
+
+    public function participantes($reunion, $tipo=1)
+    {
+        $participantes = Participantereunion::find()->where(['reunionedh' => $reunion])->all();
+        
+        if($tipo == 1){
+            $query = Agente::find()
+            ->joinWith(['genero0', 'detallepartes'])
+            ->where(['not in', 'documento', array_column($participantes, 'participante')])
+            ->orderBy('apellido', 'nombre', 'legajo');
+        }
+        
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+            
+        ]);
+
+        //$this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        return $dataProvider;
+    }
+
+
 }

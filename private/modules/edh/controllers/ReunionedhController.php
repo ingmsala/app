@@ -2,6 +2,8 @@
 
 namespace app\modules\edh\controllers;
 
+use app\models\AgenteSearch;
+use app\models\Nombramiento;
 use app\modules\edh\models\Caso;
 use app\modules\edh\models\ParticipantereunionSearch;
 use Yii;
@@ -49,6 +51,8 @@ class ReunionedhController extends Controller
         ]);
     }
 
+
+
     /**
      * Displays a single Reunionedh model.
      * @param integer $id
@@ -61,8 +65,10 @@ class ReunionedhController extends Controller
         $model = $this->findModel($id);
 
         $searchModelParticipantes = new ParticipantereunionSearch();
+        
         $dataProviderParticipantes = $searchModelParticipantes->porReunion($model->id);
 
+        
         try {
             $desdeexplode = explode("-",$model->fecha);
             $newdatedesde = date("d/m/Y", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[2], $desdeexplode[0]));
@@ -73,6 +79,8 @@ class ReunionedhController extends Controller
         
 
         if ($model->load(Yii::$app->request->post())) {
+
+            return var_dump(Yii::$app->request->post());
 
             $desdeexplode = explode("/",$model->fecha);
             $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
@@ -88,6 +96,7 @@ class ReunionedhController extends Controller
             'model' => $model,
             'searchModelParticipantes' => $searchModelParticipantes,
             'dataProviderParticipantes' => $dataProviderParticipantes,
+           
         ]);
     }
 

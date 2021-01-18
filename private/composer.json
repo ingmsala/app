@@ -44,7 +44,8 @@
         "silecs/yii2-auth-cas": "^1.03",
         "kartik-v/yii2-widget-rangeinput": "dev-master",
         "kartik-v/yii2-widget-fileinput": "dev-master",
-        "kartik-v/yii2-markdown": "dev-master"
+        "kartik-v/yii2-markdown": "dev-master",
+        "softark/yii2-dual-listbox": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

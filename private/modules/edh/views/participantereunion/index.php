@@ -95,7 +95,17 @@ use yii\helpers\Html;
 
             ['class' => 'kartik\grid\ActionColumn',
             
-                'template' => '{delete}'
+                'template' => '{delete}',
+                'buttons' => [
+                    'delete' => function($url, $model, $key){
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=edh/participantereunion/delete&id='.$model['id'], 
+                            ['data' => [
+                            'confirm' => 'Está seguro de querer eliminar este elemento?',
+                            'method' => 'post',
+                             ]
+                            ]);
+                    },
+                ]
             ],
         ],
     ]); ?>
