@@ -8,6 +8,7 @@ use app\models\Agente;
 use app\modules\edh\models\Areasolicitud;
 use app\modules\edh\models\Informeprofesional;
 use app\modules\edh\models\InformeprofesionalSearch;
+use app\modules\edh\models\Solicitudedh;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -82,7 +83,13 @@ class InformeprofesionalController extends Controller
             
 
             $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+
+            $modelSolicitud = Solicitudedh::findOne($solicitud);
+            $modelSolicitud->estadosolicitud = 2;
+            $modelSolicitud->save();
+
+            Yii::$app->session->setFlash('success', 'Se generó correctamente el informe');
+            return $this->redirect(['/edh/solicitudedh/index', 'id' => $model->solicitud0->caso, 'sol' => $solicitud]);
         }
 
         return $this->renderAjax('create', [
@@ -101,13 +108,24 @@ class InformeprofesionalController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $areas = Areasolicitud::find()->where(['in', 'id', [2,3]])->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $fechaexplode = explode("/",$model->fecha);
+            $newdatefecha = (!empty($model->fecha)) ? date("Y-m-d", mktime(0, 0, 0, $fechaexplode[1], $fechaexplode[0], $fechaexplode[2])) : null;
+            $model->fecha = $newdatefecha;
+            $model->save();
+            Yii::$app->session->setFlash('success', 'Se actualizó correctamente el informe');
+            return $this->redirect(['/edh/solicitudedh/index', 'id' => $model->solicitud0->caso, 'sol' => $model->solicitud]);
         }
 
-        return $this->render('update', [
+        $fechaexplode = explode("-",$model->fecha);
+        $newdatefecha = (!empty($model->fecha)) ? date("d/m/Y", mktime(0, 0, 0, $fechaexplode[1], $fechaexplode[2], $fechaexplode[0])) : null;
+        $model->fecha = $newdatefecha;
+
+        return $this->renderAjax('update', [
             'model' => $model,
+            'areas' => $areas,
         ]);
     }
 

@@ -38,7 +38,8 @@ class Solicitudedh extends \yii\db\ActiveRecord
     {
         return [
             [['fecha', 'areasolicitud', 'caso', 'estadosolicitud', 'tiposolicitud'], 'required'],
-            [['fecha'], 'safe'],
+            [['fecha', 'fechaexpediente'], 'safe'],
+            [['expediente'], 'string', 'max' => 100],
             [['areasolicitud', 'caso', 'demandante', 'estadosolicitud', 'tiposolicitud'], 'integer'],
             [['areasolicitud'], 'exist', 'skipOnError' => true, 'targetClass' => Areasolicitud::className(), 'targetAttribute' => ['areasolicitud' => 'id']],
             [['caso'], 'exist', 'skipOnError' => true, 'targetClass' => Caso::className(), 'targetAttribute' => ['caso' => 'id']],
@@ -61,6 +62,8 @@ class Solicitudedh extends \yii\db\ActiveRecord
             'demandante' => 'Demandante',
             'estadosolicitud' => 'Estado de solicitud',
             'tiposolicitud' => 'Tipo de solicitud',
+            'fechaexpediente' => 'Fecha del expediente',
+            'expediente' => 'Expediente',
         ];
     }
 

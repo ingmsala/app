@@ -39,6 +39,8 @@ use yii\helpers\Html;
                     'format' => 'dd/mm/yyyy',
                     
                 ],
+                'options' => ['style' => 'cursor: pointer;']
+
                 
             ]);
         ?>
@@ -106,6 +108,25 @@ use yii\helpers\Html;
 
     ?>
 
+    <div style="width: 50%;">
+        <?= 
+            $form->field($model, 'vencimiento')->widget(DatePicker::classname(), [
+                //'name' => 'dp_3',
+                'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                //'value' => '23-Feb-1982',
+                'readonly' => true,
+                'pluginOptions' => [
+                    'autoclose'=>true,
+                    'format' => 'dd/mm/yyyy',
+                    
+                ],
+                'options' => ['style' => 'cursor: pointer;']
+                
+            ]);
+        ?>
+
+    </div>
+
     <?php 
         
         echo $form->field($model, 'diagnostico')->widget(Typeahead::classname(), [
@@ -140,6 +161,8 @@ use yii\helpers\Html;
     ?>
     <br /> 
 
+    
+
     <?= $form->field($model, 'indicacion')->textarea(['rows' => 6]) ?>
 
     
@@ -156,5 +179,7 @@ use yii\helpers\Html;
     </div>
 
     <?php ActiveForm::end(); ?>
+
+    
 
 </div>

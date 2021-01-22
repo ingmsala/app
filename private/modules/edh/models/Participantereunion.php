@@ -2,6 +2,7 @@
 
 namespace app\modules\edh\models;
 
+use app\models\Actividad;
 use app\models\Agente;
 use app\modules\curriculares\models\Alumno;
 use app\modules\curriculares\models\Tutor;
@@ -50,7 +51,7 @@ class Participantereunion extends \yii\db\ActiveRecord
 
         return [
             [['participante', 'reunionedh', 'tipoparticipante', 'asistio', 'comunico'], 'required'],
-            [['reunionedh', 'tipoparticipante', 'asistio', 'comunico'], 'integer'],
+            [['reunionedh', 'tipoparticipante', 'asistio', 'comunico', 'actividad'], 'integer'],
             [['participante'], 'string', 'max' => 8],
             [['reunionedh'], 'exist', 'skipOnError' => true, 'targetClass' => Reunionedh::className(), 'targetAttribute' => ['reunionedh' => 'id']],
             [['tipoparticipante'], 'exist', 'skipOnError' => true, 'targetClass' => Tipoparticipante::className(), 'targetAttribute' => ['tipoparticipante' => 'id']],
@@ -104,5 +105,10 @@ class Participantereunion extends \yii\db\ActiveRecord
     public function getTipoparticipante0()
     {
         return $this->hasOne(Tipoparticipante::className(), ['id' => 'tipoparticipante']);
+    }
+
+    public function getActividad0()
+    {
+        return $this->hasOne(Actividad::className(), ['id' => 'actividad']);
     }
 }

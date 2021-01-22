@@ -18,7 +18,7 @@ class SolicitudedhSearch extends Solicitudedh
     {
         return [
             [['id', 'areasolicitud', 'caso', 'demandante', 'estadosolicitud', 'tiposolicitud'], 'integer'],
-            [['fecha'], 'safe'],
+            [['fecha', 'expediente', 'fechaexpediente'], 'safe'],
         ];
     }
 

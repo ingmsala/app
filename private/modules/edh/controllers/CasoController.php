@@ -2,6 +2,7 @@
 
 namespace app\modules\edh\controllers;
 
+use app\modules\curriculares\models\Alumno;
 use app\modules\curriculares\models\Aniolectivo;
 use app\modules\curriculares\models\Tutor;
 use app\modules\edh\models\Areasolicitud;
@@ -13,10 +14,12 @@ use app\modules\edh\models\Estadocaso;
 use app\modules\edh\models\Matriculaedh;
 use app\modules\edh\models\Solicitudedh;
 use app\modules\edh\models\Tiposolicitud;
+use kartik\form\ActiveForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\web\Response;
 
 /**
  * CasoController implements the CRUD actions for Caso model.
@@ -45,12 +48,42 @@ class CasoController extends Controller
     public function actionIndex()
     {
         $this->layout = '@app/modules/edh/views/layouts/main';
+        
+
+        /*
+            busqueda
+        */
+        $model = new Caso();
+        $param = Yii::$app->request->queryParams;
+        $model->scenario = $model::SCENARIO_SEARCHINDEX;
+
+        $aniolectivos = Aniolectivo::find()->all();
+        $casos = Caso::find()->all();
+        $estadoscaso = Estadocaso::find()->all();
+        $alumnos = Alumno::find()->all();
+
         $searchModel = new CasoSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search($param);
+
+        if(isset($param['Caso']['aniolectivo']))
+            $model->aniolectivo = $param['Caso']['aniolectivo'];
+        if(isset($param['Caso']['resolucion']))
+            $model->resolucion = $param['Caso']['resolucion'];
+        if(isset($param['Caso']['alumno']))
+            $model->alumno = $param['Caso']['alumno'];
+        if(isset($param['Caso']['estadocaso']))
+            $model->estadocaso = $param['Caso']['estadocaso'];
+        
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'param' => $param,
+            'model' => $model,
+            'alumnos' => $alumnos,
+            'estadoscaso' => $estadoscaso,
+            'casos' => $casos,
+            'aniolectivos' => $aniolectivos,
         ]);
     }
 
@@ -78,6 +111,7 @@ class CasoController extends Controller
     {
         $this->layout = '@app/modules/edh/views/layouts/main';
         $model = new Caso();
+        $model->scenario = $model::SCENARIO_ABM;
         $modelSolicitud = new Solicitudedh();
 
         $model->estadocaso = 1;
@@ -89,11 +123,24 @@ class CasoController extends Controller
         $aniolectivos = Aniolectivo::find()->all();
         $areas = Areasolicitud::find()->all();
 
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return ActiveForm::validate($model);
+
+        }
+
         if ($model->load(Yii::$app->request->post()) && $modelSolicitud->load(Yii::$app->request->post())) {
            
             $desdeexplode = explode("/",$model->inicio);
             $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
             $model->inicio = $newdatedesde;
+
+            $finexplode = explode("/",$model->fin);
+            $newdatefin = (!empty($model->fin)) ? date("Y-m-d", mktime(0, 0, 0, $finexplode[1], $finexplode[0], $finexplode[2])) : null;
+            $model->fin = $newdatefin;
+            
             
             $model->save();
 
@@ -104,6 +151,8 @@ class CasoController extends Controller
             
             return $this->redirect(['view', 'id' => $model->id]);
         }
+
+        
 
         return $this->render('create', [
             'model' => $model,
@@ -117,10 +166,20 @@ class CasoController extends Controller
     {
         $this->layout = '@app/modules/edh/views/layouts/main';
         $model = $this->findModel($id);
+        
+        $model->scenario = $model::SCENARIO_ABM;
         $modelSolicitud = new Solicitudedh();
 
         $condicionesfinales = Condicionfinal::find()->all();
         $estadoscaso = Estadocaso::find()->all();
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return ActiveForm::validate($model);
+
+        }
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -129,7 +188,7 @@ class CasoController extends Controller
             $model->inicio = $newdatedesde;
 
             $finexplode = explode("/",$model->fin);
-            $newdatefin = (!empty($model->fin)) ? date("d/m/Y", mktime(0, 0, 0, $finexplode[1], $finexplode[2], $finexplode[0])) : null;
+            $newdatefin = (!empty($model->fin)) ? date("Y-m-d", mktime(0, 0, 0, $finexplode[1], $finexplode[0], $finexplode[2])) : null;
             $model->fin = $newdatefin;
             
             $model->save();

@@ -21,7 +21,7 @@ use yii\helpers\Url;
 
 <div class="caso-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'casoform', 'enableAjaxValidation' => true]); ?>
 
     <div style="width: 50%;">
         <?= 

@@ -33,6 +33,7 @@ use yii\widgets\ActiveForm;
                     'format' => 'dd/mm/yyyy',
                     
                 ],
+                'options' => ['style' => 'cursor: pointer;']
                 
             ]);
         ?>

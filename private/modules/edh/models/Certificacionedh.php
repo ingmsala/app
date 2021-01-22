@@ -39,7 +39,7 @@ class Certificacionedh extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fecha'], 'safe'],
+            [['fecha','vencimiento'], 'safe'],
             [['indicacion'], 'string'],
             [['referente', 'solicitud', 'fecha'], 'required'],
             [['solicitud', 'tipocertificado', 'tipoprofesional'], 'integer'],
@@ -67,9 +67,11 @@ class Certificacionedh extends \yii\db\ActiveRecord
             'solicitud' => 'Solicitud',
             'tipocertificado' => 'Tipo',
             'tipoprofesional' => 'Area profesional',
+            'vencimiento' => 'Vencimiento',
         ];
     }
 
+    
     /**
      * @return \yii\db\ActiveQuery
      */

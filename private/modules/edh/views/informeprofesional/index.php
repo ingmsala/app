@@ -27,6 +27,7 @@ use yii\helpers\Url;
 
             [
                 'label' => 'Fecha',
+                'vAlign' => 'middle', 
                 'value' => function($model){
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
                     return Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy');
@@ -42,14 +43,46 @@ use yii\helpers\Url;
             ],
             [
                 'label' => 'Creado por',
+                'vAlign' => 'middle', 
                 'value' => function($model){
                     return $model->agente0->apellido.', '.$model->agente0->nombre;
                 }
             ],
             
-            'descripcion:ntext',
+            [
+                'label' => 'Descripción',
+                'vAlign' => 'middle',
+                'value' => function ($model){
+                    return $model->descripcion;
+                }
 
-            ['class' => 'kartik\grid\ActionColumn'],
+            ],
+
+            [
+                'class' => 'kartik\grid\ActionColumn',
+                'template' => '{update}{delete}',
+                'buttons' => [
+
+                    'update' => function($url, $model, $key){
+                        return Html::button('<span class="glyphicon glyphicon-pencil"></span>',
+                            ['value' => Url::to(['informeprofesional/update', 'id' => $model->id]),
+                                'class' => 'amodalinfoprofesional btn btn-link', 'style'=>'width:auto;margin-bottom:0px;']);
+
+
+                    },
+                    
+                    'delete' => function($url, $model, $key){
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', Url::to(['informeprofesional/delete', 'id' => $model->id]), 
+                            ['data' => [
+                            'confirm' => 'Está seguro de querer eliminar este elemento?',
+                            'method' => 'post',
+                             ]
+                            ]);
+                    },
+
+                ]
+            
+            ],
         ],
     ]); ?>
 </div>

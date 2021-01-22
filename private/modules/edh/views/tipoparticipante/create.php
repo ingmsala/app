@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Tipoparticipante */
 
-$this->title = 'Create Tipoparticipante';
+$this->title = 'Nuevo tipo de participante';
 $this->params['breadcrumbs'][] = ['label' => 'Tipoparticipantes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

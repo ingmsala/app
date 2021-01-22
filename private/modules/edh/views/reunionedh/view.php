@@ -166,10 +166,14 @@ $this->registerJs("
     
     <div class="clearfix"></div>
 
-    <?= Html::button('<span class="glyphicon glyphicon-refresh"></span>', ['value' => Url::to('index.php?r=edh/participantereunion/porreunion&id='.$model->id), 'class' => 'btn btn-info amodalsolicitudstate', 'style' => 'width:auto;']); ?>
     <hr />
-    <h4>Participantes</h4>
-    <hr />
+    <div class="row">
+        <div class="col-md-2"><h4>Participantes</h4></div>
+        <div class="col-md-10">
+            <?= Html::button('<span class="glyphicon glyphicon-plus"></span> Agregar', ['value' => Url::to('index.php?r=edh/participantereunion/porreunion&id='.$model->id), 'class' => 'btn btn-success amodalsolicitudstate', 'style' => 'width:auto;']); ?>
+        </div>
+    </div>
+    
     <?php
 
         echo $this->render('/participantereunion/index', [

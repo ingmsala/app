@@ -74,7 +74,9 @@ $this->params['sidebar'] = [
             
             //'url:url',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 
+                'template' => '{view} {delete}'
+            ],
         ],
     ]); ?>
 </div>

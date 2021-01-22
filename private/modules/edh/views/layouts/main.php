@@ -144,7 +144,7 @@ NavBar::end();
     <div class="row">
     <div class="titulocaso">
         <div class="panel panel-primary">
-            <div class="panel-heading">Caso: <?= $model->matricula0->alumno0->apellido.', '.$model->matricula0->alumno0->nombre ?></div>
+            <div class="panel-heading">Caso<?= '#'.$model->id.': '.$model->matricula0->aniolectivo0->nombre.' - '.$model->matricula0->alumno0->apellido.', '.$model->matricula0->alumno0->nombre.' ('.$model->matricula0->division0->nombre.')'; ?></div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-2">

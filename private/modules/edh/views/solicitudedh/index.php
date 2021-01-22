@@ -1,9 +1,12 @@
 <?php
 
+use app\modules\edh\models\CertificacionedhSearch;
+use app\modules\edh\models\InformeprofesionalSearch;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\edh\models\SolicitudedhSearch */
@@ -16,6 +19,7 @@ $this->params['sidebar'] = [
     'model' => $model,
     'origen' => 'solicitudes',
 ];
+
 ?>
 <?php 
         Modal::begin([
@@ -47,7 +51,7 @@ $this->params['sidebar'] = [
 	?>
     <?php 
         Modal::begin([
-            'header' => "<h2 id='modalHeader3'>".'Agregar informe profesional'."</h2>",
+            'header' => "<h2 id='modalHeader3'>".'Informe profesional'."</h2>",
             'id' => 'modalinfoprofesional',
             'size' => 'modal-lg',
             'options' => [
@@ -83,7 +87,7 @@ $this->params['sidebar'] = [
     </p>
 
     
-
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
@@ -115,7 +119,18 @@ $this->params['sidebar'] = [
                 'rowClickExcludedTags' => ['a', 'button', 'input', 'span'],
                 
                 // show row expanded for even numbered keys
-                'detailUrl' => Url::to(['/edh/certificacionedh/porsolicitud']),
+                'detail' => function ($model){
+                    $searchModel = new CertificacionedhSearch();
+            $dataProvider = $searchModel->porSolicitud($model->id);
+
+            $searchModelInforme = new InformeprofesionalSearch();
+            $dataProviderInforme = $searchModelInforme->porSolicitud($model->id);
+                    return $this->render('/certificacionedh/porsolicitud', ['solicitud' => $model->id,
+                    'dataProvider' => $dataProvider,
+                    'searchModelInforme' => $searchModelInforme,
+                    'dataProviderInforme' => $dataProviderInforme,
+                   
+                    ]);},
                 
                 'value' => function ($model, $key, $index, $column) {
                     //return $sol;
@@ -209,4 +224,5 @@ $this->params['sidebar'] = [
             ],
         ],
     ]); ?>
+    
 </div>

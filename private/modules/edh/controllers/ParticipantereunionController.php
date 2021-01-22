@@ -2,11 +2,13 @@
 
 namespace app\modules\edh\controllers;
 
+use app\config\Globales;
 use app\models\Agente;
 use app\models\AgenteSearch;
 use app\models\Detallecatedra;
 use app\models\Horario;
 use app\models\Nombramiento;
+use app\models\Rolexuser;
 use app\modules\curriculares\models\Alumno;
 use app\modules\curriculares\models\Tutor;
 use Yii;
@@ -17,6 +19,8 @@ use app\modules\libroclase\models\Detallehora;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
  * ParticipantereunionController implements the CRUD actions for Participantereunion model.
@@ -96,16 +100,46 @@ class ParticipantereunionController extends Controller
 
         $nombramientos = Nombramiento::find()
                             ->joinWith(['agente0'])
-                            ->where(['in', 'cargo', [225,242]])
+                            ->where(['in', 'cargo', [225,207,242]])
                             ->andWhere(['not in', 'agente.documento', $participantes_actuales])
                             ->all();
+
+        $preceptorcurso = Nombramiento::find()
+                            ->joinWith(['agente0'])
+                            ->where(['cargo' => 227])
+                            ->andWhere(['division' => $reunion->caso0->matricula0->division])
+                            ->andWhere(['not in', 'agente.documento', $participantes_actuales])
+                            ->all();
+
         
+        $user = Rolexuser::find()
+            ->where(['subrole' => $reunion->caso0->matricula0->division0->preceptoria0->nombre])
+            ->one();
+
+        $jefe = Nombramiento::find()
+            ->joinWith(['agente0'])
+            ->where(['cargo' => 223])
+            ->andWhere(['agente.mail' => $user->user0->username])
+            ->andWhere(['not in', 'agente.documento', $participantes_actuales])
+            ->one();
+        
+
         foreach ($docentes_curso as $detcat) {
-            $items [] = [$detcat->agente0->documento.'-1' => $detcat->catedra0->division0->nombre.' - '.$detcat->agente0->apellido.', '.$detcat->agente0->nombre.' ('.$detcat->catedra0->actividad0->nombre.')'];
+            $items [] = [$detcat->agente0->documento.'-1-'.$detcat->catedra0->actividad => $detcat->catedra0->division0->nombre.' - '.$detcat->agente0->apellido.', '.$detcat->agente0->nombre.' ('.$detcat->catedra0->actividad0->nombre.')'];
         }
 
+        foreach ($preceptorcurso as $prec) {
+            $items [] = [$prec->agente0->documento.'-2' => $prec->division0->nombre.' - '.$prec->agente0->apellido.', '.$prec->agente0->nombre.' ('.$prec->cargo0->nombre.')'];
+        }
+        try {
+            $items [] = [$jefe->agente0->documento.'-6' => $jefe->agente0->apellido.', '.$jefe->agente0->nombre.' (Jefe de '.$reunion->caso0->matricula0->division0->preceptoria0->descripcion.')'];
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        
+
         foreach ($nombramientos as $nom) {
-            $items [] = [$nom->agente0->documento.'-3' => $nom->agente0->apellido.' ('.$nom->cargo0->nombre.')'];
+            $items [] = [$nom->agente0->documento.'-3' => $nom->agente0->apellido.', '.$nom->agente0->nombre.' ('.$nom->cargo0->nombre.')'];
         }
 
         //return var_dump(array_column(array_column($docentes_curso, 'agente0'), 'documento'));
@@ -139,6 +173,8 @@ class ParticipantereunionController extends Controller
                     $modelX->asistio = 0;
                     $modelX->comunico = 0;
                     $modelX->participante = $parti[0];
+                    if(count($parti)==3)
+                        $modelX->actividad = $parti[2];
                     //return var_dump($modelX);
                     $modelX->save();
                     
@@ -219,6 +255,63 @@ class ParticipantereunionController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+    public function actionAsistioupdate()
+    {
+        //return Yii::$app->request->post('asistio');
+        if(Yii::$app->request->post('asistio') == 'true')
+            $asistio = 1;
+        else
+            $asistio = 0;
+        $id = Yii::$app->request->post('id');
+        $model = $this->findModel($id);
+        $model->asistio = $asistio;
+        $model->save();
+        return 'Cambio a '.$asistio;
+
+        
+    }
+    public function actionComunicoupdate()
+    {
+        //return Yii::$app->request->post('asistio');
+        if(Yii::$app->request->post('comunico') == 'true')
+            $comunico = 1;
+        else
+            $comunico = 0;
+        $id = Yii::$app->request->post('id');
+        $model = $this->findModel($id);
+        $model->comunico = $comunico;
+        $model->save();
+
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $fecha = Yii::$app->formatter->asDate($model->reunionedh0->fecha, 'dd/MM/yyyy');
+        $hora = explode(':', $model->reunionedh0->hora);
+        $hora = $hora[0].':'.$hora[1].'hs.';
+        
+        if(strpos($model->reunionedh0->lugar, 'virtual') !== false){
+            $lugar = 'en '.$model->reunionedh0->lugar;
+        }else{
+            if($model->reunionedh0->url == null)
+                $lugar = 'en forma virtual,';
+            else
+                $lugar = 'en forma virtual ('.Html::a(Url::to($model->reunionedh0->url, true), Url::to($model->reunionedh0->url, true)).'),';
+        }
+        if($model->comunico == 1){
+            $output = 'Estimado docente de '.$model->reunionedh0->caso0->matricula0->division0->nombre.', se lo invita a participar de la reunión informativa sobre la situación de '.$model->reunionedh0->caso0->matricula0->alumno0->nombre.' '.$model->reunionedh0->caso0->matricula0->alumno0->apellido.', estudiante del curso. La misma se realizará '.$lugar.' el día '.$fecha.' a las '.$hora;
+            $output .= '<br />Esperamos contar con su presencia. Saludamos atte.<br />Equipo de Educación Domiciliaria y Hospitalaria.';
+            //$output = 'aa';
+            $sendemail=Yii::$app->mailer->compose()
+                                ->setFrom([Globales::MAIL => 'Educación Domiciliaria'])
+                                ->setTo('msala@unc.edu.ar')
+                                ->setSubject($model->reunionedh0->tematica)
+                                ->setHtmlBody($output)
+                                ->send();
+        }
+        
+
+        return 'Cambio a '.$comunico;
+
+        
     }
 
     /**

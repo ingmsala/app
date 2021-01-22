@@ -18,7 +18,7 @@ class ParticipantereunionSearch extends Participantereunion
     public function rules()
     {
         return [
-            [['id', 'reunionedh', 'tipoparticipante', 'asistio', 'comunico'], 'integer'],
+            [['id', 'reunionedh', 'tipoparticipante', 'asistio', 'comunico', 'actividad'], 'integer'],
             [['participante'], 'safe'],
         ];
     }

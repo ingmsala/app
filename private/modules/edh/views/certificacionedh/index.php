@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\edh\models\CertificacionedhSearch */
@@ -25,7 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'contacto',
             'diagnostico',
             'fecha',
@@ -36,7 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
             //'tipocertificado',
             //'tipoprofesional',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 
+
+'template' => '{update} {view}'
+            ],
+
         ],
     ]); ?>
 </div>

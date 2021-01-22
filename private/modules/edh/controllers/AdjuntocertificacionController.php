@@ -111,18 +111,29 @@ class AdjuntocertificacionController extends Controller
         ]);
     }
 
+    
+    
     /**
-     * Deletes an existing Adjuntocertificacion model.
+     * Deletes an existing Adjuntoticket model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete()
     {
-        $this->findModel($id)->delete();
+        $id = Yii::$app->request->post()['id'];
+        $model = $this->findModel($id);
+        
+        //$idx = $model->ticket;
 
-        return $this->redirect(['index']);
+        Yii::$app->params['uploadPath'] = Yii::getAlias('@webroot') . '/assets/images/certificados3d7WLzEjbpKjr0K/';
+        $archivo = Yii::$app->params['uploadPath'] . $model->url;
+
+        unlink($archivo);
+        $model->delete();
+
+        //return $this->redirect(['/ticket/'.$redirigir.'/update/', 'id'=>$idx]);
     }
 
     /**

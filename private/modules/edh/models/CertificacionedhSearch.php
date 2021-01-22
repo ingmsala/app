@@ -18,7 +18,7 @@ class CertificacionedhSearch extends Certificacionedh
     {
         return [
             [['id', 'solicitud', 'tipocertificado', 'tipoprofesional'], 'integer'],
-            [['contacto', 'diagnostico', 'fecha', 'indicacion', 'institucion', 'referente'], 'safe'],
+            [['contacto', 'diagnostico', 'fecha', 'indicacion', 'institucion', 'referente', 'vencimiento'], 'safe'],
         ];
     }
 

@@ -3,6 +3,7 @@
 namespace app\modules\edh\controllers;
 
 use app\modules\edh\models\Adjuntocertificacion;
+use app\modules\edh\models\AdjuntocertificacionSearch;
 use Yii;
 use app\modules\edh\models\Certificacionedh;
 use app\modules\edh\models\CertificacionedhSearch;
@@ -118,6 +119,10 @@ class CertificacionedhController extends Controller
             $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
             $model->fecha = $newdatedesde;
 
+            $vencimientoexplode = explode("/",$model->vencimiento);
+            $newdatevencimiento = (!empty($model->vencimiento)) ? date("Y-m-d", mktime(0, 0, 0, $vencimientoexplode[1], $vencimientoexplode[0], $vencimientoexplode[2])) : null;
+            $model->vencimiento = $newdatevencimiento;
+
             $model->save();
 
             if (!is_null($images)) {
@@ -162,13 +167,73 @@ class CertificacionedhController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $modelajuntos = new Adjuntocertificacion();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $tiposcertificado = Tipocertificacion::find()->all();
+        $tiposprofesional = Tipoprofesional::find()->all();
+
+        $certificados = Certificacionedh::find()->all();
+
+        $referentes = array_column($certificados,'referente');
+        $instituciones = array_column($certificados,'institucion');
+        $diagnosticos = array_column($certificados,'diagnostico');
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $images = UploadedFile::getInstances($modelajuntos, 'image');
+
+            $desdeexplode = explode("/",$model->fecha);
+            $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
+            $model->fecha = $newdatedesde;
+
+            $vencimientoexplode = explode("/",$model->vencimiento);
+            $newdatevencimiento = (!empty($model->vencimiento)) ? date("Y-m-d", mktime(0, 0, 0, $vencimientoexplode[1], $vencimientoexplode[0], $vencimientoexplode[2])) : null;
+            $model->vencimiento = $newdatevencimiento;
+
+            $model->save();
+
+            if (!is_null($images)) {
+                foreach ($images as $image) {
+                    $modelajuntosX = new Adjuntocertificacion();
+                    $arr = [];
+                    $arr = explode(".", $image->name);
+                    $ext = end($arr);
+                    $modelajuntosX->nombre = $image->name;
+                    $modelajuntosX->url = Yii::$app->security->generateRandomString().".{$ext}";
+                    $modelajuntosX->certificacion = $model->id;
+                    Yii::$app->params['uploadPath'] = Yii::getAlias('@webroot') . '/assets/images/certificados3d7WLzEjbpKjr0K/';
+                    $path = Yii::$app->params['uploadPath'] . $modelajuntosX->url;
+                    $image->saveAs($path);
+                    $modelajuntosX->save();
+                    
+                }
+                
+            }
+
+            return $this->redirect(['/edh/solicitudedh/index', 'id' => $model->solicitud0->caso, 'sol' => $model->solicitud]);
         }
 
-        return $this->render('update', [
+        $fechaexplode = explode("-",$model->fecha);
+        $newdatefecha = (!empty($model->fecha)) ? date("d/m/Y", mktime(0, 0, 0, $fechaexplode[1], $fechaexplode[2], $fechaexplode[0])) : null;
+        $model->fecha = $newdatefecha;
+
+        $vencimientoexplode = explode("-",$model->vencimiento);
+        $newdatevencimiento = (!empty($model->vencimiento)) ? date("d/m/Y", mktime(0, 0, 0, $vencimientoexplode[1], $vencimientoexplode[2], $vencimientoexplode[0])) : null;
+        $model->vencimiento = $newdatevencimiento;
+
+        $searchModelAdjuntos = new AdjuntocertificacionSearch();
+        $dataProviderAdjuntos = $searchModelAdjuntos->porCertificado($id);
+        
+        return $this->renderAjax('update', [
             'model' => $model,
+            'modelajuntos' => $modelajuntos,
+            'tiposcertificado' => $tiposcertificado,
+            'tiposprofesional' => $tiposprofesional,
+            'referentes' => $referentes,
+            'instituciones' => $instituciones,
+            'diagnosticos' => $diagnosticos,
+            'searchModelAdjuntos' => $searchModelAdjuntos,
+            'dataProviderAdjuntos' => $dataProviderAdjuntos,
         ]);
     }
 

@@ -36,7 +36,7 @@ class Informeprofesional extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['descripcion', 'fecha', 'agente', 'solicitud'], 'required'],
+            [['descripcion', 'fecha', 'agente', 'solicitud', 'areasolicitud'], 'required'],
             [['descripcion'], 'string'],
             [['fecha'], 'safe'],
             [['areasolicitud', 'agente', 'solicitud'], 'integer'],

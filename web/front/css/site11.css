@@ -1604,6 +1604,7 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     bottom: 10%;
     right: 2%;
     width: 30%;
+    z-index: 1000;
     
     
 }

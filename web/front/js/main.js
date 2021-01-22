@@ -127,6 +127,22 @@ $('body').on('click', '.amodalsolicitudstate',function(){
 	
 });
 
+$('body').on('click', '.deletebuttonhorario',function(){
+	var id = $(this).attr('value');
+	$.ajax({
+		url:'index.php?r=edh/adjuntocertificacion/delete',
+		method:'post',
+		data:{id:$(this).attr('value')},
+		success:function(data){
+			$.pjax.reload({container: "#test", async: false});
+		},
+		error:function(jqXhr,asistio,error){
+			alert(error);
+		}
+	});
+	
+});
+
 
 	
 	$('body').on('click', '.bajarprioridad',function(){
@@ -349,7 +365,27 @@ $(document).on('click', '#btnCopiar', function () {
         divAlerta.innerText = '';
         divAlerta.classList.remove('alert-success', 'alert-warning', 'alert-danger', 'visible');
         divAlerta.classList.add('invisible');
+	}
+	
+	
+    function sendRequestBorraradjuntocertif(e, id){
+        
+        e.preventDefault();
+        $.ajax({
+            url:'index.php?r=edh/adjuntocertificacion/delete',
+            method:'post',
+            data:{id:id},
+            success:function(data){
+                //alert(data);
+            },
+            error:function(jqXhr,asistio,error){
+                alert(error);
+            }
+        });
     }
+
+
+
 
 
 

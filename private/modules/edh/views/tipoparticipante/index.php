@@ -1,13 +1,13 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\edh\models\TipoparticipanteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tipoparticipantes';
+$this->title = 'Tipo de participante';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tipoparticipante-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Tipoparticipante', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Nuevo Tipo de participante', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,10 +25,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'nombre',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 
+
+            'template' => '{update} {view}'
+            ],
+
         ],
     ]); ?>
 </div>

@@ -71,11 +71,20 @@ class SolicitudedhController extends Controller
         $model = $this->findModel($id);
         $estadosolicitudes = Estadosolicitud::find()->all();
         
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
 
+            $expedienteexplode = explode("/",$model->fechaexpediente);
+            $newdateexpediente = date("Y-m-d", mktime(0, 0, 0, $expedienteexplode[1], $expedienteexplode[0], $expedienteexplode[2]));
+            $model->fechaexpediente = $newdateexpediente;
+            $model->save();
+            Yii::$app->session->setFlash('success', 'Se actualizó correctamente la solicitud');
             return $this->redirect(['index', 'id' => $model->caso]);
 
         }
+
+        $fechaexpedienteexplode = explode("-",$model->fechaexpediente);
+        $newdatefechaexpediente = (!empty($model->fechaexpediente)) ? date("d/m/Y", mktime(0, 0, 0, $fechaexpedienteexplode[1], $fechaexpedienteexplode[2], $fechaexpedienteexplode[0])) : null;
+        $model->fechaexpediente = $newdatefechaexpediente;
 
         return $this->renderAjax('cambiarestado', [
             'model' => $model,
@@ -107,10 +116,16 @@ class SolicitudedhController extends Controller
             $desdeexplode = explode("/",$model->fecha);
             $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
             $model->fecha = $newdatedesde;
+
+            $expedienteexplode = explode("/",$model->fechaexpediente);
+            $newdateexpediente = date("Y-m-d", mktime(0, 0, 0, $expedienteexplode[1], $expedienteexplode[0], $expedienteexplode[2]));
+            $model->fechaexpediente = $newdateexpediente;
             $model->save();
+            Yii::$app->session->setFlash('success', 'Se creó correctamente la solicitud');
             return $this->redirect(['index', 'id' => $id]);
         }
 
+        
         return $this->renderAjax('create', [
             'model' => $model,
             'areas' => $areas,

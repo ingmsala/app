@@ -2,6 +2,7 @@
 
 namespace app\modules\edh\models;
 
+use app\modules\curriculares\models\Aniolectivo;
 use Yii;
 
 /**
@@ -24,6 +25,18 @@ use Yii;
 class Caso extends \yii\db\ActiveRecord
 {
     public $aniolectivo;
+    public $alumno;
+
+    const SCENARIO_SEARCHINDEX = 'index';
+    const SCENARIO_ABM = 'abm';
+    
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_SEARCHINDEX] = ['aniolectivo', 'alumno', 'resolucion', 'estadocaso'];
+        $scenarios[self::SCENARIO_ABM] = ['inicio', 'fin', 'matricula', 'resolucion', 'condicionfinal', 'estadocaso'];
+        return $scenarios;
+    }
     /**
      * {@inheritdoc}
      */
@@ -38,14 +51,24 @@ class Caso extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['inicio', 'matricula', 'condicionfinal', 'estadocaso'], 'required'],
+            [['inicio', 'matricula', 'condicionfinal', 'estadocaso'], 'required', 'on' => self::SCENARIO_ABM],
             [['inicio', 'fin'], 'safe'],
             [['matricula', 'condicionfinal', 'estadocaso'], 'integer'],
             [['resolucion'], 'string', 'max' => 150],
             [['condicionfinal'], 'exist', 'skipOnError' => true, 'targetClass' => Condicionfinal::className(), 'targetAttribute' => ['condicionfinal' => 'id']],
             [['estadocaso'], 'exist', 'skipOnError' => true, 'targetClass' => Estadocaso::className(), 'targetAttribute' => ['estadocaso' => 'id']],
             [['matricula'], 'exist', 'skipOnError' => true, 'targetClass' => Matriculaedh::className(), 'targetAttribute' => ['matricula' => 'id']],
+            [['inicio', 'fin'], 'inifin', 'on' => self::SCENARIO_ABM, 'skipOnEmpty' => false],
         ];
+    }
+
+    public function inifin($attribute, $params, $validator)
+    {
+        if($this->fin != null){
+            if ($this->fin < $this->inicio)
+                $this->addError($attribute, 'La fecha de cierre del caso no puede ser menos a la de solicitud');
+        }
+        
     }
 
     /**
@@ -56,14 +79,35 @@ class Caso extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'inicio' => 'Fecha de solicitud',
-            'fin' => 'Fin',
+            'fin' => 'Fecha de cierre',
             'resolucion' => 'N° Resolución',
             'matricula' => 'Estudiante',
             'condicionfinal' => 'Condición estudiante',
             'estadocaso' => 'Estado del caso',
             'aniolectivo' => 'Año lectivo',
+            'alumno' => 'Estudiante',
         ];
     }
+
+    public function getVencido(){
+        $max = date('Y-m-d');
+        $ven = true;
+        if($this->estadocaso == 1){
+            foreach ($this->solicitudedhs as $solicitud) {
+                foreach ($solicitud->certificacionedhs as $certificado) {
+                    if($certificado->vencimiento>=date('Y-m-d')){
+                        $max = $certificado->vencimiento;
+                        $ven = false;
+                    }
+                }
+            }
+            
+        }else{
+            $ven = false; 
+        }
+        return [$ven, $max];
+    }
+
 
     /**
      * @return \yii\db\ActiveQuery
@@ -103,5 +147,11 @@ class Caso extends \yii\db\ActiveRecord
     public function getSolicitudedhs()
     {
         return $this->hasMany(Solicitudedh::className(), ['caso' => 'id']);
+    }
+
+    public function getAniolectivo0()
+    {
+
+        return $this->hasOne(Aniolectivo::className(), ['id' => 'aniolectivo'])->via('matricula0');
     }
 }

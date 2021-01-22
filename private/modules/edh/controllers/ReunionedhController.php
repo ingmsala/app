@@ -80,7 +80,7 @@ class ReunionedhController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-            return var_dump(Yii::$app->request->post());
+            //return var_dump(Yii::$app->request->post());
 
             $desdeexplode = explode("/",$model->fecha);
             $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
@@ -153,9 +153,16 @@ class ReunionedhController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $caso = $model->caso;
+        try {
+            $model->delete();
+        } catch (\Throwable $th) {
+            Yii::$app->session->setFlash('danger', 'No puede eliminar una reunión que posee participantes');
+        }
+        
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index', 'caso' => $caso]);
     }
 
     /**

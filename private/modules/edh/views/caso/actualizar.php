@@ -22,7 +22,9 @@ use yii\helpers\Url;
 
 <div class="caso-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'actualizar-form',
+                            'enableAjaxValidation' => true,
+                        ]); ?>
 
     <div style="width: 50%;">
         <?= 
@@ -36,6 +38,7 @@ use yii\helpers\Url;
                     'format' => 'dd/mm/yyyy',
                     
                 ],
+                'options' => ['style' => 'cursor: pointer;']
                 
             ]);
         ?>
@@ -54,6 +57,7 @@ use yii\helpers\Url;
                     'format' => 'dd/mm/yyyy',
                     
                 ],
+                'options' => ['style' => 'cursor: pointer;']
                 
             ]);
         ?>

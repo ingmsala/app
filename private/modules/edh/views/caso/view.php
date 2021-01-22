@@ -38,12 +38,18 @@ $this->params['sidebar'] = [
 
     <?php 
         $textasignacion = $model->matricula0->alumno0->apellido.', '.$model->matricula0->alumno0->nombre;
-        $estado = $model->estadocaso0->nombre;
-        $fecha = $model->inicio;
-        $resolucion = $model->resolucion;
+        if($model->estadocaso == 1)
+            $estado = '<span class="label label-success">'.$model->estadocaso0->nombre.'</span>';
+        else
+            $estado = '<span class="label label-danger">'.$model->estadocaso0->nombre.'</span>';
+
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+
+        $fecha = Yii::$app->formatter->asDate($model->inicio, 'dd/MM/yyyy');
+        $descrip = 'Resolución: '.$model->resolucion;
         $condicionfinal = $model->condicionfinal0->nombre;
-        $descrip = '';
-        $pie = $condicionfinal;
+        $resolucion = '';
+        $pie = '<hr/>'.$condicionfinal;
         echo '<div class="vista-listado flowGrid">
                     <div class="item-aviso flowGridItem">
                         <div class="header-aviso-resultados Empleos">
