@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\edh\models\InformeprofesionalSearch */
@@ -17,10 +18,11 @@ use yii\helpers\Url;
     </p> 
 
     <div class="clearfix"></div>
-
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+        'responsiveWrap' => false,
         'summary' => false,
         'columns' => [
             ['class' => 'kartik\grid\SerialColumn'],
@@ -85,4 +87,5 @@ use yii\helpers\Url;
             ],
         ],
     ]); ?>
+    
 </div>

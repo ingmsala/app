@@ -47,6 +47,7 @@ $this->params['sidebar'] = [
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'summary' => false,
+        'responsiveWrap' => false,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 

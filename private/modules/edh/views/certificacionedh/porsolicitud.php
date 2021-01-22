@@ -10,10 +10,6 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\modules\edh\models\CertificacionedhSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Certificacionedhs';
-$this->params['breadcrumbs'][] = $this->title;
-
-
 
 ?>
 
@@ -39,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     //'filterModel' => $searchModel,
                     'summary' => false,
+                    'responsiveWrap' => false,
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
 
@@ -71,8 +68,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 
 
 
-                                $echofooter = '<ul style="padding-inline-start: 0px;">';
-                                
+                                //$echofooter = '<ul style="padding-inline-start: 0px;">';
+                                $echofooter = '';
                                 
                                 foreach ($model->adjuntocertificacions as $adjunto) {
 
@@ -94,17 +91,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                         //$echofooter .= '<li style="list-style:none">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntocertificacion/descargar', 'file' => $adjunto->url]), ['target'=>'_blank']).'</li>';
                                           $echofooter .= '<div class="label label-default" style="border-style: solid;border-width: 1px;border-radius: 5px;">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntocertificacion/descargar', 'file' => $adjunto->url]), ['target'=>'_blank']).' '.
                                           Html::button('<span class="glyphicon glyphicon-remove"></span>',['value' => $adjunto->id, 
-                                         'class' => 'deletebuttonhorario',
-                                         
+                                          
+                                         'class' => 'deletebuttonadjuntocert btn btn-link',
+                                         'style' => 'width:auto;margin:0.6em;position:relative;padding: 0px;',
+                                         //'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
                                          /*'data' => [
                                             'confirm' => '¿Está seguro de querer eliminar este elemento?',
                                             'method' => 'post',
                                             ]*/
-                                         ]).'</div><br />';  
+                                         ]).'</div><div class="clearfix"></div>';  
                                         
                                     
                                 }
-                                $echofooter .= '</ul>';
+                                //$echofooter .= '</ul>';
                                 return $echofooter;
                             }
                         ],

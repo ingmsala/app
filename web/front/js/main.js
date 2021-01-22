@@ -127,19 +127,22 @@ $('body').on('click', '.amodalsolicitudstate',function(){
 	
 });
 
-$('body').on('click', '.deletebuttonhorario',function(){
+$('body').on('click', '.deletebuttonadjuntocert',function(){
 	var id = $(this).attr('value');
-	$.ajax({
-		url:'index.php?r=edh/adjuntocertificacion/delete',
-		method:'post',
-		data:{id:$(this).attr('value')},
-		success:function(data){
-			$.pjax.reload({container: "#test", async: false});
-		},
-		error:function(jqXhr,asistio,error){
-			alert(error);
-		}
-	});
+	if(confirm('Desea eliminar el archivo adjunto?')){
+		$.ajax({
+			
+			url:'index.php?r=edh/adjuntocertificacion/delete',
+			method:'post',
+			data:{id:$(this).attr('value')},
+			success:function(data){
+				$.pjax.reload({container: "#test", async: false});
+			},
+			error:function(jqXhr,asistio,error){
+				alert(error);
+			}
+		});
+	}
 	
 });
 

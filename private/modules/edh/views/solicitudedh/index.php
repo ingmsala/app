@@ -95,6 +95,7 @@ $this->params['sidebar'] = [
         //'pjax' => true,
         'condensed' => true,
         'persistResize' => false,
+        'responsiveWrap' => false,
         'rowOptions' => function($model){
             
                 return ['style' => 'cursor:pointer'];
@@ -121,10 +122,10 @@ $this->params['sidebar'] = [
                 // show row expanded for even numbered keys
                 'detail' => function ($model){
                     $searchModel = new CertificacionedhSearch();
-            $dataProvider = $searchModel->porSolicitud($model->id);
+                    $dataProvider = $searchModel->porSolicitud($model->id);
 
-            $searchModelInforme = new InformeprofesionalSearch();
-            $dataProviderInforme = $searchModelInforme->porSolicitud($model->id);
+                    $searchModelInforme = new InformeprofesionalSearch();
+                    $dataProviderInforme = $searchModelInforme->porSolicitud($model->id);
                     return $this->render('/certificacionedh/porsolicitud', ['solicitud' => $model->id,
                     'dataProvider' => $dataProvider,
                     'searchModelInforme' => $searchModelInforme,
