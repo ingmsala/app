@@ -2,6 +2,7 @@
 
 namespace app\modules\edh\controllers;
 
+use app\modules\edh\models\Actuacionedh;
 use app\modules\edh\models\Adjuntocertificacion;
 use app\modules\edh\models\AdjuntocertificacionSearch;
 use Yii;
@@ -125,6 +126,9 @@ class CertificacionedhController extends Controller
 
             $model->save();
 
+            $actuacion = new Actuacionedh();
+            $actuacion = $actuacion->nuevaActuacion($model->solicitud0->caso, 3, 'Se crea la certificación #'.$model->id, 1);
+
             if (!is_null($images)) {
                 foreach ($images as $image) {
                     $modelajuntosX = new Adjuntocertificacion();
@@ -142,6 +146,8 @@ class CertificacionedhController extends Controller
                 }
                 
             }
+
+            Yii::$app->session->setFlash('success', "Se registró correctamente la certificación");
 
             return $this->redirect(['/edh/solicitudedh/index', 'id' => $model->solicitud0->caso, 'sol' => $solicitud]);
         }
@@ -192,6 +198,9 @@ class CertificacionedhController extends Controller
 
             $model->save();
 
+            $actuacion = new Actuacionedh();
+            $actuacion = $actuacion->nuevaActuacion($model->solicitud0->caso, 3, 'Se modifica la certificación #'.$model->id, 0);
+
             if (!is_null($images)) {
                 foreach ($images as $image) {
                     $modelajuntosX = new Adjuntocertificacion();
@@ -209,6 +218,8 @@ class CertificacionedhController extends Controller
                 }
                 
             }
+
+            Yii::$app->session->setFlash('success', "Se modificó correctamente la certificación");
 
             return $this->redirect(['/edh/solicitudedh/index', 'id' => $model->solicitud0->caso, 'sol' => $model->solicitud]);
         }

@@ -5,6 +5,7 @@ namespace app\modules\edh\controllers;
 
 use Yii;
 use app\models\Agente;
+use app\modules\edh\models\Actuacionedh;
 use app\modules\edh\models\Areasolicitud;
 use app\modules\edh\models\Informeprofesional;
 use app\modules\edh\models\InformeprofesionalSearch;
@@ -84,9 +85,13 @@ class InformeprofesionalController extends Controller
 
             $model->save();
 
+            
             $modelSolicitud = Solicitudedh::findOne($solicitud);
             $modelSolicitud->estadosolicitud = 2;
             $modelSolicitud->save();
+
+            $actuacion = new Actuacionedh();
+            $actuacion = $actuacion->nuevaActuacion($model->solicitud0->caso, 3, 'Se crea el informe profesional #'.$model->id.' y se cambia el estado de la solicitud a '.$modelSolicitud->estadosolicitud0->nombre, 1);
 
             Yii::$app->session->setFlash('success', 'Se generó correctamente el informe');
             return $this->redirect(['/edh/solicitudedh/index', 'id' => $model->solicitud0->caso, 'sol' => $solicitud]);

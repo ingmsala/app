@@ -4,6 +4,7 @@ namespace app\modules\edh\controllers;
 
 use app\models\AgenteSearch;
 use app\models\Nombramiento;
+use app\modules\edh\models\Actuacionedh;
 use app\modules\edh\models\Caso;
 use app\modules\edh\models\ParticipantereunionSearch;
 use Yii;
@@ -116,6 +117,9 @@ class ReunionedhController extends Controller
             $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
             $model->fecha = $newdatedesde;
             $model->save();
+            $actuacion = new Actuacionedh();
+            $actuacion = $actuacion->nuevaActuacion($model->caso, 3, 'Se crea reunión: '.$model->tematica, 1);
+            Yii::$app->session->setFlash('success', 'Se creó la reunión correctamente');
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

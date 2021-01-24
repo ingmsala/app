@@ -104,6 +104,19 @@ $(function(){
 	})
 });
 
+$(function(){
+	
+	$('.amodalcasoupdate').click(function(){
+		$('#modalcasoupdate').modal('show').find('#modalHeader').html($(this).attr('title'));
+		$('#modalcasoupdate').modal('show')
+			.find('#modalContent')
+			.load($(this).attr('value'));
+		
+			//.load($(this).attr('value'));
+		//document.getElementById('modalHeader').innerHTML ='ss';
+	})
+});
+
 
 
 $('body').on('click', '.amodalcertificado',function(){
@@ -121,6 +134,7 @@ $('body').on('click', '.amodalinfoprofesional',function(){
 });
 
 $('body').on('click', '.amodalsolicitudstate',function(){
+	$('#amodalsolicitudstate').modal('show').find('#modalHeader4').html($(this).attr('title'));
 	$('#amodalsolicitudstate').modal('show')
 		.find('#modalContent4')
 		.load($(this).attr('value'));

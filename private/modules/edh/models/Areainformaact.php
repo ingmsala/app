@@ -30,7 +30,7 @@ class Areainformaact extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['area', 'actuacion'], 'required'],
+            [['actuacion'], 'required'],
             [['area', 'actuacion'], 'integer'],
             [['actuacion'], 'exist', 'skipOnError' => true, 'targetClass' => Actuacionedh::className(), 'targetAttribute' => ['actuacion' => 'id']],
             [['area'], 'exist', 'skipOnError' => true, 'targetClass' => Areasolicitud::className(), 'targetAttribute' => ['area' => 'id']],

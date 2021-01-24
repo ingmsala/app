@@ -35,6 +35,7 @@ class TipoactuacionController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout = '@app/modules/edh/views/layouts/main';
         $searchModel = new TipoactuacionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -52,6 +53,7 @@ class TipoactuacionController extends Controller
      */
     public function actionView($id)
     {
+        $this->layout = '@app/modules/edh/views/layouts/main';
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -64,6 +66,7 @@ class TipoactuacionController extends Controller
      */
     public function actionCreate()
     {
+        $this->layout = '@app/modules/edh/views/layouts/main';
         $model = new Tipoactuacion();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -84,6 +87,7 @@ class TipoactuacionController extends Controller
      */
     public function actionUpdate($id)
     {
+        $this->layout = '@app/modules/edh/views/layouts/main';
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

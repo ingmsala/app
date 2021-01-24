@@ -2,9 +2,11 @@
 
 namespace app\modules\edh\controllers;
 
+use app\models\Agente;
 use app\modules\curriculares\models\Alumno;
 use app\modules\curriculares\models\Aniolectivo;
 use app\modules\curriculares\models\Tutor;
+use app\modules\edh\models\Actuacionedh;
 use app\modules\edh\models\Areasolicitud;
 use Yii;
 use app\modules\edh\models\Caso;
@@ -168,10 +170,61 @@ class CasoController extends Controller
         $model = $this->findModel($id);
         
         $model->scenario = $model::SCENARIO_ABM;
-        $modelSolicitud = new Solicitudedh();
+        
 
         $condicionesfinales = Condicionfinal::find()->all();
         $estadoscaso = Estadocaso::find()->all();
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return ActiveForm::validate($model);
+
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            
+            
+            $model->save();
+
+            $actuacion = new Actuacionedh();
+            $actuacion = $actuacion->nuevaActuacion($model->id, 2, 'Se modifica la resolución', 0);
+
+           return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        
+
+        return $this->renderAjax('actualizar', [
+            'model' => $model,
+            'estadoscaso' => $estadoscaso,
+            'condicionesfinales' => $condicionesfinales,
+        ]);
+    }
+
+    public function actionCerrar($id, $newestado)
+    {
+        $this->layout = '@app/modules/edh/views/layouts/main';
+        $model = $this->findModel($id);
+        
+        if($newestado == 1){
+            $model->scenario = $model::SCENARIO_ABM;
+            
+            $ocultarfechafin = 1;
+            $registro = 'Se reabre el caso, cerrado el día '. $model->fin;
+            $model->fin = null;
+            
+        }else{
+            $model->scenario = $model::SCENARIO_CERRAR;
+            $ocultarfechafin = 0;
+            $registro = 'Se cierra el caso';
+        }
+        
+        $model->estadocaso = $newestado;
+        $condicionesfinales = Condicionfinal::find()->all();
+        
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             
@@ -193,6 +246,9 @@ class CasoController extends Controller
             
             $model->save();
 
+            $actuacion = new Actuacionedh();
+            $actuacion = $actuacion->nuevaActuacion($model->id, 2, $registro, 1);
+
            return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -204,12 +260,15 @@ class CasoController extends Controller
         $newdatefin = (!empty($model->fin)) ? date("d/m/Y", mktime(0, 0, 0, $finexplode[1], $finexplode[2], $finexplode[0])) : null;
         $model->fin = $newdatefin;
 
-        return $this->renderAjax('actualizar', [
+        return $this->renderAjax('cerrar', [
             'model' => $model,
-            'estadoscaso' => $estadoscaso,
+            'ocultarfechafin' => $ocultarfechafin ,
+            
             'condicionesfinales' => $condicionesfinales,
         ]);
     }
+
+    
 
     /**
      * Updates an existing Caso model.

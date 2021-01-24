@@ -40,10 +40,10 @@ class Actuacionedh extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['area', 'lugaractuacion', 'agente', 'tipoactuacion', 'caso'], 'integer'],
+            [['area', 'lugaractuacion', 'agente', 'tipoactuacion', 'caso', 'log'], 'integer'],
             [['fecha', 'fechacreate'], 'safe'],
             [['registro'], 'string'],
-            [['fechacreate', 'agente', 'tipoactuacion'], 'required'],
+            [['fechacreate', 'agente', 'tipoactuacion', 'registro', 'log'], 'required'],
             [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
             [['area'], 'exist', 'skipOnError' => true, 'targetClass' => Areasolicitud::className(), 'targetAttribute' => ['area' => 'id']],
             [['lugaractuacion'], 'exist', 'skipOnError' => true, 'targetClass' => Lugaractuacion::className(), 'targetAttribute' => ['lugaractuacion' => 'id']],
@@ -67,6 +67,7 @@ class Actuacionedh extends \yii\db\ActiveRecord
             'agente' => 'Agente',
             'tipoactuacion' => 'Tipoactuacion',
             'caso' => 'Caso',
+            'log' => 'Log',
         ];
     }
 
@@ -121,5 +122,20 @@ class Actuacionedh extends \yii\db\ActiveRecord
     public function getAreainformaacts()
     {
         return $this->hasMany(Areainformaact::className(), ['actuacion' => 'id']);
+    }
+
+    public function nuevaActuacion($caso, $tipoactuacion, $registro, $log){
+        $actuacion = new Actuacionedh();
+        $actuacion->caso = $caso;
+        $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        $actuacion->agente = $agente->id; 
+        $actuacion->tipoactuacion = $tipoactuacion;
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $actuacion->fechacreate = date('Y-m-d H:i');
+        $actuacion->fecha = date('Y-m-d');
+        $actuacion->registro = $registro;
+        $actuacion->log = $log;
+        $actuacion->save();
+        return $actuacion;
     }
 }

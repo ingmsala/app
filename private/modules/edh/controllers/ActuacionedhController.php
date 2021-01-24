@@ -99,22 +99,31 @@ class ActuacionedhController extends Controller
             $desdeexplode = explode("/",$model->fecha);
             $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
             $model->fecha = $newdatedesde;
+            $model->log = 1;
 
             //return var_dump($modelAreainf);
             $model->save();
 
-            foreach ($modelActores['persona'] as $persona) {
-                $modelActoresX = new Actorxactuacion();
-                $modelActoresX->persona = $persona;
-                $modelActoresX->actuacion = $model->id;
-                $modelActoresX->save();
-            }
+            try{
+                foreach ($modelActores['persona'] as $persona) {
+                    $modelActoresX = new Actorxactuacion();
+                    $modelActoresX->persona = $persona;
+                    $modelActoresX->actuacion = $model->id;
+                    $modelActoresX->save();
+                }
+            }catch(\Throwable $th){
 
-            foreach ($modelAreainf['area'] as $area) {
-                $modelAreainfX = new Areainformaact();
-                $modelAreainfX->area = $area;
-                $modelAreainfX->actuacion = $model->id;
-                $modelAreainfX->save();
+            }
+            
+            try{
+                foreach ($modelAreainf['area'] as $area) {
+                    $modelAreainfX = new Areainformaact();
+                    $modelAreainfX->area = $area;
+                    $modelAreainfX->actuacion = $model->id;
+                    $modelAreainfX->save();
+                }
+            }catch(\Throwable $th){
+
             }
 
             Yii::$app->session->setFlash('success', "Se creó correctamente la actuación");
@@ -262,19 +271,26 @@ class ActuacionedhController extends Controller
             foreach ($model->areainformaacts as $aia) {
                 $aia->delete();
             }   
+            try{
+                foreach ($modelActores['persona'] as $persona) {
+                    $modelActoresX = new Actorxactuacion();
+                    $modelActoresX->persona = $persona;
+                    $modelActoresX->actuacion = $model->id;
+                    $modelActoresX->save();
+                }
+            }catch(\Throwable $th){
 
-            foreach ($modelActores['persona'] as $persona) {
-                $modelActoresX = new Actorxactuacion();
-                $modelActoresX->persona = $persona;
-                $modelActoresX->actuacion = $model->id;
-                $modelActoresX->save();
             }
-
-            foreach ($modelAreainf['area'] as $area) {
-                $modelAreainfX = new Areainformaact();
-                $modelAreainfX->area = $area;
-                $modelAreainfX->actuacion = $model->id;
-                $modelAreainfX->save();
+            
+            try{
+                foreach ($modelAreainf['area'] as $area) {
+                    $modelAreainfX = new Areainformaact();
+                    $modelAreainfX->area = $area;
+                    $modelAreainfX->actuacion = $model->id;
+                    $modelAreainfX->save();
+                }
+            } catch (\Throwable $th) {
+                //throw $th;
             }
             Yii::$app->session->setFlash('success', "Se modificó correctamente la actuación");
             return $this->redirect(['index', 'id' => $model->caso]);

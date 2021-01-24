@@ -54,7 +54,12 @@ $this->params['sidebar'] = [
                 'vAlign' => 'middle', 
                 'hAlign' => 'center', 
                 'value' => function($model){
-                    return $model->area0->nombre;
+                    try {
+                        return $model->area0->nombre;
+                    } catch (\Throwable $th) {
+                        return '';
+                    }
+                    
                 }
             ],
             [
@@ -72,12 +77,15 @@ $this->params['sidebar'] = [
                 'hAlign' => 'center', 
                 'format' => 'raw', 
                 'value' => function($model){
-                    $ret = '<ul>';
-                    foreach ($model->actorxactuacions as $axa) {
-                        $ret .= '<li>'.$axa->persona0->apellido.', '.$axa->persona0->nombre.'</li>';
+                    if(count($model->actorxactuacions)>0){
+                        $ret = '<ul>';
+                        foreach ($model->actorxactuacions as $axa) {
+                            $ret .= '<li>'.$axa->persona0->apellido.', '.$axa->persona0->nombre.'</li>';
+                        }
+                        $ret .= '</ul>';
+                        return $ret;
                     }
-                    $ret .= '</ul>';
-                    return $ret;
+                    return $model->agente0->apellido.', '.$model->agente0->nombre;
                     
                 }
             ],
@@ -86,7 +94,12 @@ $this->params['sidebar'] = [
                 'vAlign' => 'middle', 
                 'hAlign' => 'center', 
                 'value' => function($model){
-                    return $model->lugaractuacion0->nombre;
+                    try {
+                        return $model->lugaractuacion0->nombre;
+                    } catch (\Throwable $th) {
+                        return '';
+                    }
+                    
                 }
             ],
 

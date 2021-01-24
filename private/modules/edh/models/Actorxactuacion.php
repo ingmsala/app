@@ -32,7 +32,7 @@ class Actorxactuacion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['persona', 'actuacion'], 'required'],
+            [['actuacion'], 'required'],
             [['actuacion'], 'integer'],
             [['persona'], 'safe'],
             [['actuacion'], 'exist', 'skipOnError' => true, 'targetClass' => Actuacionedh::className(), 'targetAttribute' => ['actuacion' => 'id']],

@@ -3,6 +3,7 @@
 namespace app\modules\edh\controllers;
 
 use app\modules\curriculares\models\Tutor;
+use app\modules\edh\models\Actuacionedh;
 use app\modules\edh\models\Areasolicitud;
 use app\modules\edh\models\Caso;
 use app\modules\edh\models\Estadosolicitud;
@@ -65,11 +66,44 @@ class SolicitudedhController extends Controller
         ]);
     }
 
-    public function actionCambiarestado($id)
+    public function actionCambiarestado($id, $est)
     {
         
         $model = $this->findModel($id);
-        $estadosolicitudes = Estadosolicitud::find()->all();
+        $estadosolicitudes = Estadosolicitud::find()->where(['in', 'id', [3,4]])->all();
+        $model->estadosolicitud = $est;
+        $model->scenario = $model::SCENARIO_STATE;
+
+                
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->save();
+
+            if($est == 3){
+                $lbl = 'Aceptación de la solicitud del caso';
+            }else
+                $lbl = 'Rechazo de la solicitud del caso';
+
+            $actuacion = new Actuacionedh();
+            $actuacion = $actuacion->nuevaActuacion($model->caso, 3, $lbl, 1);
+
+            Yii::$app->session->setFlash('success', 'Se actualizó correctamente la solicitud');
+            return $this->redirect(['index', 'id' => $model->caso]);
+
+        }
+
+        return $this->renderAjax('cambiarestado', [
+            'model' => $model,
+            'estadosolicitudes' => $estadosolicitudes,
+            
+        ]);
+    }
+
+    public function actionExpediente($id)
+    {
+        
+        $model = $this->findModel($id);
+        $model->scenario = $model::SCENARIO_ABM;
         
         if ($model->load(Yii::$app->request->post())) {
 
@@ -77,6 +111,9 @@ class SolicitudedhController extends Controller
             $newdateexpediente = date("Y-m-d", mktime(0, 0, 0, $expedienteexplode[1], $expedienteexplode[0], $expedienteexplode[2]));
             $model->fechaexpediente = $newdateexpediente;
             $model->save();
+
+            $actuacion = new Actuacionedh();
+            $actuacion = $actuacion->nuevaActuacion($model->caso, 3, 'Se registra expediente de la solicitud', 1);
             Yii::$app->session->setFlash('success', 'Se actualizó correctamente la solicitud');
             return $this->redirect(['index', 'id' => $model->caso]);
 
@@ -86,9 +123,8 @@ class SolicitudedhController extends Controller
         $newdatefechaexpediente = (!empty($model->fechaexpediente)) ? date("d/m/Y", mktime(0, 0, 0, $fechaexpedienteexplode[1], $fechaexpedienteexplode[2], $fechaexpedienteexplode[0])) : null;
         $model->fechaexpediente = $newdatefechaexpediente;
 
-        return $this->renderAjax('cambiarestado', [
+        return $this->renderAjax('expediente', [
             'model' => $model,
-            'estadosolicitudes' => $estadosolicitudes,
             
         ]);
     }
@@ -103,6 +139,7 @@ class SolicitudedhController extends Controller
     {
         $caso = Caso::findOne($id);
         $model = new Solicitudedh();
+        $model->scenario = $model::SCENARIO_ABM;
         $model->caso = $id;
         $model->estadosolicitud = 1;
         $model->tiposolicitud = 2;
@@ -117,10 +154,17 @@ class SolicitudedhController extends Controller
             $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
             $model->fecha = $newdatedesde;
 
-            $expedienteexplode = explode("/",$model->fechaexpediente);
-            $newdateexpediente = date("Y-m-d", mktime(0, 0, 0, $expedienteexplode[1], $expedienteexplode[0], $expedienteexplode[2]));
-            $model->fechaexpediente = $newdateexpediente;
+            if($model->fechaexpediente != null){
+                $expedienteexplode = explode("/",$model->fechaexpediente);
+                $newdateexpediente = date("Y-m-d", mktime(0, 0, 0, $expedienteexplode[1], $expedienteexplode[0], $expedienteexplode[2]));
+                $model->fechaexpediente = $newdateexpediente;
+            }
             $model->save();
+
+            $actuacion = new Actuacionedh();
+            $actuacion = $actuacion->nuevaActuacion($model->caso, 3, 'Se crea una solicitud de renovación del caso', 1);
+
+
             Yii::$app->session->setFlash('success', 'Se creó correctamente la solicitud');
             return $this->redirect(['index', 'id' => $id]);
         }

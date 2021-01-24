@@ -37,7 +37,12 @@ use yii\widgets\Pjax;
                     'summary' => false,
                     'responsiveWrap' => false,
                     'columns' => [
-                        ['class' => 'yii\grid\SerialColumn'],
+                        [
+                            'label' => '#',
+                            'value' => function($model){
+                                return $model->id;
+                            }
+                        ],
 
                         [
                             'label' => 'Fecha',

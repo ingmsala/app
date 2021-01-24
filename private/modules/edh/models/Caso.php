@@ -29,12 +29,14 @@ class Caso extends \yii\db\ActiveRecord
 
     const SCENARIO_SEARCHINDEX = 'index';
     const SCENARIO_ABM = 'abm';
+    const SCENARIO_CERRAR = 'cerrar';
     
     public function scenarios()
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_SEARCHINDEX] = ['aniolectivo', 'alumno', 'resolucion', 'estadocaso'];
         $scenarios[self::SCENARIO_ABM] = ['inicio', 'fin', 'matricula', 'resolucion', 'condicionfinal', 'estadocaso'];
+        $scenarios[self::SCENARIO_CERRAR] = ['inicio', 'fin', 'matricula', 'resolucion', 'condicionfinal', 'estadocaso'];
         return $scenarios;
     }
     /**
@@ -52,6 +54,7 @@ class Caso extends \yii\db\ActiveRecord
     {
         return [
             [['inicio', 'matricula', 'condicionfinal', 'estadocaso'], 'required', 'on' => self::SCENARIO_ABM],
+            [['fin', 'condicionfinal'], 'required', 'on' => self::SCENARIO_CERRAR],
             [['inicio', 'fin'], 'safe'],
             [['matricula', 'condicionfinal', 'estadocaso'], 'integer'],
             [['resolucion'], 'string', 'max' => 150],
@@ -59,6 +62,7 @@ class Caso extends \yii\db\ActiveRecord
             [['estadocaso'], 'exist', 'skipOnError' => true, 'targetClass' => Estadocaso::className(), 'targetAttribute' => ['estadocaso' => 'id']],
             [['matricula'], 'exist', 'skipOnError' => true, 'targetClass' => Matriculaedh::className(), 'targetAttribute' => ['matricula' => 'id']],
             [['inicio', 'fin'], 'inifin', 'on' => self::SCENARIO_ABM, 'skipOnEmpty' => false],
+            [['inicio', 'fin'], 'inifin', 'on' => self::SCENARIO_CERRAR, 'skipOnEmpty' => false],
         ];
     }
 

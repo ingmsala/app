@@ -20,8 +20,7 @@ use yii\helpers\Html;
 <div class="solicitudedh-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    
+    <div style="display: none;">
     <?= 
 
         $form->field($model, 'estadosolicitud')->widget(Select2::classname(), [
@@ -35,30 +34,16 @@ use yii\helpers\Html;
         ]);
 
     ?>
-    <div class="panel panel-default">
-        <div class="panel-heading">Expediente</div>
-        <div class="panel-body">
-            <div style="width: 50%;">
-                    <?= 
-                        $form->field($model, 'fechaexpediente')->widget(DatePicker::classname(), [
-                            //'name' => 'dp_3',
-                            'type' => DatePicker::TYPE_COMPONENT_APPEND,
-                            //'value' => '23-Feb-1982',
-                            'readonly' => true,
-                            'pluginOptions' => [
-                                'autoclose'=>true,
-                                'format' => 'dd/mm/yyyy',
-                                
-                            ],
-                            'options' => ['style' => 'cursor: pointer;']
-                            
-                        ]);
-                    ?>
-
-            </div>
-            <?= $form->field($model, 'expediente')->textInput(['maxlength' => true]) ?>
-        </div>
     </div>
+
+    
+    <?php
+        if($model->estadosolicitud == 3)
+            echo '<h4>¿Está seguro que desea cambiar el estado de la solicitud a <b>Aceptada</b>?<br/><br/></h4>';
+        else
+            echo '<h4>¿Está seguro que desea cambiar el estado de la solicitud a <b>Rechadaza</b>?<br/><br/></h4>';
+    ?>
+    
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

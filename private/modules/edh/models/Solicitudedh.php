@@ -23,6 +23,17 @@ use Yii;
  */
 class Solicitudedh extends \yii\db\ActiveRecord
 {
+    const SCENARIO_STATE = 'cerrar';
+    const SCENARIO_ABM = 'abm';
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        
+        
+        $scenarios[self::SCENARIO_ABM] = ['fecha', 'areasolicitud', 'caso', 'estadosolicitud', 'tiposolicitud', 'expediente', 'fechaexpediente', 'demandante'];
+        $scenarios[self::SCENARIO_STATE] = ['estadosolicitud'];
+        return $scenarios;
+    }
     /**
      * {@inheritdoc}
      */
@@ -37,7 +48,7 @@ class Solicitudedh extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fecha', 'areasolicitud', 'caso', 'estadosolicitud', 'tiposolicitud'], 'required'],
+            [['fecha', 'areasolicitud', 'caso', 'estadosolicitud', 'tiposolicitud'], 'required', 'on' => self::SCENARIO_ABM],
             [['fecha', 'fechaexpediente'], 'safe'],
             [['expediente'], 'string', 'max' => 100],
             [['areasolicitud', 'caso', 'demandante', 'estadosolicitud', 'tiposolicitud'], 'integer'],

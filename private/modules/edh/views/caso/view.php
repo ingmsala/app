@@ -1,9 +1,11 @@
 <?php
 
 use kartik\detail\DetailView;
+
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\helpers\Url;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Caso */
@@ -23,7 +25,7 @@ $this->params['sidebar'] = [
 <?php 
         Modal::begin([
             'header' => "<h2 id='modalHeader'>".'Modificar  Caso#'.$model->id."</h2>",
-            'id' => 'modaldetalleticket',
+            'id' => 'modalcasoupdate',
             'size' => 'modal-lg',
             'options' => [
                 'tabindex' => false,
@@ -70,7 +72,17 @@ $this->params['sidebar'] = [
                     </div>
                                     
                 </div>';
-        echo Html::button('<span class="glyphicon glyphicon-pencil"></span> '.'Modificar', ['value' => Url::to('index.php?r=edh/caso/actualizar&id='.$model->id), 'class' => 'btn btn-main btn-primary amodaldetalleticket pull-right contenedorlistado']);
+        if($model->estadocaso == 1){
+            $newestado = 2;
+            $lbl = 'Cerrar Caso';
+            $gly = 'off';
+        }else{
+            $newestado = 1;
+            $lbl = 'Reabrir Caso';
+            $gly = 'transfer';
+        }         
+        echo Html::button('<span class="glyphicon glyphicon-'.$gly.'"></span> '.$lbl, ['value' => Url::to(['cerrar', 'id' => $model->id, 'newestado' => $newestado]), 'title' => $lbl.' #'.$model->id, 'class' => 'btn btn-main btn-danger amodalcasoupdate pull-right contenedorlistado', 'style' => 'margin-left:0.2%']);
+        echo Html::button('<span class="glyphicon glyphicon-pencil"></span> '.'Resolución', ['value' => Url::to('index.php?r=edh/caso/actualizar&id='.$model->id), 'title' => 'Modificar resolución del Caso #'.$model->id, 'class' => 'btn btn-main btn-info amodalcasoupdate pull-right contenedorlistado']);
     ?>
     
 

@@ -26,72 +26,9 @@ use yii\helpers\Url;
                             'enableAjaxValidation' => true,
                         ]); ?>
 
-    <div style="width: 50%;">
-        <?= 
-            $form->field($model, 'inicio')->widget(DatePicker::classname(), [
-                //'name' => 'dp_3',
-                'type' => DatePicker::TYPE_COMPONENT_APPEND,
-                //'value' => '23-Feb-1982',
-                'readonly' => true,
-                'pluginOptions' => [
-                    'autoclose'=>true,
-                    'format' => 'dd/mm/yyyy',
-                    
-                ],
-                'options' => ['style' => 'cursor: pointer;']
-                
-            ]);
-        ?>
-
-    </div>
-
-    <div style="width: 50%;">
-        <?= 
-            $form->field($model, 'fin')->widget(DatePicker::classname(), [
-                //'name' => 'dp_3',
-                'type' => DatePicker::TYPE_COMPONENT_APPEND,
-                //'value' => '23-Feb-1982',
-                'readonly' => true,
-                'pluginOptions' => [
-                    'autoclose'=>true,
-                    'format' => 'dd/mm/yyyy',
-                    
-                ],
-                'options' => ['style' => 'cursor: pointer;']
-                
-            ]);
-        ?>
-
-    </div>
-
     <?= $form->field($model, 'resolucion')->textInput(['maxlength' => true]) ?>
 
-    <?= 
-
-        $form->field($model, 'condicionfinal')->widget(Select2::classname(), [
-            'data' => $condicionesfinales,
-            'options' => [
-                'placeholder' => 'Seleccionar...'],
-            //'value' => 1,
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]);
-
-    ?>
-    <?= 
-
-        $form->field($model, 'estadocaso')->widget(Select2::classname(), [
-            'data' => $estadoscaso,
-            'options' => [
-                'placeholder' => 'Seleccionar...'],
-            //'value' => 1,
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]);
-
-    ?>
+  
 
 
 

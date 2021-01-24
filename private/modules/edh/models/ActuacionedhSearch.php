@@ -40,7 +40,7 @@ class ActuacionedhSearch extends Actuacionedh
      */
     public function porCaso($id)
     {
-        $query = Actuacionedh::find()->where(['caso' => $id]);
+        $query = Actuacionedh::find()->where(['caso' => $id])->andWhere(['log' => 1]);
 
         // add conditions that should always apply here
 

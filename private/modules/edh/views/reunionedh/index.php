@@ -48,32 +48,44 @@ $this->params['sidebar'] = [
         //'filterModel' => $searchModel,
         'summary' => false,
         'responsiveWrap' => false,
+        'hover' => true,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             
             [
                 'label' => 'Fecha',
-                
+                'format' => 'raw',
                 'value' => function($model){
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
-                    return Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy');
+                    return Html::a(Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy'), Url::to(['view', 'id' => $model->id]));
                 }
             ],
             [
                 'label' => 'Hora',
-                
+                'format' => 'raw',
                 'value' => function($model){
                     $hora = explode(':', $model->hora);
-                    return $hora[0].':'.$hora[1].'hs.';
+                    return Html::a($hora[0].':'.$hora[1].'hs.', Url::to(['view', 'id' => $model->id]));
                 }
             ],
-            
-            'tematica',
-            //'parte:ntext',
-            'lugar',
-            
-            //'url:url',
+            [
+                'label' => 'Temática',
+                'format' => 'raw',
+                'value' => function($model){
+                    $hora = explode(':', $model->hora);
+                    return Html::a($model->tematica, Url::to(['view', 'id' => $model->id]));
+                }
+            ],
+            [
+                'label' => 'Lugar',
+                'format' => 'raw',
+                'value' => function($model){
+                    $hora = explode(':', $model->hora);
+                    return Html::a($model->lugar, Url::to(['view', 'id' => $model->id]));
+                }
+            ],
+           
 
             ['class' => 'yii\grid\ActionColumn', 
                 'template' => '{view} {delete}'
