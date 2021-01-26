@@ -208,18 +208,18 @@ class CasoController extends Controller
     {
         $this->layout = '@app/modules/edh/views/layouts/main';
         $model = $this->findModel($id);
-        
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
         if($newestado == 1){
             $model->scenario = $model::SCENARIO_ABM;
             
             $ocultarfechafin = 1;
-            $registro = 'Se reabre el caso, cerrado el día '. $model->fin;
+            $registro = 'Se reabre el caso, cerrado el día '. Yii::$app->formatter->asDate($model->fin, 'dd/MM/yyyy');
             $model->fin = null;
             
         }else{
             $model->scenario = $model::SCENARIO_CERRAR;
             $ocultarfechafin = 0;
-            $registro = 'Se cierra el caso';
+            $registro = 'Se cierra el caso, con fecha '.Yii::$app->formatter->asDate($model->fin, 'dd/MM/yyyy');
         }
         
         $model->estadocaso = $newestado;
@@ -243,8 +243,12 @@ class CasoController extends Controller
             $finexplode = explode("/",$model->fin);
             $newdatefin = (!empty($model->fin)) ? date("Y-m-d", mktime(0, 0, 0, $finexplode[1], $finexplode[0], $finexplode[2])) : null;
             $model->fin = $newdatefin;
-            
+
             $model->save();
+
+            if($newestado != 1){
+                $registro = 'Se cierra el caso, con fecha '.Yii::$app->formatter->asDate($model->fin, 'dd/MM/yyyy');
+            }
 
             $actuacion = new Actuacionedh();
             $actuacion = $actuacion->nuevaActuacion($model->id, 2, $registro, 1);

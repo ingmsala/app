@@ -40,10 +40,11 @@ $this->params['sidebar'] = [
 
     <?php 
         $textasignacion = $model->matricula0->alumno0->apellido.', '.$model->matricula0->alumno0->nombre;
+        $fechafin = Yii::$app->formatter->asDate($model->fin, 'dd/MM/yyyy');
         if($model->estadocaso == 1)
             $estado = '<span class="label label-success">'.$model->estadocaso0->nombre.'</span>';
         else
-            $estado = '<span class="label label-danger">'.$model->estadocaso0->nombre.'</span>';
+            $estado = '<span class="label label-danger">'.$model->estadocaso0->nombre.' el '.$fechafin.'</span>';
 
         date_default_timezone_set('America/Argentina/Buenos_Aires');
 

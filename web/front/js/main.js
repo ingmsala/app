@@ -141,6 +141,14 @@ $('body').on('click', '.amodalsolicitudstate',function(){
 	
 });
 
+$('body').on('click', '.amodalplancursado',function(){
+	$('#modalplancursado').modal('show').find('#modalHeader').html($(this).attr('title'));
+	$('#modalplancursado').modal('show')
+		.find('#modalContent')
+		.load($(this).attr('value'));
+	
+});
+
 $('body').on('click', '.deletebuttonadjuntocert',function(){
 	var id = $(this).attr('value');
 	if(confirm('Desea eliminar el archivo adjunto?')){

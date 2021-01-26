@@ -7,6 +7,7 @@ use app\modules\edh\models\Actuacionedh;
 use app\modules\edh\models\Areasolicitud;
 use app\modules\edh\models\Caso;
 use app\modules\edh\models\Estadosolicitud;
+use app\modules\edh\models\Plancursado;
 use Yii;
 use app\modules\edh\models\Solicitudedh;
 use app\modules\edh\models\SolicitudedhSearch;
@@ -81,6 +82,9 @@ class SolicitudedhController extends Controller
 
             if($est == 3){
                 $lbl = 'Aceptación de la solicitud del caso';
+                $newmain = new Plancursado();
+                $newmain = $newmain->nuevoPlanPrincipal($model->caso);
+                
             }else
                 $lbl = 'Rechazo de la solicitud del caso';
 

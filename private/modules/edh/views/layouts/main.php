@@ -160,7 +160,7 @@ NavBar::end();
                                 echo Html::a('Solicitudes', Url::to(['/edh/solicitudedh/index', 'id' => $model->id]), ['class' => $solicitudes]);
                                 echo Html::a('Reuniones', Url::to(['/edh/reunionedh/index', 'caso' => $model->id]), ['class' => $reuniones]);
                                 echo Html::a('Actuaciones', Url::to(['/edh/actuacionedh/index', 'id' => $model->id]), ['class' => $actuaciones]);
-                                echo Html::a('Plan de cursado', Url::to(['/edh/caso/view', 'id' => $model->id]), ['class' => $plan]);
+                                echo Html::a('Plan de cursado', Url::to(['/edh/plancursado/index', 'caso' => $model->id]), ['class' => $plan]);
                             
                             ?>
                             

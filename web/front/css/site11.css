@@ -169,6 +169,7 @@ a.desc:after {
     
 }
 
+
 .dropdown-submenu>.dropdown-menu {
     top: 0;
     left: 100%;
@@ -1087,7 +1088,7 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
   100% { transform: rotate(360deg); }
 }
 
-.panel-body .btn:not(.btn-block) { width:160px;margin-bottom:10px; }
+/*.panel-body .btn:not(.btn-block) { width:160px;margin-bottom:10px; }*/
 
 .verticalTableHeader {
     text-align:center;

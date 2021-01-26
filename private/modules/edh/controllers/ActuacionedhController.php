@@ -184,27 +184,27 @@ class ActuacionedhController extends Controller
         
 
         foreach ($docentes_curso as $detcat) {
-            $items [$detcat->agente0->documento] = $detcat->catedra0->division0->nombre.' - '.$detcat->agente0->apellido.', '.$detcat->agente0->nombre.' ('.$detcat->catedra0->actividad0->nombre.')';
+            $items ['Docentes de '.$detcat->catedra0->division0->nombre][$detcat->agente0->documento] = $detcat->catedra0->division0->nombre.' - '.$detcat->agente0->apellido.', '.$detcat->agente0->nombre.' ('.$detcat->catedra0->actividad0->nombre.')';
         }
 
         foreach ($preceptorcurso as $prec) {
-            $items [$prec->agente0->documento] = $prec->division0->nombre.' - '.$prec->agente0->apellido.', '.$prec->agente0->nombre.' ('.$prec->cargo0->nombre.')';
+            $items ['Preceptor/a del curso'][$prec->agente0->documento] = $prec->division0->nombre.' - '.$prec->agente0->apellido.', '.$prec->agente0->nombre.' ('.$prec->cargo0->nombre.')';
         }
         try {
-            $items [$jefe->agente0->documento] = $jefe->agente0->apellido.', '.$jefe->agente0->nombre.' (Jefe de '.$caso->matricula0->division0->preceptoria0->descripcion.')';
+            $items ['Jefe/a de piso del curso'][$jefe->agente0->documento] = $jefe->agente0->apellido.', '.$jefe->agente0->nombre.' (Jefe de '.$caso->matricula0->division0->preceptoria0->descripcion.')';
         } catch (\Throwable $th) {
             //throw $th;
         }
 
-        $items [$caso->matricula0->alumno0->documento] = $caso->matricula0->alumno0->apellido.', '.$caso->matricula0->alumno0->nombre.' (Estudiante)';
+        $items ['Estudiante'][$caso->matricula0->alumno0->documento] = $caso->matricula0->alumno0->apellido.', '.$caso->matricula0->alumno0->nombre.' (Estudiante)';
         
             foreach ($tutores as $tutor) {
-            $items [$tutor->documento] = $tutor->apellido.', '.$tutor->nombre.' (Tutor - '.$tutor->parentesco.')';
+            $items ['Tutores'][$tutor->documento] = $tutor->apellido.', '.$tutor->nombre.' (Tutor - '.$tutor->parentesco.')';
         }
         
 
         foreach ($nombramientos as $nom) {
-            $items [$nom->agente0->documento] = $nom->agente0->apellido.', '.$nom->agente0->nombre.' ('.$nom->cargo0->nombre.')';
+            $items ['Equipo de Salud'][$nom->agente0->documento] = $nom->agente0->apellido.', '.$nom->agente0->nombre.' ('.$nom->cargo0->nombre.')';
         }
 
         //return var_dump(array_column(array_column($docentes_curso, 'agente0'), 'documento'));
@@ -216,7 +216,7 @@ class ActuacionedhController extends Controller
                 ->orderBy('apellido, nombre')->all();
 
         foreach ($agentes as $agente) {
-            $items [$agente->documento] = $agente->apellido.', '.$agente->nombre;
+            $items ['Otros docentes'][$agente->documento] = $agente->apellido.', '.$agente->nombre;
         }
 
         
@@ -235,6 +235,9 @@ class ActuacionedhController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        if($model->tipoactuacion != 1){
+            return 'No puede modificar una actuación autogenerada por el sistema.';
+        }
 
         $modelActores = new Actorxactuacion();
         $modelAreainf = new Areainformaact();

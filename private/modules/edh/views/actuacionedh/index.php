@@ -106,7 +106,7 @@ $this->params['sidebar'] = [
             [
                 'label' => 'Registro',
                 'vAlign' => 'middle', 
-                'hAlign' => 'center', 
+                //'hAlign' => 'center', 
                 'value' => function($model){
                     return $model->registro;
                 }
@@ -134,6 +134,7 @@ $this->params['sidebar'] = [
                 'buttons' => [
 
                     'update' => function($url, $model, $key){
+                        if($model->tipoactuacion == 1)
                         return Html::button('<span class="glyphicon glyphicon-pencil"></span>',
                             ['value' => Url::to(['actuacionedh/update', 'id' => $model->id]),
                                 'class' => 'amodaldetalleticket btn btn-link', 'style'=>'width:auto;margin-bottom:0px;']);
@@ -142,9 +143,11 @@ $this->params['sidebar'] = [
                     },
                     
                     'delete' => function($url, $model, $key){
+                        if($model->tipoactuacion == 1)
                         return Html::a('<span class="glyphicon glyphicon-trash"></span>', Url::to(['actuacionedh/delete', 'id' => $model->id]), 
                             ['data' => [
                             'confirm' => 'Está seguro de querer eliminar este elemento?',
+                            
                             'method' => 'post',
                              ]
                             ]);
