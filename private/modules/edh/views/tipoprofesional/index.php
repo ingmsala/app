@@ -7,7 +7,7 @@ use kartik\grid\GridView;
 /* @var $searchModel app\modules\edh\models\TipoprofesionalSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tipoprofesionals';
+$this->title = 'Tipo de profesional';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tipoprofesional-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Tipoprofesional', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Nuevo Tipo de profesional', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([

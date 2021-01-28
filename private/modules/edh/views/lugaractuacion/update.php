@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Lugaractuacion */
 
-$this->title = 'Update Lugaractuacion: ' . $model->id;
+$this->title = 'Modificar lugar de actuación: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Lugaractuacions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';

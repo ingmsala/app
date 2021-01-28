@@ -78,6 +78,11 @@ class Alumno extends \yii\db\ActiveRecord
         return $this->hasOne(Division::className(), ['id' => 'curso']);
     }
 
+    public function getNombrecompleto()
+    {
+        return $this->apellido.', '.$this->nombre;
+    }
+
     public function fields()
     {
         $fields = [

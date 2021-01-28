@@ -33,16 +33,25 @@ $this->params['sidebar'] = [
 	?>
 <div class="actuacionedh-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Agregar actuación', ['value' => Url::to('index.php?r=edh/actuacionedh/create&caso='.$model->id), 'class' => 'btn btn-main btn-success amodaldetalleticket contenedorlistado']); ?>
-    </p>
-
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+        'panel' => [
+            'type' => GridView::TYPE_DEFAULT,
+            'heading' => Html::encode($this->title),
+            'footer' => false,
+            'after' => false,
+            'before' =>Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Agregar actuación', ['value' => Url::to('index.php?r=edh/actuacionedh/create&caso='.$model->id), 'class' => 'btn btn-main btn-success amodaldetalleticket contenedorlistado'])
+        ],
+        'toolbar'=>[
+            
+            
+            
+        ],
         'summary' => false,
         'condensed' => true,
         'responsiveWrap' => false,

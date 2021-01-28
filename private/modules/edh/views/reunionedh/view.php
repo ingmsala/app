@@ -156,6 +156,13 @@ $this->registerJs("
                        Yii::$app->session->remove('success3');
                 }
             ?>
+            <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => 'Está seguro que desea eliminar la reunión?',
+                    'method' => 'post',
+                ],
+            ]) ?>
         <?= Html::submitButton('Actualizar', ['class' => 'btn btn-primary']) ?>
         </div>
     </div>

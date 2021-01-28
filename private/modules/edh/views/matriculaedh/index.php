@@ -7,7 +7,7 @@ use kartik\grid\GridView;
 /* @var $searchModel app\modules\edh\models\MatriculaedhSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Matriculaedhs';
+$this->title = 'Matrículas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="matriculaedh-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Matriculaedh', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Nueva matrícula', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,9 +25,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'alumno0.apellido',
-            'division0.nombre',
-            'aniolectivo0.nombre',
+            [
+                'label' => 'Estudiante',
+                'value' => function($model){
+                    return $model->alumno0->nombrecompleto;
+                }
+            ],
+            [
+                'label' => 'División',
+                'value' => function($model){
+                    return $model->division0->nombre;
+                }
+            ],
+            [
+                'label' => 'Año lectivo',
+                'value' => function($model){
+                    return $model->aniolectivo0->nombre;
+                }
+            ],
+            
 
             ['class' => 'yii\grid\ActionColumn', 
 

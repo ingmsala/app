@@ -18,7 +18,7 @@ class CasoSearch extends Caso
     public function rules()
     {
         return [
-            [['id', 'matricula', 'condicionfinal', 'estadocaso'], 'integer'],
+            [['id', 'matricula', 'condicionfinal', 'estadocaso', 'referente', 'preceptor', 'jefe'], 'integer'],
             [['inicio', 'fin', 'resolucion'], 'safe'],
         ];
     }

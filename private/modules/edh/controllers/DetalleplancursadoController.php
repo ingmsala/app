@@ -65,6 +65,8 @@ class DetalleplancursadoController extends Controller
     public function actionCreate()
     {
         $model = new Detalleplancursado();
+        $model->scenario = $model::SCENARIO_ABM;
+
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -85,6 +87,7 @@ class DetalleplancursadoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->scenario = $model::SCENARIO_ABM;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

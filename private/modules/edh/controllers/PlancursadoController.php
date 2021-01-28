@@ -45,6 +45,12 @@ class PlancursadoController extends Controller
     {
         $this->layout = '@app/modules/edh/views/layouts/main';
         $model = Caso::findOne($caso);
+
+        if(!in_array(3, array_column($model->solicitudedhs, 'estadosolicitud'))){
+            Yii::$app->session->setFlash('danger', 'No se puede gestionar el Plan de Cursado, ya que no existe ninguna solicitud en estado <b>"Aceptada"</b>');
+            return $this->redirect(['caso/view', 'id' => $model->id]);
+        }
+
         $searchModel = new PlancursadoSearch();
         $dataProvider = $searchModel->porCaso($caso);
 
@@ -66,6 +72,7 @@ class PlancursadoController extends Controller
         $this->layout = '@app/modules/edh/views/layouts/main';
         $searchModel = new DetalleplancursadoSearch();
         $dataProvider = $searchModel->porPlan($id);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
             'dataProvider' => $dataProvider,
@@ -120,6 +127,14 @@ class PlancursadoController extends Controller
                 $modelCatxplanX->plan = $model->id;
                 $modelCatxplanX->catedra = $catxplan;
                 $modelCatxplanX->save();
+
+                $detalleplancursadoX = new Detalleplancursado();
+                $detalleplancursadoX->scenario = $detalleplancursadoX::SCENARIO_NEWMAIN;
+                $detalleplancursadoX->plan = $model->id;
+                $detalleplancursadoX->catedra = $catxplan;
+                $detalleplancursadoX->estadodetplan = 1;
+                $detalleplancursadoX->save();
+
             }
 
             $actuacion = new Actuacionedh();

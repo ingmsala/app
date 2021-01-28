@@ -7,7 +7,7 @@ use kartik\grid\GridView;
 /* @var $searchModel app\modules\edh\models\EstadocasoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Estadocasos';
+$this->title = 'Estado de casos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="estadocaso-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Nuevo Estadocaso', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Nuevo Estado', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([

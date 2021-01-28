@@ -17,6 +17,7 @@ use yii\helpers\Html;
         'referentes' => $referentes,
         'instituciones' => $instituciones,
         'diagnosticos' => $diagnosticos,
+        'origen' => 'update',
         
     ]) ?>
 

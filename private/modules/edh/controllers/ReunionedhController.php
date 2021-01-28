@@ -41,9 +41,17 @@ class ReunionedhController extends Controller
     public function actionIndex($caso)
     {
         $this->layout = '@app/modules/edh/views/layouts/main';
+        $model = Caso::findOne($caso);
+
+        if(!in_array(3, array_column($model->solicitudedhs, 'estadosolicitud'))){
+            Yii::$app->session->setFlash('danger', 'No se puede gestionar Reuniones, ya que no existe ninguna solicitud en estado <b>"Aceptada"</b>');
+            return $this->redirect(['caso/view', 'id' => $model->id]);
+        }
+
+
         $searchModel = new ReunionedhSearch();
         $dataProvider = $searchModel->porCaso($caso);
-        $model = Caso::findOne($caso);
+        
 
         return $this->render('index', [
             'searchModel' => $searchModel,

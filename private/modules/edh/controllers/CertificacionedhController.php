@@ -257,9 +257,20 @@ class CertificacionedhController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model =$this->findModel($id);
+        $solicitud = $model->solicitud0;
 
-        return $this->redirect(['index']);
+        foreach ($model->adjuntocertificacions as $adjunto) {
+            $adjunto->delete();
+        }
+
+        $model->delete();
+
+        Yii::$app->session->setFlash('success', "Se eliminó correctamente el certificado");
+
+        return $this->redirect(['/edh/solicitudedh/index', 'id' => $solicitud->caso, 'sol' => $solicitud->id]);
+
+        
     }
 
     /**

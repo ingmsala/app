@@ -104,23 +104,15 @@ class ParticipantereunionController extends Controller
                             ->andWhere(['not in', 'agente.documento', $participantes_actuales])
                             ->all();
 
-        $preceptorcurso = Nombramiento::find()
-                            ->joinWith(['agente0'])
-                            ->where(['cargo' => 227])
-                            ->andWhere(['division' => $reunion->caso0->matricula0->division])
-                            ->andWhere(['not in', 'agente.documento', $participantes_actuales])
-                            ->all();
-
         
-        $user = Rolexuser::find()
-            ->where(['subrole' => $reunion->caso0->matricula0->division0->preceptoria0->nombre])
+        $preceptorcurso = Agente::find()
+            ->where(['id' => $reunion->caso0->preceptor])
+            ->andWhere(['not in', 'documento', $participantes_actuales])
             ->one();
 
-        $jefe = Nombramiento::find()
-            ->joinWith(['agente0'])
-            ->where(['cargo' => 223])
-            ->andWhere(['agente.mail' => $user->user0->username])
-            ->andWhere(['not in', 'agente.documento', $participantes_actuales])
+        $jefe = Agente::find()
+            ->where(['id' => $reunion->caso0->jefe])
+            ->andWhere(['not in', 'documento', $participantes_actuales])
             ->one();
         
 
@@ -128,11 +120,15 @@ class ParticipantereunionController extends Controller
             $items [] = [$detcat->agente0->documento.'-1-'.$detcat->catedra0->actividad => $detcat->catedra0->division0->nombre.' - '.$detcat->agente0->apellido.', '.$detcat->agente0->nombre.' ('.$detcat->catedra0->actividad0->nombre.')'];
         }
 
-        foreach ($preceptorcurso as $prec) {
-            $items [] = [$prec->agente0->documento.'-2' => $prec->division0->nombre.' - '.$prec->agente0->apellido.', '.$prec->agente0->nombre.' ('.$prec->cargo0->nombre.')'];
-        }
         try {
-            $items [] = [$jefe->agente0->documento.'-6' => $jefe->agente0->apellido.', '.$jefe->agente0->nombre.' (Jefe de '.$reunion->caso0->matricula0->division0->preceptoria0->descripcion.')'];
+            $items [] = [$preceptorcurso->documento.'-2' => $reunion->caso0->matricula0->division0->nombre.' - '.$preceptorcurso->apellido.', '.$preceptorcurso->nombre.' (Preceptor/a)'];
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        
+
+        try {
+            $items [] = [$jefe->documento.'-6' => $jefe->apellido.', '.$jefe->nombre.' (Jefe de '.$reunion->caso0->matricula0->division0->preceptoria0->descripcion.')'];
         } catch (\Throwable $th) {
             //throw $th;
         }

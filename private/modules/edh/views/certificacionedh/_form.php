@@ -1,5 +1,7 @@
 <?php
 
+use kartik\builder\Form;
+use kartik\builder\FormGrid;
 use kartik\date\DatePicker;
 use kartik\file\FileInput;
 use kartik\form\ActiveForm;
@@ -25,123 +27,138 @@ use yii\helpers\Html;
 
 
     <?php $form = ActiveForm::begin([
-          'options'=>['enctype'=>'multipart/form-data']]); ?>
+          'options'=>['enctype'=>'multipart/form-data']]);
 
-    <div style="width: 50%;">
-        <?= 
-            $form->field($model, 'fecha')->widget(DatePicker::classname(), [
-                //'name' => 'dp_3',
-                'type' => DatePicker::TYPE_COMPONENT_APPEND,
-                //'value' => '23-Feb-1982',
-                'readonly' => true,
-                'pluginOptions' => [
-                    'autoclose'=>true,
-                    'format' => 'dd/mm/yyyy',
-                    
-                ],
-                'options' => ['style' => 'cursor: pointer;']
-
-                
-            ]);
-        ?>
-
-    </div>
-
-
-    <?= 
-
-        $form->field($model, 'tipoprofesional')->widget(Select2::classname(), [
-            'data' => $tiposprofesional,
-            'options' => [
-                'placeholder' => 'Seleccionar...'],
-            //'value' => 1,
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]);
-
-    ?>
-
-    <?php 
+    echo FormGrid::widget([
     
-        echo $form->field($model, 'referente')->widget(Typeahead::classname(), [
-            'options' => ['placeholder' => 'Completar ...', 'autoComplete' =>"off"],
-            'pluginOptions' => ['highlight'=>true],
-            'dataset' => [
-                [
-                    'local' => $referentes,
-                    'limit' => 10
-                ]
-            ]
-        ]);
+        'model'=>$model,
+        'form'=>$form,
+        'autoGenerateColumns'=>true,
+        'rows'=>[
+            [
+                'attributes'=>[
 
-    ?>
-
-    <?php 
-        
-        echo $form->field($model, 'institucion')->widget(Typeahead::classname(), [
-            'options' => ['placeholder' => 'Completar ...', 'autoComplete' =>"off"],
-            'pluginOptions' => ['highlight'=>true],
-            'dataset' => [
-                [
-                    'local' => $instituciones,
-                    'limit' => 10
-                ]
-            ]
-        ]);
-
-    ?>
-
-    <?= $form->field($model, 'contacto')->textInput(['maxlength' => true]) ?>
-
-    <?= 
-
-        $form->field($model, 'tipocertificado')->widget(Select2::classname(), [
-            'data' => $tiposcertificado,
-            'options' => [
-                'placeholder' => 'Seleccionar...'],
-            //'value' => 1,
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]);
-
-    ?>
-
-    <div style="width: 50%;">
-        <?= 
-            $form->field($model, 'vencimiento')->widget(DatePicker::classname(), [
-                //'name' => 'dp_3',
-                'type' => DatePicker::TYPE_COMPONENT_APPEND,
-                //'value' => '23-Feb-1982',
-                'readonly' => true,
-                'pluginOptions' => [
-                    'autoclose'=>true,
-                    'format' => 'dd/mm/yyyy',
+                    'fecha'=>[
+                        'type'=>Form::INPUT_WIDGET, 
+                        'widgetClass'=>'\kartik\date\DatePicker', 
+                        'options'=>[
+                            'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                            'readonly' => true,
+                            'pluginOptions' => [
+                                'autoclose'=>true,
+                                'format' => 'dd/mm/yyyy',
+                            ],
+                            'options' => ['style' => 'cursor: pointer;']
+                        ]
+                    ],
+                    'tipocertificado'=>[
+                        'type'=>Form::INPUT_WIDGET, 
+                        'widgetClass'=>'\kartik\select2\Select2', 
+                        'options'=>[
+                            'data'=>$tiposcertificado,
+                            'options' => [
+                                'placeholder' => 'Seleccionar...'],
+                            //'value' => 1,
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
+                        ], 
+                    ],
+                    'vencimiento'=>[
+                        'type'=>Form::INPUT_WIDGET, 
+                        'widgetClass'=>'\kartik\date\DatePicker', 
+                        'options'=>[
+                            'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                            'readonly' => true,
+                            'pluginOptions' => [
+                                'autoclose'=>true,
+                                'format' => 'dd/mm/yyyy',
+                            ],
+                            'options' => ['style' => 'cursor: pointer;']
+                        ]
+                    ],
                     
-                ],
-                'options' => ['style' => 'cursor: pointer;']
-                
-            ]);
-        ?>
 
-    </div>
-
-    <?php 
-        
-        echo $form->field($model, 'diagnostico')->widget(Typeahead::classname(), [
-            'options' => ['placeholder' => 'Completar ...', 'autoComplete' =>"off"],
-            'pluginOptions' => ['highlight'=>true],
-            'dataset' => [
-                [
-                    'local' => $diagnosticos,
-                    'limit' => 10
                 ]
-            ]
-        ]);
-
+            ],
+            [
+                'attributes'=>[
+                    'tipoprofesional'=>[
+                        'type'=>Form::INPUT_WIDGET, 
+                        'widgetClass'=>'\kartik\select2\Select2', 
+                        'options'=>[
+                            'data'=>$tiposprofesional,
+                            'options' => [
+                                'placeholder' => 'Seleccionar...'],
+                            //'value' => 1,
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
+                        ], 
+                    ],
+                    'referente'=>[
+                        'type'=>Form::INPUT_WIDGET,
+                        'widgetClass'=>'\kartik\typeahead\Typeahead', 
+                        'options' => [
+                            'options' => ['placeholder' => 'Completar ...', 'autoComplete' =>"off"],
+                            'pluginOptions' => ['highlight'=>true],
+                            'dataset' => [
+                                [
+                                    'local' => $referentes,
+                                    'limit' => 10
+                                ]
+                            ]
+                        ]
+                    ],
+                    'institucion'=>[
+                        'type'=>Form::INPUT_WIDGET,
+                        'widgetClass'=>'\kartik\typeahead\Typeahead', 
+                        'options' => [
+                            'options' => ['placeholder' => 'Completar ...', 'autoComplete' =>"off"],
+                            'pluginOptions' => ['highlight'=>true],
+                            'dataset' => [
+                                [
+                                    'local' => $instituciones,
+                                    'limit' => 10
+                                ]
+                            ]
+                        ]
+                    ],
+                ]
+            ],
+            [
+                'attributes'=>[
+                    'contacto'=>['type'=>Form::INPUT_TEXT],
+                ]
+            ],
+            [
+                    
+                'attributes'=>[
+                    'diagnostico'=>[
+                        'type'=>Form::INPUT_WIDGET,
+                        'widgetClass'=>'\kartik\typeahead\Typeahead', 
+                        'options' => [
+                            'options' => ['placeholder' => 'Completar ...', 'autoComplete' =>"off"],
+                            'pluginOptions' => ['highlight'=>true],
+                            'dataset' => [
+                                [
+                                    'local' => $diagnosticos,
+                                    'limit' => 10
+                                ]
+                            ]
+                        ]
+                    ],
+                ]
+            ],
+            [
+                'attributes'=>[
+                    'indicacion'=>['type'=>Form::INPUT_TEXTAREA, 'options'=>['rows'=>6]],
+                ]
+            ],
+        ]
+    ]);
     ?>
-
+    
     <?php
 
         echo '<label class="control-label">Adjuntar</label>';
@@ -163,18 +180,29 @@ use yii\helpers\Html;
 
     
 
-    <?= $form->field($model, 'indicacion')->textarea(['rows' => 6]) ?>
-
     
 
     
 
     
 
+    
+
 
 
     
-    <div class="form-group">
+    <div class="form-group pull-right">
+        <?php
+        if($origen == 'update'){
+            echo Html::a('Eliminar', ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => 'Desea de eliminar el Certificado?',
+                    'method' => 'post',
+                ],
+            ]);
+        }
+              ?>
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
@@ -183,3 +211,4 @@ use yii\helpers\Html;
     
 
 </div>
+<div class="clearfix"></div>

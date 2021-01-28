@@ -24,43 +24,57 @@ use yii\widgets\Pjax;
         //'filterModel' => $searchModel,
         'responsiveWrap' => false,
         'summary' => false,
+        'bordered' => false,
         'columns' => [
             ['class' => 'kartik\grid\SerialColumn'],
 
             [
                 'label' => 'Fecha',
                 'vAlign' => 'middle', 
+                'format' => 'raw',
                 'value' => function($model){
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
-                    return Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy');
+                    
+                    return Html::button(Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy'),
+                            ['value' => Url::to(['informeprofesional/update', 'id' => $model->id]),
+                                'class' => 'amodalinfoprofesional btn btn-link', 'style'=>'width:auto;margin-bottom:0px;']);
                 }
             ],
             [
                 'label' => 'Área',
                 'vAlign' => 'middle', 
                 'hAlign' => 'center', 
+                'format' => 'raw',
                 'value' => function($model){
-                    return $model->areasolicitud0->nombre;
+                    return Html::button($model->areasolicitud0->nombre,
+                            ['value' => Url::to(['informeprofesional/update', 'id' => $model->id]),
+                                'class' => 'amodalinfoprofesional btn btn-link', 'style'=>'width:auto;margin-bottom:0px;']);
                 }
             ],
             [
                 'label' => 'Creado por',
                 'vAlign' => 'middle', 
+                'format' => 'raw',
                 'value' => function($model){
-                    return $model->agente0->apellido.', '.$model->agente0->nombre;
+                    return Html::button($model->agente0->apellido.', '.$model->agente0->nombre,
+                            ['value' => Url::to(['informeprofesional/update', 'id' => $model->id]),
+                                'class' => 'amodalinfoprofesional btn btn-link', 'style'=>'width:auto;margin-bottom:0px;']);
                 }
             ],
             
             [
                 'label' => 'Descripción',
                 'vAlign' => 'middle',
+                'format' => 'raw',
                 'value' => function ($model){
-                    return $model->descripcion;
+                    return Html::button($model->descripcion,
+                            ['value' => Url::to(['informeprofesional/update', 'id' => $model->id]),
+                                'class' => 'amodalinfoprofesional btn btn-link', 'style'=>'width:auto;margin-bottom:0px;']);
                 }
 
             ],
 
-            [
+            /*[
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{update}{delete}',
                 'buttons' => [
@@ -84,7 +98,7 @@ use yii\widgets\Pjax;
 
                 ]
             
-            ],
+            ],*/
         ],
     ]); ?>
     

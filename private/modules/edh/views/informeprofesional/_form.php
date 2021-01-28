@@ -1,10 +1,11 @@
 <?php
 
 use kartik\date\DatePicker;
+use kartik\form\ActiveForm;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Informeprofesional */
@@ -57,10 +58,24 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'descripcion')->textarea(['rows' => 6]) ?>
 
 
-    <div class="form-group">
+    <div class="form-group pull-right">
+    <?php
+
+        if($origen == 'update'){
+            echo Html::a('Eliminar', ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => 'Desea de eliminar el Informe?',
+                    'method' => 'post',
+                ],
+            ]);
+        }
+
+    ?>
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
 
 </div>
+<div class="clearfix"></div>

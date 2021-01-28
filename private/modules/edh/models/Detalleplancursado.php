@@ -23,6 +23,17 @@ class Detalleplancursado extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    const SCENARIO_ABM = 'abm';
+    const SCENARIO_NEWMAIN = 'cerrar';
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_ABM] = ['descripcion', 'catedra', 'estadodetplan', 'plan'];
+        $scenarios[self::SCENARIO_NEWMAIN] = ['descripcion', 'catedra', 'estadodetplan', 'plan'];
+        return $scenarios;
+    }
+
     public static function tableName()
     {
         return 'detalleplancursado';
@@ -34,7 +45,8 @@ class Detalleplancursado extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['descripcion', 'catedra', 'estadodetplan', 'plan'], 'required'],
+            [['descripcion', 'catedra', 'estadodetplan', 'plan'], 'required', 'on' => self::SCENARIO_ABM],
+            [['catedra', 'estadodetplan', 'plan'], 'required', 'on' => self::SCENARIO_NEWMAIN],
             [['descripcion'], 'string'],
             [['catedra', 'estadodetplan', 'plan'], 'integer'],
             [['catedra'], 'exist', 'skipOnError' => true, 'targetClass' => Catedra::className(), 'targetAttribute' => ['catedra' => 'id']],

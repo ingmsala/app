@@ -2,6 +2,9 @@
 
 namespace app\modules\edh\controllers;
 
+use app\models\Division;
+use app\modules\curriculares\models\Alumno;
+use app\modules\curriculares\models\Aniolectivo;
 use Yii;
 use app\modules\edh\models\Matriculaedh;
 use app\modules\edh\models\MatriculaedhSearch;
@@ -68,6 +71,9 @@ class MatriculaedhController extends Controller
     {
         $this->layout = '@app/modules/edh/views/layouts/main';
         $model = new Matriculaedh();
+        $alumnos = Alumno::find()->orderBy('apellido, nombre')->all();
+        $aniolectivos = Aniolectivo::find()->all();
+        $divisiones = Division::find()->where(['<', 'id', 53])->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -75,6 +81,9 @@ class MatriculaedhController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'alumnos' => $alumnos,
+            'aniolectivos' => $aniolectivos,
+            'divisiones' => $divisiones,
         ]);
     }
 

@@ -53,9 +53,9 @@ class Matriculaedh extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'alumno' => 'Alumno',
-            'division' => 'Division',
-            'aniolectivo' => 'Aniolectivo',
+            'alumno' => 'Estudiante',
+            'division' => 'División',
+            'aniolectivo' => 'Año lectivo',
         ];
     }
 

@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Condicionfinal */
 
-$this->title = $model->id;
+$this->title = 'Condición final: #'.$model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Condicionfinals', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

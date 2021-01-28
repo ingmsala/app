@@ -36,35 +36,57 @@ use yii\widgets\Pjax;
                     //'filterModel' => $searchModel,
                     'summary' => false,
                     'responsiveWrap' => false,
+                    'bordered' => false,
                     'columns' => [
-                        [
-                            'label' => '#',
-                            'value' => function($model){
-                                return $model->id;
-                            }
-                        ],
-
+                        
                         [
                             'label' => 'Fecha',
+                            'format' => 'raw',
                             'value' => function($model){
                                 date_default_timezone_set('America/Argentina/Buenos_Aires');
-                                return Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy');
+                                
+                                //return Html::button(Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy'), Url::to([]));
+                                return Html::button(Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy'),
+                                    ['value' => Url::to(['certificacionedh/update', 'id' => $model->id]),
+                                    'class' => 'amodalcertificado btn btn-link', 'style'=>'width:auto;margin-bottom:0px;']);
                             }
                         ],
-                        'referente',
-                        'institucion',
-                        //'contacto',
+                        [
+                            'label' => 'Referente',
+                            'format' => 'raw',
+                            'value' => function($model){
+                                return Html::button($model->referente,
+                                    ['value' => Url::to(['certificacionedh/update', 'id' => $model->id]),
+                                    'class' => 'amodalcertificado btn btn-link', 'style'=>'width:auto;margin-bottom:0px;']);
+                                
+                            }
+                        ],
+                        [
+                            'label' => 'Institución',
+                            'format' => 'raw',
+                            'value' => function($model){
+                                
+                                return Html::button($model->institucion,
+                                ['value' => Url::to(['certificacionedh/update', 'id' => $model->id]),
+                                'class' => 'amodalcertificado btn btn-link', 'style'=>'width:auto;margin-bottom:0px;']);
+                            }
+                        ],
+                        
                         [
                             'label' => 'Vencimiento',
+                            'format' => 'raw',
                             'value' => function($model){
                                 date_default_timezone_set('America/Argentina/Buenos_Aires');
-                                return Yii::$app->formatter->asDate($model->vencimiento, 'dd/MM/yyyy');
+                                
+                                return Html::button(Yii::$app->formatter->asDate($model->vencimiento, 'dd/MM/yyyy'),
+                                ['value' => Url::to(['certificacionedh/update', 'id' => $model->id]),
+                                'class' => 'amodalcertificado btn btn-link', 'style'=>'width:auto;margin-bottom:0px;']);
                             }
                         ],
-                        'diagnostico',            
+                        //'diagnostico',            
                         //'tipocertificado0.nombre',
                         //'tipoprofesional0.nombre',
-                        'indicacion:ntext',
+                        //'indicacion:ntext',
                         [
                             'label' => 'Adjuntos',
                             'format' => 'raw',
@@ -94,7 +116,7 @@ use yii\widgets\Pjax;
                                     
                                     
                                         //$echofooter .= '<li style="list-style:none">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntocertificacion/descargar', 'file' => $adjunto->url]), ['target'=>'_blank']).'</li>';
-                                          $echofooter .= '<div class="label label-default" style="border-style: solid;border-width: 1px;border-radius: 5px;">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntocertificacion/descargar', 'file' => $adjunto->url]), ['target'=>'_blank']).' '.
+                                          $echofooter .= '<div class="label label-default" style="border-style: solid;border-width: 1px;border-radius: 5px;">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntocertificacion/descargar', 'file' => $adjunto->url]), ['target'=>'_blank', 'data-pjax'=>"0"]).' '.
                                           Html::button('<span class="glyphicon glyphicon-remove"></span>',['value' => $adjunto->id, 
                                           
                                          'class' => 'deletebuttonadjuntocert btn btn-link',
@@ -113,9 +135,9 @@ use yii\widgets\Pjax;
                             }
                         ],
 
-                        [
+                        /*[
                             'class' => 'kartik\grid\ActionColumn',
-                            'template' => '{update} {delete}',
+                            'template' => '{update}',
                             'buttons' => [
             
                                 'update' => function($url, $model, $key){
@@ -137,7 +159,7 @@ use yii\widgets\Pjax;
             
                             ]
                         
-                        ],
+                        ],*/
 
                     ],
                 ]); ?>

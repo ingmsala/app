@@ -1,10 +1,13 @@
 <?php
 
+use kartik\builder\Form;
+use kartik\builder\FormGrid;
 use kartik\date\DatePicker;
+use kartik\form\ActiveForm;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Actuacionedh */
@@ -24,38 +27,65 @@ use yii\widgets\ActiveForm;
 
     <?= 
 
-        $form->field($model, 'area')->widget(Select2::classname(), [
-            'data' => $areaslist,
-            'options' => [
-                'placeholder' => 'Seleccionar...',
-                //'multiple' => true,
-            ],
-            //'value' => 1,
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]);
+        FormGrid::widget([
+        
+            'model'=>$model,
+            'form'=>$form,
+            'autoGenerateColumns'=>true,
+            'rows'=>[
+                [
+                    'attributes'=>[
 
-    ?>
+                        'fecha'=>[
+                            'type'=>Form::INPUT_WIDGET, 
+                            'widgetClass'=>'\kartik\date\DatePicker', 
+                            'options'=>[
+                                'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                                'readonly' => true,
+                                'pluginOptions' => [
+                                    'autoclose'=>true,
+                                    'format' => 'dd/mm/yyyy',
+                                ],
+                                'options' => ['style' => 'cursor: pointer;']
+                            ]
+                        ],
+                        'lugaractuacion'=>[
+                            'type'=>Form::INPUT_WIDGET, 
+                            'widgetClass'=>'\kartik\select2\Select2', 
+                            'options'=>[
+                                'data'=>$lugaresactuacion,
+                                'options' => [
+                                    'placeholder' => 'Seleccionar...'],
+                                //'value' => 1,
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ], 
+                        ],
+                        'area'=>[
+                            'type'=>Form::INPUT_WIDGET, 
+                            'widgetClass'=>'\kartik\select2\Select2', 
+                            'options'=>[
+                                'data'=>$areaslist,
+                                'options' => [
+                                    'placeholder' => 'Seleccionar...'],
+                                //'value' => 1,
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ], 
+                        ],
 
-    <div style="width: 50%;">
-        <?= 
-            $form->field($model, 'fecha')->widget(DatePicker::classname(), [
-                //'name' => 'dp_3',
-                'type' => DatePicker::TYPE_COMPONENT_APPEND,
-                //'value' => '23-Feb-1982',
-                'readonly' => true,
-                'pluginOptions' => [
-                    'autoclose'=>true,
-                    'format' => 'dd/mm/yyyy',
-                    
+                    ]
                 ],
                 
-            ]);
-        ?>
+            ]
+        ]);
 
-    </div>
+        
 
+    ?>
+    
     <?= 
 
         $form->field($modelActores, 'persona')->widget(Select2::classname(), [
@@ -72,20 +102,7 @@ use yii\widgets\ActiveForm;
 
     ?>
 
-    <?= 
-
-        $form->field($model, 'lugaractuacion')->widget(Select2::classname(), [
-            'data' => $lugaresactuacion,
-            'options' => [
-                'placeholder' => 'Seleccionar...'],
-            //'value' => 1,
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]);
-
-    ?>
-
+    
     <?= $form->field($model, 'registro')->textarea(['rows' => 6]) ?>
 
     <?= 

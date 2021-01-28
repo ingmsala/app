@@ -165,21 +165,12 @@ class ActuacionedhController extends Controller
                             ->where(['in', 'cargo', [225,207,242]])
                             ->all();
 
-        $preceptorcurso = Nombramiento::find()
-                            ->joinWith(['agente0'])
-                            ->where(['cargo' => 227])
-                            ->andWhere(['division' => $caso->matricula0->division])
-                            ->all();
-
-        
-        $user = Rolexuser::find()
-            ->where(['subrole' => $caso->matricula0->division0->preceptoria0->nombre])
+        $preceptorcurso = Agente::find()
+            ->where(['id' => $caso->preceptor])
             ->one();
 
-        $jefe = Nombramiento::find()
-            ->joinWith(['agente0'])
-            ->where(['cargo' => 223])
-            ->andWhere(['agente.mail' => $user->user0->username])
+        $jefe = Agente::find()
+            ->where(['id' => $caso->jefe])
             ->one();
         
 
@@ -187,13 +178,19 @@ class ActuacionedhController extends Controller
             $items ['Docentes de '.$detcat->catedra0->division0->nombre][$detcat->agente0->documento] = $detcat->catedra0->division0->nombre.' - '.$detcat->agente0->apellido.', '.$detcat->agente0->nombre.' ('.$detcat->catedra0->actividad0->nombre.')';
         }
 
-        foreach ($preceptorcurso as $prec) {
-            $items ['Preceptor/a del curso'][$prec->agente0->documento] = $prec->division0->nombre.' - '.$prec->agente0->apellido.', '.$prec->agente0->nombre.' ('.$prec->cargo0->nombre.')';
-        }
         try {
-            $items ['Jefe/a de piso del curso'][$jefe->agente0->documento] = $jefe->agente0->apellido.', '.$jefe->agente0->nombre.' (Jefe de '.$caso->matricula0->division0->preceptoria0->descripcion.')';
+            $items ['Preceptor/a del curso'][$preceptorcurso->documento] = $caso->matricula0->division0->nombre.' - '.$preceptorcurso->apellido.', '.$preceptorcurso->nombre.' (Preceptor/a)';
+            $precedoc = $preceptorcurso->documento;
         } catch (\Throwable $th) {
-            //throw $th;
+            $precedoc = null;
+        }
+        
+        
+        try {
+            $items ['Jefe/a de piso del curso'][$jefe->documento] = $jefe->apellido.', '.$jefe->nombre.' (Jefe de '.$caso->matricula0->division0->preceptoria0->descripcion.')';
+            $jefedoc = $jefe->documento;
+        } catch (\Throwable $th) {
+            $jefedoc = null;
         }
 
         $items ['Estudiante'][$caso->matricula0->alumno0->documento] = $caso->matricula0->alumno0->apellido.', '.$caso->matricula0->alumno0->nombre.' (Estudiante)';
@@ -211,8 +208,8 @@ class ActuacionedhController extends Controller
         $agentes = Agente::find()
                 ->where(['not in', 'documento', array_column(array_column($docentes_curso, 'agente0'), 'documento')])
                 ->andWhere(['not in', 'documento', array_column(array_column($nombramientos, 'agente0'), 'documento')])
-                ->andWhere(['<>', 'documento', $jefe->agente0->documento])
-                ->andWhere(['not in', 'documento', array_column(array_column($preceptorcurso, 'agente0'), 'documento')])
+                ->andWhere(['<>', 'documento', $jefedoc])
+                ->andWhere(['<>', 'documento', $precedoc])
                 ->orderBy('apellido, nombre')->all();
 
         foreach ($agentes as $agente) {

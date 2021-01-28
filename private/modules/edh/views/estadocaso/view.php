@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Estadocaso */
 
-$this->title = $model->id;
+$this->title = 'Estado de casos: #'.$model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Estadocasos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

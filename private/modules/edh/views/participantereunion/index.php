@@ -58,6 +58,7 @@ $this->registerJs($js2, \yii\web\View::POS_READY);
         'condensed' => true,
         'hover' => true,
         'responsiveWrap' => false,
+        'bordered' => false,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 

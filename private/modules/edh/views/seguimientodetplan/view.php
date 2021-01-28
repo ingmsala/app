@@ -4,14 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\edh\models\Areasolicitud */
+/* @var $model app\modules\edh\models\Seguimientodetplan */
 
-$this->title = 'Área de solicitud: #'.$model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Areasolicituds', 'url' => ['index']];
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Seguimientodetplans', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="areasolicitud-view">
+<div class="seguimientodetplan-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Desea de eliminar el registro??',
+                'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -30,7 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'nombre',
+            'fecha',
+            'descripcion:ntext',
+            'plazo',
+            'detalleplan',
+            'creado',
         ],
     ]) ?>
 

@@ -147,8 +147,10 @@ NavBar::end();
         ?>
     <div class="row">
     <div class="titulocaso">
-        <div class="panel panel-primary">
-            <div class="panel-heading">Caso<?= ' #'.$model->id.': '.$model->matricula0->aniolectivo0->nombre.' - '.$model->matricula0->alumno0->apellido.', '.$model->matricula0->alumno0->nombre.' ('.$model->matricula0->division0->nombre.')'; ?></div>
+        <div class="panel panel-primary" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+            <div class="panel-heading">Caso<?= ' #'.$model->id.': '.$model->matricula0->aniolectivo0->nombre.' - '.$model->matricula0->alumno0->apellido.', '.$model->matricula0->alumno0->nombre.' ('.$model->matricula0->division0->nombre.')'; ?>
+            <span class="pull-right"><?= Html::a('×', Url::to(['/edh/caso']),['class' =>'close']); ?></span>
+            </div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-2">

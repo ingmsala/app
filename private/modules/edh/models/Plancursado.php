@@ -101,9 +101,16 @@ class Plancursado extends \yii\db\ActiveRecord
 
     public function nuevoPlanPrincipal($caso)
     {
-        $model = new Plancursado();
+        
         
         $caso = Caso::findOne($caso);
+
+        if(in_array(1, array_column($caso->plancursados, 'tipoplan'))){
+            return null;
+        }
+
+        $model = new Plancursado();
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
 
         $model->caso = $caso->id;
         $model->tipoplan = 1;
@@ -125,8 +132,8 @@ class Plancursado extends \yii\db\ActiveRecord
         foreach ($docentes_curso as $detcat) {
             
             $detalleplancursadoX = new Detalleplancursado();
+            $detalleplancursadoX->scenario = $detalleplancursadoX::SCENARIO_NEWMAIN;
             $detalleplancursadoX->plan = $model->id;
-            $detalleplancursadoX->descripcion = '(Editar)';
             $detalleplancursadoX->catedra = $detcat->catedra;
             $detalleplancursadoX->estadodetplan = 1;
             $detalleplancursadoX->save();

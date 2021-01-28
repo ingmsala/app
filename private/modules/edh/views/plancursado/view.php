@@ -1,9 +1,10 @@
 <?php
 
+use kartik\detail\DetailView;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
-use yii\widgets\DetailView;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Plancursado */
@@ -81,6 +82,7 @@ $this->params['sidebar'] = [
                 echo '<h4 class="panel-title">';
                     echo '<a data-toggle="collapse" data-parent="#accordion" href="#plan'.$model->id.'">';
                     echo $model->catedra0->actividad0->nombre.'</a>';
+                    echo '<span class="label label-default pull-right">'.$model->estadodetplan0->nombre.'</span>';
                 echo '</h4>';
                 echo '</div>';
                 echo '<div id="plan'.$model->id.'" class="panel-collapse collapse '.$show.'">';

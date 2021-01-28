@@ -175,5 +175,10 @@ class Agente extends \yii\db\ActiveRecord
        return $this->hasMany(Tipocargo::className(), ['id' => 'agente'])->via('agentextipo');
    }
 
+   public function getNombreCompleto()
+    {
+        return $this->apellido.', '.$this->nombre;
+    }
+
    
 }

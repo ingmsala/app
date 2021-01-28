@@ -36,21 +36,27 @@ $this->params['sidebar'] = [
 	?>
 <div class="reunionedh-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Agregar reunión', ['value' => Url::to('index.php?r=edh/reunionedh/create&caso='.$model->id), 'class' => 'btn btn-main btn-success amodaldetalleticket contenedorlistado']); ?>
-    </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+        'panel' => [
+            'type' => GridView::TYPE_DEFAULT,
+            'heading' => Html::encode($this->title),
+            'footer' => false,
+            'after' => false,
+            'before' => 
+            Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Agregar reunión', ['value' => Url::to('index.php?r=edh/reunionedh/create&caso='.$model->id), 'class' => 'btn btn-main btn-success amodaldetalleticket contenedorlistado'])
+            ,
+        ],
+        'toolbar'=>[
+        
+        ],
         'summary' => false,
         'responsiveWrap' => false,
         'hover' => true,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'kartik\grid\SerialColumn'],
 
             
             [
@@ -87,9 +93,9 @@ $this->params['sidebar'] = [
             ],
            
 
-            ['class' => 'yii\grid\ActionColumn', 
-                'template' => '{view} {delete}'
-            ],
+            /*['class' => 'kartik\grid\ActionColumn', 
+                'template' => '{view}'
+            ],*/
         ],
     ]); ?>
 </div>

@@ -39,6 +39,18 @@ $this->params['sidebar'] = [
 <div class="caso-view">
 
     <?php 
+
+if($model->estadocaso == 1){
+    $newestado = 2;
+    $lbl = 'Cerrar Caso';
+    $gly = 'off';
+}else{
+    $newestado = 1;
+    $lbl = 'Reabrir Caso';
+    $gly = 'transfer';
+}         
+echo Html::button('<span class="glyphicon glyphicon-'.$gly.'"></span> '.$lbl, ['value' => Url::to(['cerrar', 'id' => $model->id, 'newestado' => $newestado]), 'title' => $lbl.' #'.$model->id, 'class' => 'btn btn-main btn-danger amodalcasoupdate pull-right contenedorlistado', 'style' => 'margin-left:0.2%']);
+echo Html::button('<span class="glyphicon glyphicon-pencil"></span> '.'Resolución', ['value' => Url::to('index.php?r=edh/caso/actualizar&id='.$model->id), 'title' => 'Modificar resolución del Caso #'.$model->id, 'class' => 'btn btn-main btn-info amodalcasoupdate pull-right contenedorlistado']);
         $textasignacion = $model->matricula0->alumno0->apellido.', '.$model->matricula0->alumno0->nombre;
         $fechafin = Yii::$app->formatter->asDate($model->fin, 'dd/MM/yyyy');
         if($model->estadocaso == 1)
@@ -73,17 +85,77 @@ $this->params['sidebar'] = [
                     </div>
                                     
                 </div>';
-        if($model->estadocaso == 1){
-            $newestado = 2;
-            $lbl = 'Cerrar Caso';
-            $gly = 'off';
-        }else{
-            $newestado = 1;
-            $lbl = 'Reabrir Caso';
-            $gly = 'transfer';
-        }         
-        echo Html::button('<span class="glyphicon glyphicon-'.$gly.'"></span> '.$lbl, ['value' => Url::to(['cerrar', 'id' => $model->id, 'newestado' => $newestado]), 'title' => $lbl.' #'.$model->id, 'class' => 'btn btn-main btn-danger amodalcasoupdate pull-right contenedorlistado', 'style' => 'margin-left:0.2%']);
-        echo Html::button('<span class="glyphicon glyphicon-pencil"></span> '.'Resolución', ['value' => Url::to('index.php?r=edh/caso/actualizar&id='.$model->id), 'title' => 'Modificar resolución del Caso #'.$model->id, 'class' => 'btn btn-main btn-info amodalcasoupdate pull-right contenedorlistado']);
+
+                try {
+                    $preceptor = Html::button($model->preceptor0->apellido.', '.$model->preceptor0->nombre, ['value' => Url::to(['addpreceptor', 'id' => $model->id]), 'title' => 'Modificar preceptor del Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
+                } catch (\Throwable $th) {
+                    $preceptor = Html::button('<span class="glyphicon glyphicon-plus"></span> Agregar', ['value' => Url::to(['addpreceptor', 'id' => $model->id]), 'title' => 'Agregar preceptor al Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
+                }
+
+                echo '<div class="vista-listado flowGrid">
+                <div class="item-aviso flowGridItem">
+                    <div class="header-aviso-resultados Empleos">
+                        <h3><b>Preceptor/a:</b> '.$preceptor.'</h3>
+                    </div>
+                    
+                    
+                </div>
+
+                
+                                
+                </div>';
+
+                try {
+                    $jefe = Html::button($model->jefe0->apellido.', '.$model->jefe0->nombre, ['value' => Url::to(['addjefe', 'id' => $model->id]), 'title' => 'Modificar jefe de piso del Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
+                } catch (\Throwable $th) {
+                    $jefe = Html::button('<span class="glyphicon glyphicon-plus"></span> Agregar', ['value' => Url::to(['addjefe', 'id' => $model->id]), 'title' => 'Agregar jefe de piso al Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
+                }
+
+                echo '<div class="vista-listado flowGrid">
+                <div class="item-aviso flowGridItem">
+                    <div class="header-aviso-resultados Empleos">
+                        <h3><b>Jefe/a de piso:</b> '.$jefe.'</h3>
+                    </div>
+                    
+                    
+                </div>
+                </div>';
+
+                $tutores = $model->matricula0->alumno0->tutors;
+                $tutecho = '<ul>';
+                foreach ($tutores as $tutor) {
+                    $tutecho .= '<li>'.$tutor->apellido.', '.$tutor->nombre.' ('.$tutor->parentesco.'). <i>Contacto: '.$tutor->telefono.' - '.$tutor->mail.'</i></li>';
+                }
+                $tutecho .= '</ul>';
+
+                echo '<div class="vista-listado flowGrid">
+                <div class="item-aviso flowGridItem">
+                    <div class="header-aviso-resultados Empleos">
+                        <h3><b>Tutores</b></h3>
+                    </div>
+                    <div class="content-aviso-resultados">
+                        '.$tutecho.'
+                    </div>
+                    
+                </div>
+                </div>';
+
+                try {
+                    $referente = Html::button($model->referente0->apellido.', '.$model->referente0->nombre, ['value' => Url::to(['addreferente', 'id' => $model->id]), 'title' => 'Modificar referente del Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
+                } catch (\Throwable $th) {
+                    $referente = Html::button('<span class="glyphicon glyphicon-plus"></span> Agregar', ['value' => Url::to(['addreferente', 'id' => $model->id]), 'title' => 'Agregar referente al Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
+                }
+                
+                echo '<div class="vista-listado flowGrid">
+                <div class="item-aviso flowGridItem">
+                    <div class="header-aviso-resultados Empleos">
+                        <h3><b>Referente del equipo de salud:</b> '.$referente.'</h3>
+                    </div>
+                    
+                    
+                </div>
+                </div>';
+        
     ?>
     
 

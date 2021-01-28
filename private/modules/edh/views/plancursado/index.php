@@ -35,13 +35,6 @@ $this->params['sidebar'] = [
 
 <div class="plancursado-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Agregar plan', ['value' => Url::to(['create', 'caso' =>$model->id]), 'title' => 'Nuevo plan personalizado',  'class' => 'btn btn-success btn-success amodalplancursado']); ?>
-    </p>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
@@ -51,6 +44,18 @@ $this->params['sidebar'] = [
             }
             //return ['class' => 'warning', 'id' => $model['id']];
         },
+        'panel' => [
+            'type' => GridView::TYPE_DEFAULT,
+            'heading' => Html::encode($this->title),
+            'footer' => false,
+            'after' => false,
+            'before' =>Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Agregar plan', ['value' => Url::to(['create', 'caso' =>$model->id]), 'title' => 'Nuevo plan personalizado',  'class' => 'btn btn-success btn-success amodalplancursado'])
+        ],
+        'toolbar'=>[
+            
+            
+            
+        ],
         'summary' => false,
         'condensed' => true,
         'responsiveWrap' => false,

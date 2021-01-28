@@ -3,6 +3,7 @@
 use app\modules\edh\models\Caso;
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use yii\bootstrap\Modal;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -12,27 +13,51 @@ use yii\helpers\Url;
 $this->title = 'Casos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?php 
+        Modal::begin([
+            'header' => "<h2 id='modalHeader'></h2>",
+            'id' => 'modalplancursado',
+            'size' => 'modal-lg',
+            'options' => [
+                'tabindex' => false,
+            ],
+        ]);
+
+        echo "<div id='modalContent'></div>";
+
+        Modal::end();
+	?>
+
 <div class="caso-index">
 
-<?= $this->render('_search', [
-        'param' => $param,
-        'model' => $model,
-        'alumnos' => $alumnos,
-        'estadoscaso' => $estadoscaso,
-        'casos' => $casos,
-        'aniolectivos' => $aniolectivos,
-    ]) ?>
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('Nueva solicitud', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+        'summary' => false,
+        'panel' => [
+            'type' => GridView::TYPE_PRIMARY,
+            'heading' => Html::encode($this->title),
+            'footer' => false,
+            'after' => false,
+            'before' => $this->render('_search', [
+                'param' => $param,
+                'model' => $model,
+                'alumnos' => $alumnos,
+                'estadoscaso' => $estadoscaso,
+                'casos' => $casos,
+                'aniolectivos' => $aniolectivos,
+            ]).Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Nueva solicitud', ['value' => Url::to(['create']), 'title' => 'Nueva solicitud',  'class' => 'btn btn-success amodalplancursado pull-right'])
+            
+            //'beforeOptions' => ['style'=>'width:80%;'],
+        ],
+        'toolbar'=>[
+            
+            //'{export}',
+            
+        ],
         'hover' => true,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
@@ -91,22 +116,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Estado',
                 'format' => 'raw',
                 'value' => function($model){
+                    $caso = Caso::findOne($model['id']);
+                    //return var_dump($caso->vencido);
                     if($model['estadocaso'] == 'Cerrado')
                             return '<span class="label label-default">Cerrado</span>';
-                    $caso = Caso::findOne($model['id']);
-                    if($caso->vencido[0]){
-                        return '<span class="label label-success">Abierto</span><span class="label label-danger">Certificado vencido</span>';
+                    
+                    
+                    $vencido = $caso->vencido;
+                    if($vencido[0]){
+                        return '<span class="label label-success">Abierto</span> <span class="label label-danger">Certificado vencido</span>';
                     }else{
-                            date_default_timezone_set('America/Argentina/Buenos_Aires');
-                            $interval = date_diff(date_create(date('Y-m-d')), date_create($caso->vencido[1]));
-                            if($interval->d>5)
+                            //date_default_timezone_set('America/Argentina/Buenos_Aires');
+                            //$interval = date_diff(date_create(date('Y-m-d')), date_create($caso->vencido[1]));
+                            if($vencido[1]>7)
                                 return '<span class="label label-success">Abierto</span>';
-                            elseif($interval->d==1)
-                                return '<span class="label label-success">Abierto</span><span class="label label-warning">Certificado vence en '.$interval->d.' día</span>';
-                            elseif($interval->d==0)
-                                return '<span class="label label-success">Abierto</span><span class="label label-warning">Certificado vence hoy</span>';
+                            elseif($vencido[1]==1)
+                                return '<span class="label label-success">Abierto</span> <span class="label label-warning">Certificado vence en '.$vencido[1].' día</span>';
+                            elseif($vencido[1]==0)
+                                return '<span class="label label-success">Abierto</span> <span class="label label-warning">Certificado vence hoy</span>';
                             else
-                                return '<span class="label label-success">Abierto</span><span class="label label-info">Certificado vence en '.$interval->d.' días</span>';
+                                return '<span class="label label-success">Abierto</span> <span class="label label-info">Certificado vence en '.$vencido[1].' días</span>';
                         
                             
                     }

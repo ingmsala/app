@@ -1,9 +1,12 @@
 <?php
 
+use kartik\builder\Form;
+use kartik\builder\FormGrid;
 use kartik\date\DatePicker;
+use kartik\form\ActiveForm;
 use kartik\time\TimePicker;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Reunionedh */
@@ -12,45 +15,55 @@ use yii\widgets\ActiveForm;
 
 <div class="reunionedh-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin();
 
-    <div style="width: 50%;">
-        <?= 
-            $form->field($model, 'fecha')->widget(DatePicker::classname(), [
-                //'name' => 'dp_3',
-                'type' => DatePicker::TYPE_COMPONENT_APPEND,
-                //'value' => '23-Feb-1982',
-                'readonly' => true,
-                'pluginOptions' => [
-                    'autoclose'=>true,
-                    'format' => 'dd/mm/yyyy',
-                    
-                ],
-                'options' => ['style' => 'cursor: pointer;']
+    echo FormGrid::widget([
+    
+        'model'=>$model,
+        'form'=>$form,
+        'autoGenerateColumns'=>true,
+        'rows'=>[
+            [
+                'attributes'=>[
+                    'fecha'=>[
+                        'type'=>Form::INPUT_WIDGET, 
+                        'widgetClass'=>'\kartik\date\DatePicker', 
+                        'options'=>[
+                            'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                            'readonly' => true,
+                            'pluginOptions' => [
+                                'autoclose'=>true,
+                                'format' => 'dd/mm/yyyy',
+                            ],
+                            'options' => ['style' => 'cursor: pointer;']
+                        ]
+                    ],
+                    'hora'=>[
+                        'type'=>Form::INPUT_WIDGET, 
+                        'widgetClass'=>'\kartik\time\TimePicker', 
+                        'options'=>[
+                            'pluginOptions' => [
                 
-            ]);
-        ?>
-
-    </div>
-
-    <?= $form->field($model, 'hora')->widget(TimePicker::classname(), [
-
-        'pluginOptions' => [
+                                'showMeridian' => false,
+                                'minuteStep' => 1,
+                                'defaultTime' => false,
                 
-                'showMeridian' => false,
-                'minuteStep' => 1,
-                'defaultTime' => false,
+                            ]
+                        ]
+                    ],
+                    'lugar'=>['type'=>Form::INPUT_TEXT],
+                ]
+            ],
+            [
+                'attributes'=>[
+                    'tematica'=>['type'=>Form::INPUT_TEXT],
+                    'url'=>['type'=>Form::INPUT_TEXT],
+                ]
+            ],
+        ]
+    ]);
 
-            ]
-
-        ]); 
     ?>
-
-    <?= $form->field($model, 'lugar')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'tematica')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

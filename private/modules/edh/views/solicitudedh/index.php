@@ -79,18 +79,21 @@ $this->params['sidebar'] = [
 	?>
 <div class="solicitudedh-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Agregar solicitud', ['value' => Url::to('index.php?r=edh/solicitudedh/create&id='.$model->id), 'class' => 'btn btn-main btn-success amodaldetalleticket contenedorlistado']); ?>
-    </p>
-
-    
-    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+        'panel' => [
+            'type' => GridView::TYPE_DEFAULT,
+            'heading' => Html::encode($this->title),
+            'footer' => false,
+            'after' => false,
+            'before' => 
+                Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Agregar solicitud', ['value' => Url::to('index.php?r=edh/solicitudedh/create&id='.$model->id), 'class' => 'btn btn-main btn-success amodaldetalleticket contenedorlistado'])
+            ,
+        ],
+        'toolbar'=>[
+        
+        ],
         'summary' => false,
         //'pjax' => true,
         'condensed' => true,
@@ -214,8 +217,8 @@ $this->params['sidebar'] = [
                     'rechazar' => function($url, $model, $key){
                             $ret = '';
                             if($model->estadosolicitud < 3){
-                                $ret .= Html::button('<span class="glyphicon glyphicon-check"></span> Aceptar solicitud', ['value' => Url::to(['cambiarestado', 'id' => $model->id, 'est' => 3]), 'title' => 'Aceptar solicitud del Caso #'.$model->caso, 'class' => 'btn btn-success amodalsolicitudstate', 'style' => 'width:auto;']);
-                                $ret .= Html::button('<span class="glyphicon glyphicon-check"></span> Rechazar solicitud', ['value' => Url::to(['cambiarestado', 'id' => $model->id, 'est' => 4]), 'title' => 'Rechazar solicitud del Caso #'.$model->caso, 'class' => 'btn btn-danger amodalsolicitudstate', 'style' => 'width:auto;']);
+                                $ret .= Html::button('<span class="glyphicon glyphicon-check"></span> Aceptar', ['value' => Url::to(['cambiarestado', 'id' => $model->id, 'est' => 3]), 'title' => 'Aceptar solicitud del Caso #'.$model->caso, 'class' => 'btn btn-success amodalsolicitudstate', 'style' => 'width:auto;']);
+                                $ret .= Html::button('<span class="glyphicon glyphicon-check"></span> Rechazar', ['value' => Url::to(['cambiarestado', 'id' => $model->id, 'est' => 4]), 'title' => 'Rechazar solicitud del Caso #'.$model->caso, 'class' => 'btn btn-danger amodalsolicitudstate', 'style' => 'width:auto;']);
                             }
                             $ret .= Html::button('<span class="glyphicon glyphicon-plus"></span> Expediente', ['value' => Url::to('index.php?r=edh/solicitudedh/expediente&id='.$model->id), 'title' => 'Modificar expediente Caso #'.$model->caso, 'class' => 'btn btn-info amodalsolicitudstate', 'style' => 'width:auto;']);
                             return $ret;

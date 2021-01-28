@@ -115,6 +115,7 @@ class CasoController extends Controller
         $model = new Caso();
         $model->scenario = $model::SCENARIO_ABM;
         $modelSolicitud = new Solicitudedh();
+        $modelSolicitud->scenario = $modelSolicitud::SCENARIO_ABM;
 
         $model->estadocaso = 1;
         $model->condicionfinal = 1;
@@ -142,6 +143,9 @@ class CasoController extends Controller
             $finexplode = explode("/",$model->fin);
             $newdatefin = (!empty($model->fin)) ? date("Y-m-d", mktime(0, 0, 0, $finexplode[1], $finexplode[0], $finexplode[2])) : null;
             $model->fin = $newdatefin;
+
+            $model->preceptor = $model->matricula0->division0->preceptor0->agente;
+            $model->jefe = $model->matricula0->division0->jefe0->id;
             
             
             $model->save();
@@ -154,13 +158,121 @@ class CasoController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        
-
-        return $this->render('create', [
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('create', [
+                'model' => $model,
+                'modelSolicitud' => $modelSolicitud,
+                'aniolectivos' => $aniolectivos,
+                'areas' => $areas,
+            ]);
+        }
+        return $this->render('creates', [
             'model' => $model,
             'modelSolicitud' => $modelSolicitud,
             'aniolectivos' => $aniolectivos,
             'areas' => $areas,
+        ]);
+    }
+
+    public function actionAddreferente($id)
+    {
+        $this->layout = '@app/modules/edh/views/layouts/main';
+        $model = $this->findModel($id);
+        
+        $model->scenario = $model::SCENARIO_REFERENTE;
+        
+
+        $agentes = Agente::find()->orderBy('apellido, nombre')->all();
+        
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return ActiveForm::validate($model);
+
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->save();
+
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        
+
+        return $this->renderAjax('addreferente', [
+            'model' => $model,
+            'agentes' => $agentes,
+        ]);
+    }
+
+    public function actionAddpreceptor($id)
+    {
+        $this->layout = '@app/modules/edh/views/layouts/main';
+        $model = $this->findModel($id);
+        
+        $model->scenario = $model::SCENARIO_PRECEPTOR;
+        
+
+        $agentes = Agente::find()->orderBy('apellido, nombre')->all();
+        
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return ActiveForm::validate($model);
+
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->save();
+
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        
+
+        return $this->renderAjax('addpreceptor', [
+            'model' => $model,
+            'agentes' => $agentes,
+        ]);
+    }
+
+    public function actionAddjefe($id)
+    {
+        $this->layout = '@app/modules/edh/views/layouts/main';
+        $model = $this->findModel($id);
+        
+        $model->scenario = $model::SCENARIO_JEFE;
+        
+
+        $agentes = Agente::find()->orderBy('apellido, nombre')->all();
+        
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return ActiveForm::validate($model);
+
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->save();
+
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        
+
+        return $this->renderAjax('addjefe', [
+            'model' => $model,
+            'agentes' => $agentes,
         ]);
     }
 

@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Lugaractuacion */
 
-$this->title = 'Create Lugaractuacion';
+$this->title = 'Nuevo Lugar de actuación';
 $this->params['breadcrumbs'][] = ['label' => 'Lugaractuacions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

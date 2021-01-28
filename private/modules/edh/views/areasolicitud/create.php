@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Areasolicitud */
 
-$this->title = 'Create Areasolicitud';
+$this->title = 'Nueva área de solicitud';
 $this->params['breadcrumbs'][] = ['label' => 'Areasolicituds', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

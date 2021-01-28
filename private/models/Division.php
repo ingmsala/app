@@ -114,4 +114,14 @@ class Division extends \yii\db\ActiveRecord
    { 
        return $this->hasMany(Habilitacionce::className(), ['division' => 'id']); 
    } 
+    public function getPreceptor0() 
+   { 
+    return $this->hasOne(Nombramiento::className(), ['division' => 'id']); 
+   } 
+    public function getJefe0() 
+   {
+       $rxu = Rolexuser::find()->where(['subrole' => $this->preceptoria0->nombre])->one();
+       return Agente::find()->where(['mail' => $rxu->user0->username])->one();
+        return $this->hasOne(Nombramiento::className(), ['division' => 'id']); 
+   } 
 }

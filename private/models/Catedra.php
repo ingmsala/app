@@ -134,5 +134,24 @@ class Catedra extends \yii\db\ActiveRecord
        }
     }
 
+    public function docenteHorario($id, $al)
+    {
+       $detcatedras = Detallecatedra::find()
+                        ->where(['catedra'=> $id])
+                        ->andWhere(['aniolectivo' => $al])
+                        ->andWhere(['revista' => 6])
+                        ->one();
+        //return var_dump($detcatedras);
+        try {
+            return $detcatedras->agente0->apellido.', '.$detcatedras->agente0->nombre; 
+        } catch (\Throwable $th) {
+            return '';
+        }
+        
+       
+    }
+
+
+
 
 }

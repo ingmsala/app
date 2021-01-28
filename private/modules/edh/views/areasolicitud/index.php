@@ -7,7 +7,7 @@ use kartik\grid\GridView;
 /* @var $searchModel app\modules\edh\models\AreasolicitudSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Areasolicituds';
+$this->title = 'Área de solicitud';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="areasolicitud-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Areasolicitud', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Nueva área', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([

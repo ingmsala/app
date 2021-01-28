@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Estadocaso */
 
-$this->title = 'Nuevo Estadocaso';
+$this->title = 'Nuevo Estado de caso';
 $this->params['breadcrumbs'][] = ['label' => 'Estadocasos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
