@@ -46,7 +46,7 @@ class Seguimientoplan extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'fecha' => 'Fecha',
-            'descripcion' => 'Descripcion',
+            'descripcion' => 'Descripción',
             'plan' => 'Plan',
         ];
     }

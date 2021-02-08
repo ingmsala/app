@@ -70,6 +70,10 @@ class InformeprofesionalController extends Controller
     public function actionCreate($solicitud)
     {
         $model = new Informeprofesional();
+        $solicitudX = Solicitudedh::findOne($solicitud);
+        if($solicitudX->caso0->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
         $model->solicitud = $solicitud;
 
         $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
@@ -116,6 +120,10 @@ class InformeprofesionalController extends Controller
         $areas = Areasolicitud::find()->where(['in', 'id', [2,3]])->all();
 
         if ($model->load(Yii::$app->request->post())) {
+            if($model->solicitud0->caso0->estadocaso == 2){
+                Yii::$app->session->setFlash('danger', '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>');
+                return $this->redirect(['/edh/solicitudedh/index', 'id' => $model->solicitud0->caso, 'sol' => $model->solicitud]);
+            }
             $fechaexplode = explode("/",$model->fecha);
             $newdatefecha = (!empty($model->fecha)) ? date("Y-m-d", mktime(0, 0, 0, $fechaexplode[1], $fechaexplode[0], $fechaexplode[2])) : null;
             $model->fecha = $newdatefecha;
@@ -145,6 +153,11 @@ class InformeprofesionalController extends Controller
     {
         $model = $this->findModel($id);
         $solicitud = $model->solicitud0;
+
+        if($model->solicitud0->caso0->estadocaso == 2){
+            Yii::$app->session->setFlash('danger', '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>');
+            return $this->redirect(['/edh/solicitudedh/index', 'id' => $solicitud->caso, 'sol' => $solicitud->id]);
+        }
 
         $model->delete();
 

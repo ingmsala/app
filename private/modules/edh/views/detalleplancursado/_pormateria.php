@@ -15,7 +15,8 @@ $docente = new Catedra();
 $docente = $docente->docenteHorario($model->catedra, $model->plan0->caso0->matricula0->aniolectivo);
 
 if($model->plan0->tipoplan == 1){
-    $col = 6;
+    $col = 8;
+    $coli = 4;
     $visible = true;
 }else{
     $col = 12;
@@ -57,7 +58,7 @@ if($model->plan0->tipoplan == 1){
             ]) ?>
         </div>
         <?php if($visible){ ?>
-        <div class="col-md-<?=$col?>">
+        <div class="col-md-<?=$coli?>">
             <div class="panel panel-warning">
                 <div class="panel-heading">Reporte inferencial</div>
                 <div class="panel-body">

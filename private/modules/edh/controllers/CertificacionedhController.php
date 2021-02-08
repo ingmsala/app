@@ -9,6 +9,7 @@ use Yii;
 use app\modules\edh\models\Certificacionedh;
 use app\modules\edh\models\CertificacionedhSearch;
 use app\modules\edh\models\InformeprofesionalSearch;
+use app\modules\edh\models\Solicitudedh;
 use app\modules\edh\models\Tipocertificacion;
 use app\modules\edh\models\Tipoprofesional;
 use yii\web\Controller;
@@ -100,6 +101,10 @@ class CertificacionedhController extends Controller
     public function actionCreate($solicitud)
     {
         $model = new Certificacionedh();
+        $solicitudX = Solicitudedh::findOne($solicitud);
+        if($solicitudX->caso0->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
         $model->solicitud = $solicitud;
         $modelajuntos = new Adjuntocertificacion();
 
@@ -173,6 +178,7 @@ class CertificacionedhController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        
         $modelajuntos = new Adjuntocertificacion();
 
         $tiposcertificado = Tipocertificacion::find()->all();
@@ -185,6 +191,11 @@ class CertificacionedhController extends Controller
         $diagnosticos = array_column($certificados,'diagnostico');
 
         if ($model->load(Yii::$app->request->post())) {
+
+            if($model->solicitud0->caso0->estadocaso == 2){
+                Yii::$app->session->setFlash('danger', '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>');
+                return $this->redirect(['/edh/solicitudedh/index', 'id' => $model->solicitud0->caso, 'sol' => $model->solicitud]);
+            }
 
             $images = UploadedFile::getInstances($modelajuntos, 'image');
 
@@ -259,6 +270,11 @@ class CertificacionedhController extends Controller
     {
         $model =$this->findModel($id);
         $solicitud = $model->solicitud0;
+
+        if($model->solicitud0->caso0->estadocaso == 2){
+            Yii::$app->session->setFlash('danger', '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>');
+            return $this->redirect(['/edh/solicitudedh/index', 'id' => $solicitud->caso, 'sol' => $solicitud->id]);
+        }
 
         foreach ($model->adjuntocertificacions as $adjunto) {
             $adjunto->delete();

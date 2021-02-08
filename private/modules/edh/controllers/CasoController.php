@@ -2,6 +2,7 @@
 
 namespace app\modules\edh\controllers;
 
+use app\config\Globales;
 use app\models\Agente;
 use app\modules\curriculares\models\Alumno;
 use app\modules\curriculares\models\Aniolectivo;
@@ -17,6 +18,7 @@ use app\modules\edh\models\Matriculaedh;
 use app\modules\edh\models\Solicitudedh;
 use app\modules\edh\models\Tiposolicitud;
 use kartik\form\ActiveForm;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -34,6 +36,87 @@ class CasoController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'addreferente', 'addpreceptor', 'addjefe', 'cerrar', 'matriculas', 'demandantes', 'actualizar'],
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_PRECEPTOR, Globales::US_REGENCIA, Globales::US_PRECEPTORIA, Globales::US_COORDINACION, Globales::US_VICEACAD]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['view'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_REGENCIA, Globales::US_COORDINACION, Globales::US_VICEACAD])){
+                                    return true;
+                                }
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+
+                            $caso = $this->findModel(Yii::$app->request->queryParams['id']);
+
+                            if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTORIA])){
+                                
+
+                                $jefe = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+
+                                if ($caso->jefe == $jefe->id)
+                                     return true;
+                            }
+
+                            if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTOR])){
+
+                                $prece = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                        
+                                if ($caso->preceptor == $prece->id)
+                                     return true;
+                            
+                            }
+
+                            return false;
+
+                        }
+
+                    ],
+                    [
+                        'actions' => ['create', 'matriculas', 'demandantes', 'addreferente', 'addpreceptor', 'addjefe', 'actualizar'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_REGENCIA, Globales::US_COORDINACION, Globales::US_VICEACAD]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['cerrar'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_REGENCIA]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                    
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -280,6 +363,10 @@ class CasoController extends Controller
     {
         $this->layout = '@app/modules/edh/views/layouts/main';
         $model = $this->findModel($id);
+
+        if($model->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
         
         $model->scenario = $model::SCENARIO_ABM;
         
@@ -325,7 +412,7 @@ class CasoController extends Controller
             $model->scenario = $model::SCENARIO_ABM;
             
             $ocultarfechafin = 1;
-            $registro = 'Se reabre el caso, cerrado el día '. Yii::$app->formatter->asDate($model->fin, 'dd/MM/yyyy');
+            $registro = 'Se reabre el caso, cerrado con fecha '. Yii::$app->formatter->asDate($model->fin, 'dd/MM/yyyy');
             $model->fin = null;
             
         }else{

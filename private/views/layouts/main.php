@@ -621,6 +621,8 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Contacto Docentes', 'url' => ['/reporte/telefonos/docentes']],
                                 '<div class="dropdown-divider"></div>',
+                                ['label' => 'EDH', 'url' => ['/edh/menuopciones']],
+                                '<div class="dropdown-divider"></div>',
                             ],
                     ],
                     
@@ -784,6 +786,7 @@ try {
 
                     ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
 
+                    
                     ['label' => 'Reportes', 
                             'items' => [
                                 
@@ -793,6 +796,18 @@ try {
                                 
                             ],
                     ],
+
+                    ['label' => 'Administración', 
+                            'items' => [
+                                
+                                ['label' => 'EDH', 'url' => ['/edh/menuopciones']],
+                                        '<div class="dropdown-divider"></div>',
+                                
+                                
+                            ],
+                    ],
+                    
+                                
                     
                     ['label' => 'Horarios', 
                             'items' => [

@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\modules\edh\models\TipoactuacionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tipoactuacions';
+$this->title = 'Tipos de actuación';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tipoactuacion-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Tipoactuacion', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Nuevo Tipoactuacion', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,7 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'nombre',
 
             ['class' => 'yii\grid\ActionColumn'],

@@ -113,20 +113,25 @@ use yii\widgets\Pjax;
                                         $img = $adjunto->nombre;
 
 
-                                    
-                                    
-                                        //$echofooter .= '<li style="list-style:none">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntocertificacion/descargar', 'file' => $adjunto->url]), ['target'=>'_blank']).'</li>';
-                                          $echofooter .= '<div class="label label-default" style="border-style: solid;border-width: 1px;border-radius: 5px;">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntocertificacion/descargar', 'file' => $adjunto->url]), ['target'=>'_blank', 'data-pjax'=>"0"]).' '.
+                                        if($adjunto->certificacion0->solicitud0->caso0->estadocaso == 2){
+                                            $echofooter .= '<div class="label label-default" style="border-style: solid;border-width: 1px;border-radius: 5px;">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntocertificacion/descargar', 'file' => $adjunto->url]), ['target'=>'_blank', 'data-pjax'=>"0"]).' '.
+                                         '</div><div class="clearfix"></div>';  
+                                        }else{
+                                            $echofooter .= '<div class="label label-default" style="border-style: solid;border-width: 1px;border-radius: 5px;">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntocertificacion/descargar', 'file' => $adjunto->url]), ['target'=>'_blank', 'data-pjax'=>"0"]).' '.
                                           Html::button('<span class="glyphicon glyphicon-remove"></span>',['value' => $adjunto->id, 
                                           
                                          'class' => 'deletebuttonadjuntocert btn btn-link',
                                          'style' => 'width:auto;margin:0.6em;position:relative;padding: 0px;',
-                                         //'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                         //'data-confirm' => Yii::t('yii', 'Desea eliminar este elemento??'),
                                          /*'data' => [
                                             'confirm' => '¿Está seguro de querer eliminar este elemento?',
                                             'method' => 'post',
                                             ]*/
                                          ]).'</div><div class="clearfix"></div>';  
+                                        }
+                                    
+                                        //$echofooter .= '<li style="list-style:none">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntocertificacion/descargar', 'file' => $adjunto->url]), ['target'=>'_blank']).'</li>';
+                                          
                                         
                                     
                                 }

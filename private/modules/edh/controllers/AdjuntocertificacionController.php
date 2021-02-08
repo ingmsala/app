@@ -124,6 +124,10 @@ class AdjuntocertificacionController extends Controller
     {
         $id = Yii::$app->request->post()['id'];
         $model = $this->findModel($id);
+
+        if($model->certificacion0->solicitud0->caso0->estadocaso == 2){
+            return Yii::$app->session->setFlash('danger', '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>');
+        }
         
         //$idx = $model->ticket;
 

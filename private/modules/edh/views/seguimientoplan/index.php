@@ -32,14 +32,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'responsiveWrap' => false,
         'condensed' => true,
         'responsiveWrap' => false,
+        'bordered' => false,
         'columns' => [
             //['class' => 'yii\grid\SerialColumn'],
 
             [
                 'label' => 'Fecha',
+                'format' => 'raw',
+                'width' => '10%',
                 'value' => function($model){
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
-                    return Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy');
+                    
+                    return Html::button(Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy'),
+                    ['value' => Url::to(['seguimientoplan/update', 'id' => $model->id]),
+                    'title' => 'Modificar seguimiento',
+                        'class' => 'amodalplancursado btn btn-link', 'style'=>'width:auto;margin-bottom:0px;']);
                 }
             ],
             [
@@ -48,11 +55,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function($model){
                     $module = Config::getModule(Module::MODULE);
                     $output = Markdown::convert($model->descripcion, ['custom' => $module->customConversion]);
-                    return $output;
+                    return Html::button($output,
+                    ['value' => Url::to(['seguimientoplan/update', 'id' => $model->id]),
+                    'title' => 'Modificar seguimiento',
+                        'class' => 'amodalplancursado btn btn-link', 'style'=>'width:auto;margin-bottom:0px;']);
+                    //return $output;
                 }
             ],
             
-            [
+            /*[
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{update} {delete}',
                 'buttons' => [
@@ -77,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 ]
             
-            ],
+            ],*/
         ],
     ]); ?>
     <?php Pjax::end() ?>

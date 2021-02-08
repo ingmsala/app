@@ -1,9 +1,9 @@
 <?php
 
 use kartik\grid\GridView;
-use kartik\switchinput\SwitchInput;
-use yii\helpers\Html;
 
+use yii\helpers\Html;
+use kartik\switchinput\SwitchInput;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\edh\models\ParticipantereunionSearch */
@@ -115,15 +115,23 @@ $this->registerJs($js2, \yii\web\View::POS_READY);
                 'hAlign' => 'center',
                 
                 'value' => function($model){
-                    if ($model->comunico == 0)
+                    if ($model->comunico == 0){
                         $val = false;
-                    else
+                        $cerrado = false;
+                    }
+                    else{
                         $val = true;
+                        $cerrado = true;
+                    }
+
+                    if($model->reunionedh0->caso0->estadocaso == 2){
+                        $cerrado = true;
+                    }
                         
                     return SwitchInput::widget([
                         'name' => 'statuscom_'.$model->id,
                         'value'=> $val,
-                        'disabled' => $val,
+                        'disabled' => $cerrado,
 
                         'pluginEvents' => [
                             'switchChange.bootstrapSwitch' => "function(e){sendRequest2(e.currentTarget.checked, $model->id);}"
@@ -150,10 +158,17 @@ $this->registerJs($js2, \yii\web\View::POS_READY);
                         $val = false;
                     else
                         $val = true;
+
+                    if($model->reunionedh0->caso0->estadocaso == 2){
+                        $cerrado = true;
+                    }else{
+                        $cerrado = false;
+                    }
                         
                     return SwitchInput::widget([
                         'name' => 'statusasis_'.$model->id,
                         'value'=> $val,
+                        'disabled' => $cerrado,
 
                         'pluginEvents' => [
                             'switchChange.bootstrapSwitch' => "function(e){sendRequest(e.currentTarget.checked, $model->id);}"

@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Matriculaedh */
 
-$this->title = 'Create Matriculaedh';
-$this->params['breadcrumbs'][] = ['label' => 'Matriculaedhs', 'url' => ['index']];
+$this->title = 'Nueva Matricula';
+$this->params['breadcrumbs'][] = ['label' => 'Matricula', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="matriculaedh-create">

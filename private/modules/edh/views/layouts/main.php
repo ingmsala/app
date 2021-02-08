@@ -32,7 +32,7 @@ AppAsset::register($this);
 <?php 
 
 if(!Yii::$app->user->isGuest){
-    if(Yii::$app->user->identity->role == Globales::US_CAE_ADMIN){
+    if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_CAE_ADMIN])){
         $items = [
             ['label' => '<span class="glyphicon glyphicon-plus"></span><br />'.'Nueva solicitud'.'',
              'url' => ['/edh/caso/create']],
@@ -60,6 +60,8 @@ if(!Yii::$app->user->isGuest){
                                             '<div class="dropdown-divider"></div>',
                                             ['label' => 'Tipo de participante', 'url' => ['/edh/tipoparticipante']],
                                             '<div class="dropdown-divider"></div>',
+                                            ['label' => 'Tipo de plan de cursado', 'url' => ['/edh/tipoplancursado']],
+                                            '<div class="dropdown-divider"></div>',
                                             ['label' => 'Lugar de actuacion', 'url' => ['/edh/lugaractuacion']],
                                             '<div class="dropdown-divider"></div>',
                                             ['label' => 'Tipo de actuacion', 'url' => ['/edh/tipoactuacion']],
@@ -70,9 +72,6 @@ if(!Yii::$app->user->isGuest){
 
 
             ],
-                            
-            
-            
             
             ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.Yii::$app->user->identity->role0->nombre.'',
             
@@ -97,7 +96,138 @@ if(!Yii::$app->user->isGuest){
             ]
 
         ];
-    }else{
+    }elseif(Yii::$app->user->identity->role == Globales::US_GABPSICO){
+        $items = [
+            ['label' => '<span class="glyphicon glyphicon-plus"></span><br />'.'Nueva solicitud'.'',
+             'url' => ['/edh/caso/create']],
+            ['label' => '<span class="glyphicon glyphicon-folder-open"></span><br />'.'Casos'.'',
+             'url' => ['/edh/caso']],
+                                            
+            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.Yii::$app->user->identity->role0->nombre.'',
+            
+                'items' => [
+
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).'Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 5],
+                    ],
+                                            
+                    
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                        'url' => ['/edh/login/logout'],
+                        'linkOptions' => ['data-method' => 'post'],
+                    
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
+                    
+                ],
+            ]
+
+        ];
+    }elseif(in_array(Yii::$app->user->identity->role, [Globales::US_PRECEPTOR, Globales::US_PRECEPTORIA])){
+        $items = [
+            
+            ['label' => '<span class="glyphicon glyphicon-folder-open"></span><br />'.'Casos'.'',
+             'url' => ['/edh/caso']],
+                                            
+            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.Yii::$app->user->identity->role0->nombre.'',
+            
+                'items' => [
+
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).'Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 5],
+                    ],
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-left-arrow']).'Salir de EDH',
+                        'url' => ['/site/index'],
+                    ],
+                                            
+                    
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                        'url' => ['/edh/login/logout'],
+                        'linkOptions' => ['data-method' => 'post'],
+                    
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
+                    
+                ],
+            ]
+
+        ];
+    }elseif(Yii::$app->user->identity->role == Globales::US_REGENCIA){
+        $items = [
+
+            ['label' => '<span class="glyphicon glyphicon-plus"></span><br />'.'Nueva solicitud'.'',
+            'url' => ['/edh/caso/create']],
+            
+            ['label' => '<span class="glyphicon glyphicon-folder-open"></span><br />'.'Casos'.'',
+             'url' => ['/edh/caso']],
+                                            
+            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.Yii::$app->user->identity->role0->nombre.'',
+            
+                'items' => [
+
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).'Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 5],
+                    ],
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-left-arrow']).'Salir de EDH',
+                        'url' => ['/site/index'],
+                    ],
+                                            
+                    
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                        'url' => ['/edh/login/logout'],
+                        'linkOptions' => ['data-method' => 'post'],
+                    
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
+                    
+                ],
+            ]
+
+        ];
+    }elseif(Yii::$app->user->identity->role == Globales::US_VICEACAD){
+        $items = [
+
+            ['label' => '<span class="glyphicon glyphicon-plus"></span><br />'.'Nueva solicitud'.'',
+            'url' => ['/edh/caso/create']],
+            
+            ['label' => '<span class="glyphicon glyphicon-folder-open"></span><br />'.'Casos'.'',
+             'url' => ['/edh/caso']],
+                                            
+            ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.Yii::$app->user->identity->role0->nombre.'',
+            
+                'items' => [
+
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).'Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 5],
+                    ],
+                    
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                        'url' => ['/edh/login/logout'],
+                        'linkOptions' => ['data-method' => 'post'],
+                    
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
+                    
+                ],
+            ]
+
+        ];
+    }
+    else{
         $items = [];
     }
 }else{

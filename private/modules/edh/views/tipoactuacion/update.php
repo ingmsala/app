@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Tipoactuacion */
 
-$this->title = 'Update Tipoactuacion: ' . $model->id;
+$this->title = 'Modificar Tipo de actuación: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Tipoactuacions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';

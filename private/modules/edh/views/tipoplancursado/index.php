@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\modules\edh\models\TipoplancursadoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tipoplancursados';
+$this->title = 'Tipo de plan de cursado';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tipoplancursado-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Tipoplancursado', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Nuevo Tipoplancursado', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -25,7 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'nombre',
 
             ['class' => 'yii\grid\ActionColumn'],

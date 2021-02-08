@@ -77,10 +77,15 @@ class ActuacionedhController extends Controller
      */
     public function actionCreate($caso)
     {
+        
         $model = new Actuacionedh();
         $modelActores = new Actorxactuacion();
         $modelAreainf = new Areainformaact();
         $model->caso = $caso;
+        $casoX = Caso::findOne($caso);
+        if($casoX->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
         $lugaresactuacion = Lugaractuacion::find()->all();
         $areas = Areasolicitud::find()->all();
 
@@ -232,8 +237,11 @@ class ActuacionedhController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        if($model->caso0->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
         if($model->tipoactuacion != 1){
-            return 'No puede modificar una actuación autogenerada por el sistema.';
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar una actuación autogenerada por el sistema.';
         }
 
         $modelActores = new Actorxactuacion();
@@ -323,6 +331,11 @@ class ActuacionedhController extends Controller
     {
         $actuacion = $this->findModel($id);
         $caso = $actuacion->caso;
+        if($actuacion->caso0->estadocaso == 2){
+            Yii::$app->session->setFlash('danger', '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>');
+            return $this->redirect(['index', 'id' => $caso]);
+        }
+        
         $actuacion->delete();
 
         Yii::$app->session->setFlash('success', "Se eliminó correctamente la actuación");

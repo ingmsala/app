@@ -1,5 +1,6 @@
 <?php
 
+use app\config\Globales;
 use kartik\detail\DetailView;
 
 use yii\bootstrap\Modal;
@@ -48,9 +49,11 @@ if($model->estadocaso == 1){
     $newestado = 1;
     $lbl = 'Reabrir Caso';
     $gly = 'transfer';
-}         
-echo Html::button('<span class="glyphicon glyphicon-'.$gly.'"></span> '.$lbl, ['value' => Url::to(['cerrar', 'id' => $model->id, 'newestado' => $newestado]), 'title' => $lbl.' #'.$model->id, 'class' => 'btn btn-main btn-danger amodalcasoupdate pull-right contenedorlistado', 'style' => 'margin-left:0.2%']);
-echo Html::button('<span class="glyphicon glyphicon-pencil"></span> '.'Resoluci√≥n', ['value' => Url::to('index.php?r=edh/caso/actualizar&id='.$model->id), 'title' => 'Modificar resoluci√≥n del Caso #'.$model->id, 'class' => 'btn btn-main btn-info amodalcasoupdate pull-right contenedorlistado']);
+}
+if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_REGENCIA, Globales::US_COORDINACION, Globales::US_VICEACAD])){         
+    echo Html::button('<span class="glyphicon glyphicon-'.$gly.'"></span> '.$lbl, ['value' => Url::to(['cerrar', 'id' => $model->id, 'newestado' => $newestado]), 'title' => $lbl.' #'.$model->id, 'class' => 'btn btn-main btn-danger amodalcasoupdate pull-right contenedorlistado', 'style' => 'margin-left:0.2%']);
+    echo Html::button('<span class="glyphicon glyphicon-pencil"></span> '.'Resoluci√≥n', ['value' => Url::to('index.php?r=edh/caso/actualizar&id='.$model->id), 'title' => 'Modificar resoluci√≥n del Caso #'.$model->id, 'class' => 'btn btn-main btn-info amodalcasoupdate pull-right contenedorlistado']);
+}
         $textasignacion = $model->matricula0->alumno0->apellido.', '.$model->matricula0->alumno0->nombre;
         $fechafin = Yii::$app->formatter->asDate($model->fin, 'dd/MM/yyyy');
         if($model->estadocaso == 1)
@@ -85,11 +88,19 @@ echo Html::button('<span class="glyphicon glyphicon-pencil"></span> '.'Resoluci√
                     </div>
                                     
                 </div>';
-
-                try {
-                    $preceptor = Html::button($model->preceptor0->apellido.', '.$model->preceptor0->nombre, ['value' => Url::to(['addpreceptor', 'id' => $model->id]), 'title' => 'Modificar preceptor del Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
-                } catch (\Throwable $th) {
-                    $preceptor = Html::button('<span class="glyphicon glyphicon-plus"></span> Agregar', ['value' => Url::to(['addpreceptor', 'id' => $model->id]), 'title' => 'Agregar preceptor al Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
+                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_REGENCIA, Globales::US_COORDINACION, Globales::US_VICEACAD])){
+                    try {
+                        $preceptor = Html::button($model->preceptor0->apellido.', '.$model->preceptor0->nombre, ['value' => Url::to(['addpreceptor', 'id' => $model->id]), 'title' => 'Modificar preceptor del Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
+                    } catch (\Throwable $th) {
+                        $preceptor = Html::button('<span class="glyphicon glyphicon-plus"></span> Agregar', ['value' => Url::to(['addpreceptor', 'id' => $model->id]), 'title' => 'Agregar preceptor al Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
+                    }
+                }else{
+                    try {
+                        $preceptor = $model->preceptor0->apellido.', '.$model->preceptor0->nombre;
+                    } catch (\Throwable $th) {
+                        $preceptor = 'Sin asignar';
+                    }
+                    
                 }
 
                 echo '<div class="vista-listado flowGrid">
@@ -105,12 +116,20 @@ echo Html::button('<span class="glyphicon glyphicon-pencil"></span> '.'Resoluci√
                                 
                 </div>';
 
-                try {
-                    $jefe = Html::button($model->jefe0->apellido.', '.$model->jefe0->nombre, ['value' => Url::to(['addjefe', 'id' => $model->id]), 'title' => 'Modificar jefe de piso del Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
-                } catch (\Throwable $th) {
-                    $jefe = Html::button('<span class="glyphicon glyphicon-plus"></span> Agregar', ['value' => Url::to(['addjefe', 'id' => $model->id]), 'title' => 'Agregar jefe de piso al Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
+                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_REGENCIA, Globales::US_COORDINACION, Globales::US_VICEACAD])){
+                    try {
+                        $jefe = Html::button($model->jefe0->apellido.', '.$model->jefe0->nombre, ['value' => Url::to(['addjefe', 'id' => $model->id]), 'title' => 'Modificar jefe de piso del Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
+                    } catch (\Throwable $th) {
+                        $jefe = Html::button('<span class="glyphicon glyphicon-plus"></span> Agregar', ['value' => Url::to(['addjefe', 'id' => $model->id]), 'title' => 'Agregar jefe de piso al Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
+                    }
+                }else{
+                    try {
+                        $jefe = $model->jefe0->apellido.', '.$model->jefe0->nombre;
+                    } catch (\Throwable $th) {
+                        $jefe = 'Sin asignar';
+                    }
+                    
                 }
-
                 echo '<div class="vista-listado flowGrid">
                 <div class="item-aviso flowGridItem">
                     <div class="header-aviso-resultados Empleos">
@@ -139,13 +158,20 @@ echo Html::button('<span class="glyphicon glyphicon-pencil"></span> '.'Resoluci√
                     
                 </div>
                 </div>';
-
-                try {
-                    $referente = Html::button($model->referente0->apellido.', '.$model->referente0->nombre, ['value' => Url::to(['addreferente', 'id' => $model->id]), 'title' => 'Modificar referente del Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
-                } catch (\Throwable $th) {
-                    $referente = Html::button('<span class="glyphicon glyphicon-plus"></span> Agregar', ['value' => Url::to(['addreferente', 'id' => $model->id]), 'title' => 'Agregar referente al Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
+                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_REGENCIA, Globales::US_COORDINACION, Globales::US_VICEACAD])){
+                    try {
+                        $referente = Html::button($model->referente0->apellido.', '.$model->referente0->nombre, ['value' => Url::to(['addreferente', 'id' => $model->id]), 'title' => 'Modificar referente del Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
+                    } catch (\Throwable $th) {
+                        $referente = Html::button('<span class="glyphicon glyphicon-plus"></span> Agregar', ['value' => Url::to(['addreferente', 'id' => $model->id]), 'title' => 'Agregar referente al Caso'.' #'.$model->id, 'class' => 'btn btn-link amodalcasoupdate']);
+                    }
+                }else{
+                    try {
+                        $referente = $model->referente0->apellido.', '.$model->referente0->nombre;
+                    } catch (\Throwable $th) {
+                        $referente = 'Sin asignar';
+                    }
+                    
                 }
-                
                 echo '<div class="vista-listado flowGrid">
                 <div class="item-aviso flowGridItem">
                     <div class="header-aviso-resultados Empleos">

@@ -2,9 +2,11 @@
 
 namespace app\modules\edh\controllers;
 
+use app\config\Globales;
 use Yii;
 use app\modules\edh\models\Areainformaact;
 use app\modules\edh\models\AreainformaactSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,6 +22,26 @@ class AreainformaactController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -35,6 +57,7 @@ class AreainformaactController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout = '@app/modules/edh/views/layouts/main';
         $searchModel = new AreainformaactSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -52,6 +75,7 @@ class AreainformaactController extends Controller
      */
     public function actionView($id)
     {
+        $this->layout = '@app/modules/edh/views/layouts/main';
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -64,6 +88,7 @@ class AreainformaactController extends Controller
      */
     public function actionCreate()
     {
+        $this->layout = '@app/modules/edh/views/layouts/main';
         $model = new Areainformaact();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -84,6 +109,7 @@ class AreainformaactController extends Controller
      */
     public function actionUpdate($id)
     {
+        $this->layout = '@app/modules/edh/views/layouts/main';
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

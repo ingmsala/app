@@ -71,6 +71,9 @@ class SolicitudedhController extends Controller
     {
         
         $model = $this->findModel($id);
+        if($model->caso0->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
         $estadosolicitudes = Estadosolicitud::find()->where(['in', 'id', [3,4]])->all();
         $model->estadosolicitud = $est;
         $model->scenario = $model::SCENARIO_STATE;
@@ -107,6 +110,9 @@ class SolicitudedhController extends Controller
     {
         
         $model = $this->findModel($id);
+        if($model->caso0->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
         $model->scenario = $model::SCENARIO_ABM;
         
         if ($model->load(Yii::$app->request->post())) {
@@ -142,6 +148,9 @@ class SolicitudedhController extends Controller
     public function actionCreate($id)
     {
         $caso = Caso::findOne($id);
+        if($caso->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
         $model = new Solicitudedh();
         $model->scenario = $model::SCENARIO_ABM;
         $model->caso = $id;
@@ -211,6 +220,9 @@ class SolicitudedhController extends Controller
     public function actionDelete($id)
     {
         $solicitud = $this->findModel($id);
+        if($solicitud->caso0->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
         $caso = $solicitud->caso;
         $solicitud->delete();
 

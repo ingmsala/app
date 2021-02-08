@@ -90,6 +90,10 @@ class ReunionedhController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 
             //return var_dump(Yii::$app->request->post());
+            if($model->caso0->estadocaso == 2){
+                Yii::$app->session->setFlash('danger', '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>');
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
 
             $desdeexplode = explode("/",$model->fecha);
             $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
@@ -118,6 +122,10 @@ class ReunionedhController extends Controller
     {
         $model = new Reunionedh();
         $model->caso = $caso;
+        $casoX = Caso::findOne($caso);
+        if($casoX->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -146,6 +154,10 @@ class ReunionedhController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        
+        if($model->caso0->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -167,6 +179,12 @@ class ReunionedhController extends Controller
     {
         $model = $this->findModel($id);
         $caso = $model->caso;
+        if($model->caso0->estadocaso == 2){
+            Yii::$app->session->setFlash('danger', '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>');
+            //return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+            return $this->redirect(['view', 'id' => $id]);
+        }
+        
         try {
             $model->delete();
         } catch (\Throwable $th) {

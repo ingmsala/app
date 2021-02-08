@@ -75,6 +75,9 @@ class ParticipantereunionController extends Controller
         $model = new Participantereunion();
         
         $reunion = Reunionedh::findOne($id);
+        if($reunion->caso0->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
         $participantes_actuales = array_column($reunion->participantereunions, 'participante');
 
         
@@ -255,12 +258,16 @@ class ParticipantereunionController extends Controller
     public function actionAsistioupdate()
     {
         //return Yii::$app->request->post('asistio');
+        
         if(Yii::$app->request->post('asistio') == 'true')
             $asistio = 1;
         else
             $asistio = 0;
         $id = Yii::$app->request->post('id');
         $model = $this->findModel($id);
+        if($model->reunionedh0->caso0->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
         $model->asistio = $asistio;
         $model->save();
         return 'Cambio a '.$asistio;
@@ -276,6 +283,9 @@ class ParticipantereunionController extends Controller
             $comunico = 0;
         $id = Yii::$app->request->post('id');
         $model = $this->findModel($id);
+        if($model->reunionedh0->caso0->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
         $model->comunico = $comunico;
         $model->save();
 
@@ -321,6 +331,11 @@ class ParticipantereunionController extends Controller
     {
         $participante = $this->findModel($id);
         $reunion = $participante->reunionedh;
+        if($participante->reunionedh0->caso0->estadocaso == 2){
+            Yii::$app->session->setFlash('danger', '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>');
+            return $this->redirect(['reunionedh/view', 'id' => $reunion]);
+        }
+        
         $participante->delete();
 
         return $this->redirect(['reunionedh/view', 'id' => $reunion]);

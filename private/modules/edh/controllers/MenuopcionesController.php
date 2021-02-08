@@ -36,7 +36,7 @@ class MenuopcionesController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_PRECEPTOR, Globales::US_REGENCIA, Globales::US_PRECEPTORIA, Globales::US_COORDINACION, Globales::US_VICEACAD]);
                             }catch(\Exception $exception){
                                 return false;
                             }

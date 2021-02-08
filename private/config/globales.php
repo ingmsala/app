@@ -26,6 +26,8 @@ class Globales
 	const US_CAE_ADMIN = 19;
 	const US_PSC = 20;
 	const US_CRON_ANIV = 21;
+	const US_GABPSICO = 22;
+	const US_VICEACAD = 23;
 	
 	
 	const COND_SUPL = 5;

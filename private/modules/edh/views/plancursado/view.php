@@ -67,7 +67,7 @@ $this->params['sidebar'] = [
         //$ref = 11;
         foreach ($models as $model) {
 
-            $render = $this->renderAjax('/detalleplancursado/_pormateria', [
+            $render = $this->render('/detalleplancursado/_pormateria', [
                 'model' => $model
             ]);
 

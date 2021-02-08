@@ -92,6 +92,12 @@ class SiteController extends Controller
         }elseif(Yii::$app->user->identity->role == Globales::US_CAE_ADMIN){
             $this->layout = '/edh/layouts/main';
             return $this->redirect(['/edh/menuopciones']);
+        }elseif(Yii::$app->user->identity->role == Globales::US_GABPSICO){
+            $this->layout = '/edh/layouts/main';
+            return $this->redirect(['/edh/menuopciones']);
+        }elseif(Yii::$app->user->identity->role == Globales::US_VICEACAD){
+            $this->layout = '/edh/layouts/main';
+            return $this->redirect(['/edh/menuopciones']);
         }
         return $this->render('index');
     }
@@ -133,6 +139,9 @@ class SiteController extends Controller
             }elseif(Yii::$app->user->identity->role == Globales::US_CAE_ADMIN){
                 $this->layout = '/edh/layouts/main';
                 return $this->redirect(['/edh/menuopciones']);
+            }elseif(Yii::$app->user->identity->role == Globales::US_GABPSICO){
+                $this->layout = '/edh/layouts/main';
+                return $this->redirect(['/edh/menuopciones']);
             }
             
             
@@ -157,6 +166,9 @@ class SiteController extends Controller
                 $this->layout = 'mainvacio';
                 return $this->redirect(['/horario/menuopciones']);
             }elseif(Yii::$app->user->identity->role == Globales::US_CAE_ADMIN){
+                $this->layout = '/edh/layouts/main';
+                return $this->redirect(['/edh/menuopciones']);
+            }elseif(Yii::$app->user->identity->role == Globales::US_GABPSICO){
                 $this->layout = '/edh/layouts/main';
                 return $this->redirect(['/edh/menuopciones']);
             }

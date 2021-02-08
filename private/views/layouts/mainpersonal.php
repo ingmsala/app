@@ -224,6 +224,11 @@ if(!Yii::$app->user->isGuest){
                     'url' => ['/curriculares/menuopciones'],
                     '<div class="dropdown-divider"></div>',
             ],
+            ['label' => '<center><span class="glyphicon glyphicon-home"></span><br />'.'EDH</center>',
+                            
+                    'url' => ['/edh/menuopciones'],
+                    '<div class="dropdown-divider"></div>',
+            ],
 
             ['label' => '<span class="glyphicon glyphicon-user"></span><br />'.Yii::$app->user->identity->role0->nombre.'',
             

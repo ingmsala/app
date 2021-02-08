@@ -2,12 +2,14 @@
 
 namespace app\modules\edh\controllers;
 
+use app\config\Globales;
 use app\models\Division;
 use app\modules\curriculares\models\Alumno;
 use app\modules\curriculares\models\Aniolectivo;
 use Yii;
 use app\modules\edh\models\Matriculaedh;
 use app\modules\edh\models\MatriculaedhSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -23,6 +25,26 @@ class MatriculaedhController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -99,12 +121,19 @@ class MatriculaedhController extends Controller
         $this->layout = '@app/modules/edh/views/layouts/main';
         $model = $this->findModel($id);
 
+        $alumnos = Alumno::find()->orderBy('apellido, nombre')->all();
+        $aniolectivos = Aniolectivo::find()->all();
+        $divisiones = Division::find()->where(['<', 'id', 53])->all();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'alumnos' => $alumnos,
+            'aniolectivos' => $aniolectivos,
+            'divisiones' => $divisiones,
         ]);
     }
 

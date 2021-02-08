@@ -1,5 +1,6 @@
 <?php
 
+use app\config\Globales;
 use app\modules\edh\models\CertificacionedhSearch;
 use app\modules\edh\models\InformeprofesionalSearch;
 use yii\bootstrap\Modal;
@@ -79,6 +80,16 @@ $this->params['sidebar'] = [
 	?>
 <div class="solicitudedh-index">
 
+    <?php 
+
+        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_REGENCIA, Globales::US_COORDINACION, Globales::US_VICEACAD])){
+            $buttadd = Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Agregar solicitud', ['value' => Url::to('index.php?r=edh/solicitudedh/create&id='.$model->id), 'class' => 'btn btn-main btn-success amodaldetalleticket contenedorlistado']);
+        }else{
+            $buttadd = '';
+        }
+
+    ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
@@ -88,7 +99,7 @@ $this->params['sidebar'] = [
             'footer' => false,
             'after' => false,
             'before' => 
-                Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Agregar solicitud', ['value' => Url::to('index.php?r=edh/solicitudedh/create&id='.$model->id), 'class' => 'btn btn-main btn-success amodaldetalleticket contenedorlistado'])
+                $buttadd
             ,
         ],
         'toolbar'=>[
@@ -144,7 +155,12 @@ $this->params['sidebar'] = [
                     return GridView::ROW_COLLAPSED;*/
                 },
                 'headerOptions' => ['class' => 'kartik-sheet-style'], 
-                'expandOneOnly' => true
+                'expandOneOnly' => true,
+                'disabled' => function($model){
+                    return !in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_REGENCIA, Globales::US_COORDINACION, Globales::US_VICEACAD]);
+                },
+                'visible' => in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_REGENCIA, Globales::US_COORDINACION, Globales::US_VICEACAD]),
+                
             ],
 
             [
@@ -210,6 +226,7 @@ $this->params['sidebar'] = [
                 'template' => '{ver} {rechazar} {eliminar}',
                 'vAlign' => 'middle', 
                 'hAlign' => 'center', 
+                'visible' => in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_REGENCIA, Globales::US_COORDINACION, Globales::US_VICEACAD]),
                 'buttons' => [
                     
                     

@@ -2,9 +2,12 @@
 
 namespace app\modules\edh\models;
 
+use app\config\Globales;
+use app\models\Agente;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\edh\models\Caso;
+use Yii;
 use yii\data\SqlDataProvider;
 
 /**
@@ -41,6 +44,7 @@ class CasoSearch extends Caso
      */
     public function search($params)
     {
+        
         $sql='
         select c.id as id, c.inicio as inicio, c.fin as fin, c.resolucion as resolucion, concat(alu.apellido,", ",alu.nombre) as alumno, cond.nombre as condicionfinal, est.nombre as estadocaso, anio.nombre as aniolectivo
         from caso c
@@ -61,6 +65,14 @@ class CasoSearch extends Caso
         }
         if (isset($params['Caso']['condicionfinal'])){
             $sql .= ' AND c.condicionfinal = '.$params['Caso']['condicionfinal'];
+        }
+        if( Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+            $prec = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $sql .= ' AND c.preceptor = '.$prec->id;
+        }
+        if( Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
+            $prec = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            $sql .= ' AND c.jefe = '.$prec->id;
         }
         $sql.= ' order by alu.apellido, alu.nombre';
 

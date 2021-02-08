@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\edh\models\Matriculaedh */
 
-$this->title = 'Update Matriculaedh: ' . $model->id;
+$this->title = 'Modificar Matricula: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Matriculaedhs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
@@ -16,6 +16,9 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'alumnos' => $alumnos,
+        'aniolectivos' => $aniolectivos,
+        'divisiones' => $divisiones,
     ]) ?>
 
 </div>
