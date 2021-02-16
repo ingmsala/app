@@ -1,5 +1,6 @@
 <?php
 
+use app\config\Globales;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
@@ -36,6 +37,13 @@ $this->params['sidebar'] = [
 	?>
 <div class="reunionedh-index">
 
+    <?php
+      if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION, Globales::US_REGENCIA])){
+        $buttadd = Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Agregar reunión', ['value' => Url::to('index.php?r=edh/reunionedh/create&caso='.$model->id), 'class' => 'btn btn-main btn-success amodaldetalleticket contenedorlistado']);
+      }else{
+        $buttadd = '';
+      }
+    ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -45,9 +53,7 @@ $this->params['sidebar'] = [
             'heading' => Html::encode($this->title),
             'footer' => false,
             'after' => false,
-            'before' => 
-            Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Agregar reunión', ['value' => Url::to('index.php?r=edh/reunionedh/create&caso='.$model->id), 'class' => 'btn btn-main btn-success amodaldetalleticket contenedorlistado'])
-            ,
+            'before' => $buttadd,
         ],
         'toolbar'=>[
         

@@ -1,5 +1,6 @@
 <?php
 
+use app\config\Globales;
 use kartik\grid\GridView;
 
 use yii\helpers\Html;
@@ -127,6 +128,10 @@ $this->registerJs($js2, \yii\web\View::POS_READY);
                     if($model->reunionedh0->caso0->estadocaso == 2){
                         $cerrado = true;
                     }
+
+                    if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION])){
+                        $cerrado = true;
+                    }
                         
                     return SwitchInput::widget([
                         'name' => 'statuscom_'.$model->id,
@@ -164,6 +169,10 @@ $this->registerJs($js2, \yii\web\View::POS_READY);
                     }else{
                         $cerrado = false;
                     }
+
+                    if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION])){
+                        $cerrado = true;
+                    }
                         
                     return SwitchInput::widget([
                         'name' => 'statusasis_'.$model->id,
@@ -190,8 +199,10 @@ $this->registerJs($js2, \yii\web\View::POS_READY);
             ['class' => 'kartik\grid\ActionColumn',
             
                 'template' => '{delete}',
+                'visible' => in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION]),
                 'buttons' => [
                     'delete' => function($url, $model, $key){
+                        
                         return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=edh/participantereunion/delete&id='.$model['id'], 
                             ['data' => [
                             'confirm' => 'Está seguro de querer eliminar este elemento?',

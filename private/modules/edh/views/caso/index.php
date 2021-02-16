@@ -1,5 +1,6 @@
 <?php
 
+use app\config\Globales;
 use app\modules\edh\models\Caso;
 use yii\helpers\Html;
 use kartik\grid\GridView;
@@ -31,7 +32,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="caso-index">
 
-
+<?php
+    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_REGENCIA, Globales::US_COORDINACION, Globales::US_VICEACAD])){         
+        $buttadd = Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Nueva solicitud', ['value' => Url::to(['create']), 'title' => 'Nueva solicitud',  'class' => 'btn btn-success amodalplancursado pull-right']);
+    }else{
+       $buttadd = '';
+   }
+?>
     
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -49,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'estadoscaso' => $estadoscaso,
                 'casos' => $casos,
                 'aniolectivos' => $aniolectivos,
-            ]).Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Nueva solicitud', ['value' => Url::to(['create']), 'title' => 'Nueva solicitud',  'class' => 'btn btn-success amodalplancursado pull-right'])
+            ]).$buttadd
             
             //'beforeOptions' => ['style'=>'width:80%;'],
         ],

@@ -1,5 +1,6 @@
 <?php
 
+use app\config\Globales;
 use app\models\Catedra;
 use app\modules\edh\models\SeguimientodetplanSearch;
 use yii\helpers\Html;
@@ -18,7 +19,14 @@ if($model->plan0->tipoplan == 1){
     $col = 8;
     $coli = 4;
     $visible = true;
+    $visiblenota = true;
 }else{
+    $col = 12;
+    $visible = false;
+    $visiblenota = false;
+}
+
+if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION])){
     $col = 12;
     $visible = false;
 }
@@ -37,7 +45,7 @@ if($model->plan0->tipoplan == 1){
         <br />
     </div>
     <div class="btn-group" role="group" aria-label="...">
-        <?php if($visible) echo Html::button('<span class="glyphicon glyphicon-list-alt"></span> '.'Ver notas', ['value' => Url::to(['/edh/notaedh/viewlegajo', 'det' =>$model->id]), 'title' => 'Notas de '.$model->catedra0->actividad0->nombre,  'class' => 'btn btn-default amodalplancursado']); ?>
+        <?php if($visiblenota) echo Html::button('<span class="glyphicon glyphicon-list-alt"></span> '.'Ver notas', ['value' => Url::to(['/edh/notaedh/viewlegajo', 'det' =>$model->id]), 'title' => 'Notas de '.$model->catedra0->actividad0->nombre,  'class' => 'btn btn-default amodalplancursado']); ?>
         <?=Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Nuevo seguimiento', ['value' => Url::to(['/edh/seguimientodetplan/create', 'det' =>$model->id]), 'title' => 'Nuevo seguimiento de '.$model->catedra0->actividad0->nombre,  'class' => 'btn btn-default amodalplancursado']); ?>
         <?php if($visible) echo Html::button('<span class="glyphicon glyphicon-tasks"></span> '.'Realizar pronóstico', ['value' => Url::to(['/edh/notaedh/viewlegajo', 'det' =>$model->id]), 'title' => 'Notas de '.$model->catedra0->actividad0->nombre,  'class' => 'btn btn-default amodalplancursado']); ?>
     </div>

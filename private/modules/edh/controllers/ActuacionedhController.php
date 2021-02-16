@@ -2,6 +2,7 @@
 
 namespace app\modules\edh\controllers;
 
+use app\config\Globales;
 use app\models\Agente;
 use app\models\Detallecatedra;
 use app\models\Nombramiento;
@@ -15,6 +16,7 @@ use app\modules\edh\models\Areainformaact;
 use app\modules\edh\models\Areasolicitud;
 use app\modules\edh\models\Caso;
 use app\modules\edh\models\Lugaractuacion;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -31,6 +33,123 @@ class ActuacionedhController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    
+                    [
+                        'actions' => ['index'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION, Globales::US_REGENCIA, Globales::US_VICEACAD])){
+                                    return true;
+                                }
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+
+                            $caso = Caso::findOne(Yii::$app->request->queryParams['id']);
+
+                            if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTORIA])){
+                                
+
+                                $jefe = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+
+                                if ($caso->jefe == $jefe->id)
+                                     return true;
+                            }
+
+                            if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTOR])){
+
+                                $prece = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                        
+                                if ($caso->preceptor == $prece->id)
+                                     return true;
+                            
+                            }
+
+                            return false;
+                        }
+
+                    ],
+                    [
+                        'actions' => ['create'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION, Globales::US_REGENCIA, Globales::US_VICEACAD])){
+                                    return true;
+                                }
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+
+                            $caso = Caso::findOne(Yii::$app->request->queryParams['caso']);
+
+                            if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTORIA])){
+                                
+
+                                $jefe = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+
+                                if ($caso->jefe == $jefe->id)
+                                     return true;
+                            }
+
+                            if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTOR])){
+
+                                $prece = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                        
+                                if ($caso->preceptor == $prece->id)
+                                     return true;
+                            
+                            }
+
+                            return false;
+                        }
+
+                    ],
+                    [
+                        'actions' => ['update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            $actuacion = Actuacionedh::findOne(Yii::$app->request->queryParams['id']);
+                            $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                            if($actuacion->agente == $agente->id){
+                                try{
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION, Globales::US_REGENCIA, Globales::US_VICEACAD])){
+                                        return true;
+                                    }
+                                }catch(\Exception $exception){
+                                    return false;
+                                }
+                                $actuacion = Actuacionedh::findOne(Yii::$app->request->queryParams['id']);
+                                $caso = Caso::findOne($actuacion->caso);
+    
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTORIA])){
+                                    if ($caso->jefe == $agente->id)
+                                        return true;
+                                }
+    
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTOR])){
+                                    if ($caso->preceptor == $agente->id)
+                                         return true;
+                                }
+    
+                                return false;
+                            }else{
+                                return false;
+                            }
+                            
+                        }
+
+                    ],
+                    
+
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

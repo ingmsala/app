@@ -2,6 +2,8 @@
 
 namespace app\modules\edh\controllers;
 
+use app\config\Globales;
+use app\models\Agente;
 use app\models\AgenteSearch;
 use app\models\Nombramiento;
 use app\modules\edh\models\Actuacionedh;
@@ -10,6 +12,7 @@ use app\modules\edh\models\ParticipantereunionSearch;
 use Yii;
 use app\modules\edh\models\Reunionedh;
 use app\modules\edh\models\ReunionedhSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -25,6 +28,98 @@ class ReunionedhController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION, Globales::US_REGENCIA]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['index'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION, Globales::US_VICEACAD])){
+                                    return true;
+                                }
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+
+                            $caso = Caso::findOne(Yii::$app->request->queryParams['caso']);
+
+                            if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTORIA])){
+                                
+
+                                $jefe = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+
+                                if ($caso->jefe == $jefe->id)
+                                     return true;
+                            }
+
+                            if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTOR])){
+
+                                $prece = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                        
+                                if ($caso->preceptor == $prece->id)
+                                     return true;
+                            
+                            }
+
+                            return false;
+                        }
+
+                    ],
+                    [
+                        'actions' => ['view'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION, Globales::US_VICEACAD])){
+                                    return true;
+                                }
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+
+                            $caso = $this->findModel(Yii::$app->request->queryParams['id'])->caso0;
+
+                            if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTORIA])){
+                                
+
+                                $jefe = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+
+                                if ($caso->jefe == $jefe->id)
+                                     return true;
+                            }
+
+                            if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTOR])){
+
+                                $prece = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                        
+                                if ($caso->preceptor == $prece->id)
+                                     return true;
+                            
+                            }
+
+                            return false;
+                        }
+
+                    ],
+
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -92,6 +187,11 @@ class ReunionedhController extends Controller
             //return var_dump(Yii::$app->request->post());
             if($model->caso0->estadocaso == 2){
                 Yii::$app->session->setFlash('danger', '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>');
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
+            if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION, Globales::US_REGENCIA])){
+                Yii::$app->session->setFlash('danger', '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No tiene los permisos para realizar la acción');
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
