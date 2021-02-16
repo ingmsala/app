@@ -1,5 +1,6 @@
 <?php
 
+use app\config\Globales;
 use app\models\Agente;
 use app\models\Nombramiento;
 use kartik\builder\Form;
@@ -30,6 +31,9 @@ $this->params['sidebar'] = [
     'model' => $model->caso0,
     'origen' => 'reuniones',
 ];
+
+
+$auth = in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION]);
 
 $this->registerJs("
            
@@ -94,6 +98,7 @@ $this->registerJs("
                                 'type' => DatePicker::TYPE_COMPONENT_APPEND,
                                 //'value' => '23-Feb-1982',
                                 'readonly' => true,
+                                'disabled' => !$auth,
                                 'pluginOptions' => [
                                     'autoclose'=>true,
                                     'format' => 'dd/mm/yyyy',
@@ -104,34 +109,35 @@ $this->registerJs("
                         ],   
                         'hora'=>[
                             'type'=>Form::INPUT_WIDGET, 
-                            'widgetClass'=>'\kartik\time\TimePicker', 
+                            'widgetClass'=>'\kartik\time\TimePicker',
                             'options'=>[
-                                
+                                    'disabled' => !$auth,
                                     'pluginOptions' => [
                                     'showMeridian' => false,
                                     'minuteStep' => 1,
                                     'defaultTime' => false,
                                     
                                     
+                                    
                                 ],
                             ]
                         ],
-                        'lugar'=>['type'=>Form::INPUT_TEXT],   
+                        'lugar'=>['type'=>Form::INPUT_TEXT, 'options' => ['disabled' => !$auth]],   
                     ]
                 ],
                 [
                     //'contentBefore'=>'<legend class="text-info"><small>2</small></legend>',
                     'attributes'=>[       // 2 column layout
                         
-                        'tematica'=>['type'=>Form::INPUT_TEXT],
-                        'url'=>['type'=>Form::INPUT_TEXT],   
+                        'tematica'=>['type'=>Form::INPUT_TEXT, 'options' => ['disabled' => !$auth]],
+                        'url'=>['type'=>Form::INPUT_TEXT, 'options' => ['disabled' => !$auth]],   
                     ]
                 ],
 
                 [
                     
                     'attributes'=>[       // 2 column layout
-                        'parte'=>['type'=>Form::INPUT_TEXTAREA],   
+                        'parte'=>['type'=>Form::INPUT_TEXTAREA, 'options' => ['disabled' => !$auth]],   
                     ]
                 ],
                 
@@ -156,14 +162,18 @@ $this->registerJs("
                        Yii::$app->session->remove('success3');
                 }
             ?>
-            <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
-                'data' => [
-                    'confirm' => 'Está seguro que desea eliminar la reunión?',
-                    'method' => 'post',
-                ],
-            ]) ?>
-        <?= Html::submitButton('Actualizar', ['class' => 'btn btn-primary']) ?>
+            <?php 
+            if($auth){
+                echo Html::a('Eliminar', ['delete', 'id' => $model->id], [
+                    'class' => 'btn btn-danger',
+                    'data' => [
+                        'confirm' => 'Está seguro que desea eliminar la reunión?',
+                        'method' => 'post',
+                    ],
+                ]); 
+                echo Html::submitButton('Actualizar', ['class' => 'btn btn-primary']);
+                }
+            ?>
         </div>
     </div>
 
@@ -177,7 +187,11 @@ $this->registerJs("
     <div class="row">
         <div class="col-md-2"><h4>Participantes</h4></div>
         <div class="col-md-10">
-            <?= Html::button('<span class="glyphicon glyphicon-plus"></span> Agregar', ['value' => Url::to('index.php?r=edh/participantereunion/porreunion&id='.$model->id), 'class' => 'btn btn-success amodalsolicitudstate', 'style' => 'width:auto;']); ?>
+            <?php
+            if($auth)
+               echo Html::button('<span class="glyphicon glyphicon-plus"></span> Agregar', ['value' => Url::to('index.php?r=edh/participantereunion/porreunion&id='.$model->id), 'class' => 'btn btn-success amodalsolicitudstate', 'style' => 'width:auto;']);
+            
+            ?>
         </div>
     </div>
     

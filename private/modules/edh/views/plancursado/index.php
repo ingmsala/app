@@ -1,5 +1,6 @@
 <?php
 
+use app\config\Globales;
 use app\modules\edh\models\SeguimientoplanSearch;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
@@ -35,6 +36,23 @@ $this->params['sidebar'] = [
 
 <div class="plancursado-index">
 
+    <?php
+        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION])){
+            $buttadd = Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Agregar plan', ['value' => Url::to(['create', 'caso' =>$model->id]), 'title' => 'Nuevo plan personalizado',  'class' => 'btn btn-success btn-success amodalplancursado']);
+        }else{
+            $buttadd = '';
+        }
+    ?>
+
+    <?php
+        if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION])){
+            $template = '{view}';
+        }else{
+            $template = '{view} {update} {delete}';
+        
+        }
+    ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
@@ -49,7 +67,7 @@ $this->params['sidebar'] = [
             'heading' => Html::encode($this->title),
             'footer' => false,
             'after' => false,
-            'before' =>Html::button('<span class="glyphicon glyphicon-plus"></span> '.'Agregar plan', ['value' => Url::to(['create', 'caso' =>$model->id]), 'title' => 'Nuevo plan personalizado',  'class' => 'btn btn-success btn-success amodalplancursado'])
+            'before' => $buttadd
         ],
         'toolbar'=>[
             
@@ -143,7 +161,8 @@ $this->params['sidebar'] = [
                 }
             ],
 
-            ['class' => 'kartik\grid\ActionColumn'],
+            ['class' => 'kartik\grid\ActionColumn',
+            'template' => $template],
         ],
     ]); ?>
 </div>

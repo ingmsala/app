@@ -2,10 +2,12 @@
 
 namespace app\modules\edh\controllers;
 
+use app\config\Globales;
 use app\models\Agente;
 use Yii;
 use app\modules\edh\models\Seguimientodetplan;
 use app\modules\edh\models\SeguimientodetplanSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -21,6 +23,51 @@ class SeguimientodetplanController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['create'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION, Globales::US_PRECEPTOR, Globales::US_PRECEPTORIA]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                            $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+
+                            $caso = Seguimientodetplan::findOne(Yii::$app->request->queryParams['id'])->detalleplan0->plan0->caso0;
+                                
+    
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTORIA])){
+                                    if ($caso->jefe == $agente->id)
+                                        return true;
+                                }
+    
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_PRECEPTOR])){
+                                    if ($caso->preceptor == $agente->id)
+                                         return true;
+                                }
+                            
+                        }
+
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

@@ -1,5 +1,6 @@
 <?php
 
+use app\config\Globales;
 use kartik\base\Config;
 use yii\helpers\Html;
 use kartik\grid\GridView;
@@ -21,7 +22,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p class="pull-right">
-                <?= Html::button('<span class="glyphicon glyphicon-plus"></span> Agregar seguimiento', ['value' => Url::to('index.php?r=edh/seguimientoplan/create&plan='.$plan), 'title' =>'Agregar seguimiento', 'class' => 'btn btn-success amodalplancursado']); ?>
+                <?php
+                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION])){
+                        echo Html::button('<span class="glyphicon glyphicon-plus"></span> Agregar seguimiento', ['value' => Url::to('index.php?r=edh/seguimientoplan/create&plan='.$plan), 'title' =>'Agregar seguimiento', 'class' => 'btn btn-success amodalplancursado']);
+
+                    }
+                ?>                
                 </p>
     <div class="clearfix"></div>
 
@@ -42,8 +48,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'width' => '10%',
                 'value' => function($model){
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
-                    
-                    return Html::button(Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy'),
+                    $lbl = Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy');
+                    if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION])){
+                        return $lbl;
+                    }
+                    return Html::button($lbl,
                     ['value' => Url::to(['seguimientoplan/update', 'id' => $model->id]),
                     'title' => 'Modificar seguimiento',
                         'class' => 'amodalplancursado btn btn-link', 'style'=>'width:auto;margin-bottom:0px;']);
@@ -55,6 +64,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function($model){
                     $module = Config::getModule(Module::MODULE);
                     $output = Markdown::convert($model->descripcion, ['custom' => $module->customConversion]);
+                    if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_CAE_ADMIN, Globales::US_GABPSICO, Globales::US_COORDINACION])){
+                        return $output;
+                    }
                     return Html::button($output,
                     ['value' => Url::to(['seguimientoplan/update', 'id' => $model->id]),
                     'title' => 'Modificar seguimiento',

@@ -261,6 +261,9 @@ class CasoController extends Controller
     {
         $this->layout = '@app/modules/edh/views/layouts/main';
         $model = $this->findModel($id);
+        if($model->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
         
         $model->scenario = $model::SCENARIO_REFERENTE;
         
@@ -295,6 +298,9 @@ class CasoController extends Controller
     {
         $this->layout = '@app/modules/edh/views/layouts/main';
         $model = $this->findModel($id);
+        if($model->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
         
         $model->scenario = $model::SCENARIO_PRECEPTOR;
         
@@ -329,6 +335,9 @@ class CasoController extends Controller
     {
         $this->layout = '@app/modules/edh/views/layouts/main';
         $model = $this->findModel($id);
+        if($model->estadocaso == 2){
+            return '<div class="glyphicon glyphicon-info-sign" style="color:#a94442;"></div> No puede modificar un caso en estado <b>Cerrado</b>';
+        }
         
         $model->scenario = $model::SCENARIO_JEFE;
         
