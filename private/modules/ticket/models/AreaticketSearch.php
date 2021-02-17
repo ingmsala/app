@@ -18,7 +18,7 @@ class AreaticketSearch extends Areaticket
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'activo'], 'integer'],
             [['nombre'], 'safe'],
         ];
     }

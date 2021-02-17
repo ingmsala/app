@@ -128,7 +128,7 @@ class DetalleticketController extends Controller
         $model->agente = $creador->id;
         $model->estadoticket = ($ticketModel->estadoticket == 2) ? 1 : $ticketModel->estadoticket;
 
-        $areas = Areaticket::find()->all();
+        $areas = Areaticket::find()->where(['activo' => 1])->all();
         $agentes = Agente::find()->orderBy('apellido, nombre')->all();
         $asignaciones = [];
 
@@ -237,14 +237,14 @@ class DetalleticketController extends Controller
             $ticketModel->save();
 
             $trello = false;
-            if($modelasignacion->agente != null){
+            /*if($modelasignacion->agente != null){
                 if($modelasignacion->agente == 188){
                     $trello = true;
                 }
             }else{
                 if(in_array(188, array_column($modelasignacion->areaticket0->grupotrabajotickets,'agente')))
                     $trello = true;
-            }
+            }*/
 
             if($trello){
                 $module = Config::getModule(Module::MODULE);
@@ -260,7 +260,7 @@ class DetalleticketController extends Controller
 
             
 
-            if($model->notificacion == 1){
+            /*if($model->notificacion == 1){
                 $module = Config::getModule(Module::MODULE);
                 $output = Markdown::convert($model->descripcion, ['custom' => $module->customConversion]);
                 $sendemail=Yii::$app->mailer->compose()
@@ -269,7 +269,7 @@ class DetalleticketController extends Controller
                             ->setSubject($ticketModel->asunto)
                             ->setHtmlBody('Se ha respondido a su consulta: <div style="background-color:#DDDDDD;">'.$output.'</div><br />Puede consultar el historial de su respuesta ingresando a <a href="https://admin.cnm.unc.edu.ar/ticket/ticket/view&id='.$ticketModel->id.'">Ticket #'.$ticketModel->id.'</a>')
                             ->send();
-            }
+            }*/
 
             if (!is_null($images)) {
                 foreach ($images as $image) {

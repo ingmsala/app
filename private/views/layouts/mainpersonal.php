@@ -112,11 +112,11 @@ if(!Yii::$app->user->isGuest){
 
         $items = [
 
-            /*['label' => '<center><span class="glyphicon glyphicon-barcode"></span><br />'.'Ticket</center>',
+            ['label' => '<center><span class="glyphicon glyphicon-barcode"></span><br />'.'Ticket</center>',
                             
                     'url' => ['/ticket/ticket', 'i'=>3],
                     '<div class="dropdown-divider"></div>',
-            ],*/
+            ],
                             
             ['label' => '<center><span class="glyphicon glyphicon-time"></span><br />'.'Horarios</center>',
                             
@@ -173,11 +173,11 @@ if(!Yii::$app->user->isGuest){
     }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
         $items = [
 
-            /*['label' => '<center><span class="glyphicon glyphicon-barcode"></span><br />'.'Ticket</center>',
+            ['label' => '<center><span class="glyphicon glyphicon-barcode"></span><br />'.'Ticket</center>',
                             
                     'url' => ['/ticket/ticket', 'i'=>3],
                     '<div class="dropdown-divider"></div>',
-            ],*/
+            ],
                             
             ['label' => '<center><span class="glyphicon glyphicon-time"></span><br />'.'Horarios</center>',
                             
@@ -260,11 +260,11 @@ if(!Yii::$app->user->isGuest){
     }elseif(Yii::$app->user->identity->role == Globales::US_NODOCENTE){
         $items = [
 
-            /*['label' => '<center><span class="glyphicon glyphicon-barcode"></span><br />'.'Ticket</center>',
+            ['label' => '<center><span class="glyphicon glyphicon-barcode"></span><br />'.'Ticket</center>',
                             
                     'url' => ['/ticket/ticket', 'i'=>3],
                     '<div class="dropdown-divider"></div>',
-            ],*/
+            ],
                             
             ['label' => '<center><span class="glyphicon glyphicon-modal-window"></span><br />'.'D. Juradas</center>',
                             

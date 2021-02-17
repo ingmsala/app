@@ -90,7 +90,7 @@ class GrupotrabajoticketController extends Controller
         $model = new Grupotrabajoticket();
         $model->areaticket = $area;
         $agentes=Agente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
-        $areas=Areaticket::find()->all();
+        $areas=Areaticket::find()->where(['activo' => 1])->all();
         if ($model->load(Yii::$app->request->post())) {
             $model->areaticket = $area;
             $model->save();
@@ -117,7 +117,7 @@ class GrupotrabajoticketController extends Controller
         $area = $model->areaticket;
 
         $agentes=Agente::find()->orderBy('apellido', 'nombre', 'legajo')->all();
-        $areas=Areaticket::find()->all();
+        $areas=Areaticket::find()->where(['activo' => 1])->all();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->areaticket = $area;

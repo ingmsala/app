@@ -29,7 +29,8 @@ class Areaticket extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre'], 'required'],
+            [['nombre', 'activo'], 'required'],
+            [['activo'], 'integer'],
             [['nombre'], 'string', 'max' => 50],
         ];
     }
@@ -42,6 +43,7 @@ class Areaticket extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nombre' => 'Nombre',
+            'activo' => 'Activo',
         ];
     }
 

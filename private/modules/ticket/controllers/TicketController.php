@@ -187,7 +187,7 @@ class TicketController extends Controller
 
         $prioridades = Prioridadticket::find()->all();
 
-        $areas = Areaticket::find()->all();
+        $areas = Areaticket::find()->where(['activo' => 1])->all();
         $agentes = Agente::find()->orderBy('apellido, nombre')->all();
         $asignaciones = [];
         $asignaciones ['Áreas']=ArrayHelper::map($areas,function($model){return -$model->id;}, 'nombre');
@@ -226,14 +226,14 @@ class TicketController extends Controller
             $modelasignacion->save();
 
             $trello = false;
-            if($modelasignacion->agente != null){
+            /*if($modelasignacion->agente != null){
                 if($modelasignacion->agente == 188){
                     $trello = true;
                 }
             }else{
                 if(in_array(188, array_column($modelasignacion->areaticket0->grupotrabajotickets,'agente')))
                     $trello = true;
-            }
+            }*/
 
             if($trello){
                 $module = Config::getModule(Module::MODULE);
@@ -297,7 +297,7 @@ class TicketController extends Controller
         $dataProviderAdjuntos = $searchModelAdjuntos->porTicket($model->id);
 
         
-        $areas = Areaticket::find()->all();
+        $areas = Areaticket::find()->where(['activo' => 1])->all();
         $agentes = Agente::find()->orderBy('apellido, nombre')->all();
         $creadores = Agente::find()/*->where(['mail' => Yii::$app->user->identity->username])*/->all();
         $prioridades = Prioridadticket::find()->all();
