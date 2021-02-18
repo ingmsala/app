@@ -1,7 +1,10 @@
 <?php
 
+use kartik\form\ActiveForm;
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -9,9 +12,28 @@ use yii\helpers\Url;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Horarios con movilidad deshabilitada';
-
+$anios=ArrayHelper::map($anios,'id','nombre');
 ?>
 <div class="horario-index">
+
+    <?php $form = ActiveForm::begin(); ?>
+    <?= 
+
+    $form->field($model, 'aniolectivo')->widget(Select2::classname(), [
+        'data' => $anios,
+        'options' => ['placeholder' => 'Seleccionar...'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]);
+
+    ?>
+
+        <div class="form-group">
+            <?= Html::submitButton('<div class="glyphicon glyphicon-search"></div> Buscar', ['class' => 'btn btn-primary']) ?>
+        </div>
+
+        <?php ActiveForm::end(); ?>
 
     
     <?php

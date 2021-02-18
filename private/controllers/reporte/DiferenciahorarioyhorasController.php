@@ -11,7 +11,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\config\Globales;
-
+use app\models\Horario;
+use app\modules\curriculares\models\Aniolectivo;
 
 class DiferenciahorarioyhorasController extends \yii\web\Controller
 {
@@ -54,13 +55,27 @@ class DiferenciahorarioyhorasController extends \yii\web\Controller
 
  	public function actionIndex()
 	    {
-	        $searchModel = new CatedraSearch();
-	        $dataProvider = $searchModel->diferenciacatedrasyhoras();
+            $anios = Aniolectivo::find()->all();
+            $model = new Catedra();
+
+            if (Yii::$app->request->post()) {
+                $searchModel = new CatedraSearch();
+	            $dataProvider = $searchModel->diferenciacatedrasyhoras(Yii::$app->request->post()['Catedra']['aniolectivo']);
+            }else{
+                $searchModel = new CatedraSearch();
+	            $dataProvider = $searchModel->diferenciacatedrasyhoras(0);
+            }
+
+            if(isset(Yii::$app->request->post()['Catedra']['aniolectivo'])){
+                $model->aniolectivo = Yii::$app->request->post()['Catedra']['aniolectivo'];
+            }
+	        
             	        
 
 	        return $this->render('index', 
 	        [
-                
+                'model' => $model,
+                'anios' => $anios,
 	            'searchModel' => $searchModel,
 	            'dataProvider' => $dataProvider,
                 

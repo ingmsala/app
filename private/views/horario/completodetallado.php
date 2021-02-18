@@ -1,7 +1,10 @@
 <?php
 
+use kartik\form\ActiveForm;
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -9,10 +12,29 @@ use yii\helpers\Url;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Listado de docentes en horario';
-
+$anios=ArrayHelper::map($anios,'id','nombre');
+$anio = $model->aniolectivo;
 ?>
 <div class="horario-index">
 
+    <?php $form = ActiveForm::begin(); ?>
+    <?= 
+
+    $form->field($model, 'aniolectivo')->widget(Select2::classname(), [
+        'data' => $anios,
+        'options' => ['placeholder' => 'Seleccionar...'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]);
+
+    ?>
+
+    <div class="form-group">
+        <?= Html::submitButton('<div class="glyphicon glyphicon-search"></div> Buscar', ['class' => 'btn btn-primary']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
     
     <?php
         date_default_timezone_set('America/Argentina/Buenos_Aires');
@@ -58,10 +80,10 @@ $this->title = 'Listado de docentes en horario';
             [
                 'label' =>'Documento',
                 //'group' => true,
-                'value' => function($model){
+                'value' => function($model) use($anio){
                     $cat = $model;
                     foreach ($cat->detallecatedras as $dc) {
-                        if ($dc->revista == 6){
+                        if ($dc->revista == 6 && $dc->aniolectivo==$anio){
                             $doc = $dc->agente0->documento;
                             break;
                         }
@@ -72,10 +94,10 @@ $this->title = 'Listado de docentes en horario';
             [
                 'label' =>'Docente',
                 //'group' => true,
-                'value' => function($model){
+                'value' => function($model) use($anio){
                     $cat = $model;
                     foreach ($cat->detallecatedras as $dc) {
-                        if ($dc->revista == 6){
+                        if ($dc->revista == 6 && $dc->aniolectivo==$anio){
                             $doc = $dc->agente0->apellido.', '.$dc->agente0->nombre;
                             break;
                         }
@@ -105,10 +127,10 @@ $this->title = 'Listado de docentes en horario';
             [
                 'label' =>'Mail',
                 //'group' => true,
-                'value' => function($model){
+                'value' => function($model) use($anio){
                     $cat = $model;
                     foreach ($cat->detallecatedras as $dc) {
-                        if ($dc->revista == 6){
+                        if ($dc->revista == 6 && $dc->aniolectivo==$anio){
                             $doc = $dc->agente0->mail;
                             break;
                         }

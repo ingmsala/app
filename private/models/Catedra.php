@@ -35,6 +35,7 @@ class Catedra extends \yii\db\ActiveRecord
     public $divisionnom;
     public $resolucion;
     public $activo;
+    public $aniolectivo;
    
 
     public function scenarios()
@@ -84,6 +85,7 @@ class Catedra extends \yii\db\ActiveRecord
             'id' => 'ID',
             'actividad' => 'Actividad',
             'division' => 'Division',
+            'aniolectivo' => 'Año lectivo',
         ];
     }
 

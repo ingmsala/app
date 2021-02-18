@@ -328,7 +328,7 @@ ORDER BY
     }
 
 
-    public function diferenciacatedrasyhoras()
+    public function diferenciacatedrasyhoras($al)
     {
         
         $sql='SELECT ac.id as actid, ac.nombre as materia, di.id as divid, di.nombre as division, ac.cantHoras as horasmat, count(h.id) as horashorario 
@@ -337,7 +337,7 @@ ORDER BY
         left join actividad ac ON c.actividad = ac.id
         left join division di ON c.division = di.id
         left join aniolectivo al ON al.id = h.aniolectivo
-        where (di.turno = 1 or di.turno = 2) and (ac.id <> 23) and (ac.id <> 31) and (ac.id <> 33) and (al.activo = 1)
+        where (di.turno = 1 or di.turno = 2) and (ac.id <> 23) and (ac.id <> 31) and (ac.id <> 33) and (al.id = '.$al.')
         group by ac.id, ac.nombre, di.id, di.nombre, ac.cantHoras 
         having ac.cantHoras <> count(h.id)
         ORDER BY `c`.`id` ASC';

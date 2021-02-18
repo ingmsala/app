@@ -1876,8 +1876,17 @@ class HorarioController extends Controller
         
         $param = Yii::$app->request->queryParams;
         $model = new Actividad();
+        $modelCatedra = new Catedra();
         $repetido = false;
         $matexp = '';
+
+        $anios = Aniolectivo::find()->all();
+
+        if(isset($param['Catedra']['aniolectivo'])){
+            $modelCatedra->aniolectivo = $param['Catedra']['aniolectivo'];
+        }else{
+            $modelCatedra->aniolectivo = 0;
+        }
 
         try{
              $largo = count($param['Actividad']['id']);
@@ -1950,7 +1959,7 @@ class HorarioController extends Controller
             ->where(['in', 'catedra.actividad', $materiasfiltro])
             ->andWhere(['<>', 'catedra.division', 77])
             ->andWhere(['tipo' => 1])
-            ->andWhere(['aniolectivo' => $aniolectivo->id])
+            ->andWhere(['aniolectivo' => $modelCatedra->aniolectivo])
             ->orderBy('diasemana, hora')
             ->all();
 
@@ -2020,7 +2029,7 @@ class HorarioController extends Controller
                             foreach ($horariox->catedra0->detallecatedras as $dc) {
 
                                 $salida = '';
-                                if ($dc->revista == 6 && $dc->aniolectivo == $aniolectivo->id){
+                                if ($dc->revista == 6 && $dc->aniolectivo == $modelCatedra->aniolectivo){
                                     //return var_dump($dc['revista']==1);
                                     //$superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->diasemana);
                                     //if ($superpuesto[0]){
@@ -2092,6 +2101,8 @@ class HorarioController extends Controller
 
         return $this->render('filtropormateria', [
             'model' => $model,
+            'modelCatedra' => $modelCatedra,
+            'anios' => $anios,
             'actividades' => $actividades,
             'rep' => $rep,
             //'searchModel' => $searchModel,
@@ -2412,10 +2423,24 @@ class HorarioController extends Controller
 
     public function actionHorassuperpuestas(){
 
-        $searchModel = new HorarioSearch;
-        $dataProvider = $searchModel->horassuperpuestas();
+            $anios = Aniolectivo::find()->all();
+            $model = new Catedra();
+
+            if (Yii::$app->request->post()) {
+                $searchModel = new HorarioSearch;
+                $dataProvider = $searchModel->horassuperpuestas(Yii::$app->request->post()['Catedra']['aniolectivo']);
+	        }else{
+                $searchModel = new HorarioSearch();
+	            $dataProvider = $searchModel->horassuperpuestas(0);
+            }
+
+            if(isset(Yii::$app->request->post()['Catedra']['aniolectivo'])){
+                $model->aniolectivo = Yii::$app->request->post()['Catedra']['aniolectivo'];
+            }
 
         return $this->render('horassuperpuestas', [
+            'model' => $model,
+            'anios' => $anios,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             
@@ -2425,10 +2450,25 @@ class HorarioController extends Controller
 
     public function actionDeshabilitados()
     {
-        $searchModel = new HorarioSearch();
-        $dataProvider = $searchModel->getDeshabilitados();
+        $anios = Aniolectivo::find()->all();
+        $model = new Catedra();
 
+        if (Yii::$app->request->post()) {
+            $searchModel = new HorarioSearch();
+            $dataProvider = $searchModel->getDeshabilitados(Yii::$app->request->post()['Catedra']['aniolectivo']);
+        }else{
+            $searchModel = new HorarioSearch();
+            $dataProvider = $searchModel->getDeshabilitados(0);
+        }
+
+        if(isset(Yii::$app->request->post()['Catedra']['aniolectivo'])){
+            $model->aniolectivo = Yii::$app->request->post()['Catedra']['aniolectivo'];
+        }
+
+        
         return $this->render('deshabilitados', [
+            'model' => $model,
+            'anios' => $anios,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -2436,10 +2476,24 @@ class HorarioController extends Controller
 
     public function actionCompletodetallado()
     {
-        $searchModel = new HorarioSearch();
-        $dataProvider = $searchModel->getCompletoDetallado();
+        $anios = Aniolectivo::find()->all();
+        $model = new Catedra();
+
+        if (Yii::$app->request->post()) {
+            $searchModel = new HorarioSearch();
+            $dataProvider = $searchModel->getCompletoDetallado(Yii::$app->request->post()['Catedra']['aniolectivo']);
+        }else{
+            $searchModel = new HorarioSearch();
+            $dataProvider = $searchModel->getCompletoDetallado(0);
+        }
+
+        if(isset(Yii::$app->request->post()['Catedra']['aniolectivo'])){
+            $model->aniolectivo = Yii::$app->request->post()['Catedra']['aniolectivo'];
+        }
 
         return $this->render('completodetallado', [
+            'model' => $model,
+            'anios' => $anios,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

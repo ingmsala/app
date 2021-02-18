@@ -374,7 +374,7 @@ class ClasevirtualController extends Controller
         //return var_dump($array);
 
         $docente_materia_search = new DetallecatedraSearch();
-        $dataProvider = $docente_materia_search->horario_doce_divi($division);
+        $dataProvider = $docente_materia_search->horario_doce_divi($division, 2);
 
         /*if($prt == 1)
                 return $this->renderAjax('completoxcurso', [

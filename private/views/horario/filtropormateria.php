@@ -16,6 +16,7 @@ use kartik\form\ActiveForm;
 $this->title = 'Distribución de horas'.$matexp;
 
 $listActividades=ArrayHelper::map($actividades,'id','nombre');
+$anios=ArrayHelper::map($anios,'id','nombre');
 
 ?>
 <div class="horario-view">
@@ -36,6 +37,16 @@ JS;
 
     ?>
 
+<?=
+	$form->field($modelCatedra, 'aniolectivo')->widget(Select2::classname(), [
+		'data' => $anios,
+		'options' => ['placeholder' => 'Seleccionar...'],
+		'pluginOptions' => [
+			'allowClear' => true
+		],
+	]);
+ ?>
+ 
 <?= $form->field($model, 'id')->widget(Select2::classname(), [
             'data' => $listActividades,
             'options' => [
@@ -48,6 +59,8 @@ JS;
         ])->label('Materias');
 
  ?>
+
+ 
 
  <div class="form-group">
         <?= Html::submitButton('Filtrar', ['class' => 'btn btn-primary']) ?>
