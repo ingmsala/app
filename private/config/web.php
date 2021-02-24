@@ -164,6 +164,10 @@ $config = [
                 'class' => 'app\modules\aniversary\Aniversary',
          ],
 
+         'solicitudprevios' => [
+                'class' => 'app\modules\solicitudprevios\Solicitudprevios',
+         ],
+
          'ticket' => [
                 'class' => 'app\modules\ticket\Ticket',
          ],

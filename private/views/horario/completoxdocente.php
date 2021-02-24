@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\helpers\Url;
 use app\config\Globales;
+use kartik\form\ActiveForm;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Horario */
@@ -21,7 +23,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 	}
 ?>
 
-    <h1><?= (!$userhorario) ? Html::encode($alx->nombre.' - Horario de Clases: '.$this->title) : '' ?>
+    <h1><?= (!$userhorario) ? Html::encode($alx->nombre.' - Horario de Clases: '.$this->title) : 'Horario '.$alx->nombre ?>
     <div class="row" style="padding-bottom: 10px;">
 <?php $dipl = ($userhorario) ? "none" : "block" ?>
 	 <div style="display: <?=  $dipl  ?>;">
@@ -42,10 +44,19 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 	    </div>
 	</div>
 </div>
-    
-    
-   
+
 </h1>
+    <div class="clearfix"></div>
+	<?php
+		if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]) && $pr<>1){
+			$form = ActiveForm::begin();
+			$listaniolectivo=ArrayHelper::map($anioslectivos,'id','nombre'); 
+			echo $form->field($model, 'aniolectivo')->dropDownList($listaniolectivo, ['prompt'=>'Seleccionar...', 'onchange'=>'this.form.submit()']);
+			
+
+			ActiveForm::end();
+		}
+	?>
     <div class="clearfix"></div>
     <div class='row'>
     	<div class="col-md-6">

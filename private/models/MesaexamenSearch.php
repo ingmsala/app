@@ -18,7 +18,7 @@ class MesaexamenSearch extends Mesaexamen
     public function rules()
     {
         return [
-            [['id', 'turnoexamen', 'espacio'], 'integer'],
+            [['id', 'turnoexamen', 'espacio', 'turnohorario'], 'integer'],
             [['fecha', 'hora', 'nombre'], 'safe'],
         ];
     }

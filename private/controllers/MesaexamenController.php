@@ -11,14 +11,20 @@ use Yii;
 use app\models\Mesaexamen;
 use app\models\MesaexamenSearch;
 use app\models\Tribunal;
+use app\models\Turno;
 use app\models\Turnoexamen;
+use app\modules\solicitudprevios\models\Detallesolicitudext;
+use kartik\detail\DetailView;
 use kartik\grid\GridView;
+use kartik\helpers\Html;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 /**
  * MesaexamenController implements the CRUD actions for Mesaexamen model.
@@ -54,7 +60,7 @@ class MesaexamenController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -134,6 +140,16 @@ class MesaexamenController extends Controller
             $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
             $model->fecha = $newdatedesde;
 
+            if($model->hora != null){
+                if(strtotime($model->hora)<=strtotime('12:00:00')) {
+                    $model->turnohorario = 1;
+                   } else {
+                    $model->turnohorario = 2;
+                   }
+            }else{
+                $model->turnohorario = null;
+            }
+
             $model->save();
 
             $doc = Yii::$app->request->post()['docentes'];
@@ -174,9 +190,15 @@ class MesaexamenController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $or='aj')
     {
         $model = $this->findModel($id);
+        if($or=='in')
+            $model->scenario = Mesaexamen::SCENARIO_AMB;
+        elseif($or=='p2')
+            $model->scenario = Mesaexamen::SCENARIO_AMB;
+        else
+            $model->scenario = Mesaexamen::SCENARIO_PASOS;
 
         $turnosexamen = Turnoexamen::find()->all();
         $espacios = Espacio::find()->all();
@@ -188,42 +210,96 @@ class MesaexamenController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-            $desdeexplode = explode("/",$model->fecha);
-            $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
-            $model->fecha = $newdatedesde;
+            try {
+                $desdeexplode = explode("/",$model->fecha);
+                $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
+                $model->fecha = $newdatedesde;
+            } catch (\Throwable $th) {
+                $model->fecha = null;
+            }
+            
+
+            if($model->hora != null){
+                if(strtotime($model->hora)<=strtotime('12:00:00')) {
+                    $model->turnohorario = 1;
+                   } else {
+                    $model->turnohorario = 2;
+                   }
+            }else{
+                $model->turnohorario = null;
+            }
 
             $model->save();
 
-            $doc = Yii::$app->request->post()['docentes'];
-            $act = Yii::$app->request->post()['actividades'];
+            try {
+                $doc = Yii::$app->request->post()['docentes'];
+                foreach ($tribunal as $tr) {
+                    $tr->delete();
+                }
 
-            foreach ($actividadesxmesa as $am) {
-                $am->delete();
+                foreach ($doc as $d) {
+                    $tribunal = new Tribunal();
+                    $tribunal->mesaexamen = $model->id;
+                    $tribunal->agente = $d;
+                    $tribunal->save();
+                }
+            } catch (\Throwable $th) {
+                foreach ($tribunal as $tr) {
+                    $tr->delete();
+                }
             }
-            foreach ($tribunal as $tr) {
-                $tr->delete();
+            
+
+            try {
+                $act = Yii::$app->request->post()['actividades'];
+
+                foreach ($actividadesxmesa as $am) {
+                    $am->delete();
+                }
+
+                foreach ($act as $a) {
+                    $actividadxmesa = new Actividadxmesa();
+                    $actividadxmesa->mesaexamen = $model->id;
+                    $actividadxmesa->actividad = $a;
+                    $actividadxmesa->save();
+                }
+            } catch (\Throwable $th) {
+                foreach ($actividadesxmesa as $am) {
+                    $am->delete();
+                }
             }
 
-            foreach ($doc as $d) {
-                $tribunal = new Tribunal();
-                $tribunal->mesaexamen = $model->id;
-                $tribunal->agente = $d;
-                $tribunal->save();
-            }
-
-            foreach ($act as $a) {
-                $actividadxmesa = new Actividadxmesa();
-                $actividadxmesa->mesaexamen = $model->id;
-                $actividadxmesa->actividad = $a;
-                $actividadxmesa->save();
-            }
-
-        return $this->redirect(['index', 'turno' => $model->turnoexamen]);
+            
+            if($or=='in')
+                return $this->redirect(['index', 'turno' => $model->turnoexamen, 'all' => 1]);
+            elseif($or=='p2')
+                return $this->redirect(['paso2', 'turno' => $model->turnoexamen]);
+            else
+                return $this->redirect(['paso1', 'turno' => $model->turnoexamen]);
         }
 
-        $desdeexplode = explode("-",$model->fecha);
-        $newdatedesde = date("d/m/Y", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[2], $desdeexplode[0]));
-        $model->fecha = $newdatedesde;
+        try {
+            $desdeexplode = explode("-",$model->fecha);
+            $newdatedesde = date("d/m/Y", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[2], $desdeexplode[0]));
+            $model->fecha = $newdatedesde;
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        
+
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('update', [
+                'model' => $model,
+                'turnosexamen' => $turnosexamen,
+                'espacios' => $espacios,
+                'docentes' => $docentes,
+                'actividades' => $actividades,
+                'actividadesxmesa' => $actividadesxmesa,
+                'tribunal' => $tribunal,
+                'origen' => 'ajax',
+                'or' => $or,
+            ]);
+        }
 
         return $this->render('update', [
             'model' => $model,
@@ -232,7 +308,9 @@ class MesaexamenController extends Controller
             'docentes' => $docentes,
             'actividades' => $actividades,
             'actividadesxmesa' => $actividadesxmesa,
+            'origen' => 'noajax',
             'tribunal' => $tribunal,
+            'or' => $or,
         ]);
     }
 
@@ -243,11 +321,18 @@ class MesaexamenController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($id, $or = 'aj')
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $turno = $model->turnoexamen;
+        $model->delete();
 
-        return $this->redirect(['index']);
+        if($or=='in')
+                return $this->redirect(['index', 'turno' => $turno, 'all' => 1]);
+            elseif($or=='p2')
+                return $this->redirect(['paso2', 'turno' => $turno]);
+            else
+                return $this->redirect(['paso1', 'turno' => $turno]);
     }
 
     public function actionEnviarrecordatorio(){
@@ -391,6 +476,385 @@ class MesaexamenController extends Controller
 
     }
 
+    public function actionPaso1($turno)
+    {
+        if(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_PRECEPTOR])){
+            $this->layout = 'mainpersonal';
+            $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+        }
+        else{
+            $this->layout = 'main';
+            $doc = null;
+        }
+
+        $sql = Mesaexamen::find()->where(['turnoexamen' => $turno]);
+
+        $mesas = new ActiveDataProvider([
+            'query' => $sql,
+        ]);
+        $actividadxmesa = Actividadxmesa::find()->joinWith(['mesaexamen0'])->where(['mesaexamen.turnoexamen' => $turno])->all();
+        $axm = ArrayHelper::map($actividadxmesa, 'actividad', 'actividad');
+
+        $solicitudes = Detallesolicitudext::find()
+                        ->select('actividad.id, actividad.nombre as materia, count(actividad) as cant')
+                        ->joinWith(['solicitud0', 'actividad0'])
+                        ->groupBy('actividad.id, actividad.nombre')
+                        ->where(['solicitudinscripext.turno' => $turno])
+                        ->andWhere(['not in', 'actividad.id', $axm])
+                        ->all();
+
+        $solicitudesX = Detallesolicitudext::find()
+        ->select('actividad.id, actividad.nombre as materia, count(actividad) as cant')
+        ->joinWith(['solicitud0', 'actividad0'])
+        ->groupBy('actividad.id, actividad.nombre')
+        ->where(['solicitudinscripext.turno' => $turno])
+        ->all();
+
+        $solicitudesTodas = ArrayHelper::map($solicitudesX, 'id', function($model){
+            return $model->cant;
+        });
+                        
+        $materias = ArrayHelper::map($solicitudes, 'id', function($model){
+            return '<div class="btn btn-primary">'.$model->materia.' <span class="badge">'.$model->cant.'</span></div>';
+        });
+        
+        $mat = Actividad::find()->where(['in', 'id', array_keys($materias)])->orderBy('departamento, nombre')->all();
+
+        /*$materias = ArrayHelper::map($solicitudes, 'actividad', function($model){
+            return $model->actividad0->nombre;
+        });*/
+        $materiasdisponibles = array_replace(ArrayHelper::map($mat, 'id', 'id'), $materias);
+
+        $model = new Mesaexamen();
+
+        $model->scenario = Mesaexamen::SCENARIO_PASOS;
+        $model->turnoexamen = $turno;
+
+        $modelAxM = new Actividadxmesa();
+
+        $turno = Turnoexamen::findOne($turno);
+
+        if ($modelAxM->load(Yii::$app->request->post())) {
+            
+            if($model->save()){
+
+                $activ = Yii::$app->request->post()['Actividadxmesa']['actividad'];
+
+                foreach ($activ as $act) {
+                    $modelAxMx = new Actividadxmesa();
+                    $modelAxMx->mesaexamen = $model->id;
+                    $modelAxMx->actividad = $act;
+                    $modelAxMx->save();
+                }
+
+            }
+
+            return $this->redirect(['paso1', 'turno' => $turno->id]);
+        }
+
+        return $this->render('paso1', [
+            'model' => $model,
+            'modelAxM' => $modelAxM,
+            'materiasdisponibles' => $materiasdisponibles,
+            'solicitudesTodas' => $solicitudesTodas,
+            'actividadxmesa' => $actividadxmesa,
+            'mesas' => $mesas,
+            'turno' => $turno,
+        ]);
+        
+    }
+
+    public function actionMover($mesa, $dir)
+    {
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $mesa = Mesaexamen::findOne($mesa);
+
+        $diaanterior =strtotime ( '-1 day' , strtotime ( $mesa->fecha ) );
+        $diasiguiente =strtotime ( '+1 day' , strtotime ( $mesa->fecha ) );
+
+        //$diaanterior = date('d/m/Y', $diaanterior);
+
+        //Yii::$app->session->setFlash('danger', $diaanterior.' - '.$diasiguiente);
+        //return $this->redirect(['paso2', 'turno' => $mesa->turnoexamen0->id]);
+        
+
+        if(($mesa->turnohorario == 1 && $dir == 'u') || ($mesa->turnohorario == 2 && $dir == 'd')
+             || ($diaanterior < strtotime ($mesa->turnoexamen0->desde) && $dir == 'l')
+             || ($diasiguiente > strtotime ($mesa->turnoexamen0->hasta) && $dir == 'r')){
+                Yii::$app->session->setFlash('danger', "No se puede mover la mesa en esa dirección");
+                 return $this->redirect(['paso2', 'turno' => $mesa->turnoexamen0->id]);
+             }
+             
+        if($mesa->turnohorario == 1 && $dir == 'd'){
+            $mesa->hora = '13:30';
+            $mesa->turnohorario = 2;
+        }
+        if($mesa->turnohorario == 2 && $dir == 'u'){
+            $mesa->hora = '08:00';
+            $mesa->turnohorario = 1;
+        }
+        if($dir == 'r'){
+            $mesa->fecha = date('Y-m-d', $diasiguiente);
+        }
+        if($dir == 'l'){
+            $mesa->fecha = date('Y-m-d', $diaanterior);
+        }
+        $mesa->save();
+
+        return $this->redirect(['paso2', 'turno' => $mesa->turnoexamen0->id]);
+    }
+
+    public function actionPaso2($turno)
+    {
+       
+        $turnoX = Turnoexamen::findOne($turno);
+        $start = $turnoX->desde;
+        $end = $turnoX->hasta;
+
+        $solicitudesX = Detallesolicitudext::find()
+        ->select('actividad.id, actividad.nombre as materia, count(actividad) as cant')
+        ->joinWith(['solicitud0', 'actividad0'])
+        ->groupBy('actividad.id, actividad.nombre')
+        ->where(['solicitudinscripext.turno' => $turno])
+        ->all();
+
+        $solicitudesTodas = ArrayHelper::map($solicitudesX, 'id', function($model){
+            return $model->cant;
+        });
+
+        $range = [];
+
+
+
+        if (is_string($start) === true) $start = strtotime($start);
+        if (is_string($end) === true ) $end = strtotime($end);
+        do {
+            $range[] = date('Y-m-d', $start);
+            $start = strtotime("+ 1 day", $start);
+        } while($start <= $end);
+
+        //return var_dump($range);
+
+        $dias = $range;
+
+        $turnocursado = Turno::find()->where(['<', 'id', 3])->all();
+        $cd = 0;
+        //return var_dump($dias);
+        $array = [];
+        $salida = '';
+        $diasgrid = [];
+        $diasgrid['columns'][] =['class' => 'yii\grid\SerialColumn'];
+        $diasgrid['columns'][] =[
+                        'label' => 'Turno',
+                        'vAlign' => 'middle',
+                        'hAlign' => 'center',
+                        'format' => 'raw',
+                        //'attribute' => '999',
+                        'value' => function($model) {
+                            return '<span class="badge">'.$model['999'].'</span>';
+                            
+                                
+                        }
+                    ];
+        $dias2 = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado","Domingo"];
+        foreach ($dias as $dia) {
+            $ch = 0;
+            $fechats = $dia;
+
+            if (!in_array(date("w",strtotime($fechats)), [0,6])){
+                date_default_timezone_set('America/Argentina/Buenos_Aires');
+                $dia = Yii::$app->formatter->asDate($dia, 'dd/MM/yyyy');
+                $diasgrid['columns'][] =  [
+                            'header' => $dias2[date("w",strtotime($fechats)-1)].'<br/>'.'<span class="label label-primary">'.$dia.'</span>',
+                            'vAlign' => 'middle',
+                            'hAlign' => 'center',
+                            'format' => 'raw',
+                            'attribute' => $fechats
+                            /*'value' => function($model){
+                                return var_dump($model);
+                            }*/
+                        ];
+                
+
+                foreach ($turnocursado as $turnocur) {
+                    # code...
+                    if($cd == 0)
+                        $array[$turnocur->id][999] = $turnocur->nombre; 
+                    /*if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]))
+                        if($prt==1)
+                            $array[$hora->id][$fechats] = "-";
+                        else
+                            $array[$hora->id][$fechats] = '<a class="btn btn-info btn-sm" href="?r=horarioexamen/createdesdehorario&division='.$division.'&hora='.$hora->id.'&fecha='.$fechats.'&tipo='.$tipo.'&alxtrim='.$anioxtrim->id.'&col='.$col.'"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>';
+                    else*/
+                        $array[$turnocur->id][$fechats] = "";
+                    //$key = array_search($hora->id, array_column($horarios, 'hora'));
+                    //$salida .= $key;
+                    /*if ($horario->hora == $hora->id && $horario->diasemana == $cd){
+
+                    
+                    }*/
+                    $ch = $ch + 1;
+                }  
+            }
+            
+            $cd = $cd + 1;
+        }
+        //return var_dump($array);
+
+        $mesas = Mesaexamen::find()->where(['turnoexamen' => $turnoX->id])->orderBy('fecha, hora')->all();
+
+        $salida = '';
+        $listdc = [];
+        foreach ($mesas as $mesa) {
+            if($mesa->fecha == null){
+                $mesa->fecha = $mesa->turnoexamen0->desde;
+                $mesa->save();
+            }
+            if($mesa->hora == null){
+                
+                $mesa->hora = '08:00';
+                $mesa->turnohorario = 1;
+                $mesa->save();
+                
+            }
+
+            $horaX = explode(':', $mesa->hora);
+            $horaX = ' - '.$horaX[0].':'.$horaX[1].'hs.';
+
+            $salida = '<ul>';
+        $superposision = false;
+        if($mesa->fecha != null && $mesa->hora != null){
+            if($mesa->repetidos == "Sin inscripciones"){
+                $salida = "Sin inscripciones";
+                $tipopanel = DetailView::TYPE_DEFAULT;
+            }else{
+                foreach ($mesa->repetidos as $key => $detalle) {
+                    # code...
+                    $det = Detallesolicitudext::findOne($key);
+                    $salida .= '<li>'.$det->solicitud0->apellido.', '.$det->solicitud0->nombre.'</li>';
+        
+                    //$mesas = array_column($detalle,'0');
+                    $salida .= '<ul>';
+                    foreach ($detalle as $mesaX) {
+                        //return var_dump($mesa);
+                        try {
+                            $salida .= '<li>Mesa #'.$mesaX->id.'</li>';
+                            $superposision = true;
+                        } catch (\Throwable $th) {
+                            //throw $th;
+                        }
+                            
+                        
+                    }
+                    $salida .= '</ul>';
+                }
+                $salida .= '</ul>';
+
+                if($superposision){
+                    $tipopanel = DetailView::TYPE_DANGER;
+                }else{
+                    $tipopanel = DetailView::TYPE_SUCCESS;
+                    $salida = '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>';
+                }
+            }
+        }
+
+        if($mesa->fecha == null || $mesa->hora == null){
+            $tipopanel = DetailView::TYPE_PRIMARY;
+        }
+            
+            $salida = DetailView::widget([
+                'model'=>$mesa,
+                'condensed'=>true,
+                //'hover'=>true,
+                'mode'=>DetailView::MODE_VIEW,
+                'enableEditMode' => false,
+                'panel'=>[
+                    'heading'=>'Mesa #'.$mesa->id.Html::button($horaX, ['value' => Url::to(['update', 'id' => $mesa->id, 'or' => 'p2']), 'title' => 'Modificar mesa de examen'.' #'.$mesa->id, 'class' => 'btn btn-link amodalcasoupdate']),
+                    'headingOptions' => [
+                        'template' => '',
+                    ],
+                    'type'=>$tipopanel,
+                ],
+                'attributes'=>[
+                    
+                    //'turnohorario',
+                    [
+                        'label' => 'Materias',
+                        'format' => 'raw',
+                        'value' => function($model) use ($mesa, $solicitudesTodas){
+                            //return var_dump($solicitudesTodas);
+                            $salida = '<ul>';
+                            foreach ($mesa->actividads as $actividad) {
+                                $salida .= '<li>'.$actividad->nombre.'<b> - Inscriptos: '.Html::button($solicitudesTodas[$actividad->id], ['value' => Url::to(['/solicitudprevios/detallesolicitudext/pormateria', 'turno' => $mesa->turnoexamen, 'actividad' => $actividad->id]), 'title' => 'Inscriptos en la materia '.$actividad->nombre, 'class' => 'btn btn-link amodalcasoupdate']).'</b></li>';
+                            }
+                            $salida .= '</ul>';
+                            return $salida;
+                        }
+                    ],
+                    [
+                        'label' => 'Superposición'.'<br /> <center><span style="color:red" class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span></center>',
+                        'format' => 'raw',
+                        'visible' => $superposision,
+                        'value' => function($model) use ($salida){
+                            return $salida;
+                            
+                        }
+                    ],
+                    
+                    [
+                        'label' => 'Mover',
+                        'format' => 'raw',
+                        'value' => function($model) use ($mesa){
+                            
+                            $arriba = Html::a('<span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>', Url::to(['mover', 'mesa' => $mesa->id, 'dir' => 'u']), ['class' => 'btn btn-default']);
+                            $derecha = Html::a('<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>', Url::to(['mover', 'mesa' => $mesa->id, 'dir' => 'r']), ['class' => 'btn btn-default']);
+                            $izquierda = Html::a('<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>', Url::to(['mover', 'mesa' => $mesa->id, 'dir' => 'l']), ['class' => 'btn btn-default']);
+                            $abajo = Html::a('<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>', Url::to(['mover', 'mesa' => $mesa->id, 'dir' => 'd']), ['class' => 'btn btn-default']);
+
+                            return $arriba.'<br>'.$izquierda.$abajo.$derecha;
+                            
+                        }
+                    ]
+                    
+                   
+                ]
+            ]);
+                            
+            $array[$mesa->turnohorario][$mesa->fecha] .= $salida;
+        }
+
+        $provider = new ArrayDataProvider([
+            'allModels' => $array,
+            
+        ]);
+
+        return $this->render('paso2', [
+
+            'provider' => $provider,
+            'diasgrid' => $diasgrid,
+            'listdc' => $listdc,
+            'turno' => $turnoX,
+
+        ]);
+    }
+
+    protected function getTurnoHorario($mesa){
+        $model = $this->findModel($mesa);
+        if($model->fecha !=null || $model->hora != null){
+            if(strtotime($model->hora)<=strtotime('12:00:00')) {
+                return 1;
+               } else {
+                return 2;
+               }
+        }else{
+            return 0;
+        }
+
+    }
+
+
+
     /**
      * Finds the Mesaexamen model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -398,6 +862,8 @@ class MesaexamenController extends Controller
      * @return Mesaexamen the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+
+
     protected function findModel($id)
     {
         if (($model = Mesaexamen::findOne($id)) !== null) {

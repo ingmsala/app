@@ -5,10 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Turnoexamen */
 
-$this->title = 'Modificar Turnoexamen: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Turnoexamens', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Modificar';
+$this->title = 'Modificar Turno de examen: ' . $model->id;
+
 ?>
 <div class="turnoexamen-update">
 
@@ -16,6 +14,8 @@ $this->params['breadcrumbs'][] = 'Modificar';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'tipos' => $tipos,
+        'estados' => $estados,
     ]) ?>
 
 </div>

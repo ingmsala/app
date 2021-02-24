@@ -12,8 +12,21 @@ $this->params['breadcrumbs'][] = 'Modificar';
 ?>
 <div class="mesaexamen-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
+    <?php
+        if($origen == 'noajax'){
+            echo '<h1>'.Html::encode($this->title).'</h1>';
+        }
+    ?>
+<div class="pull-right">
+<?= Html::a('Eliminar', ['delete', 'id' => $model->id, 'or'=>$or], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => 'Está seguro que desea eliminar el elemento?',
+                'method' => 'post',
+            ],
+        ]) ?>
+  </div>
+  <div class="clearfix"></div>  
     <?= $this->render('_form', [
         'model' => $model,
         'turnosexamen' => $turnosexamen,

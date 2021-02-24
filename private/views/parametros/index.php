@@ -1,5 +1,6 @@
 <?php
 
+use app\modules\curriculares\models\Aniolectivo;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -27,7 +28,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'descripcion',
-            'estado',
+            [
+                'label' => 'Estado',
+                'value' => function($model){
+                    if($model->id == 1){
+                        try {
+                            $anio = Aniolectivo::findOne($model->estado);
+                            return 'Publicado el horario '.$anio->nombre;
+                        } catch (\Throwable $th) {
+                            //throw $th;
+                        }
+                        return 'No publicado';
+                    }
+                    return $model->estado;
+                }
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

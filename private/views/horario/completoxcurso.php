@@ -100,6 +100,8 @@ JS;
 			
 
 			ActiveForm::end();
+			
+			echo '<div class="pull-right">'.$publi.'</div>';
 		}
 	?>
     <div class="clearfix" style="padding-bottom: 10px;"></div>	

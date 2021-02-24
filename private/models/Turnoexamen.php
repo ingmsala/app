@@ -36,6 +36,7 @@ class Turnoexamen extends \yii\db\ActiveRecord
             [['desde', 'hasta'], 'safe'],
             [['tipoturno', 'activo'], 'integer'],
             [['nombre'], 'string', 'max' => 200],
+            [['activo'], 'exist', 'skipOnError' => true, 'targetClass' => Estadoturnoexamen::className(), 'targetAttribute' => ['activo' => 'id']],
         ];
     }
 
@@ -63,6 +64,11 @@ class Turnoexamen extends \yii\db\ActiveRecord
     }
     public function getTipoturno0()
     {
-        return $this->hasOne(Tipoparte::className(), ['id' => 'tipoturno']);
+        return $this->hasOne(Tipoturnoexamen::className(), ['id' => 'tipoturno']);
+    }
+
+    public function getEstado0()
+    {
+        return $this->hasOne(Estadoturnoexamen::className(), ['id' => 'activo']);
     }
 }

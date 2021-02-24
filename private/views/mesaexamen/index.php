@@ -56,7 +56,12 @@ $this->title = 'Horario de previas';
                             'label' => 'Hora',
                             'value' => function() use ($model){
                                 $hora = explode(':', $model->hora);
-                                return $hora[0].':'.$hora[1].' hs.';
+                                try {
+                                    return $hora[0].':'.$hora[1].' hs.';
+                                } catch (\Throwable $th) {
+                                    return '';
+                                }
+                                
                             }
                         ],
             
@@ -171,7 +176,7 @@ $this->title = 'Horario de previas';
 
         'toolbar'=>[
             ['content' => 
-                (in_array (Yii::$app->user->identity->role, [Globales::US_SUPER])) ? Html::a('Nueva Mesa de examen', ['create'], ['class' => 'btn btn-success']) : $a 
+                (in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])) ? Html::a('Nueva Mesa de examen', ['create'], ['class' => 'btn btn-success']) : $a 
 
             ],
             '{export}',
@@ -197,8 +202,13 @@ $this->title = 'Horario de previas';
             [
                 'label' => 'Hora',
                 'value' => function($model){
-                    $hora = explode(':', $model->hora);
-                    return $hora[0].':'.$hora[1].' hs.';
+                    
+                    try {
+                        $hora = explode(':', $model->hora);
+                        return $hora[0].':'.$hora[1].' hs.';
+                    } catch (\Throwable $th) {
+                        return '';
+                    }
                 }
             ],
 
@@ -250,7 +260,7 @@ $this->title = 'Horario de previas';
 
                 'template' => '{update} {delete}',
 
-                'visible' => in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]),
+                'visible' => in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]),
                 'buttons' => [
                     'view' => function($url, $model, $key){
                         return Html::a(
@@ -260,7 +270,7 @@ $this->title = 'Horario de previas';
                     'update' => function($url, $model, $key){
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>',
-                            '?r=mesaexamen/update&id='.$model['id']);
+                            '?r=mesaexamen/update&id='.$model['id'].'&or=in');
                     },
                     
                     

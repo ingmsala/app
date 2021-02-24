@@ -3,6 +3,9 @@
 namespace app\controllers;
 
 use app\config\Globales;
+use app\models\Estadoturnoexamen;
+use app\models\Parametros;
+use app\models\Tipoturnoexamen;
 use Yii;
 use app\models\Turnoexamen;
 use app\models\TurnoexamenSearch;
@@ -44,7 +47,9 @@ class TurnoexamenController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_PRECEPTORIA]);
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_PRECEPTOR, Globales::US_AGENTE, Globales::US_PRECEPTORIA]) || in_array (Yii::$app->user->identity->username, Globales::solicitudesext))
+                                    return true;
+                                return false;
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -68,6 +73,8 @@ class TurnoexamenController extends Controller
      */
     public function actionIndex()
     {
+        $g = new Globales();
+        $this->layout = $g->getLayout(Yii::$app->user->identity->role);
         $searchModel = new TurnoexamenSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -98,33 +105,62 @@ class TurnoexamenController extends Controller
     public function actionCreate()
     {
         $model = new Turnoexamen();
+        $tipos = Tipoturnoexamen::find()->all();
+        $estados = Estadoturnoexamen::find()->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $desdeexplode = explode("/",$model->desde);
+            $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
+            $model->desde = $newdatedesde;
+
+            $hastaexplode = explode("/",$model->hasta);
+            $newdatehasta = (!empty($model->hasta)) ? date("Y-m-d", mktime(0, 0, 0, $hastaexplode[1], $hastaexplode[0], $hastaexplode[2])) : null;
+            $model->hasta = $newdatehasta;
+            $model->save();
+            Yii::$app->session->setFlash('success', "Se creó correctamente el turno de examen");
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'tipos' => $tipos,
+            'estados' => $estados,
+
         ]);
     }
 
-    /**
-     * Updates an existing Turnoexamen model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $tipos = Tipoturnoexamen::find()->all();
+        $estados = Estadoturnoexamen::find()->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $desdeexplode = explode("/",$model->desde);
+            $newdatedesde = date("Y-m-d", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[0], $desdeexplode[2]));
+            $model->desde = $newdatedesde;
+
+            $hastaexplode = explode("/",$model->hasta);
+            $newdatehasta = (!empty($model->hasta)) ? date("Y-m-d", mktime(0, 0, 0, $hastaexplode[1], $hastaexplode[0], $hastaexplode[2])) : null;
+            $model->hasta = $newdatehasta;
+            $model->save();
+            Yii::$app->session->setFlash('success', "Se modificó correctamente el turno de examen");
+            return $this->redirect(['index']);
         }
+
+        $desdeexplode = explode("-",$model->desde);
+        $newdatedesde = (!empty($model->desde)) ? date("d/m/Y", mktime(0, 0, 0, $desdeexplode[1], $desdeexplode[2], $desdeexplode[0])) : null;
+        $model->desde = $newdatedesde;
+
+        $hastaexplode = explode("-",$model->hasta);
+        $newdatehasta = (!empty($model->hasta)) ? date("d/m/Y", mktime(0, 0, 0, $hastaexplode[1], $hastaexplode[2], $hastaexplode[0])) : null;
+        $model->hasta = $newdatehasta;
 
         return $this->render('update', [
             'model' => $model,
+            'tipos' => $tipos,
+            'estados' => $estados,
         ]);
     }
 

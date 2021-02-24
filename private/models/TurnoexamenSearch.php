@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\config\Globales;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -41,7 +42,10 @@ class TurnoexamenSearch extends Turnoexamen
      */
     public function search($params)
     {
-        $query = Turnoexamen::find();
+        if(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
+            $query = Turnoexamen::find()->where(['activo' => 2])->orderBy('desde desc');
+        else
+            $query = Turnoexamen::find()->orderBy('desde desc');
 
         // add conditions that should always apply here
 

@@ -28,10 +28,12 @@ use app\models\Tipoparte;
 use app\models\Turnoexamen;
 use app\modules\curriculares\models\Aniolectivo;
 use kartik\mpdf\Pdf;
+use Symfony\Component\Finder\Glob;
 use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -53,7 +55,7 @@ class HorarioController extends Controller
                                     'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 
                                     'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 
                                     'horariocompleto', 'menuopciones','migrarhorarioprueba', 'printxcurso', 
-                                    'printxdocente', 'deshabilitados', 'cambiarmovilidad', 'completodetallado', 'prueba', 'migrarhorariosiguienteanio', 'declaracionhorario'],
+                                    'printxdocente', 'deshabilitados', 'cambiarmovilidad', 'completodetallado', 'prueba', 'migrarhorariosiguienteanio', 'declaracionhorario', 'publicar', 'horassuperpuestasdj'],
                 'rules' => [
                     [
                         'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'filtropormateria', 'horariocompleto', 'menuopciones'],   
@@ -181,7 +183,7 @@ class HorarioController extends Controller
 
                     ],
                     [
-                        'actions' => ['createdesdehorario','updatedesdehorario', 'delete', 'printxdocente', 'deshabilitados', 'cambiarmovilidad', 'completodetallado', 'declaracionhorario'],   
+                        'actions' => ['createdesdehorario','updatedesdehorario', 'delete', 'printxdocente', 'deshabilitados', 'cambiarmovilidad', 'completodetallado', 'declaracionhorario', 'publicar'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -209,6 +211,22 @@ class HorarioController extends Controller
                         }
 
                     ],
+                    [
+                        'actions' => ['horassuperpuestasdj'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_SECRETARIA])){
+                                    return true;
+                                }else{
+                                        return false;
+                                    }
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
 
                    
                 ],
@@ -218,6 +236,7 @@ class HorarioController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                     'cambiarmovilidad' => ['POST'],
+                    'publicar' => ['POST'],
                 ],
             ],
         ];
@@ -268,7 +287,7 @@ class HorarioController extends Controller
 
     public function actionPdfprevios()
     {
-        $estadopublicacion = Parametros::findOne(2)->estado;
+        /*$estadopublicacion = Parametros::findOne(2)->estado;
 
         if ($estadopublicacion == 0){
             Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes previos");
@@ -284,19 +303,11 @@ class HorarioController extends Controller
                 return $this->redirect(Yii::$app->request->referrer);
             }
             
-        }//1 ok
+        }//1 ok*/
         
         $this->layout = 'mainpersonal';
-            
         
-        $te = Turnoexamen::find()->where(['tipoturno' => 3])->andWhere(['activo' => 1])->one();
-
-        if($te == null){
-            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes previos");
-                return $this->redirect(Yii::$app->request->referrer);
-        }
-
-            return $this->redirect(['/mesaexamen', 'turno' => $te->id]);
+        return $this->redirect(['/turnoexamen']);
     }
 
         public function actionMarzo()
@@ -694,18 +705,9 @@ class HorarioController extends Controller
         if ($estadopublicacion == 0){
             Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
             return $this->redirect(Yii::$app->request->referrer);
-        }elseif($estadopublicacion == 2){
-            try {
-                if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
-                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
-                return $this->redirect(Yii::$app->request->referrer);
-            }
-            } catch (\Throwable $th) {
-                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
-                return $this->redirect(Yii::$app->request->referrer);
-            }
-            
-        }//1 ok
+        }
+
+        
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
         if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR)
@@ -864,6 +866,18 @@ class HorarioController extends Controller
             return $this->redirect(['completoxcurso', 'division' => $division, 'vista' => $vista, 'al' => $model->aniolectivo]);
             
         }
+        $publicado = Parametros::findOne(1);
+        if($alx->id == $publicado->estado){
+            $publi = 'Publicado';
+        }else{
+            $publi = Html::a('Publicar', Url::to(['publicar', 'division' => $division, 'vista' => $vista, 'al' => $alx->id]), [
+                'class' => 'btn btn-link',
+                'data' => [
+                    'confirm' => 'Está seguro que desea publicar el horario '.$alx->nombre.'?',
+                    'method' => 'post',
+                ],
+                ]);
+        }
 
         
 
@@ -884,6 +898,7 @@ class HorarioController extends Controller
                 'alx' => $alx,
                 'colorheader' => $colorheader,
                 'otro' => $otro,
+                'publi' => $publi,
     
             ]);
         }else{
@@ -903,11 +918,19 @@ class HorarioController extends Controller
                 'alx' => $alx,
                 'colorheader' => $colorheader,
                 'otro' => $otro,
+                'publi' => $publi,
     
             ]);
         }
 
         
+    }
+
+    public function actionPublicar($division, $vista, $al){
+        $param = Parametros::findOne(1);
+        $param->estado = $al;
+        $param->save();
+        return $this->redirect(['completoxcurso', 'division' => $division, 'vista' => $vista, 'al' => $al]);
     }
 
 
@@ -1011,7 +1034,9 @@ class HorarioController extends Controller
    
     public function actionCompletoxcurso($division, $vista, $al=0)
     {
-        $almodel = Aniolectivo::find()->where(['activo' => 1])->one();
+        $estadopublicacion = Parametros::findOne(1)->estado;
+        $almodel = Aniolectivo::find()->where(['id' => $estadopublicacion])->one();
+
         $anio = $almodel->id;
         
         if($al==0){
@@ -1167,6 +1192,8 @@ class HorarioController extends Controller
             return [false, ''];
     }
 
+    
+
     private function horaSuperpuestaDeclaracionJurada($dc, $hora, $diasemana, $al, $h){
         $agente = $dc->agente0;
         
@@ -1174,10 +1201,13 @@ class HorarioController extends Controller
                 ->where(['agente' => $agente->documento])
                 ->andWhere(['in', 'estadodeclaracion', [2,3]])
                 ->max('id');
-
+        //$ff = [];
         foreach ($h as $key => $hx ) {
             $ff[] = explode(' a ',$hx);
         }
+        
+        
+
 
         $horariosdj = null;
 
@@ -1190,14 +1220,14 @@ class HorarioController extends Controller
                             ->andWhere(['or',['and',
                                         
                                         ['=', 'horariodj.diasemana', $diasemana],
-                                        ['<=', 'horariodj.inicio', $ff[$hora-2][0]],
+                                        ['<', 'horariodj.inicio', $ff[$hora-2][0]],
                                         ['>', 'horariodj.fin', $ff[$hora-2][0]],
                                 
                                      ], 
                                      ['and',
 
                                         ['=', 'horariodj.diasemana', $diasemana],
-                                        ['<=', 'horariodj.inicio', $ff[$hora-2][1]],
+                                        ['<', 'horariodj.inicio', $ff[$hora-2][1]],
                                         ['>', 'horariodj.fin', $ff[$hora-2][1]],
                                 
                                      ],     
@@ -1244,18 +1274,8 @@ class HorarioController extends Controller
         if ($estadopublicacion == 0){
             Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
             return $this->redirect(Yii::$app->request->referrer);
-        }elseif($estadopublicacion == 2){
-            try {
-                if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
-                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
-                return $this->redirect(Yii::$app->request->referrer);
-            }
-            } catch (\Throwable $th) {
-                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
-                return $this->redirect(Yii::$app->request->referrer);
-            }
-            
-        }//1 ok
+        }
+
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
         $searchModel = new HorarioSearch();
@@ -1349,18 +1369,8 @@ class HorarioController extends Controller
         if ($estadopublicacion == 0){
             Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
             return $this->redirect(Yii::$app->request->referrer);
-        }elseif($estadopublicacion == 2){
-            try {
-                if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
-                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
-                return $this->redirect(Yii::$app->request->referrer);
-            }
-            } catch (\Throwable $th) {
-                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
-                return $this->redirect(Yii::$app->request->referrer);
-            }
-            
-        }//1 ok
+        }
+
         $this->layout = 'mainpersonal';
         /*$agente = Agente::find()
                 ->joinWith('detallecatedras')
@@ -1379,7 +1389,7 @@ class HorarioController extends Controller
             return $this->redirect(['menuopcionespublic']);
         }
         
-        $alx2 = Aniolectivo::find()->where(['activo' => 1])->one();
+        $alx2 = Aniolectivo::find()->where(['id' => $estadopublicacion])->one();
         return $this->getCompletoxdocentepage($agente->id, 0, 0, 1, $alx2->id);
     }
 
@@ -1390,21 +1400,10 @@ class HorarioController extends Controller
         if ($estadopublicacion == 0){
             Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
             return $this->redirect(Yii::$app->request->referrer);
-        }elseif($estadopublicacion == 2){
-            try {
-                if(!in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
-                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
-                return $this->redirect(Yii::$app->request->referrer);
-            }
-            } catch (\Throwable $th) {
-                Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
-                return $this->redirect(Yii::$app->request->referrer);
-            }
-            
-        }//1 ok
+        }
 
 
-        $almodel = Aniolectivo::find()->where(['activo' => 1])->one();
+        $almodel = Aniolectivo::find()->where(['id' => $estadopublicacion])->one();
         $anio = $almodel->id;
         
         if($al==0){
@@ -1666,12 +1665,27 @@ class HorarioController extends Controller
         
         $alx = Aniolectivo::findOne($al);
         $alx2 = Aniolectivo::find()->where(['activo' => 1])->one();
-        if($alx->nombre <> $alx2->nombre){
+        if($alx->nombre <> $alx2->nombre && in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
             $colorheader = ['style' => 'background-color:#f2dede'];
             $otro = 1;
         }else{
             $colorheader = [];
             $otro = 0;
+        }
+
+        $model = new Horario();
+        $model->aniolectivo = $al;
+        $alx = Aniolectivo::findOne($al);
+        $alx2 = Aniolectivo::find()->where(['activo' => 1])->one();
+        //$anioslectivos = Aniolectivo::find()->limit(2)->orderBy('id DESC')->all();
+        $anioslectivos = Aniolectivo::find()->where(['>=', 'id', $alx2->id])->all();
+        
+        if ($model->load(Yii::$app->request->post())) {
+            //return var_dump($model->aniolectivo);
+            $session = Yii::$app->session;
+		    $session->set('aniolectivosession', $model->aniolectivo);
+            return $this->redirect(['completoxdocente', 'agente' => $agente, 'al' => $model->aniolectivo]);
+            
         }
 
         if($pr<>1){
@@ -1685,6 +1699,8 @@ class HorarioController extends Controller
                 'alx' => $alx,
                 'colorheader' => $colorheader,
                 'otro' => $otro,
+                'anioslectivos' => $anioslectivos,
+                'model' => $model,
                 
             ]);
         }else{
@@ -1697,6 +1713,8 @@ class HorarioController extends Controller
                 'alx' => $alx,
                 'colorheader' => $colorheader,
                 'otro' => $otro,
+                'anioslectivos' => $anioslectivos,
+                'model' => $model,
                 
             ]);
         }
@@ -2423,6 +2441,132 @@ class HorarioController extends Controller
 
     public function actionHorassuperpuestas(){
 
+            $anios = Aniolectivo::find()->all();
+            $model = new Catedra();
+
+            if (Yii::$app->request->post()) {
+                $searchModel = new HorarioSearch;
+                $dataProvider = $searchModel->horassuperpuestas(Yii::$app->request->post()['Catedra']['aniolectivo']);
+	        }else{
+                $searchModel = new HorarioSearch();
+	            $dataProvider = $searchModel->horassuperpuestas(0);
+            }
+
+            if(isset(Yii::$app->request->post()['Catedra']['aniolectivo'])){
+                $model->aniolectivo = Yii::$app->request->post()['Catedra']['aniolectivo'];
+            }
+
+        return $this->render('horassuperpuestas', [
+            'model' => $model,
+            'anios' => $anios,
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            
+            
+        ]);
+    }
+
+    public function actionHorassuperpuestasdj(){
+
+        if (Yii::$app->request->post()) {
+            $al = Yii::$app->request->post()['Catedra']['aniolectivo'];
+            $alx = Aniolectivo::findOne($al);
+            $alx = ' - '.$alx->nombre;
+            $superpuestas = [];
+            $horarios = Horario::find()
+                            ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.detallecatedras.agente0'])
+                            //->where(['diasemana' => 2])
+                            ->andWhere(['tipo' => 1])
+                            //->andWhere(['horario.aniolectivo' => $al])
+                            ->andWhere(['horario.aniolectivo' => $al])
+                            ->orderBy('agente.apellido, agente.nombre, diasemana, hora')
+                            ->all();
+
+                            //return var_dump($horarios);
+
+            foreach ($horarios as $horariox) {
+
+                $turno = $horariox->catedra0->division0->turno;
+                $h= [];
+                if($turno == 1){
+                    $h[1] = '7:15 a 7:55';
+                    $h[2] = '8:00 a 8:40';
+                    $h[3] = '8:45 a 9:25';
+                    $h[4] = '9:30 a 10:10';
+                    $h[5] = '10:20 a 11:00';
+                    $h[6] = '11:05 a 11:45';
+                    $h[7] = '11:50 a 12:30';
+                    $h[8] = '12:35 a 13:15';
+                }elseif ($turno == 2) {
+                    $h[1] = '13:30 a 14:10';
+                    $h[2] = '14:15 a 14:55';
+                    $h[3] = '15:00 a 15:40';
+                    $h[4] = '15:45 a 16:25';
+                    $h[5] = '16:35 a 17:15';
+                    $h[6] = '17:20 a 18:00';
+                    $h[7] = '18:05 a 18:45';
+                    $h[8] = '18:50 a 19:30';
+                }
+
+                foreach ($horariox->catedra0->detallecatedras as $dc) {
+
+                    $salida = '';
+                    if ($dc->revista == 6 && $dc->aniolectivo == $al){
+                    
+                        try {
+                            $superpuestodj = $this->horaSuperpuestaDeclaracionJurada($dc, $horariox->hora, $horariox->diasemana, $dc->aniolectivo, $h);
+                            if($superpuestodj[0]){
+                                $superpuestas[$dc->id]['division']=$dc->catedra0->division0->nombre;
+                                $superpuestas[$dc->id]['actividad']=$dc->catedra0->actividad0->nombre;
+                                $superpuestas[$dc->id]['agente']=$dc->agente0->apellido.', '.$dc->agente0->nombre;
+                                $superpuestas[$dc->id]['hora']=$horariox->hora0->nombre.' ('.$h[$horariox->hora-1].')';
+                                $superpuestas[$dc->id]['dia']=$horariox->diasemana0->nombre;
+                                $superpuestas[$dc->id]['superposicion']=$superpuestodj[1];
+                            }
+                        } catch (\Throwable $th) {
+                            //throw $th;
+                        }
+                
+                    }   
+                
+                }
+
+            }
+        }else{
+            $superpuestas = [];
+            $alx = '';
+        }
+        
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $superpuestas,
+            'pagination' => false,
+            
+        ]);
+
+        $anios = Aniolectivo::find()->all();
+            $model = new Catedra();
+        
+
+        if(isset(Yii::$app->request->post()['Catedra']['aniolectivo'])){
+            $model->aniolectivo = Yii::$app->request->post()['Catedra']['aniolectivo'];
+        }
+        return $this->render('horassuperpuestasdj', [
+            //'model' => $model,
+            //'searchModel' => $searchModel,
+            'model' => $model,
+            'anios' => $anios,
+            'dataProvider' => $dataProvider,
+            'alx' => $alx,
+            
+
+        ]);
+
+
+                        
+        
+
+        
+            
             $anios = Aniolectivo::find()->all();
             $model = new Catedra();
 

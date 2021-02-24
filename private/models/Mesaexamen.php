@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use app\modules\solicitudprevios\models\Detallesolicitudext;
+use app\modules\solicitudprevios\models\Solicitudinscripext;
 use Yii;
 
 /**
@@ -20,6 +22,9 @@ use Yii;
  */
 class Mesaexamen extends \yii\db\ActiveRecord
 {
+    const SCENARIO_AMB = 'abm';
+    const SCENARIO_PASOS = 'pasos';
+
     /**
      * {@inheritdoc}
      */
@@ -28,14 +33,23 @@ class Mesaexamen extends \yii\db\ActiveRecord
         return 'mesaexamen';
     }
 
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_AMB] = ['turnoexamen', 'espacio', 'fecha', 'hora', 'nombre', 'turnohorario'];
+        $scenarios[self::SCENARIO_PASOS] = ['turnoexamen', 'espacio', 'fecha', 'hora', 'nombre', 'turnohorario'];
+        return $scenarios;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['turnoexamen', 'espacio'], 'integer'],
-            [['fecha', 'hora', 'turnoexamen'], 'required'],
+            [['turnoexamen', 'espacio', 'turnohorario'], 'integer'],
+            [['fecha', 'hora', 'turnoexamen', 'turnohorario'], 'required', 'on' => self::SCENARIO_AMB],
+            [['turnoexamen'], 'required', 'on' => self::SCENARIO_PASOS],
             [['nombre', 'fecha', 'hora'], 'safe'],
             [['turnoexamen'], 'exist', 'skipOnError' => true, 'targetClass' => Turnoexamen::className(), 'targetAttribute' => ['turnoexamen' => 'id']],
             [['espacio'], 'exist', 'skipOnError' => true, 'targetClass' => Espacio::className(), 'targetAttribute' => ['espacio' => 'id']],
@@ -54,6 +68,7 @@ class Mesaexamen extends \yii\db\ActiveRecord
             'hora' => 'Hora',
             'turnoexamen' => 'Turno de examen',
             'espacio' => 'Espacio',
+            'turnohorario' => 'Turno',
         ];
     }
 
@@ -79,5 +94,96 @@ class Mesaexamen extends \yii\db\ActiveRecord
     public function getTribunals()
     {
         return $this->hasMany(Tribunal::className(), ['mesaexamen' => 'id']);
+    }
+
+    public function getActividadxmesas()
+    {
+        return $this->hasMany(Actividadxmesa::className(), ['mesaexamen' => 'id']);
+    }
+
+    public function getActividads()
+    {
+        return $this->hasMany(Actividad::className(), ['id' => 'actividad'])->via('actividadxmesas');
+    }
+
+    public function getRepetidos()
+    {
+        $mesamismodia = [];
+        //if($this->fecha != null || $this->hora !=null)
+        $mesamismodia = Mesaexamen::find()
+            ->where(['turnoexamen' => $this->turnoexamen])
+            ->andWhere(['<>', 'id', $this->id])
+            ->andWhere(['fecha' => $this->fecha])
+            ->andWhere(['turnohorario' => $this->turnohorario])
+            ->all();
+
+        $actividades = $this->actividads;
+
+        $solicitantes = Solicitudinscripext::find()
+                //->select('detallesolicitudext.id, solicitudinscripext.apellido, solicitudinscripext.nombre, actividad.nombre as mail')
+                ->joinWith(['detallesolicitudexts', 'detallesolicitudexts.actividad0'])
+                ->where(['solicitudinscripext.turno' => $this->turnoexamen])
+                ->andWhere(['in', 'actividad.id', array_column($actividades, 'id')])
+                ->all();
+        if($solicitantes == null)
+            return 'Sin inscripciones';
+        $repe = [];
+
+        foreach ($solicitantes as $solicitud) {
+            
+            foreach ($solicitud->detallesolicitudexts as $detalle) {
+                $mesamismodia = Mesaexamen::find()
+                    ->joinWith(['actividadxmesas'])
+                    ->where(['mesaexamen.turnoexamen' => $this->turnoexamen])
+                    ->andWhere(['<>', 'mesaexamen.id', $this->id])
+                    ->andWhere(['mesaexamen.fecha' => $this->fecha])
+                    ->andWhere(['mesaexamen.turnohorario' => $this->turnohorario])
+                    ->andWhere(['actividadxmesa.actividad' => $detalle->actividad])
+                    ->all();
+                    if($mesamismodia !=null){
+                        $repe[$detalle->id] = $mesamismodia;
+                    }
+                   
+            }
+        
+        }
+        
+
+        $alumnoinscripto = Detallesolicitudext::find()
+                        ->joinWith(['solicitud0', 'actividad0'])
+                        ->where(['solicitudinscripext.turno' => $this->turnoexamen])
+                        ->andWhere(['in', 'actividad.id', array_column($actividades, 'id')])
+                        ->all();
+
+        
+        return $repe;
+    }
+
+    public function getRepetidosinternos()
+    {
+        $actividades = $this->actividads;
+        $repe = [];
+        foreach ($actividades as $actividad) {
+            $alumnoinscripto = Detallesolicitudext::find()
+                ->joinWith(['solicitud0', 'actividad0'])
+                ->where(['solicitudinscripext.turno' => $this->turnoexamen])
+                ->andWhere(['actividad.id' => $actividad])
+                ->all();
+
+            $otrasmismamesa = Detallesolicitudext::find()
+                ->joinWith(['solicitud0', 'actividad0'])
+                ->where(['solicitudinscripext.turno' => $this->turnoexamen])
+                ->andWhere(['in', 'actividad.id', array_column($actividades, 'id')])
+                ->andWhere(['<>', 'actividad.id', $actividad->id])
+                ->andWhere(['in', 'solicitudinscripext.documento', array_column(array_column($alumnoinscripto, 'solicitud0'),'documento')])
+                ->all();
+            
+            foreach ($alumnoinscripto as $detotras) {
+                $repe[$detotras->id] = $otrasmismamesa;
+            }
+
+        }
+        return $repe;
+        
     }
 }

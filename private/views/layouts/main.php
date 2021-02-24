@@ -160,6 +160,8 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Horarios con movilidad deshabilitada', 'url' => ['/horario/deshabilitados']],
                                         '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Horarios de Convocatoria', 'url' => ['/reporte/horarios/convocatoria']],
+                                        '<div class="dropdown-divider"></div>',
                                         
 
                                     ],
@@ -461,6 +463,8 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Previas', 'url' => ['/turnoexamen']],
                                         '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Horarios de Convocatoria', 'url' => ['/reporte/horarios/convocatoria']],
+                                        '<div class="dropdown-divider"></div>',
                                         
                                         
                                     ],
@@ -656,6 +660,8 @@ try {
                                         ['label' => 'Horarios con movilidad deshabilitada', 'url' => ['/horario/deshabilitados']],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Listado de docentes en horario', 'url' => ['/horario/completodetallado']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Horarios de Convocatoria', 'url' => ['/reporte/horarios/convocatoria']],
                                         '<div class="dropdown-divider"></div>',
                                         
 
@@ -1280,6 +1286,43 @@ try {
 NavBar::end();
 ?>
 
+<?php if(isset($this->params['sidebar'])) {
+    if($this->params['sidebar']['visible'] == false){ 
+        
+?>
+    
+    
+        
+            
+            
+                
+        
+                        
+                            <div class="container" style="width:100%;">
+                            <?= Alert::widget() ?>
+                                <div class="row">
+                                    
+                                    <div class="col-md-12">
+                                    <?= Breadcrumbs::widget([
+                                        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                                    ]) ?>
+                                    <?= Alert::widget() ?>
+                                        <?= $content ?>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        
+                    
+                
+
+            
+        
+    
+    
+    
+<?php }}
+else{ ?>
 
 
 <div class="container">
@@ -1290,6 +1333,7 @@ NavBar::end();
     <?= Alert::widget() ?>
     <?= $content ?>
 </div>
+<?php }?>
 </div>
 
 <footer class="footer">

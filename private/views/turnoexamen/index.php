@@ -1,5 +1,6 @@
 <?php
 
+use app\config\Globales;
 use yii\helpers\Html;
 use kartik\grid\GridView;;
 
@@ -16,12 +17,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Nuevo Turnoexamen', ['create'], ['class' => 'btn btn-success']) ?>
+        <?php
+        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
+        echo Html::a('Nuevo Turno', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
+        'summary' => false,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -49,28 +53,36 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Activo',
                 'value' => function($model){
-                    if($model->activo == 0)
-                        return 'Inactivo';
-                    elseif($model->activo == 1)
-                        return 'Publicado';
-                    else
-                        return 'En carga';
+                    return $model->estado0->nombre;
                 }
             ],
 
             [
                 'class' => 'kartik\grid\ActionColumn',
 
-                'template' => '{view} {update} {delete}',
+                'template' => '{inscriptos} {armado} {view} {update} {delete}',
 
                 
                 'buttons' => [
+                    'inscriptos' => function($url, $model, $key){
+                        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-list-alt"></span>',
+                            '?r=solicitudprevios/detallesolicitudext/index&turno='.$model['id']);
+                    },
+                    'armado' => function($url, $model, $key){
+                        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-calendar"></span>',
+                            '?r=mesaexamen/paso1&turno='.$model['id']);
+                    },
                     'view' => function($url, $model, $key){
                         return Html::a(
                             '<span class="glyphicon glyphicon-eye-open"></span>',
                             '?r=mesaexamen/index&turno='.$model['id'].'&all=1');
                     },
                     'update' => function($url, $model, $key){
+                        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>',
                             '?r=turnoexamen/update&id='.$model['id']);
@@ -78,6 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     
                     
                     'delete' => function($url, $model, $key){
+                        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
                         return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=turnoexamen/delete&id='.$model['id'], 
                             ['data' => [
                             'confirm' => 'Está seguro de querer eliminar este elemento?',

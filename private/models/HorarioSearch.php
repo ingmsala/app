@@ -196,6 +196,44 @@ class HorarioSearch extends Horario
         return $dataProvider;
     }
 
+    public function getConvocatoria($aniolectivo)
+    {
+        //$aniolectivo = Aniolectivo::find()->where(['activo' => 1])->one();
+        $query = Horario::find()
+                    ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.actividad0', 'catedra0.division0'])
+                    ->andWhere(['tipo' => 1])
+                    ->andWhere(['detallecatedra.revista' => 6])
+                    ->andWhere(['detallecatedra.activo' => 1])
+                    ->andWhere(['horario.aniolectivo' => $aniolectivo])
+                    ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo])
+                    ->andWhere(['detallecatedra.agente' => 370])
+                    ->orderBy('actividad.nombre, division.nombre, horario.diasemana, horario.hora');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'catedra' => $this->catedra,
+            'hora' => $this->hora,
+            'diasemana' => $this->diasemana,
+            'tipo' => $this->tipo,
+        ]);
+
+        return $dataProvider;
+    }
+
     public function getCompletoDetallado($aniolectivo)
     {
         /*$query = Horario::find()
