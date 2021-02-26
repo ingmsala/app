@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
+use yii\widgets\Pjax;
 
 $this->title = $turno->nombre;
 
@@ -52,11 +53,15 @@ $this->params['sidebar'] = [
 
         Modal::end();
 	?>
-
+<div id="loadercont" style="display:none">
+<div id="loader"></div>
+</div>
 <div class="mesaexamen-form">
 
 <h1><?= Html::encode($this->title) ?></h1>
 <div style="font-size: 8pt;">
+
+
 <?= GridView::widget([
 		        'dataProvider' => $provider,
 		        //'filterModel' => $searchModel,
@@ -74,4 +79,5 @@ $this->params['sidebar'] = [
 		        
 	    	]); ?>
 </div>
+
 </div>

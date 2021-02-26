@@ -31,19 +31,29 @@ $this->title = 'Horario de previas';
         if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR])){
             $breadcrumbs = [];
             $breadcrumbs [] = ['label' => $turnoex->nombre];
+
+            echo Breadcrumbs::widget([
+                'homeLink' => ['label' => '< Volver', 'url' => ['/turnoexamen']],
+                'links' => $breadcrumbs,
+            ]);
         }
-        echo Breadcrumbs::widget([
-        'homeLink' => ['label' => '< Volver', 'url' => ['/turnoexamen']],
-        'links' => $breadcrumbs,
-    ]) ?>
+         ?>
 
 
     <?php
         if(Yii::$app->params['devicedetect']['isMobile']){
+
+            if($all == 1){
+                $a = Html::a('<span class="glyphicon glyphicon-filter" aria-hidden="true"></span>', Url::to('index.php?r=mesaexamen&turno='.$turnoex->id.'&all=0'), ['class' => 'btn btn-success', 'title' => 'Filtrar mis mesas']);
+            }else{
+                $a = Html::a('<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>', Url::to('index.php?r=mesaexamen&turno='.$turnoex->id.'&all=1'), ['class' => 'btn btn-success', 'title' => 'Ver turno completo']);
+            }
             date_default_timezone_set('America/Argentina/Buenos_Aires');
                 
             $models = $dataProvider->getModels();
-            
+            if(count($models)==0){
+                Yii::$app->session->setFlash('info', 'No tiene asignada ninguna mesa en el turno. Puede ver el turno completo haciendo click en el botón verde');
+            }
             foreach ($models as $model) {
                 $i = 0;
                 $fechaok = Yii::$app->formatter->asDate($model['fecha'], 'dd/MM/yyyy');
