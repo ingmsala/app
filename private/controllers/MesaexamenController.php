@@ -19,6 +19,7 @@ use app\modules\solicitudprevios\models\Detallesolicitudext;
 use kartik\detail\DetailView;
 use kartik\grid\GridView;
 use kartik\helpers\Html;
+use kartik\sortable\Sortable;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
@@ -198,6 +199,8 @@ class MesaexamenController extends Controller
             $model->scenario = Mesaexamen::SCENARIO_AMB;
         elseif($or=='p2')
             $model->scenario = Mesaexamen::SCENARIO_AMB;
+        elseif($or=='p3')
+            $model->scenario = Mesaexamen::SCENARIO_AMB;
         else
             $model->scenario = Mesaexamen::SCENARIO_PASOS;
 
@@ -316,6 +319,8 @@ class MesaexamenController extends Controller
                 return $this->redirect(['index', 'turno' => $model->turnoexamen, 'all' => 1]);
             elseif($or=='p2')
                 return $this->redirect(['paso2', 'turno' => $model->turnoexamen]);
+            elseif($or=='p3')
+                return $this->redirect(['paso3', 'turno' => $model->turnoexamen]);
             else
                 return $this->redirect(['paso1', 'turno' => $model->turnoexamen]);
         }
@@ -375,6 +380,8 @@ class MesaexamenController extends Controller
                 return $this->redirect(['index', 'turno' => $turno, 'all' => 1]);
             elseif($or=='p2')
                 return $this->redirect(['paso2', 'turno' => $turno]);
+            elseif($or=='p3')
+                return $this->redirect(['paso3', 'turno' => $turno]);
             else
                 return $this->redirect(['paso1', 'turno' => $turno]);
     }
@@ -889,6 +896,386 @@ class MesaexamenController extends Controller
             ]);
                             
             $array[$mesa->turnohorario][$mesa->fecha] .= $salida;
+        }
+
+        $provider = new ArrayDataProvider([
+            'allModels' => $array,
+            
+        ]);
+
+        return $this->render('paso2', [
+
+            'provider' => $provider,
+            'diasgrid' => $diasgrid,
+            'listdc' => $listdc,
+            'turno' => $turnoX,
+
+        ]);
+    }
+
+    public function actionMover2($destino, $origen, $mesa){
+
+        //$destion;
+        $cambio = false;
+        $destino2=substr($destino, 1, strlen($destino));
+        $expl = explode('-',$destino2);
+        $fecha = date('Y-m-d', $expl[0]);
+        $turnohorario = $expl[1];
+
+        $mesaexamenX = Mesaexamen::findOne($mesa);
+        if($mesaexamenX->turnohorario != $turnohorario){
+            $cambio = true;
+            if($turnohorario == 1){
+                $mesaexamenX->hora = '08:00';
+            }else{
+                $mesaexamenX->hora = '13:30';
+            }
+        }
+        if($mesaexamenX->fecha != $fecha){
+            $cambio = true;
+        }
+        if($cambio){
+            $mesaexamenX->turnohorario = $turnohorario;
+            $mesaexamenX->fecha = $fecha;
+            $mesaexamenX->save();
+        }else{
+            $cambio = 'sin cambios';
+        }
+       
+
+        return $cambio;
+
+    }
+
+    public function actionPaso3($turno)
+    {
+       
+        $turnoX = Turnoexamen::findOne($turno);
+        $start = $turnoX->desde;
+        $end = $turnoX->hasta;
+
+        $solicitudesX = Detallesolicitudext::find()
+        ->select('actividad.id, actividad.nombre as materia, count(actividad) as cant')
+        ->joinWith(['solicitud0', 'actividad0', 'estado0'])
+        ->groupBy('actividad.id, actividad.nombre')
+        ->where(['solicitudinscripext.turno' => $turno])
+        ->andWhere(['<>', 'estadoxsolicitudext.estado', 3])
+        ->all();
+
+        $solicitudesTodas = ArrayHelper::map($solicitudesX, 'id', function($model){
+            return $model->cant;
+        });
+
+        $range = [];
+
+
+
+        if (is_string($start) === true) $start = strtotime($start);
+        if (is_string($end) === true ) $end = strtotime($end);
+        do {
+            $range[] = date('Y-m-d', $start);
+            $start = strtotime("+ 1 day", $start);
+        } while($start <= $end);
+
+        //return var_dump($range);
+
+        $dias = $range;
+
+        $turnocursado = Turno::find()->where(['<', 'id', 3])->all();
+        $cd = 0;
+        //return var_dump($dias);
+        $array = [];
+        $salida = '';
+        $diasgrid = [];
+        //$diasgrid['columns'][] =['class' => 'yii\grid\SerialColumn'];
+        $diasgrid['columns'][] =[
+                        'label' => 'Turno',
+                        'vAlign' => 'middle',
+                        'hAlign' => 'center',
+                        'format' => 'raw',
+                        //'attribute' => '999',
+                        'value' => function($model) {
+                            return '<span class="badge">'.$model['999'].'</span>';
+                            
+                                
+                        }
+                    ];
+        $dias2 = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado","Domingo"];
+        foreach ($dias as $dia) {
+            $ch = 0;
+            $fechats = $dia;
+
+            if (!in_array(date("w",strtotime($fechats)), [0,6])){
+                date_default_timezone_set('America/Argentina/Buenos_Aires');
+                $dia = Yii::$app->formatter->asDate($dia, 'dd/MM/yyyy');
+                $diasgrid['columns'][] =  [
+                            'header' => $dias2[date("w",strtotime($fechats)-1)].'<br/>'.'<span class="label label-primary">'.$dia.'</span>',
+                            'vAlign' => 'middle',
+                            'hAlign' => 'center',
+                            'format' => 'raw',
+                            'attribute' => $fechats
+                            /*'value' => function($model){
+                                return var_dump($model);
+                            }*/
+                        ];
+                
+
+                foreach ($turnocursado as $turnocur) {
+                    # code...
+                    if($cd == 0)
+                        $array[$turnocur->id][999] = $turnocur->nombre; 
+                    
+                        $array[$turnocur->id][$fechats] = '';
+                    
+                    $ch = $ch + 1;
+                }  
+            }
+            
+            $cd = $cd + 1;
+        }
+        //return var_dump($array);
+
+        $mesas = Mesaexamen::find()->where(['turnoexamen' => $turnoX->id])->orderBy('fecha, hora')->all();
+
+        $salida = '';
+        $listdc = [];
+        $cmf = 0;
+        $cmh = 0;
+       
+        $punterofecha = strtotime ( $turnoX->desde );
+        $punterohora = 1;
+        $item = [];
+        foreach ($mesas as $mesa) {
+            if($mesa->fecha == null){
+                $mesa->fecha = date('Y-m-d', $punterofecha);
+                $mesa->save();
+                $punterofecha = strtotime ( '+1 day' , $punterofecha);
+                if($punterofecha>strtotime ($turnoX->hasta))
+                    $punterofecha = strtotime ($turnoX->desde);
+            }
+            if($mesa->hora == null){
+                $mesa->turnohorario = $punterohora;
+                if($punterohora == 1){
+                    $mesa->hora = '08:00';
+                    $punterohora = 2;
+                }
+                else{
+                    $mesa->hora = '13:30';
+                    $punterohora = 1;
+                }
+                
+                $mesa->save();
+                
+            }
+
+            $horaX = explode(':', $mesa->hora);
+            $horaX = ' - '.$horaX[0].':'.$horaX[1].'hs.';
+
+            $salida = '<ul>';
+        $superposision = false;
+        if($mesa->fecha != null && $mesa->hora != null){
+            if($mesa->repetidos == "Sin inscripciones"){
+                $salida = "Sin inscripciones";
+                $tipopanel = DetailView::TYPE_DEFAULT;
+            }else{
+                foreach ($mesa->repetidos as $key => $detalle) {
+                    # code...
+                    $det = Detallesolicitudext::findOne($key);
+                    $salida .= '<li>'.$det->solicitud0->apellido.', '.$det->solicitud0->nombre.'</li>';
+        
+                    //$mesas = array_column($detalle,'0');
+                    $salida .= '<ul>';
+                    foreach ($detalle as $mesaX) {
+                        //return var_dump($mesa);
+                        try {
+                            $salida .= '<li>Mesa #'.$mesaX->id.'</li>';
+                            $superposision = true;
+                        } catch (\Throwable $th) {
+                            //throw $th;
+                        }
+                            
+                        
+                    }
+                    $salida .= '</ul>';
+                }
+                $salida .= '</ul>';
+
+                if($superposision){
+                    $tipopanel = DetailView::TYPE_DANGER;
+                }else{
+                    $tipopanel = DetailView::TYPE_SUCCESS;
+                    $salida = '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>';
+                }
+            }
+        }
+
+        if($mesa->fecha == null || $mesa->hora == null){
+            $tipopanel = DetailView::TYPE_PRIMARY;
+        }
+           //$item = [];
+            $item[strtotime($mesa->fecha).'-'.$mesa->turnohorario][] = ['options' =>['id'=>$mesa->id], 'content' => DetailView::widget([
+                'model'=>$mesa,
+                'condensed'=>true,
+                //'hover'=>true,
+                'mode'=>DetailView::MODE_VIEW,
+                'enableEditMode' => false,
+                'panel'=>[
+                    'heading'=>'Mesa #'.$mesa->id.Html::button($horaX, ['value' => Url::to(['update', 'id' => $mesa->id, 'or' => 'p3']), 'title' => 'Modificar mesa de examen'.' #'.$mesa->id, 'class' => 'btn btn-link amodalcasoupdate']),
+                    'headingOptions' => [
+                        'template' => '',
+                    ],
+                    'type'=>$tipopanel,
+                ],
+                'attributes'=>[
+                    
+                    //'turnohorario',
+                    [
+                        'label' => 'Materias',
+                        'format' => 'raw',
+                        'value' => function($model) use ($mesa, $solicitudesTodas){
+                            //return var_dump($solicitudesTodas);
+                            $salida = '<ul>';
+                            foreach ($mesa->actividads as $actividad) {
+                                try {
+                                    $salida .= '<li>'.$actividad->nombre.'<b> - Inscriptos: '.Html::button($solicitudesTodas[$actividad->id], ['value' => Url::to(['/solicitudprevios/detallesolicitudext/pormateria', 'turno' => $mesa->turnoexamen, 'actividad' => $actividad->id]), 'title' => 'Inscriptos en la materia '.$actividad->nombre, 'class' => 'btn btn-link amodalcasoupdate']).'</b></li>';
+                                } catch (\Throwable $th) {
+                                    $salida .= '<li>'.$actividad->nombre.'</li>';
+                                }
+                                
+                            }
+                            $salida .= '</ul>';
+                            return $salida;
+                        }
+                    ],
+                    [
+                        'label' => 'Superposición'.'<br /> <center><span style="color:red" class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span></center>',
+                        'format' => 'raw',
+                        'visible' => $superposision,
+                        'value' => function($model) use ($salida){
+                            return $salida;
+                            
+                        }
+                    ],
+                    
+                    /*[
+                        'label' => 'Mover',
+                        'format' => 'raw',
+                        'value' => function($model) use ($mesa){
+                            
+                            $arriba = Html::a('<span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>', Url::to(['mover', 'mesa' => $mesa->id, 'dir' => 'u']), ['class' => 'btn btn-default']);
+                            $derecha = Html::a('<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>', Url::to(['mover', 'mesa' => $mesa->id, 'dir' => 'r']), ['class' => 'btn btn-default']);
+                            $izquierda = Html::a('<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>', Url::to(['mover', 'mesa' => $mesa->id, 'dir' => 'l']), ['class' => 'btn btn-default']);
+                            $abajo = Html::a('<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>', Url::to(['mover', 'mesa' => $mesa->id, 'dir' => 'd']), ['class' => 'btn btn-default']);
+
+                            return $arriba.'<br>'.$izquierda.$abajo.$derecha;
+                            
+                        }
+                    ]*/
+                    
+                   
+                ]
+            ])
+                    ];
+
+                    /*$salida = Sortable::widget([
+                        'options' =>[
+                            'id' => 'w'.$mesa->id,
+                        ],
+                        'showHandle'=>true,
+                        'connected'=>true,
+                        'items'=>$item,
+                        'pluginEvents' => [
+                            'sortupdate' => 'function(e) { console.log(e.detail); }',
+                        ]
+                    ]); */
+                            
+            //$array[$mesa->turnohorario][$mesa->fecha] .= $salida;
+        }
+
+        //return var_dump($item['1615172400-1']);
+
+        
+
+        foreach ($dias as $dia2) {
+            
+            $fechats = $dia2;
+            
+
+            //return var_dump(strtotime($dia));
+
+            if (!in_array(date("w",strtotime($fechats)), [0,6])){
+                date_default_timezone_set('America/Argentina/Buenos_Aires');
+                
+                //$dia2 = Yii::$app->formatter->asDate($dia2, 'dd/MM/yyyy');
+                                
+                
+                foreach ($turnocursado as $turnocur) {
+                    
+                    # code...
+                    /*if($cd == 0)
+                        $array2[$turnocur->id][999] = $turnocur->nombre; */
+                    /*if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]))
+                        if($prt==1)
+                            $array[$hora->id][$fechats] = "-";
+                        else
+                            $array[$hora->id][$fechats] = '<a class="btn btn-info btn-sm" href="?r=horarioexamen/createdesdehorario&division='.$division.'&hora='.$hora->id.'&fecha='.$fechats.'&tipo='.$tipo.'&alxtrim='.$anioxtrim->id.'&col='.$col.'"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>';
+                    else*/
+                    try {
+                        $mesadragable = $item[strtotime($dia2).'-'.$turnocur->id];
+                        //$mesadragable = $item['1615172400-1'];
+                    } catch (\Throwable $th) {
+                        $mesadragable = [];
+                    }
+                        $array[$turnocur->id][$fechats] = 
+                        Sortable::widget([
+                            'options' =>[
+                                'id' => 'w'.strtotime($dia2).'-'.$turnocur->id,
+                            ],
+                            //'showHandle'=>true,
+                            'connected'=>true,
+                            'items'=>$mesadragable,
+                            'pluginEvents' => [
+                                
+                                'sortupdate' => 'function(e) { 
+                                    document.getElementById("loadercont").style.display = "block";
+                                    var mesa;
+                                    var destino;
+                                    var origen;
+                                    destino = e.detail.destination.container.id; 
+                                    origen = e.detail.origin.container.id;
+                                    mesa = e.detail.item.id;
+
+                                    $.ajax({
+                                        url:"index.php?r=mesaexamen/mover2",
+                                        method:"get",
+                                        data:{destino:destino, origen:origen, mesa:mesa},
+                                        success:function(data){
+                                            location.reload();
+                                            //$.pjax.reload({container: "#test", async: false});
+                                            //alert(data);
+                                        },
+                                        error:function(jqXhr,asistio,error){
+                                            console.log(error);
+                                            alert(error);
+                                        }
+                                    });
+                                   
+
+                                    
+                                }',
+                            ]
+                        ]);
+                    //$key = array_search($hora->id, array_column($horarios, 'hora'));
+                    //$salida .= $key;
+                    /*if ($horario->hora == $hora->id && $horario->diasemana == $cd){
+
+                    
+                    }*/
+                    $ch = $ch + 1;
+                }  
+            }
+            
+            $cd = $cd + 1;
         }
 
         $provider = new ArrayDataProvider([

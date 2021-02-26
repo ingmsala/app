@@ -24,6 +24,7 @@ return array(
     'kartik\\time\\' => array($vendorDir . '/kartik-v/yii2-widget-timepicker/src'),
     'kartik\\switchinput\\' => array($vendorDir . '/kartik-v/yii2-widget-switchinput'),
     'kartik\\spinner\\' => array($vendorDir . '/kartik-v/yii2-widget-spinner/src'),
+    'kartik\\sortable\\' => array($vendorDir . '/kartik-v/yii2-sortable/src'),
     'kartik\\select2\\' => array($vendorDir . '/kartik-v/yii2-widget-select2/src'),
     'kartik\\range\\' => array($vendorDir . '/kartik-v/yii2-widget-rangeinput/src'),
     'kartik\\popover\\' => array($vendorDir . '/kartik-v/yii2-popover-x/src'),

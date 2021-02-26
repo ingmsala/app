@@ -277,7 +277,7 @@ $this->params['sidebar'] = [
 
     <div class="clearfix"></div>
     <?php
-        echo Html::a('Siguiente >', Url::to(['paso2', 'turno' => $turno->id]), ['class' => 'btn btn-primary pull-right']);
+        echo Html::a('Siguiente >', Url::to(['paso3', 'turno' => $turno->id]), ['class' => 'btn btn-primary pull-right']);
     ?>
 
 </div>
