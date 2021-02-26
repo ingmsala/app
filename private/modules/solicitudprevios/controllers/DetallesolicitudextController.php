@@ -8,6 +8,7 @@ use app\models\Turnoexamen;
 use Yii;
 use app\modules\solicitudprevios\models\Detallesolicitudext;
 use app\modules\solicitudprevios\models\DetallesolicitudextSearch;
+use app\modules\solicitudprevios\models\Estadoxsolicitudext;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -26,10 +27,10 @@ class DetallesolicitudextController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'pormateria'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'pormateria', 'control'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'pormateria'],   
+                        'actions' => ['index', 'pormateria', 'control'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -76,6 +77,41 @@ class DetallesolicitudextController extends Controller
         $dataProvider = $searchModel->search($turno);
         $turno = Turnoexamen::findOne($turno);
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'turno' => $turno,
+        ]);
+    }
+
+    /*public function actionMigrar($turno)
+    {
+        $detalles = Detallesolicitudext::find()
+        ->joinWith(['solicitud0'])
+            ->where(['solicitudinscripext.turno' => $turno])->all();
+        foreach ($detalles as $detalle) {
+            
+            $estado = new Estadoxsolicitudext();
+            $estado->fecha = date('Y-m-d');
+            $estado->detalle = $detalle->id;
+            $estado->estado = 1;
+            $estado->save();
+
+            $detalle->estado = $estado->id;
+            $detalle->save();
+
+
+        }
+
+        return true;
+
+    }*/
+
+    public function actionControl($turno)
+    {
+        $searchModel = new DetallesolicitudextSearch();
+        $dataProvider = $searchModel->porcontrol($turno);
+        $turno = Turnoexamen::findOne($turno);
+        return $this->render('control', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'turno' => $turno,

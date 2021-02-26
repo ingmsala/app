@@ -2,9 +2,11 @@
 
 namespace app\modules\solicitudprevios\controllers;
 
+use app\config\Globales;
 use Yii;
 use app\modules\solicitudprevios\models\Adjuntosolicitudext;
 use app\modules\solicitudprevios\models\AdjuntosolicitudextSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,6 +22,39 @@ class AdjuntosolicitudextController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'descargar'],
+                'rules' => [
+                    [
+                        'actions' => ['descargar'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_SECRETARIA]) || in_array (Yii::$app->user->identity->username, Globales::solicitudesext))
+                                    return true;
+                                return false;
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                           try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -42,6 +77,22 @@ class AdjuntosolicitudextController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionDescargar($file)
+    {
+        
+        $model = Adjuntosolicitudext::find()->where(['url' => $file])->one();
+
+        $path = Yii::getAlias('@webroot') . '/assets/images/solicitud6d639c31fbcc6029/'.$file;
+
+        $file = $path;
+
+        if (file_exists($file)) {
+
+            Yii::$app->response->sendFile($file, $model->nombre);
+        }
+
     }
 
     /**

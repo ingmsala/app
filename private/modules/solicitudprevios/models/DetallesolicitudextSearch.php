@@ -17,7 +17,7 @@ class DetallesolicitudextSearch extends Detallesolicitudext
     public function rules()
     {
         return [
-            [['id', 'actividad', 'solicitud'], 'integer'],
+            [['id', 'actividad', 'solicitud', 'estado'], 'integer'],
         ];
     }
 
@@ -40,9 +40,10 @@ class DetallesolicitudextSearch extends Detallesolicitudext
     public function search($turno)
     {
         $query = Detallesolicitudext::find()
-                    ->joinWith(['solicitud0', 'actividad0'])
+                    ->joinWith(['solicitud0', 'actividad0', 'estado0'])
                     ->where(['solicitudinscripext.turno' => $turno])
-                    ->orderBy('actividad.nombre');
+                    ->andWhere(['<>', 'estadoxsolicitudext.estado', 3])
+                    ->orderBy('actividad.nombre, solicitudinscripext.apellido, solicitudinscripext.nombre');
 
         // add conditions that should always apply here
 
@@ -68,12 +69,46 @@ class DetallesolicitudextSearch extends Detallesolicitudext
 
         return $dataProvider;
     }
-    public function pormateria($turno, $actividad)
+
+    public function porcontrol($turno)
     {
         $query = Detallesolicitudext::find()
                     ->joinWith(['solicitud0', 'actividad0'])
                     ->where(['solicitudinscripext.turno' => $turno])
+                    ->orderBy('solicitudinscripext.apellido, solicitudinscripext.nombre, actividad.nombre');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        //$this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'actividad' => $this->actividad,
+            'solicitud' => $this->solicitud,
+        ]);
+
+        return $dataProvider;
+    }
+
+    public function pormateria($turno, $actividad)
+    {
+        $query = Detallesolicitudext::find()
+                    ->joinWith(['solicitud0', 'actividad0', 'estado0'])
+                    ->where(['solicitudinscripext.turno' => $turno])
                     ->andWhere(['detallesolicitudext.actividad' => $actividad])
+                    ->andWhere(['<>', 'estadoxsolicitudext.estado', 3])
                     ->orderBy('solicitudinscripext.apellido, solicitudinscripext.nombre');
 
         // add conditions that should always apply here

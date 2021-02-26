@@ -5,16 +5,11 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\solicitudprevios\models\Solicitudinscripext */
 
-$this->title = 'Update Solicitudinscripext: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Solicitudinscripexts', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+
 ?>
 <div class="solicitudinscripext-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= $this->render('_form', [
+    <?= $this->render('_formabm', [
         'model' => $model,
     ]) ?>
 

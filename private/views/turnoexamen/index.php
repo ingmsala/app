@@ -60,10 +60,16 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'kartik\grid\ActionColumn',
 
-                'template' => '{inscriptos} {armado} {view} {update} {delete}',
+                'template' => '{control} {inscriptos} {armado} {view} {update} {delete}',
 
                 
                 'buttons' => [
+                    'control' => function($url, $model, $key){
+                        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-ok"></span>',
+                            '?r=solicitudprevios/detallesolicitudext/control&turno='.$model['id']);
+                    },
                     'inscriptos' => function($url, $model, $key){
                         if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
                         return Html::a(

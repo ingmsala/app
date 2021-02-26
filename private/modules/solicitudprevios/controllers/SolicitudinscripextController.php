@@ -2,9 +2,11 @@
 
 namespace app\modules\solicitudprevios\controllers;
 
+use app\config\Globales;
 use Yii;
 use app\modules\solicitudprevios\models\Solicitudinscripext;
 use app\modules\solicitudprevios\models\SolicitudinscripextSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,6 +22,25 @@ class SolicitudinscripextController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    
+                    [
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                           try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -50,6 +71,14 @@ class SolicitudinscripextController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
+
+    public function actionComprobante($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -87,10 +116,10 @@ class SolicitudinscripextController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['detallesolicitudext/control', 'turno' => $model->turno]);
         }
 
-        return $this->render('update', [
+        return $this->renderAjax('update', [
             'model' => $model,
         ]);
     }

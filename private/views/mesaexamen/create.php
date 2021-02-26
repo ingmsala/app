@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Mesaexamen */
 
-$this->title = 'Nuevo Mesaexamen';
-$this->params['breadcrumbs'][] = ['label' => 'Mesaexamens', 'url' => ['index']];
+$this->title = 'Nueva Mesa de examen';
+$this->params['breadcrumbs'][] = ['label' => '< Volver', 'url' => ['index', 'turno' => $model->turnoexamen]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="mesaexamen-create">
@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'actividades' => $actividades,
         'actividadesxmesa' => [],
         'tribunal' => [],
+        'or' => 'c',
     ]) ?>
 
 </div>

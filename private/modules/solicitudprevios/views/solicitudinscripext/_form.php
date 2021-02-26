@@ -16,12 +16,12 @@ use yii\helpers\Html;
 <?php $turnoexamen=ArrayHelper::map($turnoexamen,'id','nombre'); ?>
 <?php $actividades=ArrayHelper::map($actividades,'id','nombre'); ?>
 
-<div class="solicitudinscripext-form">
+<div class="solicitudinscripext-form" style="background-color: #F9F9F9;padding:10px;">
 
     <?php $form = ActiveForm::begin([
           'options'=>['enctype'=>'multipart/form-data']]); ?>
 
-    <div style="width: 50%;">
+    <div class="divfecha">
         <?= 
             $form->field($model, 'fecha')->widget(DatePicker::classname(), [
                 //'name' => 'dp_3',

@@ -10,7 +10,7 @@ $this->title = 'FORMULARIO SOLICITUD DE INSCRIPCIÓN A EXÁMENES PREVIOS/LIBRES 
 ?>
 <div class="solicitudinscripext-create">
 
-    <h3><?= Html::encode($this->title) ?></h3>
+    <h4><?= Html::encode($this->title) ?></h4>
 
     <?= $this->render('_form', [
         'model' => $model,

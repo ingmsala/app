@@ -34,9 +34,10 @@ class Detallesolicitudext extends \yii\db\ActiveRecord
     {
         return [
             [['actividad', 'solicitud'], 'required'],
-            [['actividad', 'solicitud'], 'integer'],
+            [['actividad', 'solicitud', 'estado'], 'integer'],
             [['actividad'], 'exist', 'skipOnError' => true, 'targetClass' => Actividad::className(), 'targetAttribute' => ['actividad' => 'id']],
             [['solicitud'], 'exist', 'skipOnError' => true, 'targetClass' => Solicitudinscripext::className(), 'targetAttribute' => ['solicitud' => 'id']],
+            [['estado'], 'exist', 'skipOnError' => true, 'targetClass' => Estadoxsolicitudext::className(), 'targetAttribute' => ['estado' => 'id']],
         ];
     }
 
@@ -49,6 +50,7 @@ class Detallesolicitudext extends \yii\db\ActiveRecord
             'id' => 'ID',
             'actividad' => 'Materias a rendir',
             'solicitud' => 'Solicitud',
+            'estado' => 'Estado',
         ];
     }
 
@@ -66,5 +68,10 @@ class Detallesolicitudext extends \yii\db\ActiveRecord
     public function getSolicitud0()
     {
         return $this->hasOne(Solicitudinscripext::className(), ['id' => 'solicitud']);
+    }
+
+    public function getEstado0()
+    {
+        return $this->hasOne(Estadoxsolicitudext::className(), ['id' => 'estado']);
     }
 }

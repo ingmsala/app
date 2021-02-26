@@ -7,6 +7,7 @@ use kartik\detail\DetailView;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\helpers\Url;
+use yii\widgets\Breadcrumbs;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\MesaexamenSearch */
@@ -24,6 +25,17 @@ $this->title = 'Horario de previas';
             $a = Html::a('Ver todo el turno', Url::to('index.php?r=mesaexamen&turno='.$turnoex->id.'&all=1'), ['class' => 'btn btn-success']);
         }
     ?>
+
+
+    <?php
+        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR])){
+            $breadcrumbs = [];
+            $breadcrumbs [] = ['label' => $turnoex->nombre];
+        }
+        echo Breadcrumbs::widget([
+        'homeLink' => ['label' => '< Volver', 'url' => ['/turnoexamen']],
+        'links' => $breadcrumbs,
+    ]) ?>
 
 
     <?php
@@ -176,7 +188,7 @@ $this->title = 'Horario de previas';
 
         'toolbar'=>[
             ['content' => 
-                (in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])) ? Html::a('Nueva Mesa de examen', ['create'], ['class' => 'btn btn-success']) : $a 
+                (in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])) ? Html::a('Nueva Mesa de examen', ['create', 'turno' => $turnoex->id], ['class' => 'btn btn-success']) : $a 
 
             ],
             '{export}',
@@ -235,19 +247,29 @@ $this->title = 'Horario de previas';
                     $trib = Tribunal::find()->where(['mesaexamen' => $model->id])->all();
 
                     foreach ($trib as $tribunal) {
-                        try {
-                            if($doc->documento == $tribunal->agente0->documento){
-                                $salida .= '<li><span style="background-color: #FFaaFF;">'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</span></li>';
-                            }else{
+                        
+                        
+                        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+                            if($tribunal->getSuperpuesto()){
+                                $salida .= '<li><span style="background-color: #FF6622;">'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</span></li>';
+                            }else
+                            $salida .= '<li>'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</li>';
+                        }else{
+
+                            try {
+                                if($doc->documento == $tribunal->agente0->documento){
+                                    $salida .= '<li><span style="background-color: #FFaaFF;">'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</span></li>';
+                                }else{
+                                    $salida .= '<li>'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</li>';
+                                }
+                            } catch (\Throwable $th) {
                                 $salida .= '<li>'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</li>';
                             }
-                        } catch (\Throwable $th) {
-                            $salida .= '<li>'.$tribunal->agente0->apellido.', '.substr(ltrim($tribunal->agente0->nombre),0,1).'</li>';
+
                         }
                         
-
-                        
                     }
+
 
                     $salida .= '</ul>';
                     return $salida;

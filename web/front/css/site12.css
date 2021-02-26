@@ -607,13 +607,32 @@ a.desc:after {
         margin-left: 0px;
 
 }
+
+.divfecha {
+    width: 30%;
+}
+
 @media (max-width: 797px) {
     .navbar-default-horarios .navbar-nav .open .dropdown-menu > li > a {
         color: #fff;
     }
 
-    .navbar-brand > img{
+    .navbar-collapse{
+        background-color: #6d1703;
+    }
+
+    .navbar-brand > span{
         display: none;
+    }
+    .navbar-brand {
+        height:55px;
+    }
+    .navbar-brand > img{
+        height:40px;
+    }
+
+    .divfecha {
+        width: 100%;
     }
 
     .navbar-default-horarios .navbar-nav .open .dropdown-menu > li > a:hover,

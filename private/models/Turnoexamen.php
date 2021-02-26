@@ -50,8 +50,8 @@ class Turnoexamen extends \yii\db\ActiveRecord
             'nombre' => 'Nombre',
             'desde' => 'Desde',
             'hasta' => 'Hasta',
-            'tipoturno' => 'Tipoturno',
-            'activo' => 'Activo',
+            'tipoturno' => 'Tipo de turno',
+            'activo' => 'Estado',
         ];
     }
 

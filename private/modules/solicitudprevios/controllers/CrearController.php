@@ -6,6 +6,7 @@ use app\models\Actividad;
 use app\models\Turnoexamen;
 use app\modules\solicitudprevios\models\Adjuntosolicitudext;
 use app\modules\solicitudprevios\models\Detallesolicitudext;
+use app\modules\solicitudprevios\models\Estadoxsolicitudext;
 use Yii;
 
 use app\modules\solicitudprevios\models\Solicitudinscripext;
@@ -29,6 +30,7 @@ class CrearController extends Controller
     }
     public function actionIndex()
     {
+        $this->layout = 'mainactivar';
         date_default_timezone_set('America/Argentina/Buenos_Aires');
 
         $model = new Solicitudinscripext();
@@ -37,6 +39,10 @@ class CrearController extends Controller
         $modelAjuntos = new Adjuntosolicitudext();
         
         $turnoexamen = Turnoexamen::find()->where(['tipoturno' => 1])->andWhere(['activo' => 1])->all();
+
+        if(count($turnoexamen)==0){
+            Yii::$app->session->setFlash('danger', 'No está habilitado ningún turno de examen. Consulte el calendario académico para verificar las fechas de apertura de inscripcionres.');
+        }
         $actividades = Actividad::find()->where(['propuesta' => 1])->andWhere(['actividadtipo' => 1])->orderBy('nombre')->all();
 
         if ($model->load(Yii::$app->request->post()) && $modelAjuntos->load(Yii::$app->request->post())) {
@@ -50,12 +56,20 @@ class CrearController extends Controller
             $model->fecha = $newdatefecha;
 
             $model->save();
-            //return var_dump($model);
+            //return var_dump($model->id);
             foreach ($actividadesSeleccionadas as $actividad) {
                 $modelDetalleX = new Detallesolicitudext();
                 $modelDetalleX->solicitud = $model->id;
                 $modelDetalleX->actividad = $actividad;
                 $modelDetalleX->save();
+                $newEstado = new Estadoxsolicitudext();
+                $newEstado->estado = 1;
+                $newEstado->detalle = $modelDetalleX->id;
+                $newEstado->fecha = date('Y-m-d');
+                $newEstado->save();
+                $modelDetalleX->estado = $newEstado->id;
+                $modelDetalleX->save();
+
             }
 
             if (!is_null($images)) {
@@ -67,10 +81,16 @@ class CrearController extends Controller
                     $modelajuntosX->nombre = $image->name;
                     $modelajuntosX->url = Yii::$app->security->generateRandomString().".{$ext}";
                     $modelajuntosX->solicitud = $model->id;
+                    
                     Yii::$app->params['uploadPath'] = Yii::getAlias('@webroot') . '/assets/images/solicitud6d639c31fbcc6029/';
                     $path = Yii::$app->params['uploadPath'] . $modelajuntosX->url;
+
                     $image->saveAs($path);
+
+                    $modelajuntosX->image = 's';
                     $modelajuntosX->save();
+
+                   
                     
                 }
                 

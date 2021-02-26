@@ -2,19 +2,17 @@
 
 namespace app\modules\solicitudprevios\controllers;
 
-use app\config\Globales;
 use Yii;
-use app\models\Tipoturnoexamen;
-use app\modules\solicitudprevios\models\TipoturnoexamenSearch;
-use yii\filters\AccessControl;
+use app\modules\solicitudprevios\models\Estadodetallesolicitudext;
+use app\modules\solicitudprevios\models\EstadodetallesolicitudextSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * TipoturnoexamenController implements the CRUD actions for Tipoturnoexamen model.
+ * EstadodetallesolicitudextController implements the CRUD actions for Estadodetallesolicitudext model.
  */
-class TipoturnoexamenController extends Controller
+class EstadodetallesolicitudextController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -22,25 +20,6 @@ class TipoturnoexamenController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
-                'rules' => [
-                    
-                    [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
-                        'allow' => true,
-                        'matchCallback' => function ($rule, $action) {
-                           try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
-                            }catch(\Exception $exception){
-                                return false;
-                            }
-                        }
-
-                    ],
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -51,12 +30,12 @@ class TipoturnoexamenController extends Controller
     }
 
     /**
-     * Lists all Tipoturnoexamen models.
+     * Lists all Estadodetallesolicitudext models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new TipoturnoexamenSearch();
+        $searchModel = new EstadodetallesolicitudextSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -66,7 +45,7 @@ class TipoturnoexamenController extends Controller
     }
 
     /**
-     * Displays a single Tipoturnoexamen model.
+     * Displays a single Estadodetallesolicitudext model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -79,13 +58,13 @@ class TipoturnoexamenController extends Controller
     }
 
     /**
-     * Creates a new Tipoturnoexamen model.
+     * Creates a new Estadodetallesolicitudext model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Tipoturnoexamen();
+        $model = new Estadodetallesolicitudext();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -97,7 +76,7 @@ class TipoturnoexamenController extends Controller
     }
 
     /**
-     * Updates an existing Tipoturnoexamen model.
+     * Updates an existing Estadodetallesolicitudext model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -117,7 +96,7 @@ class TipoturnoexamenController extends Controller
     }
 
     /**
-     * Deletes an existing Tipoturnoexamen model.
+     * Deletes an existing Estadodetallesolicitudext model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -131,15 +110,15 @@ class TipoturnoexamenController extends Controller
     }
 
     /**
-     * Finds the Tipoturnoexamen model based on its primary key value.
+     * Finds the Estadodetallesolicitudext model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Tipoturnoexamen the loaded model
+     * @return Estadodetallesolicitudext the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Tipoturnoexamen::findOne($id)) !== null) {
+        if (($model = Estadodetallesolicitudext::findOne($id)) !== null) {
             return $model;
         }
 

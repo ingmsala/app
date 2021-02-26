@@ -35,6 +35,8 @@ $this->params['breadcrumbs'][] = 'Modificar';
         'actividades' => $actividades,
         'actividadesxmesa' => $actividadesxmesa,
         'tribunal' => $tribunal,
+        'doce' => $doce,
+        'or' => 'u',
     ]) ?>
 
 </div>

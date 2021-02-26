@@ -2,7 +2,7 @@
 
 use kartik\grid\GridView;
 use yii\helpers\Html;
-
+use yii\widgets\Breadcrumbs;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\solicitudprevios\models\DetallesolicitudextSearch */
@@ -11,6 +11,18 @@ use yii\helpers\Html;
 $this->title = 'Solicitudes: '.$turno->nombre;
 
 ?>
+<?php 
+        $breadcrumbs = [];
+        $breadcrumbs [] = ['label' => $turno->nombre];
+        //$breadcrumbs [] = $this->title;
+
+    ?>
+
+
+    <?= Breadcrumbs::widget([
+        'homeLink' => ['label' => '< Volver', 'url' => ['/turnoexamen']],
+        'links' => $breadcrumbs,
+    ]) ?>
 <div class="detallesolicitudext-index">
 
 
@@ -69,6 +81,17 @@ $this->title = 'Solicitudes: '.$turno->nombre;
                 //'groupEvenCssClass' => 'kv-grouped-row', // configure even group cell css class
                 
             ],
+
+            [
+                'label' => 'Documento',
+                
+                'value' => function($model){
+                    //return var_dump($model);
+                    return $model->solicitud0->documento;
+                },
+                
+                
+            ],
             
             [
                 'label' => 'Estudiante',
@@ -80,6 +103,27 @@ $this->title = 'Solicitudes: '.$turno->nombre;
                 
                 
             ],
+            /*[
+                'label' => 'Correo electrónico',
+                
+                'value' => function($model){
+                    //return var_dump($model);
+                    return $model->solicitud0->mail;
+                },
+                
+                
+            ],
+            [
+                'header' => 'Nro de Teléfono / <br />Celular de contacto',
+                
+                'value' => function($model){
+                    //return var_dump($model);
+                    return $model->solicitud0->apellido.', '.$model->solicitud0->nombre;
+                },
+                
+                
+            ],*/
+            
 
             //['class' => 'yii\grid\ActionColumn'],
         ],

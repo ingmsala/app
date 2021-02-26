@@ -6,6 +6,7 @@ use app\config\Globales;
 use app\models\Actividad;
 use app\models\Actividadxmesa;
 use app\models\Agente;
+use app\models\Detallecatedra;
 use app\models\Espacio;
 use Yii;
 use app\models\Mesaexamen;
@@ -13,6 +14,7 @@ use app\models\MesaexamenSearch;
 use app\models\Tribunal;
 use app\models\Turno;
 use app\models\Turnoexamen;
+use app\modules\curriculares\models\Aniolectivo;
 use app\modules\solicitudprevios\models\Detallesolicitudext;
 use kartik\detail\DetailView;
 use kartik\grid\GridView;
@@ -123,13 +125,12 @@ class MesaexamenController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($turno)
     {
         $model = new Mesaexamen();
+        $model->turnoexamen = $turno;
 
-        
-
-        $turnosexamen = Turnoexamen::find()->all();
+        $turnosexamen = Turnoexamen::find()->where(['id' => $turno])->all();
         $espacios = Espacio::find()->all();
         $docentes = Agente::find()->all();
         $actividades = Actividad::find()->all();
@@ -203,6 +204,47 @@ class MesaexamenController extends Controller
         $turnosexamen = Turnoexamen::find()->all();
         $espacios = Espacio::find()->all();
         $docentes = Agente::find()->all();
+
+        $al = Aniolectivo::find()->where(['activo' => 1])->one();
+        
+        $doce = [];
+        $acti = ArrayHelper::map($model->actividads, 'id', 'id');
+        $docentes_actividades = Detallecatedra::find()
+            ->joinWith(['catedra0', 'catedra0.actividad0', 'agente0'])
+            ->andWhere(['in', 'actividad.id', $acti])
+            ->andWhere(['revista' => 6])
+            ->andWhere(['aniolectivo' => $al->id])
+            ->orderBy('agente.apellido, agente.nombre')
+            ->all();
+
+            $doce['Docentes de las materias']=[];
+            foreach ($docentes_actividades as $dc) {
+                $doce['Docentes de las materias'][$dc->agente0->id] = $dc->agente0->getNombreCompleto();
+            }
+
+        /*$docente_act = array_column($docentes_actividades, 'agente');
+        $agentes = Agente::find()
+            ->where(['not in', 'id', $docente_act])
+            ->orderBy('apellido, nombre')
+            ->all();*/
+        //return var_dump(array_keys($doce['Docentes de las materias']));
+        $otrosdc = Detallecatedra::find()
+            ->joinWith(['catedra0', 'catedra0.actividad0', 'agente0'])
+            ->andWhere(['not in', 'actividad.id', $acti])
+            ->andWhere(['not in', 'agente.id', array_keys($doce['Docentes de las materias'])])
+            ->andWhere(['revista' => 6])
+            ->andWhere(['aniolectivo' => $al->id])
+            ->orderBy('agente.apellido, agente.nombre')
+            ->all();
+            
+        
+        foreach ($otrosdc as $odt) {
+            $doce['Otros docentes'][$odt->agente0->id] = $odt->agente0->getNombreCompleto();
+        }
+
+            
+        
+
         $actividades = Actividad::find()->all();
 
         $actividadesxmesa = Actividadxmesa::find()->where(['mesaexamen' => $id])->all();
@@ -298,6 +340,7 @@ class MesaexamenController extends Controller
                 'tribunal' => $tribunal,
                 'origen' => 'ajax',
                 'or' => $or,
+                'doce' => $doce,
             ]);
         }
 
@@ -311,6 +354,7 @@ class MesaexamenController extends Controller
             'origen' => 'noajax',
             'tribunal' => $tribunal,
             'or' => $or,
+            'doce' => $doce,
         ]);
     }
 
@@ -497,17 +541,19 @@ class MesaexamenController extends Controller
 
         $solicitudes = Detallesolicitudext::find()
                         ->select('actividad.id, actividad.nombre as materia, count(actividad) as cant')
-                        ->joinWith(['solicitud0', 'actividad0'])
+                        ->joinWith(['solicitud0', 'actividad0', 'estado0'])
                         ->groupBy('actividad.id, actividad.nombre')
                         ->where(['solicitudinscripext.turno' => $turno])
                         ->andWhere(['not in', 'actividad.id', $axm])
+                        ->andWhere(['<>', 'estadoxsolicitudext.estado', 3])
                         ->all();
 
         $solicitudesX = Detallesolicitudext::find()
         ->select('actividad.id, actividad.nombre as materia, count(actividad) as cant')
-        ->joinWith(['solicitud0', 'actividad0'])
+        ->joinWith(['solicitud0', 'actividad0', 'estado0'])
         ->groupBy('actividad.id, actividad.nombre')
         ->where(['solicitudinscripext.turno' => $turno])
+        ->andWhere(['<>', 'estadoxsolicitudext.estado', 3])
         ->all();
 
         $solicitudesTodas = ArrayHelper::map($solicitudesX, 'id', function($model){
@@ -613,9 +659,10 @@ class MesaexamenController extends Controller
 
         $solicitudesX = Detallesolicitudext::find()
         ->select('actividad.id, actividad.nombre as materia, count(actividad) as cant')
-        ->joinWith(['solicitud0', 'actividad0'])
+        ->joinWith(['solicitud0', 'actividad0', 'estado0'])
         ->groupBy('actividad.id, actividad.nombre')
         ->where(['solicitudinscripext.turno' => $turno])
+        ->andWhere(['<>', 'estadoxsolicitudext.estado', 3])
         ->all();
 
         $solicitudesTodas = ArrayHelper::map($solicitudesX, 'id', function($model){
@@ -643,7 +690,7 @@ class MesaexamenController extends Controller
         $array = [];
         $salida = '';
         $diasgrid = [];
-        $diasgrid['columns'][] =['class' => 'yii\grid\SerialColumn'];
+        //$diasgrid['columns'][] =['class' => 'yii\grid\SerialColumn'];
         $diasgrid['columns'][] =[
                         'label' => 'Turno',
                         'vAlign' => 'middle',
@@ -705,15 +752,30 @@ class MesaexamenController extends Controller
 
         $salida = '';
         $listdc = [];
+        $cmf = 0;
+        $cmh = 0;
+       
+        $punterofecha = strtotime ( $turnoX->desde );
+        $punterohora = 1;
         foreach ($mesas as $mesa) {
             if($mesa->fecha == null){
-                $mesa->fecha = $mesa->turnoexamen0->desde;
+                $mesa->fecha = date('Y-m-d', $punterofecha);
                 $mesa->save();
+                $punterofecha = strtotime ( '+1 day' , $punterofecha);
+                if($punterofecha>strtotime ($turnoX->hasta))
+                    $punterofecha = strtotime ($turnoX->desde);
             }
             if($mesa->hora == null){
+                $mesa->turnohorario = $punterohora;
+                if($punterohora == 1){
+                    $mesa->hora = '08:00';
+                    $punterohora = 2;
+                }
+                else{
+                    $mesa->hora = '13:30';
+                    $punterohora = 1;
+                }
                 
-                $mesa->hora = '08:00';
-                $mesa->turnohorario = 1;
                 $mesa->save();
                 
             }
@@ -786,7 +848,12 @@ class MesaexamenController extends Controller
                             //return var_dump($solicitudesTodas);
                             $salida = '<ul>';
                             foreach ($mesa->actividads as $actividad) {
-                                $salida .= '<li>'.$actividad->nombre.'<b> - Inscriptos: '.Html::button($solicitudesTodas[$actividad->id], ['value' => Url::to(['/solicitudprevios/detallesolicitudext/pormateria', 'turno' => $mesa->turnoexamen, 'actividad' => $actividad->id]), 'title' => 'Inscriptos en la materia '.$actividad->nombre, 'class' => 'btn btn-link amodalcasoupdate']).'</b></li>';
+                                try {
+                                    $salida .= '<li>'.$actividad->nombre.'<b> - Inscriptos: '.Html::button($solicitudesTodas[$actividad->id], ['value' => Url::to(['/solicitudprevios/detallesolicitudext/pormateria', 'turno' => $mesa->turnoexamen, 'actividad' => $actividad->id]), 'title' => 'Inscriptos en la materia '.$actividad->nombre, 'class' => 'btn btn-link amodalcasoupdate']).'</b></li>';
+                                } catch (\Throwable $th) {
+                                    $salida .= '<li>'.$actividad->nombre.'</li>';
+                                }
+                                
                             }
                             $salida .= '</ul>';
                             return $salida;

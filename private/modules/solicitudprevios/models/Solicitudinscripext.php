@@ -62,8 +62,9 @@ class Solicitudinscripext extends \yii\db\ActiveRecord
             'documento' => 'Documento',
             'turno' => 'Turno de examen',
             'fecha' => 'Fecha de solicitud',
-            'mail' => 'Mail',
+            'mail' => 'Correo electrónico',
             'telefono' => 'Nro de Teléfono / Celular de contacto',
+            'estado' => 'Estado',
         ];
     }
 
@@ -95,4 +96,5 @@ class Solicitudinscripext extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Actividad::className(), ['id' => 'actividad'])->via('detallesolicitudexts');
     }
+
 }

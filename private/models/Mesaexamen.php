@@ -121,17 +121,25 @@ class Mesaexamen extends \yii\db\ActiveRecord
 
         $solicitantes = Solicitudinscripext::find()
                 //->select('detallesolicitudext.id, solicitudinscripext.apellido, solicitudinscripext.nombre, actividad.nombre as mail')
-                ->joinWith(['detallesolicitudexts', 'detallesolicitudexts.actividad0'])
+                ->joinWith(['detallesolicitudexts', 'detallesolicitudexts.actividad0', 'detallesolicitudexts.estado0'])
                 ->where(['solicitudinscripext.turno' => $this->turnoexamen])
                 ->andWhere(['in', 'actividad.id', array_column($actividades, 'id')])
+                ->andWhere(['<>', 'estadoxsolicitudext.estado', 3])
                 ->all();
         if($solicitantes == null)
             return 'Sin inscripciones';
         $repe = [];
 
         foreach ($solicitantes as $solicitud) {
+
+            $det = Detallesolicitudext::find()
+                ->joinWith(['solicitud0', 'estado0'])    
+                ->where(['solicitud' => $solicitud])
+                ->andWhere(['<>', 'estadoxsolicitudext.estado', 3])
+                ->orderBy('solicitudinscripext.apellido, solicitudinscripext.nombre')
+                ->all();
             
-            foreach ($solicitud->detallesolicitudexts as $detalle) {
+            foreach ($det as $detalle) {
                 $mesamismodia = Mesaexamen::find()
                     ->joinWith(['actividadxmesas'])
                     ->where(['mesaexamen.turnoexamen' => $this->turnoexamen])
@@ -149,11 +157,11 @@ class Mesaexamen extends \yii\db\ActiveRecord
         }
         
 
-        $alumnoinscripto = Detallesolicitudext::find()
+        /*$alumnoinscripto = Detallesolicitudext::find()
                         ->joinWith(['solicitud0', 'actividad0'])
                         ->where(['solicitudinscripext.turno' => $this->turnoexamen])
                         ->andWhere(['in', 'actividad.id', array_column($actividades, 'id')])
-                        ->all();
+                        ->all();*/
 
         
         return $repe;
@@ -165,17 +173,19 @@ class Mesaexamen extends \yii\db\ActiveRecord
         $repe = [];
         foreach ($actividades as $actividad) {
             $alumnoinscripto = Detallesolicitudext::find()
-                ->joinWith(['solicitud0', 'actividad0'])
+                ->joinWith(['solicitud0', 'actividad0', 'estado0'])
                 ->where(['solicitudinscripext.turno' => $this->turnoexamen])
                 ->andWhere(['actividad.id' => $actividad])
+                ->andWhere(['<>', 'estadoxsolicitudext.estado', 3])
                 ->all();
 
             $otrasmismamesa = Detallesolicitudext::find()
-                ->joinWith(['solicitud0', 'actividad0'])
+                ->joinWith(['solicitud0', 'actividad0', 'estado0'])
                 ->where(['solicitudinscripext.turno' => $this->turnoexamen])
                 ->andWhere(['in', 'actividad.id', array_column($actividades, 'id')])
                 ->andWhere(['<>', 'actividad.id', $actividad->id])
                 ->andWhere(['in', 'solicitudinscripext.documento', array_column(array_column($alumnoinscripto, 'solicitud0'),'documento')])
+                ->andWhere(['<>', 'estadoxsolicitudext.estado', 3])
                 ->all();
             
             foreach ($alumnoinscripto as $detotras) {

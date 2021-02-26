@@ -17,9 +17,14 @@ use yii\widgets\ActiveForm;
 <?php $listactividades=ArrayHelper::map($actividades,'id','nombre'); ?>
 <?php $tribunal=ArrayHelper::map($tribunal,'agente','agente'); ?>
 <?php $actividadesxmesa=ArrayHelper::map($actividadesxmesa,'actividad','actividad'); ?>
-<?php $listdocentes=ArrayHelper::map($docentes,'id', function($doc) {
+<?php 
+if($or == 'u')
+    $listdocentes = $doce;
+else
+    $listdocentes=ArrayHelper::map($docentes,'id', function($doc) {
             return $doc->apellido.', '.$doc->nombre;}
-        );?>
+        );
+?>
 <div class="mesaexamen-form">
 
     <?php $form = ActiveForm::begin(); ?>

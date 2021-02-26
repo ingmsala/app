@@ -64,4 +64,18 @@ class Tribunal extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Mesaexamen::className(), ['id' => 'mesaexamen']);
     }
+
+    public function getSuperpuesto()
+    {
+        $trib = Tribunal::find()
+                ->joinWith(['mesaexamen0', 'mesaexamen0.turnoexamen0'])
+                ->where(['tribunal.agente' => $this->agente])
+                ->andWhere(['<>','tribunal.mesaexamen', $this->mesaexamen])
+                ->andWhere(['mesaexamen.fecha' => $this->mesaexamen0->fecha])
+                ->andWhere(['mesaexamen.turnohorario' => $this->mesaexamen0->turnohorario])
+                ->all();
+        if(count($trib)>0)
+            return true;
+        return false;
+    }
 }

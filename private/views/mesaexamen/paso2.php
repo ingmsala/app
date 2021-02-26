@@ -62,24 +62,16 @@ $this->params['sidebar'] = [
 		        //'filterModel' => $searchModel,
 		        'summary' => false,
 		        'responsiveWrap' => false,
+
+				'rowOptions' => function($model){
+					if ($model['999'] =='MAÑANA'){
+						return ['class' => 'primary'];
+					}
+					return ['class' => 'warning'];
+				},
+
 		        'columns' => $diasgrid['columns']
-		        /*'columns' => [
-		            ['class' => 'yii\grid\SerialColumn'],
-		            [
-		                'label' => 'Horario',
-		                'vAlign' => 'middle',
-		                'hAlign' => 'center',
-		                'format' => 'raw',
-		                'attribute' => '0',
-		                'value' => function($model){
-		                	return '<span class="badge">'.$model['0'].'</span>';
-		                }
-		            ],
-		            
-		            $diasgrid['columns'][0]
-		            
-		            
-		        ],*/
+		        
 	    	]); ?>
 </div>
 </div>
