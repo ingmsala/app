@@ -42,7 +42,7 @@ class MesaexamenController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'mover', 'mover2', 'paso1', 'paso2', 'paso3'],
                 'rules' => [
                     
                     [
@@ -59,7 +59,7 @@ class MesaexamenController extends Controller
                     ],
 
                     [
-                        'actions' => ['view', 'create', 'update', 'delete'],   
+                        'actions' => ['view', 'create', 'update', 'delete', 'mover', 'mover2', 'paso1', 'paso2', 'paso3'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{

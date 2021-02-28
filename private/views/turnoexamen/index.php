@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             '?r=solicitudprevios/detallesolicitudext/index&turno='.$model['id']);
                     },
                     'armado' => function($url, $model, $key){
-                        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
+                        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]))
                         return Html::a(
                             '<span class="glyphicon glyphicon-calendar"></span>',
                             '?r=mesaexamen/paso1&turno='.$model['id']);
@@ -88,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             '?r=mesaexamen/index&turno='.$model['id'].'&all=1');
                     },
                     'update' => function($url, $model, $key){
-                        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
+                        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]))
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>',
                             '?r=turnoexamen/update&id='.$model['id']);
@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     
                     
                     'delete' => function($url, $model, $key){
-                        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
+                        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]))
                         return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=turnoexamen/delete&id='.$model['id'], 
                             ['data' => [
                             'confirm' => 'Está seguro de querer eliminar este elemento?',

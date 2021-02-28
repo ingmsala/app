@@ -13,6 +13,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * DetallesolicitudextController implements the CRUD actions for Detallesolicitudext model.
@@ -110,11 +111,21 @@ class DetallesolicitudextController extends Controller
     {
         $searchModel = new DetallesolicitudextSearch();
         $dataProvider = $searchModel->porcontrol($turno);
+
+        $noingresados = Detallesolicitudext::find()
+                    ->joinWith(['solicitud0', 'actividad0', 'estado0'])
+                    ->where(['solicitudinscripext.turno' => $turno])
+                    ->andWhere(['in', 'estadoxsolicitudext.estado', [2,3]])
+                    ->orderBy('solicitudinscripext.apellido, solicitudinscripext.nombre, actividad.nombre')->all();
+
+        $noingresados = ArrayHelper::map($noingresados, 'solicitud', 'solicitud');
+        
         $turno = Turnoexamen::findOne($turno);
         return $this->render('control', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'turno' => $turno,
+            'noingresados' => $noingresados,
         ]);
     }
     public function actionPormateria($turno, $actividad)

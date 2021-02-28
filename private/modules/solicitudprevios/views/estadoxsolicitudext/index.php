@@ -25,8 +25,12 @@ use yii\grid\GridView;
             [
                 'label' => 'Realizado por',
                 'value' => function($model){
-                    date_default_timezone_set('America/Argentina/Buenos_Aires');
-                    return $model->agente0->getNombreCompleto();
+                    try {
+                        return $model->agente0->getNombreCompleto();
+                    } catch (\Throwable $th) {
+                        return 'Estudiante';
+                    }
+                    
 
                 }
             ],

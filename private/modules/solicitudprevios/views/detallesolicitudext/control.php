@@ -231,12 +231,12 @@ $this->title = 'Solicitudes: '.$turno->nombre;
             [
                 'label' => 'Datos personales',
                 'format' => 'raw',
-                'value' => function($model){
+                'value' => function($model) use($noingresados) {
                     //return var_dump($model);
                     
                     if($model->estado0->estado0->id == 1){
-                        
-                        return Html::button('<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>', ['value' => Url::to(['/solicitudprevios/solicitudinscripext/update', 'id' => $model->solicitud]), 'title' => 'Modificar datos personales', 'class' => 'btn btn-info amodalcasoupdate']);
+                        if(!in_array($model->solicitud, $noingresados))
+                            return Html::button('<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>', ['value' => Url::to(['/solicitudprevios/solicitudinscripext/update', 'id' => $model->solicitud]), 'title' => 'Modificar datos personales', 'class' => 'btn btn-info amodalcasoupdate']);
                         
                     }
                     

@@ -98,6 +98,9 @@ class EstadoxsolicitudextController extends Controller
         $ag = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
         $model->agente = $ag->id;
         if($estado <> 3){
+            if($estado == 1){
+                $model->motivo = 'Cambio a estado inicial';
+            }
             $model->save();
             $det = Detallesolicitudext::findOne($detalle);
             $det->estado = $model->id;
