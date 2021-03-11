@@ -28,6 +28,7 @@ class Globales
 	const US_CRON_ANIV = 21;
 	const US_GABPSICO = 22;
 	const US_VICEACAD = 23;
+	const US_DESPACHO = 24;
 	
 	
 	const COND_SUPL = 5;
@@ -65,7 +66,8 @@ class Globales
 
 	
 	const authttemas = ['msala@unc.edu.ar', 'msala', 'mariano.ferrero@unc.edu.ar', 'carlos.cima@unc.edu.ar', 'fbarros@unc.edu.ar', 'manuarias1@unc.edu.ar', 'ornellabiazzutti@unc.edu.ar', 'cesar.romero@unc.edu.ar', 'sebastian.angilello@unc.edu.ar', 'cecilia.rivero@unc.edu.ar', 'ruben.vargas@unc.edu.ar', 'carlospatoco@unc.edu.ar', 'ernesto.morales@unc.edu.ar', 'miguel.torti@unc.edu.ar', 'mfragueiro@unc.edu.ar', 'sebastian.suarez@unc.edu.ar', 'mariaf.diaz.gavier@unc.edu.ar'];
-	const mones = ['msala@unc.edu.ar', 'gabriela.helale@unc.edu.ar', 'hernan.moya@unc.edu.ar', 'gustavo.carranza@unc.edu.ar', 'nicolas.esparza@unc.edu.ar'];
+	const mones = [];
+	//const mones = ['msala@unc.edu.ar', 'gabriela.helale@unc.edu.ar', 'hernan.moya@unc.edu.ar', 'gustavo.carranza@unc.edu.ar', 'nicolas.esparza@unc.edu.ar', 'scenturion@unc.edu.ar'];
 	const solicitudesext = ['msala@unc.edu.ar', 'gabriela.helale@unc.edu.ar', 'hernan.moya@unc.edu.ar', 'gustavo.carranza@unc.edu.ar', 'nicolas.esparza@unc.edu.ar'];
 	const MAIL2 = 'msala@unc.edu.ar';
 	const MAIL = 'monserratsistema@gmail.com';
@@ -83,6 +85,8 @@ class Globales
             return '@app/views/layouts/main';
         elseif(in_array($role, [$this::US_AGENTE, $this::US_PRECEPTOR]))
             return '@app/views/layouts/mainpersonal';
+        elseif(in_array($role, [$this::US_HORARIO]))
+            return '@app/views/layouts/mainvacio';
         else{
             return '@app/views/layouts/mainactivar';
         }

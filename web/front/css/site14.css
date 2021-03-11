@@ -612,6 +612,10 @@ a.desc:after {
     width: 30%;
 }
 
+.divcalendar {
+    width: 50%;
+}
+
 @media (max-width: 797px) {
     .navbar-default-horarios .navbar-nav .open .dropdown-menu > li > a {
         color: #fff;
@@ -632,6 +636,9 @@ a.desc:after {
     }
 
     .divfecha {
+        width: 100%;
+    }
+    .divcalendar {
         width: 100%;
     }
 
@@ -1621,7 +1628,7 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
       float: none;
     }
     
-
+    
     
   }
 
@@ -1702,6 +1709,69 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     to{ bottom:0; opacity:1 }
   }
 
+  .label-yellow{
+      background-color: #FFFACD;
+      color:black;
+      border: 1px solid gray;
+  }
+  .label-red{
+      background-color: #f2dede;
+      color:black;
+      border: 1px solid gray;
+  }
+  .label-blue{
+      background-color: #ADD8E6;
+      color:black;
+      border: 1px solid gray;
+  }
+
+  .button-red{
+    background-color: #f2dede;
+    display: inline-block;
+    margin-top: 4px;
+    border: 1px solid gray;
+    box-shadow: 1px 1px grey;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+ }
+  .button-blue{
+    background-color: #ADD8E6;
+    display: inline-block;
+    margin-top: 4px;
+    border: 1px solid gray;
+    box-shadow: 1px 1px grey;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+ }
+  .button-yellow{
+    background-color: #FFFACD;
+    display: inline-block;
+    margin-top: 4px;
+    border: 1px solid gray;
+    box-shadow: 1px 1px grey;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+ }
+
+ .button-yellow:hover {
+    background-color: #fae73d;
+    
+  }
+ .button-red:hover {
+    background-color: #f59c9c;
+    
+  }
+ .button-blue:hover {
+    background-color: #35b9e6;
+    
+  }
+ 
 
 
 

@@ -47,6 +47,7 @@ class SemanaSearch extends Semana
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         $this->load($params);

@@ -33,7 +33,7 @@ class MonalumnoController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]) || in_array (Yii::$app->user->identity->username, Globales::mones);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DESPACHO]) || in_array (Yii::$app->user->identity->username, Globales::mones);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -70,7 +70,7 @@ class MonalumnoController extends Controller
      */
     public function actionIndex()
     {
-        $this->layout = '@app/views/layouts/mainpersonal';
+        //$this->layout = '@app/views/layouts/mainpersonal';
         $searchModel = new MonalumnoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -88,7 +88,7 @@ class MonalumnoController extends Controller
      */
     public function actionView($id)
     {
-        $this->layout = '@app/views/layouts/mainpersonal';
+        //$this->layout = '@app/views/layouts/mainpersonal';
         $alumno = $this->findModel($id);
         $carreras= Moncarrera::find()
                         ->joinWith(['monmatriculas'])

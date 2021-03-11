@@ -141,6 +141,14 @@ $('body').on('click', '.amodalsolicitudstate',function(){
 	
 });
 
+$('body').on('click', '.amodalgenerico',function(){
+	$('#modalgenerico').modal('show').find('#modalHeader').html($(this).attr('title'));
+	$('#modalgenerico').modal('show')
+		.find('#modalContent')
+		.load($(this).attr('value'));
+	
+});
+
 $('body').on('click', '.amodalplancursado',function(){
 	$('#modalplancursado').modal('show').find('#modalHeader').html($(this).attr('title'));
 	$('#modalplancursado').modal('show')

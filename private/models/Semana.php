@@ -3,8 +3,7 @@
 namespace app\models;
 
 use app\modules\curriculares\models\Aniolectivo;
-
-
+use app\modules\horariogenerico\models\Horariogeneric;
 use Yii;
 
 /**
@@ -36,9 +35,10 @@ class Semana extends \yii\db\ActiveRecord
     {
         return [
             [['aniolectivo', 'inicio', 'fin', 'publicada'], 'required'],
-            [['aniolectivo', 'publicada'], 'integer'],
+            [['aniolectivo', 'publicada', 'tiposemana'], 'integer'],
             [['inicio', 'fin'], 'safe'],
             [['aniolectivo'], 'exist', 'skipOnError' => true, 'targetClass' => Aniolectivo::className(), 'targetAttribute' => ['aniolectivo' => 'id']],
+            [['tiposemana'], 'exist', 'skipOnError' => true, 'targetClass' => Tiposemana::className(), 'targetAttribute' => ['tiposemana' => 'id']],
         ];
     }
 
@@ -53,15 +53,16 @@ class Semana extends \yii\db\ActiveRecord
             'inicio' => 'Inicio',
             'fin' => 'Fin',
             'publicada' => 'Publicada',
+            'tiposemana' => 'Tipo',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getClasevirtuals()
+    public function getHorariogenerics()
     {
-        return $this->hasMany(Clasevirtual::className(), ['semana' => 'id']);
+        return $this->hasMany(Horariogeneric::className(), ['semana' => 'id']);
     }
 
     /**
@@ -70,5 +71,36 @@ class Semana extends \yii\db\ActiveRecord
     public function getAniolectivo0()
     {
         return $this->hasOne(Aniolectivo::className(), ['id' => 'aniolectivo']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTiposemana0()
+    {
+        return $this->hasOne(Tiposemana::className(), ['id' => 'tiposemana']);
+    }
+
+    public function getFechas()
+    {
+        $model = $this;
+        $start = $model->inicio;
+        $end = $model->fin;
+
+        $fechas = [];
+
+        $dias2 = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado","Domingo"];
+
+        if (is_string($start) === true) $start = strtotime($start);
+        if (is_string($end) === true ) $end = strtotime($end);
+        do {
+            $fechas[date('w', $start)+1] = date('Y-m-d', $start);
+            $start = strtotime("+ 1 day", $start);
+
+
+        } while($start <= $end);
+
+        return $fechas;
+
     }
 }

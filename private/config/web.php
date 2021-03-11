@@ -152,6 +152,12 @@ $config = [
                 'class' => 'app\modules\optativas\Optativas',
          ],
 
+         
+        'horariogenerico' => [
+                'class' => 'app\modules\horariogenerico\Horariogenerico',
+        ],
+        
+
          'edh' => [
                 'class' => 'app\modules\edh\Edh',
          ],

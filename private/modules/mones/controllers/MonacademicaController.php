@@ -10,6 +10,7 @@ use app\modules\mones\models\Monalumno;
 use app\modules\mones\models\Moncarrera;
 use app\modules\mones\models\Monmatricula;
 use kartik\mpdf\Pdf;
+use Symfony\Component\Finder\Glob;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -35,7 +36,7 @@ class MonacademicaController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]) || in_array (Yii::$app->user->identity->username, Globales::mones);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DESPACHO]) || in_array (Yii::$app->user->identity->username, Globales::mones);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -72,7 +73,7 @@ class MonacademicaController extends Controller
      */
 
     public function actionIndex($doc,$car){
-        $this->layout = '@app/views/layouts/mainpersonal';
+        //$this->layout = '@app/views/layouts/mainpersonal';
         return $this->generarHistorial($doc,$car,0);
     }
 

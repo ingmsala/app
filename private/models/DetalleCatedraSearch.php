@@ -337,6 +337,41 @@ class DetallecatedraSearch extends Detallecatedra
         return $dataProvider;
     }
 
+    public function horario_doce_divi_cant($division, $al)
+    {
+        
+        $query = Detallecatedra::find()
+            ->joinWith(['catedra0', 'catedra0.actividad0'])
+            ->where(['catedra.division' => $division])
+            ->andWhere(['<>', 'actividad.id', 31])
+            ->andWhere(['<>', 'actividad.id', 33])
+            ->andWhere(['<>', 'actividad.id', 195])
+            ->andWhere(['revista' => 6])
+            ->andWhere(['aniolectivo' => $al])
+            ->orderBy('actividad.nombre');
+        
+        
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+       // $this->load($dia, $curso);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        
+
+        return $dataProvider;
+    }
+
     
         
     

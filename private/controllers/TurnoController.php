@@ -142,6 +142,15 @@ class TurnoController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionGetturnos($id)
+    {
+        $turnos = Turno::find()->where(['<', 'id', 3])->all();
+        echo "<option>Seleccionar...</option>";
+        foreach($turnos as $turno){
+            echo "<option value='".$turno->id."'>".$turno->nombre."</option>";
+        }
+    }
+
     /**
      * Finds the Turno model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
