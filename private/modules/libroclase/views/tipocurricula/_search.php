@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\libroclase\models\ClasediariaSearch */
+/* @var $model app\modules\libroclase\models\TipocurriculaSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="clasediaria-search">
+<div class="tipocurricula-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -17,19 +17,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'catedra') ?>
-
-    <?= $form->field($model, 'temaunidad') ?>
-
-    <?= $form->field($model, 'fecha') ?>
-
-    <?php // echo $form->field($model, 'fechacarga') ?>
-
-    <?php // echo $form->field($model, 'agente') ?>
-
-    <?php // echo $form->field($model, 'observaciones') ?>
-
-    <?php // echo $form->field($model, 'modalidadclase') ?>
+    <?= $form->field($model, 'nombre') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

@@ -12,7 +12,7 @@ $this->title = 'Seleccione una división';
 <div class="row">
 <?php $userhorario = (Yii::$app->user->identity->role == Globales::US_HORARIO)? "none" : "block" ?>
 	 <h1 style="display: <?= $userhorario ?>;">
-    	Horarios de <?= $anioxtrim->trimestral0->nombre ?>
+	 Examenes regulares - Marzo 2021
 	</h1>
 </div>
 <div class="row" style="padding-bottom: 10px;">

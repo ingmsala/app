@@ -37,7 +37,7 @@ $form->field($model, 'fecha')->widget(DatePicker::classname(), [
     'pluginOptions' => [
         'autoclose'=>true,
         'format' => 'dd/mm/yyyy',
-        'endDate' => "1d",
+        //'endDate' => "1d",
         
     ],
     

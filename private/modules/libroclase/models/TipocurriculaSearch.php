@@ -2,15 +2,14 @@
 
 namespace app\modules\libroclase\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\libroclase\models\Clasediaria;
+use app\modules\libroclase\models\Tipocurricula;
 
 /**
- * ClasediariaSearch represents the model behind the search form of `app\modules\libroclase\models\Clasediaria`.
+ * TipocurriculaSearch represents the model behind the search form of `app\modules\libroclase\models\Tipocurricula`.
  */
-class ClasediariaSearch extends Clasediaria
+class TipocurriculaSearch extends Tipocurricula
 {
     /**
      * {@inheritdoc}
@@ -18,8 +17,8 @@ class ClasediariaSearch extends Clasediaria
     public function rules()
     {
         return [
-            [['id', 'catedra', 'agente', 'modalidadclase', 'aniolectivo', 'tipocurricula'], 'integer'],
-            [['fecha', 'fechacarga', 'observaciones'], 'safe'],
+            [['id'], 'integer'],
+            [['nombre'], 'safe'],
         ];
     }
 
@@ -39,21 +38,17 @@ class ClasediariaSearch extends Clasediaria
      *
      * @return ActiveDataProvider
      */
-    public function porcatedra($cat, $al)
+    public function search($params)
     {
-        $query = Clasediaria::find()
-                    ->where(['catedra' => $cat])
-                    ->andWhere(['aniolectivo' => $al])
-                    ->orderBy('fecha DESC');
+        $query = Tipocurricula::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => false,
         ]);
 
-        $this->load($cat);
+        $this->load($params);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -64,14 +59,9 @@ class ClasediariaSearch extends Clasediaria
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'catedra' => $this->catedra,
-            'fecha' => $this->fecha,
-            'fechacarga' => $this->fechacarga,
-            'agente' => $this->agente,
-            'modalidadclase' => $this->modalidadclase,
         ]);
 
-        $query->andFilterWhere(['like', 'observaciones', $this->observaciones]);
+        $query->andFilterWhere(['like', 'nombre', $this->nombre]);
 
         return $dataProvider;
     }

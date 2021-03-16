@@ -44,7 +44,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
     <div class='row' style="padding-bottom: 20px;">
     	
     	<div class="col-md-12"><center><h4>
-    		<?= (Yii::$app->user->identity->role != Globales::US_HORARIO) ? Html::encode('Agente: '.$this->title) : '' ?>
+    		<?= (Yii::$app->user->identity->role != Globales::US_HORARIO) ? Html::encode('Docente: '.$this->title) : '' ?>
     	</h4></center></div>
 
 	</div>

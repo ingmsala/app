@@ -5,21 +5,21 @@ namespace app\modules\libroclase\models;
 use Yii;
 
 /**
- * This is the model class for table "tipodesarrollo".
+ * This is the model class for table "tipocurricula".
  *
  * @property int $id
  * @property string $nombre
  *
- * @property Cemaxclase[] $temaxclase
+ * @property Clasediaria[] $clasediarias
  */
-class Tipodesarrollo extends \yii\db\ActiveRecord
+class Tipocurricula extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'tipodesarrollo';
+        return 'tipocurricula';
     }
 
     /**
@@ -29,7 +29,7 @@ class Tipodesarrollo extends \yii\db\ActiveRecord
     {
         return [
             [['nombre'], 'required'],
-            [['nombre'], 'string', 'max' => 50],
+            [['nombre'], 'string', 'max' => 40],
         ];
     }
 
@@ -40,15 +40,15 @@ class Tipodesarrollo extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'nombre' => 'Tipo de desarrollo',
+            'nombre' => 'Nombre',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTemaxclases()
+    public function getClasediarias()
     {
-        return $this->hasMany(Temaxclase::className(), ['tipodesarrollo' => 'id']);
+        return $this->hasMany(Clasediaria::className(), ['tipocurricula' => 'id']);
     }
 }

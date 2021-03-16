@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\controllers\CatedraController;
+use app\modules\libroclase\models\Clasediaria;
 use Yii;
 
 /**
@@ -128,6 +129,11 @@ class Catedra extends \yii\db\ActiveRecord
         return $this->hasMany(Agente::className(), ['id' => 'agente'])->via('detallecatedras');
     }
 
+    public function getClasediarias()
+    {
+        return $this->hasMany(Clasediaria::className(), ['catedra' => 'id']);
+    }
+
     public function getNameActividad($id)
     {
        $actividades = Actividad::find()->where(['id'=> $id])->all();
@@ -155,6 +161,7 @@ class Catedra extends \yii\db\ActiveRecord
 
     public function getDocentehorarioal0($al)
     {
+        
        $detcatedras = Detallecatedra::find()
                         ->where(['catedra'=> $this->id])
                         ->andWhere(['aniolectivo' => $al])

@@ -59,9 +59,9 @@ JS;
 <?php
 if($prt != 1){
 ?>
-    <h2><?= (Yii::$app->user->identity->role != Globales::US_HORARIO) ? Html::encode($this->title).'    <span class="badge">'.$txt.'</span>' : '' ?>
+    <h2><?= $horariopremitido ? Html::encode($this->title).'    <span class="badge">'.$txt.'</span>' : '' ?>
 	</h2>
-    <?php $userhorario = (Yii::$app->user->identity->role == Globales::US_HORARIO)? "none" : "block" ?>
+    <?php $userhorario = $horariopremitido ? "none" : "block" ?>
     <div style="display: <?= $userhorario ?>;">
     	<div  class="pull-right">
 	        <?php 
@@ -93,7 +93,7 @@ if($prt != 1){
 		<?php 
 		if($sema != null){
 			$sema = $sema->id;
-			echo  '<a class = "btn btn-default" href="index.php?r=horariogenerico/horariogeneric/completoxcurso&division='.$paramdivision->id.'&vista=docentes&sem='.$sema.'"><center><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span><br />Semana anterior</center></a>';
+			echo  '<a class = "btn btn-default" href="index.php?r=horariogenerico/horariogeneric/'.$origen.'&division='.$paramdivision->id.'&vista=docentes&sem='.$sema.'"><center><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span><br />Semana anterior</center></a>';
 		
 		}else
 		echo  '<a class = "btn btn-default" href="#"><center><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span><br />Semana anterior</center></a>';
@@ -106,7 +106,7 @@ if($prt != 1){
 		<?php 
 			if($semn != null){
 				$semn = $semn->id;
-			echo  '<a class = "btn btn-default" href="index.php?r=horariogenerico/horariogeneric/completoxcurso&division='.$paramdivision->id.'&vista=docentes&sem='.$semn.'"><center><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span><br />Semana siguiente	</center></a>';
+			echo  '<a class = "btn btn-default" href="index.php?r=horariogenerico/horariogeneric/'.$origen.'&division='.$paramdivision->id.'&vista=docentes&sem='.$semn.'"><center><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span><br />Semana siguiente	</center></a>';
 		
 			}else
 			echo  '<a class = "btn btn-default" href="#"><center><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span><br />Semana siguiente	</center></a>';
@@ -182,7 +182,7 @@ if($prt != 1){
 		            [
 		            	'class' => 'kartik\grid\BooleanColumn',
 		            	'label' => '',
-		            	'visible' => (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTORIA, Globales::US_HORARIO]) && $prt==0) ? true : false,
+		            	'visible' => ($columnpremitido && $prt==0) ? true : false,
 		            	'value' => function($model) use($listdc) {
 		            		//return var_dump(array_count_values($listdc));
 		            		try {
@@ -206,19 +206,23 @@ if($prt != 1){
 		            ],
 
 		            [
-		            	'label' => 'Agente',
+		            	'label' => 'Docente',
 		            	'format' => 'raw',
-		            	'value' => function($model) use ($sem, $prt) {
-		            		if($prt == 0)
-		            			return Html::a($model->agente0->apellido.', '.$model->agente0->nombre, Url::to(['completoxdocente', 'agente' => $model->agente, 'col' => 0]));
-		            		else
-		            			return $model->agente0->apellido.', '.$model->agente0->nombre;
+		            	'value' => function($model) use ($sem, $prt, $regenciapermitido) {
+							if($regenciapermitido){
+								if($prt == 0)
+									return Html::a($model->agente0->apellido.', '.$model->agente0->nombre, Url::to(['completoxdocente', 'agente' => $model->agente, 'col' => 0]));
+								else
+									return $model->agente0->apellido.', '.$model->agente0->nombre;
+							}
+							return $model->agente0->apellido.', '.$model->agente0->nombre;
 		            	}
 
 		            ],
 		            [
 		            	'label' => 'Total de clases',
 		            	'format' => 'raw',
+						'visible' => $regenciapermitido,
 		            	'value' => function($model) use ($sem, $prt) {
 							$salida = '';
 							$semana = Semana::findOne($sem);

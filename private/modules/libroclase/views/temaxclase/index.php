@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\modules\libroclase\models\ClasediariaSearch */
+/* @var $searchModel app\modules\libroclase\models\TemaxclaseSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Libro de aula';
+$this->title = 'Temaxclases';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="clasediaria-index">
+<div class="temaxclase-index">
 
-    <h1><?= $division->nombre ?></h1>
+    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Nueva clase diaria', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Temaxclase', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -26,14 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'catedra',
+            'clasediaria',
             'temaunidad',
             'tipodesarrollo',
-            'fecha',
-            //'fechacarga',
-            //'agente',
-            //'observaciones:ntext',
-            //'modalidadclase',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

@@ -149,6 +149,22 @@ $('body').on('click', '.amodalgenerico',function(){
 	
 });
 
+$('body').on('click', '.amodalagregartema',function(){
+
+	var array = []
+    
+	var checkboxes = document.querySelectorAll('input[type=hidden].valtemaxx')
+	
+	
+	$('#modalagregartema').modal('show').find('#modalHeader').html($(this).attr('title'));
+	$('#modalagregartema').modal('show')
+		.find('#modalContent')
+		.load($(this).attr('value'));
+	
+		
+	
+});
+
 $('body').on('click', '.amodalplancursado',function(){
 	$('#modalplancursado').modal('show').find('#modalHeader').html($(this).attr('title'));
 	$('#modalplancursado').modal('show')

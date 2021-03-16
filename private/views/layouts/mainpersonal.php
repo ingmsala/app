@@ -11,6 +11,7 @@ use app\assets\AppAsset;
 use app\config\Globales;
 use app\models\Agente;
 use app\models\Docentexdepartamento;
+use kartik\dialog\Dialog;
 
 AppAsset::register($this);
 ?>
@@ -111,6 +112,12 @@ if(!Yii::$app->user->isGuest){
         }
 
         $items = [
+
+            ['label' => '<center><span class="glyphicon glyphicon-book"></span><br />'.'Libro aula</center>',
+                            
+                    'url' => ['/libroclase/clasediaria'],
+                    '<div class="dropdown-divider"></div>',
+            ],
 
             ['label' => '<center><span class="glyphicon glyphicon-barcode"></span><br />'.'Ticket</center>',
                             
@@ -369,7 +376,7 @@ echo Nav::widget([
     'items' => $items
 ]);
 NavBar::end();
-
+echo  Dialog :: widget ([ 'overrideYiiConfirm' => true ]);
 ?>
        
 <div class='wrappersonal'>

@@ -4,6 +4,7 @@ namespace app\modules\libroclase\models;
 
 use app\models\Catedra;
 use app\models\Agente;
+use app\modules\curriculares\models\Aniolectivo;
 use Yii;
 
 /**
@@ -12,7 +13,6 @@ use Yii;
  * @property int $id
  * @property int $catedra
  * @property int $temaunidad
- * @property int $tipodesarrollo
  * @property string $fecha
  * @property string $fechacarga
  * @property int $agente
@@ -20,7 +20,6 @@ use Yii;
  * @property int $modalidadclase
  *
  * @property Catedra $catedra0
- * @property Tipodesarrollo $tipodesarrollo0
  * @property Agente $agente0
  * @property Temaunidad $temaunidad0
  * @property Modalidadclase $modalidadclase0
@@ -28,6 +27,7 @@ use Yii;
  */
 class Clasediaria extends \yii\db\ActiveRecord
 {
+    public $unidades;
     /**
      * {@inheritdoc}
      */
@@ -42,15 +42,21 @@ class Clasediaria extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['catedra', 'temaunidad', 'tipodesarrollo', 'fecha', 'fechacarga'], 'required'],
-            [['catedra', 'temaunidad', 'tipodesarrollo', 'agente', 'modalidadclase'], 'integer'],
+            [['catedra', 'fecha', 'fechacarga', 'aniolectivo', 'modalidadclase', 'tipocurricula'], 'required'],
+            //[['observaciones'], 'required', 'on' => self::SCENARIO_EXTRACURRICULAR],
+            ['observaciones', 'required', 'when' => function ($model) {
+                return $model->tipocurricula == 2;
+            }, 'whenClient' => "function (attribute, value) {
+                return $('#clasediaria-tipocurricula').val() == 2;
+            }"],
+            [['catedra', 'agente', 'modalidadclase', 'tipocurricula'], 'integer'],
             [['fecha', 'fechacarga'], 'safe'],
             [['observaciones'], 'string'],
             [['catedra'], 'exist', 'skipOnError' => true, 'targetClass' => Catedra::className(), 'targetAttribute' => ['catedra' => 'id']],
-            [['tipodesarrollo'], 'exist', 'skipOnError' => true, 'targetClass' => Tipodesarrollo::className(), 'targetAttribute' => ['tipodesarrollo' => 'id']],
             [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
-            [['temaunidad'], 'exist', 'skipOnError' => true, 'targetClass' => Temaunidad::className(), 'targetAttribute' => ['temaunidad' => 'id']],
             [['modalidadclase'], 'exist', 'skipOnError' => true, 'targetClass' => Modalidadclase::className(), 'targetAttribute' => ['modalidadclase' => 'id']],
+            [['aniolectivo'], 'exist', 'skipOnError' => true, 'targetClass' => Aniolectivo::className(), 'targetAttribute' => ['aniolectivo' => 'id']], 
+            [['tipocurricula'], 'exist', 'skipOnError' => true, 'targetClass' => Tipocurricula::className(), 'targetAttribute' => ['tipocurricula' => 'id']], 
         ];
     }
 
@@ -62,13 +68,12 @@ class Clasediaria extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'catedra' => 'Cátedra',
-            'temaunidad' => 'Tema de unidad',
-            'tipodesarrollo' => 'Tipo de desarrollo',
             'fecha' => 'Fecha',
             'fechacarga' => 'Fecha de carga',
             'agente' => 'Agente',
             'observaciones' => 'Observaciones',
             'modalidadclase' => 'Modalidad de clase',
+            'tipocurricula' => 'Tipo',
         ];
     }
 
@@ -80,14 +85,7 @@ class Clasediaria extends \yii\db\ActiveRecord
         return $this->hasOne(Catedra::className(), ['id' => 'catedra']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTipodesarrollo0()
-    {
-        return $this->hasOne(Tipodesarrollo::className(), ['id' => 'tipodesarrollo']);
-    }
-
+    
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -99,9 +97,14 @@ class Clasediaria extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTemaunidad0()
+    public function getTemaxclases()
     {
-        return $this->hasOne(Temaunidad::className(), ['id' => 'temaunidad']);
+        return $this->hasMany(Temaxclase::className(), ['clasediaria' => 'id']);
+    }
+
+    public function getHoraxclases()
+    {
+        return $this->hasMany(Horaxclase::className(), ['clasediaria' => 'id']);
     }
 
     /**
@@ -119,4 +122,17 @@ class Clasediaria extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Detallehora::className(), ['clasediaria' => 'id']);
     }
+
+    /**
+    * @return \yii\db\ActiveQuery
+    */
+   public function getAniolectivo0() 
+   { 
+       return $this->hasOne(Aniolectivo::className(), ['id' => 'aniolectivo']); 
+   } 
+
+   public function getTipocurricula0() 
+   { 
+       return $this->hasOne(Tipocurricula::className(), ['id' => 'tipocurricula']); 
+   } 
 }

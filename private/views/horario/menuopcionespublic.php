@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\config\Globales;
+use app\models\Parametros;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Hora */
@@ -25,10 +26,15 @@ else{
 <div class="row contpanelprincipal">
         
         <div class="col-md-3">           
-          <?= 
-            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-time"></span><h2>Horario</h2><span class="label label-primary">CLASES</span>',
-
-           ['/horario/horarioclasespublic'],
+          <?php
+          
+          if(Parametros::findOne(5)->estado == 1)
+            $urlclases = ['/horario/horarioclasespublic'];
+          else
+            $urlclases = ['/horariogenerico/horariogeneric/horarioclasespublic'];
+            
+            echo Html::a('<span class="'.$classlogo.' glyphicon glyphicon-time"></span><h2>Horario</h2><span class="label label-primary">CLASES</span>',
+            $urlclases,
 
            [
 

@@ -550,8 +550,19 @@ class SemanaController extends Controller
             $horasX = Hora::find()->all();
             $turnos = Turno::find()->where(['<', 'id', 3])->all();
             $anios = ['1' => '1°', '2' => '2°', '3' => '3°', '4' => '4°', '5' => '5°', '6' => '6°', '7' => '7°'];
+
+            $horasorigen = Horareloj::find()->where(['semana' => $param['Horariogeneric']['semana']])->all();
+            
+            $horasorigen = ArrayHelper::map($horasorigen, function($model){
+                return $model->turno.'-'.$model->anio.'-'.$model->hora;
+            }, function($model){
+                return $model->inicio.' a '.$model->fin;
+            });
+            //return var_dump($horasorigen);
+            
+
             foreach ($turnos as $turno) {
-                $h = $this->getHora($turno->id);
+                //$h = $this->getHora($turno->id);
                 foreach ($anios as $keyanios => $anio) {
                     foreach ($horasX as $horaX) {
                         $horaRelojx = new Horareloj();
@@ -560,7 +571,8 @@ class SemanaController extends Controller
                         $horaRelojx->anio = $keyanios;
                         $horaRelojx->turno = $turno->id;
                         
-                        $h2 = explode(' a ', $h[$horaX->id-1]);
+                        //$h2 = explode(' a ', $h[$horaX->id-1]);
+                        $h2 = explode(' a ', $horasorigen[$turno->id.'-'.$keyanios.'-'.$horaX->id]);
                         $horaRelojx->inicio = $h2[0];
                         $horaRelojx->fin = $h2[1];
                         try {

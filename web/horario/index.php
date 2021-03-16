@@ -1,4 +1,4 @@
 <?php 
-     header('Location: ../front/index.php?r=horario/login');
+     header('Location: ../front/index.php?r=horariogenerico/horariogeneric/menudivipublic');
      exit();
 ?>

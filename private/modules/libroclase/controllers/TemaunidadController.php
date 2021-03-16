@@ -2,9 +2,12 @@
 
 namespace app\modules\libroclase\controllers;
 
+use app\modules\libroclase\models\Clasediaria;
+use app\modules\libroclase\models\Detalleunidad;
 use Yii;
 use app\modules\libroclase\models\Temaunidad;
 use app\modules\libroclase\models\TemaunidadSearch;
+use kartik\helpers\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -33,15 +36,156 @@ class TemaunidadController extends Controller
      * Lists all Temaunidad models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($actividad)
     {
         $searchModel = new TemaunidadSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            
         ]);
+    }
+
+    public function actionPorunidad($detuni, $actividad, $cat)
+    {
+        $searchModel = new TemaunidadSearch();
+        $dataProvider = $searchModel->pordetalleunidadycat($detuni, $cat);
+        
+        $model = new Clasediaria();
+
+        $unidades = Detalleunidad::find()
+                                ->joinWith(['unidad0', 'programa0'])
+                                ->where(['programa.actividad' => $actividad])
+                                ->andWhere(['programa.vigencia' => 1])
+                                ->orderBy('unidad.id')
+                                ->all();
+                                
+
+        return $this->renderAjax('porunidad', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'unidades' => $unidades,
+            'model' => $model,
+            'cat' => $cat,
+        ]);
+    }
+
+    public function actionDetunidad($detuni, $nose, $cat)
+    {
+        $nose2 = json_decode($nose);
+        $searchModel = new TemaunidadSearch();
+        $dataProvider = $searchModel->pordetalleunidadycat($detuni, $cat);
+
+        return $this->renderPartial('detunidad', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'nose' => $nose2,
+            'cat' => $cat,
+        
+        ]);
+    }
+    public function actionDevolvertema($id, $bot)
+    {
+        $tema = Temaunidad::findOne($id);
+        //return '<div id="tema'.$id.'">'.$tema->descripcion.'</div>';
+        if($bot==0){
+            $label = '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>';
+            $tipo = 'danger';
+            $bot = 1;
+        }else{
+            $label = '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>';
+            $tipo = 'success';
+            $bot = 0;
+        }
+            $par = '<input type=\"hidden\" name=\"tipodes['.$id.']\" id=\"tipodes'.$id.'\" value=\"1\">';
+            $tot = '<input type=\"hidden\" name=\"tipodes['.$id.']\" id=\"tipodes'.$id.'\" value=\"2\">';
+        return json_encode([
+            '0' => '<div id="buttontema'.$id.'">'.
+                                Html::button($label, 
+                                ['class' => 'btn btn-'.$tipo, 
+                        
+                                        'onclick' => '
+                                            $.get("index.php?r=libroclase/temaunidad/devolvertema&bot='.$bot.'&id='.$id.'", function( data ) {
+                                                jsonString = JSON.parse(data);
+                                                bot = jsonString[2];
+                                                id = jsonString[3];
+                                                if(bot==1){
+                                                    $( "div#temasseleccionados" ).append( jsonString[1] );
+                                                    $( "div#forminputs" ).append( jsonString[4] );
+                                                }else{
+                                                    $( "div#tema"+id ).remove();
+                                                    $( "input#valtema"+id ).remove();
+                                                }
+                                                
+                                                $( "div#buttontema'.$id.'" ).html( jsonString[0] );
+                                            });
+                                        '
+                
+                                ]).
+                            '</div>', 
+            '1' => '<div class="temaseleccionado" id="tema'.$id.'">'.$tema->descripcion.
+                '<div class="btn-group pull-right" role="group" aria-label="...">'.
+                    Html::button("Parcial", 
+                        [   
+                            'class' => 'btn btn-success', 
+                            'id' => 'pp'.$id.'pp',
+                                'onclick' => '
+                                    id = '.$id.';
+                                    cl = "tt"+id+"tt";
+                                    cl2 = "pp"+id+"pp";
+                                    try{
+                                        $( "div#tipodes"+id ).remove();
+                                    }catch(err){
+                                    }
+                                    $( "div#forminputstipo-des" ).append( "'.$par.'" );
+                                    this.setAttribute("id", cl2);
+                                    document.getElementById(cl).setAttribute("class", "btn btn-default");
+                                    document.getElementById(cl2).setAttribute("class", "btn btn-success");
+                                    
+                                   
+                                    
+                                    
+                                    
+                                    
+                                    
+                                '
+
+                        ]).
+                    Html::button("Total", 
+                        [   
+                            'class' => 'btn btn-default', 
+                            'id' => 'tt'.$id.'tt',
+                
+                                'onclick' => '
+                                    id = '.$id.';
+                                    cl = "tt"+id+"tt";
+                                    cl2 = "pp"+id+"pp";
+                                    try{
+                                        $( "div#tipodes"+id ).remove();
+                                    }catch(err){
+                                    }
+                                    $( "div#forminputstipo-des" ).append( "'.$tot.'" );
+                                    this.setAttribute("id", cl);
+                                    document.getElementById(cl).setAttribute("class", "btn btn-success");
+                                    document.getElementById(cl2).setAttribute("class", "btn btn-default");
+                                    
+                                    
+                                
+                                '
+
+                        ])
+                .'</div><div class="clearfix"></div>'
+            .'</div>',
+            '2' => $bot,
+            '3' => $id,
+            '4' => '<input type="hidden" class="valtemaxx" name="valtemas['.$id.']" id="valtema'.$id.'" value="'.$id.'">',
+        ]);
+
+        
     }
 
     /**

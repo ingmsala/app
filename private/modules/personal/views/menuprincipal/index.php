@@ -24,6 +24,31 @@ else{
 ?>
 
 <div class="row contpanelprincipal">
+
+        <?php
+              if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_PRECEPTOR])){
+            ?>
+          <div class="col-md-3"> 
+              <?= 
+                Html::a('<span class="'.$classlogo.' glyphicon glyphicon-book"></span><h2>Libro</h2><span class="label label-purple">AULA</span>',
+
+              
+
+                ['/libroclase/clasediaria'],
+
+              [
+
+                  //'id' => 'modalButtonIngreso',
+                  'class' => $classclient,
+                  // modalCall
+
+              ]);
+              ?>
+
+          </div>
+        <?php
+              }
+        ?>
         
 
         <?php
@@ -156,7 +181,7 @@ else{
         ?>
         <div class="col-md-3">           
           <?= 
-            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-book"></span><h2>Libro</h2><span class="label label-danger">AULA</span>',
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-book"></span><h2>Administrar</h2><span class="label label-danger">PROGRAMAS</span>',
 
            ['/libroclase/programa/actividades'],
 

@@ -38,7 +38,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 	</div>
 </div>
     <center><h2>
- <?= (true) ? Html::encode("Citación de Examen: {$anioxtrimestral->trimestral0->nombre}") : '' ?>   
+ <?= (true) ? Html::encode("Citación de Examen: Exámenes regulares - Marzo 2021") : '' ?>   
    
 </h2></center>
     <div class="clearfix"></div>
@@ -46,7 +46,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
     <div class='row' style="padding-bottom: 20px;">
     	
     	<div class="col-md-12"><center><h4>
-    		<?= (true) ? Html::encode('Agente: '.$docenteparam->apellido.', '.$docenteparam->nombre) : '' ?>
+    		<?= (true) ? Html::encode('Docente: '.$docenteparam->apellido.', '.$docenteparam->nombre) : '' ?>
     	</h4></center></div>
 
     </div>

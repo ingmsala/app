@@ -372,6 +372,33 @@ class HorariogenericController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
+    public function actionPublicoshorarios($division, $vista, $prt=0, $sem=1, $ini=0){
+        
+        
+        //$g = new Globales();
+        //$this->layout = $g->getLayout(Yii::$app->user->identity->role);
+        $this->layout = '@app/views/layouts/mainhorariopublic';
+
+        try {
+            $sem = Semana::findOne($sem)->id;
+        } catch (\Throwable $th) {
+            $semana = Semana::find()
+                        ->where(['<=','inicio',date('Y-m-d')])
+                        ->andWhere(['>=','fin',date('Y-m-d')])
+                        ->one();
+            
+            if($semana == null){
+                $semana = Semana::find()
+                        ->where(['>','inicio',date('Y-m-d')])
+                        ->all();
+                $sem = min($semana)->id;
+            }else
+                $sem= $semana->id;
+        }
+        
+        return $this->generarHorarioCurso($division, $vista, $prt, $sem);
+    }
+
     public function actionCompletoxcurso($division, $vista, $prt=0, $sem=1, $ini=0){
         
         
@@ -528,8 +555,6 @@ class HorariogenericController extends Controller
         //$division = 1;
         //$dia = 3;
 
-        if(Yii::$app->user->identity->role == Globales::US_HORARIO)
-            $this->layout = 'mainvacio';
         $searchModel = new HorariogenericSearch();
         $paramdivision = Division::findOne($division);
 
@@ -569,24 +594,34 @@ class HorariogenericController extends Controller
        
 
         
-
-        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+        try {
+            if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
             
+                $horarios = Horariogeneric::find()
+                    ->joinWith(['catedra0'])
+                    ->where(['semana' => $semana->id])
+                    ->andWhere(['catedra.division' => $division])
+                    ->orderBy('fecha')
+                    ->all();
+            }else{
+                $horarios = Horariogeneric::find()
+                    ->joinWith(['catedra0', 'semana0'])
+                    ->where(['semana' => $semana->id])
+                    ->andWhere(['catedra.division' => $division])
+                    ->andWhere(['semana.publicada' => 1])
+                    ->orderBy('fecha')
+                    ->all();
+            }
+        } catch (\Throwable $th) {
             $horarios = Horariogeneric::find()
-                ->joinWith(['catedra0'])
-                ->where(['semana' => $semana->id])
-                ->andWhere(['catedra.division' => $division])
-                ->orderBy('fecha')
-                ->all();
-        }else{
-            $horarios = Horariogeneric::find()
-                ->joinWith(['catedra0', 'semana0'])
-                ->where(['semana' => $semana->id])
-                ->andWhere(['catedra.division' => $division])
-                ->andWhere(['semana.publicada' => 1])
-                ->orderBy('fecha')
-                ->all();
+                    ->joinWith(['catedra0', 'semana0'])
+                    ->where(['semana' => $semana->id])
+                    ->andWhere(['catedra.division' => $division])
+                    ->andWhere(['semana.publicada' => 1])
+                    ->orderBy('fecha')
+                    ->all();
         }
+        
         if($semana->publicada == 0){
             Yii::$app->session->setFlash('danger', "No se encuentra publicada la semana");
         }
@@ -689,14 +724,18 @@ class HorariogenericController extends Controller
                     }
 
                 $dia = Yii::$app->formatter->asDate($dia, 'dd/MM/yyyy');
-
-                if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
-                    $botonera='<br />';
-                    $botonera .= Html::a('<span class="button-red"></span>', Url::to(['updateburbuja', 'bur' => 1, 'fecha' => $fechats, 'division' => $division, 'semana' => $semana->id ]), ['style' => 'color:'.'red']);
-                    $botonera .= ' '.Html::a('<span class="button-blue"></span>', Url::to(['updateburbuja', 'bur' => 2, 'fecha' => $fechats, 'division' => $division, 'semana' => $semana->id ]), ['style' => 'color:'.'blue']);
-                    $botonera .= ' '.Html::a('<span class="button-yellow"></span>', Url::to(['updateburbuja', 'bur' => 3, 'fecha' => $fechats, 'division' => $division, 'semana' => $semana->id ]), ['style' => 'color:'.'#C7BC57']);
-                }else
+                try {
+                    if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+                        $botonera='<br />';
+                        $botonera .= Html::a('<span class="button-red"></span>', Url::to(['updateburbuja', 'bur' => 1, 'fecha' => $fechats, 'division' => $division, 'semana' => $semana->id ]), ['style' => 'color:'.'red']);
+                        $botonera .= ' '.Html::a('<span class="button-blue"></span>', Url::to(['updateburbuja', 'bur' => 2, 'fecha' => $fechats, 'division' => $division, 'semana' => $semana->id ]), ['style' => 'color:'.'blue']);
+                        $botonera .= ' '.Html::a('<span class="button-yellow"></span>', Url::to(['updateburbuja', 'bur' => 3, 'fecha' => $fechats, 'division' => $division, 'semana' => $semana->id ]), ['style' => 'color:'.'#C7BC57']);
+                    }else
+                        $botonera = '';
+                } catch (\Throwable $th) {
                     $botonera = '';
+                }
+                
 
                 $diasgrid['columns'][] =  [
                             'header' => ($prt==1) ? $dias2[date("w",strtotime($fechats)-1)].'<br/>'.$dia : $dias2[date("w",strtotime($fechats)-1)].'<br/>'.'<span class="label label-primary">'.$dia.'</span>'.$botonera,
@@ -723,29 +762,45 @@ class HorariogenericController extends Controller
                     # code...
                     if($cd == 0)
                         $array[$hora->hora][999] = $h[$ch+1]; 
-                    if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
-                        if(($hora->hora != 2 && $hora->hora != 9) || $semana->tiposemana == 2){
-                            if($prt==1)
-                                $array[$hora->hora][$fechats] = "-";
-                            else
-                                //$array[$hora->hora][$fechats] = '<a class="btn btn-info btn-sm" href="?r=horariogenerico/horariogeneric/createdesdehorario&division='.$division.'&hora='.$hora->hora.'&fecha='.$fechats.'&semana='.$semana->id.'"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>';
-                                $array[$hora->hora][$fechats] = Html::button('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>', ['value' => Url::to(['/horariogenerico/horariogeneric/createdesdehorario', 'division' => $division, 'hora' => $hora->id, 'fecha' => $fechats, 'semana' => $semana->id]), 'title' => 'Modificar hora', 'class' => 'btn btn-info amodalgenerico']);
-                        }else{
-                            if($diaconmateria){
-                                if($hora->hora == 2)
-                                    $array[$hora->hora][$fechats] = "Ingreso escalonado";
-                                else//9
-                                    $array[$hora->hora][$fechats] = "Egreso escalonado";
+                    
+                    try {
+                        if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+                            if(($hora->hora != 2 && $hora->hora != 9) || $semana->tiposemana == 2){
+                                if($prt==1)
+                                    $array[$hora->hora][$fechats] = "-";
+                                else
+                                    //$array[$hora->hora][$fechats] = '<a class="btn btn-info btn-sm" href="?r=horariogenerico/horariogeneric/createdesdehorario&division='.$division.'&hora='.$hora->hora.'&fecha='.$fechats.'&semana='.$semana->id.'"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>';
+                                    $array[$hora->hora][$fechats] = Html::button('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>', ['value' => Url::to(['/horariogenerico/horariogeneric/createdesdehorario', 'division' => $division, 'hora' => $hora->id, 'fecha' => $fechats, 'semana' => $semana->id]), 'title' => 'Modificar hora', 'class' => 'btn btn-info amodalgenerico']);
                             }else{
-                                $array[$hora->hora][$fechats] = '-';
+                                if($diaconmateria){
+                                    if($hora->hora == 2)
+                                        $array[$hora->hora][$fechats] = "Ingreso escalonado";
+                                    else//9
+                                        $array[$hora->hora][$fechats] = "Egreso escalonado";
+                                }else{
+                                    $array[$hora->hora][$fechats] = '-';
+                                }
+                            }
+                            
+                        }
+                            
+                        else{
+                            if(($hora->hora != 2 && $hora->hora != 9) || $semana->tiposemana == 2)
+                                $array[$hora->hora][$fechats] = "-";
+                            else{
+                                if($diaconmateria){
+                                    if($hora->hora == 2)
+                                        $array[$hora->hora][$fechats] = "Ingreso escalonado";
+                                    else//9
+                                        $array[$hora->hora][$fechats] = "Egreso escalonado";
+                                }else{
+                                    $array[$hora->hora][$fechats] = '-';
+                                }
                             }
                         }
-                        
-                    }
-                        
-                    else{
+                    } catch (\Throwable $th) {
                         if(($hora->hora != 2 && $hora->hora != 9) || $semana->tiposemana == 2)
-                            $array[$hora->hora][$fechats] = "-";
+                        $array[$hora->hora][$fechats] = "-";
                         else{
                             if($diaconmateria){
                                 if($hora->hora == 2)
@@ -757,6 +812,7 @@ class HorariogenericController extends Controller
                             }
                         }
                     }
+                    
                         
                     //$key = array_search($hora->id, array_column($horarios, 'hora'));
                     //$salida .= $key;
@@ -813,18 +869,22 @@ class HorariogenericController extends Controller
                            
                            //return $salida;
             if(($horariox->horareloj0->hora != 2 && $horariox->horareloj0->hora != 9) || $semana->tiposemana == 2){//Egreso e ingreso
-            
-                if($vista == 'docentes'){
-                    if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]))
-                        if($prt==1)
-                            $array[$horariox->horareloj0->hora][$horariox->fecha] = $salida;
+                try {
+                    if($vista == 'docentes'){
+                        if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]))
+                            if($prt==1)
+                                $array[$horariox->horareloj0->hora][$horariox->fecha] = $salida;
+                            else
+                                //$array[$horariox->hora][$horariox->fecha] = $salida.'<div class="pull-right"><a class="btn btn-success btn-sm" href="?r=horarioexamen/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&fecha='.$horariox->fecha.'&tipo='.$tipo.'&alxtrim='.$anioxtrim->id.'&col='.$col.'"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></div>';
+                                $array[$horariox->horareloj0->hora][$horariox->fecha] = Html::button($salida, ['value' => Url::to(['/horariogenerico/horariogeneric/updatedesdehorario', 'division' => $division, 'hora' => $horariox->horareloj, 'fecha' => $horariox->fecha, 'semana' => $semana->id]), 'title' => 'Modificar docente', 'class' => 'btn btn-link amodalgenerico']);
                         else
-                            //$array[$horariox->hora][$horariox->fecha] = $salida.'<div class="pull-right"><a class="btn btn-success btn-sm" href="?r=horarioexamen/updatedesdehorario&division='.$division.'&hora='.$horariox->hora.'&fecha='.$horariox->fecha.'&tipo='.$tipo.'&alxtrim='.$anioxtrim->id.'&col='.$col.'"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></div>';
-                            $array[$horariox->horareloj0->hora][$horariox->fecha] = Html::button($salida, ['value' => Url::to(['/horariogenerico/horariogeneric/updatedesdehorario', 'division' => $division, 'hora' => $horariox->horareloj, 'fecha' => $horariox->fecha, 'semana' => $semana->id]), 'title' => 'Modificar docente', 'class' => 'btn btn-link amodalgenerico']);
-                    else
-                        $array[$horariox->horareloj0->hora][$horariox->fecha] = $salida;
-                }else
+                            $array[$horariox->horareloj0->hora][$horariox->fecha] = $salida;
+                    }else
+                        $array[$horariox->horareloj0->hora][$horariox->fecha] = $horariox->catedra0->actividad0->nombre;
+                } catch (\Throwable $th) {
                     $array[$horariox->horareloj0->hora][$horariox->fecha] = $horariox->catedra0->actividad0->nombre;
+                }
+                
             }
         }
 
@@ -836,6 +896,24 @@ class HorariogenericController extends Controller
 
         $docente_materia_search = new DetallecatedraSearch();
         $dataProvider = $docente_materia_search->horario_doce_divi_cant($division, $semana->aniolectivo);
+
+        try {
+            $columnpremitido = in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTORIA, Globales::US_HORARIO]);
+            $origen = 'completoxcurso';
+        } catch (\Throwable $th) {
+            $columnpremitido = false;
+            $origen = 'publicoshorarios';
+        }
+        try {
+            $regenciapermitido = in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]);
+        } catch (\Throwable $th) {
+            $regenciapermitido = false;
+        }
+        try {
+            $horariopremitido = in_array(Yii::$app->user->identity->role, [Globales::US_HORARIO]);
+        } catch (\Throwable $th) {
+            $horariopremitido = true;
+        }
 
         if($prt == 1)
                 return $this->renderAjax('completoxcurso', [
@@ -854,6 +932,10 @@ class HorariogenericController extends Controller
             'sem' => $sem,
             'sema' => $sema,
             'semn' => $semn,
+            'columnpremitido' => $columnpremitido,
+            'horariopremitido' => $horariopremitido,
+            'regenciapermitido' => $regenciapermitido,
+            'origen' => $origen,
             ]);
 
         //return var_dump($contaux);
@@ -873,6 +955,10 @@ class HorariogenericController extends Controller
             'sem' => $sem,
             'sema' => $sema,
             'semn' => $semn,
+            'columnpremitido' => $columnpremitido,
+            'horariopremitido' => $horariopremitido,
+            'regenciapermitido' => $regenciapermitido,
+            'origen' => $origen,
 
         ]);
     }
@@ -1131,6 +1217,32 @@ class HorariogenericController extends Controller
         
         return $this->render('panelprincipal', [
             'infoexamen' => $infoexamen,
+            
+        ]);
+    }
+
+    public function actionMenudivipublic($col = 0)
+    {
+        $this->layout = '@app/views/layouts/mainhorariopublic';
+
+        $divisiones = Division::find()
+                                    ->where(['in', 'turno', [1,2]])
+                                    ->andWhere(['<=', 'id', 53])
+                                    ->orderBy('id')
+                                    ->all();
+
+        $vista = 'materias';
+        
+        $echodiv = '';
+        foreach ($divisiones as $division) {
+                $echodiv .= '<div class="pull-left" style="height: 16vh; width: 16vh; vertical-align: middle;">';
+                $echodiv .= '<center><div>';
+                $echodiv .= '<a class="menuHorarios" href="index.php?r=horariogenerico/horariogeneric/publicoshorarios&division='.$division->id.'&vista='.$vista.'&prt=0&ini=1'.'" role="button" style="font-size:5vh; width:15vh; height: 15vh;">'.$division->nombre.'</a>';
+                $echodiv .= '</div></center>';
+                $echodiv .= '</div>';
+        }
+        return $this->render('menuxdivisionpublic', [
+            'echodiv' => $echodiv,
             
         ]);
     }

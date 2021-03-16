@@ -14,7 +14,7 @@ if($vista == 'docentes')
 else
 	$txt = 'Materias';
 
-$this->title = "Horario de {$trimestral}: ".$paramdivision->nombre;
+$this->title = "Examenes regulares - Marzo 2021: ".$paramdivision->nombre;
 $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="index.php?r=horarioexamen/menuxdivision&col='.$col.'" style="font-size: 12hv;"><center><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span><br />Volver</center></a>'];
 
 if($vista == 'docentes')
@@ -153,7 +153,7 @@ JS;
 		            ],
 
 		            [
-		            	'label' => 'Agente',
+		            	'label' => 'Docente',
 		            	'format' => 'raw',
 		            	'value' => function($model) use ($col, $prt) {
 		            		if($prt == 0)
