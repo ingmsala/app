@@ -2,10 +2,14 @@
 
 namespace app\modules\libroclase\controllers;
 
+use app\config\Globales;
+use app\models\Agente;
+use app\models\Docentexdepartamento;
 use Yii;
 use app\modules\libroclase\models\Detalleunidad;
 use app\modules\libroclase\models\DetalleunidadSearch;
 use app\modules\libroclase\models\Unidad;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -21,6 +25,28 @@ class DetalleunidadController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'actividades'],
+                'rules' => [
+                    [
+                        'actions' => ['create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                $persona = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                $depto = Docentexdepartamento::find()->where(['agente' => $persona->id])->count();
+                                return (in_array (Yii::$app->user->identity->username, Globales::authttemas) || $depto>0 );
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

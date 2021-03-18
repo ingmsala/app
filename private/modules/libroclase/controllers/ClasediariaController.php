@@ -27,6 +27,7 @@ use app\modules\libroclase\models\Temaxclase;
 use app\modules\libroclase\models\Tipocurricula;
 use app\modules\libroclase\models\Tipodesarrollo;
 use yii\data\ArrayDataProvider;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -42,6 +43,94 @@ class ClasediariaController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'gethorashorario', 'catedra'],
+                'rules' => [
+                    [
+                        'actions' => ['index'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['catedra', 'create', 'gethorashorario'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                if (in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE])){
+                                    $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+            
+                                    $dcs = Detallecatedra::find()
+                                        ->joinWith(['catedra0', 'catedra0.division0'])
+                                        ->where(['detallecatedra.agente' => $doc->id])
+                                        ->andWhere(['detallecatedra.revista' => 6])
+                                        ->andWhere(['detallecatedra.aniolectivo' => 3])
+                                        ->andWhere(['catedra.id' => Yii::$app->request->queryParams['cat']])
+                                        ->all();
+                                    if(count($dcs)>0)
+                                        return true;
+                                    else
+                                        return false;
+
+                                }
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                if (in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE])){
+                                    $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                    $clase = $this->findModel(Yii::$app->request->queryParams['id']);
+            
+                                    $dcs = Detallecatedra::find()
+                                        ->joinWith(['catedra0', 'catedra0.division0'])
+                                        ->where(['detallecatedra.agente' => $doc->id])
+                                        ->andWhere(['detallecatedra.revista' => 6])
+                                        ->andWhere(['detallecatedra.aniolectivo' => 3])
+                                        ->andWhere(['catedra.id' => $clase->catedra])
+                                        ->all();
+                                        
+                                    if(count($dcs)>0)
+                                        return true;
+                                    else
+                                        return false;
+
+                                }
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['index', 'view', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                           try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

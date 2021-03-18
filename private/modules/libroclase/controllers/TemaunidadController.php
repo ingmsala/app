@@ -2,12 +2,16 @@
 
 namespace app\modules\libroclase\controllers;
 
+use app\config\Globales;
+use app\models\Agente;
+use app\models\Detallecatedra;
 use app\modules\libroclase\models\Clasediaria;
 use app\modules\libroclase\models\Detalleunidad;
 use Yii;
 use app\modules\libroclase\models\Temaunidad;
 use app\modules\libroclase\models\TemaunidadSearch;
 use kartik\helpers\Html;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -23,6 +27,68 @@ class TemaunidadController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'porunidad', 'detunidad', 'devolvertema'],
+                'rules' => [
+                    [
+                        'actions' => ['create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
+                                
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['porunidad', 'detunidad'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                if (in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE])){
+                                    $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                    
+                                    $dcs = Detallecatedra::find()
+                                    ->joinWith(['catedra0', 'catedra0.division0'])
+                                    ->where(['detallecatedra.agente' => $doc->id])
+                                    ->andWhere(['detallecatedra.revista' => 6])
+                                    ->andWhere(['detallecatedra.aniolectivo' => 3])
+                                    ->andWhere(['catedra.id' => Yii::$app->request->queryParams['cat']])
+                                    ->all();
+                                        
+                                    if(count($dcs)>0)
+                                        return true;
+                                    else
+                                        return false;
+
+                                }
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['devolvertema'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
