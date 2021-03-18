@@ -89,8 +89,8 @@ class SemanaController extends Controller
     {
         /*$searchModel = new SemanaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);*/
-
-        $semanas = Semana::find()->all();
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $semanas = Semana::find()->where(['>=', 'id', 14])->all();
         $events = [];
 
         
@@ -109,7 +109,7 @@ class SemanaController extends Controller
                     $tipo = 'Sin definir';
                     $color = '#a4a4a4';
                 }
-                date_default_timezone_set('America/Argentina/Buenos_Aires');
+                
                 $newfechainicio = $semana->inicio;
                 $fin = $semana->fin;
                 if (is_string($semana->fin) === true) $fin = strtotime($semana->fin);
@@ -128,47 +128,59 @@ class SemanaController extends Controller
                     //'startEditable'    => true,
                     'color'            => $color,
                     'editable'         => false,
-                    'url'              => 'index.php?r=semana/index&id='.$semana->id,
+                    'url'              => 'index.php?r=semana/view&id='.$semana->id,
                     'durationEditable' => false,]);
                 }
 
-        $horarios = Horariogeneric::find()->where(['is not', 'burbuja', null])->all();
-        $burbujas = ArrayHelper::map($horarios, 'fecha', function($model){
+        $horarios = Horariogeneric::find()->select('fecha, burbuja, semana')->distinct()->where(['is not', 'burbuja', null])->andWhere(['>=', 'semana', 14])->all();
+        /*$burbujas = ArrayHelper::map($horarios, 'fecha', function($model){
             return $model->burbuja0->nombre.'-'.$model->semana;
-        });
+        });*/
+        //return var_dump($horarios);
+        foreach ($horarios as $key => $burbuja) {
 
-        foreach ($burbujas as $key => $burbuja) {
-
-            $expl = explode('-', $burbuja);
-            $burbu = $expl[0];
-            $sem = $expl[1];
+            //$expl = explode('-', $burbuja);
+            //$burbu = $expl[0];
+            //$sem = $expl[1];
+            $burbu = $burbuja['burbuja'];
+            $sem = $burbuja['semana'];
+            $fecha = $burbuja['fecha'];
             $border = null;
 
-            if($burbu == 'Roja')
+            if($burbu == 1){
                 $color = '#f2dede';
-            elseif($burbu == 'Azul')
+                $burbujanom = 'Roja';
+            }
+            elseif($burbu == 2){
                 $color = '#ADD8E6';
+                $burbujanom = 'Azul';
+            }
+            elseif($burbu == 2){
+                $color = '#ADD8E6';
+                $burbujanom = 'Azul';
+            }
             else{
                 $color = '#FFFACD';
                 $border = 'grey';
+                $burbujanom = 'Amarilla';
             }
 
 
             $events[] = new \edofre\fullcalendar\models\Event([
                 'id'               => uniqid(),
-                'title'            => $burbu,
-                'start'            => $key,
-                'end'              => $key,
+                'title'            => $burbujanom,
+                'start'            => $fecha,
+                'end'              => $fecha,
                 //'startEditable'    => true,
                 'color'            => $color,
                 'editable'         => false,
                 'borderColor' => $border,
                 'textColor' => 'grey',
-                'url'              => 'index.php?r=semana/index&id='.$sem,
+                'url'              => 'index.php?r=semana/view&id='.$sem,
                 'durationEditable' => false,]);
         }
             
-        if(isset(Yii::$app->request->queryParams['id'])){
+        /*if(isset(Yii::$app->request->queryParams['id'])){
             $renderCopiarDesde = $this->getCopiarDesde(Yii::$app->request->queryParams['id'], 'view');
             $renderMasivos = $this->getRenderOperarMasivos(Yii::$app->request->queryParams['id'], 'index');
             $semedit = Semana::findOne(Yii::$app->request->queryParams['id']);
@@ -197,8 +209,9 @@ class SemanaController extends Controller
         }else{
             $renderMasivos = '';
             $renderCopiarDesde = '';
-        }
-            
+        }*/
+        $renderMasivos = '';
+        $renderCopiarDesde = '';   
         
         
 

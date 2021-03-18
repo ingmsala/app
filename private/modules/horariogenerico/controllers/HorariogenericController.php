@@ -863,7 +863,7 @@ class HorariogenericController extends Controller
                                     
                                     break 1;
                                 }else{
-                                    $salida = 'Ed. Física';
+                                    $salida = 'Hora institucional';
                                 }
                             }
                            
@@ -879,10 +879,18 @@ class HorariogenericController extends Controller
                                 $array[$horariox->horareloj0->hora][$horariox->fecha] = Html::button($salida, ['value' => Url::to(['/horariogenerico/horariogeneric/updatedesdehorario', 'division' => $division, 'hora' => $horariox->horareloj, 'fecha' => $horariox->fecha, 'semana' => $semana->id]), 'title' => 'Modificar docente', 'class' => 'btn btn-link amodalgenerico']);
                         else
                             $array[$horariox->horareloj0->hora][$horariox->fecha] = $salida;
-                    }else
-                        $array[$horariox->horareloj0->hora][$horariox->fecha] = $horariox->catedra0->actividad0->nombre;
+                    }else{
+                        if($salida == 'Hora institucional')
+                            $array[$horariox->horareloj0->hora][$horariox->fecha] = 'Hora institucional';
+                        else
+                            $array[$horariox->horareloj0->hora][$horariox->fecha] = $horariox->catedra0->actividad0->nombre;
+                        
+                    }
                 } catch (\Throwable $th) {
-                    $array[$horariox->horareloj0->hora][$horariox->fecha] = $horariox->catedra0->actividad0->nombre;
+                    if($salida == 'Hora institucional')
+                            $array[$horariox->horareloj0->hora][$horariox->fecha] = 'Hora institucional';
+                        else
+                            $array[$horariox->horareloj0->hora][$horariox->fecha] = $horariox->catedra0->actividad0->nombre;
                 }
                 
             }

@@ -58,9 +58,7 @@ use kartik\select2\Select2;
 
         ?>
 
-        <?= $form->field($model, 'condicion')->dropDownList($listcondiciones, ['prompt'=>'Seleccionar...', 'disabled' => 'disabled']); ?>
-
-        <?= $form->field($model, 'revista')->dropDownList($listrevistas, ['prompt'=>'Seleccionar...', 'disabled' => 'disabled']); ?>
+        
 
         <?= $form->field($model, 'hora')->textInput(['value'=>($model->hora != null) ? $model->hora : $catedras->actividad0->cantHoras, 'disabled' => 'disabled']) ?>
 

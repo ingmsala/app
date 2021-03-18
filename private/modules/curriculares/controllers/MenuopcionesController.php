@@ -64,6 +64,8 @@ class MenuopcionesController extends Controller
     public function actionIndex()
     {
         
+        $g = new Globales();
+        $this->layout = $g->getLayout(Yii::$app->user->identity->role);
 
         $aniolectivo = Aniolectivo::find()->where(['activo' => 1])->one();
         

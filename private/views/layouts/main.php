@@ -134,6 +134,8 @@ try {
                                     'itemsOptions'=>['class'=>'dropdown-submenu'],
                                     'submenuOptions'=>['class'=>'dropdown-menu'],
                                     'items' => [
+                                        ['label' => 'Clases 2021 - Mixto', 'url' => ['/semana']],
+                                        '<div class="dropdown-divider"></div>',
                                         ['label' => 'Horarios de Clase', 'url' => ['/horario/panelprincipal']],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Horarios de Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
@@ -633,6 +635,8 @@ try {
                     ['label' => 'Horarios', 
                             'items' => [
                                 
+                                ['label' => 'Clases 2021 - Mixto', 'url' => ['/semana']],
+                                '<div class="dropdown-divider"></div>',
                                 ['label' => 'Clases', 'url' => ['horario/panelprincipal']],
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
@@ -1270,7 +1274,7 @@ try {
                     ['label' => 'Reportes',
                             'items' => [
 
-                                ['label' => 'Monse 2.0', 'url' => ['/mones/monalumno']],
+                                ['label' => 'Mones 2.0', 'url' => ['/mones/monalumno']],
                                 '<div class="dropdown-divider"></div>',
                                 
                                 

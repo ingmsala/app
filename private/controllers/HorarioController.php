@@ -16,6 +16,7 @@ use app\models\Agente;
 use app\models\Funciondj;
 use app\models\Hora;
 use app\models\Horario;
+use app\models\HorariocontraturnoSearch;
 use app\models\Horariodj;
 use app\models\Horarioexamen;
 use app\models\HorarioSearch;
@@ -703,7 +704,7 @@ class HorarioController extends Controller
         $estadopublicacion = Parametros::findOne(1)->estado;
 
         if ($estadopublicacion == 0){
-            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
+            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de clases");
             return $this->redirect(Yii::$app->request->referrer);
         }
 
@@ -879,6 +880,9 @@ class HorarioController extends Controller
                 ]);
         }
 
+        $contraturnoSearch = new HorariocontraturnoSearch();
+        $contraturnoProvider = $contraturnoSearch->porDivision($paramdivision->id, $alx->id);
+
         
 
         if($pr<>1){
@@ -899,6 +903,7 @@ class HorarioController extends Controller
                 'colorheader' => $colorheader,
                 'otro' => $otro,
                 'publi' => $publi,
+                'contraturnoProvider' => $contraturnoProvider,
     
             ]);
         }else{
@@ -919,6 +924,7 @@ class HorarioController extends Controller
                 'colorheader' => $colorheader,
                 'otro' => $otro,
                 'publi' => $publi,
+                'contraturnoProvider' => $contraturnoProvider,
     
             ]);
         }
