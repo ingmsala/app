@@ -72,8 +72,8 @@ $tiposcurricula = ArrayHelper::map($tiposcurricula, 'id', 'nombre');
                         console.log(date);
                         
                         $.get("index.php?r=libroclase/clasediaria/gethorashorario&cat="+cat+"&fecha="+date, function( data ) {
+                            $( "select#horaxclase-hora" ).html("");
                             $( "select#horaxclase-hora" ).html( data );
-                            console.log(data);
                         });
 
                      }',
@@ -138,20 +138,29 @@ $tiposcurricula = ArrayHelper::map($tiposcurricula, 'id', 'nombre');
 
     ?>
     <div class="clearfix"></div>
-
-    <div id="divtemasclase"  class="panel panel-default">
+    
+    <?php 
+    if($model->tipocurricula == 1)
+            $panel = 'block';
+    else
+            $panel = 'none';
+    ?>
+    <div style="display: <?= $panel ?>;" id="divtemasclase"  class="panel panel-default">
     <div class="panel-heading">Temas de clase</div>
         <div class="panel-body">
             <?=
                 Html::button('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar o quitar tema', ['value' => Url::to(['/libroclase/temaunidad/porunidad', 'cat' => $model->catedra, 'detuni' => 1, 'actividad' => $actividad]), 'title' => 'Agregar tema', 'class' => 'btn btn-info amodalagregartema']);
             ?>
 
-            <div id="temasseleccionados"></div>
+            <div id="temasseleccionados">
+            <?=$divselecc;?>
+            </div>
         </div>
     </div>
     
 
     <div id="forminputs">
+    <?= $imputstemas; ?>
     </div>
 
     <div id="forminputstipo-des">

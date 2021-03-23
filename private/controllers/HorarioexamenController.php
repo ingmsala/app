@@ -39,7 +39,7 @@ class HorarioexamenController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto', 'print', 'printcursos', 'migracionfechas', 'revisarhorarios'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 'horariocompleto', 'print', 'printcursos', 'migracionfechas', 'revisarhorarios', 'mesasxfecha'],
                 'rules' => [
                     [
                         'actions' => ['completoxdia', 'completoxdocente', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 'menuxletra', 'panelprincipal', 'filtropormateria', 'horariocompleto'],   
@@ -199,7 +199,7 @@ class HorarioexamenController extends Controller
 
                     ],
                     [
-                        'actions' => ['index', 'createdesdehorario','updatedesdehorario', 'print', 'migracionfechas', 'delete', 'revisarhorarios'],   
+                        'actions' => ['index', 'createdesdehorario','updatedesdehorario', 'print', 'migracionfechas', 'delete', 'revisarhorarios', 'mesasxfecha'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -2385,6 +2385,20 @@ class HorarioexamenController extends Controller
             'providerdocentes' => $providerdocentes,
             'providermaterias' => $providermaterias,
             'col' => $col,
+        ]);
+    }
+
+    public function actionMesasxfecha($id)
+    {
+        $axt = Anioxtrimestral::findOne($id);
+        $tipo = ($axt->trimestral < 4) ? 2 : 3;
+        $col =  ($tipo==2) ? 0 : 1;
+
+        $searchModel = new HorarioexamenSearch();
+        $providercursos = $searchModel->porfecha($id);
+
+        return $this->render('mesasxfecha', [
+            'providercursos' => $providercursos,
         ]);
     }
 }

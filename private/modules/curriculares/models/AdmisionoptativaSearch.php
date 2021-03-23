@@ -14,6 +14,10 @@ use yii\db\Query;
  */
 class AdmisionoptativaSearch extends Admisionoptativa
 {
+
+    public $apellidos;
+    public $documento;
+    
     /**
      * {@inheritdoc}
      */
@@ -21,6 +25,7 @@ class AdmisionoptativaSearch extends Admisionoptativa
     {
         return [
             [['id', 'alumno', 'curso', 'aniolectivo'], 'integer'],
+            [['apellidos', 'documento'], 'string'],
         ];
     }
 
@@ -42,7 +47,8 @@ class AdmisionoptativaSearch extends Admisionoptativa
      */
     public function search($params)
     {
-        $query = Admisionoptativa::find();
+        $query = Admisionoptativa::find()
+        ->joinWith(['alumno0']);
 
         // add conditions that should always apply here
 
@@ -61,17 +67,19 @@ class AdmisionoptativaSearch extends Admisionoptativa
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'alumno' => $this->alumno,
             'curso' => $this->curso,
             'aniolectivo' => $this->aniolectivo,
         ]);
+        $query->andFilterWhere(['like', 'alumno.apellido', $this->apellidos]);
+        $query->andFilterWhere(['like', 'alumno.documento', $this->documento]);
 
         return $dataProvider;
     }
 
     public function porAlumno($id)
     {
-        $sql = "SELECT alumno, curso, count(id) as cantidad FROM admisionoptativa  WHERE alumno = ".$id." and aniolectivo = 2  group by alumno, curso";
+        $al = Aniolectivo::find()->where(['activo' => 1])->one();
+        $sql = "SELECT alumno, curso, count(id) as cantidad FROM admisionoptativa  WHERE alumno = ".$id." and aniolectivo = ".$al->id."  group by alumno, curso";
 
         // add conditions that should always apply here
 
@@ -107,7 +115,7 @@ class AdmisionoptativaSearch extends Admisionoptativa
                             ])
                         ->orderBy('al.apellido, al.nombre', 'admisionoptativa.curso');*/
         
-        $query = 'SELECT al.documento as documento, al.apellido as apellido, al.nombre as nombre, admisionoptativa.curso as curso FROM admisionoptativa LEFT JOIN alumno al ON admisionoptativa.alumno = al.id WHERE (admisionoptativa.aniolectivo=2) AND (al.id NOT IN (SELECT matricula.alumno FROM matricula LEFT JOIN comision ON matricula.comision = comision.id LEFT JOIN espaciocurricular ON comision.espaciocurricular = espaciocurricular.id WHERE (espaciocurricular.aniolectivo=2) AND (espaciocurricular.curso=admisionoptativa.curso))) ORDER BY al.apellido, al.nombre';
+        $query = 'SELECT al.documento as documento, al.apellido as apellido, al.nombre as nombre, admisionoptativa.curso as curso FROM admisionoptativa LEFT JOIN alumno al ON admisionoptativa.alumno = al.id WHERE (admisionoptativa.aniolectivo='.$al.') AND (al.id NOT IN (SELECT matricula.alumno FROM matricula LEFT JOIN comision ON matricula.comision = comision.id LEFT JOIN espaciocurricular ON comision.espaciocurricular = espaciocurricular.id WHERE (espaciocurricular.aniolectivo='.$al.') AND (espaciocurricular.curso=admisionoptativa.curso))) ORDER BY al.apellido, al.nombre';
         
         $dataProvider = new SqlDataProvider([
             'sql' => $query,

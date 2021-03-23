@@ -202,4 +202,40 @@ class HorarioexamenSearch extends Horarioexamen
         return $dataProvider;
 
     }
+
+    public function porfecha($id)
+    {
+        $query = Horarioexamen::find()
+            ->joinWith(['catedra0', 'catedra0.division0'])
+            ->where(['anioxtrimestral' => $id])
+            ->orderBy('horarioexamen.fecha, division.id, horarioexamen.hora');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        //$this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'catedra' => $this->catedra,
+            'hora' => $this->hora,
+            'tipo' => $this->tipo,
+            'anioxtrimestral' => $this->anioxtrimestral,
+            'fecha' => $this->fecha,
+            'cambiada' => $this->cambiada,
+        ]);
+
+        return $dataProvider;
+    }
 }

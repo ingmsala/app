@@ -6,7 +6,7 @@ use yii\widgets\Breadcrumbs;
 /* @var $this yii\web\View */
 /* @var $model app\modules\libroclase\models\Clasediaria */
 
-$this->title = 'Modificar Clase diaria: ' . $model->id;
+$this->title = 'Modificar Clase diaria';
 ?>
 
 <?php 
@@ -34,6 +34,10 @@ $this->title = 'Modificar Clase diaria: ' . $model->id;
         'unidades' => $unidades,
         'horas' => $horas,
         'actividad' => $catedra->actividad,
+        'imputstemas' => $imputstemas,
+        'tiposcurricula' => $tiposcurricula,
+        'horasaj' => $horasaj,
+        'divselecc' => $divselecc,
 
     ]) ?>
 

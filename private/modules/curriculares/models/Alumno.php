@@ -68,6 +68,11 @@ class Alumno extends \yii\db\ActiveRecord
         return $this->hasMany(Admisionoptativa::className(), ['alumno' => 'id']);
     }
 
+    public function getAdmisionsociocoms()
+    {
+        return $this->hasMany(Admisionsociocom::className(), ['alumno' => 'id']);
+    }
+
     public function getTutors()
     {
         return $this->hasMany(Tutor::className(), ['alumno' => 'id']);

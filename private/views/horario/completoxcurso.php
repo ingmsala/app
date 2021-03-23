@@ -190,10 +190,117 @@ JS;
 		            
 		        ],
 			]); ?>
-			
-	<?php
+		
+		<p>
+			<?php
+			if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]) && $pr<>1){
+			 	Html::a('Horario contraturno', Url::to(['/horariocontraturno/create', 'division' => $paramdivision->id, 'al' => $alx->id]), ['class' => 'btn btn-success']);
+			}
+			 ?>
+
+		</p>
+
+		<?php
 		$template = (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])) ? '{viewdetcat} {dj}' : '{viewdetcat}';
+		$template2 = (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])) ? '{viewdetcat} {dj} {delete}' : '{viewdetcat}';
 	?>
+
+		<?php GridView::widget([
+		        'dataProvider' => $contraturnoProvider,
+		        //'filterModel' => $searchModel,
+		        'responsiveWrap' => false,
+		        'summary' => false,
+		        'condensed' => ($pr==0) ? false : true,
+		        'columns' => [
+		            ['class' => 'yii\grid\SerialColumn'],
+
+					[
+		            	'label' => 'Día',
+		            	'value' => function($model){
+		            		return $model->diasemana0->nombre;
+		            	}
+
+		            ],
+
+					[
+		            	'label' => 'Hora',
+		            	'value' => function($model){
+							$inicio = explode(':', $model->inicio);
+							$fin = explode(':', $model->fin);
+		            		return $inicio[0].':'.$inicio[1].' a '.$fin[0].':'.$fin[1];
+		            	}
+
+		            ],
+
+					
+		            [
+		            	'label' => 'Materia',
+		            	'value' => function($model){
+		            		return $model->catedra0->actividad0->nombre;
+		            	}
+
+		            ],
+
+		            [
+		            	'label' => 'Docente',
+		            	'format' => 'raw',
+		            	'value' => function($model) use($pr, $alx){
+		            			/*if($pr==0)
+		            				return Html::a($model->agente0->apellido.', '.$model->agente0->nombre, Url::to(['horario/completoxdocente', 'agente' => $model->agente]));
+		            		 	else*/
+								 return $model->agente0->getNombreCompleto();
+		            		 		
+									 
+		            	}
+
+		            ],
+
+					[
+						'class' => 'kartik\grid\ActionColumn',
+	
+						'template' => $template2,
+						'visible' => (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTORIA]) && ($pr==0)) ? true : false,
+						
+						'buttons' => [
+							'viewdetcat' => function($url, $model, $key) {
+
+								return Html::a(
+									'<span class="glyphicon glyphicon-pencil"></span>',
+									'?r=horariocontraturno/update&or=hc&id='.$model->id);
+							},
+							
+							'dj' => function($url, $model, $key) {
+
+								return Html::button('<span class="glyphicon glyphicon-modal-window"></span>',
+								['value' => Url::to('index.php?r=horario/declaracionhorario&dni='.$model->agente0->documento),
+									'class' => 'modala btn btn-link', 'id'=>'modala']);
+									
+							},
+	
+							'delete' => function($url, $model, $key){
+								
+							return Html::a('<span class="glyphicon glyphicon-trash"></span>', Url::to(['/horariocontraturno/delete', 'id' => $model->id]), ['data-confirm' => 'Esta seguro que desea eliminar el horario?', 'data-method' => 'post']);
+	
+	
+						},
+							
+							
+						]
+	
+					],
+
+		            
+
+            	],
+
+				
+		            
+
+		            
+		        
+	    	]); ?>
+			
+	
 
 	  <?= GridView::widget([
 		        'dataProvider' => $dataProvider,

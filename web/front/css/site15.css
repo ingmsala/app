@@ -1717,7 +1717,7 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
       border: 1px solid gray;
   }
   .label-red{
-      background-color: #f2dede;
+      background-color: #FFCD80;
       color:black;
       border: 1px solid gray;
   }
@@ -1728,7 +1728,7 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
   }
 
   .button-red{
-    background-color: #f2dede;
+    background-color: #FFCD80;
     display: inline-block;
     margin-top: 4px;
     border: 1px solid gray;
@@ -1766,7 +1766,7 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     
   }
  .button-red:hover {
-    background-color: #f59c9c;
+    background-color: #FFB43F;
     
   }
  .button-blue:hover {
@@ -1806,6 +1806,15 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     background-color: #fa3e3e!important;
     color:#000;
     
+  }
+  .updatetbn{
+    float: left;
+    font-weight: bold;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: 0.2;
   }
   
 

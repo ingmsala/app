@@ -327,6 +327,32 @@ class MatriculaController extends Controller
     
     }
 
+    /*public function actionDeleteveinte()
+    {
+        
+        $matriculas20 = Matricula::find()
+                        ->joinWith(['comision0', 'comision0.espaciocurricular0'])
+                        ->where(['espaciocurricular.aniolectivo' => 2 ])
+                        ->andWhere(['espaciocurricular.tipoespacio' => 1])
+                        ->all();
+        
+        foreach ($matriculas20 as $matricula) {
+            $matricula->delete();
+        }
+
+        return 'true';
+      
+        return $this->render('pendientes', [
+            
+            'dataProvider' => $dataProvider,
+            
+        ]);
+
+    
+    }*/
+
+
+
     protected function findModel($id)
     {
         if (($model = Matricula::findOne($id)) !== null) {

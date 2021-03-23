@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Horariocontraturno */
 
-$this->title = 'Horario contraturno: '.$divi->nombre;
+$this->title = 'Nuevo horario contraturno: ' . $divi->nombre;
 
 ?>
 <div class="horariocontraturno-create">

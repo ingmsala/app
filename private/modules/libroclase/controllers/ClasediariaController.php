@@ -31,6 +31,8 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 
 /**
  * ClasediariaController implements the CRUD actions for Clasediaria model.
@@ -88,7 +90,7 @@ class ClasediariaController extends Controller
 
                     ],
                     [
-                        'actions' => ['delete'],   
+                        'actions' => ['delete', 'update'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -521,11 +523,12 @@ class ClasediariaController extends Controller
                 if($model->tipocurricula == 1)
                     $valtemas = $param['valtemas'];
                 $model->save();
+                Yii::$app->session->setFlash('success', "Se creó correctamente la clase");
                 $ok = true;
             } catch (\Throwable $th) {
                 $valtemas = [];
                 if($model->tipocurricula == 1)
-                    Yii::$app->session->setFlash('danger', "Debe cargar un tema");
+                    Yii::$app->session->setFlash('danger', "Debe seleccionar al menos un tema del programa para una clase de tipo Curricular");
             }
 
             
@@ -599,10 +602,96 @@ class ClasediariaController extends Controller
         $model = $this->findModel($id);
         $modelhxc = new Horaxclase();
 
+        $horasdelaclase = $model->horaxclases;
+        $horasdelaclase = ArrayHelper::map($horasdelaclase, 'hora', 'hora');
+        $modelhxc->hora = $horasdelaclase;
+        /*f(count($horasdelaclase)==1){
+            $cargosseleccionados = Globales::PADRON_OTROSDOC;
+            $model->cargo = $cargosseleccionados;
+        }else{
+            if(isset($param['Nombramiento']['cargo']))
+                $cargosseleccionados = $param['Nombramiento']['cargo'];
+                $modelhxc->hora = $param['Nombramiento']['cargo'];
+        }*/
+
+        $imputstemas = '';
+        $divselecc = '';
+        foreach ($model->temaxclases as $temas) {
+            if($temas->tipodesarrollo == 2){
+                $coltot = 'success';
+                $colpar = 'default';
+            }else{
+                $coltot = 'default';
+                $colpar = 'success';
+            }
+            $imputstemas .=  '<input type="hidden" class="valtemaxx" name="valtemas['.$temas->temaunidad.']" id="valtema'.$temas->temaunidad.'" value="'.$temas->temaunidad.'">';
+            $par = '<input type=\"hidden\" name=\"tipodes['.$temas->temaunidad.']\" id=\"tipodes'.$temas->temaunidad.'\" value=\"1\">';
+            $tot = '<input type=\"hidden\" name=\"tipodes['.$temas->temaunidad.']\" id=\"tipodes'.$temas->temaunidad.'\" value=\"2\">';
+            $divselecc .= '<div class="temaseleccionado" id="tema'.$temas->temaunidad.'">'.$temas->temaunidad0->descripcion.
+                '<div class="btn-group pull-right" role="group" aria-label="...">'.
+                    Html::button("Parcial", 
+                        [   
+                            'class' => 'btn btn-'.$colpar, 
+                            'id' => 'pp'.$temas->temaunidad.'pp',
+                                'onclick' => '
+                                    id = '.$temas->temaunidad.';
+                                    cl = "tt"+id+"tt";
+                                    cl2 = "pp"+id+"pp";
+                                    try{
+                                        $( "div#tipodes"+id ).remove();
+                                    }catch(err){
+                                    }
+                                    $( "div#forminputstipo-des" ).append( "'.$par.'" );
+                                    this.setAttribute("id", cl2);
+                                    document.getElementById(cl).setAttribute("class", "btn btn-default");
+                                    document.getElementById(cl2).setAttribute("class", "btn btn-success");
+                                    
+                                   
+                                    
+                                    
+                                    
+                                    
+                                    
+                                '
+
+                        ]).
+                    Html::button("Total", 
+                        [   
+                            'class' => 'btn btn-'.$coltot, 
+                            'id' => 'tt'.$temas->temaunidad.'tt',
+                
+                                'onclick' => '
+                                    id = '.$temas->temaunidad.';
+                                    cl = "tt"+id+"tt";
+                                    cl2 = "pp"+id+"pp";
+                                    try{
+                                        $( "div#tipodes"+id ).remove();
+                                    }catch(err){
+                                    }
+                                    $( "div#forminputstipo-des" ).append( "'.$tot.'" );
+                                    this.setAttribute("id", cl);
+                                    document.getElementById(cl).setAttribute("class", "btn btn-success");
+                                    document.getElementById(cl2).setAttribute("class", "btn btn-default");
+                                    
+                                    
+                                
+                                '
+
+                        ])
+                .'</div><div class="clearfix"></div>'
+            .'</div>';
+
+
+        }
+
+        
+
         $catedra = Catedra::findOne($model->catedra);
         
         $modelidadesclase = Modalidadclase::find()->all();
+        $tiposcurricula = Tipocurricula::find()->all();
         $horas = Hora::find()->all();
+        $horasaj = $this->gethorashorario($model->catedra, Yii::$app->formatter->asDate($model->fecha, 'yyyy-MM-dd'), 2);
         $unidades = Detalleunidad::find()
                                 ->joinWith(['unidad0', 'programa0'])
                                 ->where(['programa.actividad' => $catedra->actividad])
@@ -633,16 +722,22 @@ class ClasediariaController extends Controller
             }
             $ok = false;
             try {
-                $valtemas = $param['valtemas'];
+                if($model->tipocurricula == 1)
+                    $valtemas = $param['valtemas'];
                 $model->save();
+                Yii::$app->session->setFlash('success', "Se modificó correctamente la clase");
                 $ok = true;
             } catch (\Throwable $th) {
                 $valtemas = [];
-                Yii::$app->session->setFlash('danger', "Debe cargar un tema");
+                Yii::$app->session->setFlash('danger', "Debe seleccionar al menos un tema del programa para una clase de tipo Curricular");
             }
 
             
             if($ok){
+                $horasxclaseaborrar = Horaxclase::find()->where(['clasediaria' => $model->id])->all();
+                foreach ($horasxclaseaborrar as $horaaborrar) {
+                    $horaaborrar->delete();
+                }
                 foreach ($modelhxc['hora'] as $horax) {
                     $newhxc = new Horaxclase();
                     $newhxc->clasediaria = $model->id;
@@ -652,28 +747,52 @@ class ClasediariaController extends Controller
             }
             
 
-           
-            $ok = false;
-            foreach ($valtemas as $key => $tema) {
-                $newTemaxClase = new Temaxclase();
-                $newTemaxClase->clasediaria = $model->id;
-                try {
-                    $newTemaxClase->tipodesarrollo = $tipodes[$tema];
-                } catch (\Throwable $th) {
-                    $newTemaxClase->tipodesarrollo = 1;
-                }
-                $newTemaxClase->temaunidad = $tema;
-                $newTemaxClase->save();
-                $ok = true;
-                
-                
+            $temssxclaseaborrar = Temaxclase::find()->where(['clasediaria' => $model->id])->all();
+            foreach ($temssxclaseaborrar as $temsaborrar) {
+                $temsaborrar->delete();
             }
+            
+            if($model->tipocurricula == 1){
+                $ok = false;
+                foreach ($valtemas as $key => $tema) {
+                    $newTemaxClase = new Temaxclase();
+                    $newTemaxClase->clasediaria = $model->id;
+                    try {
+                        $newTemaxClase->tipodesarrollo = $tipodes[$tema];
+                    } catch (\Throwable $th) {
+                        $newTemaxClase->tipodesarrollo = 1;
+                    }
+                    $newTemaxClase->temaunidad = $tema;
+                    $newTemaxClase->save();
+                    $ok = true;
+                    
+                    
+                }
+            }
+            
+            
+            
             if($ok)
                 return $this->redirect(['catedra', 'cat' => $model->catedra]);
-            else
+            else{
                 $fechaexplode = explode("-",$model->fecha);
                 $newdatefecha = date("d/m/Y", mktime(0, 0, 0, $fechaexplode[1], $fechaexplode[2], $fechaexplode[0]));
                 $model->fecha = $newdatefecha;
+                return $this->render('update', [
+                    'model' => $model,
+                    'modelhxc' => $modelhxc,
+                    'modelidadesclase' => $modelidadesclase,
+                    'unidades' => $unidades,
+                    'horas' => $horas,
+                    'catedra' => $catedra,
+                    'imputstemas' => $imputstemas,
+                    'tiposcurricula' => $tiposcurricula,
+                    'horasaj' => $horasaj,
+                    'divselecc' => $divselecc,
+                    
+        
+                ]);
+            }
 
 
         }
@@ -689,6 +808,11 @@ class ClasediariaController extends Controller
             'unidades' => $unidades,
             'horas' => $horas,
             'catedra' => $catedra,
+            'imputstemas' => $imputstemas,
+            'tiposcurricula' => $tiposcurricula,
+            'horasaj' => $horasaj,
+            'divselecc' => $divselecc,
+            
 
         ]);
             

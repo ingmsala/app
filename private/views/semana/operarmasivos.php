@@ -43,9 +43,9 @@ use yii\helpers\Url;
                     'summary' => false,
                     'rowOptions' => function($model){
                         //return var_dump($model);
-                        if($model['burbuja'] == 'Roja'){
-                            return ['style' => 'background-color:#f2dede'];
-                            $colorcol = '#f2dede';
+                        if($model['burbuja'] == 'Naranja'){
+                            return ['style' => 'background-color:#FFCD80'];
+                            $colorcol = '#FFCD80';
                             $diaconmateria = true;
                         }
                         if($model['burbuja'] == 'Azul'){

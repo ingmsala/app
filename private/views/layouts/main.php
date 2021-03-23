@@ -609,9 +609,9 @@ try {
                                     'items' => [
                                         ['label' => 'Fecha de Inscripción', 'url' => ['/preinscripcion/update', 'id' => 1]],
                                         '<div class="dropdown-divider"></div>',
-                                        ['label' => 'Pendientes de inscripción', 'url' => ['/optativas/matricula/pendientes', 'al' => 2]],
+                                        ['label' => 'Pendientes de inscripción', 'url' => ['/optativas/matricula/pendientes', 'al' => 3]],
                                         '<div class="dropdown-divider"></div>',
-                                        ['label' => 'Inscriptos por cupos', 'url' => ['/optativas/matricula/inscriptos', 'al' => 2]],
+                                        ['label' => 'Inscriptos por cupos', 'url' => ['/optativas/matricula/inscriptos', 'al' => 3]],
                                         '<div class="dropdown-divider"></div>',
                                         
                                         

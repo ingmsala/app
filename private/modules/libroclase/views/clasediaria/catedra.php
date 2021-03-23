@@ -34,7 +34,7 @@ $this->title = 'Libro de aula';
         <?= Html::a('Nueva clase diaria', Url::to(['create', 'cat' => $catedra->id]), ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?=$horasfaltantes ?>
+    <?= $horasfaltantes ?>
 
     <?php
     
@@ -43,7 +43,7 @@ $this->title = 'Libro de aula';
         
     foreach ($dataProvider->getModels() as $model) {
         
-        $echo = '';
+        //$echo = '';
         date_default_timezone_set('America/Argentina/Buenos_Aires');
 
         $fecha = Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy');
@@ -90,7 +90,7 @@ $this->title = 'Libro de aula';
         $fecha1w = strtotime('+10 day', strtotime($model->fechacarga));
 
         if($hoy<=$fecha1w){
-
+            $update = Html::a('<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>', ['update', 'id' => $model->id], ['class' => 'updatetbn']);
             $delete = Html::a('×', ['delete', 'id' => $model->id], [
                 'class' => 'close',
                 'data' => [
@@ -98,32 +98,41 @@ $this->title = 'Libro de aula';
                     'method' => 'post',
                 ],
             ]);
-        }else
+        }else{
             $delete = '';
-
-        $echo .= '<div class="vista-listado flowGrid">
-        <div class="item-aviso flowGridItem">
-            <div class="header-aviso-resultados Empleos">
-                <h3>'.$cantx.' - '.$fecha.'</h3>'.$delete.'
-                <h4><span class="label label-petroleo">'.$model->modalidadclase0->nombre.'</span></h4>
-                <p class="hora-publicado-resultados"><span class="text-muted">'.$listadohoras.'</span></p>
-            </div>
-            <div class="content-aviso-resultados">
-            '.$listadotemas.'
-            </div>
-            <div class="footer-aviso-resultados">
-                <div class="box-rs">
-                '.$pie.'
-                </div>
-                
-            </div>
-        </div>
-                        
-        </div>';
-        //$cant--;
-       //echo Html::a($echo, ['update', 'id' => $model->id], ['class' => 'button-listado']);
-        echo $echo;
+            $update = '';
         }
+
+        $echox = '<div class="vista-listado flowGrid">
+                    <div class="item-aviso flowGridItem">
+                        <div class="header-aviso-resultados Empleos">
+                            <h3>'.$cantx.' - '.$fecha.'</h3>'.$update.$delete.'
+                            <h4><span class="label label-petroleo">'.$model->modalidadclase0->nombre.'</span></h4>
+                            <p class="hora-publicado-resultados"><span class="text-muted">'.$listadohoras.'</span></p>
+                        </div>
+                        <div class="content-aviso-resultados">
+                        '.$listadotemas.'
+                        </div>
+                        <div class="footer-aviso-resultados">
+                            <div class="box-rs">
+                            '.$pie.'
+                            </div>
+                            
+                        </div>
+                    </div>
+                                    
+                  </div>';
+        //$cant--;
+         //var_dump(Html::a($echo, ['update', 'id' => $model->id], ['class' => 'button-listado']));
+        //if($hoy<=$fecha1w){
+        //    echo Html::a($echox, ['update', 'id' => $model->id], ['class' => 'button-listado']);
+        //    echo '<div class="clearfix"></div>';
+        //}
+        //else{
+            echo $echox;
+            echo '<div class="clearfix"></div>';
+        //}
+    }
         
 
 

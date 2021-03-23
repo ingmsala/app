@@ -119,6 +119,23 @@ class AdmisionoptativaController extends Controller
         return $this->redirect(['index']);
     }
 
+    /*public function actionAdduno()
+    {
+        $admision20 = Admisionoptativa::find()
+                        ->where(['aniolectivo' => 2])
+                        ->all();
+        
+        foreach ($admision20 as $admision) {
+            $admision->aniolectivo = $admision->aniolectivo + 1;
+            $admision->curso = $admision->curso + 1;
+            $admision->save();
+
+        }
+        return 'true';
+
+        return $this->redirect(['index']);
+    }*/
+
     /**
      * Finds the Admisionoptativa model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

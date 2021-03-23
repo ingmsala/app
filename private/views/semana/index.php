@@ -15,6 +15,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <div style="margin-bottom: 30px;">
+    <?=$renderMasivos;?>
+    </div>
+    
+    <div class="col-md-3">
+        
+        <div class="clearfix"></div>
+        
+    </div>
     <div class="col-md-6">
         <div>
             <?= edofre\fullcalendar\Fullcalendar::widget([
@@ -33,11 +42,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
         </div>
     </div>
-    <div class="col-md-6">
-        <?=$renderMasivos;?>
+    <div class="col-md-3">
+        
         <div class="clearfix"></div>
-        <?=$renderCopiarDesde;?>
+        
     </div>
+    
     <?php
      /*GridView::widget([
         'dataProvider' => $dataProvider,

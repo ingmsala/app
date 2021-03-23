@@ -5,10 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Horariocontraturno */
 
-$this->title = 'Update Horariocontraturno: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Horariocontraturnos', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Modificar horario contraturno: ' . $model->catedra0->division0->nombre;
+
 ?>
 <div class="horariocontraturno-update">
 
@@ -16,6 +14,11 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'catedras' => $catedras,
+        'agentes' => $agentes,
+        'dias' => $dias,
+        'al' => $al,
+        'divi' => $divi,
     ]) ?>
 
 </div>

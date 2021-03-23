@@ -711,7 +711,7 @@ class HorariogenericController extends Controller
 
                     $diaconmateria = false;
                     if($bur == 1){
-                        $colorcol = '#f2dede';
+                        $colorcol = '#FFCD80';
                         $diaconmateria = true;
                     }
                     if($bur == 2){

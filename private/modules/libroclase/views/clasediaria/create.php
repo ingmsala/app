@@ -38,6 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'horasaj' => $horasaj,
         'tiposcurricula' => $tiposcurricula,
         'actividad' => $catedra->actividad,
+        'divselecc' => '',
+        'imputstemas' => '',
 
     ]) ?>
 

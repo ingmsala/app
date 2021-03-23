@@ -200,6 +200,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'estadomatricula0.nombre',
                 
             ],
+            [
+                'label' => 'Admisiones',
+                'format' => 'raw',
+                'value' => function ($model){
+                    $salida = '<ul>';
+                    foreach ($model->alumno0->admisionsociocoms as $admision) {
+                        $salida .= '<li>'.$admision->aniolectivo0->nombre.' - '.$admision->curso.'</li>';
+                    }
+                    $salida .= '</ul>';
+                    return $salida;
+                }
+            ],
                         
             
 

@@ -12,9 +12,9 @@ $this->title = 'Exámenes por año';
 $this->params['breadcrumbs'][] = $this->title;
 
 if(Yii::$app->user->identity->role==Globales::US_SUPER)
-     $template = '{dethorarios} {viewdetcat} {deletedetcat} {validar}';
+     $template = '{dethorarios} {viewdetcat} {deletedetcat} {validar} {listado}';
 else
-    $template = '{viewdetcat} {validar}';
+    $template = '{viewdetcat} {validar} {listado}';
 
 ?>
 <div class="anioxtrimestral-index">
@@ -97,6 +97,12 @@ else
                     'validar' => function($url, $model, $key){
                         if ($model->activo==1)
                             return Html::a('<span class="glyphicon glyphicon-check"></span>', '?r=horarioexamen/revisarhorarios&id='.$model->id);
+                            
+                    },
+                    
+                    'listado' => function($url, $model, $key){
+                        if ($model->activo==1)
+                            return Html::a('<span class="glyphicon glyphicon-list"></span>', '?r=horarioexamen/mesasxfecha&id='.$model->id);
                             
                     },
                 ]

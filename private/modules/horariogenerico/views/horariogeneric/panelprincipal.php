@@ -27,7 +27,7 @@ else{
           <?= 
             Html::a('<span class="'.$classlogo.' glyphicon glyphicon-user"></span><h2>Horario</h2><h3>POR DOCENTE</h3><span class="label label-info">'.$infoexamen.'</span>',
 
-           ['menuxletra'],
+           ['/horariogenerico/horariogeneric/menuxletra'],
 
            [
 
@@ -47,7 +47,7 @@ else{
 
            
 
-           ['menuxdivision'],
+           ['/horariogenerico/horariogeneric/menuxdivision'],
 
            [
 

@@ -38,7 +38,7 @@ $this->title = 'Matriculación '.$aniolectivo.' - '.$instancia;
             
             
             [
-            	'label' => 'Espaciocurricular de ',
+            	'label' => 'Espacio curricular de ',
             	'value' => function($model){
             		return $model['curso'].'° año';
             	}

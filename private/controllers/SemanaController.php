@@ -148,8 +148,8 @@ class SemanaController extends Controller
             $border = null;
 
             if($burbu == 1){
-                $color = '#f2dede';
-                $burbujanom = 'Roja';
+                $color = '#FFCD80';
+                $burbujanom = 'Naranja';
             }
             elseif($burbu == 2){
                 $color = '#ADD8E6';
@@ -210,7 +210,14 @@ class SemanaController extends Controller
             $renderMasivos = '';
             $renderCopiarDesde = '';
         }*/
-        $renderMasivos = '';
+
+        $infoexamen = "CLASES 2021 - Especiales";
+        
+        $renderMasivos = $this->renderPartial('@app/modules/horariogenerico/views/horariogeneric/panelprincipal', [
+            'infoexamen' => $infoexamen,
+            
+        ]);
+        
         $renderCopiarDesde = '';   
         
         
