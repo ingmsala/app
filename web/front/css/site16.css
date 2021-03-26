@@ -1817,6 +1817,28 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     opacity: 0.2;
   }
   
+  #watermarkp {
+    color: #aaa;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    
+
+    width: 600px;
+    margin-left: -300px;
+    font-weight: 900;
+    font-size: 50px;
+    pointer-events: none;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    filter: alpha(opacity=15);
+    opacity: 0.15;
+    
+    
+  }
+  #watermark {
+    overflow: hidden;
+  }
 
 
 

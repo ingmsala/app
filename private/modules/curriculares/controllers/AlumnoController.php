@@ -2,6 +2,7 @@
 
 namespace app\modules\curriculares\controllers;
 
+use app\models\Alumnomail;
 use Yii;
 use app\modules\curriculares\models\Alumno;
 use app\modules\curriculares\models\AlumnoSearch;
@@ -24,10 +25,10 @@ class AlumnoController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'actualizarmail'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'actualizarmail'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -79,6 +80,24 @@ class AlumnoController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    public function actionActualizarmail()
+    {
+        $alumnos = Alumno::find()->all();
+        foreach ($alumnos as $alumno) {
+            $alX = Alumnomail::find()->where(['documento' => $alumno->documento])->one();
+            try {
+                $alumno->curso = $alX->curso;
+                $alumno->mail = $alX->mail;
+                $alumno->save();
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+            
+           
+        }
+        return 'true';
     }
 
     /**

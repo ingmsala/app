@@ -2,6 +2,7 @@
 
 namespace app\modules\optativas\controllers;
 
+use app\config\Globales;
 use Yii;
 use app\models\Division;
 use app\modules\curriculares\models\Admisionoptativa;
@@ -32,7 +33,7 @@ class MatriculaController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'listado'],
                 'rules' => [
                     [
                         'actions' => ['index', 'view', 'create', 'update', 'delete'],   
@@ -40,6 +41,19 @@ class MatriculaController extends Controller
                         'matchCallback' => function ($rule, $action) {
                             try{
                                 return in_array (Yii::$app->user->identity->role, [1]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['listado'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -321,6 +335,32 @@ class MatriculaController extends Controller
         return $this->render('pendientes', [
             
             'dataProvider' => $dataProvider,
+            
+        ]);
+
+    
+    }
+
+    public function actionListado()
+    {
+        $param = Yii::$app->request->queryParams;
+        $model = new Matricula();
+        $model->scenario = $model::SCENARIO_SEARCHINDEX;
+        $searchModel = new MatriculaSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 1);
+        $aniolectivos = Aniolectivo::find()->orderBy('id DESC')->all();
+
+        if(isset($param['Matricula']['aniolectivo']))
+            $model->aniolectivo = $param['Matricula']['aniolectivo'];
+        if(isset($param['Matricula']['comision']))
+            $model->comision = $param['Matricula']['comision'];
+
+        return $this->render('listado', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'aniolectivos' => $aniolectivos,
+            'param' => $param,
+            'model' => $model,
             
         ]);
 

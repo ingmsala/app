@@ -18,7 +18,7 @@ $this->title = 'Ingresar';
 
     <?= Alert::widget() ?>
 
-    <?= Yii::$app->session->setFlash('info', 'Si ud. ingresaba al sistema con un usuario administrativo, ahora deberá iniciar sesión con su cuenta UNC y operar desde allí, cambiando su rol asignado.'); ?>
+    
 
     <div class="row" style="margin-top: 1%;">
   

@@ -37,7 +37,7 @@ $tiposcurricula = ArrayHelper::map($tiposcurricula, 'id', 'nombre');
 
 
 
-<div class="clasediaria-form">
+<div class="clasediaria-form" >
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -176,5 +176,5 @@ $tiposcurricula = ArrayHelper::map($tiposcurricula, 'id', 'nombre');
     </div>
 
     <?php ActiveForm::end(); ?>
-
+    <p id="watermarkp">Versión de prueba</p>
 </div>

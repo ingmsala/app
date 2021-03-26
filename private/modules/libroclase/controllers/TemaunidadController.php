@@ -5,6 +5,7 @@ namespace app\modules\libroclase\controllers;
 use app\config\Globales;
 use app\models\Agente;
 use app\models\Detallecatedra;
+use app\models\Docentexdepartamento;
 use app\modules\libroclase\models\Clasediaria;
 use app\modules\libroclase\models\Detalleunidad;
 use Yii;
@@ -36,8 +37,11 @@ class TemaunidadController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
-                                
+                                if((in_array (Yii::$app->user->identity->username, [Globales::US_SUPER])))
+                                    return true;
+                                $persona = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+                                $depto = Docentexdepartamento::find()->where(['agente' => $persona->id])->count();
+                                return (in_array (Yii::$app->user->identity->username, Globales::authttemas) || $depto>0 );
                             }catch(\Exception $exception){
                                 return false;
                             }

@@ -192,7 +192,7 @@ class HorariogenericController extends Controller
 
                     ],
                     [
-                        'actions' => ['createdesdehorario','updatedesdehorario', 'generar', 'updateburbuja', 'printxdocente', 'deshabilitados', 'cambiarmovilidad', 'completodetallado', 'declaracionhorario', 'publicar'],   
+                        'actions' => ['delete', 'createdesdehorario','updatedesdehorario', 'generar', 'updateburbuja', 'printxdocente', 'deshabilitados', 'cambiarmovilidad', 'completodetallado', 'declaracionhorario', 'publicar'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -236,23 +236,7 @@ class HorariogenericController extends Controller
                         }
 
                     ],
-                    [
-                        'actions' => ['delete'],   
-                        'allow' => true,
-                        'matchCallback' => function ($rule, $action) {
-                            try{
-                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_AGENTE])){
-                                    return true;
-                                }else{
-                                        return false;
-                                    }
-                            }catch(\Exception $exception){
-                                return false;
-                            }
-                        }
-
-                    ],
-
+                    
                    
                 ],
             ],
@@ -1186,6 +1170,112 @@ class HorariogenericController extends Controller
     return $pdf->render(); 
     }
 
+    public function actionPrintxdocente($agente, $all=0, $sem)
+    {
+
+        $g = new Globales();
+        $this->layout = $g->getLayout(21);
+
+                
+        //return $this->generarHorarioDocente($agente, 1, $sem);
+        
+        if (YII_ENV_DEV) {
+            Yii::$app->getModule('debug')->instance->allowedIPs = [];
+        }
+        $salidaimpar = '';
+        
+        if($all){
+            ini_set("pcre.backtrack_limit", "5000000");
+            
+             $docentes = Agente::find()
+                            ->joinWith(['detallecatedras'])
+                            ->where(['=', 'detallecatedra.revista', 6])
+                            ->orderBy('agente.apellido, agente.nombre')
+                            ->all();
+            
+
+            
+            foreach ($docentes as $doce) {
+                $salidaimpar .=  $this->generarHorarioDocente($doce->id, 1, $sem);
+            
+            }
+            $filenamesext = "Horario de Clases por Agente Completo ";
+            $filename = $filenamesext.".pdf";
+        }else{
+            $agente = Agente::findOne($agente);
+            $salidaimpar = $this->generarHorarioDocente($agente->id, 1, $sem);
+            $filenamesext = "Horario de Clases - {$agente->apellido}, {$agente->nombre}";
+            $filename =$filenamesext.".pdf";
+        }
+        
+        
+        $content = $this->renderAjax('all', [
+                'salidaimpar' => $salidaimpar,
+                
+               
+            ]);
+
+        $pdf = new Pdf([
+        // set to use core fonts only
+        'mode' => Pdf::MODE_CORE, 
+        // A4 paper format
+        'format' => Pdf::FORMAT_A4, 
+        'marginTop' => 45,
+        // portrait orientation
+        'orientation' => Pdf::ORIENT_LANDSCAPE, 
+        // stream to browser inline
+        'destination' => Pdf::DEST_DOWNLOAD, 
+        'filename' => $filename, 
+        // your html content input
+        'content' => $content,  
+        // format content from your own css file if needed or use the
+        // enhanced bootstrap css built by Krajee for mPDF formatting 
+        //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+        // any css to be embedded if required
+        'cssInline' => '
+                
+                .horario-view{
+                    font-size = 8px;
+                }
+                .col-md-6 {
+                        width: 45%;
+                        float: left;
+                        
+                   } 
+                .horarioxcurso-view{
+                    margin-top: -70px;
+                    max-height: 100%;
+                    overflow: hidden;
+                    page-break-after: always;
+                }
+
+                .pull-right {
+                    display: none;
+                }
+                
+
+                #encabezado{ 
+                    padding-bottom: 500px;
+                    
+                    width: 200px;
+
+                }', 
+         // set mPDF properties on the fly
+        'options' => ['title' => 'Colegio Nacional de Monserrat'],
+         // call mPDF methods on the fly
+        'methods' => [ 
+            //'defaultheaderline' => 0,
+            'SetHeader'=>['<span><img src="assets/images/logo-encabezado.png" /></span>'], 
+            'SetFooter'=>[date('d/m/Y')." - ".$filenamesext],
+        ]
+    ]);
+    
+    // return the pdf output as per the destination setting
+    //return $salidaimpar;
+    return $pdf->render();
+        
+    }
+
     public function actionMenuxsemana()
     {
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
@@ -1595,14 +1685,14 @@ class HorariogenericController extends Controller
                 }else{
                     if(Yii::$app->user->identity->username == $horarioxTm->catedra0->getDocentehorarioal0($horarioxTm->aniolectivo)['mail'])
                         if($horarioxTm->semana0->tiposemana == 2)
-                            $arrayTm[$horarioxTm->horareloj0->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTm->catedra0->actividad0->nombre.'</span>'.
+                            $arrayTm[$horarioxTm->horareloj0->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTm->catedra0->actividad0->nombre.'</span>'/*.
                             Html::a('<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>', ['delete', 'id' => $horarioxTm->id], [
                                 'class' => 'btn btn-danger pull-right',
                                 'data' => [
                                     'confirm' => 'Se dará de baja la clase, quiere proceder?',
                                     'method' => 'post',
                                 ],
-                            ]);
+                            ])*/;
                         else
                             $arrayTm[$horarioxTm->horareloj0->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTm->catedra0->actividad0->nombre.'</span>';
                     else
@@ -1700,14 +1790,14 @@ class HorariogenericController extends Controller
                 }else{
                     if(Yii::$app->user->identity->username == $horarioxTt->catedra0->getDocentehorarioal0($horarioxTt->aniolectivo)['mail'])
                         if($horarioxTt->semana0->tiposemana == 2)
-                            $arrayTt[$horarioxTt->horareloj0->hora][$horarioxTt->fecha] .= $horarioxTt->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTt->catedra0->actividad0->nombre.'</span>'.
+                            $arrayTt[$horarioxTt->horareloj0->hora][$horarioxTt->fecha] .= $horarioxTt->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTt->catedra0->actividad0->nombre.'</span>'/*.
                             Html::a('<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>', ['delete', 'id' => $horarioxTt->id], [
                                 'class' => 'btn btn-danger pull-right',
                                 'data' => [
                                     'confirm' => 'Se dará de baja la clase, quiere proceder?',
                                     'method' => 'post',
                                 ],
-                            ]);
+                            ])*/;
                         else
                             $arrayTt[$horarioxTt->horareloj0->hora][$horarioxTt->fecha] .= $horarioxTt->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTt->catedra0->actividad0->nombre.'</span>';
                     else

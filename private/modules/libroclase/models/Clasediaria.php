@@ -23,7 +23,7 @@ use Yii;
  * @property Agente $agente0
  * @property Temaunidad $temaunidad0
  * @property Modalidadclase $modalidadclase0
- * @property Detallehora[] $detallehoras
+ 
  */
 class Clasediaria extends \yii\db\ActiveRecord
 {
@@ -45,9 +45,9 @@ class Clasediaria extends \yii\db\ActiveRecord
             [['catedra', 'fecha', 'fechacarga', 'aniolectivo', 'modalidadclase', 'tipocurricula'], 'required'],
             //[['observaciones'], 'required', 'on' => self::SCENARIO_EXTRACURRICULAR],
             ['observaciones', 'required', 'when' => function ($model) {
-                return $model->tipocurricula == 2;
+                return $model->tipocurricula > 1;
             }, 'whenClient' => "function (attribute, value) {
-                return $('#clasediaria-tipocurricula').val() == 2;
+                return $('#clasediaria-tipocurricula').val() > 1;
             }"],
             [['catedra', 'agente', 'modalidadclase', 'tipocurricula'], 'integer'],
             [['fecha', 'fechacarga'], 'safe'],
@@ -115,14 +115,7 @@ class Clasediaria extends \yii\db\ActiveRecord
         return $this->hasOne(Modalidadclase::className(), ['id' => 'modalidadclase']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getDetallehoras()
-    {
-        return $this->hasMany(Detallehora::className(), ['clasediaria' => 'id']);
-    }
-
+    
     /**
     * @return \yii\db\ActiveQuery
     */

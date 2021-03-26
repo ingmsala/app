@@ -25,9 +25,16 @@ $this->title = 'Libro de aula';
         'homeLink' => ['label' => '< Volver', 'url' => ['index']],
         'links' => $breadcrumbs,
     ]) ?>
-<div class="clasediaria-index">
+<div class="clasediaria-index" id="watermark">
+
     
-    <h1><?= $catedra->division0->nombre.' - '.$catedra->actividad0->nombre ?></h1>
+    <h1><?= $catedra->division0->nombre.' - '.$catedra->actividad0->nombre ?> <span style="font-size: 21px;
+    font-weight: bold;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: 0.2;" class="label label-danger">Versión de prueba</span></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -195,4 +202,5 @@ $this->title = 'Libro de aula';
             
         ],
     ]);*/ ?>
+    <p id="watermarkp">Versión de prueba</p>
 </div>

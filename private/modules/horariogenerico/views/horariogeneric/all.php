@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\modules\optativas\models\Clase */
 
 ?>
-<div class="clase-view" style="margin-top: 20px;">
+<div class="clase-view">
 
    <div class="row">
    	

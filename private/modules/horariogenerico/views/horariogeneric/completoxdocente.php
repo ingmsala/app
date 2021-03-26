@@ -19,7 +19,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 
     
     <div class="row">
-<?php $userhorario = (Yii::$app->user->identity->role == Globales::US_HORARIO)? "none" : "block" ?>
+<?php $userhorario = (Yii::$app->user->identity->role == Globales::US_REGENCIA)? "block" : "none" ?>
 	 <div style="display: <?= $userhorario ?>;">
     	<div  class="pull-right">
 	        <?php 
@@ -30,7 +30,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 	    <div  class="pull-right">
 	        <?php 
 	          	
-	          	echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center>', Url::to(['print', 'agente' => $docenteparam->id, 'all' => false]), ['class' => 'btn btn-default'])
+	          	echo Html::a('<center><span class="glyphicon glyphicon-print" aria-hidden="true"></span><br />Imprimir</center>', Url::to(['printxdocente', 'agente' => $docenteparam->id, 'all' => false, 'sem' => $semana->id]), ['class' => 'btn btn-default'])
 	        ?>
 	    </div>
 	</div>

@@ -611,7 +611,9 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Pendientes de inscripción', 'url' => ['/optativas/matricula/pendientes', 'al' => 3]],
                                         '<div class="dropdown-divider"></div>',
-                                        ['label' => 'Inscriptos por cupos', 'url' => ['/optativas/matricula/inscriptos', 'al' => 3]],
+                                        ['label' => 'Comisiónes por cupos', 'url' => ['/optativas/matricula/inscriptos', 'al' => 3]],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Listado estudiantes inscriptos', 'url' => ['/optativas/matricula/listado']],
                                         '<div class="dropdown-divider"></div>',
                                         
                                         

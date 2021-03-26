@@ -34,6 +34,8 @@ class DetalleunidadController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
+                                if((in_array (Yii::$app->user->identity->username, [Globales::US_SUPER])))
+                                    return true;
                                 $persona = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                                 $depto = Docentexdepartamento::find()->where(['agente' => $persona->id])->count();
                                 return (in_array (Yii::$app->user->identity->username, Globales::authttemas) || $depto>0 );

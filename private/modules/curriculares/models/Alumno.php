@@ -49,7 +49,7 @@ class Alumno extends \yii\db\ActiveRecord
             'id' => 'ID',
             'apellido' => 'Apellido',
             'nombre' => 'Nombre',
-            'documento' => 'documento',
+            'documento' => 'Documento',
             'curso' => 'Curso',
             'fechanac' => 'Fecha de Nacimiento',
         ];

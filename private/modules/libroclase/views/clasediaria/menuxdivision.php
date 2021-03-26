@@ -18,4 +18,5 @@ $this->title = 'Libro de aula';
         <?= 
     $echodiv;
      ?>
+     <p id="watermarkp">Versión de prueba</p>
     </div>
