@@ -3,11 +3,15 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\datetime\DateTimePicker;
-
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Preinscripcion */
 /* @var $form yii\widgets\ActiveForm */
+
+$tipoespacios = ArrayHelper::map($tipoespacios, 'id','nombre');
+
 ?>
 
 <div class="preinscripcion-form">
@@ -16,9 +20,28 @@ use kartik\datetime\DateTimePicker;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true, 'disabled'=>(Yii::$app->user->identity->role == 4) ? 'disabled' : false]) ?>
+    <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'activo')->dropDownList($tipodepublicacion, ['prompt'=>'Seleccionar...']); ?>
+
+    <?= $form->field($model, 'tipoespacio')->dropDownList($tipoespacios, ['prompt'=>'Seleccionar...']); ?>
+
+    <?= 
+
+        $form->field($modelXcurso, 'anio')->widget(Select2::classname(), [
+            'data' => $anios,
+            'options' => ['placeholder' => 'Seleccionar...'
+            ],
+            'pluginOptions' => [
+                'allowClear' => true,
+                'multiple' => true,
+                
+            ],
+        ]);
+
+    ?>
+    
+
 
     <?php
         echo $form->field($model, 'inicio')->widget(DateTimePicker::classname(), [

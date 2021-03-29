@@ -35,8 +35,8 @@ $this->title = 'Autogestión de Espacios Curriculares';
             
                 <center><h3><?= Html::encode($this->title) ?></h3></center>
                 La plataforma incluye a los distintos espacios optativos y los proyectos sociocomunitarios correspondientes al plan de estudios 2018 del Colegio Nacional de Monserrat. Consulta de agenda de clases, horarios, resumen de cursado e historial académico.
-                En las fechas debidamente comunicadas en esta plataforma se realizará la inscripcion a dichos espacio de manera autogestiva.
-                Los alumnos ingresan con su número de documento.
+                En las fechas debidamente comunicadas por los canales oficiales, en esta plataforma se realizará la inscripcion a dichos espacios de manera autogestiva.
+                Los estudiantes ingresan con su número de documento.
 
             </div>
             <div class="col-sm-3">

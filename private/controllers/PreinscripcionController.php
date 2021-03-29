@@ -2,11 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\Actividadtipo;
 use Yii;
 use app\models\Preinscripcion;
 use app\models\PreinscripcionSearch;
+use app\models\Preinscripcionxanio;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -26,7 +29,7 @@ class PreinscripcionController extends Controller
                 'only' => ['index', 'view', 'create', 'update', 'delete'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'delete'],   
+                        'actions' => ['view', 'delete'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -39,7 +42,7 @@ class PreinscripcionController extends Controller
                     ],
 
                     [
-                        'actions' => ['update'],   
+                        'actions' => ['update', 'index', 'create'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -100,6 +103,7 @@ class PreinscripcionController extends Controller
     public function actionCreate()
     {
         $model = new Preinscripcion();
+        $modelXcurso = new Preinscripcionxanio();
         $tipodepublicacion=[
             0=> 'Inactivo',
             1=> 'Habilitado para inscripción',
@@ -108,13 +112,56 @@ class PreinscripcionController extends Controller
 
         ];
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $anios=[
+            1=> '1°',
+            2=> '2°',
+            3=> '3°',
+            4=> '4°',
+            5=> '5°',
+            6=> '6°',
+            7=> '7°',
+
+        ];
+
+        $tipoespacios = Actividadtipo::find()->where(['in', 'id', [4,5]])->all();
+
+        if ($model->load(Yii::$app->request->post()) && $modelXcurso->load(Yii::$app->request->post())) {
+
+            $explode = explode(' ', $model->inicio);
+            $date =   $explode[0];
+            $date = explode('/',$date);
+            $time = $explode[1];
+            $date = $date[2].'-'.$date[1].'-'.$date[0];
+            
+            $model->inicio=$date.' '.$time;
+            
+            $explode2 = explode(' ', $model->fin);
+            $date2 =   $explode2[0];
+            $date2 = explode('/',$date2);
+            $time2 = $explode2[1];
+            $date2 = $date2[2].'-'.$date2[1].'-'.$date2[0];
+            
+            $model->fin=$date2.' '.$time2;
+
+            $model->save();
+
+            foreach ($modelXcurso['anio'] as $anioX) {
+                $newhxc = new Preinscripcionxanio();
+                $newhxc->preinscripcion = $model->id;
+                $newhxc->anio = $anioX;
+                $newhxc->save();
+            }
+            return $this->redirect(['index', 'id' => $model->id]);
         }
+
+        
 
         return $this->render('create', [
             'model' => $model,
             'tipodepublicacion' => $tipodepublicacion,
+            'tipoespacios' => $tipoespacios,
+            'anios' => $anios,
+            'modelXcurso' => $modelXcurso,
         ]);
     }
 
@@ -129,18 +176,22 @@ class PreinscripcionController extends Controller
     {
         //date_default_timezone_set('America/Argentina/Buenos_Aires');
 
-        
+        $modelXcurso = new Preinscripcionxanio();
 
-        if(Yii::$app->user->identity->role == 4 && $id != 1){
+        /*if(Yii::$app->user->identity->role == 4 && $id != 1){
             Yii::$app->session->setFlash('error', "No tiene permisos para modificar el elemento");
             return $this->goHome();
             return $this->redirect(Yii::$app->request->referrer);
-        }
+        }*/
         
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $model = $this->findModel($id);
         $model->inicio=Yii::$app->formatter->asDatetime($model->inicio, 'dd/MM/Y HH:mm');
         $model->fin=Yii::$app->formatter->asDatetime($model->fin, 'dd/MM/Y HH:mm');
+
+        $aniospreinscripcion = $model->anios;
+        $aniospreinscripcion = ArrayHelper::map($aniospreinscripcion, 'anio', 'anio');
+        $modelXcurso->anio = $aniospreinscripcion;
 
         if(Yii::$app->user->identity->role == 4){
             $tipodepublicacion=[
@@ -155,9 +206,20 @@ class PreinscripcionController extends Controller
                 3=> 'Regido por fecha',
             ];
         }
-        
 
-        if ($model->load(Yii::$app->request->post())) {
+        $anios=[
+            1=> '1°',
+            2=> '2°',
+            3=> '3°',
+            4=> '4°',
+            5=> '5°',
+            6=> '6°',
+            7=> '7°',
+        ];
+
+        $tipoespacios = Actividadtipo::find()->where(['in', 'id', [4,5]])->all();
+
+        if ($model->load(Yii::$app->request->post()) && $modelXcurso->load(Yii::$app->request->post())) {
            /* $datatime = explode(" ",$model->inicio);
             $data = $datatime[0];
             $time = $datatime[1];
@@ -182,15 +244,32 @@ class PreinscripcionController extends Controller
             $date2 = $date2[2].'-'.$date2[1].'-'.$date2[0];
             //$date2 = date("Y-m-d", mktime(0, 0, 0, $date2[1], $date2[0], $date2[2]));
             $model->fin=$date2.' '.$time2;
+
             $model->save();
+
+            $horasxclaseaborrar = Preinscripcionxanio::find()->where(['preinscripcion' => $model->id])->all();
+            foreach ($horasxclaseaborrar as $horaaborrar) {
+                $horaaborrar->delete();
+            }
+
+            foreach ($modelXcurso['anio'] as $anioX) {
+                $newhxc = new Preinscripcionxanio();
+                $newhxc->preinscripcion = $model->id;
+                $newhxc->anio = $anioX;
+                $newhxc->save();
+            }
+            
             Yii::$app->session->setFlash('success', "Se modificó correctamente la preinscripción");
                 
-            return $this->redirect(['update', 'id' => $model->id]);
+            return $this->redirect(['index', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
             'tipodepublicacion' => $tipodepublicacion,
+            'tipoespacios' => $tipoespacios,
+            'anios' => $anios,
+            'modelXcurso' => $modelXcurso,
         ]);
     }
 

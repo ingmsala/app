@@ -15,6 +15,9 @@ $this->title = 'Preinscripción: ' . $model->descripcion;
     <?= $this->render('_form', [
         'model' => $model,
         'tipodepublicacion' => $tipodepublicacion,
+        'tipoespacios' => $tipoespacios,
+        'anios' => $anios,
+        'modelXcurso' => $modelXcurso,
     ]) ?>
 
 </div>

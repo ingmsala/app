@@ -5,6 +5,7 @@ namespace app\modules\curriculares\controllers\autogestion;
 use Yii;
 use app\models\Division;
 use app\models\Preinscripcion;
+use app\models\Preinscripcionxanio;
 use app\modules\curriculares\models\Admisionoptativa;
 use app\modules\curriculares\models\AdmisionoptativaSearch;
 use app\modules\curriculares\models\Alumno;
@@ -77,23 +78,7 @@ class PreinscripcionController extends Controller
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $this->layout = 'mainautogestion';
         $preinscripcion = Preinscripcion::findOne(1);
-        $estadoinscripcion = $preinscripcion->activo;
-        if($estadoinscripcion == 0){//inactivo
-            Yii::$app->session->setFlash('error', "No existe un periodo de <b>Inscripción</b> activo.");
-            return $this->redirect(['/curriculares/autogestion/agenda/index']);
-        }elseif($estadoinscripcion == 2){//publicado
-            Yii::$app->session->setFlash('error', "No existe un periodo de <b>Inscripción</b> activo.");
-            //return $this->redirect(['/curriculares/autogestion/agenda/index']);
-        }elseif($estadoinscripcion == 3){//regido por fecha
-            //Yii::$app->session->setFlash('error', "No existe un periodo de <b>Inscripción</b> activo.");
-            //return $this->redirect(['/curriculares/autogestion/agenda/index']);
-            if ($preinscripcion->inicio <= date('Y-m-d H:i:s') && $preinscripcion->fin >= date('Y-m-d H:i:s')){
-                
-            }else{
-                Yii::$app->session->setFlash('error', "No existe un periodo de <b>Inscripción</b> activo.");
-            }
-        }
-    
+
         $documento = Yii::$app->session->get('documento');
         $model = new Matricula();
         $model->scenario = $model::SCENARIO_CREATE;
@@ -111,11 +96,78 @@ class PreinscripcionController extends Controller
             ->andWhere(['aniolectivo.activo' => 1])
             ->all();
         if(count($admision)==0){
-            Yii::$app->session->setFlash('error', "El estudiante no está habilitado para cursar ningún Espacio Curricular. Si considera que es un error deberá dirigirse personalmente al Establecimiento.");
+            Yii::$app->session->setFlash('error', "El estudiante no está habilitado para cursar ningún Espacio Curricular. Si considera que es un error deberá contactarse con Regencia.");
             return $this->redirect(['/curriculares/autogestion/agenda/index']);
         }
         $aniolectivo = $admision[0]->aniolectivo0->nombre;
         $admision = ArrayHelper::map($admision,'id','curso');
+
+
+        $preinscripciones = Preinscripcion::find()
+                                ->joinWith(['anios'])
+                                ->where(['in', 'preinscripcionxanio.anio', $admision])
+                                ->andWhere(['or', 
+                                    ['preinscripcion.activo' => 1],
+                                    ['and', 
+                                        ['preinscripcion.activo' => 3],
+                                        ['<=', 'preinscripcion.inicio', date('Y-m-d H:i:s')],
+                                        ['>=', 'preinscripcion.fin', date('Y-m-d H:i:s')],
+                                    ],
+
+                                ])
+                                ->all();
+        //return var_dump($preinscripciones);
+        $habilitados = [];
+        foreach ($preinscripciones as $preinscrip) {
+            //$habilitados[] = ArrayHelper::map($preinscrip->anios, 'anio', 'anio');
+            foreach ($preinscrip->anios as $aniox) {
+                $habilitados [$aniox->anio] = $aniox->anio;
+            }
+        }
+
+        $habilitadosyadmitidos = array_intersect($habilitados, $admision);
+
+        
+
+        if(count($preinscripciones)>0){
+            $estadoinscripcion = 1;
+
+        }
+        else{
+            $preinscripcionespublicadas = Preinscripcion::find()
+                                ->joinWith(['anios'])
+                                ->where(['in', 'preinscripcionxanio.anio', $admision])
+                                ->andWhere(['or', 
+                                    ['and', 
+                                        ['preinscripcion.activo' => 3],
+                                        ['>', 'preinscripcion.inicio', date('Y-m-d H:i:s')],
+                                        
+                                    ],
+
+                                ])
+                                ->all();
+            if(count($preinscripcionespublicadas)>0){
+                $estadoinscripcion = 2;
+                $habilitadosyadmitidos = $admision;
+            }
+            else
+                $estadoinscripcion = 0;
+        }
+
+
+        //$estadoinscripcion = $preinscripcion->activo;
+        if($estadoinscripcion == 0){//inactivo
+            Yii::$app->session->setFlash('error', "No existe un periodo de <b>Inscripción</b> activo.");
+            return $this->redirect(['/curriculares/autogestion/agenda/index']);
+        }elseif($estadoinscripcion == 2){//publicado
+            Yii::$app->session->setFlash('error', "No existe un periodo de <b>Inscripción</b> activo.");
+            //return $this->redirect(['/curriculares/autogestion/agenda/index']);
+        }
+    
+        
+
+
+
         if(count($admision)==0)
             $admision =[99];
         $optativas = Espaciocurricular::find()
@@ -153,7 +205,7 @@ class PreinscripcionController extends Controller
                     Yii::$app->session->setFlash('success', "Se realizó la matrícula correctamente. Puede verificar la agenda de clases en esta pantalla.");
                     return $this->redirect(['autogestion/agenda/index', 'id' => $model->id]);
                 }else{
-                    Yii::$app->session->setFlash('danger', "El estudiante ya está matriculado en la cantidad máxima de Espacios Optativos para este año lectivo");
+                    Yii::$app->session->setFlash('danger', "El estudiante ya está matriculado en la cantidad máxima de Espacios Curricular para este año lectivo");
                 }
                 
             }else{
@@ -174,7 +226,7 @@ class PreinscripcionController extends Controller
         $dataProviderAdmision = $admisionSearch->porAlumno($alumno->id);
 
         $optativaSearch  = new EspaciocurricularSearch();
-        $dataProviderEspaciocurricular = $optativaSearch->porCursos($alumno->id);
+        $dataProviderEspaciocurricular = $optativaSearch->porCursos($alumno->id, $habilitadosyadmitidos);
 
         return $this->render('index', [
             'model' => $model,

@@ -71,28 +71,31 @@ class EspaciocurricularSearch extends Espaciocurricular
         return $dataProvider;
     }
 
-    public function porCursos($alumno)
+    public function porCursos($alumno, $habilitadosyadmitidos)
     {
         $prioridad = Parametros::findOne(4);
+        
+        
         if($prioridad->estado == 1){
-        $sql = "SELECT comi.id AS idcomi, act.nombre AS actividad, op.curso AS curso, comi.nombre AS comision, op.resumen AS resumen, comi.horario AS horario, comi.aula AS aula 
-                FROM `espaciocurricular` op
-                left join comision comi ON comi.espaciocurricular = op.id
-                left join actividad act ON op.actividad = act.id
-                left join aniolectivo al2 on op.aniolectivo = al2.id
-                WHERE op.curso in 
-                (select max(curso) from admisionoptativa ao left join aniolectivo al on ao.aniolectivo = al.id where alumno = ".$alumno." and al.activo=1)
-                AND al2.activo=1
-                    order by op.curso, act.nombre";
+            $max = max($habilitadosyadmitidos);
+            $sql = "SELECT comi.id AS idcomi, act.nombre AS actividad, op.curso AS curso, comi.nombre AS comision, op.resumen AS resumen, comi.horario AS horario, comi.aula AS aula 
+                    FROM `espaciocurricular` op
+                    left join comision comi ON comi.espaciocurricular = op.id
+                    left join actividad act ON op.actividad = act.id
+                    left join aniolectivo al2 on op.aniolectivo = al2.id
+                    WHERE op.curso in ({$max})
+                    AND al2.activo=1
+                        order by op.curso, act.nombre";
         
         }elseif($prioridad->estado == 2){
+            $impl = implode(",", $habilitadosyadmitidos);
             $sql = "SELECT comi.id AS idcomi, act.nombre AS actividad, op.curso AS curso, comi.nombre AS comision, op.resumen AS resumen, comi.horario AS horario, comi.aula AS aula 
                 FROM `espaciocurricular` op
                 left join comision comi ON comi.espaciocurricular = op.id
                 left join actividad act ON op.actividad = act.id
                 left join aniolectivo al2 on op.aniolectivo = al2.id
-                WHERE op.curso in 
-                (select curso from admisionoptativa ao left join aniolectivo al on ao.aniolectivo = al.id where alumno = ".$alumno." and al.activo=1)
+                WHERE op.curso in ({$impl})
+                
                 AND al2.activo=1
                     order by op.curso, act.nombre";
         }else{

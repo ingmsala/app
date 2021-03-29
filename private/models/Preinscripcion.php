@@ -57,6 +57,7 @@ class Preinscripcion extends \yii\db\ActiveRecord
             [['activo'], 'integer'],
             [['inicio', 'fin'], 'safe'],
             [['descripcion'], 'string', 'max' => 50],
+            [['tipoespacio'], 'exist', 'skipOnError' => true, 'targetClass' => Actividadtipo::className(), 'targetAttribute' => ['tipoespacio' => 'id']],
         ];
     }
 
@@ -67,10 +68,22 @@ class Preinscripcion extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'descripcion' => 'Descripcion',
+            'descripcion' => 'Descripción',
             'activo' => 'Activo',
             'inicio' => 'Inicio',
             'fin' => 'Fin',
+            'tipoespacio' => 'Tipo de actividad',
         ];
     }
+
+    public function getTipoespacio0()
+    {
+        return $this->hasOne(Actividadtipo::className(), ['id' => 'tipoespacio']);
+    }
+
+    public function getAnios()
+    {
+        return $this->hasMany(Preinscripcionxanio::className(), ['preinscripcion' => 'id']);
+    }
+
 }

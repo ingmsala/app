@@ -607,7 +607,7 @@ try {
                                     'itemsOptions'=>['class'=>'dropdown-submenu'],
                                     'submenuOptions'=>['class'=>'dropdown-menu'],
                                     'items' => [
-                                        ['label' => 'Fecha de Inscripción', 'url' => ['/preinscripcion/update', 'id' => 1]],
+                                        ['label' => 'Fecha de Inscripción', 'url' => ['/preinscripcion']],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Pendientes de inscripción', 'url' => ['/optativas/matricula/pendientes', 'al' => 3]],
                                         '<div class="dropdown-divider"></div>',

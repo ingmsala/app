@@ -1,6 +1,7 @@
 <?php
 
 use app\modules\curriculares\models\Admisionoptativa;
+use app\modules\curriculares\models\Comision;
 use app\modules\curriculares\models\Matricula;
 use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
@@ -10,7 +11,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\espaciocurriculars\models\Matricula */
 
-$this->title = 'Matriculación '.$aniolectivo.' - '.$instancia;
+$this->title = 'Matriculación '.$aniolectivo;
 
 ?>
 
@@ -160,12 +161,16 @@ $this->title = 'Matriculación '.$aniolectivo.' - '.$instancia;
             	'label' => 'Acción',
             	'format' => 'raw',
             	'value' => function($model) use ($matriculasalumno, $alumno, $estadoinscripcion, $preinscripcion){
-                     
+                    $matriculas = count(Matricula::find()->where(['comision' => $model['idcomi']])->all());
+                    $comision = Comision::findOne($model['idcomi']);
+                    if( $matriculas >= $comision->cupo)
+                        return '<span style="color:orange">Cupo completo</span>';
+
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
             		if($estadoinscripcion == 1 || ($estadoinscripcion == 3 && $preinscripcion->inicio <= date('Y-m-d H:i:s') && $preinscripcion->fin >= date('Y-m-d H:i:s')))
             			{
                             if(in_array($model['idcomi'], $matriculasalumno))
-                                return "Matriculado";
+                                return '<span style="color:green">Ya tiene la matriculación a este espacio</span>';
                             return Html::a('Inscribirse', ['inscripcion', 'c' => $model['idcomi'], 'a' => $alumno], [
                                         'class' => 'btn btn-success btn-sm',
                                         'data' => [
