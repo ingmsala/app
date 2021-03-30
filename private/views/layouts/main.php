@@ -1318,6 +1318,56 @@ try {
                 ];
 
 
+            }elseif(Yii::$app->user->identity->role == Globales::US_CONSULTA_HORARIO){
+
+                
+                $items = [
+
+                    ['label' => 'Horarios',
+                            'items' => [
+
+                                ['label' => 'Ver horarios', 'url' => ['horario/panelprincipal']],
+                                '<div class="dropdown-divider"></div>',
+                                
+                                
+                                
+                            ],
+
+
+                    ],
+                        
+                                       
+                    
+                    ['label' => Yii::$app->user->identity->role0->nombre,
+                            
+                            'items' => [
+                                            
+                                            [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).' Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
+                                
+                                            [
+                                                'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                                                'url' => ['/cas/auth/logout'],
+                                                'linkOptions' => ['data-method' => 'post'],
+                                            
+                                    
+                                            ],
+                                            '<div class="dropdown-divider"></div>',
+                                
+                             ],
+                    ],
+
+
+
+
+                ];
+
+
             }
 
 

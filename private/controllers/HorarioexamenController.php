@@ -47,7 +47,7 @@ class HorarioexamenController extends Controller
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
-                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_COORDINACION, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR])){
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_CONSULTA_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_COORDINACION, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR])){
                                         return true;
                                     /*}elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
 
@@ -113,7 +113,7 @@ class HorarioexamenController extends Controller
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
-                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_COORDINACION])){
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_CONSULTA_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_COORDINACION])){
                                         return true;
                                     }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
                                         
@@ -168,7 +168,7 @@ class HorarioexamenController extends Controller
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
-                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR, Globales::US_SECRETARIA, Globales::US_COORDINACION])){
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_CONSULTA_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR, Globales::US_SECRETARIA, Globales::US_COORDINACION])){
                                         return true;
                                     
                                     }else{

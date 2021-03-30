@@ -129,7 +129,7 @@ JS;
 		            [
 		            	'class' => 'kartik\grid\BooleanColumn',
 		            	'label' => '',
-		            	'visible' => (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTORIA, Globales::US_HORARIO]) && $prt==0) ? true : false,
+		            	'visible' => (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTORIA, Globales::US_HORARIO, Globales::US_CONSULTA_HORARIO, ]) && $prt==0) ? true : false,
 		            	'value' => function($model) use($listdc) {
 		            		//return var_dump(array_count_values($listdc));
 		            		try {

@@ -29,6 +29,7 @@ class Globales
 	const US_GABPSICO = 22;
 	const US_VICEACAD = 23;
 	const US_DESPACHO = 24;
+	const US_CONSULTA_HORARIO = 25;
 	
 	
 	const COND_SUPL = 5;
