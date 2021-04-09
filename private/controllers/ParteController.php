@@ -237,7 +237,7 @@ class ParteController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($id, $tab = 1)
     {
         if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
             $this->layout = 'mainpersonal';
@@ -275,6 +275,8 @@ class ParteController extends Controller
 
             'searchModelavisosinasistencias' => $searchModelavisosinasistencias,
             'dataProvideravisosinasistencias' => $dataProvideravisosinasistencias,
+            
+            'tab' => $tab,
         ]); 
         }else{
             return $this->render('/novedadesparte/_edilicias', [

@@ -176,5 +176,5 @@ $tiposcurricula = ArrayHelper::map($tiposcurricula, 'id', 'nombre');
     </div>
 
     <?php ActiveForm::end(); ?>
-    <p id="watermarkp">Versión de prueba</p>
+    
 </div>

@@ -140,7 +140,7 @@ class PreinscripcionController extends Controller
                                 ->andWhere(['or', 
                                     ['and', 
                                         ['preinscripcion.activo' => 3],
-                                        ['>', 'preinscripcion.inicio', date('Y-m-d H:i:s')],
+                                        //['<=', 'preinscripcion.inicio', date('Y-m-d H:i:s')],
                                         
                                     ],
 

@@ -18,7 +18,7 @@ class AvisoinasistenciaSearch extends Avisoinasistencia
     public function rules()
     {
         return [
-            [['id', 'agente'], 'integer'],
+            [['id', 'agente', 'tipoavisoparte'], 'integer'],
             [['descripcion', 'desde', 'hasta'], 'safe'],
         ];
     }
@@ -39,9 +39,16 @@ class AvisoinasistenciaSearch extends Avisoinasistencia
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($todos)
     {
-        $query = Avisoinasistencia::find()
+        if($todos == 2)
+            $query = Avisoinasistencia::find()
+                    ->where(['year(desde)'=>date('Y')])
+                    ->andWhere(['tipoavisoparte' => 2])
+                    ->orderBy('desde DESC');
+        else
+            $query = Avisoinasistencia::find()
+                    ->where(['year(desde)'=>date('Y')])
                     ->orderBy('desde DESC');
 
         // add conditions that should always apply here
@@ -50,7 +57,7 @@ class AvisoinasistenciaSearch extends Avisoinasistencia
             'query' => $query,
         ]);
 
-        $this->load($params);
+        $this->load($todos);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails

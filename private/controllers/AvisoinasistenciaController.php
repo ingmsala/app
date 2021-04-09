@@ -32,7 +32,7 @@ class AvisoinasistenciaController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_CONSULTORIO_MEDICO]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -45,7 +45,7 @@ class AvisoinasistenciaController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTORIA]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTORIA, Globales::US_CONSULTORIO_MEDICO]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -71,8 +71,14 @@ class AvisoinasistenciaController extends Controller
      */
     public function actionIndex()
     {
+        if(Yii::$app->user->identity->role == Globales::US_CONSULTORIO_MEDICO){
+            $todos = 2;
+        }else{
+            $todos = 1;
+        }
         $searchModel = new AvisoinasistenciaSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        $dataProvider = $searchModel->search($todos);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -104,6 +110,12 @@ class AvisoinasistenciaController extends Controller
         $docentes = Agente::find()->orderBy('apellido, nombre')->all();
 
         if ($model->load(Yii::$app->request->post())) {
+
+            if(Yii::$app->user->identity->role == Globales::US_REGENCIA){
+                $model->tipoavisoparte = 1;
+            }else{
+                $model->tipoavisoparte = 2;
+            }
             
             $desdeexplode = explode("/",$model->desde);
 

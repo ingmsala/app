@@ -74,7 +74,7 @@ class PreceptoresController extends \yii\web\Controller
 	    {
             $searchModel = new NombramientoSearch();
             if(Yii::$app->user->identity->role == Globales::US_REGENCIA){
-                $dataProvider = $searchModel->getPreceptores(0);
+                $dataProvider = $searchModel->getPreceptores();
             }else{
                 $dataProvider = $searchModel->getPreceptores();
             }

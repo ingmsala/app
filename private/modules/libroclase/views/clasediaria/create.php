@@ -26,13 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     
 
-    <h3><?= Html::encode('Nueva Clase: '.$catedra->division0->nombre.' - '.$catedra->actividad0->nombre) ?> <span style="font-size: 21px;
-    font-weight: bold;
-    line-height: 1;
-    color: #000;
-    text-shadow: 0 1px 0 #fff;
-    filter: alpha(opacity=20);
-    opacity: 0.2;" class="label label-danger">Versión de prueba</span></h3>
+    <h3><?= Html::encode('Nueva Clase: '.$catedra->division0->nombre.' - '.$catedra->actividad0->nombre) ?></h3>
 
     <?= $this->render('_form',
      [

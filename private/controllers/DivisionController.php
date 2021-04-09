@@ -226,7 +226,7 @@ class DivisionController extends Controller
             $parents = $_POST['depdrop_parents'];
             if ($parents != null) {
 
-                if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
+                /*if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
                     
                     $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
                     $nom = Nombramiento::find()
@@ -248,9 +248,12 @@ class DivisionController extends Controller
                         ->where(['preceptoria' => $preceptoria])
                         ->orderBy('nombre ASC')
                         ->all();
-                }
+                }*/
 
-                
+                $divisiones = Division::find()
+                        ->where(['preceptoria' => $preceptoria])
+                        ->orderBy('nombre ASC')
+                        ->all();
                 
 
                 $listDivisiones=ArrayHelper::toArray($divisiones, [

@@ -70,6 +70,38 @@ class ComisionSearch extends Comision
         return $dataProvider;
     }
 
+    public function xdocentes($al)
+    {
+        $query = Comision::find()
+            ->joinWith(['espaciocurricular0'])
+            ->where(['espaciocurricular.aniolectivo' => $al]);
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'optativa' => $this->espaciocurricular,
+            'cupo' => $this->cupo,
+        ]);
+
+        $query->andFilterWhere(['like', 'nombre', $this->nombre]);
+
+        return $dataProvider;
+    }
+
     public function comisionesxalumno($documento)
     {
         $query = Comision::find()

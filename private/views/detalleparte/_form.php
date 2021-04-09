@@ -135,7 +135,7 @@ use yii\helpers\Url;
                                     'pluginOptions' => [
                                        'depends'  => ['division_id', 'falta'],
                                        'placeholder' => 'Seleccionar...',
-                                       'url' => Url::to(['/detallecatedra/docxhorario', 'diasemana' => date("w",strtotime($partes->fecha))+1, 'tipoparte' =>$partes->tipoparte])
+                                       'url' => Url::to(['/detallecatedra/docxhorario', 'fecha' => $partes->fecha, 'diasemana' => date("w",strtotime($partes->fecha))+1, 'tipoparte' =>$partes->tipoparte])
                                     ]
                                 ])->label('Docente (Materia)');  ?>
 
@@ -157,7 +157,7 @@ use yii\helpers\Url;
            'depends'  => ['division_id', 'catedra-id', 'falta'],
            'placeholder' => 'Seleccionar...',
 
-           'url' => Url::to(['/horario/horaxdivisionxdocente', 'diasemana' => date("w",strtotime($partes->fecha))+1])
+           'url' => Url::to(['/horario/horaxdivisionxdocente', 'fecha' => $partes->fecha, 'diasemana' => date("w",strtotime($partes->fecha))+1])
         ]
     ])->label($labelhora);  ?>
 

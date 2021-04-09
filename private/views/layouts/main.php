@@ -615,6 +615,8 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Listado estudiantes inscriptos', 'url' => ['/optativas/matricula/listado']],
                                         '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Cupos vs. admisiones', 'url' => ['/optativas/matricula/admisionesvscupo', 'al' => 3, 'tipoespacio' => 1]],
+                                        '<div class="dropdown-divider"></div>',
                                         
                                         
 
@@ -639,7 +641,7 @@ try {
                                 
                                 ['label' => 'Clases 2021 - Mixto', 'url' => ['/semana']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Clases', 'url' => ['horario/panelprincipal']],
+                                ['label' => 'Clases', 'url' => ['/horario/panelprincipal']],
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
                                 '<div class="dropdown-divider"></div>',
@@ -668,6 +670,8 @@ try {
                                         ['label' => 'Listado de docentes en horario', 'url' => ['/horario/completodetallado']],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Horarios de Convocatoria', 'url' => ['/reporte/horarios/convocatoria']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Docentes con superposición - Horario Mixto', 'url' => ['/horariogenerico/horariogeneric/horassuperpuestas']],
                                         '<div class="dropdown-divider"></div>',
                                         
 
@@ -824,7 +828,7 @@ try {
                     ['label' => 'Horarios', 
                             'items' => [
                                 
-                                ['label' => 'Clases', 'url' => ['horario/panelprincipal']],
+                                ['label' => 'Clases', 'url' => ['/horariogenerico/horariogeneric/panelprincipal']],
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Trimestrales', 'url' => ['/horarioexamen/panelprincipal', 'col' => 0]],
                                 '<div class="dropdown-divider"></div>',
@@ -1327,6 +1331,56 @@ try {
                             'items' => [
 
                                 ['label' => 'Ver horarios', 'url' => ['horario/panelprincipal']],
+                                '<div class="dropdown-divider"></div>',
+                                
+                                
+                                
+                            ],
+
+
+                    ],
+                        
+                                       
+                    
+                    ['label' => Yii::$app->user->identity->role0->nombre,
+                            
+                            'items' => [
+                                            
+                                            [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).' Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
+                                
+                                            [
+                                                'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                                                'url' => ['/cas/auth/logout'],
+                                                'linkOptions' => ['data-method' => 'post'],
+                                            
+                                    
+                                            ],
+                                            '<div class="dropdown-divider"></div>',
+                                
+                             ],
+                    ],
+
+
+
+
+                ];
+
+
+            }elseif(Yii::$app->user->identity->role == Globales::US_CONSULTORIO_MEDICO){
+
+                
+                $items = [
+
+                    ['label' => 'Administración',
+                            'items' => [
+
+                                ['label' => 'Reporte inasistencia', 'url' => ['/avisoinasistencia']],
                                 '<div class="dropdown-divider"></div>',
                                 
                                 

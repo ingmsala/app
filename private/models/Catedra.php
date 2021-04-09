@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\controllers\CatedraController;
+use app\modules\horariogenerico\models\Horariogeneric;
 use app\modules\libroclase\models\Clasediaria;
 use Yii;
 
@@ -122,6 +123,11 @@ class Catedra extends \yii\db\ActiveRecord
     public function getHorarios()
     {
         return $this->hasMany(Horario::className(), ['catedra' => 'id']);
+    }
+
+    public function getHorariogenerics()
+    {
+        return $this->hasMany(Horariogeneric::className(), ['catedra' => 'id']);
     }
 
     public function getAgentes()

@@ -105,6 +105,25 @@ else{
           ?>
 
       </div>
+
+      <div class="col-md-3"> 
+          <?= 
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-tags"></span><h2>Citación</h2><span class="label label-warning">EXAMEN DE INGRESO</span>',
+
+           
+
+           Url::to('https://drive.google.com/file/d/1GEYn-2PvskUrsft5RR5kLF15Bf8u-0SH/view?usp=sharing', $schema = true),
+
+           [
+
+               //'id' => 'modalButtonIngreso',
+               'class' => $classclient,
+               // modalCall
+
+           ]);
+          ?>
+
+      </div>
         <div class="col-md-3">
           <?= '';
             /*Html::a('<span class="'.$classlogo.' glyphicon glyphicon-ruble"></span><h2>Exámenes</h2><span class="label label-warning">FEBRERO / MARZO</span>',

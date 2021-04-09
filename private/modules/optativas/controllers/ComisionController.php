@@ -84,6 +84,18 @@ class ComisionController extends Controller
         ]);
     }
 
+    public function actionDocentes($al)
+    {
+        
+        $searchModel = new ComisionSearch();
+        $dataProvider = $searchModel->xdocentes($al);
+
+        return $this->render('xdocente', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     /**
      * Displays a single Comision model.
      * @param integer $id

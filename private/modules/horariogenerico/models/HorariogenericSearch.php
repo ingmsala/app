@@ -5,6 +5,7 @@ namespace app\modules\horariogenerico\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\horariogenerico\models\Horariogeneric;
+use yii\data\SqlDataProvider;
 
 /**
  * HorariogenericSearch represents the model behind the search form of `app\modules\horariogenerico\models\Horariogeneric`.
@@ -106,6 +107,63 @@ class HorariogenericSearch extends Horariogeneric
             'aniolectivo' => $this->aniolectivo,
             'diasemana' => $this->diasemana,
         ]);
+
+        return $dataProvider;
+    }
+
+    public function horassuperpuestas()
+    {
+        $sql='
+            SELECT
+                `agente`.`id`,
+                `agente`.`apellido`,
+                `agente`.`nombre`,
+                `horariogeneric`.`fecha`,
+                `horareloj`.`hora`,
+                `division`.`turno`,
+                COUNT(horariogeneric.id)
+            FROM
+                `horariogeneric`
+            LEFT JOIN `catedra` ON `horariogeneric`.`catedra` = `catedra`.`id`
+            LEFT JOIN `detallecatedra` ON `catedra`.`id` = `detallecatedra`.`catedra`
+            LEFT JOIN `agente` ON `detallecatedra`.`agente` = `agente`.`id`
+            LEFT JOIN `division` ON `catedra`.`division` = `division`.`id`
+            LEFT JOIN `horareloj` ON `horariogeneric`.`horareloj` = `horareloj`.`id`
+            WHERE
+                `detallecatedra`.`revista` = 6 AND
+                `detallecatedra`.`aniolectivo` = 3 AND
+                `horariogeneric`.`aniolectivo` = 3 
+            GROUP BY
+                `agente`.`id`,
+                `agente`.`apellido`,
+                `agente`.`nombre`,
+                `horariogeneric`.`fecha`,
+                `horareloj`.`hora`,
+                `division`.`turno`
+            HAVING
+                COUNT(horariogeneric.id) > 1
+            ORDER BY
+                `agente`.`apellido`,
+                `agente`.`nombre`';
+
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $sql,
+            'pagination' => false,
+            
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+
+
+        
+        // grid filtering conditions
+        
 
         return $dataProvider;
     }

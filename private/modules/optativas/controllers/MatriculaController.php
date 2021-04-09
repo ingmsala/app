@@ -14,6 +14,7 @@ use app\modules\curriculares\models\Estadomatricula;
 use app\modules\curriculares\models\Matricula;
 use app\modules\curriculares\models\MatriculaSearch;
 use app\modules\curriculares\models\Espaciocurricular;
+use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
@@ -33,7 +34,7 @@ class MatriculaController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'listado'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'listado', 'admisionesvscupo'],
                 'rules' => [
                     [
                         'actions' => ['index', 'view', 'create', 'update', 'delete'],   
@@ -49,7 +50,7 @@ class MatriculaController extends Controller
                     ],
 
                     [
-                        'actions' => ['listado'],   
+                        'actions' => ['listado', 'admisionesvscupo'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -338,6 +339,48 @@ class MatriculaController extends Controller
             
         ]);
 
+    
+    }
+
+    public function actionAdmisionesvscupo($al, $tipoespacio)
+    {
+        $admisiones = Admisionoptativa::find()->where(['aniolectivo' => $al])->all();
+        $admisiones = ArrayHelper::map($admisiones, 'curso', 'curso');
+        $cantidadcupos = [];
+        foreach ($admisiones as $admision) {
+
+            $cantidadcupos[$admision]['cursos'] = $admision.'°';
+
+            $cantidadcupos[$admision]['cupos'] = Espaciocurricular::find()->joinWith(['comisions'])
+                        ->select('sum(comision.cupo)')
+                        ->where(['aniolectivo' => $al])
+                        ->andWhere(['curso' => $admision])
+                        ->andWhere(['tipoespacio' => $tipoespacio])
+                        ->scalar();
+
+            $cantidadcupos[$admision]['admisiones'] = Admisionoptativa::find()
+                        ->where(['aniolectivo' => $al])
+                        ->andWhere(['curso' => $admision])
+                        ->count();
+
+            $cantidadcupos[$admision]['inscriptos'] = Matricula::find()
+                        ->joinWith(['comision0', 'comision0.espaciocurricular0'])
+                        ->where(['espaciocurricular.aniolectivo' => $al])
+                        ->andWhere(['espaciocurricular.curso' => $admision])
+                        ->andWhere(['espaciocurricular.tipoespacio' => $tipoespacio])
+                        ->count();
+        }
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $cantidadcupos,
+            
+        ]);
+
+        return $this->render('admivscupo', [
+            
+            'dataProvider' => $dataProvider,
+            
+        ]);
     
     }
 

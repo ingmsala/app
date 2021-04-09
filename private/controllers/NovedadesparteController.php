@@ -56,7 +56,20 @@ class NovedadesparteController extends Controller
                     ],
 
                     [
-                        'actions' => ['create', 'update', 'delete', 'panelnovedadeshist', 'panelnovedadesprec'],   
+                        'actions' => ['create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+
+                    [
+                        'actions' => ['panelnovedadeshist', 'panelnovedadesprec'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -181,7 +194,9 @@ class NovedadesparteController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-            if ($model->tiponovedad != 1 && $model->tiponovedad != 5 && $model->tiponovedad != 6){
+            
+
+            if ($model->tiponovedad != 1 && $model->tiponovedad != 5 && $model->tiponovedad != 6 && $model->tiponovedad != 9){
                 $model->agente = null;
                 if ($model->tiponovedad == 2 || $model->tiponovedad == 3){
                     $text = ' - N° de Aula o espacio: '.Yii::$app->request->post()["aulaoespacio"];
@@ -230,21 +245,50 @@ class NovedadesparteController extends Controller
                 $nov->save();
             }
 
-            if($model->save()){
+            $ok = false;
+            
+            if ($model->tiponovedad == 1 || $model->tiponovedad == 9){
+                //return var_dump($model['agente']);
+                foreach ($model['agente'] as $agente) {
+                    $newnparte = new Novedadesparte();
+                    $newnparte->tiponovedad = $model->tiponovedad;
+                    $newnparte->parte = $parte;
+                    $newnparte->agente = $agente;
+                    $newnparte->descripcion = $model->descripcion;
+                    $newnparte->save();
 
-                date_default_timezone_set('America/Argentina/Buenos_Aires');
-                
-                $modelexn->estadonovedad = 1;
-                $modelexn->novedadesparte = $model->id;
-                $modelexn->fecha = date("Y-m-d");
-                if($modelexn->save()){
+                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+                    $modelexnX = new Estadoxnovedad();
+                    $modelexnX->estadonovedad = 1;
+                    $modelexnX->novedadesparte = $newnparte->id;
+                    $modelexnX->fecha = date("Y-m-d");
+                    $modelexnX->save();
+                    $ok = true;
+                }
+            }else{
+                if($model->save()){
 
+                    date_default_timezone_set('America/Argentina/Buenos_Aires');
                     
-
-                    Yii::$app->session->setFlash('success', "Se guardó correctamente la novedad.");
-                    return $this->redirect(['/parte/view', 'id' => $model->parte]);
+                    $modelexn->estadonovedad = 1;
+                    $modelexn->novedadesparte = $model->id;
+                    $modelexn->fecha = date("Y-m-d");
+                    if($modelexn->save()){
+    
+                        
+    
+                        Yii::$app->session->setFlash('success', "Se guardó correctamente la novedad.");
+                        return $this->redirect(['/parte/view', 'id' => $model->parte]);
+                    }
                 }
             }
+            if($ok){
+                Yii::$app->session->setFlash('success', "Se guardó correctamente la novedad.");
+                return $this->redirect(['/parte/view', 'id' => $model->parte, 'tab' => 2]);
+            }
+            
+
+            
         }
 
         return $this->renderAjax('create', [
@@ -328,7 +372,7 @@ class NovedadesparteController extends Controller
         $parte = $model->parte;
         $model->delete();
         Yii::$app->session->setFlash('success', "Se eliminó correctamente la novedad.");
-        return $this->redirect(['/parte/view', 'id' => $parte]);
+        return $this->redirect(['/parte/view', 'id' => $parte, 'tab' => 2]);
     }
 
     /**

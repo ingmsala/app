@@ -10,7 +10,7 @@ use kartik\grid\GridView;
 $this->title = 'Aviso de Inasistencias';
 $this->params['breadcrumbs'][] = $this->title;
 
-if(in_array (Yii::$app->user->identity->role, [1,4]))
+if(in_array (Yii::$app->user->identity->role, [1,4,26]))
         $template =  "{edit} {delete}";
     else
         $template =  "";
@@ -22,7 +22,7 @@ if(in_array (Yii::$app->user->identity->role, [1,4]))
 
     <p>
         <?php
-            if(in_array (Yii::$app->user->identity->role, [1,4]))
+            if(in_array (Yii::$app->user->identity->role, [1,4,26]))
                 echo Html::a('Nuevo aviso', ['create'], ['class' => 'btn btn-success']); 
         ?>
     </p>
@@ -33,6 +33,16 @@ if(in_array (Yii::$app->user->identity->role, [1,4]))
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
+            [
+                'label' => 'Área',
+                'format' => 'raw',
+                'value' => function($model){
+                    if($model->tipoavisoparte == 2)
+                        return '<span class="label label-danger">'.$model->tipoavisoparte0->nombre.'</span>';
+                    else    
+                        return $model->tipoavisoparte0->nombre;
+                }
+            ],
                         
             [
                 'label' => 'Agente',

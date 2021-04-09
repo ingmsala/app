@@ -392,10 +392,11 @@ class ClasediariaController extends Controller
             $doc = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
             
             $dcs = Detallecatedra::find()
-                ->joinWith(['catedra0', 'catedra0.division0'])
+                ->joinWith(['catedra0', 'catedra0.division0', 'catedra0.actividad0'])
                 ->where(['detallecatedra.agente' => $doc->id])
                 ->andWhere(['detallecatedra.revista' => 6])
                 ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo])
+                ->andWhere(['not in','actividad.id', [184, 201, 195,33,23]])
                 ->orderBy('division.id')
                 ->all();
 

@@ -33,9 +33,10 @@ class Avisoinasistencia extends \yii\db\ActiveRecord
         return [
             [['descripcion'], 'string'],
             [['hasta'], 'required', 'message' => 'Fecha de fin de la inasistencia o finalización de la visualización del aviso en el parte'],
-            [['agente'], 'integer'],
+            [['agente', 'tipoavisoparte'], 'integer'],
             [['desde', 'hasta'], 'safe'],
             [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
+            [['tipoavisoparte'], 'exist', 'skipOnError' => true, 'targetClass' => Tipoavisoparte::className(), 'targetAttribute' => ['tipoavisoparte' => 'id']],
         ];
     }
 
@@ -59,5 +60,12 @@ class Avisoinasistencia extends \yii\db\ActiveRecord
     public function getAgente0()
     {
         return $this->hasOne(Agente::className(), ['id' => 'agente']);
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTipoavisoparte0()
+    {
+        return $this->hasOne(Tipoavisoparte::className(), ['id' => 'tipoavisoparte']);
     }
 }

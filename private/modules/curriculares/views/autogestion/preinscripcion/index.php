@@ -72,9 +72,13 @@ $this->title = 'Matriculación '.$aniolectivo;
                                 ->andWhere(['aniolectivo.activo' => 1])
                                 ->andWhere(['curso' => $model['curso']])
                                 ->all());
-            	if( $matriculas > 0)
-            		return '<span style = "color:red">Pendiente';
-            	return '<span style = "color:green">Listo';
+            	if( $matriculas > 0){
+                    if($model['curso']==2)
+                        return '<span style = "color:red">Pendiente - Inscripción desde el 07/04/2021 a las 20hs.</span>';
+            		else
+                        return '<span style = "color:red">Pendiente</span>';
+                }
+            	return '<span style = "color:green">Listo</span>';
             	}
             ],
            

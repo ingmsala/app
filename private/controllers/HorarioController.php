@@ -28,6 +28,7 @@ use app\models\Tipomovilidad;
 use app\models\Tipoparte;
 use app\models\Turnoexamen;
 use app\modules\curriculares\models\Aniolectivo;
+use app\modules\horariogenerico\models\Horariogeneric;
 use kartik\mpdf\Pdf;
 use Symfony\Component\Finder\Glob;
 use yii\data\ArrayDataProvider;
@@ -64,7 +65,7 @@ class HorarioController extends Controller
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
-                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_COORDINACION, Globales::US_PRECEPTORIA])){
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_CONSULTA_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_COORDINACION, Globales::US_PRECEPTORIA])){
                                         return true;
                                     /*}elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
 
@@ -97,7 +98,7 @@ class HorarioController extends Controller
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
-                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_COORDINACION])){
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_CONSULTA_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_COORDINACION])){
                                         return true;
                                     }elseif(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
 
@@ -125,10 +126,23 @@ class HorarioController extends Controller
                                                         ->andWhere(['<=', 'division', 53])
                                                         //->andWhere(['is not', 'division', 53])
                                                         ->all();
+                                            
                                             $array = [];
                                             foreach ($nom as $n) {
-                                                $array [] = $n->division;
+                                                $array [] = $n->division0->preceptoria;
                                             }
+                                            
+                                            $divisiones = Division::find()
+                                                ->where(['in', 'preceptoria', $array])
+                                                ->orderBy('id')
+                                                ->all();
+
+                                            $array = [];
+                                            foreach ($divisiones as $n) {
+                                                $array [] = $n->id;
+                                            }
+
+
                                             if(in_array($division, $array))
                                                 return true;
                                             else
@@ -153,7 +167,7 @@ class HorarioController extends Controller
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
-                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR, Globales::US_SECRETARIA, Globales::US_COORDINACION])){
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_HORARIO, Globales::US_CONSULTA_HORARIO, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR, Globales::US_SECRETARIA, Globales::US_COORDINACION])){
                                         return true;
                                     
                                     }else{
@@ -380,13 +394,21 @@ class HorarioController extends Controller
                         ->all();
             $array = [];
             foreach ($nom as $n) {
-                $array [] = $n->division;
+                $array [] = $n->division0->preceptoria;
             }
             //$pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
-            $divisiones = Division::find()
+            /*$pre = Preceptoria::find()
+                    ->where(['in', 'id', $array])->all();*/
+            /*$divisiones = Division::find()
                         ->where(['in', 'id', $array])
                         ->orderBy('id')
-                        ->all();
+                        ->all();*/
+
+            $divisiones = Division::find()
+                //->where(['preceptoria' => $pre->id])
+                ->where(['in', 'preceptoria', $array])
+                ->orderBy('id')
+                ->all();
         
         }else{
             $divisiones = Division::find()
@@ -1820,7 +1842,7 @@ class HorarioController extends Controller
     }
 
 
-    public function actionHoraxdivisionxdocente($diasemana)
+    public function actionHoraxdivisionxdocente($fecha, $diasemana)
     {
         
         $aniolectivo = Aniolectivo::find()->where(['activo' => 1])->one();
@@ -1831,6 +1853,7 @@ class HorarioController extends Controller
         if (isset($_POST['depdrop_parents'])) {
             
             $parents = $_POST['depdrop_parents'];
+            $originalOgenerico = Parametros::findOne(5)->estado;
 
             $division_id = empty($parents[0]) ? null : $parents[0];
             $docente_id = empty($parents[1]) ? null : $parents[1];
@@ -1839,17 +1862,31 @@ class HorarioController extends Controller
             if ($parents != null &&  $division_id != null && $docente_id != null && $falta_id != null) {
 
                 if($falta_id == 3 || $falta_id == 1){
+                    
+                    $aniolectivo = Aniolectivo::find()->where(['nombre' => date('Y')])->one();
+                    
 
-                    $horario = Horario::find()
-                                ->joinWith(['catedra0', 'catedra0.detallecatedras', ])
-                                ->where(['catedra.division' => $division_id])
-                                ->andWhere(['detallecatedra.revista' => 6])
-                                ->andWhere(['detallecatedra.agente' => $docente_id])
-                                ->andWhere(['horario.diasemana' => $diasemana])
-                                ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
-                                ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
-                                ->orderBy('horario.hora')
-                                ->all();
+                    if($originalOgenerico == 1)
+                        $horario = Horario::find()
+                            ->joinWith(['catedra0', 'catedra0.detallecatedras', ])
+                            ->where(['catedra.division' => $division_id])
+                            ->andWhere(['detallecatedra.revista' => 6])
+                            ->andWhere(['detallecatedra.agente' => $docente_id])
+                            ->andWhere(['horario.diasemana' => $diasemana])
+                            ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
+                            ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
+                            ->orderBy('horario.hora')
+                            ->all();
+                    else
+                        $horario = Horariogeneric::find()
+                                    ->joinWith(['semana0'])
+                                    ->where(['catedra' => $cat])
+                                    ->andWhere(['fecha' => $fecha])
+                                    ->andWhere(['horariogeneric.aniolectivo' => $aniolectivo->id])
+                                    ->andWhere(['semana.publicada' => 1])
+                                    ->all();
+
+                    
                 }else{
                     $horario = Horario::find()
                                 ->joinWith(['catedra0', 'catedra0.detallecatedras', ])

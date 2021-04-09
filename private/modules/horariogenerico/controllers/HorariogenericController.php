@@ -328,14 +328,14 @@ class HorariogenericController extends Controller
     {
         $model = $this->findModel($id);
         $division = $model->catedra0->division;
-        $detcat = $model->catedra0->getDocentehorarioal0($model->aniolectivo);
-        $agente = $detcat['agenteid'];
-        $mail = $detcat['mail'];
+        //$detcat = $model->catedra0->getDocentehorarioal0($model->aniolectivo);
+        //$agente = $detcat['agenteid'];
+        //$mail = $detcat['mail'];
         $semana = $model->semana;
         $model->delete();
-        if(Yii::$app->user->identity->role == Globales::US_AGENTE && Yii::$app->user->identity->username == $mail)
-            return $this->redirect(['/horariogenerico/horariogeneric/completoxdocente', 'agente' => $agente, 'sem' => $semana]);
-        else
+        /*if(Yii::$app->user->identity->role == Globales::US_AGENTE && Yii::$app->user->identity->username == $mail)
+            return $this->redirect(['/horariogenerico/horariogeneric/completoxdocente', 'agente' => $agente, 'sem' => $semana]);*/
+       //else
             return $this->redirect(['/horariogenerico/horariogeneric/completoxcurso', 'division' => $division, 'vista' => 'docentes', 'sem' => $semana]);
         
     }
@@ -847,7 +847,10 @@ class HorariogenericController extends Controller
                                     
                                     break 1;
                                 }else{
-                                    $salida = 'Hora institucional';
+                                    if($anio == 4)
+                                        $salida = 'Ed. física';
+                                    else
+                                        $salida = 'Hora institucional';
                                 }
                             }
                            
@@ -1351,7 +1354,7 @@ class HorariogenericController extends Controller
         $g = new Globales();
         $this->layout = $g->getLayout(Yii::$app->user->identity->role);
 
-        if(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
+        /*if(Yii::$app->user->identity->role == Globales::US_PRECEPTORIA){
             $pre = Preceptoria::find()->where(['nombre' => Yii::$app->user->identity->username])->one();
             $divisiones = Division::find()
                         ->where(['preceptoria' => $pre->id])
@@ -1363,7 +1366,13 @@ class HorariogenericController extends Controller
                                     ->andWhere(['<=', 'id', 53])
                                     ->orderBy('id')
                                     ->all();
-        }
+        }*/
+
+        $divisiones = Division::find()
+                                    ->where(['in', 'turno', [1,2]])
+                                    ->andWhere(['<=', 'id', 53])
+                                    ->orderBy('id')
+                                    ->all();
 
         if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER,Globales::US_REGENCIA])){
             $vista = 'docentes';
@@ -1911,5 +1920,18 @@ class HorariogenericController extends Controller
         
 
 
+    }
+
+    public function actionHorassuperpuestas(){
+
+        $searchModel = new HorariogenericSearch();
+        $dataProvider = $searchModel->horassuperpuestas();
+        
+
+        
+        return $this->render('horassuperpuestas', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
     }
 }

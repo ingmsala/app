@@ -46,16 +46,35 @@ $this->params['breadcrumbs'][] = $this->title;
         En la descripción de la novedad, si corresponde, especificar número de aula y bancos en caso de que haya que efectuar reparaciones.
     </div>-->
 
+    <?php 
+        if($tab == 1){
+            $tab1 = 'in active';
+            $tab2 = '';
+            $classtab1 = 'active';
+            $classtab2 = '';
+        }elseif($tab==2){
+            $tab2 = 'in active';
+            $tab1 = '';
+            $classtab2 = 'active';
+            $classtab1 = '';
+        }else{
+            $tab1 = 'in active';
+            $tab2 = '';
+            $classtab1 = 'active';
+            $classtab2 = '';
+        }
+    ?>
+
 
     <ul class="nav nav-tabs">
-          <li class="active"><a data-toggle="tab" href="#parte">Asistencia Docente</a></li>
-          <li><a data-toggle="tab" href="#novedades">Novedades</a></li>
+          <li class="<?=$classtab1?>"><a data-toggle="tab" href="#parte">Asistencia Docente</a></li>
+          <li class="<?=$classtab2?>"><a data-toggle="tab" href="#novedades">Novedades</a></li>
           <li><a data-toggle="tab" href="#aviso">Aviso de Inasistencias <span class="badge"> <?=$dataProvideravisosinasistencias->getTotalCount()?></span></a></li>
           
         </ul>
 
         <div class="tab-content">
-            <div id="parte" class="tab-pane fade in active">
+            <div id="parte" class="tab-pane fade <?=$tab1?>">
             
                 <div class="row">
                     <div class="col-md-9">
@@ -177,7 +196,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             
           </div>
-          <div id="novedades" class="tab-pane fade">
+          <div id="novedades" class="tab-pane fade <?=$tab2?>">
             <?php 
 
                 echo $this->render('/novedadesparte/index',[

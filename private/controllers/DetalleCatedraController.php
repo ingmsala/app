@@ -16,6 +16,7 @@ use app\models\Condicion;
 use app\models\Catedra;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use app\models\Parametros;
 use app\models\Rolexuser;
 use app\modules\curriculares\models\Aniolectivo;
 use yii\helpers\ArrayHelper;
@@ -433,7 +434,7 @@ class DetallecatedraController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionDocxhorario($diasemana, $tipoparte)
+    public function actionDocxhorario($fecha, $diasemana, $tipoparte)
     {
         
         $aniolectivo = Aniolectivo::find()->where(['activo' => 1])->one();
@@ -442,6 +443,8 @@ class DetallecatedraController extends Controller
         $out = [];
         
         if (isset($_POST['depdrop_parents'])) {
+
+            $originalOgenerico = Parametros::findOne(5)->estado;
             
             $parents = $_POST['depdrop_parents'];
             $falta_id = empty($parents[1]) ? null : $parents[1];
@@ -450,15 +453,26 @@ class DetallecatedraController extends Controller
                 $division_id = $parents[0];
                                 
                 if(($falta_id == 3 || $falta_id == 1) && $tipoparte == 1){
-                    $detallecat = Detallecatedra::find()
-                    ->joinWith(['agente0', 'catedra0', 'catedra0.horarios'])
-                    ->where(['catedra.division' => $division_id])
-                    ->andWhere(['revista' => 6])
-                    ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
-                    ->andWhere(['horario.diasemana' => $diasemana])
-                    ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
-                    ->orderBy('agente.apellido, agente.nombre')
-                    ->all();
+                    if($originalOgenerico == 1)
+                        $detallecat = Detallecatedra::find()
+                            ->joinWith(['agente0', 'catedra0', 'catedra0.horarios'])
+                            ->where(['catedra.division' => $division_id])
+                            ->andWhere(['revista' => 6])
+                            ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
+                            ->andWhere(['horario.diasemana' => $diasemana])
+                            ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
+                            ->orderBy('agente.apellido, agente.nombre')
+                            ->all();
+                    else
+                        $detallecat = Detallecatedra::find()
+                            ->joinWith(['agente0', 'catedra0', 'catedra0.horariogenerics'])
+                            ->where(['catedra.division' => $division_id])
+                            ->andWhere(['revista' => 6])
+                            ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
+                            ->andWhere(['horariogeneric.fecha' => $fecha])
+                            ->andWhere(['horariogeneric.aniolectivo' => $aniolectivo->id])
+                            ->orderBy('agente.apellido, agente.nombre')
+                            ->all();
                 }else{
                     $detallecat = Detallecatedra::find()
                     ->joinWith(['agente0', 'catedra0', 'catedra0.horarios'])

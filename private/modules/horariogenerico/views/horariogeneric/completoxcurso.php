@@ -59,7 +59,7 @@ JS;
 <?php
 if($prt != 1){
 ?>
-    <h2><?= $horariopremitido ? Html::encode($this->title).'    <span class="badge">'.$txt.'</span>' : '' ?>
+    <h2><?= ($horariopremitido || $regenciapermitido) ? Html::encode($this->title).'    <span class="badge">'.$txt.'</span>' : '' ?>
 	</h2>
     <?php $userhorario = $horariopremitido ? "none" : "block" ?>
     <div style="display: <?= $userhorario ?>;">
@@ -156,7 +156,23 @@ if($prt != 1){
 		        ],*/
 	    	]); ?>
 
-		
+	<?php
+		if($prt != 1){
+				echo '<center>';
+				echo Html::a('Ver horarios de Ed. Física', '#collapse', ['data-toggle'=>"collapse", 'class' => 'btn btn-success btn-lg']);
+				echo '</center>';
+				echo '<br/><br/>';
+				
+					
+				$d ='<div id="collapse" class="panel-collapse collapse">
+						<iframe src="https://drive.google.com/file/d/1cFHp5OmJlH4UTiuQKzody2yZRXbBpA44/preview" width="100%" height="780"></iframe>
+					</div>';
+				
+				
+				echo $d;
+				//echo '<iframe src="https://drive.google.com/file/d/1cFHp5OmJlH4UTiuQKzody2yZRXbBpA44/preview" width="640" height="480"></iframe>';
+		}
+	?>
 	  <?= GridView::widget([
 		        'dataProvider' => $dataProvider,
 		        //'filterModel' => $searchModel,

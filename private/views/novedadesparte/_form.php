@@ -36,7 +36,7 @@ use kartik\depdrop\DepDrop;
             ],
             'pluginEvents' => [
                 'select2:select' => 'function() {
-                    if ($(this).val()==1 || $(this).val()==5 || $(this).val()==6) {
+                    if ($(this).val()==1 || $(this).val()==5 || $(this).val()==6 || $(this).val()==9) {
                            $( "#divpreceptor" ).show();
                            $( "#divedilicias" ).hide();
                            $( "#ausencias" ).hide();
@@ -68,7 +68,7 @@ use kartik\depdrop\DepDrop;
                                 
                                 $form->field($model, 'agente')->widget(Select2::classname(), [
                                     'data' => $listpreceptores,
-                                    'options' => ['placeholder' => 'Seleccionar...'],
+                                    'options' => ['placeholder' => 'Seleccionar...', 'multiple' => true,],
                                     'pluginOptions' => [
                                         'allowClear' => true
                                     ],
