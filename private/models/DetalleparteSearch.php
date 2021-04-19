@@ -100,9 +100,10 @@ class DetalleparteSearch extends Detalleparte
             $sql= 'select distinct detalleparte.id as id, division.nombre as division, hora.nombre as hora, ' ;
         }
         $sql.='
-        parte.fecha as fecha, agente.apellido as apellido, agente.nombre as nombred, detalleparte.llego, detalleparte.retiro, falta.nombre as falta, estadoinasistenciaxparte.detalle as detalle, detalleparte.estadoinasistencia as estadoinasistenciax, esdp.nombre as estadoinasistenciaxtxt, (select count(*) from estadoinasistenciaxparte eixp where eixp.detalleparte = detalleparte.id) as cont 
+        parte.fecha as fecha, tiposemana.nombre as tipo, agente.apellido as apellido, agente.nombre as nombred, detalleparte.llego, detalleparte.retiro, falta.nombre as falta, estadoinasistenciaxparte.detalle as detalle, detalleparte.estadoinasistencia as estadoinasistenciax, esdp.nombre as estadoinasistenciaxtxt, (select count(*) from estadoinasistenciaxparte eixp where eixp.detalleparte = detalleparte.id) as cont 
         from detalleparte 
         left join division on detalleparte.division = division.id
+        left join tiposemana on detalleparte.tipo = tiposemana.id
         left join agente on detalleparte.agente = agente.id
         left join estadoinasistencia esdp on detalleparte.estadoinasistencia = esdp.id
         left join hora on detalleparte.hora = hora.id

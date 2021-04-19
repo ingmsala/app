@@ -37,7 +37,7 @@ use yii\helpers\Url;
                 'value' => function($model) use($catedra){
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
                    if ($model['fecha'] == date('Y-m-d')){
-                        return Yii::$app->formatter->asDate($model['fecha'], 'dd/MM/yyyy').' (HOY)';
+                    return Html::a(Yii::$app->formatter->asDate($model['fecha'], 'dd/MM/yyyy'), Url::to(['create', 'cat' => $catedra, 'fecha'=>$model['fecha']], $schema = true), $options = []).' (HOY)';
                    } 
                    return Html::a(Yii::$app->formatter->asDate($model['fecha'], 'dd/MM/yyyy'), Url::to(['create', 'cat' => $catedra, 'fecha'=>$model['fecha']], $schema = true), $options = []);
                 }

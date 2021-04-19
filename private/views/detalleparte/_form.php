@@ -25,10 +25,13 @@ use yii\helpers\Url;
         );?>
 
     <?php $listHoras=ArrayHelper::map($horas,'id','nombre'); ?>
+    <?php $tipos=ArrayHelper::map($tipos,'id','nombre'); ?>
     <?php $listFaltas=ArrayHelper::map($faltas,'id','nombre'); ?>
      
 
     <?php $listDivisiones=ArrayHelper::map($divisiones,'id','nombre'); ?>
+
+    <?= $form->field($model, 'tipo')->dropDownList($tipos, ['prompt'=>'Seleccionar...']); ?>
 
     <?= 
 

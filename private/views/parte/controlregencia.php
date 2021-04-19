@@ -223,6 +223,8 @@ GridView::widget([
                 'label' => 'Tipo de falta',
                 'attribute' => 'falta',
                 'value' => function($model){
+                    if($model['tipo'] != null)
+                        return $model['falta'].' - '.$model['tipo'];
                     return $model['falta'];
                 }
             ],

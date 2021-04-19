@@ -37,7 +37,7 @@ class Detalleparte extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_ABM] = ['parte', 'division', 'agente', 'hora', 'falta', 'llego','retiro', 'detalleadelrecup'];
+        $scenarios[self::SCENARIO_ABM] = ['parte', 'division', 'agente', 'hora', 'falta', 'llego','retiro', 'detalleadelrecup', 'tipo'];
         $scenarios[self::SCENARIO_CONTROLREGENCIA] = ['anio', 'mes', 'agente', 'estadoinasistencia', 'solodia'];
         return $scenarios;
     }
@@ -57,7 +57,7 @@ class Detalleparte extends \yii\db\ActiveRecord
     {
         return [
             
-            [['parte', 'division', 'hora', 'falta'], 'required', 'on'=>self::SCENARIO_ABM],
+            [['parte', 'division', 'hora', 'falta', 'tipo'], 'required', 'on'=>self::SCENARIO_ABM],
             [['anio'], 'required', 'message' => 'Debe seleccionar un año lectivo', 'on'=>self::SCENARIO_CONTROLREGENCIA],
             [['parte', 'division', 'agente', 'llego', 'retiro', 'falta', 'estadoinasistencia'], 'integer'],
             
@@ -66,6 +66,7 @@ class Detalleparte extends \yii\db\ActiveRecord
             [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
             [['division'], 'exist', 'skipOnError' => true, 'targetClass' => Division::className(), 'targetAttribute' => ['division' => 'id']],
             [['estadoinasistencia'], 'exist', 'skipOnError' => true, 'targetClass' => Estadoinasistencia::className(), 'targetAttribute' => ['estadoinasistencia' => 'id']],
+            [['tipo'], 'exist', 'skipOnError' => true, 'targetClass' => Tiposemana::className(), 'targetAttribute' => ['tipo' => 'id']],
             ['agente', 'isVacante', 'on' => self::SCENARIO_ABM],
         ];
     }
@@ -93,6 +94,7 @@ class Detalleparte extends \yii\db\ActiveRecord
             'falta' => 'Tipo de Falta',
             'detalleadelrecup' => 'Detalle recupera/adelanto',
             'estadoinasistencia' => 'Estado',
+            'tipo' => 'Tipo',
         ];
     }
 
@@ -151,4 +153,9 @@ class Detalleparte extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Estadoinasistencia::className(), ['id' => 'detalleparte'])->via('estadoinasistenciaxpartes');
     }
+
+    public function getTipo0()
+   {
+       return $this->hasOne(Tiposemana::className(), ['id' => 'tipo']);
+   }
 }

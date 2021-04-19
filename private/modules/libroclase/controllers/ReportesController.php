@@ -71,8 +71,14 @@ class ProgramaController extends Controller
     public function actionIndex($id)
     {
         $this->layout = '@app/views/layouts/mainpersonal';
-        $searchModel = new ProgramaSearch();
-        $dataProvider = $searchModel->poractividad($id);
+        
+        $temas = Detalleunidad::find()
+                    ->joinWith('programa0')
+                    ->where(['programa.vigente' => 1])
+                    ->andWhere(['programa.actividad' => $id])
+                    ->all();
+
+        return var_dump($temas);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

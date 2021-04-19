@@ -46,6 +46,20 @@ if($vista == 'docentes')
 
         Modal::end();
 	?>
+	<?php 
+        Modal::begin([
+            'header' => "<h2 id='modalHeader'></h2>",
+            'id' => 'modal',
+            'size' => 'modal-lg',
+            'options' => [
+                'tabindex' => false,
+            ],
+        ]);
+
+        echo "<div id='modalContent'></div>";
+
+        Modal::end();
+    ?>
 <div class="horarioxcurso-view">
 
 	<?php  
@@ -59,7 +73,7 @@ JS;
 <?php
 if($prt != 1){
 ?>
-    <h2><?= ($horariopremitido || $regenciapermitido) ? Html::encode($this->title).'    <span class="badge">'.$txt.'</span>' : '' ?>
+    <h2><?= Html::encode($this->title);?>
 	</h2>
     <?php $userhorario = $horariopremitido ? "none" : "block" ?>
     <div style="display: <?= $userhorario ?>;">
@@ -274,7 +288,41 @@ if($prt != 1){
 		            
 
 		            
-		        ],
+		        
+
+				[
+	                'class' => 'kartik\grid\ActionColumn',
+
+	                'template' => '{viewdetcat} {dj}',
+	                'visible' => $regenciapermitido,
+	                
+	                'buttons' => [
+	                    'viewdetcat' => function($url, $model, $key)use ($sem){
+	                        return Html::a(
+	                            '<span class="glyphicon glyphicon-eye-open"></span>',
+	                            '?r=detallecatedra/updatehorario&or=hg&id='.$model['id'].'&sem='.$sem);
+						},
+						
+						'dj' => function($url, $model, $key){
+	                        return Html::button('<span class="glyphicon glyphicon-modal-window"></span>',
+                            ['value' => Url::to('index.php?r=horario/declaracionhorario&dni='.$model->agente0->documento),
+                                'class' => 'modala btn btn-link', 'id'=>'modala']);
+	                            
+	                    },
+
+	                    'updatedetcat' => function($url, $model, $key){
+                        
+                        return Html::button('<span class="glyphicon glyphicon-pencil"></span>',
+                            ['value' => Url::to('index.php?r=detallecatedra/updatehorario&id='.$model['id']),
+                                'class' => 'modala btn btn-link', 'id'=>'modala']);
+
+
+                    },
+	                    
+	                    
+	                ]
+				],
+			],
 	    	]); ?>
     
 

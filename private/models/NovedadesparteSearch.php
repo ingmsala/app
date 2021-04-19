@@ -7,7 +7,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Novedadesparte;
 use app\config\Globales;
-
+use app\modules\curriculares\models\Aniolectivo;
 
 /**
  * NovedadesparteSearch represents the model behind the search form of `app\models\Novedadesparte`.
@@ -167,19 +167,22 @@ class NovedadesparteSearch extends Novedadesparte
 
     public function novedadesactivas($tipodenovedadXusuario, $descrip)
     {
+        $anio = Aniolectivo::find()->where(['activo' => 1])->one();
         if ($descrip != null)
             $query = Novedadesparte::find()
                     ->joinWith(['tiponovedad0', 'parte0', 'estadoxnovedads'])
                     ->where(['activo' => 1])
                     ->andWhere(['in', 'tiponovedad', $tipodenovedadXusuario])
                      ->andWhere(['like', 'descripcion', $descrip])
+                     ->andWhere(['=', 'year(parte.fecha)', $anio->nombre])
                     ->orderBy('parte.fecha');
         else{
             $query = Novedadesparte::find()
                     ->joinWith(['tiponovedad0', 'parte0', 'estadoxnovedads'])
                     ->where(['activo' => 1])
                     ->andWhere(['in', 'tiponovedad', $tipodenovedadXusuario])
-                    ->orderBy('parte.fecha');  
+                    ->andWhere(['=', 'year(parte.fecha)', $anio->nombre])
+                    ->orderBy('parte.fecha DESC');  
         }
         
 

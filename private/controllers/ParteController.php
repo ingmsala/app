@@ -490,24 +490,36 @@ class ParteController extends Controller
 
     public function actionControlsecretaria(){
         $searchModel = new DetalleparteSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
 
         $param = Yii::$app->request->queryParams;
-
+        
 
 
         $model = new Detalleparte();
         $model->scenario = $model::SCENARIO_CONTROLREGENCIA;
         $years = Aniolectivo::find()->all();
-
-        if(isset($param['Detalleparte']['anio']))
+        $search = false;
+        if(isset($param['Detalleparte']['anio'])){
             $model->anio = $param['Detalleparte']['anio'];
-        if(isset($param['Detalleparte']['mes']))
+            $search = true;
+        }
+        if(isset($param['Detalleparte']['mes'])){
             $model->mes = $param['Detalleparte']['mes'];
-        if(isset($param['Detalleparte']['agente']))
+            $search = true;
+        }
+        if(isset($param['Detalleparte']['agente'])){
             $model->agente = $param['Detalleparte']['agente'];
-        if(isset($param['Detalleparte']['estadoinasistencia']))
+            $search = true;
+        }
+        if(isset($param['Detalleparte']['estadoinasistencia'])){
             $model->estadoinasistencia = $param['Detalleparte']['estadoinasistencia'];
+            $search = true;
+        }
+        if($search)
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        else
+            $dataProvider = null;
 
         return $this->render('controlsecretaria', [
             

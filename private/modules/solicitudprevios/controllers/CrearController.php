@@ -43,7 +43,14 @@ class CrearController extends Controller
         if(count($turnoexamen)==0){
             Yii::$app->session->setFlash('danger', 'No está habilitado ningún turno de examen. Consulte el calendario académico para verificar las fechas de apertura de inscripcionres.');
         }
-        $actividades = Actividad::find()->where(['propuesta' => 1])->andWhere(['actividadtipo' => 1])->orderBy('nombre')->all();
+        $habilitados = [6,7];
+        $actividades = Actividad::find()
+                            ->joinWith(['catedras', 'catedras.division0'])
+                            ->where(['in', 'left(division.nombre, 1)', $habilitados])
+                            ->andWhere(['actividad.propuesta' => 1])
+                            ->andWhere(['actividad.actividadtipo' => 1])
+                            ->orderBy('actividad.nombre')->all();
+        //$actividades = Actividad::find()->where(['propuesta' => 1])->andWhere(['actividadtipo' => 1])->orderBy('nombre')->all();
 
         if ($model->load(Yii::$app->request->post()) && $modelAjuntos->load(Yii::$app->request->post())) {
             

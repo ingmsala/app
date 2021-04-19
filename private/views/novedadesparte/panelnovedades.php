@@ -209,6 +209,7 @@ GridView::widget([
                 'label' => 'Tiempo respuesta',
                 //'attribute' => 'estadonovedad0.nombre',
                 'value' => function($model){
+                    try {
                         $itemsc = [];
                         $max=-1;
                         $c=0;
@@ -245,6 +246,10 @@ GridView::widget([
                         //return $diff->days . ' días';
                         //if ($max ==  1)
                         return '<center><span style="color:'.$color.';">'.$diff->days.' '.$dias.'</span></center>';
+                    } catch (\Throwable $th) {
+                        //throw $th;
+                    }
+                        
                   
                 },
             ],

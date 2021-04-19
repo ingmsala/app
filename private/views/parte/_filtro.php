@@ -1,11 +1,12 @@
 <?php
 
+use kartik\form\ActiveForm;
 use yii\helpers\Html;
 use kartik\select2\Select2;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use yii\helpers\ArrayHelper;
-use yii\widgets\ActiveForm;
+
 
 
 
@@ -22,6 +23,10 @@ use yii\widgets\ActiveForm;
                         <?php 
                             
                             //var_dump($param);
+                            if(count($param)>1)
+                                $colapse = 'collapse';
+                            else    
+                                $colapse = '';
                             
                             $meses = [ 1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12=> 'Diciembre',]; 
 
@@ -86,7 +91,7 @@ use yii\widgets\ActiveForm;
                    
                 </h4>
             </div>
-            <div id="collapseOne" class="panel-collapse collapse">
+            <div id="collapseOne" class="panel-collapse <?=$colapse?>">
 
                 <div class="row">
                     <div class="col-md-6">

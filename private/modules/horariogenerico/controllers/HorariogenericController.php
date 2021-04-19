@@ -579,14 +579,32 @@ class HorariogenericController extends Controller
 
         
         try {
-            if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
-            
-                $horarios = Horariogeneric::find()
-                    ->joinWith(['catedra0'])
-                    ->where(['semana' => $semana->id])
-                    ->andWhere(['catedra.division' => $division])
-                    ->orderBy('fecha')
-                    ->all();
+            if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTOR, Globales::US_PRECEPTORIA])){
+                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
+                    $horarios = Horariogeneric::find()
+                        ->joinWith(['catedra0'])
+                        ->where(['semana' => $semana->id])
+                        ->andWhere(['catedra.division' => $division])
+                        ->orderBy('fecha')
+                        ->all();
+                }else{
+                    if($semana->id == 18)
+                        $horarios = Horariogeneric::find()
+                            ->joinWith(['catedra0'])
+                            ->where(['semana' => $semana->id])
+                            ->andWhere(['catedra.division' => $division])
+                            ->orderBy('fecha')
+                            ->all();
+                    else
+                        $horarios = Horariogeneric::find()
+                            ->joinWith(['catedra0'])
+                            ->where(['semana' => $semana->id])
+                            ->andWhere(['catedra.division' => $division])
+                            ->andWhere(['semana.publicada' => 1])
+                            ->orderBy('fecha')
+                            ->all();
+                }
+                
             }else{
                 $horarios = Horariogeneric::find()
                     ->joinWith(['catedra0', 'semana0'])
@@ -833,14 +851,14 @@ class HorariogenericController extends Controller
                                           //  $superpuesto[1] = str_replace('</ul>', $horariox->catedra0->division0->nombre."</ul>", $superpuesto[1]);
                                         //}
                                         ($horariox->horareloj0->hora < 6) ? $plac = 'bottom' : $plac = 'top';
-                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1).'</span>'.'</span>';
+                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->agente0->apellido.', '.substr($dc->agente0->nombre,0,1).'</span>'.'</span>';
                                     }
                                     else{
                                         //if($cant>1){
                                         //    ($horariox->horareloj0->hora < 6) ? $plac = 'bottom' : $plac = 'top';
                                         //$salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.'<ul>'.$horariox->catedra0->division0->nombre.'</ul>'.'">'.$dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1).'</span>'.'</span>';
                                         //}else{
-                                            $salida = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1);
+                                            $salida = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,0,1);
 
                                         //}
                                     }
@@ -848,7 +866,7 @@ class HorariogenericController extends Controller
                                     break 1;
                                 }else{
                                     if($anio == 4)
-                                        $salida = 'Ed. física';
+                                        $salida = 'EDUCACIÓN FÍSICA';
                                     else
                                         $salida = 'Hora institucional';
                                 }
@@ -965,6 +983,7 @@ class HorariogenericController extends Controller
             ->joinWith(['catedra0', 'catedra0.detallecatedras', 'catedra0.division0', 'horareloj0'])
             ->where(['detallecatedra.agente' => $docente])
             ->andWhere(['detallecatedra.revista' => 6])
+            ->andWhere(['detallecatedra.aniolectivo' => 3])
             ->andWhere(['<>', 'catedra.division', $dc->catedra0->division])
             ->andWhere(['horareloj.hora' => $hora])
             ->andWhere(['horariogeneric.fecha' => $fecha])
@@ -981,6 +1000,105 @@ class HorariogenericController extends Controller
             
         else
             return [false, ''];
+    }
+
+
+    public function actionCompletoxdia($fecha, $vista)
+    {
+        //$division = 1;
+        //$dia = 3;
+        
+        $aniolectivo = Parametros::findOne(1)->estado;
+
+        /*if ($estadopublicacion == 0){
+            Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
+            return $this->redirect(Yii::$app->request->referrer);
+        }*/
+
+        if(Yii::$app->user->identity->role == Globales::US_HORARIO)
+            $this->layout = 'mainvacio';
+        
+        //$paramdia = Diasemana::findOne($dia);
+        
+        
+        $horarios = Horariogeneric::find()
+            ->joinWith(['catedra0', 'horareloj0'])
+            ->where(['fecha' => $fecha])
+            ->andWhere(['<','catedra.division',54])
+            //->andWhere(['aniolectivo' => $aniolectivo])
+            ->orderBy('diasemana, horareloj.hora')
+            ->all();
+
+        $divisiones = Division::find()->where(['in', 'turno', [1,2] ])->andWhere(['<','id',54])->all();
+        $horas = Hora::find()->all();
+        $cd = 0;
+        //return var_dump($dias);
+        
+        $arrayaux = [];
+
+        $salida = '';
+        foreach ($divisiones as $division) {
+            $ch = 0;
+            foreach ($horas as $hora) {
+
+                if($ch == 0)
+                    $arrayaux[$division->id][$ch+1] = $division->nombre;
+
+                $ch = $ch + 1;
+                
+
+                $arrayaux[$division->id][$hora->id] = '-';
+
+                                
+            }
+            
+        }
+        $salida = '';
+        foreach ($horarios as $horariox) {
+            
+                            foreach ($horariox->catedra0->detallecatedras as $dc) {
+
+                                $salida = '';
+                                if ($dc->revista == 6 && $dc->aniolectivo == $aniolectivo){
+                                    //return var_dump($dc['revista']==1);
+                                    $superpuesto = $this->horaSuperpuesta($dc, $horariox->horareloj0->hora, $horariox->fecha);
+                                    if ($superpuesto[0]){
+                                        ($horariox->horareloj0->hora < 6) ? $plac = 'bottom' : $plac = 'top';
+                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->agente0->apellido.', '.substr($dc->agente0->nombre,0,1).'</span>'.'</span>';
+                                    }
+                                    else
+                                        $salida = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,0,1);
+                                    break 1;
+                                }else{
+                                    $salida = 'EDUCACIÓN FÍSICA';
+                                }
+                            }
+                           //return $salida;
+            if($vista == 'docentes')
+                $arrayaux[$horariox->catedra0->division][$horariox->horareloj0->hora] = $salida;
+            else
+                $arrayaux[$horariox->catedra0->division][$horariox->horareloj0->hora] = $horariox->catedra0->actividad0->nombre;
+        }
+
+        $provider = new ArrayDataProvider([
+            'allModels' => $arrayaux,
+            'pagination' => false,
+            
+        ]);
+        //return var_dump($array);
+
+        //$docente_materia_search = new DetallecatedraSearch();
+       // $dataProvider = $docente_materia_search->horario_doce_divi($division);
+
+        return $this->render('completoxdia', [
+            //'model' => $model,
+            //'searchModel' => $searchModel,
+            //'dataProvider' => $dataProvider,
+            //'dataProviderMartes' => $dataProviderMartes,
+            'provider' => $provider,
+            'fecha' => $fecha,
+            'vista' => $vista,
+        ]);
     }
 
     public function actionCreatedesdehorario($division, $hora, $fecha, $semana)

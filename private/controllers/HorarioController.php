@@ -1297,12 +1297,12 @@ class HorarioController extends Controller
         //$division = 1;
         //$dia = 3;
         
-        $estadopublicacion = Parametros::findOne(1)->estado;
+        $aniolectivo = Parametros::findOne(1)->estado;
 
-        if ($estadopublicacion == 0){
+        /*if ($estadopublicacion == 0){
             Yii::$app->session->setFlash('info', "No está habilitada la sección de horarios de exámenes clases");
             return $this->redirect(Yii::$app->request->referrer);
-        }
+        }*/
 
         if(Yii::$app->user->identity->role == Globales::US_HORARIO)
             $this->layout = 'mainvacio';
@@ -1313,12 +1313,13 @@ class HorarioController extends Controller
         $horarios = Horario::find()
             ->joinWith(['catedra0'])
             ->where(['diasemana' => $dia])
-            ->andWhere(['<>','catedra.division',77])
+            ->andWhere(['<','catedra.division',54])
             ->andWhere(['tipo' => 1])
+            ->andWhere(['aniolectivo' => $aniolectivo])
             ->orderBy('diasemana, hora')
             ->all();
 
-        $divisiones = Division::find()->where(['in', 'turno', [1,2] ])->all();
+        $divisiones = Division::find()->where(['in', 'turno', [1,2] ])->andWhere(['<','id',54])->all();
         $horas = Hora::find()->all();
         $cd = 0;
         //return var_dump($dias);
@@ -1348,15 +1349,15 @@ class HorarioController extends Controller
                             foreach ($horariox->catedra0->detallecatedras as $dc) {
 
                                 $salida = '';
-                                if ($dc->revista == 6){
+                                if ($dc->revista == 6 && $dc->aniolectivo == $aniolectivo){
                                     //return var_dump($dc['revista']==1);
-                                    $superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->diasemana);
+                                    $superpuesto = $this->horaSuperpuesta($dc, $horariox->hora, $horariox->diasemana,$aniolectivo);
                                     if ($superpuesto[0]){
                                         ($horariox->hora < 6) ? $plac = 'bottom' : $plac = 'top';
-                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1).'</span>'.'</span>';
+                                        $salida = '<span style="color:red">'.'<span rel="tooltip" data-toggle="tooltip" data-placement="'.$plac.'" data-html="true" data-title="'.$superpuesto[1].'">'.$dc->agente0->apellido.', '.substr($dc->agente0->nombre,0,1).'</span>'.'</span>';
                                     }
                                     else
-                                        $salida = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1);
+                                        $salida = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,0,1);
                                     break 1;
                                 }else{
                                     $salida = '';
@@ -1866,7 +1867,7 @@ class HorarioController extends Controller
                     $aniolectivo = Aniolectivo::find()->where(['nombre' => date('Y')])->one();
                     
 
-                    if($originalOgenerico == 1)
+                    if($originalOgenerico == 1){
                         $horario = Horario::find()
                             ->joinWith(['catedra0', 'catedra0.detallecatedras', ])
                             ->where(['catedra.division' => $division_id])
@@ -1877,18 +1878,24 @@ class HorarioController extends Controller
                             ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
                             ->orderBy('horario.hora')
                             ->all();
-                    else
+                            $horarioclass = 1;
+                        }
+                    else{
                         $horario = Horariogeneric::find()
-                                    ->joinWith(['semana0'])
-                                    ->where(['catedra' => $cat])
+                                    ->joinWith(['semana0', 'catedra0','catedra0.detallecatedras'])
+                                    ->where(['catedra.division' => $division_id])
+                                    ->andWhere(['detallecatedra.agente' => $docente_id])
+                                    ->andWhere(['detallecatedra.revista' => 6])
                                     ->andWhere(['fecha' => $fecha])
                                     ->andWhere(['horariogeneric.aniolectivo' => $aniolectivo->id])
                                     ->andWhere(['semana.publicada' => 1])
                                     ->all();
+                                    $horarioclass = 0;
+                                }
 
                     
                 }else{
-                    $horario = Horario::find()
+                    /*$horario = Horario::find()
                                 ->joinWith(['catedra0', 'catedra0.detallecatedras', ])
                                 ->where(['catedra.division' => $division_id])
                                 ->andWhere(['detallecatedra.revista' => 6])
@@ -1897,23 +1904,47 @@ class HorarioController extends Controller
                                 ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
                                 ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
                                 ->orderBy('horario.hora')
-                                ->all();
+                                ->all();*/
+                                $horario = Hora::find()->all();
+                                $horarioclass = 3;
                 }
+
+                //$hora = Hora::find()->where(['not in', 'id', ArrayHelper::map($horario, function($model){return $model->horareloj0->hora;}, function($model){return $model->horareloj0->hora;})])->all();
 
 
 
                 
                 
        
-
-                $listhorario=ArrayHelper::toArray($horario, [
-                    'app\models\Horario' => [
-                        'id' => function($horax) {
-                            return $horax['hora0']['id'];},
-                        'name' => function($horax) {
-                            return $horax['hora0']['nombre'];},
-                    ],
-                ]);
+                if($horarioclass == 1)
+                    $listhorario=ArrayHelper::toArray($horario, [
+                        'app\models\Horario' => [
+                            'id' => function($horax) {
+                                return $horax['hora0']['id'];},
+                            'name' => function($horax) {
+                                return $horax['hora0']['nombre'];},
+                        ],
+                    ]);
+                elseif($horarioclass == 0){
+                    $listhorario=ArrayHelper::toArray($horario, [
+                        'app\modules\horariogenerico\models\Horariogeneric' => [
+                            'id' => function($horax) {
+                                return $horax['horareloj0']['hora'];},
+                            'name' => function($horax) {
+                                return ($horax['horareloj0']['hora']-1).'°';},
+                        ],
+                    ]);
+                }else{
+                    $listhorario=ArrayHelper::toArray($horario, [
+                        'app\models\Hora' => [
+                            'id' => function($horax) {
+                                return $horax['id'];},
+                            'name' => function($horax) {
+                                return $horax['nombre'];},
+                        ],
+                    ]);
+                }
+                
                 $out = $listhorario;
                 
                 return ['output'=>$out, 'selected'=>''];

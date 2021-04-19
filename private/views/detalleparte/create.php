@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'divisiones' => $divisiones,
         'horas' => $horas,
         'faltas' => $faltas,
+        'tipos' => $tipos,
         'origen' => 'create',
     ]) ?>
 

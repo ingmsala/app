@@ -18,6 +18,9 @@ use app\models\EstadoinasistenciaxparteSearch;
 use app\models\Estadoinasistenciaxparte;
 use app\config\Globales;
 use app\models\Nombramiento;
+use app\models\Parametros;
+use app\models\Semana;
+use app\models\Tiposemana;
 
 /**
  * DetalleparteController implements the CRUD actions for Detalleparte model.
@@ -114,9 +117,23 @@ class DetalleparteController extends Controller
         $param = Yii::$app->request->queryParams;
         $model = new Detalleparte();
         $model->scenario = $model::SCENARIO_ABM;
+
+        $tipos = Tiposemana::find()->all();
+        
+
         if (isset ($_REQUEST['parte'])) {
             $parte = $_REQUEST['parte'];
             $partex= Parte::findOne($parte);
+
+            if(Parametros::findOne(5)->estado == 1)
+            $model->tipo = 1;
+            else{
+                $semana = Semana::find()
+                            ->where(['<=', 'inicio', $partex->fecha])
+                            ->andWhere(['>=', 'fin', $partex->fecha])
+                            ->one();
+                $model->tipo = $semana->tiposemana;
+            }
             
             if(Yii::$app->user->identity->role == Globales::US_PRECEPTOR){
                 $partex= Parte::findOne($parte);
@@ -169,6 +186,7 @@ class DetalleparteController extends Controller
             $retiro = $model->retiro;
             $falta = $model->falta;
             $estadoinasistencia = $model->estadoinasistencia;
+            $tipo = $model->tipo;
 
             try{
                  $largo = count($model->hora);
@@ -191,6 +209,7 @@ class DetalleparteController extends Controller
                     $model2->detalleadelrecup = $detalleadelrecup;
                     $model2->retiro = $retiro;
                     $model2->falta = $falta;
+                    $model2->tipo = $tipo;
                     //$model2->estadoinasistencia = $estadoinasistencia;
                     $model2->hora = $horas[$i];
                     $ei = new EstadoinasistenciaxparteSearch();
@@ -217,6 +236,7 @@ class DetalleparteController extends Controller
             'horas' => $horas,
             'faltas' => $faltas,
             'depdr' => $depdr,
+            'tipos' => $tipos,
         ]);
     }
 
@@ -251,6 +271,7 @@ class DetalleparteController extends Controller
                     ->where(['not in', 'id', [Globales::FALTA_COMISION, 4]])
                     ->all();
         $horas = Hora::find()->all();
+        $tipos = Tiposemana::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['parte/view', 'id' => $parte]);
@@ -266,6 +287,7 @@ class DetalleparteController extends Controller
                 'parte' => $parte,
                 'horas' => $horas,
                 'faltas' => $faltas,
+                'tipos' => $tipos,
                 'depdr' => $depdr,
             ]);
             

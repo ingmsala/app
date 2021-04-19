@@ -124,7 +124,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                     
                                     [   
                                         'label' => 'Tipo de Falta',
-                                        'attribute' => 'falta0.nombre'
+                                        'attribute' => 'falta0.nombre',
+                                        'value' => function($model){
+                                            if($model->tipo != null){
+                                                return $model->falta0->nombre.' ('.$model->tipo0->nombre.')';
+                                            }
+                                            return $model->falta0->nombre;
+                                        }
                                     ],
 
                                     
