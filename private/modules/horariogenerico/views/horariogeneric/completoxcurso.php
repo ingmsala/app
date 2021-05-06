@@ -171,7 +171,7 @@ if($prt != 1){
 	    	]); ?>
 
 	<?php
-		if($prt != 1){
+		/*if($prt != 1){
 				echo '<center>';
 				echo Html::a('Ver horarios de Ed. Física', '#collapse', ['data-toggle'=>"collapse", 'class' => 'btn btn-success btn-lg']);
 				echo '</center>';
@@ -185,7 +185,8 @@ if($prt != 1){
 				
 				echo $d;
 				//echo '<iframe src="https://drive.google.com/file/d/1cFHp5OmJlH4UTiuQKzody2yZRXbBpA44/preview" width="640" height="480"></iframe>';
-		}
+		}*/
+		echo $horarioedfisica;
 	?>
 	  <?= GridView::widget([
 		        'dataProvider' => $dataProvider,

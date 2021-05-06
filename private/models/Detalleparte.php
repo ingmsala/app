@@ -33,11 +33,12 @@ class Detalleparte extends \yii\db\ActiveRecord
     public $anio;
     public $mes;
     public $solodia;
+    public $dispensa;
     
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_ABM] = ['parte', 'division', 'agente', 'hora', 'falta', 'llego','retiro', 'detalleadelrecup', 'tipo'];
+        $scenarios[self::SCENARIO_ABM] = ['parte', 'division', 'agente', 'hora', 'falta', 'llego','retiro', 'detalleadelrecup', 'tipo', 'dispensa'];
         $scenarios[self::SCENARIO_CONTROLREGENCIA] = ['anio', 'mes', 'agente', 'estadoinasistencia', 'solodia'];
         return $scenarios;
     }
@@ -57,7 +58,7 @@ class Detalleparte extends \yii\db\ActiveRecord
     {
         return [
             
-            [['parte', 'division', 'hora', 'falta', 'tipo'], 'required', 'on'=>self::SCENARIO_ABM],
+            [['parte', 'division', 'hora', 'falta', 'tipo', 'dispensa'], 'required', 'on'=>self::SCENARIO_ABM],
             [['anio'], 'required', 'message' => 'Debe seleccionar un año lectivo', 'on'=>self::SCENARIO_CONTROLREGENCIA],
             [['parte', 'division', 'agente', 'llego', 'retiro', 'falta', 'estadoinasistencia'], 'integer'],
             
@@ -95,6 +96,7 @@ class Detalleparte extends \yii\db\ActiveRecord
             'detalleadelrecup' => 'Detalle recupera/adelanto',
             'estadoinasistencia' => 'Estado',
             'tipo' => 'Tipo',
+            'dispensa' => 'Situación docente',
         ];
     }
 

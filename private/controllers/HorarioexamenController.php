@@ -906,7 +906,7 @@ class HorarioexamenController extends Controller
 
         $division = Division::findOne($division);
         $catedras = Catedra::find()->where(['division' => $division->id])->all();
-        $horas = Hora::find()->all();
+        $horas = Hora::find()->where(['>', 'id', 1])->all();
         //$dias = Diasemana::find()->all();
         $tipos = Tipoparte::find()->all();
         return $this->render('updatedesdehorario', [

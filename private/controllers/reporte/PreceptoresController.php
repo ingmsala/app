@@ -15,9 +15,12 @@ use yii\filters\AccessControl;
 use app\config\Globales;
 use app\models\Division;
 use app\models\DivisionSearch;
+use app\models\Novedadesparte;
 use app\models\Preceptoria;
 use app\models\Rolexuser;
+use app\modules\curriculares\models\Aniolectivo;
 use yii\data\ArrayDataProvider;
+use yii\helpers\ArrayHelper;
 
 class PreceptoresController extends \yii\web\Controller
 {
@@ -31,7 +34,7 @@ class PreceptoresController extends \yii\web\Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index'],
+                'only' => ['index', 'preceptores', 'asistencia'],
                 'rules' => [
                     [
                         'actions' => ['index'],   
@@ -46,7 +49,7 @@ class PreceptoresController extends \yii\web\Controller
 
                     ],
                     [
-                        'actions' => ['preceptores'],   
+                        'actions' => ['preceptores', 'asistencia'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
@@ -148,6 +151,160 @@ class PreceptoresController extends \yii\web\Controller
                 
 	        ]);
 	    }
+
+    public function actionAsistencia($p=0, $a=0){
+
+        $role = Rolexuser::find()
+                        ->where(['user' => Yii::$app->user->identity->id])
+                        ->andWhere(['role' => Globales::US_PRECEPTORIA])
+                        ->one();
+
+        $al = Aniolectivo::find()->where(['activo' => 1])->one()->nombre;
+
+        $preceptoria = Preceptoria::find()->where(['nombre' => $role->subrole])->one()->id;
+        
+        if(Yii::$app->user->identity->role == Globales::US_SUPER){
+            $al = $a;
+            $preceptoria = $p;
+        }
+        if($p == 86)
+            $novedades = Novedadesparte::find()
+                    ->joinWith(['parte0'])
+                    ->where(['tiponovedad' => 9])
+                    ->andWhere(['year(parte.fecha)' => $al])
+                    ->orderBy('parte.fecha')
+                    ->all();
+        else
+        $novedades = Novedadesparte::find()
+                    ->joinWith(['parte0'])
+                    ->where(['tiponovedad' => 9])
+                    ->andWhere(['parte.preceptoria' => $preceptoria])
+                    ->andWhere(['year(parte.fecha)' => $al])
+                    ->orderBy('parte.fecha')
+                    ->all();
+        
+        $partes = ArrayHelper::map($novedades, 'parte',function($model){
+            return $model->parte0->fecha;
+        });
+
+        
+
+        if($p == 86)
+        $nombramiento = Nombramiento::find()
+        ->joinWith(['agente0', 'division0'])
+        ->where(['cargo' => Globales::CARGO_PREC])
+        ->andWhere(['revista' => 1])
+        ->andWhere(['<=', 'division', 53])
+        ->orderBy('agente.apellido, agente.nombre')
+        ->all();
+        else
+         $nombramiento = Nombramiento::find()
+        ->joinWith(['agente0', 'division0'])
+        ->where(['cargo' => Globales::CARGO_PREC])
+        ->andWhere(['division.preceptoria' => $preceptoria])
+        ->andWhere(['revista' => 1])
+        ->orderBy('agente.apellido, agente.nombre')
+        ->all();
+
+        //return var_dump($nombramiento);
+        $preceptores = [];
+        $preceptores = ArrayHelper::map($nombramiento, 'agente',function($model){
+            return $model->agente0->nombreCompleto;
+        });
+
+
+        $preceptores += ArrayHelper::map($novedades, 'agente',function($model){
+            return $model->agente0->nombreCompleto;
+        });
+
+        //return var_dump($preceptores);
+
+        $datacolumn = [];
+        $datacolumn['columns'][] =['class' => 'yii\grid\SerialColumn'];
+        $datacolumn['columns'][] =[
+                        'label' => 'Preceptor/a',
+                        'vAlign' => 'middle',
+                        'hAlign' => 'center',
+                        'format' => 'raw',
+                        //'attribute' => '999',
+                        'value' => function($model){
+                            return $model['preceptor'];
+                            
+                        }
+                    ];
+        $datacolumn['columns'][] =[
+                    'label' => 'Total',
+                    'vAlign' => 'middle',
+                    'hAlign' => 'center',
+                    'format' => 'raw',
+                    //'attribute' => '999',
+                    'value' => function($model){
+                        return $model['total'];
+                        
+                    }
+                ];
+
+        //$preceptores = Preceptoria::findOne($preceptoria)->preceptores;
+        $array = [];
+            
+        foreach ($preceptores as $agenteid => $preceptor) {
+            $array[$agenteid]['agenteid'] = $agenteid;
+            
+            $array[$agenteid]['preceptor'] = $preceptor;
+
+            $array[$agenteid]['total'] = 0;
+            
+
+        }
+        
+        foreach ($partes as $parteid => $parte) {
+            $datacolumn['columns'][] =  [
+                'class' => 'kartik\grid\BooleanColumn',
+                'header' => Yii::$app->formatter->asDate($parte, 'dd/MM'),
+                'vAlign' => 'middle',
+                'hAlign' => 'center',
+                'trueLabel' => ' ',
+                'trueIcon' => '<b><span class="text-success">✓</span></b>',
+                'format' => 'raw',
+                'attribute' => $parteid
+                /*'value' => function($model){
+                    return var_dump($model);
+                }*/
+            ];
+            
+        }
+
+        
+
+        foreach ($novedades as $novedadx) {
+            $array[$novedadx->agente][$novedadx->parte] = true;
+            $array[$novedadx->agente]['total'] = $array[$novedadx->agente]['total'] + 1;
+        }
+
+        
+           
+        usort($array, function($b, $a) {
+            return $a['total'] - $b['total'];
+        });
+        
+        
+        //return var_dump($array);
+        $provider = new ArrayDataProvider([
+            'allModels' => $array,
+            'pagination' => false,
+            
+        ]);
+
+        return $this->render('asistencia', 
+	        [
+                
+	            'provider' => $provider,
+	            'datacolumn' => $datacolumn,
+	            
+                
+	        ]);
+
+    }
 
 	
 	protected function findModel($id)

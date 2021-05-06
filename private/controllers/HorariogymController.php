@@ -1,20 +1,21 @@
 <?php
 
-namespace app\modules\solicitudprevios\controllers;
+namespace app\controllers;
 
 use app\config\Globales;
 use Yii;
-use app\modules\solicitudprevios\models\Adjuntosolicitudext;
-use app\modules\solicitudprevios\models\AdjuntosolicitudextSearch;
+use app\models\Horariogym;
+use app\models\HorariogymSearch;
+use app\models\Semana;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * AdjuntosolicitudextController implements the CRUD actions for Adjuntosolicitudext model.
+ * HorariogymController implements the CRUD actions for Horariogym model.
  */
-class AdjuntosolicitudextController extends Controller
+class HorariogymController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -24,35 +25,22 @@ class AdjuntosolicitudextController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'descargar'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'xdivision'],
                 'rules' => [
                     [
-                        'actions' => ['descargar'],   
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'xdivision'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
-                            try{
-                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_SECRETARIA, Globales::US_DESPACHO]))
-                                    return true;
-                                return false;
-                            }catch(\Exception $exception){
-                                return false;
+                                try{
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
+                                }catch(\Exception $exception){
+                                    return false;
                             }
                         }
 
                     ],
 
-                    [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
-                        'allow' => true,
-                        'matchCallback' => function ($rule, $action) {
-                           try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
-                            }catch(\Exception $exception){
-                                return false;
-                            }
-                        }
-
-                    ],
+                    
                 ],
             ],
             'verbs' => [
@@ -65,12 +53,12 @@ class AdjuntosolicitudextController extends Controller
     }
 
     /**
-     * Lists all Adjuntosolicitudext models.
+     * Lists all Horariogym models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new AdjuntosolicitudextSearch();
+        $searchModel = new HorariogymSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -79,24 +67,28 @@ class AdjuntosolicitudextController extends Controller
         ]);
     }
 
-    public function actionDescargar($file)
+    public function actionXdivision($division, $semana)
     {
+        $semana = Semana::findOne($semana);
         
-        $model = Adjuntosolicitudext::find()->where(['url' => $file])->one();
-
-        $path = Yii::getAlias('@webroot') . '/assets/images/solicitud6d639c31fbcc6029/'.$file;
-
-        $file = $path;
-
-        if (file_exists($file)) {
-
-            Yii::$app->response->sendFile($file, $model->nombre);
+        if($semana->publicada != 1){
+            $dataProvider = null;
+        }else{
+            $searchModel = new HorariogymSearch();
+            $dataProvider = $searchModel->xdivision($division);
         }
+        
+        
+        
 
+        return $this->render('xdivision', [
+            'dataProvider' => $dataProvider,
+            'semana' => $semana,
+        ]);
     }
 
     /**
-     * Displays a single Adjuntosolicitudext model.
+     * Displays a single Horariogym model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -109,13 +101,13 @@ class AdjuntosolicitudextController extends Controller
     }
 
     /**
-     * Creates a new Adjuntosolicitudext model.
+     * Creates a new Horariogym model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Adjuntosolicitudext();
+        $model = new Horariogym();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -127,7 +119,7 @@ class AdjuntosolicitudextController extends Controller
     }
 
     /**
-     * Updates an existing Adjuntosolicitudext model.
+     * Updates an existing Horariogym model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -147,7 +139,7 @@ class AdjuntosolicitudextController extends Controller
     }
 
     /**
-     * Deletes an existing Adjuntosolicitudext model.
+     * Deletes an existing Horariogym model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -161,15 +153,15 @@ class AdjuntosolicitudextController extends Controller
     }
 
     /**
-     * Finds the Adjuntosolicitudext model based on its primary key value.
+     * Finds the Horariogym model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Adjuntosolicitudext the loaded model
+     * @return Horariogym the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Adjuntosolicitudext::findOne($id)) !== null) {
+        if (($model = Horariogym::findOne($id)) !== null) {
             return $model;
         }
 

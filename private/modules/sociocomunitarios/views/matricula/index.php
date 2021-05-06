@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </a>
                     <?php
                         if($filter1 || $filter2){
-                            echo ' <a href="index.php?r=optativas/matricula/index"><span class="badge badge-danger"><span class="glyphicon glyphicon-remove"></span></span></a>';
+                            echo ' <a href="index.php?r=sociocomunitarios/matricula/index"><span class="badge badge-danger"><span class="glyphicon glyphicon-remove"></span></span></a>';
                             $filter = false;
                         }
                     ?>
@@ -109,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'placeholder'=>'(Todos)',
                                         'url'=>Url::to(['/sociocomunitarios/comision/comxanio'])
                                     ]
-                                ])->label("Espacio Optativo");
+                                ])->label("Proyecto sociocomunitario");
 
                             ?>
 
@@ -200,7 +200,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'estadomatricula0.nombre',
                 
             ],
-            [
+            /*[
                 'label' => 'Admisiones',
                 'format' => 'raw',
                 'value' => function ($model){
@@ -211,11 +211,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     $salida .= '</ul>';
                     return $salida;
                 }
-            ],
+            ],*/
                         
             
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 
+            'template' => '{delete}'
+            ],
         ],
     ]); ?>
 </div>

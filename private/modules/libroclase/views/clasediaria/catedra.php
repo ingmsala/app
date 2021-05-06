@@ -108,7 +108,7 @@ $this->title = 'Libro de aula';
                     <div class="item-aviso flowGridItem">
                         <div class="header-aviso-resultados Empleos">
                             <h3>'.$cantx.' - '.$fecha.'</h3>'.$update.$delete.'
-                            <h4><span class="label label-petroleo">'.$model->modalidadclase0->nombre.'</span></h4>
+                            <h4><span class="label label-petroleo">'.$model->modalidadclase0->nombre.'</span> <span class="label label-info">'.$model->tipocurricula0->nombre.'</span></h4>
                             <p class="hora-publicado-resultados"><span class="text-muted">'.$listadohoras.'</span></p>
                         </div>
                         <div class="content-aviso-resultados">

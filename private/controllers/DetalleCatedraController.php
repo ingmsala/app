@@ -446,14 +446,21 @@ class DetallecatedraController extends Controller
         
         if (isset($_POST['depdrop_parents'])) {
 
-            $originalOgenerico = Parametros::findOne(5)->estado;
+            //$originalOgenerico = Parametros::findOne(5)->estado;
             
             $parents = $_POST['depdrop_parents'];
             $falta_id = empty($parents[1]) ? null : $parents[1];
+            
+
             if ($parents != null) {
 
                 $division_id = $parents[0];
-                                
+                $dispensa_id = $parents[2];
+
+                if($dispensa_id == 1)
+                    $originalOgenerico = 0;
+                else
+                    $originalOgenerico = 1;
                 if(($falta_id == 3 || $falta_id == 1) && $tipoparte == 1){
                     if($originalOgenerico == 1)
                         $detallecat = Detallecatedra::find()
@@ -461,7 +468,7 @@ class DetallecatedraController extends Controller
                             ->where(['catedra.division' => $division_id])
                             ->andWhere(['revista' => 6])
                             ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
-                            ->andWhere(['horario.diasemana' => $diasemana])
+                            //->andWhere(['horario.diasemana' => $diasemana])
                             ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
                             ->orderBy('agente.apellido, agente.nombre')
                             ->all();

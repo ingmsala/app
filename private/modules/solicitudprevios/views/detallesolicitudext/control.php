@@ -76,7 +76,7 @@ $this->title = 'Solicitudes: '.$turno->nombre;
 
         'toolbar'=>[
             ['content' => 
-               ''
+                Html::a('Nueva Inscripción', ['/solicitudprevios/crear'], ['class' => 'btn btn-success'])
 
             ],
             '{export}',

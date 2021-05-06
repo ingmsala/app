@@ -595,6 +595,7 @@ NavBar::end();
                                 'model' => new Docentexcomision(),
                                 'model2' => new Matricula(),
                                 'aniolectivos' => Aniolectivo::find()/*->where(['activo' => 1])*/->orderBy('id DESC')->all(),
+                                'anioactivo' => Aniolectivo::find()->where(['activo' => 1])->one(),
                             ]);
                     }
                     ?>

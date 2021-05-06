@@ -50,7 +50,7 @@ class MesaexamenController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_PRECEPTOR, Globales::US_REGENCIA, Globales::US_SECRETARIA, Globales::US_HORARIO, Globales::US_CONSULTA_HORARIO, Globales::US_CONSULTA, Globales::US_PRECEPTORIA]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_PRECEPTOR, Globales::US_REGENCIA, Globales::US_SECRETARIA, Globales::US_HORARIO, Globales::US_CONSULTA_HORARIO, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_DESPACHO]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -245,6 +245,15 @@ class MesaexamenController extends Controller
             $doce['Otros docentes'][$odt->agente0->id] = $odt->agente0->getNombreCompleto();
         }
 
+        $agentesvarios = Agente::find()
+                ->andWhere(['not in', 'id', array_keys($doce['Docentes de las materias'])])
+                ->andWhere(['not in', 'id', array_keys($doce['Otros docentes'])])
+                ->orderBy('agente.apellido, agente.nombre')
+                ->all();
+        
+        foreach ($agentesvarios as $odt2) {
+            $doce['Personas'][$odt2->id] = $odt2->getNombreCompleto();
+        }
             
         
 

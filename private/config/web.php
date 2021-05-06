@@ -120,6 +120,17 @@ $config = [
                     ],
                     'processor' => [],
                 ],
+
+                'horariogeneric' => [
+                    'handler' => [
+                        [
+                            'type' => 'stream',
+                            'path' => '@app/runtime/logs/horariogeneric.log',
+                            'level' => 'debug',
+                        ]
+                    ],
+                    'processor' => [],
+                ],
             ],
         ],
         'db' => $db,

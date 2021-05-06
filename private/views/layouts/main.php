@@ -286,7 +286,7 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Reporte - Ausencia a trimestrales', 'url' => ['/novedadesparte/panelnovedadeshist']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q/edit?usp=sharing'],
+                                ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/1PyKAyZYRZLLRo-bI117M0_PXUPbtVTpTfmEa3sagTl8/edit'],
                                 '<div class="dropdown-divider"></div>',
                                 
                             ],
@@ -595,7 +595,7 @@ try {
                 
                 $items = [
 
-                    ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
+                    ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/1PyKAyZYRZLLRo-bI117M0_PXUPbtVTpTfmEa3sagTl8/edit'],
 
                     ['label' => 'Administración',
                             'items' => [
@@ -673,6 +673,8 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Docentes con superposición - Horario Mixto', 'url' => ['/horariogenerico/horariogeneric/horassuperpuestas']],
                                         '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Comparativo virtuales', 'url' => ['/horariogenerico/horariogeneric/compararvirtual', 'al'=>3, 'sem'=>18]],
+                                        '<div class="dropdown-divider"></div>',
                                         
 
                                     ],
@@ -746,7 +748,7 @@ try {
                 
                 $items = [
 
-                    ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
+                    ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/1PyKAyZYRZLLRo-bI117M0_PXUPbtVTpTfmEa3sagTl8/edit'],
                         
                     ['label' => 'Administración', 
                             'items' => [
@@ -800,13 +802,13 @@ try {
                 
                 $items = [
 
-                    ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
+                    ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/1PyKAyZYRZLLRo-bI117M0_PXUPbtVTpTfmEa3sagTl8/edit'],
 
                     
                     ['label' => 'Reportes', 
                             'items' => [
                                 
-                                ['label' => 'Tutores', 'url' => ['/estudiantes']],
+                                ['label' => 'Asistencia preceptores', 'url' => ['/reporte/preceptores/asistencia']],
                                         '<div class="dropdown-divider"></div>',
                                 
                                 
@@ -999,7 +1001,7 @@ try {
 
                     ],
 
-                    ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/169GnNluz9iH7UtIfPBgrzqpsSz2_Tt46_KJZtFmN3_Q'],
+                    ['label' => 'Cronograma', 'url' => 'https://docs.google.com/document/d/1PyKAyZYRZLLRo-bI117M0_PXUPbtVTpTfmEa3sagTl8/edit'],
                     
                     ['label' => 'Parte Docente', 
                             'items' => [
@@ -1277,6 +1279,18 @@ try {
                 
                 $items = [
 
+                    ['label' => 'Administración',
+                            'items' => [
+
+                                ['label' => 'Turnos de examen', 'url' => ['/turnoexamen']],
+                                '<div class="dropdown-divider"></div>',
+                                
+                                
+                                
+                            ],
+
+
+                    ],
                     ['label' => 'Reportes',
                             'items' => [
 

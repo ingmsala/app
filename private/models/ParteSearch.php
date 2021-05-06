@@ -7,6 +7,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Parte;
+use app\modules\curriculares\models\Aniolectivo;
 use yii\data\SqlDataProvider;
 use yii\db\Query;
 
@@ -92,6 +93,8 @@ class ParteSearch extends Parte
 
         if (isset($params['Parte']['fecha']) && $params['Parte']['fecha'] != ''){
             $sql .= ' and year(p.fecha) = '.$params["Parte"]["fecha"];
+        }else{
+            $sql .= ' and year(p.fecha) = '.date('Y');
         }
         if (isset($params['Parte']['mes']) && $params['Parte']['mes'] != ''){
             $sql .= ' and month(p.fecha) = '.$params["Parte"]["mes"];

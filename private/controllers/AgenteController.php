@@ -13,6 +13,7 @@ use yii\filters\AccessControl;
 use app\config\Globales;
 use app\models\Agentextipo;
 use app\models\NodocenteSearch;
+use app\models\Rolexuser;
 use app\models\Tipocargo;
 use app\models\Tipodocumento;
 use app\models\User;
@@ -153,13 +154,23 @@ class AgenteController extends Controller
             
             $model->mapuche = 2;
             if($model->save()){
-                $user = new User();
-                $user->username = $model->mail;
-                $user->role = Globales::US_AGENTE;
-                $user->activate = 1;
-                $user->setPassword($model->documento);
-                $user->generateAuthKey();
-                $user->save();
+                
+                $unc = explode('@', $model->mail);
+                if($unc[1]=='unc.edu.ar'){
+                    $user = new User();
+                    $user->username = $model->mail;
+                    $user->role = Globales::US_AGENTE;
+                    $user->activate = 1;
+                    $user->setPassword($model->documento);
+                    $user->generateAuthKey();
+                    $user->save();
+
+                    $rolexuser = new Rolexuser();
+                    $rolexuser->user = $user->id;
+                    $rolexuser->role = $user->role;
+                    $rolexuser->save();
+
+                }
 
                 foreach ($tiposcargos as $tc) {
                     $tcx = new Agentextipo();

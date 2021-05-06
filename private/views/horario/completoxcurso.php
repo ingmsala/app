@@ -94,13 +94,14 @@ JS;
 	?>
 	<?php
 		if(in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]) && $pr<>1){
-			$form = ActiveForm::begin();
 			$listaniolectivo=ArrayHelper::map($anioslectivos,'id','nombre'); 
-			echo $form->field($model, 'aniolectivo')->dropDownList($listaniolectivo, ['prompt'=>'Seleccionar...', 'onchange'=>'this.form.submit()']);
-			
-
-			ActiveForm::end();
-			
+			if(count($listaniolectivo)>0){
+				$form = ActiveForm::begin();
+				echo $form->field($model, 'aniolectivo')->dropDownList($listaniolectivo, ['onchange'=>'this.form.submit()']);
+				ActiveForm::end();
+			}else{
+				echo '<div class="clearfix"></div>';
+			}
 			echo '<div class="pull-right">'.$publi.'</div>';
 		}
 	?>

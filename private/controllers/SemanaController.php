@@ -243,6 +243,7 @@ class SemanaController extends Controller
             $h[7] = '11:50 a 12:30';
             $h[8] = '12:35 a 13:15';
         }elseif ($turno == 2) {
+            $h[0] = '12:30 a 13:30';
             $h[1] = '13:30 a 14:10';
             $h[2] = '14:15 a 14:55';
             $h[3] = '15:00 a 15:40';
@@ -585,6 +586,7 @@ class SemanaController extends Controller
                 //$h = $this->getHora($turno->id);
                 foreach ($anios as $keyanios => $anio) {
                     foreach ($horasX as $horaX) {
+                        try {
                         $horaRelojx = new Horareloj();
                         $horaRelojx->semana = $semana;
                         $horaRelojx->hora = $horaX->id;
@@ -595,7 +597,7 @@ class SemanaController extends Controller
                         $h2 = explode(' a ', $horasorigen[$turno->id.'-'.$keyanios.'-'.$horaX->id]);
                         $horaRelojx->inicio = $h2[0];
                         $horaRelojx->fin = $h2[1];
-                        try {
+                        
                             $horaRelojx->save();
                         } catch (\Throwable $th) {
                             
@@ -788,7 +790,7 @@ class SemanaController extends Controller
 
         //$param = Yii::$app->request->post();
         //$semana = $param['semana'];
-        $horasX = Hora::find()->all();
+        $horasX = Hora::find()->where(['>', 'id', 1])->all();
         $turnos = Turno::find()->where(['<', 'id', 3])->all();
         $anios = ['1' => '1°', '2' => '2°', '3' => '3°', '4' => '4°', '5' => '5°', '6' => '6°', '7' => '7°'];
         foreach ($turnos as $turno) {

@@ -117,6 +117,7 @@ class DetalleparteController extends Controller
         $param = Yii::$app->request->queryParams;
         $model = new Detalleparte();
         $model->scenario = $model::SCENARIO_ABM;
+        
 
         $tipos = Tiposemana::find()->all();
         
@@ -171,7 +172,7 @@ class DetalleparteController extends Controller
                     ->where(['not in', 'id', [Globales::FALTA_COMISION, 4]])
                     ->all();
         if($partex->tipoparte == 1)
-            $horas = Hora::find()->all();
+            $horas = Hora::find()->where(['>', 'id', 1])->all();
         elseif($partex->tipoparte == 2)
             $horas = Hora::find()->where(['in', 'id', [2,3]])->all();
         else
@@ -210,6 +211,10 @@ class DetalleparteController extends Controller
                     $model2->retiro = $retiro;
                     $model2->falta = $falta;
                     $model2->tipo = $tipo;
+                    $model2->dispensa = $model->dispensa;
+                    if($model2->dispensa == 2){
+                        $model2->detalleadelrecup .= $model2->detalleadelrecup.' - Dispensa';
+                    }
                     //$model2->estadoinasistencia = $estadoinasistencia;
                     $model2->hora = $horas[$i];
                     $ei = new EstadoinasistenciaxparteSearch();
@@ -227,6 +232,7 @@ class DetalleparteController extends Controller
             
         }
         $depdr = ($partex->preceptoria == 7) ? false : true;
+        $model->dispensa = 1;
         return $this->renderAjax('create', [
             'model' => $model,
             'docentes' => $docentes,
@@ -270,7 +276,7 @@ class DetalleparteController extends Controller
         $faltas = Falta::find()
                     ->where(['not in', 'id', [Globales::FALTA_COMISION, 4]])
                     ->all();
-        $horas = Hora::find()->all();
+        $horas = Hora::find()->where(['>', 'id', 1])->all();
         $tipos = Tiposemana::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

@@ -47,8 +47,13 @@ if(in_array (Yii::$app->user->identity->role, [1,4,26]))
             [
                 'label' => 'Agente',
                 'value' => function ($model){
-                    if($model->agente0['apellido'] != null)
+                    
+                    try {
                         return $model->agente0['apellido'].', '.$model->agente0['nombre'];
+                    } catch (\Throwable $th) {
+                        //throw $th;
+                    }
+                        
                     return '-';
                 }
             ],

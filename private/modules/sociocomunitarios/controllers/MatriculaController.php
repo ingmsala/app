@@ -2,6 +2,7 @@
 
 namespace app\modules\sociocomunitarios\controllers;
 
+use app\config\Globales;
 use Yii;
 use app\models\Division;
 use app\modules\curriculares\models\Admisionoptativa;
@@ -31,10 +32,23 @@ class MatriculaController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'create2'],
                 'rules' => [
                     [
                         'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                //return (in_array (Yii::$app->user->identity->role, [1]) || in_array(Yii::$app->user->identity->username, Globales::psc));
+                                return in_array (Yii::$app->user->identity->role, [1]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['create2'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -64,12 +78,14 @@ class MatriculaController extends Controller
      */
     public function actionIndex()
     {
+        $g = new Globales();
+        $this->layout = $g->getLayout(Yii::$app->user->identity->role);
         $param = Yii::$app->request->queryParams;
         $model = new Matricula();
         $model->scenario = $model::SCENARIO_SEARCHINDEX;
         $searchModel = new MatriculaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 2);
-        $aniolectivos = Aniolectivo::find()->orderBy('id DESC')->all();
+        $aniolectivos = Aniolectivo::find()->where(['id' => 3])->orderBy('id DESC')->all();
 
         $comisiones = Matricula::find()->all();
 
@@ -96,7 +112,8 @@ class MatriculaController extends Controller
      */
     public function actionView($id)
     {
-        
+        $g = new Globales();
+        $this->layout = $g->getLayout(Yii::$app->user->identity->role);
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -109,7 +126,9 @@ class MatriculaController extends Controller
      */
     public function actionCreate()
     {
-        
+        $g = new Globales();
+        $this->layout = $g->getLayout(Yii::$app->user->identity->role);
+        $al = Aniolectivo::find()->where(['activo' => 1])->one();
         $model = new Matricula();
         $model->scenario = $model::SCENARIO_CREATE;
         $alumnos = Alumno::find()
@@ -122,6 +141,7 @@ class MatriculaController extends Controller
         $comisiones = Comision::find()
                         ->joinWith(['espaciocurricular0', 'espaciocurricular0.actividad0'])
                         ->where(['espaciocurricular.tipoespacio' => 2])
+                        ->andWhere(['espaciocurricular.aniolectivo' => $al->id])
                         ->orderBy('actividad.nombre', 'comision.nombre')
                         ->all();
         $estadosmatricula = Estadomatricula::find()->all();
@@ -147,10 +167,77 @@ class MatriculaController extends Controller
             /*$model->fecha = date('Y-m-d');
             $model->estadomatricula = 1;
             $model->save();*/
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->setFlash('success', 'Se realizó la inscripción correctamente');
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
+            'model' => $model,
+            'alumnos' => $alumnos,
+            'optativas' => $optativas,
+            'comisiones' => $comisiones,
+            'estadosmatricula' => $estadosmatricula,
+            'divisiones' => $divisiones,
+
+
+        ]);
+    }
+
+    public function actionCreate2()
+    {
+        $g = new Globales();
+        $this->layout = $g->getLayout(Yii::$app->user->identity->role);
+        $al = Aniolectivo::find()->where(['activo' => 1])->one();
+        $model = new Matricula();
+        $model->scenario = $model::SCENARIO_CREATE;
+        $alumnos = Alumno::find()
+                    ->orderBy('apellido, nombre')
+                    ->all();
+        $optativas = Espaciocurricular::find()->all();
+        $divisiones = Division::find()
+                        ->where(['propuesta' => 1])
+                        ->all();
+        $comisiones = Comision::find()
+                        ->joinWith(['espaciocurricular0', 'espaciocurricular0.actividad0'])
+                        ->where(['espaciocurricular.tipoespacio' => 2])
+                        ->andWhere(['espaciocurricular.aniolectivo' => $al->id])
+                        ->orderBy('actividad.nombre', 'comision.nombre')
+                        ->all();
+        $estadosmatricula = Estadomatricula::find()->all();
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            $param = Yii::$app->request->post();
+
+            $alumnos2 = $param['Matricula']['documentos'];
+            $divi = $param['Matricula']['division'];
+            $comi = $param['Matricula']['comision'];
+
+            $alumnos2 = explode(';', $alumnos2);
+            //return var_dump($alumnos2);
+            
+
+            foreach ($alumnos2 as $alumno) {
+                $alumno = substr($alumno, -8);
+                $alu = Alumno::find()->where(['documento' => $alumno])->one();
+                $model2 = new Matricula();
+                $model2->alumno = $alu->id;
+                $model2->fecha = date('Y-m-d');
+                $model2->estadomatricula = 1;
+                $model2->division = $divi;
+                $model2->comision = $comi;
+                
+                $model2->save();
+            }
+
+            /*$model->fecha = date('Y-m-d');
+            $model->estadomatricula = 1;
+            $model->save();*/
+            Yii::$app->session->setFlash('success', 'Se realizó la inscripción correctamente');
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('create2', [
             'model' => $model,
             'alumnos' => $alumnos,
             'optativas' => $optativas,
@@ -171,7 +258,8 @@ class MatriculaController extends Controller
      */
     public function actionUpdate($id)
     {
-        
+        $g = new Globales();
+        $this->layout = $g->getLayout(Yii::$app->user->identity->role);
         $model = $this->findModel($id);
         //date_default_timezone_set('America/Argentina/Buenos_Aires');
         //$model->fecha = Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy');

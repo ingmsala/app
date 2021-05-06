@@ -149,6 +149,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 $txt .='<span class="label label-primary">Detalle</span> recupero: '.$model->detalleadelrecup.'<br />';
                                             if($model->detalleadelrecup != null && $model->falta==7)
                                                 $txt .='<span class="label label-primary">Detalle</span> adelanto: '.$model->detalleadelrecup.'<br />';
+                                            if($model->detalleadelrecup != null && $model->falta==1)
+                                                $txt .=$model->detalleadelrecup;
                                             return $txt;
                                         }
                                     ],

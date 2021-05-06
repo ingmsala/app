@@ -2,6 +2,7 @@
 
 namespace app\modules\solicitudprevios\controllers;
 
+use app\config\Globales;
 use app\models\Actividad;
 use app\models\Turnoexamen;
 use app\modules\solicitudprevios\models\Adjuntosolicitudext;
@@ -37,8 +38,16 @@ class CrearController extends Controller
         $model->fecha = date('d/m/Y');
         $modelDetalle = new Detallesolicitudext();
         $modelAjuntos = new Adjuntosolicitudext();
+        try {
+            if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_DESPACHO])){
+                $turnoexamen = Turnoexamen::find()->where(['tipoturno' => 1])->andWhere(['<>', 'activo', 3])->all();
+            }else{
+                $turnoexamen = Turnoexamen::find()->where(['tipoturno' => 1])->andWhere(['activo' => 1])->all();
+            }
+        } catch (\Throwable $th) {
+            $turnoexamen = Turnoexamen::find()->where(['tipoturno' => 1])->andWhere(['activo' => 1])->all();
+        }
         
-        $turnoexamen = Turnoexamen::find()->where(['tipoturno' => 1])->andWhere(['activo' => 1])->all();
 
         if(count($turnoexamen)==0){
             Yii::$app->session->setFlash('danger', 'No está habilitado ningún turno de examen. Consulte el calendario académico para verificar las fechas de apertura de inscripcionres.');

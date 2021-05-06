@@ -3,6 +3,7 @@
 use app\models\Catedra;
 use app\models\Diasemana;
 use app\models\Hora;
+use app\modules\horariogenerico\models\Horareloj;
 use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -31,14 +32,14 @@ $listdivisiones=ArrayHelper::map($divisiones,'nombre','nombre');
             ['class' => 'yii\grid\SerialColumn'],
 
             [
-                'label' => "Fecha",
+                'label' => "Fecha operación",
                 'attribute' => '0',
                 'value' => function($model){
                     return $model['0'];
                 }
             ],
             [
-                'label' => "Hora",
+                'label' => "Hora operacion",
                 'attribute' => '1',
                 'value' => function($model){
                     return $model['1'];
@@ -65,6 +66,18 @@ $listdivisiones=ArrayHelper::map($divisiones,'nombre','nombre');
                 }
             ],
             [
+                'label' => "Fecha",
+                'value' => function($model){
+                    try {
+                        return $model['3']->modelnew->fecha;
+                        
+                    } catch (\Throwable $th) {
+                        
+                    }
+                    
+                }
+            ],
+            [
                 'label' => "Dia",
                 'value' => function($model){
                     if(isset($model['3']->modelnew->diasemana)){
@@ -81,8 +94,13 @@ $listdivisiones=ArrayHelper::map($divisiones,'nombre','nombre');
             [
                 'label' => "Hora",
                 'value' => function($model){
-                    $hora = Hora::findOne($model['3']->modelnew->hora);
-                    return $hora->nombre;
+                    try {
+                        $hora = Hora::findOne($model['3']->modelnew->hora);
+                        return $hora->nombre;
+                    } catch (\Throwable $th) {
+                        return Horareloj::findOne($model['3']->modelnew->horareloj)->hora0->nombre;
+                    }
+                    
                 }
             ],
             [
@@ -94,15 +112,19 @@ $listdivisiones=ArrayHelper::map($divisiones,'nombre','nombre');
                 'value' => function($model){
                     if(isset($model['3']->modelnew->catedra)){
                         $cat = Catedra::findOne($model['3']->modelnew->catedra);
-
-                        foreach ($cat->detallecatedras as $dc) {
-                            if ($dc->revista == 6){
-                                $doc = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1);
-                                break;
+                        try {
+                            foreach ($cat->detallecatedras as $dc) {
+                                if ($dc->revista == 6 && $dc->aniolectivo ==3){
+                                    $doc = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1);
+                                    break;
+                                }
                             }
+    
+                            return $cat->division0->nombre;
+                        } catch (\Throwable $th) {
+                            //throw $th;
                         }
-
-                        return $cat->division0->nombre;
+                        
                     }
                     return "";
                         
@@ -115,15 +137,20 @@ $listdivisiones=ArrayHelper::map($divisiones,'nombre','nombre');
                 'value' => function($model){
                     if(isset($model['3']->modelold->catedra)){
                         $cat = Catedra::findOne($model['3']->modelold->catedra);
-
-                        foreach ($cat->detallecatedras as $dc) {
-                            if ($dc->revista == 6){
-                                $doc = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1);
-                                break;
+                        $doc= '';
+                        try {
+                            foreach ($cat->detallecatedras as $dc) {
+                                if ($dc->revista == 6 && $dc->aniolectivo ==3){
+                                    $doc = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1);
+                                    break;
+                                }
                             }
+    
+                            return $cat->actividad0->nombre.' <span class="badge">'.$doc.'</span>';
+                        } catch (\Throwable $th) {
+                            //throw $th;
                         }
-
-                        return $cat->actividad0->nombre.' <span class="badge">'.$doc.'</span>';
+                        
                     }
                     return "";
                         
@@ -135,14 +162,20 @@ $listdivisiones=ArrayHelper::map($divisiones,'nombre','nombre');
                 'filter' => '<input class="form-control" name="filtermateria" value="'. $searchModel['materia'] .'" type="text">' ,
                 'value' => function($model){
                     $cat = Catedra::findOne($model['3']->modelnew->catedra);
-                    foreach ($cat->detallecatedras as $dc) {
-                        if ($dc->revista == 6){
-                            $doc = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1);
-                            break;
+                    $doc= '';
+                    try {
+                        foreach ($cat->detallecatedras as $dc) {
+                            if ($dc->revista == 6 && $dc->aniolectivo ==3){
+                                $doc = $dc->agente0->apellido.', '.substr($dc->agente0->nombre,1,1);
+                                break;
+                            }
                         }
+                        return $cat->actividad0->nombre.' <span class="badge">'.$doc.'</span>';
+                    } catch (\Throwable $th) {
+                        //throw $th;
                     }
-
-                    return $cat->actividad0->nombre.' <span class="badge">'.$doc.'</span>';
+                    
+                    
                 }
             ],
             

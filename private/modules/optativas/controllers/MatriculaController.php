@@ -34,7 +34,7 @@ class MatriculaController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'listado', 'admisionesvscupo'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'listado', 'admisionesvscupo', 'superpuestos'],
                 'rules' => [
                     [
                         'actions' => ['index', 'view', 'create', 'update', 'delete'],   
@@ -50,7 +50,7 @@ class MatriculaController extends Controller
                     ],
 
                     [
-                        'actions' => ['listado', 'admisionesvscupo'],   
+                        'actions' => ['listado', 'admisionesvscupo', 'superpuestos'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -159,6 +159,43 @@ class MatriculaController extends Controller
 
 
         ]);
+    }
+
+    public function actionSuperpuestos($al)
+    {
+        $matriculas = Matricula::find()
+                        ->joinWith(['comision0', 'comision0.espaciocurricular0'])
+                        ->where(['espaciocurricular.aniolectivo' => $al])
+                        ->andWhere(['espaciocurricular.tipoespacio' => 1])
+                        ->all();
+        $array = [];
+        foreach ($matriculas as $matricula) {
+            $otrasuperp = Matricula::find()
+                ->joinWith(['comision0', 'comision0.espaciocurricular0'])
+                ->where(['<>', 'matricula.id', $matricula->id])
+                ->andWhere(['matricula.alumno' => $matricula->alumno])
+                ->andWhere(['espaciocurricular.aniolectivo' => $al])
+                ->andWhere(['espaciocurricular.tipoespacio' => 1])
+                ->andWhere(['=', 'comision.horario', $matricula->comision0->horario])
+                ->all();
+            foreach ($otrasuperp as $otrasuperpx) {
+                $array[$matricula->alumno0->documento]['estudiante'] = $matricula->alumno0->apellido.', '.$matricula->alumno0->nombre;
+                $array[$matricula->alumno0->documento]['superpuestos'][$otrasuperpx->id] = $otrasuperpx->comision0->espaciocurricular0->curso.'° -'.$otrasuperpx->comision0->espaciocurricular0->actividad0->nombre.' ('.$otrasuperpx->comision0->horario.')';
+            }
+        }
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $array,
+            
+        ]);
+
+        return $this->render('superpuestos', [
+            
+            'dataProvider' => $dataProvider,
+            
+        ]);
+        
+
     }
 
     /**

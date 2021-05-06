@@ -513,7 +513,7 @@ class HorarioController extends Controller
         	   return $this->redirect(['/catedra/view', 'id' => $catedra]);
         }
 
-        $horas = Hora::find()->all();
+        $horas = Hora::find()->where(['>', 'id', 1])->all();
         $dias = Diasemana::find()->all();
         $tipos = Tipoparte::find()->all();
         return $this->render('create', [
@@ -582,7 +582,7 @@ class HorarioController extends Controller
 
         $catedras = Catedra::find()->joinWith(['detallecatedras'])->where(['division' => $division])->andWhere(['detallecatedra.aniolectivo' => $al])->all();
         //return var_dump($division);
-        $horas = Hora::find()->all();
+        $horas = Hora::find()->where(['>', 'id', 1])->all();
         $dias = Diasemana::find()->all();
         $tipos = Tipoparte::find()->all();
         $division = Division::findOne($division);
@@ -638,7 +638,7 @@ class HorarioController extends Controller
         $tipomovilidad = Tipomovilidad::find()->all();
         $catedras = Catedra::find()->joinWith(['detallecatedras'])->where(['catedra.division' => $division->id])->andWhere(['detallecatedra.aniolectivo' => $al])->all();
         //return var_dump($catedras[9]->detallecatedras);
-        $horas = Hora::find()->all();
+        $horas = Hora::find()->where(['>', 'id', 1])->all();
         $dias = Diasemana::find()->all();
         $tipos = Tipoparte::find()->all();
         return $this->render('updatedesdehorario', [
@@ -771,7 +771,7 @@ class HorarioController extends Controller
             ->all();
 
         $dias = Diasemana::find()->where(['not in', 'id',[1,7] ])->all();
-        $horas = Hora::find()->all();
+        $horas = Hora::find()->where(['>', 'id', 1])->all();
         $cd = 0;
         //return var_dump($dias);
         $array = [];
@@ -1320,7 +1320,7 @@ class HorarioController extends Controller
             ->all();
 
         $divisiones = Division::find()->where(['in', 'turno', [1,2] ])->andWhere(['<','id',54])->all();
-        $horas = Hora::find()->all();
+        $horas = Hora::find()->where(['>', 'id', 1])->all();
         $cd = 0;
         //return var_dump($dias);
         
@@ -1613,7 +1613,7 @@ class HorarioController extends Controller
         	->all();
 
         $dias = Diasemana::find()->where(['not in', 'id',[1,7] ])->all();
-        $horas = Hora::find()->all();
+        $horas = Hora::find()->where(['>', 'id', 1])->all();
         $cd = 0;
         //return var_dump($dias);
         $arrayTm = [];
@@ -1859,16 +1859,24 @@ class HorarioController extends Controller
             $division_id = empty($parents[0]) ? null : $parents[0];
             $docente_id = empty($parents[1]) ? null : $parents[1];
             $falta_id = empty($parents[2]) ? null : $parents[2];
+            $dispensa_id = empty($parents[3]) ? null : $parents[3];
 
-            if ($parents != null &&  $division_id != null && $docente_id != null && $falta_id != null) {
+            if ($parents != null &&  $division_id != null && $docente_id != null && $falta_id != null && $dispensa_id != null) {
 
                 if($falta_id == 3 || $falta_id == 1){
                     
                     $aniolectivo = Aniolectivo::find()->where(['nombre' => date('Y')])->one();
+
+                    
+
+                    if($dispensa_id == 1)
+                        $originalOgenerico = 0;
+                    else
+                        $originalOgenerico = 1;
                     
 
                     if($originalOgenerico == 1){
-                        $horario = Horario::find()
+                       /* $horario = Horario::find()
                             ->joinWith(['catedra0', 'catedra0.detallecatedras', ])
                             ->where(['catedra.division' => $division_id])
                             ->andWhere(['detallecatedra.revista' => 6])
@@ -1877,8 +1885,9 @@ class HorarioController extends Controller
                             ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo->id])
                             ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
                             ->orderBy('horario.hora')
-                            ->all();
-                            $horarioclass = 1;
+                            ->all();*/
+                            $horario = Hora::find()->where(['>', 'id', 1])->all();
+                            $horarioclass = 3;
                         }
                     else{
                         $horario = Horariogeneric::find()
@@ -1905,7 +1914,7 @@ class HorarioController extends Controller
                                 ->andWhere(['horario.aniolectivo' => $aniolectivo->id])
                                 ->orderBy('horario.hora')
                                 ->all();*/
-                                $horario = Hora::find()->all();
+                                $horario = Hora::find()->where(['>', 'id', 1])->all();
                                 $horarioclass = 3;
                 }
 
@@ -2407,6 +2416,10 @@ class HorarioController extends Controller
             $path = Url::to("@app/runtime/logs/")."horariocoloquio.log";
             $title = "Horario a coloquios";
         }
+        elseif($tipo == 4){
+            $path = Url::to("@app/runtime/logs/")."horariogeneric.log";
+            $title = "Horarios genericos";
+        }
         $file = new \SplFileObject($path);
         $out = [];
         while (!$file->eof()) {
@@ -2445,8 +2458,10 @@ class HorarioController extends Controller
 
                 $cat = Catedra::findOne($item['3']->modelnew->catedra);
 
+                $anio = Aniolectivo::find()->where(['activo' => 1])->one();
+
                 foreach ($cat->detallecatedras as $dc) {
-                    if ($dc->revista == 6){
+                    if ($dc->revista == 6 && $dc->aniolectivo == $anio->id){
                         $doc = $dc->agente0->apellido.', '.$dc->agente0->nombre;
                         break;
                     }

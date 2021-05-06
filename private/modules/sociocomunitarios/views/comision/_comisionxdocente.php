@@ -139,7 +139,7 @@ $js2=<<< JS
 
 });
 JS;
-$this->registerJsVar('aniolectivovar', isset($_SESSION['aniolectivox']) ? $_SESSION['aniolectivox'] : 2, yii\web\View::POS_READY);
+$this->registerJsVar('aniolectivovar', isset($_SESSION['aniolectivox']) ? $_SESSION['aniolectivox'] : $anioactivo->id, yii\web\View::POS_READY);
 
 $this->registerJs($js, yii\web\View::POS_READY);
 $this->registerJs($js2, yii\web\View::POS_READY);

@@ -32,7 +32,7 @@ class SolicitudinscripextController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]) || in_array (Yii::$app->user->identity->username, Globales::solicitudesext))
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_DESPACHO]))
                                     return true;
                                 return false;
                             }catch(\Exception $exception){

@@ -191,7 +191,10 @@ class ClasediariaController extends Controller
             $echo .= '</optgroup>';
         }
 
-        $horasbd = Hora::find()->where(['not in', 'id', $horasid])->all();
+        $horasbd = Hora::find()
+                        ->where(['not in', 'id', $horasid])
+                        ->andWhere(['>', 'id', 1])
+                        ->all();
         if(count($horasbd)>0){
             $echo .= '<optgroup label="Otras horas">';
             foreach ($horasbd as $horabd) {
@@ -482,7 +485,7 @@ class ClasediariaController extends Controller
         
         $modelidadesclase = Modalidadclase::find()->all();
         $tiposcurricula = Tipocurricula::find()->all();
-        $horas = Hora::find()->all();
+        $horas = Hora::find()->where(['>', 'id', 1])->all();
         
 
         $horasaj = $this->gethorashorario($cat, Yii::$app->formatter->asDate($fechafind, 'yyyy-MM-dd'), 2);
@@ -691,7 +694,7 @@ class ClasediariaController extends Controller
         
         $modelidadesclase = Modalidadclase::find()->all();
         $tiposcurricula = Tipocurricula::find()->all();
-        $horas = Hora::find()->all();
+        $horas = Hora::find()->where(['>', 'id', 1])->all();
         $horasaj = $this->gethorashorario($model->catedra, Yii::$app->formatter->asDate($model->fecha, 'yyyy-MM-dd'), 2);
         $unidades = Detalleunidad::find()
                                 ->joinWith(['unidad0', 'programa0'])

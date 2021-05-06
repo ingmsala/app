@@ -29,6 +29,7 @@ class Matricula extends \yii\db\ActiveRecord
      */
 
     public $aniolectivo;
+    public $documentos;
 
     public static function tableName()
     {

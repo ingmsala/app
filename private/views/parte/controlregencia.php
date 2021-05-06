@@ -110,7 +110,7 @@ $this->registerJs("
 
     
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
   <?php 
@@ -154,6 +154,33 @@ GridView::widget([
                 ]
             ];
         },
+
+        'panel' => [
+            'type' => GridView::TYPE_DEFAULT,
+            'heading' => Html::encode($this->title),
+            //'beforeOptions' => ['class'=>'kv-panel-before'],
+        ],
+        'summary' => false,
+
+        'exportConfig' => [
+            GridView::EXCEL => [
+                'label' => 'Excel',
+                'filename' =>Html::encode($this->title),
+                
+                //'alertMsg' => false,
+            ],
+            
+
+        ],
+
+        'toolbar'=>[
+            ['content' => 
+                ''
+
+            ],
+            '{export}',
+            
+        ],
 
         //'filterModel' => $searchModel,
         'columns' => [

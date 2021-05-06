@@ -4,6 +4,7 @@ use app\config\Globales;
 use app\models\Agente;
 use app\models\Docentexdepartamento;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Hora */
@@ -223,5 +224,24 @@ else{
       <?php
           }
       ?>
-     
+
+    <div class="col-md-3"> 
+          <?= 
+            Html::a('<span class="'.$classlogo.' glyphicon glyphicon-modal-window"></span><h2>Cronograma</h2><span class="label label-default">ACTIVIDADES</span>',
+
+           
+
+            Url::to('https://docs.google.com/document/d/1PyKAyZYRZLLRo-bI117M0_PXUPbtVTpTfmEa3sagTl8/edit', $schema = true),
+
+           [
+
+               //'id' => 'modalButtonIngreso',
+               'class' => $classclient,
+               // modalCall
+
+           ]);
+          ?>
+
+      </div>
+
       </div>

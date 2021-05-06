@@ -9,6 +9,7 @@ use app\models\DetallecatedraSearch;
 use app\models\Division;
 use app\models\Hora;
 use app\models\Horario;
+use app\models\HorariogymSearch;
 use app\models\Nombramiento;
 use app\models\Parametros;
 use app\models\Preceptoria;
@@ -42,7 +43,7 @@ class HorariogenericController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 
+                'only' => ['compararvirtual', 'view', 'create', 'update', 'delete', 'menuxdivision', 'completoxcurso', 'completoxdia', 
                                     'completoxdocente', 'createdesdehorario', 'menuxdia', 'menuxdocente', 'menuxdocenteletra', 
                                     'menuxletra', 'panelprincipal', 'updatedesdehorario', 'filtropormateria', 
                                     'horariocompleto', 'menuopciones','migrarhorarioprueba', 'printxcurso', 
@@ -192,7 +193,7 @@ class HorariogenericController extends Controller
 
                     ],
                     [
-                        'actions' => ['delete', 'createdesdehorario','updatedesdehorario', 'generar', 'updateburbuja', 'printxdocente', 'deshabilitados', 'cambiarmovilidad', 'completodetallado', 'declaracionhorario', 'publicar'],   
+                        'actions' => ['compararvirtual', 'delete', 'createdesdehorario','updatedesdehorario', 'generar', 'updateburbuja', 'printxdocente', 'deshabilitados', 'cambiarmovilidad', 'completodetallado', 'declaracionhorario', 'publicar'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -331,6 +332,14 @@ class HorariogenericController extends Controller
         //$detcat = $model->catedra0->getDocentehorarioal0($model->aniolectivo);
         //$agente = $detcat['agenteid'];
         //$mail = $detcat['mail'];
+        $monologComponent = Yii::$app->monolog;
+        $logger = $monologComponent->getLogger("horariogeneric");
+        $logger->log('error', json_encode([
+            "username" => Yii::$app->user->identity->username,
+            "action" => Yii::$app->controller->action->id,
+            "modelnew" => $model->getAttributes(),
+            "modelold" => [],
+        ]));
         $semana = $model->semana;
         $model->delete();
         /*if(Yii::$app->user->identity->role == Globales::US_AGENTE && Yii::$app->user->identity->username == $mail)
@@ -521,7 +530,7 @@ class HorariogenericController extends Controller
         return $this->generarHorarioDocente($agente, $prt, $sem);*/
     }
 
-    public function actionUpdateburbuja($bur, $fecha, $division, $semana){
+    public function actionUpdateburbuja($bur = null, $fecha, $division, $semana){
         $horarios = Horariogeneric::find()
                     ->joinWith(['catedra0'])
                     ->where(['fecha' => $fecha])
@@ -654,7 +663,20 @@ class HorariogenericController extends Controller
         $array = [];
         $salida = '';
         $diasgrid = [];
-        $diasgrid['columns'][] =['class' => 'yii\grid\SerialColumn'];
+        //$diasgrid['columns'][] =['class' => 'yii\grid\SerialColumn'];
+        $diasgrid['columns'][] =[
+            'label' => '#',
+            'vAlign' => 'middle',
+            'hAlign' => 'center',
+            'format' => 'raw',
+            //'attribute' => '999',
+            'value' => function($model) use($anio, $paramdivision){
+                //if($anio == 4 && $paramdivision->turno == 2)
+                //if($conthora == 9)
+                    return $model['998'].'°';
+                return ($model['998']+1).'°';
+            }
+        ];
         $diasgrid['columns'][] =[
                         'label' => 'Horario',
                         'vAlign' => 'middle',
@@ -762,8 +784,10 @@ class HorariogenericController extends Controller
 
                 foreach ($horas as $hora) {
                     # code...
-                    if($cd == 0)
-                        $array[$hora->hora][999] = $h[$ch+1]; 
+                    if($cd == 0){
+                        $array[$hora->hora][998] = ($hora->hora)-1;
+                        $array[$hora->hora][999] = $h[$ch+1];
+                    } 
                     
                     try {
                         if (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
@@ -928,6 +952,20 @@ class HorariogenericController extends Controller
             $horariopremitido = true;
         }
 
+        //$semana = Semana::findOne($semana);
+        
+        if($semana->publicada == 1 || $regenciapermitido){
+            $searchModelGym = new HorariogymSearch();
+            $dataProviderGym = $searchModelGym->xdivision($paramdivision->id);
+        }else{
+           $dataProviderGym = null; 
+        }
+
+        $horarioedfisica = $this->renderPartial('@app/views/horariogym/xdivision', [
+            'dataProvider' => $dataProviderGym,
+            'semana' => $semana,
+        ]);
+
         if($prt == 1)
                 return $this->renderAjax('completoxcurso', [
                 //'model' => $model,
@@ -948,6 +986,7 @@ class HorariogenericController extends Controller
             'columnpremitido' => $columnpremitido,
             'horariopremitido' => $horariopremitido,
             'regenciapermitido' => $regenciapermitido,
+            'horarioedfisica' => $horarioedfisica,
             'origen' => $origen,
             ]);
 
@@ -971,6 +1010,7 @@ class HorariogenericController extends Controller
             'columnpremitido' => $columnpremitido,
             'horariopremitido' => $horariopremitido,
             'regenciapermitido' => $regenciapermitido,
+            'horarioedfisica' => $horarioedfisica,
             'origen' => $origen,
 
         ]);
@@ -1030,7 +1070,7 @@ class HorariogenericController extends Controller
             ->all();
 
         $divisiones = Division::find()->where(['in', 'turno', [1,2] ])->andWhere(['<','id',54])->all();
-        $horas = Hora::find()->all();
+        $horas = Hora::find()->where(['>', 'id', 1])->all();
         $cd = 0;
         //return var_dump($dias);
         
@@ -1127,6 +1167,14 @@ class HorariogenericController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 
             $model->save();
+            $monologComponent = Yii::$app->monolog;
+                    $logger = $monologComponent->getLogger("horariogeneric");
+                    $logger->log('info', json_encode([
+                        "username" => Yii::$app->user->identity->username,
+                        "action" => Yii::$app->controller->action->id,
+                        "modelold" => [],
+                        "modelnew" => $model->getAttributes(),
+                    ]));
             return $this->redirect(['/horariogenerico/horariogeneric/completoxcurso', 'division' => $division, 'vista' => 'docentes', 'sem' => $semana]);
         }
 
@@ -1162,6 +1210,15 @@ class HorariogenericController extends Controller
             //$model->anioxtrimestral = $alxtrim;
  
            $model->save();
+
+           $monologComponent = Yii::$app->monolog;
+                    $logger = $monologComponent->getLogger("horariogeneric");
+                    $logger->log('warning', json_encode([
+                        "username" => Yii::$app->user->identity->username,
+                        "action" => Yii::$app->controller->action->id,
+                        "modelold" => $model->getOldAttributes(),
+                        "modelnew" => $model->getAttributes(),
+                    ]));
 
            return $this->redirect(['/horariogenerico/horariogeneric/completoxcurso', 'division' => $division, 'vista' => 'docentes', 'sem' => $semana]);
         }
@@ -1643,8 +1700,8 @@ class HorariogenericController extends Controller
 
         $horarelojt = Horareloj::find()
                         ->where(['semana' => $sem])
-                        
                         ->andWhere(['turno' => 2])
+                        ->andWhere(['<>', 'hora', 1])
                         ->orderBy('hora')
                         ->all();
 
@@ -2051,5 +2108,92 @@ class HorariogenericController extends Controller
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
+    }
+
+    public function actionCompararvirtual($al, $sem){
+
+        /*$horarios = Horario::find()
+                    ->where(['tipo' => 1])
+                    ->andWhere(['aniolectivo' => $al])
+                    ->all();
+
+        $catedras = ArrayHelper::map($horarios, 'catedra',function($model){
+            return $model->catedra0->actividad0->nombre;
+        });  */                  
+
+        $catedras = Catedra::find()
+                    ->joinWith(['horarios'])
+                    ->where(['<=', 'division', 53])
+                    ->andWhere(['horario.aniolectivo' => $al])
+                    ->orderBy('division')
+                    ->all();
+        $array = [];
+        $totalinstitucional = 0;
+        $total2021 = 0;
+
+        $catedrasvirtuales = Horariogeneric::find()
+                                ->where(['not in', 'catedra', ArrayHelper::map($catedras, 'id','id')])
+                                ->all();
+        $array3 = [];
+        $totalespecial = 0;
+        foreach ($catedrasvirtuales as $catedrasvirtual) {
+            $array3[$catedrasvirtual->catedra0->id]['division'] = $catedrasvirtual->catedra0->division0->nombre;
+            $array3[$catedrasvirtual->catedra0->id]['actividad'] = $catedrasvirtual->catedra0->actividad0->nombre;
+            $array3[$catedrasvirtual->catedra0->id]['horario'][] = 1;
+            $totalespecial = $totalespecial ++;
+        }
+
+        foreach ($catedras as $catedra) {
+            $array[$catedra->id]['division'] = $catedra->division0->nombre;
+            $array[$catedra->id]['actividad'] = $catedra->actividad0->nombre;
+            $array[$catedra->id]['horario'] = Horario::find()
+                                                ->where(['tipo' => 1])
+                                                ->andWhere(['aniolectivo' => $al])
+                                                ->andWhere(['catedra' => $catedra->id])
+                                                ->count();
+            $totalinstitucional = $totalinstitucional + $array[$catedra->id]['horario'];
+            $array[$catedra->id]['horariogeneric'] = Horariogeneric::find()
+                                                ->andWhere(['aniolectivo' => $al])
+                                                ->andWhere(['catedra' => $catedra->id])
+                                                ->andWhere(['semana' => $sem])
+                                                ->count();
+            $total2021 = $total2021 + $array[$catedra->id]['horariogeneric'];
+        }
+
+        
+
+        $array2 = [];
+        $array2['totales']['institucional'] = $totalinstitucional;
+        $array2['totales']['horario2021'] = $total2021;
+        $array2['totales']['totalespecial'] = $totalespecial;
+        $array2['totales']['total'] = ($total2021+$totalespecial).' ('.round(($total2021+$totalespecial)*100/$totalinstitucional,1).'%)';
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $array,
+            'pagination' => false,
+            
+        ]);
+
+        $dataProvidertotales = new ArrayDataProvider([
+            'allModels' => $array2,
+            'pagination' => false,
+            
+        ]);
+
+        $dataOtras = new ArrayDataProvider([
+            'allModels' => $array3,
+            'pagination' => false,
+            
+        ]);
+
+        return $this->render('compararvirtual', [
+            
+            'dataProvider' => $dataProvider,
+            'dataProvidertotales' => $dataProvidertotales,
+            'dataOtras' => $dataOtras,
+            
+            
+        ]);
+        
     }
 }

@@ -13,7 +13,7 @@ use yii\helpers\Url;
 ?>
 
 <div class="alert alert-danger" role="alert">
-     <b>Info</b> Si no se corresponde el agente en la hora seleccionada debe actualizar el horario antes de guardar la inasistencia.
+     <b>Info</b> En campo de <i>Situación Docente</i> podrá completar las ausencias de docentes con dispensa seleccionado la opción correspondiente.
     </div>
 
 <div class="detalleparte-form">
@@ -27,11 +27,14 @@ use yii\helpers\Url;
     <?php $listHoras=ArrayHelper::map($horas,'id','nombre'); ?>
     <?php $tipos=ArrayHelper::map($tipos,'id','nombre'); ?>
     <?php $listFaltas=ArrayHelper::map($faltas,'id','nombre'); ?>
+    <?php $dispensados=[1 => 'Docente en horario 2021', 2 => 'Docente con dispensa'] ?>
      
 
     <?php $listDivisiones=ArrayHelper::map($divisiones,'id','nombre'); ?>
 
     <?= $form->field($model, 'tipo')->dropDownList($tipos, ['prompt'=>'Seleccionar...']); ?>
+
+    <?= $form->field($model, 'dispensa')->dropDownList($dispensados, ['prompt'=>'Seleccionar...', 'id' => 'dispensa_id'])->label("Situación docente"); ?>
 
     <?= 
 
@@ -122,7 +125,7 @@ use yii\helpers\Url;
         
         'options' => ['id' => 'division_id'],
         'pluginOptions' => [
-           'depends'  => ['falta'],
+           'depends'  => ['falta', 'dispensa_id'],
            'placeholder' => 'Seleccionar...',
            'url' => Url::to(['/division/divixprec', 'preceptoria' => $partes->preceptoria])
         ]
@@ -136,7 +139,7 @@ use yii\helpers\Url;
                                     
                                     'options' => ['id'=>'catedra-id'],
                                     'pluginOptions' => [
-                                       'depends'  => ['division_id', 'falta'],
+                                       'depends'  => ['division_id', 'falta', 'dispensa_id'],
                                        'placeholder' => 'Seleccionar...',
                                        'url' => Url::to(['/detallecatedra/docxhorario', 'fecha' => $partes->fecha, 'diasemana' => date("w",strtotime($partes->fecha))+1, 'tipoparte' =>$partes->tipoparte])
                                     ]
@@ -157,7 +160,7 @@ use yii\helpers\Url;
         
         'options' => ['id'=>'hora-id', 'multiple' => ($origen=='create') ? true : false,],
         'pluginOptions' => [
-           'depends'  => ['division_id', 'catedra-id', 'falta'],
+           'depends'  => ['division_id', 'catedra-id', 'falta', 'dispensa_id'],
            'placeholder' => 'Seleccionar...',
 
            'url' => Url::to(['/horario/horaxdivisionxdocente', 'fecha' => $partes->fecha, 'diasemana' => date("w",strtotime($partes->fecha))+1])
