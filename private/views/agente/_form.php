@@ -14,6 +14,8 @@ use yii\helpers\Url;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+
+
 <?php 
         Modal::begin([
             'header' => "<h2 id='modalHeader'></h2>",
@@ -24,7 +26,9 @@ use yii\helpers\Url;
             ],
         ]);
 
-        echo "<div id='modalContent'></div>";
+        echo '<div id="modalContent"><div class="alert alert-warning" role="alert">
+            Solo se deberá cargar un nuevo docente si se consignará el <b>correo institucional definitivo</b>, ya que con el mismo se genera el usuario de acceso al sistema. <br/><br/>Si no cuenta con el correo UNC del docente, por favor no proceder con esta acción.
+        </div></div>';
 
         Modal::end();
     ?>

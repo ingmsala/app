@@ -15,6 +15,7 @@ use yii\filters\AccessControl;
 use app\config\Globales;
 use app\models\Agente;
 use app\models\Nombramiento;
+use kartik\grid\EditableColumnAction;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -30,7 +31,7 @@ class DivisionController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'xpropuesta'],
+                'only' => ['view', 'create', 'delete', 'xpropuesta'],
                 'rules' => [
                     [
                         'actions' => ['index', 'view', 'create', 'update', 'xpropuesta'],   
@@ -38,6 +39,18 @@ class DivisionController extends Controller
                         'matchCallback' => function ($rule, $action) {
                                 try{
                                     return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA]);
+                                }catch(\Exception $exception){
+                                    return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['index', 'update'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                                try{
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -66,6 +79,24 @@ class DivisionController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actions()
+    {
+        return ArrayHelper::merge(parent::actions(), [
+            'editaula' => [                                       
+                'class' => EditableColumnAction::className(),     
+                'modelClass' => Division::className(),                
+                'outputValue' => function ($model, $attribute, $key, $index) {
+                     //$fmt = Yii::$app->formatter;
+                     return $model->$attribute;                 
+                },
+                'outputMessage' => function($model, $attribute, $key, $index) {
+                      return '';                                  
+                },
+                
+            ]
+        ]);
     }
 
     /**

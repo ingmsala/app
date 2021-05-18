@@ -48,7 +48,7 @@ class NombramientoSearch extends Nombramiento
     {
         $query = Nombramiento::find()->joinWith(['agente0', 'revista0', 'division0', 'condicion0', 'suplente0 n', 'extension0'])
                         //->where(['!=','condicion.nombre', 'SUPL'] )
-                        ->where(true)
+                        ->where(['<>', 'nombramiento.condicion',7])
                         ->andWhere(
 
                             (isset($params['Nombramiento']['cargo']) && $params['Nombramiento']['cargo'] != '') ? ['nombramiento.cargo' => $params['Nombramiento']['cargo']] : true)
@@ -135,6 +135,25 @@ class NombramientoSearch extends Nombramiento
                 //'condicion' => 5 //suplente
             ])
             ->orderBy('condicion ASC', 'id ASC');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        return $dataProvider;
+
+    }
+
+    public function providertemporatios()
+    {
+        $query = Nombramiento::find()
+            ->where(['condicion' => 7]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

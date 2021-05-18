@@ -50,6 +50,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
+                'label' =>'Presencial 2021',
+                'value' => function($model){
+                   // return var_dump($model);
+                    return $model['horario2021prec'];
+                }
+            ],
+            [
                 'label' =>'Especial 2021',
                 'value' => function($model){
                    // return var_dump($model);
@@ -57,7 +64,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'label' =>'Total 2021',
+                'header' =>'Total presencial 2021<br/>(Sem: '.Yii::$app->formatter->asDate($semprec->inicio, 'dd/MM').')',
+                'value' => function($model){
+                   // return var_dump($model);
+                    return $model['totalprec'];
+                }
+            ],
+            [
+                'header' =>'Total virtual 2021<br/>(Sem: '.Yii::$app->formatter->asDate($semvir->inicio, 'dd/MM').')',
                 'value' => function($model){
                    // return var_dump($model);
                     return $model['total'];
@@ -170,10 +184,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'label' =>'Horas virtuales 2021',
+                'header' =>'Horas virtuales 2021<br/>(Sem: '.Yii::$app->formatter->asDate($semvir->inicio, 'dd/MM').')',
                 'value' => function($model){
                    // return var_dump($model);
                     return $model['horariogeneric'];
+                }
+            ],
+            [
+                'header' =>'Horas presenciales 2021<br/>(Sem: '.Yii::$app->formatter->asDate($semprec->inicio, 'dd/MM').')',
+                'value' => function($model){
+                   // return var_dump($model);
+                    return $model['horariogenericprec'];
                 }
             ],
             

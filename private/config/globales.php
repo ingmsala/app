@@ -89,6 +89,8 @@ class Globales
             return '@app/views/layouts/mainpersonal';
         elseif(in_array($role, [$this::US_HORARIO]))
             return '@app/views/layouts/mainvacio';
+        elseif($role == 0)
+            return '@app/views/layouts/mainprint';
         else{
             return '@app/views/layouts/mainactivar';
         }

@@ -117,6 +117,7 @@ class PreceptoriaController extends Controller
                 $array[$division->id][0] = $division->id;
                 
                 $array[$division->id][1] = $division->nombre;
+                $array[$division->id][3] = $division->aula;
                 try {
                     $nombramiento = Nombramiento::find()
                     ->where(['cargo' => Globales::CARGO_PREC])

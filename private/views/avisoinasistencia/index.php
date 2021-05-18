@@ -40,7 +40,7 @@ if(in_array (Yii::$app->user->identity->role, [1,4,26]))
                     if($model->tipoavisoparte == 2)
                         return '<span class="label label-danger">'.$model->tipoavisoparte0->nombre.'</span>';
                     else    
-                        return $model->tipoavisoparte0->nombre;
+                        return '<span class="label label-info">'.$model->tipoavisoparte0->nombre.'</span>';
                 }
             ],
                         

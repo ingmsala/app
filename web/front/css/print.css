@@ -1,0 +1,47 @@
+html,
+body {
+    height: 100%;
+}
+
+
+    table.kv-grid-table {
+    border: 1px solid #AAAAAA;
+    background-color: #EEEEEE;
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+  }
+  table.kv-grid-table td, table.kv-grid-table th {
+    border: 1px solid #AAAAAA;
+    padding: 3px 2px;
+  }
+  table.kv-grid-table tbody td {
+    font-size: 13px;
+  }
+  table.kv-grid-table tr:nth-child(even) {
+    background: #D0E4F5;
+  }
+  table.kv-grid-table thead {
+    background: #AAAAAA;
+    
+    border-bottom: 2px solid #AAAAAA;
+  }
+  table.kv-grid-table thead th {
+    font-size: 15px;
+    font-weight: bold;
+    background-color: #C7CEDB;
+    
+    border-left: 2px solid #AAAAAA;
+  }
+  table.kv-grid-table thead th:first-child {
+    border-left: none;
+  }
+  
+  
+  table.kv-grid-table tfoot td {
+    font-size: 14px;
+  }
+  table.kv-grid-table tfoot .links {
+    text-align: right;
+  }
+  

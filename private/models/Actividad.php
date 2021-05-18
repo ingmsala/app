@@ -39,7 +39,8 @@ class Actividad extends \yii\db\ActiveRecord
         return [
             [['nombre', 'cantHoras', 'actividadtipo', 'propuesta'], 'required'],
             [['cantHoras', 'actividadtipo', 'plan', 'propuesta'], 'integer'],
-            [['nombre'], 'string', 'max' => 70],
+            [['nombreabrev'], 'string'],
+            [['nombre', 'nombreabrev'], 'string', 'max' => 70],
             [['plan'], 'exist', 'skipOnError' => true, 'targetClass' => Plan::className(), 'targetAttribute' => ['plan' => 'id']],
             [['actividadtipo'], 'exist', 'skipOnError' => true, 'targetClass' => Actividadtipo::className(), 'targetAttribute' => ['actividadtipo' => 'id']],
             [['propuesta'], 'exist', 'skipOnError' => true, 'targetClass' => Propuesta::className(), 'targetAttribute' => ['propuesta' => 'id']],
@@ -61,6 +62,7 @@ class Actividad extends \yii\db\ActiveRecord
             'plan' => 'Plan de Estudio',
             'propuesta' => 'Propuesta Formativa',
             'departamento' => 'Departamento',
+            'nombreabrev' => 'Materia',
         ];
     }
 
@@ -103,5 +105,12 @@ class Actividad extends \yii\db\ActiveRecord
     public function getEspaciocurriculars()
     {
         return $this->hasMany(Espaciocurricular::className(), ['actividad' => 'id']);
+    }
+
+    public function getNombreok()
+    {
+        if($this->nombreabrev == null)
+            return $this->nombre;
+        return $this->nombreabrev;
     }
 }

@@ -21,6 +21,8 @@ use app\config\Globales;
    	<?= $form->field($model, 'propuesta')->dropDownList($listPropuestas, ['prompt'=>'Seleccionar...']); ?>
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true,'style'=>'text-transform:uppercase;']) ?>
+
+    <?= $form->field($model, 'aula')->textInput() ?>
     
     <?php
         if(Yii::$app->user->identity->role == Globales::US_SUPER){
@@ -28,6 +30,8 @@ use app\config\Globales;
     <?= $form->field($model, 'turno')->dropDownList($listTurnos, ['prompt'=>'Seleccionar...']); ?>
 
     <?= $form->field($model, 'preceptoria')->dropDownList($listPreceptorias, ['prompt'=>'Seleccionar...']); ?>
+
+    
 
     <?= $form->field($model, 'enlaceclase')->textInput() ?>
 

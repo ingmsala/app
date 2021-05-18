@@ -25,7 +25,11 @@ use kartik\date\DatePicker;
 
     <?php $listrevistas=ArrayHelper::map($revistas,'id','nombre'); ?>
     <?php $listdivisiones=ArrayHelper::map($divisiones,'id','nombre'); ?>
-    <?php $listcondiciones=ArrayHelper::map($condiciones,'id','nombre'); ?>
+    <?php $listcondiciones=ArrayHelper::map($condiciones,'id',function($model){
+        if($model->id ==7)
+            return 'Provisorio';
+        return $model->nombre;
+    }); ?>
     <?php $listsuplentes=ArrayHelper::map($suplentes,'id', 'nombre');?>
     <?php $listextensiones=ArrayHelper::map($extensiones,'id', 'nombre');?>
 

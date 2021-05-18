@@ -31,10 +31,10 @@ class NombramientoController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'asignarsuplente'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'asignarsuplente', 'asignarprovisorio', 'temporarios', 'asignarsuplenteprovisorio'],
                 'rules' => [
                     [
-                        'actions' => ['create', 'update', 'delete','asignarsuplente'],   
+                        'actions' => ['create', 'update', 'delete','asignarsuplente', 'asignarprovisorio', 'temporarios', 'asignarsuplenteprovisorio'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
@@ -110,6 +110,10 @@ class NombramientoController extends Controller
             $model->resolucion = $param['Nombramiento']['resolucion'];
         if(isset($param['Nombramiento']['resolucionext']) && $param['Nombramiento']['resolucionext']!='')
             $model->resolucionext = $param['Nombramiento']['resolucionext'];
+        
+        $searchModelTemporarios = new NombramientoSearch();
+        $dataProviderTemporarios = $searchModelTemporarios->providertemporatios();
+        
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -127,6 +131,8 @@ class NombramientoController extends Controller
             'resoluciones' => $resoluciones,
             'resolucionesext' => $resolucionesext,
             'param' => $param,
+            'searchModelTemporarios' => $searchModelTemporarios,
+            'dataProviderTemporarios' => $dataProviderTemporarios,
         
         ]);
     }
@@ -153,6 +159,48 @@ class NombramientoController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionTemporarios()
+    {
+        $searchModel = new NombramientoSearch();
+        $dataProvider = $searchModel->providertemporatios();
+
+        
+        return $this->render('temporarios', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+           
+        ]);
+    }
+
+    public function actionAsignarsuplenteprovisorio($idx)
+    {
+        $searchModel = new NombramientoSearch();
+        $dataProvider = $searchModel->providertemporatios();
+
+        
+        return $this->renderAjax('temporarios', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'origen' => 'asignar',
+            'idx' => $idx,
+           
+        ]);
+    }
+    public function actionAsignarprovisorio($suplente, $cargotitular)
+    {
+        
+        $model = $this->findModel($cargotitular);
+        $model->suplente = $suplente;
+        
+        $model->save();
+
+        $model2 = $this->findModel($suplente);
+        $model2->condicion = 5;
+        $model2->save();
+        
+        return $this->redirect(['view', 'id' => $cargotitular]);
     }
 
     /**
@@ -594,10 +642,18 @@ class NombramientoController extends Controller
     public function actionAbmpreceptor($nom,$div)
     {
         
-        if($nom == 0)
+        if($nom == 0){
             $model = new Nombramiento();
-        else
+        }
+        else{
             $model = $this->findModel($nom);
+        }
+
+        if($div!=null){
+            $modeldivision = Division::findOne($div);
+        }else
+            $modeldivision = new Division();
+
         $model->scenario = $model::SCENARIO_ABMDIVISION;
         
         $preceptores = Nombramiento::find()
@@ -605,7 +661,7 @@ class NombramientoController extends Controller
                 ->where(['cargo' => Globales::CARGO_PREC])
                 ->orderBy('agente.apellido, agente.nombre')->all();
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $modeldivision->load(Yii::$app->request->post())) {
             //return var_dump(Yii::$app->request->post());
 
             //$nomx = Nombramiento::findOne(Yii::$app->request->post()['Nombramiento']['id']);
@@ -618,6 +674,9 @@ class NombramientoController extends Controller
             $model2 = $this->findModel(Yii::$app->request->post()['Nombramiento']['id']);
             $model2->division = $div;
             $model2->save();
+
+            $modeldivision->save();
+            
             return $this->redirect(['reporte/preceptores/preceptores']);
         }
 
@@ -626,12 +685,14 @@ class NombramientoController extends Controller
             return $this->renderAjax('abmpreceptor', [
                 'model' => $model,
                 'preceptor' => $preceptores,
+                'modeldivision' => $modeldivision,
                 
             ]);
         }
         return $this->render('abmpreceptor', [
                 'model' => $model,
                 'preceptor' => $preceptores,
+                'modeldivision' => $modeldivision,
                 
             ]);
 

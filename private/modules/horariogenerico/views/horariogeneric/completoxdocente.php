@@ -18,7 +18,7 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 <div class="horarioexamen-view">
 
     
-    <div class="row">
+    <div class="row novisible">
 <?php $userhorario = (Yii::$app->user->identity->role == Globales::US_REGENCIA)? "block" : "none" ?>
 	 <div style="display: <?= $userhorario ?>;">
     	<div  class="pull-right">
@@ -36,12 +36,16 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 	</div>
 </div>
     <center><h2>
- <?= (Yii::$app->user->identity->role != Globales::US_HORARIO) ? Html::encode("Cronograma de Clases ").$semana->aniolectivo0->nombre : '' ?>   
+ <?php
+ echo '<span class="novisible">';
+ echo (Yii::$app->user->identity->role != Globales::US_HORARIO) ? Html::encode("Cronograma de Clases ").$semana->aniolectivo0->nombre : '';
+ echo '</span>';
+ ?>   
    
 </h2></center>
     <div class="clearfix"></div>
     
-    <div class='row' style="padding-bottom: 20px;">
+    <div class='row novisible' style="padding-bottom: 20px;">
     	
     	<div class="col-md-12"><center><h4>
     		<?= (Yii::$app->user->identity->role != Globales::US_HORARIO) ? Html::encode('Docente: '.$this->title) : '' ?>
@@ -53,17 +57,15 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 	<div class="clearfix"></div>
 	<?php
 		try {
-			echo '<center><h3>Semana del '.$semanainicio.' - '.$semana->tiposemana0->nombre.'</h3></center>';
+			echo '<span class="novisible"><center><h4>Semana del '.$semanainicio.' - '.$semana->tiposemana0->nombre.'</h4></center></span>';
 		} catch (\Throwable $th) {
-			echo '<center><h3>Semana del '.$semanainicio.'</h3></center>';
+			echo '<span class="novisible"><center><h4>Semana del '.$semanainicio.'</h4></center></span>';
 		}
 	?>
     
-    <div class='row'>
-    	<div class="col-md-12">
-		<div  class="pull-left">
-			<h3>Turno mañana</h3>
-		</div>	
+    <div class="clearfix"></div>
+    	<div class="row">
+		
 		<div  class="pull-right">
 			<?php 
 				if($semn != null){
@@ -88,8 +90,12 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		
 			?>
 	</div>    
+		
 	
 	<div class="clearfix"></div>
+	
+		<div class="col-md-12">
+		<h3>Turno mañana</h3>
     		<?= GridView::widget([
 		        'dataProvider' => $providerTm,
 		        //'filterModel' => $searchModel,
@@ -97,9 +103,8 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		        'summary' => false,
 		        'columns' => $diasgridtm['columns'],
 	    	]); ?>
-    	</div>
-    </div>
-    <div class='row'>
+    	
+		</div>
     	<div class="col-md-12">
     		<h3>Turno tarde</h3>
     		<?= GridView::widget([
@@ -109,10 +114,10 @@ $this->params['itemnav'] = ['label' => '<a class="menuHorarios" href="'.Yii::$ap
 		        'summary' => false,
 		        'columns' => $diasgridtt['columns'],
 	    	]); ?>
-    	</div>
+    	
     		
-    </div>	
-	
+    	
+		</div>
     
 
 </div>

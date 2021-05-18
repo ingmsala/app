@@ -5,39 +5,10 @@ use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
 use app\models\Nombramiento;
 use app\models\Agente;
-
-
-/* @var $this yii\web\View */
-/* @var $searchModel app\models\NombramientoSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = 'Nombramientos';
-
+use yii\helpers\Url;
 
 ?>
     
-    <?= $this->render('_filter', [
-        'model' => $model,
-
-        'cargos' => $cargos,
-        'docentes' => $docentes,
-        'revistas' => $revistas,
-        'condiciones' => $condiciones,
-        'resoluciones' => $resoluciones,
-        'resolucionesext' => $resolucionesext,
-        'param' => $param,
-        
-    ]) ?>
-
-    <?= $this->render('temporarios', [
-        'searchModel' => $searchModelTemporarios,
-        'dataProvider' => $dataProviderTemporarios,
-        'origen' => 'index',
-        'idx' => 0,
-        
-    ]) ?>
-
-           
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,
@@ -48,7 +19,7 @@ $this->title = 'Nombramientos';
         'panel' => [
             'type' => GridView::TYPE_DEFAULT,
 
-            'heading' => Html::encode($this->title)
+            'heading' => Html::encode('Nombramientos provisorios')
             
             ],
         'columns' => [
@@ -98,7 +69,7 @@ $this->title = 'Nombramientos';
                 'hAlign' => 'center',
                 'value' => function($model){
 
-                   return Html::tag('span',  $model->condicion0->nombre, ['class' => "badge"]);
+                   return Html::tag('span',  'Provisorio', ['class' => "badge"]);
                 }
             ],
 
@@ -165,41 +136,37 @@ $this->title = 'Nombramientos';
                 //'suplente0.agente0.apellido',
             ],
 
-            ['class' => 'kartik\grid\ActionColumn'],
+            ['class' => 'kartik\grid\ActionColumn',
+            'visible' => ($origen=='index')?true:false],
+
+            [
+                'label' => 'Asignar',
+                'visible' => ($origen=='asignar')?true:false,
+                'format' => 'raw',
+                'value' => function($model) use($idx){
+                    return Html::a('Asignar', Url::to(['asignarprovisorio', 'suplente' =>$model->id, 'cargotitular' => $idx]), ['class' => 'btn btn-info', 
+                    'data' => [
+                        'confirm' => 'Está seguro que desea asignar este nombramiento como Suplente?',
+                        'method' => 'post',
+                    ],]);
+                }
+            ],
+
+            
         ],
 
          'toolbar'=>[
             ['content' => 
-                Html::a('Nuevo Nombramiento', ['create'], ['class' => 'btn btn-success']),
+               ''
 
                
             ],
-            '{export}',
+            '',
             
         ],
         //'floatHeader'=>true,
         'summary'=>false,
-        'exportConfig' => [
-            GridView::EXCEL => [
-                'label' => 'Excel', 
-                'filename' =>Html::encode($this->title),
-                'config' => [
-                    'worksheet' => Html::encode($this->title),
-            
-                ]
-            ],
-            //GridView::HTML => [// html settings],
-            GridView::PDF => ['label' => 'PDF',
-                'filename' =>Html::encode($this->title),
-                'options' => ['title' => 'Portable Document Format'],
-                'config' => [
-                    'methods' => [ 
-                        'SetHeader'=>[Html::encode($this->title).' - Colegio Nacional de Monserrat'], 
-                        'SetFooter'=>[date('d/m/Y').' - Página '.'{PAGENO}'],
-                    ]
-                ],
-            ],
-        ]
+        
         
     ]); ?>
-</div>
+

@@ -673,7 +673,7 @@ try {
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Docentes con superposición - Horario Mixto', 'url' => ['/horariogenerico/horariogeneric/horassuperpuestas']],
                                         '<div class="dropdown-divider"></div>',
-                                        ['label' => 'Comparativo virtuales', 'url' => ['/horariogenerico/horariogeneric/compararvirtual', 'al'=>3, 'sem'=>18]],
+                                        ['label' => 'Comparativo virtuales', 'url' => ['/horariogenerico/horariogeneric/compararvirtual', 'al'=>3]],
                                         '<div class="dropdown-divider"></div>',
                                         
 

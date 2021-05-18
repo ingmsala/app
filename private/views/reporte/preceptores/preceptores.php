@@ -35,6 +35,11 @@ $this->title = 'Preceptores';
         Modal::end();
     ?>
 <div class="row">
+
+<div class="alert alert-info" role="alert">
+    Verificar que las divisiones coincidan con las aulas. Si hay un cambio de aula transitorio, se deberá modificar en la grilla para mantenerla actualizada.
+</div>
+
 <div class="col-md-6">
 <?= GridView::widget([
 		        'dataProvider' => $provider,
@@ -66,6 +71,16 @@ $this->title = 'Preceptores';
 		                	return var_dump($model);
 		                }*/
                     ],
+                    [
+		                'label' => 'Aula',
+		                'vAlign' => 'middle',
+		                'hAlign' => 'center',
+		                'format' => 'raw',
+		                'attribute' => '3'
+		                /*'value' => fu2nction($model){
+		                	return var_dump($model);
+		                }*/
+                    ],
 
                     [
                         'class' => 'yii\grid\ActionColumn',
@@ -82,7 +97,7 @@ $this->title = 'Preceptores';
         
                                 Html::button(
                                     '<span class="glyphicon glyphicon-pencil"></span>',
-                                    '?r=nombramiento/abmproceptor&nom='.$model['999'].'&div='.$model['0']);
+                                    '?r=nombramiento/abmpreceptor&nom='.$model['999'].'&div='.$model['0']);
                             },
         
                             

@@ -40,7 +40,7 @@ class Division extends \yii\db\ActiveRecord
             [['nombre', 'propuesta'], 'required'],
             [['turno', 'propuesta', 'preceptoria'], 'integer'],
             [['nombre'], 'string', 'max' => 100],
-            [['enlaceclase'], 'string'],
+            [['enlaceclase', 'aula'], 'string'],
             [['preceptoria'], 'exist', 'skipOnError' => true, 'targetClass' => Preceptoria::className(), 'targetAttribute' => ['preceptoria' => 'id']],
             [['turno'], 'exist', 'skipOnError' => true, 'targetClass' => Turno::className(), 'targetAttribute' => ['turno' => 'id']],
             [['propuesta'], 'exist', 'skipOnError' => true, 'targetClass' => Propuesta::className(), 'targetAttribute' => ['propuesta' => 'id']],
@@ -59,6 +59,7 @@ class Division extends \yii\db\ActiveRecord
             'propuesta' => 'Propuesta',
             'preceptoria' => 'Preceptoria',
             'enlaceclase' => 'Enlace de clase',
+            'aula' => 'Aula',
         ];
     }
 

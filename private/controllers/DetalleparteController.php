@@ -149,7 +149,7 @@ class DetalleparteController extends Controller
                 }
                     $divisiones=Division::find()
                     ->where(['preceptoria' => $partex->preceptoria])
-                    ->andWhere(['in', 'id', $array])
+                    //->andWhere(['in', 'id', $array])
                     ->orderBy('nombre')->all();
                     
             }else{

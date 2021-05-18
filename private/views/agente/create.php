@@ -10,6 +10,14 @@ $this->title = 'Nuevo Agente';
 $this->params['breadcrumbs'][] = ['label' => 'Agentes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<script>
+    $(document).ready(function(){
+        $('#modal').modal('show').find('#modalHeader').html('Información importante');
+        $("#modal").modal('show');
+        
+    });
+</script>
 <div class="agente-create">
 
     <h1><?= Html::encode($this->title) ?></h1>

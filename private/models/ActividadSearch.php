@@ -19,7 +19,7 @@ class ActividadSearch extends Actividad
     {
         return [
             [['id', 'cantHoras',], 'integer'],
-            [['nombre', 'actividadtipo', 'plan', 'propuesta'], 'safe'],
+            [['nombre', 'actividadtipo', 'plan', 'propuesta', 'nombreabrev'], 'safe'],
         ];
     }
 

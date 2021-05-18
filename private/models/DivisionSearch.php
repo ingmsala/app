@@ -19,7 +19,7 @@ class DivisionSearch extends Division
     {
         return [
             [['id',], 'integer'],
-            [['nombre', 'turno', 'propuesta', 'preceptoria'], 'safe'],
+            [['nombre', 'turno', 'propuesta', 'preceptoria', 'aula'], 'safe'],
         ];
     }
 

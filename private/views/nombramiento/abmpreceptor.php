@@ -39,6 +39,8 @@ use kartik\select2\Select2;
 
     ?>
 
+    <?= $form->field($modeldivision, 'aula')->textInput(['maxlength' => true]) ?>
+
 
     
 

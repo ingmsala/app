@@ -63,8 +63,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Condición',
                 'attribute' => 'condicion',
                 'value' => function($model){
-
-                   return $model->condicion0->nombre;
+                    if($model->condicion == 7)
+                        return 'Provisorio';
+                    return $model->condicion0->nombre;
                 }
             ],
             'nombre',
@@ -159,7 +160,12 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 
 <h3>Suplente</h3>
-    <?= Html::button('Agregar Suplente', ['value' => Url::to('index.php?r=nombramiento/asignarsuplente&cargox='.$model->cargo.'&idx='.$model->id), 'class' => 'btn btn-success', 'id'=>'modalButtonNombramiento']) ?>
+    <?= Html::button('Agregar Suplente', ['value' => Url::to('index.php?r=nombramiento/asignarsuplente&cargox='.$model->cargo.'&idx='.$model->id), 'class' => 'btn btn-success modalButtonNombramiento', 'id'=>'modalButtonNombramiento2']) ?>
+    <?php
+     if($model->condicion <> 7)
+        echo Html::button('Agregar Suplente desde Provisorio', ['value' => Url::to('index.php?r=nombramiento/asignarsuplenteprovisorio&cargox='.$model->cargo.'&idx='.$model->id), 'class' => 'btn btn-warning modalButtonNombramiento', 'id'=>'modalButtonNombramiento3'])
+     
+     ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'rowOptions' => function($model){
@@ -172,7 +178,12 @@ $this->params['breadcrumbs'][] = $this->title;
             
             [   
                 'label' => 'Condición',
-                'attribute' => 'condicion0.nombre'
+                //'attribute' => 'condicion0.nombre'
+                'value' => function($model){
+                    if($model->condicion == 7)
+                        return 'Provisorio';
+                    return $model->condicion0->nombre;
+                }
             ],
             
             [

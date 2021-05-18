@@ -72,7 +72,7 @@ class AvisoinasistenciaController extends Controller
     public function actionIndex()
     {
         if(Yii::$app->user->identity->role == Globales::US_CONSULTORIO_MEDICO){
-            $todos = 2;
+            $todos = 1;
         }else{
             $todos = 1;
         }

@@ -1352,8 +1352,9 @@ class HorariogenericController extends Controller
     {
 
         $g = new Globales();
-        $this->layout = $g->getLayout(21);
-
+        $this->layout = $g->getLayout(0);
+        $semana = Semana::findOne($sem);
+        $semanainicio = Yii::$app->formatter->asDate($semana->inicio, 'dd/MM/yyyy');
                 
         //return $this->generarHorarioDocente($agente, 1, $sem);
         
@@ -1398,7 +1399,8 @@ class HorariogenericController extends Controller
         'mode' => Pdf::MODE_CORE, 
         // A4 paper format
         'format' => Pdf::FORMAT_A4, 
-        'marginTop' => 45,
+        //'defaultFontSize' => 6,
+        'marginTop' => 25,
         // portrait orientation
         'orientation' => Pdf::ORIENT_LANDSCAPE, 
         // stream to browser inline
@@ -1408,48 +1410,46 @@ class HorariogenericController extends Controller
         'content' => $content,  
         // format content from your own css file if needed or use the
         // enhanced bootstrap css built by Krajee for mPDF formatting 
-        //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+        'cssFile' => '@webroot/css/print.css',
         // any css to be embedded if required
         'cssInline' => '
                 
-                .horario-view{
-                    font-size = 8px;
-                }
-                .col-md-6 {
-                        width: 45%;
-                        float: left;
+                .col-md-12 {
+                        font-size = 5px;
+                        width: 47%;
+                        position: relative;
+                        margin-left: 10px;
                         
-                   } 
-                .horarioxcurso-view{
-                    margin-top: -70px;
-                    max-height: 100%;
-                    overflow: hidden;
-                    page-break-after: always;
-                }
+                        float: left;
+                } 
+                
 
                 .pull-right {
                     display: none;
                 }
+                .novisible {
+                    display: none;
+                }
+
                 
 
-                #encabezado{ 
-                    padding-bottom: 500px;
-                    
-                    width: 200px;
-
-                }', 
+                ', 
          // set mPDF properties on the fly
         'options' => ['title' => 'Colegio Nacional de Monserrat'],
          // call mPDF methods on the fly
         'methods' => [ 
             //'defaultheaderline' => 0,
-            'SetHeader'=>['<span><img src="assets/images/logo-encabezado.png" /></span>'], 
+            'SetHeader'=>['<h1>Semana del '.$semanainicio.' - '.$semana->tiposemana0->nombre.'</h1>|'.$agente->apellido.', '.$agente->nombre.'|<span><img width="15%" src="assets/images/enc3.png" /></span>', ['style '=> ['background-color' => '#000']]], 
             'SetFooter'=>[date('d/m/Y')." - ".$filenamesext],
         ]
     ]);
+
+    
+
     
     // return the pdf output as per the destination setting
     //return $salidaimpar;
+    
     return $pdf->render();
         
     }
@@ -1805,7 +1805,9 @@ class HorariogenericController extends Controller
                         'hAlign' => 'center',
                         'format' => 'raw',
                         'attribute' => '999',
-                        'value' => function($model){
+                        'value' => function($model) use ($prt){
+                            if($prt==1)
+                                return '<span style="font-size:11px;">'.$model['999'].'</span>';
                             return '<span class="badge">'.$model['999'].'</span>';
                         }
                     ];
@@ -1849,27 +1851,45 @@ class HorariogenericController extends Controller
         $salida = '';
         
         foreach ($horariosTm as $horarioxTm) {
-                if($horarioxTm->burbuja == 1){
-                    $span = '<span class="button-red" title="Burbuja roja"></span>';
-                }elseif($horarioxTm->burbuja == 2){
-                    $span = '<span class="button-blue" title="Burbuja azul"></span>';
-                }elseif($horarioxTm->burbuja == 3){
-                    $span = '<span class="button-yellow" title="Burbuja amarilla"></span>';
+                if($prt==1){
+                    if($horarioxTm->burbuja == 1){
+                        $span = ' - Naranja';
+                    }elseif($horarioxTm->burbuja == 2){
+                        $span = ' - Azul';
+                    }elseif($horarioxTm->burbuja == 3){
+                        $span = ' - Amarilla';
+                    }else{
+                        $span = '';
+                    }
                 }else{
-                    $span = '';
+                    if($horarioxTm->burbuja == 1){
+                        $span = '<span class="button-red" title="Burbuja roja"></span>';
+                    }elseif($horarioxTm->burbuja == 2){
+                        $span = '<span class="button-blue" title="Burbuja azul"></span>';
+                    }elseif($horarioxTm->burbuja == 3){
+                        $span = '<span class="button-yellow" title="Burbuja amarilla"></span>';
+                    }else{
+                        $span = '';
+                    }
                 }
+
+                if($prt==1)
+                    $aulatm = '<br/><span class="text-muted" style="font-size:0.8em;border:2px solid #F0F0F0;border-radius: 5px;">Aula: '.$horarioxTm->catedra0->division0->aula.'</span>';
+                else
+                    $aulatm = ' <span class="pull-right text-muted" style="font-size:0.8em;border:2px solid #F0F0F0;border-radius: 5px;">Aula: '.$horarioxTm->catedra0->division0->aula.'</span>';
+
                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
                     if($arrayTm[$horarioxTm->horareloj0->hora][$horarioxTm->fecha] != ''){
                         $arrayTm[$horarioxTm->horareloj0->hora][$horarioxTm->fecha] .= ' - '.'<span style="color:red;">';
-                        $arrayTm[$horarioxTm->horareloj0->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTm->catedra0->actividad0->nombre.'</span>';
+                        $arrayTm[$horarioxTm->horareloj0->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.' '.$span.$aulatm.'<br/>'.$horarioxTm->catedra0->actividad0->nombreok.'</span>';
             
                     }else{
-                        $arrayTm[$horarioxTm->horareloj0->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTm->catedra0->actividad0->nombre.'</span>';
+                        $arrayTm[$horarioxTm->horareloj0->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.' '.$span.$aulatm.'<br/>'.$horarioxTm->catedra0->actividad0->nombreok.'</span>';
                     }
                 }else{
                     if(Yii::$app->user->identity->username == $horarioxTm->catedra0->getDocentehorarioal0($horarioxTm->aniolectivo)['mail'])
                         if($horarioxTm->semana0->tiposemana == 2)
-                            $arrayTm[$horarioxTm->horareloj0->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTm->catedra0->actividad0->nombre.'</span>'/*.
+                            $arrayTm[$horarioxTm->horareloj0->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.' '.$span.$aulatm.'<br/>'.$horarioxTm->catedra0->actividad0->nombreok.'</span>'/*.
                             Html::a('<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>', ['delete', 'id' => $horarioxTm->id], [
                                 'class' => 'btn btn-danger pull-right',
                                 'data' => [
@@ -1878,9 +1898,9 @@ class HorariogenericController extends Controller
                                 ],
                             ])*/;
                         else
-                            $arrayTm[$horarioxTm->horareloj0->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTm->catedra0->actividad0->nombre.'</span>';
+                            $arrayTm[$horarioxTm->horareloj0->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.' '.$span.$aulatm.'<br/>'.$horarioxTm->catedra0->actividad0->nombreok.'</span>';
                     else
-                        $arrayTm[$horarioxTm->horareloj0->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTm->catedra0->actividad0->nombre.'</span>';
+                        $arrayTm[$horarioxTm->horareloj0->hora][$horarioxTm->fecha] .= $horarioxTm->catedra0->division0->nombre.' '.$span.$aulatm.'<br/>'.$horarioxTm->catedra0->actividad0->nombreok.'</span>';
                 }
                 
                 
@@ -1907,7 +1927,9 @@ class HorariogenericController extends Controller
                         'hAlign' => 'center',
                         'format' => 'raw',
                         'attribute' => '999',
-                        'value' => function($model){
+                        'value' => function($model) use ($prt){
+                            if($prt==1)
+                                return '<span style="font-size:11px;">'.$model['999'].'</span>';
                             return '<span class="badge">'.$model['999'].'</span>';
                         }
                     ];
@@ -1953,6 +1975,18 @@ class HorariogenericController extends Controller
         $salida = '';
         //return var_dump($diasgridtt);
         foreach ($horariosTt as $horarioxTt) {
+
+            if($prt==1){
+                if($horarioxTt->burbuja == 1){
+                    $span = ' - Naranja';
+                }elseif($horarioxTt->burbuja == 2){
+                    $span = ' - Azul';
+                }elseif($horarioxTt->burbuja == 3){
+                    $span = ' - Amarilla';
+                }else{
+                    $span = '';
+                }
+            }else{
             if($horarioxTt->burbuja == 1){
                     $span = '<span class="button-red" title="Burbuja roja"></span>';
                 }elseif($horarioxTt->burbuja == 2){
@@ -1962,19 +1996,27 @@ class HorariogenericController extends Controller
                 }else{
                     $span = '';
                 }
+            }
+
+                if($prt==1)
+                    $aulatt = '<br/><span class="text-muted" style="font-size:0.8em;border:2px solid #F0F0F0;border-radius: 5px;">Aula: '.$horarioxTt->catedra0->division0->aula.'</span>';
+                else
+                    $aulatt = ' <span class="pull-right text-muted" style="font-size:0.8em;border:2px solid #F0F0F0;border-radius: 5px;">Aula: '.$horarioxTt->catedra0->division0->aula.'</span>';
+
+ 
                             
                 if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA])){
                     if($arrayTt[$horarioxTt->horareloj0->hora][$horarioxTt->fecha] != ''){
                         $arrayTt[$horarioxTt->horareloj0->hora][$horarioxTt->fecha] .= ' - '.'<span style="color:red;">';
-                        $arrayTt[$horarioxTt->horareloj0->hora][$horarioxTt->fecha] .= $horarioxTt->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTt->catedra0->actividad0->nombre.'</span>';
+                        $arrayTt[$horarioxTt->horareloj0->hora][$horarioxTt->fecha] .= $horarioxTt->catedra0->division0->nombre.' '.$span.$aulatt.'<br/>'.$horarioxTt->catedra0->actividad0->nombreok.'</span>';
             
                     }else{
-                        $arrayTt[$horarioxTt->horareloj0->hora][$horarioxTt->fecha] .= $horarioxTt->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTt->catedra0->actividad0->nombre.'</span>';
+                        $arrayTt[$horarioxTt->horareloj0->hora][$horarioxTt->fecha] .= $horarioxTt->catedra0->division0->nombre.' '.$span.$aulatt.'<br/>'.$horarioxTt->catedra0->actividad0->nombreok.'</span>';
                     }
                 }else{
                     if(Yii::$app->user->identity->username == $horarioxTt->catedra0->getDocentehorarioal0($horarioxTt->aniolectivo)['mail'])
                         if($horarioxTt->semana0->tiposemana == 2)
-                            $arrayTt[$horarioxTt->horareloj0->hora][$horarioxTt->fecha] .= $horarioxTt->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTt->catedra0->actividad0->nombre.'</span>'/*.
+                            $arrayTt[$horarioxTt->horareloj0->hora][$horarioxTt->fecha] .= $horarioxTt->catedra0->division0->nombre.' '.$span.$aulatt.'<br/>'.$horarioxTt->catedra0->actividad0->nombreok.'</span>'/*.
                             Html::a('<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>', ['delete', 'id' => $horarioxTt->id], [
                                 'class' => 'btn btn-danger pull-right',
                                 'data' => [
@@ -1983,9 +2025,9 @@ class HorariogenericController extends Controller
                                 ],
                             ])*/;
                         else
-                            $arrayTt[$horarioxTt->horareloj0->hora][$horarioxTt->fecha] .= $horarioxTt->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTt->catedra0->actividad0->nombre.'</span>';
+                            $arrayTt[$horarioxTt->horareloj0->hora][$horarioxTt->fecha] .= $horarioxTt->catedra0->division0->nombre.' '.$span.$aulatt.'<br/>'.$horarioxTt->catedra0->actividad0->nombreok.'</span>';
                     else
-                        $arrayTt[$horarioxTt->horareloj0->hora][$horarioxTt->fecha] .= $horarioxTt->catedra0->division0->nombre.' '.$span.'<br/>'.$horarioxTt->catedra0->actividad0->nombre.'</span>';
+                        $arrayTt[$horarioxTt->horareloj0->hora][$horarioxTt->fecha] .= $horarioxTt->catedra0->division0->nombre.' '.$span.$aulatt.'<br/>'.$horarioxTt->catedra0->actividad0->nombreok.'</span>';
                 }
         }
 
@@ -2110,7 +2152,7 @@ class HorariogenericController extends Controller
         ]);
     }
 
-    public function actionCompararvirtual($al, $sem){
+    public function actionCompararvirtual($al){
 
         /*$horarios = Horario::find()
                     ->where(['tipo' => 1])
@@ -2119,7 +2161,22 @@ class HorariogenericController extends Controller
 
         $catedras = ArrayHelper::map($horarios, 'catedra',function($model){
             return $model->catedra0->actividad0->nombre;
-        });  */                  
+        });  */ 
+        
+        $ultimavirtual = Semana::find()
+                    ->where(['tiposemana' => 2])
+                    ->andWhere(['publicada' => 1])
+                    ->andWhere(['aniolectivo' => $al])
+                    ->max('id');
+
+        $ultimapresencial = Semana::find()
+                    ->where(['tiposemana' => 1])
+                    ->andWhere(['publicada' => 1])
+                    ->andWhere(['aniolectivo' => $al])
+                    ->max('id');
+
+        $semvir = Semana::findOne($ultimavirtual);
+        $semprec = Semana::findOne($ultimapresencial);
 
         $catedras = Catedra::find()
                     ->joinWith(['horarios'])
@@ -2130,6 +2187,7 @@ class HorariogenericController extends Controller
         $array = [];
         $totalinstitucional = 0;
         $total2021 = 0;
+        $total2021prec = 0;
 
         $catedrasvirtuales = Horariogeneric::find()
                                 ->where(['not in', 'catedra', ArrayHelper::map($catedras, 'id','id')])
@@ -2155,9 +2213,16 @@ class HorariogenericController extends Controller
             $array[$catedra->id]['horariogeneric'] = Horariogeneric::find()
                                                 ->andWhere(['aniolectivo' => $al])
                                                 ->andWhere(['catedra' => $catedra->id])
-                                                ->andWhere(['semana' => $sem])
+                                                ->andWhere(['semana' => $ultimavirtual])
+                                                ->count();
+
+            $array[$catedra->id]['horariogenericprec'] = Horariogeneric::find()
+                                                ->andWhere(['aniolectivo' => $al])
+                                                ->andWhere(['catedra' => $catedra->id])
+                                                ->andWhere(['semana' => $ultimapresencial])
                                                 ->count();
             $total2021 = $total2021 + $array[$catedra->id]['horariogeneric'];
+            $total2021prec = $total2021prec + $array[$catedra->id]['horariogenericprec'];
         }
 
         
@@ -2165,8 +2230,10 @@ class HorariogenericController extends Controller
         $array2 = [];
         $array2['totales']['institucional'] = $totalinstitucional;
         $array2['totales']['horario2021'] = $total2021;
+        $array2['totales']['horario2021prec'] = $total2021prec;
         $array2['totales']['totalespecial'] = $totalespecial;
         $array2['totales']['total'] = ($total2021+$totalespecial).' ('.round(($total2021+$totalespecial)*100/$totalinstitucional,1).'%)';
+        $array2['totales']['totalprec'] = ($total2021prec).' ('.round(($total2021prec)*100/$totalinstitucional,1).'%)';
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $array,
@@ -2191,9 +2258,22 @@ class HorariogenericController extends Controller
             'dataProvider' => $dataProvider,
             'dataProvidertotales' => $dataProvidertotales,
             'dataOtras' => $dataOtras,
-            
+            'semvir' => $semvir,
+            'semprec' => $semprec,
             
         ]);
         
     }
+
+    /*public function actionBorrarprimero($sem){
+        $horarios = Horariogeneric::find()
+                    ->joinWith(['catedra0'])
+                    ->where(['semana' => $sem])
+                    ->andWhere(['<=', 'catedra.division', 8])
+                    ->all();
+        foreach ($horarios as $model) {
+            $model->delete();
+        }
+        return 'ok';
+    }*/
 }

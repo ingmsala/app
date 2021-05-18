@@ -44,6 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'preceptoria',
                 'value' => 'preceptoria0.nombre'
             ],
+            'aula',
 
             
             ['class' => 'yii\grid\ActionColumn'],

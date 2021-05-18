@@ -415,7 +415,7 @@ class ClasediariaController extends Controller
                 //return var_dump($catedra);
                     $echodiv .= '<div class="pull-left" >';
                     $echodiv .= '<center><div  style="margin:10px;">';
-                    $echodiv .= '<a class="menuHorarios" href="index.php?r=libroclase/clasediaria/catedra&cat='.$catedra['id'].'" role="button" >'.$catedra['division0']['nombre'].'<br><span style="font-size:0.5em;" class="label label-default">'.$catedra['actividad0']['nombre'].'</span></a>';
+                    $echodiv .= '<a class="menuHorarios" href="index.php?r=libroclase/clasediaria/catedra&cat='.$catedra['id'].'" role="button" >'.$catedra['division0']['nombre'].'<br><span style="font-size:0.5em;" class="label label-default">'.$catedra['actividad0']['nombre'].'</span><br/><span style="font-size:0.5em;"> Aula: '.$catedra['division0']['aula'].'</span></a>';
                     $echodiv .= '</div></center>';
                     $echodiv .= '</div>';
             }
