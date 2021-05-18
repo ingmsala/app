@@ -41,7 +41,7 @@ class AgenteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_ABM_AGENTE]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -67,7 +67,7 @@ class AgenteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_ABM_AGENTE]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -178,7 +178,7 @@ class AgenteController extends Controller
                     $tcx->tipocargo = $tc;
                     $tcx->save();
                 }
-
+                Yii::$app->session->setFlash('success', "Se creó correctamente el registro");
                 return $this->redirect(['view', 'id' => $model->id]);
             }
                 
@@ -223,7 +223,8 @@ class AgenteController extends Controller
             $model->nombre = strtoupper($model->nombre);
             $model->mail = strtolower($model->mail);
             if($model->save())
-                return $this->redirect(['view', 'id' => $model->id]);
+                Yii::$app->session->setFlash('success', "Se modificó correctamente el registro");
+                return $this->redirect(['index', 'id' => $model->id]);
         }
 
         return $this->render('update', [

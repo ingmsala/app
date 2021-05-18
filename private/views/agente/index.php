@@ -8,7 +8,7 @@ use app\config\Globales;
 /* @var $searchModel app\models\AgenteSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Agentes';
+$this->title = 'Docentes';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="agente-index">
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         'toolbar'=>[
             ['content' => 
-                Html::a('Nuevo Agente', ['create'], ['class' => 'btn btn-success'])
+                Html::a('Nuevo Docente', ['create'], ['class' => 'btn btn-success'])
 
             ],
             '{export}',
@@ -90,12 +90,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 
             ],
             [
-                'label' => 'Agente',
+                'label' => 'Docente',
                 'attribute' => 'apellido',
                 'hAlign' => 'left', 
                 'vAlign' => 'middle',
                 'value' => function($model){
                     return $model->apellido.', '.$model->nombre;
+                }
+            ],
+            [
+                'label' => 'Teléfono',
+                'attribute' => 'telefono',
+                'hAlign' => 'left', 
+                'vAlign' => 'middle',
+                'value' => function($model){
+                    return $model->telefono;
                 }
             ],
 
@@ -125,7 +134,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                    
             
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'template' => '{update}'],
 
             [
                 'class' => 'yii\grid\ActionColumn',

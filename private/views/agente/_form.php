@@ -52,6 +52,8 @@ use yii\helpers\Url;
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true, 'style'=>'text-transform:uppercase;']) ?>
 
     <?= $form->field($model, 'genero')->dropDownList($listgeneros, ['prompt'=>'Seleccionar...']); ?>
+
+    <?= $form->field($model, 'telefono')->textInput(['maxlength' => true]) ?>
     
     <?php
         if($origen == 'create'){

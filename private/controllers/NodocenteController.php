@@ -33,11 +33,23 @@ class NodocenteController extends Controller
                 'rules' => [
                     
                     [
-                        'actions' => ['view', 'create', 'update', 'delete'],   
+                        'actions' => ['view', 'create', 'update'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_NOVEDADES, Globales::US_SECRETARIA]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_NOVEDADES, Globales::US_SECRETARIA, Globales::US_ABM_AGENTE]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
+                    [
+                        'actions' => ['delete'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -49,7 +61,7 @@ class NodocenteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_NOVEDADES, Globales::US_CONSULTA, Globales::US_SECRETARIA]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_NOVEDADES, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_ABM_AGENTE]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -144,7 +156,8 @@ class NodocenteController extends Controller
                 $user->setPassword($model->documento);
                 $user->generateAuthKey();
                 $user->save();
-                return $this->redirect(['view', 'id' => $model->id]);
+                Yii::$app->session->setFlash('success', "Se creó correctamente el registro");
+                return $this->redirect(['index', 'id' => $model->id]);
             }
                 
         }
@@ -176,7 +189,8 @@ class NodocenteController extends Controller
             $model->nombre = strtoupper($model->nombre);
             $model->mail = strtolower($model->mail);
             if($model->save())
-                return $this->redirect(['view', 'id' => $model->id]);
+                Yii::$app->session->setFlash('success', "Se modificó correctamente el registro");
+                return $this->redirect(['index', 'id' => $model->id]);
         }
 
         return $this->render('update', [

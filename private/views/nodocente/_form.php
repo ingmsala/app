@@ -22,6 +22,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'apellido')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
+    
 
     <?= $form->field($model, 'genero')->dropDownList($listgeneros, ['prompt'=>'Seleccionar...']); ?>
     <?= $form->field($model, 'condicionnodocente')->dropDownList($listcondicion, ['prompt'=>'Seleccionar...']); ?>
@@ -29,6 +30,7 @@ use yii\widgets\ActiveForm;
     
 
     <?= $form->field($model, 'mail')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'telefono')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'area')->textInput(['maxlength' => true]) ?> 
     <?= $form->field($model, 'categorianodoc')->textInput(['maxlength' => true]) ?>
 

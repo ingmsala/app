@@ -38,8 +38,8 @@ class Agente extends \yii\db\ActiveRecord
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_FINDHORARIOLOGIN] = ['legajo'];
-        $scenarios[self::SCENARIO_AB] = ['apellido', 'nombre', 'legajo', 'genero', 'documento', 'tipodocumento', 'mail', 'fechanac', 'mapuche', 'tiposcargo'];
-        $scenarios[self::SCENARIO_AM] = ['apellido', 'nombre', 'legajo', 'genero', 'documento', 'tipodocumento', 'mail', 'fechanac', 'mapuche'];
+        $scenarios[self::SCENARIO_AB] = ['apellido', 'nombre', 'legajo', 'genero', 'documento', 'tipodocumento', 'mail', 'fechanac', 'mapuche', 'tiposcargo', 'telefono'];
+        $scenarios[self::SCENARIO_AM] = ['apellido', 'nombre', 'legajo', 'genero', 'documento', 'tipodocumento', 'mail', 'fechanac', 'mapuche', 'telefono'];
         $scenarios[self::SCENARIO_DECLARACIONJURADA] = ['apellido', 'nombre', 'legajo', 'documento', 'tipodocumento', 'mail', 'telefono', 'fechanac', 'cuil', 'domicilio', 'localidad', 'mapuche'];
         $scenarios[self::SCENARIO_FONID] = ['apellido', 'nombre', 'legajo', 'cuil'];
         

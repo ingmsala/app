@@ -31,6 +31,7 @@ class Globales
 	const US_DESPACHO = 24;
 	const US_CONSULTA_HORARIO = 25;
 	const US_CONSULTORIO_MEDICO = 26;
+	const US_ABM_AGENTE = 27;
 	
 	
 	const COND_SUPL = 5;

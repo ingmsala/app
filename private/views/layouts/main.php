@@ -518,7 +518,7 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Agentes', 'url' => ['/agente']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Personal no agente', 'url' => ['/nodocente']],
+                                ['label' => 'Personal no docente', 'url' => ['/nodocente']],
                                 '<div class="dropdown-divider"></div>',                                
                                 ['label' => 'Nombramientos de cargo', 'url' => ['/nombramiento']],
                                 '<div class="dropdown-divider"></div>',
@@ -1395,6 +1395,58 @@ try {
                             'items' => [
 
                                 ['label' => 'Reporte inasistencia', 'url' => ['/avisoinasistencia']],
+                                '<div class="dropdown-divider"></div>',
+                                
+                                
+                                
+                            ],
+
+
+                    ],
+                        
+                                       
+                    
+                    ['label' => Yii::$app->user->identity->role0->nombre,
+                            
+                            'items' => [
+                                            
+                                            [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).' Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
+                                
+                                            [
+                                                'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                                                'url' => ['/cas/auth/logout'],
+                                                'linkOptions' => ['data-method' => 'post'],
+                                            
+                                    
+                                            ],
+                                            '<div class="dropdown-divider"></div>',
+                                
+                             ],
+                    ],
+
+
+
+
+                ];
+
+
+            }elseif(Yii::$app->user->identity->role == Globales::US_ABM_AGENTE){
+
+                
+                $items = [
+
+                    ['label' => 'Administración',
+                            'items' => [
+
+                                ['label' => 'Docentes', 'url' => ['/agente']],
+                                '<div class="dropdown-divider"></div>',
+                                ['label' => 'Personal no docente', 'url' => ['/nodocente']],
                                 '<div class="dropdown-divider"></div>',
                                 
                                 

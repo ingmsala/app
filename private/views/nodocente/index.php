@@ -78,6 +78,7 @@ $this->title = 'Personal No agente';
                 'attribute' => 'condicionnodocente0.nombre',
             ],
             'area',
+            'telefono',
             'categorianodoc',
             'mail',
                         
@@ -86,7 +87,7 @@ $this->title = 'Personal No agente';
             [
                 'class' => 'kartik\grid\ActionColumn',
 
-                'template' => '{view} {viewdetcat} ',
+                'template' => '{viewdetcat} ',
 
                 
                 'buttons' => [
