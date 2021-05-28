@@ -167,6 +167,10 @@ $config = [
         'horariogenerico' => [
                 'class' => 'app\modules\horariogenerico\Horariogenerico',
         ],
+
+        'becas' => [
+                'class' => 'app\modules\becas\Becas',
+        ],
         
 
          'edh' => [

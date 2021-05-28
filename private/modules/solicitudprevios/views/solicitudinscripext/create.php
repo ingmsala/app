@@ -18,6 +18,8 @@ $this->title = 'FORMULARIO SOLICITUD DE INSCRIPCIÓN A EXÁMENES PREVIOS/LIBRES 
         'modelAjuntos' => $modelAjuntos,
         'turnoexamen' => $turnoexamen,
         'actividades' => $actividades,
+        'divisiones' => $divisiones,
+        't' => $t,
     ]) ?>
 
 </div>

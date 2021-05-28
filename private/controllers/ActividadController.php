@@ -14,6 +14,7 @@ use app\models\Propuesta;
 use yii\filters\AccessControl;
 use app\config\Globales;
 use app\models\Departamento;
+use app\models\Division;
 use yii\helpers\ArrayHelper;
 /**
  * ActividadController implements the CRUD actions for Actividad model.
@@ -204,6 +205,58 @@ class ActividadController extends Controller
                     'app\models\Actividad' => [
                         'id',
                         'name' => 'nombre',
+                    ],
+                ]);
+                $out = $listActividad;
+                return ['output'=>$out, 'selected'=>''];
+            }
+
+        }
+
+        return ['output'=>'', 'selected'=>''];
+        
+                
+        
+    }
+
+    public function actionXplan()
+    {   
+        $searchModel = new ActividadSearch();
+        
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+
+        if (isset($_POST['depdrop_parents'])) {
+            
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+
+                $division = $parents[0];
+
+                $div = Division::findOne($division);
+                $div = $div->nombre[0];
+
+                if($div<=4)
+                    $plan_id = 2;
+                else    
+                    $plan_id = 1;
+
+
+                $actividad = Actividad::find()
+                ->where(['plan' => $plan_id])
+                ->andWhere(['propuesta' => 1])
+                ->andWhere(['actividadtipo' => 1])
+                ->andWhere(['<>', 'curso', 7])
+                ->orderBy('curso, nombre')
+                ->all();
+                
+
+                $listActividad=ArrayHelper::toArray($actividad, [
+                    'app\models\Actividad' => [
+                        'id',
+                        'name' => function($model){
+                            return $model->curso.'° - '.$model->nombre;
+                        },
                     ],
                 ]);
                 $out = $listActividad;

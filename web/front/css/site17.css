@@ -1840,6 +1840,16 @@ box-shadow: 10px 10px 91px 0px rgba(152,51,21,1);
     overflow: hidden;
   }
 
+  .breadcrumbsbeca > li + li:before {
+    padding: 0 5px;
+    color: #ccc;
+    content: " » \00a0";
+}
+
+.becapasoinactivo > a, .becapasoinactivo{
+    color:#777777;
+}
+
 
 
 

@@ -4,6 +4,7 @@ namespace app\modules\solicitudprevios\controllers;
 
 use app\config\Globales;
 use app\models\Actividad;
+use app\models\Division;
 use app\models\Turnoexamen;
 use app\modules\solicitudprevios\models\Adjuntosolicitudext;
 use app\modules\solicitudprevios\models\Detallesolicitudext;
@@ -29,7 +30,10 @@ class CrearController extends Controller
             ],
         ];
     }
-    public function actionIndex()
+
+
+
+    public function actionIndex($t=1)
     {
         $this->layout = 'mainactivar';
         date_default_timezone_set('America/Argentina/Buenos_Aires');
@@ -40,28 +44,39 @@ class CrearController extends Controller
         $modelAjuntos = new Adjuntosolicitudext();
         try {
             if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_DESPACHO])){
-                $turnoexamen = Turnoexamen::find()->where(['tipoturno' => 1])->andWhere(['<>', 'activo', 3])->all();
+                $turnoexamen = Turnoexamen::find()->where(['tipoturno' => $t])->andWhere(['<>', 'activo', 3])->all();
             }else{
-                $turnoexamen = Turnoexamen::find()->where(['tipoturno' => 1])->andWhere(['activo' => 1])->all();
+                $turnoexamen = Turnoexamen::find()->where(['tipoturno' => $t])->andWhere(['activo' => 1])->all();
             }
         } catch (\Throwable $th) {
-            $turnoexamen = Turnoexamen::find()->where(['tipoturno' => 1])->andWhere(['activo' => 1])->all();
+            $turnoexamen = Turnoexamen::find()->where(['tipoturno' => $t])->andWhere(['activo' => 1])->all();
         }
+
+        $divisiones = Division::find()->where(['<=', 'preceptoria', 6])->all();
         
 
         if(count($turnoexamen)==0){
             Yii::$app->session->setFlash('danger', 'No está habilitado ningún turno de examen. Consulte el calendario académico para verificar las fechas de apertura de inscripcionres.');
         }
-        $habilitados = [6,7];
+        if($t == 1)
+            $habilitados = [6,7];
+        else
+            $habilitados = [1,2,3,4,5,6];
         $actividades = Actividad::find()
-                            ->joinWith(['catedras', 'catedras.division0'])
-                            ->where(['in', 'left(division.nombre, 1)', $habilitados])
-                            ->andWhere(['actividad.propuesta' => 1])
-                            ->andWhere(['actividad.actividadtipo' => 1])
-                            ->orderBy('actividad.nombre')->all();
+                            //->joinWith(['catedras', 'catedras.division0'])
+                            ->where(['in', 'curso', $habilitados])
+                            ->andWhere(['propuesta' => 1])
+                            ->andWhere(['actividadtipo' => 1])
+                            ->orderBy('nombre')->all();
         //$actividades = Actividad::find()->where(['propuesta' => 1])->andWhere(['actividadtipo' => 1])->orderBy('nombre')->all();
 
         if ($model->load(Yii::$app->request->post()) && $modelAjuntos->load(Yii::$app->request->post())) {
+
+            
+            ini_set("pcre.backtrack_limit", "5000000");
+            ini_set( 'upload_max_size' , '256M' );
+            ini_set( 'post_max_size', '256M');
+            ini_set( 'max_execution_time', '300' );
             
             $images = UploadedFile::getInstances($modelAjuntos, 'image');
             //return var_dump($images);
@@ -133,6 +148,8 @@ class CrearController extends Controller
             'modelAjuntos' => $modelAjuntos,
             'turnoexamen' => $turnoexamen,
             'actividades' => $actividades,
+            'divisiones' => $divisiones,
+            't' => $t,
         ]);
     }
 

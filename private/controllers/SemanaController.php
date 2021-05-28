@@ -564,6 +564,16 @@ class SemanaController extends Controller
 
             $semana = $param['btn_submit_semana'];
             $sem = Semana::findOne($semana);
+
+            foreach ($sem->horariogenerics as $horario) {
+                try {
+                    $horario->horareloj0->delete();
+                } catch (\Throwable $th) {
+                    //throw $th;
+                }
+                $horario->delete();
+            }
+
             $fechasdestino = $sem->getFechas();
 
             
@@ -670,11 +680,11 @@ class SemanaController extends Controller
             <strong>Info</strong> Debe designar el tipo de semana como <i>Virtual</i> o <i>Presencial</i> para copiar los horarios.
             </div>';
 
-        if(count($sem->horariogenerics)>0){
+        /*if(count($sem->horariogenerics)>0){
             return '<div class="alert alert-warning">
             <strong>Info</strong> No se puede copiar, ya que existen horarios cargados.
             </div>';
-        }
+        }*/
 
         return $this->renderPartial('copiardesde', [
             'semana' => $semana,

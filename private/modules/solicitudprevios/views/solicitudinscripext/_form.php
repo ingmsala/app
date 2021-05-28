@@ -1,12 +1,13 @@
 <?php
 
 use kartik\date\DatePicker;
+use kartik\depdrop\DepDrop;
 use kartik\file\FileInput;
 use kartik\form\ActiveForm;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\solicitudprevios\models\Solicitudinscripext */
@@ -15,6 +16,7 @@ use yii\helpers\Html;
 
 <?php $turnoexamen=ArrayHelper::map($turnoexamen,'id','nombre'); ?>
 <?php $actividades=ArrayHelper::map($actividades,'id','nombre'); ?>
+<?php $divisiones=ArrayHelper::map($divisiones,'id','nombre'); ?>
 
 <div class="solicitudinscripext-form" style="background-color: #F9F9F9;padding:10px;">
 
@@ -62,20 +64,46 @@ use yii\helpers\Html;
 
     <?= $form->field($model, 'telefono')->textInput(['maxlength' => true]) ?>
 
-    <?= 
+    <?php
 
-        $form->field($modelDetalle, 'actividad')->widget(Select2::classname(), [
-            'data' => $actividades,
-            'options' => [
-                'placeholder' => 'Seleccionar...',
-                'multiple' => true,
-            ],
+    if($t==2){
+
+        echo $form->field($model, 'division')->widget(Select2::classname(), [
+            'data' => $divisiones,
+            'options' => ['placeholder' => 'Seleccionar...', 'id'=>'division_id'],
             'pluginOptions' => [
                 'allowClear' => true
             ],
         ]);
 
+        echo $form->field($modelDetalle, 'actividad')->widget(DepDrop::classname(), [
+            'type' => DepDrop::TYPE_SELECT2,
+            //'name' => 'hora',
+            
+            'options' => ['id'=>'actividad-id', 'multiple' => true,],
+            'pluginOptions' => [
+            'depends'  => ['division_id'],
+            'placeholder' => 'Seleccionar...',
+
+            'url' => Url::to(['/actividad/xplan'])
+            ]
+        ]);  
+    }else{
+         
+
+        echo $form->field($modelDetalle, 'actividad')->widget(Select2::classname(), [
+            'data' => $actividades,
+            'options' => [
+                'placeholder' => 'Seleccionar...',
+                'multiple' => true,
+            ],
+        ]);
+        
+    
+    }
     ?>
+
+    
 
     <?php
 
@@ -87,7 +115,9 @@ use yii\helpers\Html;
             'showPreview' => false,
             'showCaption' => true,
             'showRemove' => true,
-            'showUpload' => false
+            'showUpload' => false,
+            //'maxFileSize' => 999,
+            //'msgSizeTooLarge' => 'ss'
         ],
     ]);
 

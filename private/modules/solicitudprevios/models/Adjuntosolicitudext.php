@@ -33,6 +33,7 @@ class Adjuntosolicitudext extends \yii\db\ActiveRecord
         return [
             [['url', 'nombre', 'image'], 'required'],
             [['solicitud'], 'integer'],
+            [['image'], 'file', 'maxSize'=>'1048576', 'extensions' => 'png, jpg, jpeg, pdf'],
             [['url', 'nombre'], 'string', 'max' => 300],
             [['url'], 'unique'],
             [['solicitud'], 'exist', 'skipOnError' => true, 'targetClass' => Solicitudinscripext::className(), 'targetAttribute' => ['solicitud' => 'id']],

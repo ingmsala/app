@@ -74,8 +74,8 @@ class Globales
 	//const mones = ['msala@unc.edu.ar', 'gabriela.helale@unc.edu.ar', 'hernan.moya@unc.edu.ar', 'gustavo.carranza@unc.edu.ar', 'nicolas.esparza@unc.edu.ar', 'scenturion@unc.edu.ar'];
 	const MAIL2 = 'msala@unc.edu.ar';
 	const MAIL = 'monserratsistema@gmail.com';
-	const PASS_MAIL = 'Monserrat294';
-	const PASS_MAIL2 = 'lpevdrdqmcosrpgk';
+	const PASS_MAIL = 'ykecgrklrguvvwgh';
+	const PASS_MAIL2 = 'qlztstfribdxemkf';
 
 	const LAYOUT_MAIN = 1;
 	const LAYOUT_SOCIOCOMUNITARIOS = 2;

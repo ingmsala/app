@@ -25,6 +25,7 @@ use app\models\Turnoexamen;
  */
 class Solicitudinscripext extends \yii\db\ActiveRecord
 {
+    public $division;
     /**
      * {@inheritdoc}
      */
@@ -40,7 +41,7 @@ class Solicitudinscripext extends \yii\db\ActiveRecord
     {
         return [
             [['apellido', 'nombre', 'documento', 'turno', 'fecha', 'mail', 'telefono'], 'required'],
-            [['turno'], 'integer'],
+            [['turno','division'], 'integer'],
             [['fecha'], 'safe'],
             [['apellido', 'nombre', 'mail'], 'string', 'max' => 200],
             ['mail', 'email'],
@@ -65,6 +66,7 @@ class Solicitudinscripext extends \yii\db\ActiveRecord
             'mail' => 'Correo electrónico',
             'telefono' => 'Nro de Teléfono / Celular de contacto',
             'estado' => 'Estado',
+            'division' => 'División de cursado '.date('Y'),
         ];
     }
 
