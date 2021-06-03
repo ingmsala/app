@@ -5,7 +5,14 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\solicitudprevios\models\Solicitudinscripext */
 
-$this->title = 'FORMULARIO SOLICITUD DE INSCRIPCIÓN A EXÁMENES PREVIOS/LIBRES – ALUMNOS NO CURSANTES';
+if($t==2){
+    $titulo = 'FORMULARIO SOLICITUD DE INSCRIPCIÓN A EXÁMENES PREVIOS/LIBRES – ESTUDIANTES CURSANTES '.date('Y');
+}else{
+    $titulo = 'FORMULARIO SOLICITUD DE INSCRIPCIÓN A EXÁMENES PREVIOS/LIBRES – ESTUDIANTES NO CURSANTES';
+}
+
+
+$this->title = $titulo;
 
 ?>
 <div class="solicitudinscripext-create">

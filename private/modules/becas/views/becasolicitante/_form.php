@@ -142,6 +142,7 @@ $parentescos = ArrayHelper::map($parentescos, 'id', 'nombre');
                     'attributes'=>[       // 2 column layout
                         'image'=>[
                             'type'=>Form::INPUT_WIDGET, 
+                            'label' => 'Negativa de Anses <span style="font-size:0.7em">'.Html::a('Puede solicitarla haciendo click aquí', 'https://www.anses.gob.ar/consulta/certificacion-negativa', ['target'=>'_blank']).'</span>',
                             'widgetClass'=>'\kartik\file\FileInput', 
                             'attribute' => 'image[]',
                             'options'=>[

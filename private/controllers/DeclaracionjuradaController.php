@@ -171,10 +171,11 @@ class DeclaracionjuradaController extends Controller
                                     ['=', 'estadodeclaracion', 4],
                                 ])
                                 ->count();
-        $cantidadenviados = Declaracionjurada::find()
+        $cantidadenviados = 0;
+        /*$cantidadenviados = Declaracionjurada::find()
                                 ->where(['agente' => $agente->documento])
                                 ->andWhere(['=', 'estadodeclaracion', 2])
-                                ->count();
+                                ->count();*/
         
         if($cantidadabiertos > 0){
             Yii::$app->session->setFlash('danger', 'No puede iniciar una nueva Declaración Jurada ya que existe una en estado de <b>Pendiente de Envío</b>. Puede ingresar a la misma para modificarla y enviarla.');

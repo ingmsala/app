@@ -11,12 +11,16 @@ use yii\filters\VerbFilter;
 use app\models\Genero;
 use yii\filters\AccessControl;
 use app\config\Globales;
+use app\models\Actividad;
 use app\models\Agentextipo;
+use app\models\Catedra;
+use app\models\Departamento;
 use app\models\NodocenteSearch;
 use app\models\Rolexuser;
 use app\models\Tipocargo;
 use app\models\Tipodocumento;
 use app\models\User;
+use app\modules\curriculares\models\Aniolectivo;
 use kartik\grid\EditableColumnAction;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
@@ -34,7 +38,7 @@ class AgenteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'editdocumento', 'updatedate', 'actualizarmapuche', 'actualizardomicilio'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'editdocumento', 'updatedate', 'actualizarmapuche', 'actualizardomicilio', 'xdepartamento'],
                 'rules' => [
                     [
                         'actions' => ['create', 'update', 'editdocumento', 'actualizarmapuche', 'actualizardomicilio'],   
@@ -63,7 +67,7 @@ class AgenteController extends Controller
                     ],
 
                     [
-                        'actions' => ['index', 'view'],   
+                        'actions' => ['index', 'view', 'xdepartamento'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -113,6 +117,38 @@ class AgenteController extends Controller
         $dataProvider = $searchModel->search2(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionXdepartamento()
+    {
+        $anios = Aniolectivo::find()->all();
+        $deptos = Departamento::find()->all();
+        $modelcatedra = new Catedra();
+        $modelactividad = new Actividad();
+        
+        if (Yii::$app->request->post()) {
+            $searchModel = new AgenteSearch();
+            $dataProvider = $searchModel->xdepartamento(Yii::$app->request->post()['Catedra']['aniolectivo'], Yii::$app->request->post()['Actividad']['departamento']);
+        }else{
+            $searchModel = new AgenteSearch();
+            $dataProvider = $searchModel->xdepartamento(0,0);
+        }
+
+        if(isset(Yii::$app->request->post()['Catedra']['aniolectivo'])){
+            $modelcatedra->aniolectivo = Yii::$app->request->post()['Catedra']['aniolectivo'];
+        }
+        if(isset(Yii::$app->request->post()['Actividad']['departamento'])){
+            $modelactividad->departamento = Yii::$app->request->post()['Actividad']['departamento'];
+        }
+
+        return $this->render('xdepartamento', [
+            'modelcatedra' => $modelcatedra,
+            'modelactividad' => $modelactividad,
+            'anios' => $anios,
+            'deptos' => $deptos,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -224,6 +260,7 @@ class AgenteController extends Controller
             $model->mail = strtolower($model->mail);
             if($model->save())
                 Yii::$app->session->setFlash('success', "Se modificó correctamente el registro");
+                return $this->redirect(Yii::$app->request->referrer ?: ['index']);
                 return $this->redirect(['index', 'id' => $model->id]);
         }
 

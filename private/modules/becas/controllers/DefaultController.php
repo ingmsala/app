@@ -73,7 +73,9 @@ class DefaultController extends Controller
         $ocupaciones = Becaocupacion::find()->all();
         $nivelestudio = Becanivelestudio::find()->all();
         $ayudasestatal = Becaayudaestatal::find()->all();
-        $parentescos = Parentesco::find()->all();
+        $parentescos = Parentesco::find()
+                        ->where(['in', 'id', [1,2,9,10]])
+                        ->all();
 
         $modelocupacionesx = new Becaocupacionpersona();
         $modelayudax = new Becaayudapersona();

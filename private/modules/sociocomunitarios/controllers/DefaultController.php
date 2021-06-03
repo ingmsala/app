@@ -2,6 +2,7 @@
 
 namespace app\modules\sociocomunitarios\controllers;
 
+use app\config\Globales;
 use Yii;use yii\filters\AccessControl;
 use app\modules\curriculares\models\Comision;
 use app\modules\curriculares\models\Myfunction;
@@ -25,7 +26,7 @@ class DefaultController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1,3,6,8,9,12,13,14,20]);
+                                return in_array (Yii::$app->user->identity->role, [1,3,6,8,9,12,13,14,20, Globales::US_PRECEPTORIA]);
                             }catch(\Exception $exception){
                                 return false;
                             }

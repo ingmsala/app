@@ -818,7 +818,11 @@ try {
                     ['label' => 'Administración', 
                             'items' => [
                                 
-                                ['label' => 'EDH', 'url' => ['/edh/menuopciones']],
+                                /*['label' => 'EDH', 'url' => ['/edh/menuopciones']],
+                                        '<div class="dropdown-divider"></div>',*/
+                                ['label' => 'Espacios Optativos', 'url' => ['/optativas']],
+                                        '<div class="dropdown-divider"></div>',
+                                ['label' => 'Proyectos sociocomunitarios', 'url' => ['/sociocomunitarios']],
                                         '<div class="dropdown-divider"></div>',
                                 
                                 
@@ -1444,7 +1448,7 @@ try {
                     ['label' => 'Administración',
                             'items' => [
 
-                                ['label' => 'Docentes', 'url' => ['/agente']],
+                                ['label' => 'Docentes', 'url' => ['/agente/xdepartamento']],
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Personal no docente', 'url' => ['/nodocente']],
                                 '<div class="dropdown-divider"></div>',

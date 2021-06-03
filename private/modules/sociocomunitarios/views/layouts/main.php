@@ -134,9 +134,13 @@ AppAsset::register($this);
                         
                             'items' => [
                                                            [
-                                    'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass','i'=>2],
-                                ],
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).'Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                    ],
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-left-arrow']).'Salir de PSC',
+                        'url' => ['/site/index'],
+                    ],
                                 
                                 [
                                     'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
@@ -330,7 +334,7 @@ AppAsset::register($this);
                         ]
                     
                 ];
-            }else if( in_array (Yii::$app->user->identity->role, [Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_PSC])){
+            }else if( in_array (Yii::$app->user->identity->role, [Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_PSC, Globales::US_PRECEPTORIA])){
                 $items = [
                     
                         ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/personal/menuprincipal']],
@@ -399,9 +403,13 @@ AppAsset::register($this);
                         
                             'items' => [
                                                            [
-                                    'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass','i'=>2],
-                                ],
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).'Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                    ],
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-left-arrow']).'Salir de PSC',
+                        'url' => ['/site/index'],
+                    ],
                                 
                                 [
                                     'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
@@ -481,9 +489,13 @@ AppAsset::register($this);
                                     'url' => ['/horario/menuopciones'],
                                 ],
                                                            [
-                                    'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass','i'=>2],
-                                ],
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).'Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                    ],
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-left-arrow']).'Salir de PSC',
+                        'url' => ['/site/index'],
+                    ],
                                 
                                 [
                                     'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
@@ -528,9 +540,13 @@ AppAsset::register($this);
                         
                             'items' => [
                                                            [
-                                    'label' => 'Cambiar contraseña',
-                                    'url' => ['/user/cambiarpass','i'=>2],
-                                ],
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).'Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                    ],
+                    [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-left-arrow']).'Salir de PSC',
+                        'url' => ['/site/index'],
+                    ],
                                 
                                 [
                                     'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',

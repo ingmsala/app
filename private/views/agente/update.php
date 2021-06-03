@@ -6,9 +6,7 @@ use yii\helpers\Html;
 /* @var $model app\models\Agente */
 
 $this->title = 'Modificar Agente: ' . $model->apellido . ', ' . $model->nombre;
-$this->params['breadcrumbs'][] = ['label' => 'Agentes', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+
 ?>
 <div class="agente-update">
 

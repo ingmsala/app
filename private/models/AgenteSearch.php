@@ -35,6 +35,44 @@ class AgenteSearch extends Agente
         return Model::scenarios();
     }
 
+    public function xdepartamento($aniolectivo, $depto){
+        $query = Agente::find()
+        ->joinWith(['detallecatedras', 'detallecatedras.catedra0.actividad0', 'detallecatedras.catedra0.division0','detallecatedras.catedra0.horarios'])
+        ->where(['horario.tipo' => 1])
+        ->andWhere(['horario.aniolectivo' => $aniolectivo])
+        ->andWhere(['detallecatedra.revista' => 6])
+        ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo])
+        ->andWhere(['actividad.departamento' => $depto])
+        ->orderBy('agente.apellido, agente.nombre, division.id');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            
+        ]);
+
+        $query->andFilterWhere(['like', 'agente.legajo', $this->legajo])
+            ->andFilterWhere(['or', 
+                ['like', 'agente.apellido', $this->apellido], 
+                ['like', 'agente.nombre', $this->apellido]
+            ])
+            ->andFilterWhere(['like', 'agente.apellido', $this->nombre])
+            ->andFilterWhere(['like', 'agente.documento', $this->documento]);
+
+        return $dataProvider;
+
+    }
+
     public function search2($params)
     {
         $query = Agente::find()

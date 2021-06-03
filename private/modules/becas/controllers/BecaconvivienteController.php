@@ -215,7 +215,6 @@ class BecaconvivienteController extends Controller
                 $conviv->cuil = $model->cuil;
                 $conviv->fechanac = $model->fechanac;
                 $conviv->nivelestudio = $model->nivelestudio;
-                $conviv->parentesco = $model->parentesco;
                 $conviv->persona = $model->persona;
                 $conviv->ocupaciones = $model->ocupaciones;
                 $conviv->ayudas = $model->ayudas;

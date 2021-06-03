@@ -16,6 +16,7 @@ use app\config\Globales;
 use app\models\Division;
 use app\models\DivisionSearch;
 use app\models\Novedadesparte;
+use app\models\Parte;
 use app\models\Preceptoria;
 use app\models\Rolexuser;
 use app\modules\curriculares\models\Aniolectivo;
@@ -143,6 +144,37 @@ class PreceptoresController extends \yii\web\Controller
                 'allModels' => $array,
                 
             ]);
+            
+            $partes = Parte::find()
+                        ->select(['fecha', 'count(id)'])
+                        ->where(['year(fecha)' => date('Y')])
+                        ->andWhere(['>=','fecha', '2021-04-09'])
+                        ->having(['<', 'count(id)', 6])
+                        ->groupBy(['fecha'])
+                        ->all();
+            
+            $partes = ArrayHelper::map($partes, 'fecha', 'fecha');
+            $partesfaltantes = '<ul>';
+            $partesfaltantesvf = false;
+            foreach ($partes as $fecha) {
+                $partespreceptoria = Parte::find()
+                            ->where(['fecha' => $fecha])
+                            ->andWhere(['preceptoria' => $pre->id])
+                            ->count();
+                if($partespreceptoria==0){
+                    $partesfaltantes .= '<li>'.Yii::$app->formatter->asDate($fecha, 'dd/MM/yyyy').'</li>';
+                    $partesfaltantesvf = true;
+                }
+            }
+            $partesfaltantes .= '</ul>';
+            
+            if($partesfaltantesvf){
+                Yii::$app->session->setFlash('warning', "Se encuentran pendientes de creación los partes en las siguientes fechas: <br><br>".$partesfaltantes);
+            }
+            
+           
+
+
 
 	        return $this->render('preceptores', 
 	        [

@@ -56,7 +56,7 @@ class CrearController extends Controller
         
 
         if(count($turnoexamen)==0){
-            Yii::$app->session->setFlash('danger', 'No está habilitado ningún turno de examen. Consulte el calendario académico para verificar las fechas de apertura de inscripcionres.');
+            Yii::$app->session->setFlash('danger', 'No está habilitado ningún turno de examen. Consulte el calendario académico para verificar las fechas de apertura de inscripciones.');
         }
         if($t == 1)
             $habilitados = [6,7];

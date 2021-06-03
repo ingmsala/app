@@ -73,8 +73,10 @@ class Globales
 	//const psc = ['msala@unc.edu.ar', 'sandragezmet@unc.edu.ar', 'florencia.leyba@unc.edu.ar', 'florencia.baca@unc.edu.ar', 'rocio.lopez.arzuaga@unc.edu.ar', 'laura.mayorga@unc.edu.ar', 'natalia.diez@unc.edu.ar'];
 	//const mones = ['msala@unc.edu.ar', 'gabriela.helale@unc.edu.ar', 'hernan.moya@unc.edu.ar', 'gustavo.carranza@unc.edu.ar', 'nicolas.esparza@unc.edu.ar', 'scenturion@unc.edu.ar'];
 	const MAIL2 = 'msala@unc.edu.ar';
-	const MAIL = 'monserratsistema@gmail.com';
-	const PASS_MAIL = 'ykecgrklrguvvwgh';
+	const MAIL = 'info.monserrat@cnm.unc.edu.ar';
+	const MAIL3 = 'monserratsistema@gmail.com';
+	const PASS_MAIL = 'wxljupjiflnhrnbl';
+	const PASS_MAIL3 = 'ykecgrklrguvvwgh';
 	const PASS_MAIL2 = 'qlztstfribdxemkf';
 
 	const LAYOUT_MAIN = 1;

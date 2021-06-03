@@ -2,6 +2,7 @@
 
 namespace app\modules\sociocomunitarios\controllers;
 
+use app\config\Globales;
 use Yii;
 use app\modules\curriculares\models\Clase;
 use app\modules\curriculares\models\Myfunction;
@@ -46,7 +47,7 @@ class ClaseController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1,3,6,8,9,12,13,14,20]);
+                                return in_array (Yii::$app->user->identity->role, [1,3,6,8,9,12,13,14,20, Globales::US_PRECEPTORIA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -89,7 +90,7 @@ class ClaseController extends Controller
                         'matchCallback' => function ($rule, $action) {
                             try{
                                 
-                                if (in_array (Yii::$app->user->identity->role, [1,3,6,8,9,12,13,14,20])){
+                                if (in_array (Yii::$app->user->identity->role, [1,3,6,8,9,12,13,14,20, Globales::US_PRECEPTORIA])){
                                     $model = $this->findModel($_GET['id']);
                                     if($model->fechaconf == 1 && $model->hora != null)
                                         return true;

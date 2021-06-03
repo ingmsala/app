@@ -70,7 +70,9 @@ class BecasolicitanteController extends Controller
         
 
         
-        $parentescos = Parentesco::find()->all();
+        $parentescos = Parentesco::find()
+                        ->where(['in', 'id', [1,2,9,10]])                
+                        ->all();
 
         $ocupacionesx = ArrayHelper::map($model->persona0->becaocupacionpersonas, 'ocupacion', 'ocupacion');
         $model->ocupaciones = $ocupacionesx;
