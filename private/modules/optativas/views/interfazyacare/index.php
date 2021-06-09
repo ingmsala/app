@@ -1,7 +1,9 @@
-<?php 
-	use yii\helpers\Html;
+<?php
+
+use kartik\grid\GridView;
+use yii\helpers\Html;
 	use yii\bootstrap\ActiveForm;
-	$this->title = 'Interfaz Yacaré - Analíticos';
+	$this->title = 'Historial académico de espacios curriculares';
 ?>
 
 <h2><?=$this->title ?></h2>
@@ -39,26 +41,59 @@
 
 				echo '<span><b><span style="font-size: 15pt;">'.
 					$model->apellido.', '.$model->nombre.' </span></b>';
-				echo '<a href="#" id="btnCopiar" class="btn btn-default"><span class="glyphicon glyphicon-copy"></a></span>';
+				echo GridView::widget([
+					'dataProvider' => $dataProvider,
+					'summary' => false,
+					'columns' => [
+						['class' => 'yii\grid\SerialColumn'],
+			
+						[
+							'label' => 'Año lectivo',
+							'value' => function($model){
+								return $model->comision0->espaciocurricular0->aniolectivo0->nombre;
+							},
+
+						],
+						[
+							'label' => 'Tipo',
+							'value' => function($model){
+								return $model->comision0->espaciocurricular0->actividad0->actividadtipo0->nombre;
+							},
+
+						],
+						[
+							'label' => 'Espacio curricular',
+							'value' => function($model){
+								return $model->comision0->espaciocurricular0->actividad0->nombre;
+							},
+
+						],
+						[
+							'label' => 'Curso',
+							'value' => function($model){
+								return $model->comision0->espaciocurricular0->curso.'°';
+							},
+
+						],
+						[
+							'label' => 'Condición',
+							'value' => function($model){
+								return $model->estadomatricula0->nombre;
+							},
+
+						],
+					],
+				]);
+
 			}
 
-			if (isset($lista)){
-				
-				$texto = 'El alumno/a ha aprobado los siguientes espacios optativos curriculares:';
-				$texto .= $lista;
-			}else{
-				$texto = '';
-			}
+			
 			
 			//echo Html::textArea('text', $texto, ['class' => 'form-control', 'rows' => '8', 'id'=> 'textoACopiar']);
 
 
 		?>
 		
-		<blockquote>
-			<div id="textoACopiar" class="">
-				<?= strip_tags (htmlspecialchars(trim($texto)), ENT_QUOTES); ?>
-	        </div>
-		</blockquote>
+		
 
 	</div>

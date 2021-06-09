@@ -2,6 +2,7 @@
 
 namespace app\modules\optativas\controllers;
 
+use app\config\Globales;
 use Yii;
 use app\modules\curriculares\models\Alumno;
 use app\modules\curriculares\models\Matricula;
@@ -31,7 +32,7 @@ class InterfazyacareController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_DESPACHO]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -66,40 +67,38 @@ class InterfazyacareController extends Controller
             $matriculas = Matricula::find()
                 ->joinWith(['alumno0'])
                 ->where(['alumno.documento' => $model->documento])
-                ->andWhere(['matricula.estadomatricula' => 3])
+                //->andWhere(['matricula.estadomatricula' => 3])
                 ->all();
             
             if ($matriculas != null){
                 $model = Alumno::find()->where(['documento' => $model->documento])->one();
                 $searchModel = new MatriculaSearch();
-                $dataProvider = $searchModel->matriculasxalumno($model->documento);
+                $dataProvider = $searchModel->matriculasxalumno($model->documento, 99);
 
                 
-                $matriculas = ArrayHelper::toArray($matriculas, [
+                /*$matriculas = ArrayHelper::toArray($matriculas, [
                     'app\modules\optativas\models\Matricula' => [
                         'id',
-                        'year' => function ($model) {
+                        'aniolectivo' => function ($model) {
                             return $model->comision0->espaciocurricular0->aniolectivo0->nombre;
                          },
                         'optativa' => function ($model) {
                             return $model->comision0->espaciocurricular0->actividad0->nombre;
                          }
                     ],
-                ]);
+                ]);*/
 
-                $lista = '<ul>';
+                /*$lista = '<ul>';
                 foreach ($matriculas as $matricula) {
-                    $lista .= '<li>'.$matricula['year'].' - '.$matricula['optativa'].'</li>';
+                    $lista .= '<li> - '.$matricula['optativa'].'</li>';
                 }
-                $lista .= '<ul>';
+                $lista .= '<ul>';*/
 
-                /*'<ul>'.
-                '<li></li>'.
-                '</ul>'*/
+                
                 return $this->render('index',[
                     'model' => $model,
                     'dataProvider' => $dataProvider,
-                    'lista' =>$lista,
+                    
                 ]);
                 
             }else{

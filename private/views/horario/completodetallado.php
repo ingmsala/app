@@ -1,5 +1,6 @@
 <?php
 
+use app\config\Globales;
 use kartik\form\ActiveForm;
 use yii\helpers\Html;
 use kartik\grid\GridView;
@@ -138,6 +139,61 @@ $anio = $model->aniolectivo;
                     return $doc;
                 }
             ],
+            /*[
+                'label' =>'Cantidad de horas 2020',
+                //'group' => true,
+                'value' => function($model) use($anio){
+                    $cat = $model;
+                    $c = 0;
+                    foreach ($cat->horarios as $horario) {
+                        if ($horario->aniolectivo==$anio){
+                            $c++;
+                        }
+                    }
+                    return $c;
+                }
+            ],*/
+
+            [
+                'class' => 'kartik\grid\ActionColumn',
+
+                'template' => '{viewdetcat}',
+                'visible' => (in_array(Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_PRECEPTORIA])) ? true : false,
+                
+                'buttons' => [
+                    'viewdetcat' => function($url, $model, $key) use($anio){
+                        $cat = $model;
+                        foreach ($cat->detallecatedras as $dc) {
+                            if ($dc->revista == 6 && $dc->aniolectivo==$anio){
+                                $id = $dc->id;
+                                break;
+                            }
+                        }
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>',
+                            '?r=detallecatedra/updatehorario&or=lh&id='.$id);
+                    },
+                    
+                    'dj' => function($url, $model, $key){
+                        return Html::button('<span class="glyphicon glyphicon-modal-window"></span>',
+                        ['value' => Url::to('index.php?r=horario/declaracionhorario&dni='.$model->agente0->documento),
+                            'class' => 'modala btn btn-link', 'id'=>'modala']);
+                            
+                    },
+
+                    'updatedetcat' => function($url, $model, $key){
+                    
+                    return Html::button('<span class="glyphicon glyphicon-pencil"></span>',
+                        ['value' => Url::to('index.php?r=detallecatedra/updatehorario&id='.$model['id']),
+                            'class' => 'modala btn btn-link', 'id'=>'modala']);
+
+
+                },
+                    
+                    
+                ]
+
+            ]
             
             
             /*[

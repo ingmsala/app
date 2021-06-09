@@ -64,7 +64,7 @@ $this->title = 'Actividades';
 
                 
                 'buttons' => [
-                    'viewdetcat2' => function($url, $model, $key){
+                    'viewdetcat' => function($url, $model, $key){
                         return Html::a(
                             '<span class="glyphicon glyphicon-eye-open btn btn-info"></span>',
                             '?r=libroclase/programa/index&id='.$model['id']);

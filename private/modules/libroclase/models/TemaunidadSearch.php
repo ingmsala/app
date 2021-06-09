@@ -73,6 +73,39 @@ class TemaunidadSearch extends Temaunidad
         return $dataProvider;
     }
 
+    public function porprograma($programa)
+    {
+        $query = Temaunidad::find()
+                    ->joinWith(['detalleunidad0'])
+                    ->where(['detalleunidad.programa' => $programa])
+                    ->orderBy('detalleunidad.unidad, temaunidad.prioridad');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'detalleunidad' => $this->detalleunidad,
+            'horasesperadas' => $this->horasesperadas,
+            'prioridad' => $this->prioridad,
+        ]);
+
+        $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);
+
+        return $dataProvider;
+    }
+
     public function pordetalleunidadycat($du, $cat)
     {
         /*$query = Temaunidad::find()

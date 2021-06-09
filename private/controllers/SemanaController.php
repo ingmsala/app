@@ -566,12 +566,18 @@ class SemanaController extends Controller
             $sem = Semana::findOne($semana);
 
             foreach ($sem->horariogenerics as $horario) {
+                
                 try {
-                    $horario->horareloj0->delete();
+                    $horarelx = $horario->horareloj0;
                 } catch (\Throwable $th) {
                     //throw $th;
                 }
                 $horario->delete();
+                try {
+                    $horarelx->delete();
+                } catch (\Throwable $th) {
+                    //throw $th;
+                }
             }
 
             $fechasdestino = $sem->getFechas();

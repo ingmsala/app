@@ -413,9 +413,16 @@ class ClasediariaController extends Controller
             $echodiv = '';
             foreach ($divisiones as $catedra) {
                 //return var_dump($catedra);
+                    $horasenfalta = $this->getFaltacargar($catedra['id'], $aniolectivo->id);
+                    //return var_dump($horasenfalta);
+                    if(count($horasenfalta)>0){
+                        $falta = '<span class="glyphicon glyphicon-exclamation-sign pull-right" title="Existen clases pendientes de carga" style="color:#D64436;font-size:0.6em;" aria-hidden="true"></span>';
+                    }else{
+                        $falta = '<span class="glyphicon glyphicon-ok pull-right" style="color:green;font-size:0.6em;" aria-hidden="true"></span>';
+                    }
                     $echodiv .= '<div class="pull-left" >';
                     $echodiv .= '<center><div  style="margin:10px;">';
-                    $echodiv .= '<a class="menuHorarios" href="index.php?r=libroclase/clasediaria/catedra&cat='.$catedra['id'].'" role="button" >'.$catedra['division0']['nombre'].'<br><span style="font-size:0.5em;" class="label label-default">'.$catedra['actividad0']['nombre'].'</span><br/><span style="font-size:0.5em;"> Aula: '.$catedra['division0']['aula'].'</span></a>';
+                    $echodiv .= '<a class="menuHorarios" href="index.php?r=libroclase/clasediaria/catedra&cat='.$catedra['id'].'" role="button" >'.$catedra['division0']['nombre'].'<br><span style="font-size:0.5em;" class="label label-default">'.$catedra['actividad0']['nombre'].'</span><br/><span style="font-size:0.5em;"> Aula: '.$catedra['division0']['aula'].'</span><br/>'.$falta.'</a>';
                     $echodiv .= '</div></center>';
                     $echodiv .= '</div>';
             }

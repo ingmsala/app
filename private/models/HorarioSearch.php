@@ -245,11 +245,11 @@ class HorarioSearch extends Horario
         //$aniolectivo = Aniolectivo::find()->where(['activo' => 1])->one();
         $query = Catedra::find()
         ->joinWith(['detallecatedras', 'actividad0', 'division0','detallecatedras.agente0', 'horarios'])
-        ->andWhere(['horario.tipo' => 1])
-        ->andWhere(['horario.aniolectivo' => $aniolectivo])
+        //->andWhere(['horario.tipo' => 1])
+        //->andWhere(['horario.aniolectivo' => $aniolectivo])
         ->andWhere(['detallecatedra.revista' => 6])
         ->andWhere(['detallecatedra.aniolectivo' => $aniolectivo])
-        ->orderBy('agente.apellido, agente.nombre, division.id')->distinct();
+        ->orderBy('division.id, actividad.nombre, agente.apellido, agente.nombre')->distinct();
 
         // add conditions that should always apply here
 

@@ -181,12 +181,18 @@ class MatriculaSearch extends Matricula
         return $dataProvider;
     }
 
-    public function matriculasxalumno($documento)
+    public function matriculasxalumno($documento, $estado =1)
     {
+        if($estado == 1)
         $query = Matricula::find()
             ->joinWith(['comision0', 'estadomatricula0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.aniolectivo0', 'alumno0'])
             ->where(['alumno.documento' => $documento])
             ->andWhere(['matricula.estadomatricula' => 1])
+            ->orderBy('aniolectivo.nombre DESC');
+        else
+        $query = Matricula::find()
+            ->joinWith(['comision0', 'estadomatricula0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.aniolectivo0', 'alumno0'])
+            ->where(['alumno.documento' => $documento])
             ->orderBy('aniolectivo.nombre DESC');
 
         // add conditions that should always apply here

@@ -20,3 +20,15 @@ $this->title = 'Libro de aula';
      ?>
      
     </div>
+
+    <div class="row">
+	 <h1>Desarrollos de Programa</h1>
+    </div>
+
+    <div class="pull-left" >
+        <center>
+        <div  style="margin:10px;">
+            <a class="menuAnio" href="index.php?r=libroclase/desarrollo/desarrollo/catedras&al=2" role="button" >2020</a>
+        </div>
+        </center>
+    </div>

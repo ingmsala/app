@@ -116,6 +116,7 @@ class Agente extends \yii\db\ActiveRecord
             'domicilio' => 'Domicilio', 
             'telefono' => 'Teléfono',
             'tiposcargo' => 'Tipo de cargo',
+            'nombrecompleto' => 'Docente',
         ];
     }
 

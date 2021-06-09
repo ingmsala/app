@@ -221,6 +221,12 @@ class DetallecatedraController extends Controller
             $condiciones=Condicion::find()->where(['<>', 'id', 6])->all();
             $revistas=Revista::find()->where(['<>', 'id', 6])->all();
         }
+
+        if(Yii::$app->user->identity->role == Globales::US_SUPER){
+            $model->condicion = 6;
+        $model->revista = 6;
+        $model->aniolectivo = 2;
+        }
         
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
@@ -238,6 +244,9 @@ class DetallecatedraController extends Controller
             }
 
             $model->save();
+            if(Yii::$app->user->identity->role == Globales::US_SUPER){
+                return $this->redirect(['catedra/create']);
+            }
             return $this->redirect(['catedra/view', 'id' => $catedra]);
         }
 
@@ -327,6 +336,10 @@ class DetallecatedraController extends Controller
             $col = -1;
         }elseif($or == 'hg'){
             $ur = '/horariogenerico/horariogeneric';
+        }elseif($or == 'lh'){
+            $ur = '/horario/completodetallado';
+        }elseif($or == 'cont'){
+            $ur = '/libroclase/desarrollo/desarrollo/control';
         }
         else{
             $ur = '/horarioexamen';
@@ -345,10 +358,17 @@ class DetallecatedraController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->catedra = $catedra;
-            if($model->save())
+            if($model->save()){
+                if($or == 'lh'){
+                    return $this->redirect([$ur]);
+                }
+                if($or == 'cont'){
+                    return $this->redirect([$ur, 'al' => $model->aniolectivo]);
+                }
                 return $this->redirect([$ur.'/completoxcurso', 'col' => $col, 'division' => $catedrax->division, 'vista' => 'docentes', 'al' => $model->aniolectivo, 'sem' => $sem]);
+            }
         }
-
+       
         return $this->render('updatehorario', [
             'model' => $model,
             'catedra' => $catedra,
@@ -523,9 +543,14 @@ class DetallecatedraController extends Controller
         
     }
 
-    public function actionMigrarhorariosiguienteanio($actual,$siguiente)
+    public function actionMigrarhorariosiguienteanio($actual,$siguiente, $divisonnueva)//paso 1
     {
-        $detalles = Detallecatedra::find()->where(['aniolectivo' => $actual])->all();
+        $detalles = Detallecatedra::find()
+                        ->joinWith(['catedra0', 'catedra0.division0'])
+                        ->where(['aniolectivo' => $actual])
+                        ->andWhere(['<>', 'LEFT(division.nombre, 1)', $divisonnueva])
+                        ->all();
+        
         ini_set("pcre.backtrack_limit", "5000000");
         foreach ($detalles as $detalle) {
             $newDetalle = new Detallecatedra();
@@ -538,7 +563,95 @@ class DetallecatedraController extends Controller
             $newDetalle->aniolectivo = $siguiente;
             $newDetalle->save();
         }
-        return $this->redirect(['/horario/panelprincipal']);
+        return $this->redirect(['/horario/migrarhorariosiguienteanio', 'actual' => $actual, 'siguiente' => $siguiente, 'divisonnueva' => $divisonnueva]);
+    }
+
+    public function actionMigrarmateriasafines($actual,$siguiente)//paso 3
+    {
+        $materiaactual = [
+            57 => 262,//biol
+            56 => 263,//quim
+            49 => 264,//caste
+            51 => 265,//grieg
+            52 => 266,//ingle
+            58 => 268,//mate
+            54 => 269,//geo
+            55 => 270,//histo
+            62 => 271,//filo-log
+        ];
+
+        foreach ($materiaactual as $key => $value) {
+            $detalles = Detallecatedra::find()
+                        ->joinWith(['catedra0'])
+                        ->where(['aniolectivo' => $actual])
+                        ->andWhere(['catedra.actividad' => $key])
+                        ->all();
+            foreach ($detalles as $detalle) {
+
+                $newCatedra = new Catedra();
+                $newCatedra->actividad = $value;
+                $newCatedra->division = $detalle->catedra0->division;
+                $newCatedra->save();
+
+                $newDetalle = new Detallecatedra();
+                $newDetalle->agente = $detalle->agente;
+                $newDetalle->catedra = $newCatedra->id;
+                $newDetalle->condicion = $detalle->condicion;
+                $newDetalle->revista = $detalle->revista;
+                $newDetalle->hora = $newCatedra->actividad0->cantHoras;
+                $newDetalle->activo = $detalle->activo;
+                $newDetalle->aniolectivo = $siguiente;
+                $newDetalle->save();
+            }
+        }
+
+        
+        return $this->redirect(['/detallecatedra/migrarfaltantes', 'actual' => $actual, 'siguiente' => $siguiente]);
+    }
+
+    public function actionMigrarfaltantes($actual,$siguiente)//paso 4
+    {
+        $materiaactual = [
+            267 => 267,//france
+            
+        ];
+
+        $divisionesnuevas = [
+            33 => 33,//5a
+            34 => 34,//5b
+            35 => 35,//..
+            36 => 36,//..
+            37 => 37,//..
+            38 => 38,//..
+            39 => 39,//..
+            40 => 40,//5h
+        ];
+
+
+
+        foreach ($materiaactual as $key => $value) {
+            
+            foreach ($divisionesnuevas as $division) {
+
+                $newCatedra = new Catedra();
+                $newCatedra->actividad = $value;
+                $newCatedra->division = $division;
+                $newCatedra->save();
+
+                $newDetalle = new Detallecatedra();
+                $newDetalle->agente = 370;
+                $newDetalle->catedra = $newCatedra->id;
+                $newDetalle->condicion = 6;
+                $newDetalle->revista = 6;
+                $newDetalle->hora = $newCatedra->actividad0->cantHoras;
+                $newDetalle->activo = 1;
+                $newDetalle->aniolectivo = $siguiente;
+                $newDetalle->save();
+            }
+        }
+
+        
+        return $this->redirect(['/horario/migrarhorariosafines', 'actual' => $actual, 'siguiente' => $siguiente]);
     }
 
     

@@ -2732,9 +2732,13 @@ class HorarioController extends Controller
         ]);
     }
 
-    public function actionMigrarhorariosiguienteanio($actual,$siguiente)
+    public function actionMigrarhorariosiguienteanio($actual,$siguiente,$divisonnueva)//paso 2
     {
-        $horarios = Horario::find()->where(['aniolectivo' => $actual])->all();
+        $horarios = Horario::find()
+                        ->joinWith(['catedra0', 'catedra0.division0'])
+                        ->where(['aniolectivo' => $actual])
+                        ->andWhere(['<>', 'LEFT(division.nombre, 1)', $divisonnueva])                
+                        ->all();
         ini_set("pcre.backtrack_limit", "5000000");
         foreach ($horarios as $horario) {
             $newHorario = new Horario();
@@ -2745,7 +2749,52 @@ class HorarioController extends Controller
             $newHorario->tipomovilidad = $horario->tipomovilidad;
             $newHorario->aniolectivo = $siguiente;
             $newHorario->save();
+
+
+
         }
+        return $this->redirect(['/detallecatedra/migrarmateriasafines', 'actual' => $actual, 'siguiente' => $siguiente]);
+    }
+
+    public function actionMigrarhorariosafines($actual,$siguiente)//paso 5
+    {
+        $materiaactual = [
+            57 => 262,//biol
+            56 => 263,//quim
+            49 => 264,//caste
+            51 => 265,//grieg
+            52 => 266,//ingle
+            58 => 268,//mate
+            54 => 269,//geo
+            55 => 270,//histo
+            62 => 271,//filo-log
+        ];
+
+        foreach ($materiaactual as $key => $value) {
+            $horarios = Horario::find()
+                        ->joinWith(['catedra0'])
+                        ->where(['aniolectivo' => $actual])
+                        ->andWhere(['catedra.actividad' => $key])
+                        ->all();
+            foreach ($horarios as $horario) {
+
+                $catedranueva = Catedra::find()
+                            ->where(['actividad' => $value])
+                            ->andWhere(['division' => $horario->catedra0->division])
+                            ->one();
+
+                $newHorario = new Horario();
+                $newHorario->catedra = $catedranueva->id;
+                $newHorario->hora = $horario->hora;
+                $newHorario->diasemana = $horario->diasemana;
+                $newHorario->tipo = $horario->tipo;
+                $newHorario->tipomovilidad = $horario->tipomovilidad;
+                $newHorario->aniolectivo = $siguiente;
+                $newHorario->save();
+            }
+        }
+
+        
         return $this->redirect(['/horario/panelprincipal']);
     }
 

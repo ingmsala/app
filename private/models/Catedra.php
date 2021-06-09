@@ -5,6 +5,7 @@ namespace app\models;
 use app\controllers\CatedraController;
 use app\modules\horariogenerico\models\Horariogeneric;
 use app\modules\libroclase\models\Clasediaria;
+use app\modules\libroclase\models\desarrollo\Desarrollo;
 use Yii;
 
 /**
@@ -186,6 +187,11 @@ class Catedra extends \yii\db\ActiveRecord
         }
         
        
+    }
+
+    public function getDesarrollos()
+    {
+        return $this->hasMany(Desarrollo::className(), ['catedra' => 'id']);
     }
 
 

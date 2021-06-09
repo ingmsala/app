@@ -76,6 +76,12 @@ use yii\helpers\Url;
             ],
         ]);
 
+        echo '
+        <div class="alert alert-danger" role="alert"><b>Importante </b>
+        Solo deberán inscribirse en las asignaturas cursadas hasta el ciclo lectivo 2019, ya que las asignaturas correspondientes al año 2020 se regirán por el régimen de promoción acompañada.
+        </div>
+        ';
+
         echo $form->field($modelDetalle, 'actividad')->widget(DepDrop::classname(), [
             'type' => DepDrop::TYPE_SELECT2,
             //'name' => 'hora',

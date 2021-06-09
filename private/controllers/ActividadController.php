@@ -204,7 +204,14 @@ class ActividadController extends Controller
                 $listActividad=ArrayHelper::toArray($actividad, [
                     'app\models\Actividad' => [
                         'id',
-                        'name' => 'nombre',
+                        'name' => function($model){
+                            try {
+                                return $model->nombre.' (Plan: '.$model->plan0->nombre.')';
+                            } catch (\Throwable $th) {
+                                return $model->nombre;
+                            }
+                            
+                        },
                     ],
                 ]);
                 $out = $listActividad;
@@ -241,12 +248,13 @@ class ActividadController extends Controller
                 else    
                     $plan_id = 1;
 
+                $div2019 = $div-2;
 
                 $actividad = Actividad::find()
                 ->where(['plan' => $plan_id])
                 ->andWhere(['propuesta' => 1])
                 ->andWhere(['actividadtipo' => 1])
-                ->andWhere(['<>', 'curso', 7])
+                ->andWhere(['<=', 'curso', $div2019])
                 ->orderBy('curso, nombre')
                 ->all();
                 

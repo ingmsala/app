@@ -18,7 +18,14 @@ use kartik\depdrop\DepDrop;
 
     <?php $listDivisiones=ArrayHelper::map($divisiones,'id','nombre'); ?>
     <?php $listPropuestas=ArrayHelper::map($propuestas,'id','nombre'); ?>
-    <?php $listActividades=ArrayHelper::map($actividades,'id','nombre'); ?>
+    <?php $listActividades=ArrayHelper::map($actividades,'id',function($model){
+        try {
+            return $model->nombre.' (Plan: '.$model->plan0->nombre.')';
+        } catch (\Throwable $th) {
+            return $model->nombre;
+        }
+        
+    }); ?>
 
     
     <?php $form = ActiveForm::begin(); ?>
@@ -53,6 +60,7 @@ use kartik\depdrop\DepDrop;
 
         $form->field($model, 'division')->widget(DepDrop::classname(), [
             //'data' => $listDivisiones,
+            'type' => DepDrop::TYPE_SELECT2,
             'options'=>['id'=>'division-id'],
                                     
                 'pluginOptions'=>[

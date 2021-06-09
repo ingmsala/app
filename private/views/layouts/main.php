@@ -623,6 +623,8 @@ try {
                                     ],
 
                                 ],
+                                ['label' => 'Desarrollos de programa', 'url' => ['/libroclase/desarrollo/desarrollo/control']],
+                                '<div class="dropdown-divider"></div>',
                                 ['label' => 'Tutores', 'url' => ['/estudiantes']],
                                         '<div class="dropdown-divider"></div>',
                                 ['label' => 'Preceptores', 'url' => ['/reporte/preceptores']],
@@ -1153,6 +1155,14 @@ try {
                     ['label' => Yii::$app->user->identity->role0->nombre,
                             
                             'items' => [
+
+                                [
+                                    'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).' Cambiar rol de usuario',
+                                    'url' => ['/rolexuser/cambiar', 'i' => 1],
+                                                       
+                        
+                                ],
+                                '<div class="dropdown-divider"></div>',
                                             
                                            
                                 
@@ -1299,6 +1309,8 @@ try {
                             'items' => [
 
                                 ['label' => 'Mones 2.0', 'url' => ['/mones/monalumno']],
+                                '<div class="dropdown-divider"></div>',
+                                ['label' => 'H. Académico espacios curriculares', 'url' => ['/optativas/interfazyacare']],
                                 '<div class="dropdown-divider"></div>',
                                 
                                 
