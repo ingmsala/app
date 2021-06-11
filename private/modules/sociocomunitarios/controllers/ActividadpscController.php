@@ -36,7 +36,7 @@ class ActividadpscController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [1,3,6,8,9,12,13,14,20, Globales::US_PRECEPTORIA]);
+                                return in_array (Yii::$app->user->identity->role, [1,3,6,8,9,12,13,14,20, Globales::US_PRECEPTORIA, Globales::US_REGENCIA]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -50,7 +50,7 @@ class ActividadpscController extends Controller
                             try{
                                 $com = isset($_SESSION['comisiontsx']) ? $_SESSION['comisiontsx'] : 0;
 
-                                if(in_array (Yii::$app->user->identity->role, [1,3,6,9,12,13,14,20, Globales::US_PRECEPTORIA]))
+                                if(in_array (Yii::$app->user->identity->role, [1,3,6,9,12,13,14,20, Globales::US_PRECEPTORIA, Globales::US_REGENCIA]))
                                     return true;
                                 if(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE])){
                                    
