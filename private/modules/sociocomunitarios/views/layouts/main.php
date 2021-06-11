@@ -26,7 +26,7 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="assets/images/favicon2.ico" type="image/x-icon" />
     <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode('Gestión de Proyectos Sociocomunitarios') ?></title>
+    <title><?= Html::encode('Gestión de PSC') ?></title>
     <?php $this->head() ?>
 </head>
 <body>
@@ -89,6 +89,7 @@ AppAsset::register($this);
                             ],
                         ],
                         ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/sociocomunitarios/seguimiento']],
+                        ['label' => '<span class="glyphicon glyphicon-list"></span><div>Actividades</div>', 'url' => ['/sociocomunitarios/actividadpsc']],
                         ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
 
                             'items' => [
@@ -184,6 +185,7 @@ AppAsset::register($this);
                             ],
                         ],
                         ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/sociocomunitarios/seguimiento']],
+                        ['label' => '<span class="glyphicon glyphicon-list"></span><div>Actividades</div>', 'url' => ['/sociocomunitarios/actividadpsc']],
                         ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
 
                             'items' => [
@@ -283,6 +285,7 @@ AppAsset::register($this);
                             ],
                         ],
                         ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/sociocomunitarios/seguimiento']],
+                        ['label' => '<span class="glyphicon glyphicon-list"></span><div>Actividades</div>', 'url' => ['/sociocomunitarios/actividadpsc']],
                         ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
 
                             'items' => [
@@ -363,6 +366,7 @@ AppAsset::register($this);
                             ],
                         ],
                         ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/sociocomunitarios/seguimiento']],
+                        ['label' => '<span class="glyphicon glyphicon-list"></span><div>Actividades</div>', 'url' => ['/sociocomunitarios/actividadpsc']],
                         ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
 
                             'items' => [
@@ -453,6 +457,7 @@ AppAsset::register($this);
                             ],
                         ],
                         ['label' => '<span class="glyphicon glyphicon-folder-open"></span><div>Seguimiento</div>', 'url' => ['/sociocomunitarios/seguimiento']],
+                        ['label' => '<span class="glyphicon glyphicon-list"></span><div>Actividades</div>', 'url' => ['/sociocomunitarios/actividadpsc']],
                         ['label' => '<span class="glyphicon glyphicon-modal-window"></span><br>Reportes', 
 
                             'items' => [
@@ -579,7 +584,7 @@ AppAsset::register($this);
         }
 
         NavBar::begin([
-            'brandLabel' => '<img src="assets/images/escudo.png" style="display:inline; vertical-align: middle; height:35px;"><span id="brandspan-optativas">Gestión de Proyectos Sociocomunitarios</span>',
+            'brandLabel' => '<img src="assets/images/escudo.png" style="display:inline; vertical-align: middle; height:35px;"><span id="brandspan-optativas">Gestión de PSC</span>',
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
                 'class' => 'navbar-default-sociocomunitarios navbar-fixed-top',
@@ -594,10 +599,10 @@ AppAsset::register($this);
         ]);
 NavBar::end();
 ?>
-    <div class="container optativas">
+    <div class="optativas">
             
 
-            <div id="content" class="col-sm-3">
+            <div id="content" class="col-sm-2">
                 <div class="row">
                     <?php $search= new DocentexcomisionSearch() ?>
                     <?php 
@@ -626,7 +631,7 @@ NavBar::end();
                     
 
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-10">
                 
                 <?= Breadcrumbs::widget([
                     'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

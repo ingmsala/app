@@ -2768,6 +2768,7 @@ class HorarioController extends Controller
             54 => 269,//geo
             55 => 270,//histo
             62 => 271,//filo-log
+            53 => 267,//france
         ];
 
         foreach ($materiaactual as $key => $value) {

@@ -13,6 +13,7 @@ use app\modules\curriculares\models\SeguimientoSearch;
 use app\modules\curriculares\models\Inasistencia;
 use app\modules\curriculares\models\Estadomatricula;
 use app\modules\curriculares\models\MatriculaSearch;
+use app\modules\sociocomunitarios\models\DetalleactividadpscSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,7 +21,7 @@ use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 use \Datetime;
-
+use yii\data\ActiveDataProvider;
 
 /**
  * MatriculaController implements the CRUD actions for Matricula model.
@@ -89,10 +90,19 @@ class FichadelalumnoController extends \yii\web\Controller
 
         $clasescomision = Clase::find()
                             ->where(['comision' => $comision])
-                            ->where(['BETWEEN', 'fecha', date('Y-m-d', strtotime("+0 days")), date('Y-m-d', strtotime("+0 days"))])
+                            ->andWhere(['BETWEEN', 'fecha', date('Y-m-d', strtotime("-360 days")), date('Y-m-d', strtotime("+0 days"))])
                             ->orderBy('fecha ASC')
                             ->all();
-
+        $query = Clase::find()
+                            ->where(['comision' => $comision])
+                            ->andWhere(['BETWEEN', 'fecha', date('Y-m-d', strtotime("-360 days")), date('Y-m-d', strtotime("+0 days"))])
+                            ->orderBy('fecha ASC');
+        
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        
+        ]);
         $listClasescomision=ArrayHelper::map($clasescomision,
                 function($model){
                     date_default_timezone_set('America/Argentina/Buenos_Aires');
@@ -186,13 +196,18 @@ class FichadelalumnoController extends \yii\web\Controller
         $searchModelSeguimientos  = new SeguimientoSearch();
         $dataProviderSeguimientos = $searchModelSeguimientos->seguimientosdelalumno($id);
 
+        $searchModelDetalleactividad  = new DetalleactividadpscSearch();
+        $dataProviderDetalleactividad = $searchModelDetalleactividad->xmatricula($id);
+
 
         return $this->render('index', [
             'dataProviderInasistencias' => $dataProviderInasistencias,
             'listClasescomision' => $listClasescomision,
             'dataProviderSeguimientos' => $dataProviderSeguimientos,
+            'dataProviderDetalleactividad' => $dataProviderDetalleactividad,
             'model' => $this->findModel($id),
             'echodiv' => $echodiv,
+            'dataProvider' => $dataProvider,
         ]);
         
     }

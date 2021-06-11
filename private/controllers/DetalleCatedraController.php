@@ -578,6 +578,7 @@ class DetallecatedraController extends Controller
             54 => 269,//geo
             55 => 270,//histo
             62 => 271,//filo-log
+            53 => 267,//france
         ];
 
         foreach ($materiaactual as $key => $value) {
@@ -629,7 +630,7 @@ class DetallecatedraController extends Controller
 
 
 
-        foreach ($materiaactual as $key => $value) {
+        /*foreach ($materiaactual as $key => $value) {
             
             foreach ($divisionesnuevas as $division) {
 
@@ -648,11 +649,43 @@ class DetallecatedraController extends Controller
                 $newDetalle->aniolectivo = $siguiente;
                 $newDetalle->save();
             }
-        }
+        }*/
 
         
         return $this->redirect(['/horario/migrarhorariosafines', 'actual' => $actual, 'siguiente' => $siguiente]);
     }
+
+    /*public function actionMigraredfi()//paso 4
+    {
+        $materiaactual = [
+            267 => 267,//france
+            
+        ];
+
+        $detcats = Detallecatedra::find()
+                    ->joinWith(['catedra0', 'catedra0.actividad0'])
+                    ->where(['like', 'actividad.nombre', '%educación fí%', false])
+                    ->andWhere(['revista' => 1])
+                    ->all();
+        
+
+            foreach ($detcats as $detcat) {
+
+                $newDetalle = new Detallecatedra();
+                $newDetalle->agente = $detcat->agente;
+                $newDetalle->catedra = $detcat->catedra;
+                $newDetalle->condicion = 6;
+                $newDetalle->revista = 6;
+                $newDetalle->hora = $detcat->hora;
+                $newDetalle->activo = 1;
+                $newDetalle->aniolectivo = 3;
+                $newDetalle->save();
+            }
+        
+
+        
+        return $this->redirect(['index']);
+    }*/
 
     
 }

@@ -87,6 +87,7 @@ $this->title = 'Libro de aula';
                 
             $pie .= '</div>';
         }
+
         $hoy = strtotime(date('Y-m-d'));
         $fecha1w = strtotime('+10 day', strtotime($model->fechacarga));
 
@@ -117,6 +118,9 @@ $this->title = 'Libro de aula';
                         <div class="footer-aviso-resultados">
                             <div class="box-rs">
                             '.$pie.'
+                            </div>
+                            <div class="pull-right text-muted" style="font-size:0.7em">
+                            Dictada por: '.$model->agente0->nombreCompleto.'
                             </div>
                             
                         </div>

@@ -29,7 +29,7 @@ $this->title = 'Agenda de Clases';
 
     <?php 
 
-                    echo '<div style="margin-left:20px;">Profesores/as</div>';
+                    echo '<div style="margin-left:20px;">Docentes</div>';
 
                     $item = [];
                     $docentes = $comision['docentexcomisions'];
@@ -44,7 +44,7 @@ $this->title = 'Agenda de Clases';
                         
                     }]);
 
-                    echo '<div style="margin-left:20px;">Preceptores</div>';
+                    
 
                     $item = [];
                     $docentes = $comision['docentexcomisions'];
@@ -53,11 +53,15 @@ $this->title = 'Agenda de Clases';
                         if($agente->role == 9)
                             $item[] = [$agente->agente0->apellido, $agente->agente0->nombre];
                     }
-                    echo Html::ul($item, ['item' => function($item) {
-                             return 
-                                        Html::tag('li', $item[0].', '.$item[1]);
-                        
-                    }]);
+                    if(count($item)>0){
+                        echo '<div style="margin-left:20px;">Preceptores</div>';
+                        echo Html::ul($item, ['item' => function($item) {
+                                 return 
+                                            Html::tag('li', $item[0].', '.$item[1]);
+                            
+                        }]);
+                    }
+                    
 
 
     ?>

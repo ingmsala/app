@@ -1,7 +1,8 @@
 <?php
 
+use kartik\detail\DetailView;
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\optativas\models\Matricula */
@@ -26,23 +27,31 @@ $this->title = 'Ficha del estudiante';
             
             [
             	'label' => 'Estudiante',
-            	'value' => function($matricula){
-            		return $matricula->alumno0->apellido.', '.$matricula->alumno0->nombre;
-            	}
+            	'value' => $model->alumno0->apellido.', '.$model->alumno0->nombre
+            	
             ],
             [
-            	'label' => 'Espacio Curricular',
-            	'value' => function($matricula){
-            		return $matricula->comision0->espaciocurricular0->actividad0->nombre.'   |   Comisión: '.$matricula->comision0->nombre;
-            	}
+                'columns' => 
+                    [
+                        [
+                            'label' => 'Espacio Curricular',
+                            'value' => $model->comision0->espaciocurricular0->actividad0->nombre
+                                
+                        ],
+                        [
+                            'label' => 'Comisión',
+                            'value' => $model->comision0->nombre
+                                
+                        ],
+                    ]
             ],
 
             [
             	'label' => 'Docentes',
             	'format' => 'raw',
-            	'value' => function($matricula){
+            	'value' => function() use($model) {
             		$items = [];
-            		$docentes = $matricula->comision0->docentexcomisions;
+            		$docentes = $model->comision0->docentexcomisions;
 
             		foreach ($docentes as $agente) {
             			if($agente->role == 8)
@@ -55,20 +64,30 @@ $this->title = 'Ficha del estudiante';
             		}]);
             	}
             ],
-
             [
-            	'label' => 'Acredita',
-            	'value' => function($matricula){
-            		return $matricula->comision0->espaciocurricular0->duracion.' horas';
-            	}
+                'columns' => 
+                    [
+                        [
+                            'label' => 'Acredita',
+                            //'attribute'=>'fecha',
+                            'value' => $model->comision0->espaciocurricular0->duracion.' horas'
+                        ],
+                        
+                        [
+                            'label' => 'Año lectivo',
+                            'format' => 'raw',
+                            'value' => $model->comision0->espaciocurricular0->aniolectivo0->nombre,
+                        ],
+
+                        [
+                            'label' => 'Condición',
+                            'attribute' => 'id',
+                            'value' => $model->estadomatricula0->nombre
+                        ],
+                    
+                    ],
             ],
             
-            'comision0.espaciocurricular0.aniolectivo0.nombre',
-
-            [
-            	'label' => 'Estado',
-            	'attribute' => 'estadomatricula0.nombre',
-            ]
         ],
     ]) ?>
 
@@ -78,6 +97,17 @@ $this->title = 'Ficha del estudiante';
             'dataProviderInasistencias' => $dataProviderInasistencias,
             'listClasescomision' => $listClasescomision,
              'echodiv' => $echodiv,
+             'dataProvider' => $dataProvider,
+             'matricula' => $model->id,
+            
+        ]) ?>
+
+    <div class="clearfix"></div>
+
+    <h3><?= Html::encode('Actividades') ?></h3>
+
+        <?= $this->render('/reportes/fichadelalumno/_actividadesxalumno', [
+            'dataProviderDetalleactividad' => $dataProviderDetalleactividad,
             
         ]) ?>
 
