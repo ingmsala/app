@@ -27,10 +27,10 @@ class BecanegativaansesController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
+                        'actions' => ['index', 'view', 'create', 'update'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -53,6 +53,22 @@ class BecanegativaansesController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionDescargar($file)
+    {
+        
+        $model = Becanegativaanses::find()->where(['url' => $file])->one();
+
+        $path = Yii::getAlias('@webroot') . '/assets/images/negativaansesFMfcgzGkXSTfLSXK/'.$file;
+
+        $file = $path;
+
+        if (file_exists($file)) {
+
+            Yii::$app->response->sendFile($file, $model->nombre);
+        }
+
     }
 
     /**

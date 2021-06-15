@@ -16,6 +16,14 @@ $this->title = 'Becas';
 
 ?>
 
+<script>
+    $(document).ready(function(){
+        $('#modal').modal('show').find('#modalHeader').html('Información importante');
+        $("#modal").modal('show');
+        
+    });
+</script>
+
 <?php 
         Modal::begin([
             'header' => "<h2 id='modalHeader'></h2>",
@@ -26,8 +34,20 @@ $this->title = 'Becas';
             ],
         ]);
 
-        echo "<div id='modalContent'></div>";
+        echo '<div id="modalContent">
+        La solicitud de beca se compone de 3 pasos:<br /><br />
+        <ul>
+        <li>Paso 1: Completar los datos del estudiante y del tutor solicitante</li>
+        <li>Paso 2: Completar los datos de <b>todas</b> las personas -menores y mayores - que conviven con el/la estudiante</li>
+        <li>Paso 3: Revisar los datos y presionar el botón <b>"Enviar Solicitud"</b> al final de la pantalla del paso 3</li>
+        </ul>
 
+        <div class="alert alert-warning" role="alert">El formulario tiene caracter de declaración jurada, es necesario que complete hasta el final el mismo para que pueda ser evaluada por el Área de Becas del Colegio</div>
+        
+        
+        <button type="button" class="btn btn-success pull-right" data-dismiss="modal" aria-hidden="true">Aceptar</button>
+        <div class="clearfix"></div>
+        </div>';
         Modal::end();
     ?>
 

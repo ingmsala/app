@@ -32,6 +32,7 @@ class Globales
 	const US_CONSULTA_HORARIO = 25;
 	const US_CONSULTORIO_MEDICO = 26;
 	const US_ABM_AGENTE = 27;
+	const US_BECAS = 28;
 	
 	
 	const COND_SUPL = 5;
@@ -75,7 +76,8 @@ class Globales
 	const MAIL2 = 'msala@unc.edu.ar';
 	const MAIL = 'info.monserrat@cnm.unc.edu.ar';
 	const MAIL3 = 'monserratsistema@gmail.com';
-	const PASS_MAIL = 'wxljupjiflnhrnbl';
+	const PASS_MAIL = 'cdcbwfavjxhlhdgg';
+	const PASS_MAIL4 = 'wxljupjiflnhrnbl';
 	const PASS_MAIL3 = 'ykecgrklrguvvwgh';
 	const PASS_MAIL2 = 'qlztstfribdxemkf';
 

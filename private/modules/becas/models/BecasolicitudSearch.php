@@ -18,7 +18,7 @@ class BecasolicitudSearch extends Becasolicitud
     {
         return [
             [['id', 'solicitante', 'convocatoria', 'estado', 'estudiante'], 'integer'],
-            [['fecha', 'token'], 'safe'],
+            [['fecha', 'token', 'puntaje'], 'safe'],
         ];
     }
 
@@ -49,6 +49,41 @@ class BecasolicitudSearch extends Becasolicitud
         ]);
 
         $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'fecha' => $this->fecha,
+            'solicitante' => $this->solicitante,
+            'convocatoria' => $this->convocatoria,
+            'estado' => $this->estado,
+            'estudiante' => $this->estudiante,
+        ]);
+
+        $query->andFilterWhere(['like', 'token', $this->token]);
+
+        return $dataProvider;
+    }
+
+    public function xconvocatroria($convocatoria)
+    {
+        $query = Becasolicitud::find()
+                    ->joinWith(['estudiante0'])
+                    ->where(['convocatoria' => $convocatoria])
+                    ->orderBy('puntaje DESC, becaalumno.apellido, becaalumno.nombre');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails

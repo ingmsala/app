@@ -40,6 +40,7 @@ class Becasolicitud extends \yii\db\ActiveRecord
         return [
             [['fecha', 'solicitante', 'convocatoria', 'estado', 'estudiante', 'token'], 'required'],
             [['fecha'], 'safe'],
+            [['puntaje'], 'number'],
             [['solicitante', 'convocatoria', 'estado', 'estudiante'], 'integer'],
             [['token'], 'string', 'max' => 24],
             [['convocatoria'], 'exist', 'skipOnError' => true, 'targetClass' => Becaconvocatoria::className(), 'targetAttribute' => ['convocatoria' => 'id']],
@@ -62,6 +63,7 @@ class Becasolicitud extends \yii\db\ActiveRecord
             'estado' => 'Estado',
             'estudiante' => 'Estudiante',
             'token' => 'Token',
+            'puntaje' => 'Puntaje',
         ];
     }
 

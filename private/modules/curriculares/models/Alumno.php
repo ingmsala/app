@@ -3,6 +3,7 @@
 namespace app\modules\curriculares\models;
 
 use app\models\Division;
+use app\models\Matriculasecundario;
 use Yii;
 
 /**
@@ -86,6 +87,19 @@ class Alumno extends \yii\db\ActiveRecord
     public function getNombrecompleto()
     {
         return $this->apellido.', '.$this->nombre;
+    }
+
+    public function matriculaactual($aniolectivo)
+    {
+       
+       return Matriculasecundario::find()
+                        ->where(['aniolectivo' => $aniolectivo])
+                        ->andWhere(['alumno' => $this->id])
+                        ->one();
+        if($mat != null){
+            return $mat->division0->nombre;
+        }
+        return 'Sin división';
     }
 
     public function fields()

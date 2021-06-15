@@ -29,6 +29,22 @@ $this->title = $actividad->descripcion.' - '.Yii::$app->formatter->asDate($activ
         ],
         'summary' => false,
         'condensed' => true,
+
+        'rowOptions' => function($model) use ($actividad){
+            $detalleactividad = Detalleactividadpsc::find()
+                        ->where(['actividad' => $actividad->id])
+                        ->andWhere(['matricula' => $model->id])
+                        ->one();
+            try {
+                if ($detalleactividad->presentacion == null || $detalleactividad->calificacion == null){
+                    return ['class' => 'warning'];
+                }
+            } catch (\Throwable $th) {
+                return ['class' => 'warning'];
+            }
+            
+            
+        },
         
 
         'toolbar'=>[
@@ -45,12 +61,7 @@ $this->title = $actividad->descripcion.' - '.Yii::$app->formatter->asDate($activ
                     return $model->alumno0->nombreCompleto;
                 }
             ],
-            [
-                'label' => 'Estudiante',
-                'value' => function($model){
-                    return $model->alumno0->documento;
-                }
-            ],
+            
             
             [
                 'label' => 'Presentación',

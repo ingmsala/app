@@ -60,13 +60,18 @@ $this->title = 'Becas';
         'links' => $breadcrumbs,
     ]) ?>
 
-<h1>Grupo familiar conviviente con el/la estudiante</h1>
+<h1>Grupo familiar conviviente con el/la estudiante <?php
+    if($solicitud->estado<2)
+        echo '<span class="label label-warning pull-right">No enviada';
+    else
+        echo '<span class="label label-success pull-right">Enviada';
+    ?></span></h1>
 
 <p class="novisible">En esta sección se deben agregar y consignar los datos de todas aquellas personas, sean mayores o menores, que conviven con el/la estudiante (sin incluirlo/la)</p>
 
 <?php
     if($edit)
-        echo '<center>'.Html::button('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar conviviente', ['value' => Url::to(['/becas/becaconviviente/create', 's' => $token]), 'title' => 'Agregar conviviente', 'class' => 'btn btn-info amodalgenerico']).'</center>';
+        echo '<center>'.Html::button('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar conviviente', ['value' => Url::to(['/becas/becaconviviente/create', 's' => $token]), 'title' => 'Agregar conviviente', 'class' => 'btn btn-info btn-lg amodalgenerico']).'</center>';
 ?>
 
 <?= $echosalida ?>      

@@ -1,20 +1,18 @@
 <?php
 
-namespace app\modules\becas\controllers;
+namespace app\controllers;
 
-use app\config\Globales;
 use Yii;
-use app\modules\becas\models\Becaconvocatoria;
-use app\modules\becas\models\BecaconvocatoriaSearch;
-use yii\filters\AccessControl;
+use app\models\Matriculasecundario;
+use app\models\MatriculasecundarioSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * BecaconvocatoriaController implements the CRUD actions for Becaconvocatoria model.
+ * MatriculasecundarioController implements the CRUD actions for Matriculasecundario model.
  */
-class BecaconvocatoriaController extends Controller
+class MatriculasecundarioController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -22,40 +20,6 @@ class BecaconvocatoriaController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
-                'rules' => [
-                    [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],   
-                        'allow' => true,
-                        'matchCallback' => function ($rule, $action) {
-                            try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER]);
-                                
-                            }catch(\Exception $exception){
-                                return false;
-                            }
-                        }
-
-                    ],
-                    [
-                        'actions' => ['index', 'view'],   
-                        'allow' => true,
-                        'matchCallback' => function ($rule, $action) {
-                            try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_BECAS]);
-                                
-                            }catch(\Exception $exception){
-                                return false;
-                            }
-                        }
-
-                    ],
-
-                    
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -66,12 +30,12 @@ class BecaconvocatoriaController extends Controller
     }
 
     /**
-     * Lists all Becaconvocatoria models.
+     * Lists all Matriculasecundario models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new BecaconvocatoriaSearch();
+        $searchModel = new MatriculasecundarioSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -81,25 +45,26 @@ class BecaconvocatoriaController extends Controller
     }
 
     /**
-     * Displays a single Becaconvocatoria model.
+     * Displays a single Matriculasecundario model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        return $this->redirect(['/becas/becasolicitud', 'convocatoria' => $id]);
-        
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
     }
 
     /**
-     * Creates a new Becaconvocatoria model.
+     * Creates a new Matriculasecundario model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Becaconvocatoria();
+        $model = new Matriculasecundario();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -111,7 +76,7 @@ class BecaconvocatoriaController extends Controller
     }
 
     /**
-     * Updates an existing Becaconvocatoria model.
+     * Updates an existing Matriculasecundario model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -131,7 +96,7 @@ class BecaconvocatoriaController extends Controller
     }
 
     /**
-     * Deletes an existing Becaconvocatoria model.
+     * Deletes an existing Matriculasecundario model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -145,15 +110,15 @@ class BecaconvocatoriaController extends Controller
     }
 
     /**
-     * Finds the Becaconvocatoria model based on its primary key value.
+     * Finds the Matriculasecundario model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Becaconvocatoria the loaded model
+     * @return Matriculasecundario the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Becaconvocatoria::findOne($id)) !== null) {
+        if (($model = Matriculasecundario::findOne($id)) !== null) {
             return $model;
         }
 

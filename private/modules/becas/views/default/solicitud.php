@@ -56,7 +56,12 @@ $this->title = 'Becas';
         'links' => $breadcrumbs,
     ]) ?>
 
-<h1>Solicitud de becas</h1>
+<h1>Solicitud de becas <?php
+    if($solicitud->estado<2)
+        echo '<span class="label label-warning pull-right">No enviada';
+    else
+        echo '<span class="label label-success pull-right">Enviada';
+    ?></span></h1>
 
     <?= $echosalida ?>      
     <div class="pull-right" style="margin-top:20px;">

@@ -60,7 +60,12 @@ $this->title = 'Becas';
         'links' => $breadcrumbs,
     ]) ?>
 
-<h1>Solicitud de becas</h1>
+<h1>Solicitud de becas <?php
+    if($solicitud->estado<2)
+        echo '<span class="label label-warning pull-right">No enviada';
+    else
+        echo '<span class="label label-success pull-right">Enviada';
+    ?></span></h1>
 
     <?= $echosalidasol ?>
     <div class="salto"></div>
@@ -89,7 +94,7 @@ $this->title = 'Becas';
             
             <div class="form-group">
                 
-                <div class="pull-right"><?= ($solicitud->estado <=2 || $solicitud->convocatoria0->becaconvocatoriaestado == 2) ? Html::submitButton('Aceptar y enviar', ['class' => 'btn btn-primary', 'data-confirm' => 'Está seguro que desea finalizar el trámite y enviarlo?']) : '' ?></div>
+                <div class="pull-right"><?= ($solicitud->estado <=2 || $solicitud->convocatoria0->becaconvocatoriaestado == 2) ? Html::submitButton('<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar Solicitud', ['class' => 'btn btn-primary btn-lg', 'data-confirm' => 'Está seguro que desea finalizar el trámite y enviarlo?']) : '' ?></div>
                 <div class="pull-right">&nbsp;</div>
                 <div class="pull-right">
                     <?= Html::a('< Anterior', ['grupofamiliar', 's' => $token], ['class' => 'btn btn-success']) ?>

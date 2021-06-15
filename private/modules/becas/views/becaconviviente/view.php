@@ -2,6 +2,7 @@
 
 use app\modules\becas\models\Becapersona;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 
@@ -55,7 +56,7 @@ use yii\widgets\DetailView;
             [
                 'label' => 'Negativa de Anses',
                 'format' => 'raw',
-                'value' => function($model){
+                'value' => function($model) use($edit){
                     try {
                         $delete = Html::a('×', ['/becas/becanegativaanses/delete', 'id' => $model->negativaanses, 'origen' => 'c', 'pers' => $model->id], [
                             'class' => 'novisible',
@@ -65,7 +66,11 @@ use yii\widgets\DetailView;
                                 'method' => 'post',
                             ],
                         ]);
-                        return '<span class="label label-default">'.$model->negativaanses0->nombre.'&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'.$delete.'</span>';
+                        
+                        if($edit)
+                            return '<span class="label label-default">'.Html::a('<div class="label label-default">'.$model->negativaanses0->nombre.'</div>', Url::to(['/becas/becanegativaanses/descargar', 'file' => $model->negativaanses0->url]), ['target'=>'_blank']).'&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'.$delete.'</span>';
+                        else
+                            return '<span class="label label-default">'.Html::a('<div class="label label-default">'.$model->negativaanses0->nombre.'</div>', Url::to(['/becas/becanegativaanses/descargar', 'file' => $model->negativaanses0->url]), ['target'=>'_blank']).'</span>';
                     } catch (\Throwable $th) {
                         return 'No presenta';
                     }

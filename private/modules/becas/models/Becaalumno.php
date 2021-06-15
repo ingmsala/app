@@ -2,6 +2,7 @@
 
 namespace app\modules\becas\models;
 
+use app\modules\curriculares\models\Alumno;
 use Yii;
 
 /**
@@ -104,6 +105,12 @@ class Becaalumno extends \yii\db\ActiveRecord
     public function getPersona0()
     {
         return $this->hasOne(Becapersona::className(), ['id' => 'persona']);
+    }
+
+    public function getAlumno0()
+    {
+        $dni = substr($this->cuil, 3, -2);
+        return Alumno::find()->where(['documento' => $dni])->one();
     }
 
     /**

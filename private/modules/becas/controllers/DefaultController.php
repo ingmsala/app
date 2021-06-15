@@ -90,7 +90,16 @@ class DefaultController extends Controller
             }
             $repetido = $this->getRepetido($convocatoria, $modelalumno->cuil);
             if($repetido[0]){
-                Yii::$app->session->setFlash('danger', "Ya existe una solicitud de beca asociada al CUIL del estudiante. Se envió un correo a la cuenta <b>{$repetido[1]}</b> con la que fue iniciada la solicitud.<br/>Si desea modificar los datos consignados, siga las instrucciones del correo electrónico.");
+                $solicitudrepetida = Becasolicitud::findOne($repetido[2]);
+                Yii::$app->session->setFlash('danger', "Ya existe una solicitud de beca asociada al DNI del estudiante. Se envió un correo a la cuenta <b>{$repetido[1]}</b> con la que fue iniciada la solicitud.<br/>Si desea modificar los datos consignados, siga las instrucciones del correo electrónico.");
+                $sendemail=Yii::$app->mailer->compose()
+                        ->setFrom([Globales::MAIL => 'Sistema de Becas CNM'])
+                        ->setTo($solicitudrepetida->solicitante0->mail)
+                        ->setSubject('Reenvío de enlace')
+                        ->setHtmlBody('
+                            Se reenvía nuevamente el enlace para que pueda modificar y enviar la solicitud hasta la fecha '.Yii::$app->formatter->asDate($solicitudrepetida->convocatoria0->hasta, 'dd/MM').' ingresando a '.Html::a('http://admin.cnm.unc.edu.ar/front/index.php?r=becas%2Fdefault%2Fsolicitud&s='.$solicitudrepetida->token, Url::to(['/becas/default/solicitud', 's' => $solicitudrepetida->token], true)).'
+                        <br> Luego de esa fecha no será posible realizar modificaciones. <br> <br> Por favor no conteste este correo ya que se envió de manera automatica y la casilla no es revisada por personal de la Institución. Si tiene alguna duda o consulta puede realizarla a través de los canales oficiales del Colegio o a secretaria_rei@cnm.unc.edu.ar')
+                        ->send();
                 return $this->redirect(['index']);
             }
             date_default_timezone_set('America/Argentina/Buenos_Aires');
@@ -231,10 +240,10 @@ class DefaultController extends Controller
             $sendemail=Yii::$app->mailer->compose()
                         ->setFrom([Globales::MAIL => 'Sistema de Becas CNM'])
                         ->setTo($solicitud->solicitante0->mail)
-                        ->setSubject('Se ha creado una nueva solicitud de beca')
+                        ->setSubject('Inicio de trámite de beca')
                         ->setHtmlBody('
-                            Se registró una solicitud de beca, puede modificarla ingresando a '.Html::a('http://admin.cnm.unc.edu.ar/front/index.php?r=becas%2Fdefault%2Fsolicitud&s='.$solicitud->token, Url::to(['/becas/default/solicitud', 's' => $solicitud->token], true)).'.
-                         <br> Por favor no conteste este correo ya que se envió de manera automatica y la casilla no es revisada por personal de la Institución. Si tiene alguna duda o consulta puede realizarla a través de los canales oficiales del Colegio.')
+                            Se inició el trámite de solicitud de beca. EL TRÁMITE NO ESTÁ FINALIZADO, debe completar todos los campos y luego presionar el botón ENVIAR. Puede modificarla ingresando a '.Html::a('http://admin.cnm.unc.edu.ar/front/index.php?r=becas%2Fdefault%2Fsolicitud&s='.$solicitud->token, Url::to(['/becas/default/solicitud', 's' => $solicitud->token], true)).'.
+                         <br> Por favor no conteste este correo ya que se envió de manera automatica y la casilla no es revisada por personal de la Institución. Si tiene alguna duda o consulta puede realizarla a través de los canales oficiales del Colegio o a secretaria_rei@cnm.unc.edu.ar')
                         ->send();
             
             return $this->redirect(['grupofamiliar', 's' => $solicitud->token]);
@@ -257,15 +266,19 @@ class DefaultController extends Controller
 
     private function getRepetido($convocatoria, $cuil){
 
+        $dni = substr($cuil, 2, -1);
+
         $ret = [false, ''];
         $solicitudes = Becasolicitud::find()
                         ->joinWith(['estudiante0'])
                         ->where(['convocatoria' => $convocatoria])
-                        ->andWhere(['becaalumno.cuil' => $cuil])
+                        ->andWhere(['like', 'becaalumno.cuil', '__'.$dni.'_', false])
                         ->one();
+
+        
         
         if($solicitudes !=null){
-            $ret = [true, substr_replace($solicitudes->solicitante0->mail, '******', 5, 10)];
+            $ret = [true, substr_replace($solicitudes->solicitante0->mail, '******', 5, 10), $solicitudes->id];
         }
 
         return $ret;
@@ -304,7 +317,7 @@ class DefaultController extends Controller
             return $this->redirect(['index']);
         }
 
-        if($solicitud->estado != 1 && $solicitud->estado != 2){
+        if($solicitud->estado != 1 && $solicitud->estado != 2 && $solicitud->convocatoria0->becaconvocatoriaestado == 1){
             $edit = false;
         }else{
             $edit = true;
@@ -315,6 +328,7 @@ class DefaultController extends Controller
             'echosalida' => $echosalida,
             'edit' => $edit,
             'token' => $s,
+            'solicitud' => $solicitud,
 
             
         ]);
@@ -353,7 +367,7 @@ class DefaultController extends Controller
                 $delete = '';
             }
 
-            $viewconviviente = $this->renderAjax('/becaconviviente/view', ['model' => $model]);
+            $viewconviviente = $this->renderAjax('/becaconviviente/view', ['model' => $model, 'edit' => $edit]);
             $echosalida .= '<div class="vista-listado flowGrid">
                     <div class="item-aviso flowGridItem">
                         <div class="header-aviso-resultados Empleos">
@@ -386,7 +400,7 @@ class DefaultController extends Controller
             return $this->redirect(['index']);
         }
 
-        if($solicitud->estado != 1 && $solicitud->estado != 2){
+        if($solicitud->estado != 1 && $solicitud->estado != 2 && $solicitud->convocatoria0->becaconvocatoriaestado == 1){
             $edit = false;
         }else{
             $edit = true;
@@ -399,7 +413,7 @@ class DefaultController extends Controller
             'echosalida' => $echosalida,
             'edit' => $edit,
             'token' => $s,
-            
+            'solicitud' => $solicitud,
         ]);
 
     }
@@ -430,7 +444,7 @@ class DefaultController extends Controller
                     $delete = '';
                 }
 
-                $viewconviviente = $this->renderAjax('/'.$construct.'/view', ['model' => $model]);
+                $viewconviviente = $this->renderAjax('/'.$construct.'/view', ['model' => $model, 'edit' => $edit]);
                 $echosalida .= '<div class="vista-listado flowGrid">
                         <div class="item-aviso flowGridItem">
                             <div class="header-aviso-resultados Empleos">
@@ -479,11 +493,70 @@ class DefaultController extends Controller
         ]);
     }
 
+    public function actionResumen($s){
+        
+        
+        $solicitud = Becasolicitud::find()->where(['token' => $s])->one();
+
+        
+
+        if($solicitud == null){
+            Yii::$app->session->setFlash('danger', "No corresponde a una solicitud válida.");
+            return $this->redirect(['becas/becaconvocatoria']);
+        }
+
+        $echosalida = $this->getResumen($solicitud);
+        $echosalidasol = $echosalida[0];
+        $echosalidaflia = $echosalida[1];
+        
+
+        return $this->render('resumen', [
+            'echosalidasol' => $echosalidasol,
+            'echosalidaflia' => $echosalidaflia,
+            'token' => $s,
+            'solicitud' => $solicitud,
+
+            
+        ]);
+    }
+
     private function getResumen($solicitud){
 
         $echosalidaflia = $this->getGrupofliar($solicitud, false);
         $echosalidasol = $this->getSolicitud($solicitud, false);
         return [$echosalidasol, $echosalidaflia];
+    }
+
+    private function getAnses($s){
+        $solicitud = Becasolicitud::find()->where(['token' => $s])->one();
+        $tr = false;
+        foreach ($solicitud->estudiante0->persona0->becaocupacionpersonas as $ocupacion) {
+            if($ocupacion->ocupacion == 8){
+                $tr = true;
+            }
+        } 
+        if($tr && $solicitud->estudiante0->negativaanses==null){
+            return 0;
+        }
+
+        
+
+        foreach ($solicitud->becaconvivientes as $conviviente) {
+            $tr = false;
+            foreach ($conviviente->persona0->becaocupacionpersonas as $ocupacion2) {
+                if($ocupacion2->ocupacion == 8){
+                    $tr = true;
+                }
+            } 
+            if($tr && $conviviente->negativaanses==null){
+                return 0;
+            }
+
+        }
+
+        return 1;
+
+
     }
 
     public function actionFinalizaryenviar($s){
@@ -496,6 +569,12 @@ class DefaultController extends Controller
             Yii::$app->session->setFlash('danger', "No corresponde a una solicitud válida.");
             return $this->redirect(['index']);
         }
+        
+        /*if($this->getAnses($s)==0){
+            Yii::$app->session->setFlash('danger', "<b>No puede enviar la solicitud</b><br/>Tiene declaradas personas con Situación Ocupacional: NINGUNA, debe cargar la Negativa de ANSES para esas personas");
+            return $this->redirect(['finalizar', 's' => $s]);
+        }*/
+
         $solicitud->estado = 2;
         $solicitud->save();
 
@@ -509,10 +588,10 @@ class DefaultController extends Controller
         $sendemail=Yii::$app->mailer->compose()
                         ->setFrom([Globales::MAIL => 'Sistema de Becas CNM'])
                         ->setTo($solicitud->solicitante0->mail)
-                        ->setSubject('Se ha generado la solicitud de beca correctamente')
+                        ->setSubject('Ha finalizado y enviado la solicitud de beca')
                         ->setHtmlBody('
-                            Se ha registrado la solicitud de beca. Podrá ser modificada hasta la fecha '.Yii::$app->formatter->asDate($solicitud->convocatoria0->hasta, 'dd/MM').' ingresando a '.Html::a('http://admin.cnm.unc.edu.ar/front/index.php?r=becas%2Fdefault%2Fsolicitud&s='.$s, Url::to(['/becas/default/solicitud', 's' => $s], true)).'
-                        <br> Luego de esa fecha no será posible realizar modificaciones. <br> <br> Por favor no conteste este correo ya que se envió de manera automatica y la casilla no es revisada por personal de la Institución. Si tiene alguna duda o consulta puede realizarla a través de los canales oficiales del Colegio.')
+                            Se ha registrado la solicitud de beca correctamente. Podrá ser modificada hasta la fecha '.Yii::$app->formatter->asDate($solicitud->convocatoria0->hasta, 'dd/MM').' ingresando a '.Html::a('http://admin.cnm.unc.edu.ar/front/index.php?r=becas%2Fdefault%2Fsolicitud&s='.$s, Url::to(['/becas/default/solicitud', 's' => $s], true)).'
+                        <br> Luego de esa fecha no será posible realizar modificaciones. <br> <br> Por favor no conteste este correo ya que se envió de manera automatica y la casilla no es revisada por personal de la Institución. Si tiene alguna duda o consulta puede realizarla a través de los canales oficiales del Colegio o a secretaria_rei@cnm.unc.edu.ar')
                         ->send();
         if($sendemail)
         {
