@@ -64,6 +64,11 @@ class Alumno extends \yii\db\ActiveRecord
         return $this->hasMany(Matricula::className(), ['alumno' => 'id']);
     }
 
+    public function getMatriculasecundarios()
+    {
+        return $this->hasMany(Matriculasecundario::className(), ['alumno' => 'id']);
+    }
+
     public function getAdmisionoptativas()
     {
         return $this->hasMany(Admisionoptativa::className(), ['alumno' => 'id']);
@@ -96,10 +101,7 @@ class Alumno extends \yii\db\ActiveRecord
                         ->where(['aniolectivo' => $aniolectivo])
                         ->andWhere(['alumno' => $this->id])
                         ->one();
-        if($mat != null){
-            return $mat->division0->nombre;
-        }
-        return 'Sin división';
+        
     }
 
     public function fields()

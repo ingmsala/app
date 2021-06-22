@@ -609,7 +609,6 @@ try {
                                     'items' => [
                                         ['label' => 'Espacios Optativos', 'url' => ['/optativas']],
                                         '<div class="dropdown-divider"></div>',
-                                        '<div class="dropdown-divider"></div>',
                                         ['label' => 'Fecha de Inscripción', 'url' => ['/preinscripcion']],
                                         '<div class="dropdown-divider"></div>',
                                         ['label' => 'Pendientes de inscripción', 'url' => ['/optativas/matricula/pendientes', 'al' => 3]],
@@ -626,7 +625,20 @@ try {
                                     ],
 
                                 ],
-                                ['label' => 'Proyectos sociocomunitarios', 'url' => ['/sociocomunitarios']],
+                                [
+                                    'label' => 'Proyectos sociocomunitarios',
+                                    'itemsOptions'=>['class'=>'dropdown-submenu'],
+                                    'submenuOptions'=>['class'=>'dropdown-menu'],
+                                    'items' => [
+                                        ['label' => 'Proyectos sociocomunitarios', 'url' => ['/sociocomunitarios']],
+                                        '<div class="dropdown-divider"></div>',
+                                        ['label' => 'Listado estudiantes inscriptos', 'url' => ['/sociocomunitarios/matricula/listado']],
+                                        '<div class="dropdown-divider"></div>',
+                                        
+                                    ],
+
+                                ],
+                                '<div class="dropdown-divider"></div>',
                                 ['label' => 'Desarrollos de programa', 'url' => ['/libroclase/desarrollo/desarrollo/control']],
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Tutores', 'url' => ['/estudiantes']],

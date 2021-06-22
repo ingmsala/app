@@ -59,6 +59,18 @@ class MatriculaController extends Controller
                         }
 
                     ],
+                    [
+                        'actions' => ['listado'],   
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            try{
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA]);
+                            }catch(\Exception $exception){
+                                return false;
+                            }
+                        }
+
+                    ],
 
                     
                 ],
@@ -76,6 +88,31 @@ class MatriculaController extends Controller
      * Lists all Matricula models.
      * @return mixed
      */
+    public function actionListado()
+    {
+        $param = Yii::$app->request->queryParams;
+        $model = new Matricula();
+        $model->scenario = $model::SCENARIO_SEARCHINDEX;
+        $searchModel = new MatriculaSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 2);
+        $aniolectivos = Aniolectivo::find()->orderBy('id DESC')->all();
+
+        if(isset($param['Matricula']['aniolectivo']))
+            $model->aniolectivo = $param['Matricula']['aniolectivo'];
+        if(isset($param['Matricula']['comision']))
+            $model->comision = $param['Matricula']['comision'];
+
+        return $this->render('listado', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'aniolectivos' => $aniolectivos,
+            'param' => $param,
+            'model' => $model,
+            
+        ]);
+
+    
+    }
     public function actionIndex()
     {
         $g = new Globales();

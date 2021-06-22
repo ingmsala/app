@@ -63,7 +63,7 @@ class DefaultController extends Controller
 
         $conv = Becaconvocatoria::findOne($convocatoria);
         if($conv->becaconvocatoriaestado == 2){
-            Yii::$app->session->setFlash('danger', "No se encuentra habilitada ninguna convocatoria a becas");
+            Yii::$app->session->setFlash('danger', "No se encuentra habilitada ninguna convocatoria a becas, cualquier duda o consulta pueden realizarla a la Secretaría de Relaciones Estudiantiles e Institucionales (secretaria_rei@cnm.unc.edu.ar)");
             return $this->redirect(['error']);
         }
 
@@ -84,9 +84,11 @@ class DefaultController extends Controller
 
             
             $esalumno = $this->getEsalumno($modelalumno->cuil);
-            if(!$esalumno){
+            if(!$esalumno[0]){
                 Yii::$app->session->setFlash('danger', "El CUIL no pertenece a ningún estudiante de la Institución.");
                 return $this->redirect(['index']);
+            }else{
+                $modelalumno->alumno =$esalumno[1];
             }
             $repetido = $this->getRepetido($convocatoria, $modelalumno->cuil);
             if($repetido[0]){
@@ -287,6 +289,7 @@ class DefaultController extends Controller
     private function getEsalumno($cuil){
 
         $ret = false;
+        $id = 0;
 
         try {
             $dniexp = explode('-', $cuil);
@@ -301,9 +304,10 @@ class DefaultController extends Controller
         
         if($alumno !=null){
             $ret = true;
+            $id = $alumno->id;
         }
 
-        return $ret;
+        return [$ret, $id];
 
     }
 

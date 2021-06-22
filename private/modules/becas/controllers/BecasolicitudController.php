@@ -4,6 +4,7 @@ namespace app\modules\becas\controllers;
 
 use app\config\Globales;
 use app\models\Agente;
+use app\models\Division;
 use app\modules\becas\models\Becaalumno;
 use app\modules\becas\models\Becaconviviente;
 use app\modules\becas\models\Becaconvocatoria;
@@ -13,6 +14,7 @@ use Yii;
 use app\modules\becas\models\Becasolicitud;
 use app\modules\becas\models\BecasolicitudSearch;
 use DateTime;
+use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -33,7 +35,7 @@ class BecasolicitudController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'recalcular', 'recalculartodas', 'reenviar'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'recalcular', 'recalculartodas', 'reenviar', 'obtenerpuntaje'],
                 'rules' => [
                     [
                         'actions' => ['view', 'create', 'update', 'delete'],   
@@ -49,7 +51,7 @@ class BecasolicitudController extends Controller
 
                     ],
                     [
-                        'actions' => ['index', 'recalcular', 'recalculartodas', 'reenviar'],   
+                        'actions' => ['index', 'recalcular', 'recalculartodas', 'reenviar', 'obtenerpuntaje'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
@@ -82,12 +84,22 @@ class BecasolicitudController extends Controller
      */
     public function actionIndex($convocatoria)
     {
+        $model = new Becasolicitud();
+        try {
+            $model->divisiones = Yii::$app->request->post()['Becasolicitud']['divisiones'];
+        } catch (\Throwable $th) {
+            $model->divisiones = 0;
+        }
+        
         $searchModel = new BecasolicitudSearch();
-        $dataProvider = $searchModel->xconvocatroria($convocatoria);
-
+        $dataProvider = $searchModel->xconvocatroria($convocatoria, $model->divisiones);
+        $divisiones = Division::find()->where(['<', 'preceptoria', 6])->all();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'divisiones' => $divisiones,
+            'model' => $model,
+            'convocatoria' => $convocatoria,
         ]);
     }
 
@@ -96,11 +108,11 @@ class BecasolicitudController extends Controller
 public function actionRecalculartodas(){
     $conv = Yii::$app->request->post()['conv'];
     $conv = Becaconvocatoria::findOne($conv);
-
+    ini_set("pcre.backtrack_limit", "5000000");
     foreach ($conv->becasolicituds as $sol) {
         $this->getRecalcular($sol->id);
     }
-    Yii::$app->session->setFlash('success', "Se recalcularon correctamente todos los puntaje");
+    Yii::$app->session->setFlash('success', "Se recalcularon correctamente todos los puntajes");
     return $this->redirect(['index', 'convocatoria' => $conv->id]);
 }
 
@@ -145,6 +157,95 @@ public function actionRecalcular()
 
         
         return $this->redirect(['index', 'convocatoria' => $sol->convocatoria]);
+    }
+
+
+    public function actionObtenerpuntaje($sol)
+    {
+        $sol = $this->findModel($sol);
+
+        $puntajeconvivientes = 0;
+        $estudiante = 0;
+        $conviviente = 0;
+        $menor = 0;
+        $mayor = 0;
+        $cantconv = 0;
+
+        $array = [];
+        $arraymenor = [];
+        $arraymayor = [];
+
+        $puntajeestudiante = $this->getPuntaje($sol->estudiante0->persona, $sol);
+        $estudiante = $puntajeestudiante ['puntaje'];
+        $menor += $puntajeestudiante ['menor'];
+        $mayor += $puntajeestudiante ['mayor'];
+        //return var_dump($puntajeestudiante);
+        if($puntajeestudiante ['menor']>0)
+            $arraymenor[] = $sol->estudiante0;
+        else
+            $arraymayor[] = $sol->estudiante0;
+
+        $array ['estudiante'][]= $puntajeestudiante;
+        
+        foreach ($sol->becaconvivientes as $convivientex) {
+            $puntajeconvivientes = $this->getPuntaje($convivientex->persona, $sol);
+            $conviviente += $puntajeconvivientes ['puntaje'];
+            $menor += $puntajeconvivientes ['menor'];
+            $mayor += $puntajeconvivientes ['mayor'];
+            $cantconv ++;
+            $array ['convivientes'][]= $puntajeconvivientes;
+            if($puntajeconvivientes ['menor']>0)
+                $arraymenor[] = $convivientex;
+            else
+                $arraymayor[] = $convivientex;
+        }
+        //return var_dump($puntajeconvivientes);
+
+        $cantmenor = $menor;
+        $cantmayor = $mayor;
+
+        if($menor>5)
+            $menor = 10;
+        else
+            $menor = $menor*2;
+
+        if($mayor>5)
+            $mayor = 5;
+            
+        try {
+            $conviviente = $conviviente/$cantconv;
+        } catch (\Throwable $th) {
+            $conviviente = 0;
+        }
+        
+
+        $puntajefinal = (float)($estudiante + $conviviente + $menor + $mayor);
+        
+
+        /*$providerEstudiante = new ArrayDataProvider([
+            'allModels' => $array['estudiante'],
+            
+        ]);*/
+
+        $modelEstudiante = $array['estudiante'];
+        $modelConvivientes = $array['convivientes'];
+
+        return $this->renderAjax('obtenerpuntaje', [
+            'sol' => $sol,
+            'modelEstudiante' => $modelEstudiante,
+            'modelConvivientes' => $modelConvivientes,
+            'estudiante' => $estudiante,
+            'conviviente' => round($conviviente,2),
+            'cantmenor' => $cantmenor,
+            'cantmayor' => $cantmayor,
+            'pjemenor' => $menor,
+            'pjemayor' => $mayor,
+            'arraymenor' => $arraymenor,
+            'arraymayor' => $arraymayor,
+            'puntajefinal' => round($puntajefinal,2),
+            
+        ]);
+        
     }
 
     /**
@@ -334,6 +435,11 @@ public function actionRecalcular()
             'puntaje' => $puntaje,
             'menor' => $menor,
             'mayor' => $mayor,
+            'nivelestudio' => $nivelestudio,
+            'situacionocupacional' => $situacionocupacional,
+            'ayuda' => $ayuda,
+            'coef' => $coef,
+            'persona' => $personax,
         ];
 
 

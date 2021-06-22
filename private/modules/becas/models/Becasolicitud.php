@@ -24,6 +24,7 @@ use Yii;
  */
 class Becasolicitud extends \yii\db\ActiveRecord
 {
+    public $divisiones;
     /**
      * {@inheritdoc}
      */
@@ -64,6 +65,7 @@ class Becasolicitud extends \yii\db\ActiveRecord
             'estudiante' => 'Estudiante',
             'token' => 'Token',
             'puntaje' => 'Puntaje',
+            'division' => 'División',
         ];
     }
 

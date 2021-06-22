@@ -1,7 +1,12 @@
 <?php
 
+use app\config\Globales;
 use app\modules\curriculares\models\Alumno;
+use kartik\form\ActiveForm;
 use kartik\grid\GridView;
+use kartik\select2\Select2;
+use yii\bootstrap\Modal;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
@@ -10,12 +15,52 @@ use yii\helpers\Url;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Solicitud de beca';
-
+$divisiones = ArrayHelper::map($divisiones, 'id', 'nombre');
 ?>
+<?php 
+        Modal::begin([
+            'header' => "<h2 id='modalHeader'></h2>",
+            'id' => 'modalgenerico',
+            'size' => 'modal-lg',
+            'options' => [
+                'tabindex' => false,
+            ],
+        ]);
+
+        echo "<div id='modalContent'></div>";
+
+        Modal::end();
+	?>
 <div class="becasolicitud-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php                 
+
+            $form = ActiveForm::begin([
+            'method' => 'post',
+        ]); ?>
+
+    <?= 
+
+        $form->field($model, 'divisiones')->widget(Select2::classname(), [
+            'data' => $divisiones,
+            'options' => ['placeholder' => 'Seleccionar...', 'id' => 'anio-id'],
+            //'value' => 1,
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);
+
+    ?>
+
+    
+
+    <div class="form-group">
+        <?= Html::submitButton('<span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filtrar', ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Todos', ['index', 'convocatoria' => $convocatoria], ['class' => 'btn btn-default']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 
    <?=
     Html::a('<span class="glyphicon glyphicon-refresh"></span> Recalcular todas', '?r=becas/becasolicitud/recalculartodas', 
@@ -80,14 +125,16 @@ $this->title = 'Solicitud de beca';
             ],
             [
                 'label' => 'Puntaje',
+                'format' => 'raw',
                 'value' => function($model){
-                    return $model->puntaje;
+                    return  Html::button($model->puntaje, ['value' => Url::to(['/becas/becasolicitud/obtenerpuntaje', 'sol' => $model->id]), 'title' => 'Detalle de Puntaje', 'class' => 'btn btn-link amodalgenerico']);
+                    
                 }
             ],
             
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{ver} {imprimir} {recalcular} {reenviar}',
+                'template' => '{ver} {imprimir} {recalcular} {reenviar} {verpuntaje}',
                 
                 'buttons' => [
                     
@@ -155,15 +202,10 @@ $this->title = 'Solicitud de beca';
                         
                         },
 
-                    /*'borrar' => function($url, $model, $key){
-                        if($model->estadodeclaracion == 1 || $model->estadodeclaracion == 4)
-                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', '?r=declaracionjurada/delete&id='.$model['dj'], 
-                            ['data' => [
-                            'confirm' => 'Está seguro de querer eliminar este elemento?',
-                            'method' => 'post',
-                             ]
-                            ]);
-                    },*/
+                    'verpuntaje' => function($url, $model, $key){
+                        //if($model->estado == 2)
+                            return  Html::button('<span class="glyphicon glyphicon-zoom-in"></span>', ['value' => Url::to(['/becas/becasolicitud/obtenerpuntaje', 'sol' => $model->id]), 'title' => 'Detalle de Puntaje (sin calcular)', 'class' => 'btn btn-success amodalgenerico']);
+                    },
                 ]
 
             ],

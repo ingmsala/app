@@ -13,6 +13,7 @@ use app\modules\becas\models\Becanivelestudio;
 use app\modules\becas\models\Becaocupacion;
 use app\modules\becas\models\Becaocupacionpersona;
 use app\modules\becas\models\Becasolicitud;
+use app\modules\curriculares\models\Alumno;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -37,6 +38,23 @@ class BecaalumnoController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionAlumnos()
+    {
+        $becaalumno = Becaalumno::find()->all();
+        foreach ($becaalumno as $alumnox) {
+            $dni = substr($alumnox->cuil, 3, -2);
+            //return var_dump($dni);
+            $al = Alumno::find()->where(['documento' => $dni])->one();
+            
+            $alumnox->alumno = $al->id;
+            //return var_dump($alumnox);
+            $alumnox->ayudas =1;
+            $alumnox->ocupaciones =1;
+            $alumnox->save();
+        }
+        return var_dump($alumnox);
     }
 
     public function actionUpdate($id, $s)

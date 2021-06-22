@@ -48,7 +48,7 @@ class Becaalumno extends \yii\db\ActiveRecord
             [['fechanac'], 'safe'],
             [['image'], 'file', 'maxSize'=>'1048576', 'extensions' => 'png, jpg, jpeg, pdf'],
             ['mail', 'email'],
-            [['nivelestudio', 'negativaanses', 'persona'], 'integer'],
+            [['nivelestudio', 'negativaanses', 'persona', 'alumno'], 'integer'],
             [['apellido', 'nombre', 'mail'], 'string', 'max' => 150],
             [['cuil'], 'string', 'max' => 13],
             [['cuil'], 'string', 'min' => 13],
@@ -57,6 +57,7 @@ class Becaalumno extends \yii\db\ActiveRecord
             [['negativaanses'], 'exist', 'skipOnError' => true, 'targetClass' => Becanegativaanses::className(), 'targetAttribute' => ['negativaanses' => 'id']],
             [['nivelestudio'], 'exist', 'skipOnError' => true, 'targetClass' => Becanivelestudio::className(), 'targetAttribute' => ['nivelestudio' => 'id']],
             [['persona'], 'exist', 'skipOnError' => true, 'targetClass' => Becapersona::className(), 'targetAttribute' => ['persona' => 'id']],
+            [['alumno'], 'exist', 'skipOnError' => true, 'targetClass' => Alumno::className(), 'targetAttribute' => ['alumno' => 'id']],
         ];
     }
 
@@ -111,6 +112,12 @@ class Becaalumno extends \yii\db\ActiveRecord
     {
         $dni = substr($this->cuil, 3, -2);
         return Alumno::find()->where(['documento' => $dni])->one();
+    }
+    public function getAlumnos0()
+    {
+        
+        return $this->hasOne(Alumno::className(), ['id' => 'alumno']);
+        
     }
 
     /**

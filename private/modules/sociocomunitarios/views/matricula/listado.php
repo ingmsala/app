@@ -12,7 +12,7 @@ use kartik\depdrop\DepDrop;
 /* @var $searchModel app\modules\optativas\models\MatriculaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Matrículas - Espacios Optativos';
+$this->title = 'Matrículas - Proyectos Sociocomunitarios';
 $this->params['breadcrumbs'][] = $this->title;
 $anio = $model->aniolectivo;
 ?>
@@ -152,7 +152,6 @@ $anio = $model->aniolectivo;
                 'groupEvenCssClass' => 'kv-grouped-row', // configure even group cell css class
                 
             ],
-
             [
                 'label' => 'División',
                 

@@ -2,9 +2,11 @@
 
 namespace app\modules\becas\models;
 
+use app\models\Matriculasecundario;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\becas\models\Becasolicitud;
+use yii\helpers\ArrayHelper;
 
 /**
  * BecasolicitudSearch represents the model behind the search form of `app\modules\becas\models\Becasolicitud`.
@@ -71,13 +73,25 @@ class BecasolicitudSearch extends Becasolicitud
         return $dataProvider;
     }
 
-    public function xconvocatroria($convocatoria)
+    public function xconvocatroria($convocatoria, $division)
     {
+       if($division==0){
         $query = Becasolicitud::find()
-                    ->joinWith(['estudiante0'])
-                    ->where(['convocatoria' => $convocatoria])
-                    ->orderBy('puntaje DESC, becaalumno.apellido, becaalumno.nombre');
+            ->joinWith(['estudiante0', 'estudiante0.alumnos0', 'estudiante0.alumnos0.matriculasecundarios'])
+            ->where(['convocatoria' => $convocatoria])
+            ->orderBy('puntaje DESC, becaalumno.apellido, becaalumno.nombre');
+       } else{
 
+       
+        $conv = Becaconvocatoria::findOne($convocatoria);
+       
+        $query = Becasolicitud::find()
+                    ->joinWith(['estudiante0', 'estudiante0.alumnos0', 'estudiante0.alumnos0.matriculasecundarios'])
+                    ->where(['convocatoria' => $convocatoria])
+                    ->andWhere(['matriculasecundario.aniolectivo' => $conv->aniolectivo])
+                    ->andWhere(['matriculasecundario.division' => $division])
+                    ->orderBy('puntaje DESC, becaalumno.apellido, becaalumno.nombre');
+       }
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
