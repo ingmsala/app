@@ -93,7 +93,7 @@ class BecasolicitudController extends Controller
         
         $searchModel = new BecasolicitudSearch();
         $dataProvider = $searchModel->xconvocatroria($convocatoria, $model->divisiones);
-        $divisiones = Division::find()->where(['<', 'preceptoria', 6])->all();
+        $divisiones = Division::find()->where(['<=', 'preceptoria', 6])->all();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

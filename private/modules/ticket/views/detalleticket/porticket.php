@@ -39,7 +39,20 @@ if($dataProvider != null){
                 return $model->nombre;
         });
 
-        $estado = ($model->estadoticket == 1) ? '<span class="label label-success">'.$model->estadoticket0->nombre.'</span>' : '<span class="label label-danger">'.$model->estadoticket0->nombre.'</span>';
+        $estado2 = ($model->estadoticket == 1) ? '<span class="label label-success">'.$model->estadoticket0->nombre.'</span>' : '<span class="label label-danger">'.$model->estadoticket0->nombre.'</span>';
+        $estado='';
+        if($model->estadoauthpago != null){
+            if($model->estadoauthpago == 1)
+                $lbl = 'info';
+            elseif($model->estadoauthpago == 2)
+                $lbl = 'petroleo';
+            elseif($model->estadoauthpago == 3)
+                $lbl = 'purple';
+            else
+                $lbl = 'warning';
+            $estado .=   ' <span class="label label-'.$lbl.'"> Orden: '.$model->estadoauthpago0->nombre.'</span>';
+        }
+
         $asignacion = ($model->asignacionticket0->agente == null) ? $model->asignacionticket0->areaticket0->nombre : $model->asignacionticket0->agente0->apellido.', '.substr(ltrim($model->asignacionticket0->agente0->nombre),0,1);
         $areaanterior = false;
         //return var_dump($model->asignacionticket0->anteriorasignacion0);
@@ -86,7 +99,7 @@ if($dataProvider != null){
                         <div class="header-aviso-resultados Empleos">
                             <h3>'.$textasignacion.'</h3>
                             <h4>'.$estado.'</h4>
-                            <p class="fecha-publicado-resultados"><span class="text-muted">'.$fecha.' - '.$hora[0].':'.$hora[1].'hs. por '.$model->agente0->apellido.', '.substr(ltrim($model->agente0->nombre),0,1).'</span></p>
+                            <p class="fecha-publicado-resultados"><span class="pull-right">'.$estado2.'</span><br/><span class="text-muted">'.$fecha.' - '.$hora[0].':'.$hora[1].'hs. por '.$model->agente0->apellido.', '.substr(ltrim($model->agente0->nombre),0,1).'</span></p>
                         </div>
                         <div class="content-aviso-resultados">
                         '.$descrip.'

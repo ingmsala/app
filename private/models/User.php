@@ -215,7 +215,15 @@ public function removePasswordResetToken() {
         return $this->hasOne(Agente::className(), ['mail' => 'username']);
     }
 
-    
+    public function getRolexusers()
+    {
+        return $this->hasMany(Rolexuser::className(), ['user' => 'id']);
+    }
+
+    public function getRoles()
+    {
+        return $this->hasMany(Role::className(), ['id' => 'role'])->via('rolexusers');
+    }
 
 
 }

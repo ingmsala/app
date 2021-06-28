@@ -8,10 +8,14 @@ use app\modules\ticket\models\Adjuntoticket;
 use app\modules\ticket\models\AdjuntoticketSearch;
 use app\modules\ticket\models\Areaticket;
 use app\modules\ticket\models\Asignacionticket;
+use app\modules\ticket\models\Authpago;
+use app\modules\ticket\models\Clasificacionticket;
 use app\modules\ticket\models\Detalleticket;
 use app\modules\ticket\models\DetalleticketSearch;
+use app\modules\ticket\models\Estadoauthpago;
 use app\modules\ticket\models\Grupotrabajoticket;
 use app\modules\ticket\models\Prioridadticket;
+use app\modules\ticket\models\Proveedorpago;
 use Yii;
 use app\modules\ticket\models\Ticket;
 use app\modules\ticket\models\TicketSearch;
@@ -39,14 +43,14 @@ class TicketController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'buscar'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create'],   
+                        'actions' => ['index', 'view', 'create', 'buscar'],   
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_NODOCENTE]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -81,6 +85,22 @@ class TicketController extends Controller
      * Lists all Ticket models.
      * @return mixed
      */
+    public function actionBuscar()
+    {
+        $modelauth = new Authpago();
+        
+        $proveedores = Proveedorpago::find()->all();
+        $estados = Estadoauthpago::find()->all();
+        if ($modelauth->load(Yii::$app->request->post())) {
+            return $this->redirect(['index', 'rpt' => 4, 'buscar' => Yii::$app->request->post()]);
+        }
+
+        return $this->renderAjax('buscar', [
+            'modelauth' => $modelauth,
+            'estados' => $estados,
+            'proveedores' => $proveedores,
+        ]);
+    }
     public function actionIndex($rpt = 1)
     {
         $g = new Globales();
@@ -93,6 +113,7 @@ class TicketController extends Controller
             $class1 = 'btn btn-default seleccionadoticket';
             $class2 = 'btn btn-default';
             $class3 = 'btn btn-default';
+            $class4 = 'btn btn-default';
         }
         elseif($rpt == 2){
             $dataProvider = $searchModel->miscerrados(Yii::$app->request->queryParams);
@@ -100,13 +121,27 @@ class TicketController extends Controller
             $class1 = 'btn btn-default';
             $class2 = 'btn btn-default seleccionadoticket';
             $class3 = 'btn btn-default';
+            $class4 = 'btn btn-default';
         }
         elseif($rpt == 3){
+
+            //return var_dump(Yii::$app->request->queryParams);
             $dataProvider = $searchModel->misabiertosycerrados(Yii::$app->request->queryParams);
             $title = 'Mis tickets abiertos y cerrados';
             $class1 = 'btn btn-default';
             $class2 = 'btn btn-default';
             $class3 = 'btn btn-default seleccionadoticket';
+            $class4 = 'btn btn-default';
+        }
+        elseif($rpt == 4){
+
+            //return var_dump(Yii::$app->request->queryParams);
+            $dataProvider = $searchModel->mibusqueda(Yii::$app->request->queryParams);
+            $title = 'Búsqueda de tickets';
+            $class1 = 'btn btn-default';
+            $class2 = 'btn btn-default';
+            $class3 = 'btn btn-default';
+            $class4 = 'btn btn-default seleccionadoticket';
         }
         else{
             $dataProvider = $searchModel->misabiertos(Yii::$app->request->queryParams);
@@ -114,6 +149,7 @@ class TicketController extends Controller
             $class1 = 'btn btn-default seleccionadoticket';
             $class2 = 'btn btn-default';
             $class3 = 'btn btn-default';
+            $class4 = 'btn btn-default';
         }
         
 
@@ -124,6 +160,8 @@ class TicketController extends Controller
             'class1' => $class1,
             'class2' => $class2,
             'class3' => $class3,
+            'class4' => $class4,
+            'params' => Yii::$app->request->queryParams,
         ]);
     }
 
@@ -133,12 +171,13 @@ class TicketController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($t)
     {
         $g = new Globales();
         $this->layout = $g->getLayout(Yii::$app->user->identity->role);
 
-        
+        $ticket = Ticket::find()->where(['token' => $t])->one();
+        $id = $ticket->id;
         $adjuntos = Adjuntoticket::find()->where(['ticket' => $id])->all();
         
         $primeraAsignacion = Asignacionticket::find()
@@ -150,6 +189,11 @@ class TicketController extends Controller
         $dataProvider = $searchModel->porTicket($id);
         $modelDetalles = Detalleticket::find()->where(['ticket' => $id])->all();
 
+        $modelauth = Authpago::find()
+            ->where(['ticket' => $id])
+            ->andWhere(['activo' => 1])
+            ->one();
+
 
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -157,6 +201,7 @@ class TicketController extends Controller
             'dataProvider' => $dataProvider,
             'modelDetalles' => $modelDetalles,
             'primeraAsignacion' => $primeraAsignacion,
+            'modelauth' => $modelauth,
         ]);
     }
 
@@ -170,10 +215,23 @@ class TicketController extends Controller
         $g = new Globales();
         $this->layout = $g->getLayout(Yii::$app->user->identity->role);
 
+        
+        //return var_dump(Yii::$app->request->get());
+
         $model = new Ticket();
         $modelasignacion = new Asignacionticket();
         $modelasignacion->scenario = $modelasignacion::SCENARIO_AGENTE_REQ;
         $modelajuntos = new Adjuntoticket();
+        $modelauth = new Authpago();
+
+        if(isset(Yii::$app->request->get()['id'])){
+            $arrget = Yii::$app->request->get()['id']['Authpago'];
+            $modelauth->fecha = $arrget['fecha'];
+            $modelauth->ordenpago = $arrget['ordenpago'];
+            $modelauth->monto = $arrget['monto'];
+            $modelauth->proveedor = $arrget['proveedor'];
+            $modelauth->estado = $arrget['estado'];
+        }
         
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $model->fecha = date('Y-m-d');
@@ -186,6 +244,9 @@ class TicketController extends Controller
         $model->prioridadticket = 1;
 
         $prioridades = Prioridadticket::find()->all();
+        $clasificaciones = Clasificacionticket::find()->all();
+        $estados = Estadoauthpago::find()->all();
+        $proveedores = Proveedorpago::find()->all();
 
         $areas = Areaticket::find()->where(['activo' => 1])->all();
         $agentes = Agente::find()->orderBy('apellido, nombre')->all();
@@ -206,7 +267,7 @@ class TicketController extends Controller
         if ($model->load(Yii::$app->request->post()) && $modelasignacion->load(Yii::$app->request->post()) && $modelajuntos->load(Yii::$app->request->post())) {
             $images = UploadedFile::getInstances($modelajuntos, 'image');
             
-            //return var_dump($images);
+            
 
             
 
@@ -221,6 +282,7 @@ class TicketController extends Controller
 
             $modelasignacion->save();
             $model->asignacionticket = $modelasignacion->id;
+            $model->token = Yii::$app->security->generateRandomString(150);
             $model->save();
             $modelasignacion->ticket =$model->id;
             $modelasignacion->save();
@@ -235,7 +297,7 @@ class TicketController extends Controller
                     $trello = true;
             }*/
 
-            if($trello){
+            /*if($trello){
                 $module = Config::getModule(Module::MODULE);
                 $output = Markdown::convert($model->descripcion, ['custom' => $module->customConversion]);
                 $sendemail=Yii::$app->mailer->compose()
@@ -245,7 +307,7 @@ class TicketController extends Controller
                             ->setSubject($model->asunto)
                             ->setHtmlBody($output)
                             ->send();
-            }
+            }*/
 
             if (!is_null($images)) {
                 foreach ($images as $image) {
@@ -264,10 +326,56 @@ class TicketController extends Controller
                 }
                 
             }
+
+            if($modelauth->estado != null){
+                try {
+                    $fechaauth = explode("/",$modelauth->fecha);
+                    $newfechaauth = date("Y-m-d", mktime(0, 0, 0, $fechaauth[1], $fechaauth[0], $fechaauth[2]));
+                    $modelauth->fecha = $newfechaauth;
+                } catch (\Throwable $th) {
+                    //throw $th;
+                }
+                
+                $modelauth->ticket = $model->id;
+                $modelauth->agente = $creador->id;
+                $modelauth->activo = 1;
+                $modelauth->save();
+            }
+
             
-            return $this->redirect(['view', 'id' => $model->id]);
+            if($modelasignacion->agente!=null){
+                $destinatario = $modelasignacion->agente0->mail;
+            }else{
+                $destinatario = [];
+                foreach ($modelasignacion->areaticket0->grupotrabajotickets as $persona) {
+                   $destinatario[] = $persona->agente0->mail;
+                }
+               
+            }
+
+            
+            $module = Config::getModule(Module::MODULE);
+            $output = Markdown::convert($model->descripcion, ['custom' => $module->customConversion]);
+            $sendemail=Yii::$app->mailer->compose()
+                        ->setFrom([Globales::MAIL => 'Sistema de ticket'])
+                        ->setTo($destinatario)
+                        ->setSubject($model->asunto)
+                        ->setHtmlBody('Nuevo ticket: Puede consultar el asunto ingresando a <a href="https://admin.cnm.unc.edu.ar/?r=ticket/ticket/view&t='.$model->token.'">Ticket #'.$model->id.'</a>')
+                        ->send();
+            
+            
+            return $this->redirect(['view', 't' => $model->token]);
             
         }
+
+        $authpagovisible = false;
+        if(in_array(Globales::US_DIRECCION,ArrayHelper::map(Yii::$app->user->identity->roles, 'id', 'id'))){
+            $authpagovisible = true;
+        }
+        if(in_array(Globales::US_SECECONOMICA,ArrayHelper::map(Yii::$app->user->identity->roles, 'id', 'id'))){
+            $authpagovisible = true;
+        }
+        
 
         return $this->render('create', [
             'model' => $model,
@@ -276,6 +384,11 @@ class TicketController extends Controller
             'prioridades' => $prioridades,
             'asignaciones' => $asignaciones,
             'modelajuntos' => $modelajuntos,
+            'clasificaciones' => $clasificaciones,
+            'modelauth' => $modelauth,
+            'estados' => $estados,
+            'proveedores' => $proveedores,
+            'authpagovisible' => $authpagovisible,
         ]);
     }
 

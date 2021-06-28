@@ -50,7 +50,7 @@ class AccesoController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_CONSULTA, Globales::US_INGRESO]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_CONSULTA, Globales::US_DIRECCION, Globales::US_INGRESO]);
                                 }catch(\Exception $exception){
                                     return false;
                             }

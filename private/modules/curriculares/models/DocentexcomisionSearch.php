@@ -136,7 +136,7 @@ class DocentexcomisionSearch extends Docentexcomision
 
     public function comisionesxdocente($id, $tipoespacio)
     {
-        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_PSC])){
+        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI, Globales::US_CONSULTA, Globales::US_DIRECCION, Globales::US_SECRETARIA, Globales::US_PSC])){
             return Docentexcomision::find()
             ->joinWith(['agente0', 'comision0', 'comision0.espaciocurricular0', 'comision0.espaciocurricular0.actividad0'])
             ->where(['espaciocurricular.tipoespacio' => $tipoespacio])

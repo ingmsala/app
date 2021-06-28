@@ -340,7 +340,7 @@ AppAsset::register($this);
                         ]
                     
                 ];
-            }else if( in_array (Yii::$app->user->identity->role, [Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_PRECEPTORIA, Globales::US_REGENCIA])){
+            }else if( in_array (Yii::$app->user->identity->role, [Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_DIRECCION, Globales::US_SACADEMICA, Globales::US_PRECEPTORIA, Globales::US_REGENCIA])){
                 $items = [
                     
                         ['label' => '<span class="glyphicon glyphicon-home"></span><div>Inicio</div>', 'url' => ['/personal/menuprincipal']],

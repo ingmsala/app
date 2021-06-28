@@ -1,12 +1,16 @@
 <?php
 
 use kartik\file\FileInput;
+use kartik\form\ActiveForm;
 use kartik\grid\GridView;
 use kartik\markdown\MarkdownEditor;
 use kartik\select2\Select2;
+use yii\bootstrap\Dropdown;
+use yii\bootstrap\Modal;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\helpers\HtmlPurifier;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\ticket\models\Ticket */
@@ -18,6 +22,7 @@ use yii\widgets\ActiveForm;
         );
 ?>
 <?php $prioridades =ArrayHelper::map($prioridades,'id', 'nombre');
+$clasificaciones =ArrayHelper::map($clasificaciones,'id', 'nombre');
 
 $customToolbar = [
     [
@@ -82,12 +87,51 @@ $customFooterButtons = [
 
 ?>
 
+<?php 
+        Modal::begin([
+            'header' => "<h2 id='modalHeader'></h2>",
+            'id' => 'modalgenerico',
+            'size' => 'modal-lg',
+            'options' => [
+                'tabindex' => false,
+            ],
+        ]);
+
+        echo "<div id='modalContent'></div>";
+
+        Modal::end();
+	?>
+
+    
+
 <div class="ticket-form">
 
-    <?php $form = ActiveForm::begin([
-          'options'=>['enctype'=>'multipart/form-data']]); ?>
+    <?php 
+    
+    
+    $form = ActiveForm::begin([
+          'options'=>['enctype'=>'multipart/form-data']]); 
+
+    ?>
 
     <?= $form->field($model, 'asunto')->textInput(['maxlength' => true]) ?>
+
+    <?php
+    if($authpagovisible)
+        echo Html::button('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Orden de pago', ['value' => Url::to(['/ticket/authpago/create']), 'title' => 'Nueva Orden de Pago', 'class' => 'btn btn-info btn-sm pull-right amodalgenerico']);
+    ?>
+<div class="clearfix"></div>
+        
+    <div id="authapago">
+        <?php
+        
+        if($modelauth->estado!=null)
+        echo $this->renderAjax('/authpago/view', [
+            'model' => $modelauth,
+            'updatehabilitado' => 2,
+        ]);
+    ?>
+    </div>
 
     <?= $form->field($model, 'descripcion')->widget(
         MarkdownEditor::classname(), 
@@ -117,6 +161,7 @@ $customFooterButtons = [
         ]);
 
     ?>
+    
 
     <?= 
 
@@ -139,7 +184,7 @@ $customFooterButtons = [
             'options' => ['multiple' => true],
             'pluginOptions' => [
                 'overwriteInitial'=>false,
-                'showPreview' => false,
+                'showPreview' => true,
                 'showCaption' => true,
                 'showRemove' => true,
                 'showUpload' => false

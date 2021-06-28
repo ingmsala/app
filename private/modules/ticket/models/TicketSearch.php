@@ -61,7 +61,7 @@ class TicketSearch extends Ticket
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'fecha' => $this->fecha,
+            'ticket.fecha' => $this->fecha,
             'hora' => $this->hora,
             'estadoticket' => $this->estadoticket,
             'agente' => $this->agente,
@@ -116,7 +116,7 @@ class TicketSearch extends Ticket
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'fecha' => $this->fecha,
+            'ticket.fecha' => $this->fecha,
             'hora' => $this->hora,
             'estadoticket' => $this->estadoticket,
             'agente' => $this->agente,
@@ -169,9 +169,18 @@ class TicketSearch extends Ticket
         }
 
         // grid filtering conditions
+        try {
+            $fechaauth = explode("/",$this->fecha);
+            $newfechaauth = date("Y-m-d", mktime(0, 0, 0, $fechaauth[1], $fechaauth[0], $fechaauth[2]));
+        } catch (\Throwable $th) {
+            $newfechaauth = $this->fecha;
+        }
+        
+        
+
         $query->andFilterWhere([
             'id' => $this->id,
-            'fecha' => $this->fecha,
+            //'ticket.fecha' => $newfechaauth,
             'hora' => $this->hora,
             'estadoticket' => $this->estadoticket,
             'agente' => $this->agente,
@@ -181,7 +190,8 @@ class TicketSearch extends Ticket
         ]);
 
         $query->andFilterWhere(['like', 'asunto', $this->asunto])
-            ->andFilterWhere(['like', 'descripcion', $this->descripcion]);
+            ->andFilterWhere(['like', 'descripcion', $this->descripcion])
+            ->andFilterWhere(['like', 'ticket.fecha', '%'.$newfechaauth.'%', false]);
 
         return $dataProvider;
     }
@@ -226,7 +236,74 @@ class TicketSearch extends Ticket
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'fecha' => $this->fecha,
+            'ticket.fecha' => $this->fecha,
+            'hora' => $this->hora,
+            'estadoticket' => $this->estadoticket,
+            'agente' => $this->agente,
+            'asignacionticket' => $this->asignacionticket,
+            'prioridadticket' => $this->prioridadticket,
+            'clasificacionticket' => $this->clasificacionticket,
+        ]);
+
+        $query->andFilterWhere(['like', 'asunto', $this->asunto])
+            ->andFilterWhere(['like', 'descripcion', $this->descripcion]);
+
+        return $dataProvider;
+    }
+
+    public function mibusqueda($params)
+    {
+        $agente = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
+
+        $proveedor = $params['buscar']['Authpago']['proveedorsearch'];
+        $ordenpago = $params['buscar']['Authpago']['ordenpagosearch'];
+
+        $query = Ticket::find()
+                    ->joinWith(['detalletickets', 'detalletickets.asignacionticket0 detasig', 'asignacionticket0 ticasig', 
+                                    'asignacionticket0.areaticket0.grupotrabajotickets detgrupo', 'authpagos', 'authpagos.proveedor0', 'authpagos.estado0'])
+                    ->where([
+                        'or',
+                        ['ticket.agente' => $agente->id],
+                        ['detalleticket.agente' => $agente->id],
+                        ['detasig.agente' => $agente->id],
+                        ['ticasig.agente' => $agente->id],
+
+                        ['detgrupo.agente' => $agente->id],
+
+                    ])
+                    ->andWhere(['and', 
+                        [
+                            'or',
+                            ['like','proveedorpago.nombre', '%'.$proveedor.'%', false],
+                            ['like', 'proveedorpago.cuit', '%'.$proveedor.'%', false],
+                        ],
+                        ['like', 'authpago.ordenpago', '%'.$ordenpago.'%', false]
+                    
+                    ])
+                    
+                    ->orderBy('id desc');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 100,
+            ]
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'ticket.fecha' => $this->fecha,
             'hora' => $this->hora,
             'estadoticket' => $this->estadoticket,
             'agente' => $this->agente,

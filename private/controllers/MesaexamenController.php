@@ -50,7 +50,7 @@ class MesaexamenController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_PRECEPTOR, Globales::US_REGENCIA, Globales::US_SECRETARIA, Globales::US_HORARIO, Globales::US_CONSULTA_HORARIO, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_DESPACHO]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_PRECEPTOR, Globales::US_REGENCIA, Globales::US_SECRETARIA, Globales::US_HORARIO, Globales::US_CONSULTA_HORARIO, Globales::US_CONSULTA, Globales::US_DIRECCION, Globales::US_PRECEPTORIA, Globales::US_DESPACHO]);
                             }catch(\Exception $exception){
                                 return false;
                             }

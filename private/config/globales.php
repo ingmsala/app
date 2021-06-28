@@ -33,6 +33,8 @@ class Globales
 	const US_CONSULTORIO_MEDICO = 26;
 	const US_ABM_AGENTE = 27;
 	const US_BECAS = 28;
+	const US_SECECONOMICA = 29;
+	const US_DIRECCION = 30;
 	
 	
 	const COND_SUPL = 5;
@@ -88,9 +90,9 @@ class Globales
 
 	
 	public function getLayout($role){
-        if(in_array($role, [$this::US_SUPER, $this::US_SECRETARIA, $this::US_REGENCIA, $this::US_PRECEPTORIA, $this::US_CONSULTA, $this::US_DESPACHO]))
+        if(in_array($role, [$this::US_SUPER, $this::US_SECRETARIA, $this::US_REGENCIA, $this::US_PRECEPTORIA, $this::US_CONSULTA, $this::US_DESPACHO,$this::US_CONSULTORIO_MEDICO,$this::US_BECAS, $this::US_SECECONOMICA, $this::US_DIRECCION]))
             return '@app/views/layouts/main';
-        elseif(in_array($role, [$this::US_AGENTE, $this::US_PRECEPTOR]))
+        elseif(in_array($role, [$this::US_AGENTE, $this::US_PRECEPTOR, $this::US_NODOCENTE]))
             return '@app/views/layouts/mainpersonal';
         elseif(in_array($role, [$this::US_HORARIO]))
             return '@app/views/layouts/mainvacio';

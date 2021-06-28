@@ -47,7 +47,7 @@ class TurnoexamenController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_PRECEPTOR, Globales::US_AGENTE, Globales::US_PRECEPTORIA, Globales::US_DESPACHO]))
+                                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_DIRECCION, Globales::US_PRECEPTOR, Globales::US_AGENTE, Globales::US_PRECEPTORIA, Globales::US_DESPACHO]))
                                     return true;
                                 return false;
                             }catch(\Exception $exception){

@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php
-        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
+        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_DIRECCION, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
         echo Html::a('Nuevo Turno', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
@@ -65,13 +65,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 
                 'buttons' => [
                     'control' => function($url, $model, $key){
-                        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
+                        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_DIRECCION, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
                         return Html::a(
                             '<span class="glyphicon glyphicon-ok"></span>',
                             '?r=solicitudprevios/detallesolicitudext/control&turno='.$model['id']);
                     },
                     'inscriptos' => function($url, $model, $key){
-                        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
+                        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_DIRECCION, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
                         return Html::a(
                             '<span class="glyphicon glyphicon-list-alt"></span>',
                             '?r=solicitudprevios/detallesolicitudext/index&turno='.$model['id']);

@@ -43,9 +43,9 @@ class Ticket extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fecha', 'hora', 'asunto', 'descripcion', 'estadoticket', 'agente', 'asignacionticket', 'prioridadticket'], 'required'],
+            [['fecha', 'hora', 'asunto', 'descripcion', 'estadoticket', 'agente', 'asignacionticket', 'prioridadticket', 'token'], 'required'],
             [['fecha', 'hora'], 'safe'],
-            [['descripcion'], 'string'],
+            [['descripcion', 'token'], 'string'],
             [['estadoticket', 'agente', 'asignacionticket', 'prioridadticket', 'clasificacionticket'], 'integer'],
             [['asunto'], 'string', 'max' => 300],
             [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
@@ -89,6 +89,11 @@ class Ticket extends \yii\db\ActiveRecord
     public function getDetalletickets()
     {
         return $this->hasMany(Detalleticket::className(), ['ticket' => 'id']);
+    }
+
+    public function getAuthpagos()
+    {
+        return $this->hasMany(Authpago::className(), ['ticket' => 'id']);
     }
 
     /**

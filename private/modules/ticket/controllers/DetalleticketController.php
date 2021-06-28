@@ -7,9 +7,11 @@ use app\models\Agente;
 use app\modules\ticket\models\Adjuntoticket;
 use app\modules\ticket\models\Areaticket;
 use app\modules\ticket\models\Asignacionticket;
+use app\modules\ticket\models\Authpago;
 use Yii;
 use app\modules\ticket\models\Detalleticket;
 use app\modules\ticket\models\DetalleticketSearch;
+use app\modules\ticket\models\Estadoauthpago;
 use app\modules\ticket\models\Estadoticket;
 use app\modules\ticket\models\Grupotrabajoticket;
 use app\modules\ticket\models\Ticket;
@@ -46,7 +48,7 @@ class DetalleticketController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_NODOCENTE]);
                             }catch(\Exception $exception){
                                 return false;
                             }
@@ -124,6 +126,14 @@ class DetalleticketController extends Controller
         $model->fecha = date('Y-m-d');
         $model->hora = date('H:i');
         $model->ticket = $ticket;
+        $exiteauth = false;
+        $authpago = Authpago::find()->where(['ticket' => $ticket])->andWhere(['activo' => 1])->one();
+        //return var_dump($ticket);
+        if($authpago!=null){
+            $model->estadoauthpago = $authpago->estado;
+            $exiteauth = true;
+        }
+
         $creador = Agente::find()->where(['mail' => Yii::$app->user->identity->username])->one();
         $model->agente = $creador->id;
         $model->estadoticket = ($ticketModel->estadoticket == 2) ? 1 : $ticketModel->estadoticket;
@@ -197,6 +207,24 @@ class DetalleticketController extends Controller
 
         
         $estados = Estadoticket::find()->all();
+        $dir = false;
+        $eco = false;
+        $estadospago = null;
+        if(in_array(Globales::US_DIRECCION,ArrayHelper::map(Yii::$app->user->identity->roles, 'id', 'id'))){
+            $dir = true;
+            $estadospago = Estadoauthpago::find()
+                            ->where(['in', 'id', [2,4]])
+                            ->all();
+        }
+        if(in_array(Globales::US_SECECONOMICA,ArrayHelper::map(Yii::$app->user->identity->roles, 'id', 'id'))){
+            $eco = true;
+            $estadospago = Estadoauthpago::find()
+                            ->where(['in', 'id', [1,3]])
+                            ->all();
+        }
+        if($eco && $dir){
+            $estadospago = Estadoauthpago::find()->all();
+        }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
 
@@ -229,6 +257,11 @@ class DetalleticketController extends Controller
             $model->asignacionticket = $modelasignacion->id;
             $model->save();
 
+            if($model->estadoauthpago != null){
+                $authpago->estado = $model->estadoauthpago;
+                $authpago->save();
+            }
+
             $modelasignacion->detalleticket =$model->id;
             $modelasignacion->save();
 
@@ -246,7 +279,7 @@ class DetalleticketController extends Controller
                     $trello = true;
             }*/
 
-            if($trello){
+            /*if($trello){
                 $module = Config::getModule(Module::MODULE);
                 $output = Markdown::convert($model->descripcion, ['custom' => $module->customConversion]);
                 $sendemail=Yii::$app->mailer->compose()
@@ -256,7 +289,7 @@ class DetalleticketController extends Controller
                             ->setSubject($ticketModel->asunto)
                             ->setHtmlBody($output)
                             ->send();
-            }
+            }*/
 
             
 
@@ -287,7 +320,28 @@ class DetalleticketController extends Controller
                 }
             }
 
-            return $this->redirect(['/ticket/ticket/view', 'id' => $ticketModel->id]);
+            if($modelasignacion->agente!=null){
+                $destinatario = $modelasignacion->agente0->mail;
+            }else{
+                $destinatario = [];
+                foreach ($modelasignacion->areaticket0->grupotrabajotickets as $persona) {
+                   $destinatario[] = $persona->agente0->mail;
+                }
+               
+            }
+
+            //if($model->notificacion == 1){
+                $module = Config::getModule(Module::MODULE);
+                $output = Markdown::convert($model->descripcion, ['custom' => $module->customConversion]);
+                $sendemail=Yii::$app->mailer->compose()
+                            ->setFrom([Globales::MAIL => 'Sistema de ticket'])
+                            ->setTo($destinatario)
+                            ->setSubject($ticketModel->asunto)
+                            ->setHtmlBody('Se le ha asignado una respuesta de un ticket. Puede consultar el historial ingresando a <a href="https://admin.cnm.unc.edu.ar/?r=ticket/ticket/view&t='.$ticketModel->token.'">Ticket #'.$ticketModel->id.'</a>')
+                            ->send();
+            //}
+
+            return $this->redirect(['/ticket/ticket/view', 't' => $ticketModel->token]);
             
         }
 
@@ -301,7 +355,9 @@ class DetalleticketController extends Controller
             'asignaciones' => $asignaciones,
             'modelajuntos' => $modelajuntos,
             'estados' => $estados,
+            'estadospago' => $estadospago,
             'estaEnGrupo' => $estaEnGrupo,
+            'exiteauth' => $exiteauth,
             
         ]);
     }

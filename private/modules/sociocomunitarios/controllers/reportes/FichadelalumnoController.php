@@ -13,6 +13,7 @@ use app\modules\curriculares\models\SeguimientoSearch;
 use app\modules\curriculares\models\Inasistencia;
 use app\modules\curriculares\models\Estadomatricula;
 use app\modules\curriculares\models\MatriculaSearch;
+use app\modules\sociocomunitarios\models\DetalleactividadpscSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -21,8 +22,7 @@ use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 use \Datetime;
 use kartik\mpdf\Pdf;
-
-
+use yii\data\ActiveDataProvider;
 
 /**
  * MatriculaController implements the CRUD actions for Matricula model.
@@ -108,9 +108,20 @@ class FichadelalumnoController extends \yii\web\Controller
 
             $clasescomision = Clase::find()
                                 ->where(['comision' => $comision])
+                                ->andWhere(['BETWEEN', 'fecha', date('Y-m-d', strtotime("-360 days")), date('Y-m-d', strtotime("+0 days"))])
                                 ->orderBy('fecha ASC')
                                 ->all();
 
+            $query = Clase::find()
+                ->where(['comision' => $comision])
+                ->andWhere(['BETWEEN', 'fecha', date('Y-m-d', strtotime("-360 days")), date('Y-m-d', strtotime("+0 days"))])
+                ->orderBy('fecha ASC');
+            
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+                'pagination' => false,
+            
+            ]);
             $listClasescomision=ArrayHelper::map($clasescomision,
                     function($model){
                         date_default_timezone_set('America/Argentina/Buenos_Aires');
@@ -161,18 +172,18 @@ class FichadelalumnoController extends \yii\web\Controller
 
             $listClasescomision = array_merge($listClasescomision, $listFaltasdelalumno);
             
-           /* $data = [
+           $data = [
                 $listClasescomision,
                 
             ];
-    
+            
             $dataProviderInasistencias = new ArrayDataProvider([
                 'allModels' => $data,
                 'pagination' => [
                     'pageSize' => 10,
                 ],
                 
-            ]);*/
+            ]);
             $ids = ArrayHelper::getColumn($listClasescomision, 0);
             $echodiv='';
             $i=0;
@@ -209,15 +220,20 @@ class FichadelalumnoController extends \yii\web\Controller
 
             $searchModelSeguimientos  = new SeguimientoSearch();
             $dataProviderSeguimientos = $searchModelSeguimientos->seguimientosdelalumno($id);
-
-
+            
+            $searchModelDetalleactividad  = new DetalleactividadpscSearch();
+            $dataProviderDetalleactividad = $searchModelDetalleactividad->xmatricula($id);
+    
+            
             return $this->render('view', [
                 'dataProviderInasistencias' => $dataProviderInasistencias,
                 'listClasescomision' => $listClasescomision,
                 'dataProviderSeguimientos' => $dataProviderSeguimientos,
+                'dataProviderDetalleactividad' => $dataProviderDetalleactividad,
                 'porcentajeausencia' => $porcentajeausencia,
                 'echodiv' => $echodiv,
                 'model' => $this->findModel($id),
+                'dataProvider' => $dataProvider,
             ]);
         }else{
         Yii::$app->session->set('success', '<span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Debe seleccionar un <b>Proyecto Sociocomunitario</b>');
@@ -333,8 +349,20 @@ class FichadelalumnoController extends \yii\web\Controller
 
             $clasescomision = Clase::find()
                                 ->where(['comision' => $comision])
+                                ->andWhere(['BETWEEN', 'fecha', date('Y-m-d', strtotime("-360 days")), date('Y-m-d', strtotime("+0 days"))])
                                 ->orderBy('fecha ASC')
                                 ->all();
+
+            $query = Clase::find()
+                ->where(['comision' => $comision])
+                ->andWhere(['BETWEEN', 'fecha', date('Y-m-d', strtotime("-360 days")), date('Y-m-d', strtotime("+0 days"))])
+                ->orderBy('fecha ASC');
+            
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+                'pagination' => false,
+            
+            ]);
 
             $listClasescomision=ArrayHelper::map($clasescomision,
                     function($model){
@@ -386,7 +414,7 @@ class FichadelalumnoController extends \yii\web\Controller
 
             $listClasescomision = array_merge($listClasescomision, $listFaltasdelalumno);
             
-           /* $data = [
+            $data = [
                 $listClasescomision,
                 
             ];
@@ -397,7 +425,7 @@ class FichadelalumnoController extends \yii\web\Controller
                     'pageSize' => 10,
                 ],
                 
-            ]);*/
+            ]);
             $ids = ArrayHelper::getColumn($listClasescomision, 0);
             $echodiv='';
             $i=0;
@@ -434,6 +462,10 @@ class FichadelalumnoController extends \yii\web\Controller
             else
                 $porcentajeausencia = 0;
 
+            $searchModelDetalleactividad  = new DetalleactividadpscSearch();
+            $dataProviderDetalleactividad = $searchModelDetalleactividad->xmatricula($id);
+    
+
             $searchModelSeguimientos  = new SeguimientoSearch();
             $dataProviderSeguimientos = $searchModelSeguimientos->seguimientosdelalumno($id);
 
@@ -441,9 +473,11 @@ class FichadelalumnoController extends \yii\web\Controller
                 'dataProviderInasistencias' => $dataProviderInasistencias,
                 'listClasescomision' => $listClasescomision,
                 'dataProviderSeguimientos' => $dataProviderSeguimientos,
+                'dataProviderDetalleactividad' => $dataProviderDetalleactividad,
                 'porcentajeausencia' => $porcentajeausencia,
                 'echodiv' => $echodiv,
                 'model' => $this->findModel($id),
+                'dataProvider' => $dataProvider,
             ]);
     }
  

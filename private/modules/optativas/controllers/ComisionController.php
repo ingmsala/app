@@ -217,7 +217,7 @@ class ComisionController extends Controller
 
 
 
-                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI, Globales::US_CONSULTA, Globales::US_SECRETARIA, Globales::US_PRECEPTORIA, Globales::US_REGENCIA])){
+                if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI, Globales::US_CONSULTA, Globales::US_DIRECCION, Globales::US_SECRETARIA, Globales::US_PRECEPTORIA, Globales::US_REGENCIA])){
                     $comisiones = Docentexcomision::find()
                     ->distinct()
                     ->select(['comision', 'espaciocurricular.aniolectivo'])

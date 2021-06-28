@@ -14,6 +14,7 @@ use yii\helpers\Html;
 ?>
 
 <?php $estados = ArrayHelper::map($estados,'id', 'nombre');
+$estadospago = ArrayHelper::map($estadospago,'id', 'nombre');
 
 $customToolbar = [
     [
@@ -96,6 +97,22 @@ $customFooterButtons = [
                 'allowClear' => true,
             ],
         ]);
+
+    ?>
+
+    <?php
+
+        if($exiteauth){
+            echo $form->field($model, 'estadoauthpago')->widget(Select2::classname(), [
+                    'data' => $estadospago,
+                    'options' => ['placeholder' => 'Seleccionar...'],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ],
+                ]);
+
+                
+        }
 
     ?>
 

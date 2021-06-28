@@ -42,7 +42,7 @@ class TurnoexamenSearch extends Turnoexamen
      */
     public function search($params)
     {
-        if(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
+        if(in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_DIRECCION, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR]))
             $query = Turnoexamen::find()->where(['activo' => 2])->orderBy('desde desc');
         else
             $query = Turnoexamen::find()->orderBy('desde desc');

@@ -235,12 +235,24 @@ try {
                                 '<div class="dropdown-divider"></div>',
                                 ['label' => 'Gestionar Exámenes', 'url' => ['/anioxtrimestral']],
                                 '<div class="dropdown-divider"></div>',
-                                ['label' => 'Tickets', 'url' => ['/ticket/ticket']],
-                                '<div class="dropdown-divider"></div>',
+                                
                                 ['label' => 'Fonid', 'url' => ['/fonid/fonidadmin']],
                                 '<div class="dropdown-divider"></div>',
                                 
-                                  ['label' => 'Declaraciones Juradas',
+                                ['label' => 'Tickets',
+                                        'items' => [
+
+                                            ['label' => 'Tickets', 'url' => ['/ticket/ticket']],
+                                            '<div class="dropdown-divider"></div>',
+                                            ['label' => 'Areas', 'url' => ['/ticket/areaticket']],
+                                            '<div class="dropdown-divider"></div>',
+                                            
+                                            
+                                        ],
+
+
+                                ],
+                                ['label' => 'Declaraciones Juradas',
                                         'items' => [
 
                                             ['label' => 'Verificar domicilios (Mapuche)', 'url' => ['/agente/actualizardomicilio']],
@@ -911,7 +923,7 @@ try {
 
 
             }
-            else if(Yii::$app->user->identity->role == Globales::US_CONSULTA){
+            else if(in_array(Yii::$app->user->identity->role,[Globales::US_CONSULTA, Globales::US_DIRECCION])){
 
                 
                 $items = [
@@ -1377,6 +1389,68 @@ try {
                             'items' => [
 
                                 ['label' => 'Ver horarios', 'url' => ['horario/panelprincipal']],
+                                '<div class="dropdown-divider"></div>',
+                                
+                                
+                                
+                            ],
+
+
+                    ],
+                        
+                                       
+                    
+                    ['label' => Yii::$app->user->identity->role0->nombre,
+                            
+                            'items' => [
+                                            
+                                            [
+                        'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-refresh']).' Cambiar rol de usuario',
+                        'url' => ['/rolexuser/cambiar', 'i' => 1],
+                                           
+            
+                    ],
+                    '<div class="dropdown-divider"></div>',
+                                
+                                            [
+                                                'label' => Html::tag('span', '', ['class'=>'glyphicon glyphicon-log-out']).' Cerrar sesión',
+                                                'url' => ['/cas/auth/logout'],
+                                                'linkOptions' => ['data-method' => 'post'],
+                                            
+                                    
+                                            ],
+                                            '<div class="dropdown-divider"></div>',
+                                
+                             ],
+                    ],
+
+
+
+
+                ];
+
+
+            }elseif(Yii::$app->user->identity->role == Globales::US_SECECONOMICA){
+
+                
+                $items = [
+
+                    ['label' => 'Reportes',
+                            'items' => [
+
+                                ['label' => 'Órdenes de Pago', 'url' => ['/ticket/authpago']],
+                                '<div class="dropdown-divider"></div>',
+                                
+                                
+                                
+                            ],
+
+
+                    ],
+                    ['label' => 'Administración',
+                            'items' => [
+
+                                ['label' => 'Proveedores', 'url' => ['/ticket/proveedorpago']],
                                 '<div class="dropdown-divider"></div>',
                                 
                                 

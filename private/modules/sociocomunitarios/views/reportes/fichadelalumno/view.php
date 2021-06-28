@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\DetailView;
+use kartik\detail\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\optativas\models\Matricula */
@@ -25,26 +25,40 @@ $this->title = 'Ficha del estudiante: '.$al;
     <div class="pull-right" style="margin-bottom: 10px;">
         <?php echo Html::a('<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Imprimir', Url::to(['print', 'matricula' => $model->id]), ['class' => 'btn btn-default']) ?>
     </div>
+    <div class="clearfix"></div>
     
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             
-            
             [
-            	'label' => 'Proyecto Sociocomunitario',
-            	'value' => function($matricula){
-            		return $matricula->comision0->espaciocurricular0->actividad0->nombre.'   |   Comisión: '.$matricula->comision0->nombre;
-            	}
+            	'label' => 'Estudiante',
+            	'value' => $model->alumno0->apellido.', '.$model->alumno0->nombre
+            	
+            ],
+            [
+                'columns' => 
+                    [
+                        [
+                            'label' => 'Espacio Curricular',
+                            'value' => $model->comision0->espaciocurricular0->actividad0->nombre
+                                
+                        ],
+                        [
+                            'label' => 'Comisión',
+                            'value' => $model->comision0->nombre
+                                
+                        ],
+                    ]
             ],
 
             [
-            	'label' => 'Agente extensionista',
+            	'label' => 'Docentes',
             	'format' => 'raw',
-            	'value' => function($matricula){
+            	'value' => function() use($model) {
             		$items = [];
-            		$docentes = $matricula->comision0->docentexcomisions;
+            		$docentes = $model->comision0->docentexcomisions;
 
             		foreach ($docentes as $agente) {
             			if($agente->role == 8)
@@ -57,21 +71,50 @@ $this->title = 'Ficha del estudiante: '.$al;
             		}]);
             	}
             ],
-
-            
             [
-            	'label' => 'Condición',
-            	'attribute' => 'estadomatricula0.nombre',
-            ]
+                'columns' => 
+                    [
+                        [
+                            'label' => 'Acredita',
+                            //'attribute'=>'fecha',
+                            'value' => $model->comision0->espaciocurricular0->duracion.' horas'
+                        ],
+                        
+                        [
+                            'label' => 'Año lectivo',
+                            'format' => 'raw',
+                            'value' => $model->comision0->espaciocurricular0->aniolectivo0->nombre,
+                        ],
+
+                        [
+                            'label' => 'Condición',
+                            'attribute' => 'id',
+                            'value' => $model->estadomatricula0->nombre
+                        ],
+                    
+                    ],
+            ],
+            
         ],
     ]) ?>
 
-    <h3><?= Html::encode('Ausencia: (~').$porcentajeausencia.'%)' ?></h3>
+    <h3><?= Html::encode('Asistencia') ?></h3>
 
-        <?= $this->render('_inasistenciasxalumno', [
+        <?= $this->render('/reportes/fichadelalumno/_inasistenciasxalumno', [
             'dataProviderInasistencias' => $dataProviderInasistencias,
             'listClasescomision' => $listClasescomision,
              'echodiv' => $echodiv,
+             'dataProvider' => $dataProvider,
+             'matricula' => $model->id,
+            
+        ]) ?>
+
+    <div class="clearfix"></div>
+
+    <h3><?= Html::encode('Actividades') ?></h3>
+
+        <?= $this->render('/reportes/fichadelalumno/_actividadesxalumno', [
+            'dataProviderDetalleactividad' => $dataProviderDetalleactividad,
             
         ]) ?>
 
@@ -79,7 +122,7 @@ $this->title = 'Ficha del estudiante: '.$al;
 
     <h3><?= Html::encode('Evaluación de Seguimiento') ?></h3>
 
-        <?= $this->render('_seguimientosxalumno', [
+        <?= $this->render('/reportes/fichadelalumno/_seguimientosxalumno', [
             'dataProviderSeguimientos' => $dataProviderSeguimientos,
             
             

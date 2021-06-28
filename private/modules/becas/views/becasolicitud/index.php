@@ -33,7 +33,7 @@ $divisiones = ArrayHelper::map($divisiones, 'id', 'nombre');
 	?>
 <div class="becasolicitud-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    
     <?php                 
 
             $form = ActiveForm::begin([
@@ -62,24 +62,46 @@ $divisiones = ArrayHelper::map($divisiones, 'id', 'nombre');
 
     <?php ActiveForm::end(); ?>
 
-   <?=
-    Html::a('<span class="glyphicon glyphicon-refresh"></span> Recalcular todas', '?r=becas/becasolicitud/recalculartodas', 
-    [
-        'class' => 'btn btn-primary pull-right',
-        'data' => [
-    
-    'confirm' => '¿Desea <b>recalcular todos</b> los puntaje de la convocatoria?',
-    'method' => 'post',
-    'params' => [
-                    'conv' => 1,
-                ],
-    ]
-    ]);
-   ?>
+   
    <div class="clearfix"></div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+        'panel' => [
+            'type' => GridView::TYPE_DEFAULT,
+            'heading' => Html::encode($this->title),
+            //'beforeOptions' => ['class'=>'kv-panel-before'],
+        ],
+        'exportConfig' => [
+            GridView::EXCEL => [
+                'label' => 'Excel',
+                'filename' =>Html::encode($this->title),
+                
+                //'alertMsg' => false,
+            ],
+            
+
+        ],
+
+        'toolbar'=>[
+            ['content' => 
+            Html::a('<span class="glyphicon glyphicon-refresh"></span> Recalcular todas', '?r=becas/becasolicitud/recalculartodas', 
+            [
+                'class' => 'btn btn-primary pull-right',
+                'data' => [
+            
+            'confirm' => '¿Desea <b>recalcular todos</b> los puntaje de la convocatoria?',
+            'method' => 'post',
+            'params' => [
+                            'conv' => 1,
+                        ],
+            ]
+            ])
+
+            ],
+            '{export}',
+            
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -127,7 +149,8 @@ $divisiones = ArrayHelper::map($divisiones, 'id', 'nombre');
                 'label' => 'Puntaje',
                 'format' => 'raw',
                 'value' => function($model){
-                    return  Html::button($model->puntaje, ['value' => Url::to(['/becas/becasolicitud/obtenerpuntaje', 'sol' => $model->id]), 'title' => 'Detalle de Puntaje', 'class' => 'btn btn-link amodalgenerico']);
+                    $mod = str_replace('.',',', $model->puntaje);
+                    return  Html::button($mod, ['value' => Url::to(['/becas/becasolicitud/obtenerpuntaje', 'sol' => $model->id]), 'title' => 'Detalle de Puntaje', 'class' => 'btn btn-link amodalgenerico']);
                     
                 }
             ],

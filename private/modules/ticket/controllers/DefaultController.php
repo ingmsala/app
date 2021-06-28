@@ -29,7 +29,7 @@ class DefaultController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                            try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_AGENTE, Globales::US_NODOCENTE]);
                             }catch(\Exception $exception){
                                 return false;
                             }

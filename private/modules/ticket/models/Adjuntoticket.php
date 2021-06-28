@@ -35,6 +35,7 @@ class Adjuntoticket extends \yii\db\ActiveRecord
             [['url', 'nombre'], 'required'],
             [['ticket', 'detalleticket'], 'integer'],
             [['image'], 'safe'],
+            [['image'], 'file', 'maxSize'=>'1048576', 'extensions' => 'png, jpg, jpeg, pdf'],
             [['url', 'nombre'], 'string', 'max' => 300],
             [['url'], 'unique'],
             [['detalleticket'], 'exist', 'skipOnError' => true, 'targetClass' => Detalleticket::className(), 'targetAttribute' => ['detalleticket' => 'id']],

@@ -31,7 +31,7 @@ class Detalleticket extends \yii\db\ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_ABM] = ['fecha', 'hora', 'ticket', 'agente', 'estadoticket', 'asignacionticket', 'descripcion', 'notificacion'];
+        $scenarios[self::SCENARIO_ABM] = ['fecha', 'hora', 'ticket', 'agente', 'estadoticket', 'asignacionticket', 'descripcion', 'notificacion', 'estadoauthpago'];
         return $scenarios;
     }
 
@@ -52,11 +52,12 @@ class Detalleticket extends \yii\db\ActiveRecord
             [['fecha', 'hora', 'ticket', 'agente', 'estadoticket', 'asignacionticket'], 'required'],
             [['fecha', 'hora'], 'safe'],
             [['descripcion'], 'string'],
-            [['ticket', 'agente', 'estadoticket', 'asignacionticket'], 'integer'],
+            [['ticket', 'agente', 'estadoticket', 'asignacionticket', 'estadoauthpago'], 'integer'],
             [['agente'], 'exist', 'skipOnError' => true, 'targetClass' => Agente::className(), 'targetAttribute' => ['agente' => 'id']],
             [['asignacionticket'], 'exist', 'skipOnError' => true, 'targetClass' => Asignacionticket::className(), 'targetAttribute' => ['asignacionticket' => 'id']],
             [['estadoticket'], 'exist', 'skipOnError' => true, 'targetClass' => Estadoticket::className(), 'targetAttribute' => ['estadoticket' => 'id']],
             [['ticket'], 'exist', 'skipOnError' => true, 'targetClass' => Ticket::className(), 'targetAttribute' => ['ticket' => 'id']],
+            [['estadoauthpago'], 'exist', 'skipOnError' => true, 'targetClass' => Estadoauthpago::className(), 'targetAttribute' => ['estadoauthpago' => 'id']],
             ['descripcion', 'findPasswords', 'on' => self::SCENARIO_ABM, 'skipOnEmpty' => false],
             /*['descripcion', 'required',  'message' => 'Ya existe la Cátedra que desea crear.', 'when' => function ($model) {
                 return $model->estadoticket == 1;
@@ -81,11 +82,12 @@ class Detalleticket extends \yii\db\ActiveRecord
             'id' => 'ID',
             'fecha' => 'Fecha',
             'hora' => 'Hora',
-            'descripcion' => 'Descripcion',
+            'descripcion' => 'Descripción',
             'ticket' => 'Ticket',
             'agente' => 'Agente',
             'estadoticket' => 'Estado',
-            'asignacionticket' => 'Asignacion',
+            'asignacionticket' => 'Asignación',
+            'estadoauthpago' => 'Estado de Orden de Pago',
         ];
     }
 
@@ -103,6 +105,11 @@ class Detalleticket extends \yii\db\ActiveRecord
     public function getAgente0()
     {
         return $this->hasOne(Agente::className(), ['id' => 'agente']);
+    }
+
+    public function getEstadoauthpago0()
+    {
+        return $this->hasOne(Estadoauthpago::className(), ['id' => 'estadoauthpago']);
     }
 
     /**

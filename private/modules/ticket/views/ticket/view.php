@@ -3,12 +3,14 @@
 use kartik\base\Config;
 use yii\helpers\Html;
 use kartik\detail\DetailView;
+use kartik\file\FileInput;
 use kartik\markdown\Markdown;
 use kartik\markdown\Module;
 use yii\bootstrap\Modal;
 use yii\helpers\ArrayHelper;
 use yii\helpers\HtmlPurifier;
 use yii\helpers\Url;
+use yii\widgets\Breadcrumbs;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\ticket\models\Ticket */
@@ -18,9 +20,36 @@ $this->title = 'Ticket #'.$model->id;
 ?>
 
 <?php 
+        $breadcrumbs = [];
+        $breadcrumbs [] = ['label' => 'Ticket #'.$model->id];
+        //$breadcrumbs [] = $this->title;
+
+    ?>
+
+
+    <?= Breadcrumbs::widget([
+        'homeLink' => ['label' => '< Volver', 'url' => ['index']],
+        'links' => $breadcrumbs,
+    ]) ?>
+
+<?php 
         Modal::begin([
             'header' => "<h2 id='modalHeader'>".'Respuesta Ticket #'.$model->id.': '.$model->asunto."</h2>",
             'id' => 'modaldetalleticket',
+            'size' => 'modal-lg',
+            'options' => [
+                'tabindex' => false,
+            ],
+        ]);
+
+        echo "<div id='modalContent'></div>";
+
+        Modal::end();
+	?>
+    <?php 
+        Modal::begin([
+            'header' => "<h2 id='modalHeader'></h2>",
+            'id' => 'modalgenerico',
             'size' => 'modal-lg',
             'options' => [
                 'tabindex' => false,
@@ -62,20 +91,110 @@ $this->title = 'Ticket #'.$model->id;
         $module = Config::getModule(Module::MODULE);
         $output = Markdown::convert($model->descripcion, ['custom' => $module->customConversion]);
         
-        $echofooter = HtmlPurifier::process($output);
+        $echofooter = '';
+        
+        try {
+            if($modelauth->estado!=null){
+                if($model->estadoticket == 1){
+                    if($modelauth->estado == 1 || $modelauth->estado == 4)
+                        $updatehabilitadoauth = 1;
+                    else
+                        $updatehabilitadoauth = 3;
+                }else{
+                    $updatehabilitadoauth = 3;
+                }
+                
+                
+
+                $echofooter .= $this->renderAjax('/authpago/view', [
+                    'model' => $modelauth,
+                    'updatehabilitado' => $updatehabilitadoauth,
+                ]);
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        
+    
+
+        $echofooter .= HtmlPurifier::process($output);
 
         //$echofooter = $model->descripcion;
         if($arr != null){
             $echofooter .= '<hr style="margin-bottom:0px;" />';
+
+            $path = substr(Url::to(Url::home(), true), 0, strrpos(Url::to(Url::home(), true),'/')).'/assets/images/tickets/';
+
+            
             $echofooter .= '<div class="push-left text-muted">Adjuntos</div><div class="row">';
+            $archivos = [];
+            $captions = [];
                 foreach ($arr as $key => $img) {
-                    $echofooter .= '<div style="margin-left:5%" class="col-md-3">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntoticket/descargar', 'file' => $key]), ['target'=>'_blank']).'</div>';
+
+                    $arr = [];
+                    $arr = explode(".", $key);
+                    $ext = end($arr);
+
+                    $icons = [
+                        'pdf' => 'pdf',
+                        'doc' => 'office',
+                        'docx' => 'word',
+                        'xls' => 'office',
+                        'xlsx' => 'excel',
+                        'ppt' => 'office',
+                        'pptx' => 'powerpoint',
+                        'txt' => 'text',
+                        'png' => 'image',
+                        'jpg' => 'image',
+                        'jpeg' => 'image',
+                    ];
+
+                    try {
+                        $type = $icons[$ext];
+                    } catch (\Throwable $th) {
+                        $type = 'none';
+                    }
+
+
+                    //$echofooter .= '<div style="margin-left:5%" class="col-md-3">'.Html::a('<div class="label label-default">'.$img.'</div>', Url::to(['adjuntoticket/descargar', 'file' => $key]), ['target'=>'_blank']).'</div>';
+                    $archivos[] = $path.$key;
+                    $captions[] = ['caption' => $img, 'type' => $type, 'downloadUrl' => $path.$key];
+                    
                 }
+
+                $echofooter .= FileInput::widget([
+                    'name' => 'attachment_49[]',
+                    
+                    'options' => ['multiple' => true],
+                    'pluginOptions' => [
+                        'overwriteInitial'=>false,
+                        'showPreview' => true,
+                        
+                        'showCaption' => false,
+                        'showRemove' => false,
+                        'showUpload' => false,
+                        'showClose' => false,
+                        'showBrowse' => false,
+                        'dropZoneEnabled' => false,
+                        
+                        'initialPreview'=>$archivos,
+                        'initialPreviewAsData'=>true,
+                        'initialPreviewShowDelete'=>false,
+                        'initialPreviewDownloadUrl'=>true,
+                        //'initialPreviewDownloadUrl' => Url::to(['adjuntoticket/descargar']),
+                        'initialPreviewConfig' => $captions,
+                        
+                    ],
+                ]);
             $echofooter .= '</div>';
         }
+
+        
         
 
     ?>
+
+    
     
 
     <?php
@@ -163,7 +282,7 @@ $this->title = 'Ticket #'.$model->id;
         echo '</div>';
 
         
-        echo $this->render('/detalleticket/porticket', [
+        echo $this->renderAjax('/detalleticket/porticket', [
             'dataProvider' => $dataProvider,
             'modelDetalles' => $modelDetalles,
             

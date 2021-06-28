@@ -46,7 +46,7 @@ class ParteController extends Controller
                         'matchCallback' => function ($rule, $action) {
                                 try{
 
-                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_SACADEMICA])){
+                                    if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_CONSULTA, Globales::US_DIRECCION, Globales::US_SACADEMICA])){
                                         return true;
                                     }
 
@@ -100,7 +100,7 @@ class ParteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                                 try{
-                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_PRECEPTORIA, Globales::US_CONSULTA, Globales::US_SACADEMICA, Globales::US_PRECEPTOR]);
+                                    return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_REGENCIA, Globales::US_PRECEPTORIA, Globales::US_CONSULTA, Globales::US_DIRECCION, Globales::US_SACADEMICA, Globales::US_PRECEPTOR]);
                                 }catch(\Exception $exception){
                                     return false;
                             }
@@ -177,7 +177,7 @@ class ParteController extends Controller
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             try{
-                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA]);
+                                return in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SECRETARIA, Globales::US_CONSULTA, Globales::US_DIRECCION]);
                             }catch(\Exception $exception){
                                 return false;
                             }

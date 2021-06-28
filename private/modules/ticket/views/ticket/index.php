@@ -1,7 +1,9 @@
 <?php
 
+use app\modules\ticket\models\Authpago;
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use yii\bootstrap\Modal;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -11,6 +13,41 @@ use yii\helpers\Url;
 $this->title = $title;
 
 ?>
+<?php 
+        Modal::begin([
+            'header' => "<h2 id='modalHeader'></h2>",
+            'id' => 'modalgenerico',
+            'size' => 'modal-lg',
+            'options' => [
+                'tabindex' => false,
+            ],
+        ]);
+
+        echo "<div id='modalContent'></div>";
+
+        Modal::end();
+
+
+        $proveedor = isset($params['buscar']['Authpago']['proveedorsearch'])?$params['buscar']['Authpago']['proveedorsearch']:'';
+        $ordenpago = isset($params['buscar']['Authpago']['ordenpagosearch'])?$params['buscar']['Authpago']['ordenpagosearch']:'';
+        if($proveedor!=''&&$ordenpago!=''){
+            $busqueda = '<div>Búsqueda:<ul>';
+            $busqueda .= '<li>Proveedor: '.$proveedor.'</li>';
+            $busqueda .= '<li>Orden N°: '.$ordenpago.'</li></ul></div>';
+        }else{
+            if($proveedor!=''){
+                $busqueda = '<div>Búsqueda:<ul>';
+                $busqueda .= '<li>Proveedor: '.$proveedor.'</li></ul></div>';
+            }elseif($ordenpago!=''){
+                $busqueda = '<div>Búsqueda:<ul>';
+                $busqueda .= '<li>Orden N°: '.$ordenpago.'</li></ul></div>';
+            }else{
+                $busqueda = '';
+            }
+        }
+            
+
+	?>
 <div class="ticket-index">
 
     <p>
@@ -42,11 +79,13 @@ $this->title = $title;
         'toolbar'=>[
             ['content' => 
                 
-                Html::tag('div', Html::a('<center>Mis tickets<br />Abiertos</center>', ['index', 'rpt' => 1], ['class' => $class1.' role="group"']).
+                Html::tag('div',  
+                Html::button('<center><span class="glyphicon glyphicon-search" aria-hidden="true"></span><br />Buscar</center>', ['value' => Url::to(['/ticket/ticket/buscar']), 'title' => 'Buscar Orden de Pago', 'class' => $class4.' amodalgenerico']).
+                Html::a('<center>Mis tickets<br />Abiertos</center>', ['index', 'rpt' => 1], ['class' => $class1.' role="group"']).
                 Html::a('<center>Mis tickets<br />Cerrados</center>', ['index', 'rpt' => 2], ['class' => $class2.' role="group"']).
                 Html::a('<center>Mis tickets<br />Abiertos y cerrados</center>', ['index', 'rpt' => 3], ['class' => $class3.' role="group"']).
-                Html::a('<center><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><br />Nuevo ticket</center>', ['create'], ['class' => 'btn btn-success'])),
-                'options' => [ 'class' => 'btn-group btn-group-xs ' ]   
+                Html::a('<center><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><br />Nuevo ticket</center>', ['create'], ['class' => 'btn btn-success']),
+                [ 'class' => 'btn-group btn-group-xs ' ]).$busqueda
             ],
             
             
@@ -60,11 +99,20 @@ $this->title = $title;
                 'format' => 'raw',
                 'width' => '1%',
                 'value' => function($model){
-                    return Html::a('#'.$model->id, Url::to(['view', 'id' => $model->id]));
+                    return Html::a('#'.$model->id, Url::to(['view', 't' => $model->token]));
                 }
             ],
-            /*'fecha',
-            'hora',*/
+            [
+                'label' => 'Fecha',
+                
+                'format' => 'raw',
+                'value' => function($model){
+                   date_default_timezone_set('America/Argentina/Buenos_Aires');
+                   
+                   return Yii::$app->formatter->asDate($model->fecha, 'dd/MM/yyyy');
+                }
+            ],
+            
             
             [
                 'label' => 'Asunto',
@@ -72,7 +120,7 @@ $this->title = $title;
                 'width' => '40%',
                 'format' => 'raw',
                 'value' => function($model){
-                    return Html::a($model->asunto, Url::to(['view', 'id' => $model->id]));
+                    return Html::a($model->asunto, Url::to(['view', 't' => $model->token]));
                 }
             ],
             
@@ -80,8 +128,27 @@ $this->title = $title;
                 'label' => 'Estado',
                 'format' => 'raw',
                 'value' => function($model){
-                    return ($model->estadoticket == 1) ? '<span class="label label-success">'.$model->estadoticket0->nombre.'</span>' : '<span class="label label-danger">'.$model->estadoticket0->nombre.'</span>';
-                    return $model->estadoticket0->nombre;
+                    
+                    
+                    $ret = ($model->estadoticket == 1) ? '<span class="label label-success">'.$model->estadoticket0->nombre.'</span>' : '<span class="label label-danger">'.$model->estadoticket0->nombre.'</span>';
+                    
+                    $authpago = Authpago::find()->where(['ticket' => $model->id])->andWhere(['activo' => 1])->one();
+                    
+                    if($authpago!=null){
+                        if($authpago->estado == 1)
+                            $lbl = 'info';
+                        elseif($authpago->estado == 2)
+                            $lbl = 'petroleo';
+                        elseif($authpago->estado == 3)
+                            $lbl = 'purple';
+                        else
+                            $lbl = 'warning';
+                        $ret .= '<br/><div class="label label-'.$lbl.'">Orden: '.$authpago->estado0->nombre.'</div>';
+                        
+                    }
+                    
+                    return $ret;
+                    
                 }
             ],
             [

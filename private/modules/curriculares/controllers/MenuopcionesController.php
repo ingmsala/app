@@ -69,7 +69,7 @@ class MenuopcionesController extends Controller
 
         $aniolectivo = Aniolectivo::find()->where(['activo' => 1])->one();
         
-        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI, Globales::US_CONSULTA, Globales::US_SECRETARIA])){
+        if(in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI, Globales::US_CONSULTA, Globales::US_DIRECCION, Globales::US_SECRETARIA])){
             $comisionesoptativas = Docentexcomision::find()
             ->distinct()
             ->select(['comision', 'espaciocurricular.aniolectivo'])
@@ -146,7 +146,7 @@ class MenuopcionesController extends Controller
         }
            
         if($comisionessociocom>0 && $comisionesoptativas>0){
-            if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI, Globales::US_CONSULTA, Globales::US_SECRETARIA]))
+            if(!in_array (Yii::$app->user->identity->role, [Globales::US_SUPER, Globales::US_SACADEMICA, Globales::US_COORDINACION, Globales::US_SREI, Globales::US_CONSULTA, Globales::US_DIRECCION, Globales::US_SECRETARIA]))
                 $this->layout = 'mainpersonal';
             return $this->render('index', [
                 'comisionesoptativas' => $comisionesoptativas,

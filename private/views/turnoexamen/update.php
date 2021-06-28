@@ -11,7 +11,7 @@ $this->title = 'Modificar Turno de examen: ' . $model->id;
 
 ?>
 <?php
-        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR])){
+        if(!in_array (Yii::$app->user->identity->role, [Globales::US_AGENTE, Globales::US_CONSULTA, Globales::US_DIRECCION, Globales::US_PRECEPTORIA, Globales::US_PRECEPTOR])){
             $breadcrumbs = [];
             $breadcrumbs [] = ['label' => $model->nombre];
         }

@@ -1,5 +1,6 @@
 <?php
 
+use app\modules\sociocomunitarios\models\Detallerubrica;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 
@@ -41,7 +42,20 @@ use kartik\grid\GridView;
                 //'attribute' => 'fecha',
                 'format' => 'raw',
                 'value' => function($model){
-                    return $model->descripcion;
+                    $detru = $model->descripcion;
+                    try {
+                        $detallerubrica = Detallerubrica::find()->where(['seguimiento' => $model->id])->all();
+                        $detru .= '<br/><ul>';
+
+                        foreach ($detallerubrica as $dr) {
+                            $detru.= '<li>'.$dr->calificacionrubrica0->rubrica0->descripcion.': '.$dr->calificacionrubrica0->detalleescalanota0->nota.'</li>';
+                        }
+                        $detru .= '</ul>';
+                    } catch (\Throwable $th) {
+                        //throw $th;
+                    }
+                    
+                    return $detru;
                 },
             ],
             
